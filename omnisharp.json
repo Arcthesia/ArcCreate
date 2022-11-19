@@ -1,0 +1,9 @@
+{
+  "RoslynExtensionsOptions": {
+    "EnableAnalyzersSupport": true,
+    "LocationPaths": [
+      "./Linting/microsoft.unity.analyzers.1.14.0/analyzers/dotnet/cs",
+      "./Linting/stylecop.analyzers.1.1.118/analyzers/dotnet/cs"
+    ]
+  }
+}
