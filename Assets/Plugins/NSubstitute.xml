@@ -1,0 +1,1361 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NSubstitute</name>
+    </assembly>
+    <members>
+        <member name="T:NSubstitute.Arg">
+            <summary>
+            Argument matchers used for specifying calls to substitutes.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Arg.Any``1">
+            <summary>
+            Match any argument value compatible with type <typeparamref name="T"/>.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Arg.Is``1(``0)">
+            <summary>
+            Match argument that is equal to <paramref name="value"/>.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Arg.Is``1(System.Linq.Expressions.Expression{System.Predicate{``0}})">
+            <summary>
+            Match argument that satisfies <paramref name="predicate"/>. 
+            If the <paramref name="predicate"/> throws an exception for an argument it will be treated as non-matching.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Arg.Invoke">
+            <summary>
+            Invoke any <see cref="T:System.Action"/> argument whenever a matching call is made to the substitute.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Arg.Invoke``1(``0)">
+            <summary>
+            Invoke any <see cref="T:System.Action`1"/> argument with specified argument whenever a matching call is made to the substitute.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Arg.Invoke``2(``0,``1)">
+            <summary>
+            Invoke any <see cref="T:System.Action`2"/> argument with specified arguments whenever a matching call is made to the substitute.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Arg.Invoke``3(``0,``1,``2)">
+            <summary>
+            Invoke any <see cref="T:System.Action`3"/> argument with specified arguments whenever a matching call is made to the substitute.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Arg.Invoke``4(``0,``1,``2,``3)">
+            <summary>
+            Invoke any <see cref="T:System.Action`4"/> argument with specified arguments whenever a matching call is made to the substitute.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Arg.InvokeDelegate``1(System.Object[])">
+            <summary>
+            Invoke any <typeparamref name="TDelegate"/> argument with specified arguments whenever a matching call is made to the substitute.
+            </summary>
+            <param name="arguments">Arguments to pass to delegate.</param>
+        </member>
+        <member name="M:NSubstitute.Arg.Do``1(System.Action{``0})">
+            <summary>
+            Capture any argument compatible with type <typeparamref name="T"/> and use it to call the <paramref name="useArgument"/> function 
+            whenever a matching call is made to the substitute.
+            </summary>
+        </member>
+        <member name="T:NSubstitute.Arg.Compat">
+             <summary>
+             Alternate version of <see cref="T:NSubstitute.Arg"/> matchers for compatibility with pre-C#7 compilers
+             which do not support <c>ref</c> return types. Do not use unless you are unable to use <see cref="T:NSubstitute.Arg"/>.
+            
+             For more information see <see href="https://nsubstitute.github.io/help/compat-args">Compatibility Argument
+             Matchers</see> in the NSubstitute documentation.
+             </summary>
+        </member>
+        <member name="M:NSubstitute.Arg.Compat.Any``1">
+            <summary>
+            Match any argument value compatible with type <typeparamref name="T"/>.
+            This is provided for compatibility with older compilers --
+            if possible use <see cref="M:NSubstitute.Arg.Any``1" /> instead.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Arg.Compat.Is``1(``0)">
+            <summary>
+            Match argument that is equal to <paramref name="value"/>.
+            This is provided for compatibility with older compilers --
+            if possible use <see cref="M:NSubstitute.Arg.Is``1(``0)" /> instead.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Arg.Compat.Is``1(System.Linq.Expressions.Expression{System.Predicate{``0}})">
+            <summary>
+            Match argument that satisfies <paramref name="predicate"/>. 
+            If the <paramref name="predicate"/> throws an exception for an argument it will be treated as non-matching.
+            This is provided for compatibility with older compilers --
+            if possible use <see cref="M:NSubstitute.Arg.Is``1(System.Linq.Expressions.Expression{System.Predicate{``0}})" /> instead.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Arg.Compat.Invoke">
+            <summary>
+            Invoke any <see cref="T:System.Action"/> argument whenever a matching call is made to the substitute.
+            This is provided for compatibility with older compilers --
+            if possible use <see cref="M:NSubstitute.Arg.Invoke" /> instead.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Arg.Compat.Invoke``1(``0)">
+            <summary>
+            Invoke any <see cref="T:System.Action`1"/> argument with specified argument whenever a matching call is made to the substitute.
+            This is provided for compatibility with older compilers --
+            if possible use <see cref="M:NSubstitute.Arg.Invoke``1(``0)" /> instead.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Arg.Compat.Invoke``2(``0,``1)">
+            <summary>
+            Invoke any <see cref="T:System.Action`2"/> argument with specified arguments whenever a matching call is made to the substitute.
+            This is provided for compatibility with older compilers --
+            if possible use <see cref="M:NSubstitute.Arg.Invoke``2(``0,``1)" /> instead.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Arg.Compat.Invoke``3(``0,``1,``2)">
+            <summary>
+            Invoke any <see cref="T:System.Action`3"/> argument with specified arguments whenever a matching call is made to the substitute.
+            This is provided for compatibility with older compilers --
+            if possible use <see cref="M:NSubstitute.Arg.Invoke``3(``0,``1,``2)" /> instead.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Arg.Compat.Invoke``4(``0,``1,``2,``3)">
+            <summary>
+            Invoke any <see cref="T:System.Action`4"/> argument with specified arguments whenever a matching call is made to the substitute.
+            This is provided for compatibility with older compilers --
+            if possible use <see cref="M:NSubstitute.Arg.Invoke``4(``0,``1,``2,``3)" /> instead.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Arg.Compat.InvokeDelegate``1(System.Object[])">
+            <summary>
+            Invoke any <typeparamref name="TDelegate"/> argument with specified arguments whenever a matching call is made to the substitute.
+            This is provided for compatibility with older compilers --
+            if possible use <see cref="M:NSubstitute.Arg.InvokeDelegate``1(System.Object[])" /> instead.
+            </summary>
+            <param name="arguments">Arguments to pass to delegate.</param>
+        </member>
+        <member name="M:NSubstitute.Arg.Compat.Do``1(System.Action{``0})">
+            <summary>
+            Capture any argument compatible with type <typeparamref name="T"/> and use it to call the <paramref name="useArgument"/> function 
+            whenever a matching call is made to the substitute.
+            This is provided for compatibility with older compilers --
+            if possible use <see cref="M:NSubstitute.Arg.Do``1(System.Action{``0})" /> instead.
+            </summary>
+        </member>
+        <member name="T:NSubstitute.Callback">
+            <summary>
+            Perform this chain of callbacks and/or always callback when called.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Callback.First(System.Action{NSubstitute.Core.CallInfo})">
+            <summary>
+            Perform as first in chain of callback when called.
+            </summary>
+            <param name="doThis"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Callback.Always(System.Action{NSubstitute.Core.CallInfo})">
+            <summary>
+            Perform this action always when callback is called.
+            </summary>
+            <param name="doThis"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Callback.FirstThrow``1(System.Func{NSubstitute.Core.CallInfo,``0})">
+            <summary>
+            Throw exception returned by function as first callback in chain of callback when called.
+            </summary>
+            <param name="throwThis"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Callback.FirstThrow``1(``0)">
+            <summary>
+            Throw this exception as first callback in chain of callback when called.
+            </summary>
+            <param name="exception"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Callback.AlwaysThrow``1(System.Func{NSubstitute.Core.CallInfo,``0})">
+            <summary>
+            Throw exception returned by function always when callback is called.
+            </summary>
+            <typeparam name="TException">The type of the exception.</typeparam>
+            <param name="throwThis">The throw this.</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Callback.AlwaysThrow``1(``0)">
+            <summary>
+            Throw this exception always when callback is called.
+            </summary>
+            <typeparam name="TException">The type of the exception.</typeparam>
+            <param name="exception">The exception.</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Callbacks.ConfiguredCallback.Then(System.Action{NSubstitute.Core.CallInfo})">
+            <summary>
+            Perform this action once in chain of called callbacks.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Callbacks.ConfiguredCallback.ThenKeepDoing(System.Action{NSubstitute.Core.CallInfo})">
+            <summary>
+            Keep doing this action after the other callbacks have run.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Callbacks.ConfiguredCallback.ThenKeepThrowing``1(System.Func{NSubstitute.Core.CallInfo,``0})">
+            <summary>
+            Keep throwing this exception after the other callbacks have run.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Callbacks.ConfiguredCallback.ThenKeepThrowing``1(``0)">
+            <summary>
+            Keep throwing this exception after the other callbacks have run.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Callbacks.ConfiguredCallback.ThenThrow``1(System.Func{NSubstitute.Core.CallInfo,``0})">
+            <summary>
+            Throw exception returned by function once when called in a chain of callbacks.
+            </summary>
+            <typeparam name="TException">The type of the exception</typeparam>
+            <param name="throwThis">Produce the exception to throw for a CallInfo</param>
+        </member>
+        <member name="M:NSubstitute.Callbacks.ConfiguredCallback.ThenThrow``1(``0)">
+            <summary>
+            Throw this exception once when called in a chain of callbacks.
+            </summary>
+            <typeparam name="TException">The type of the exception</typeparam>
+            <param name="exception">The exception to throw</param>
+        </member>
+        <member name="M:NSubstitute.Callbacks.EndCallbackChain.AndAlways(System.Action{NSubstitute.Core.CallInfo})">
+            <summary>
+            Perform the given action for every call.
+            </summary>
+            <param name="doThis">The action to perform for every call</param>
+        </member>
+        <member name="F:NSubstitute.ClearOptions.ReceivedCalls">
+            <summary>
+            Clear all the received calls
+            </summary>
+        </member>
+        <member name="F:NSubstitute.ClearOptions.ReturnValues">
+            <summary>
+            Clear all configured return results (including auto-substituted values).
+            </summary>
+        </member>
+        <member name="F:NSubstitute.ClearOptions.CallActions">
+            <summary>
+            Clear all call actions configured for this substitute (via When..Do, Arg.Invoke, and Arg.Do)
+            </summary>
+        </member>
+        <member name="F:NSubstitute.ClearOptions.All">
+            <summary>
+            Clears all received calls and configured return values and callbacks.
+            </summary>
+        </member>
+        <member name="T:NSubstitute.Compatibility.CompatArg">
+             <summary>
+             Alternate version of <see cref="T:NSubstitute.Arg"/> matchers for compatibility with pre-C#7 compilers
+             which do not support <c>ref</c> return types. Do not use unless you are unable to use <see cref="T:NSubstitute.Arg"/>.
+             
+             <see cref="T:NSubstitute.Compatibility.CompatArg"/> provides a non-static version of <see cref="T:NSubstitute.Arg.Compat"/>, which can make it easier
+             to use from an abstract base class. You can get a reference to this instance using the static
+             <see cref="F:NSubstitute.Compatibility.CompatArg.Instance" /> field.
+            
+             For more information see <see href="https://nsubstitute.github.io/help/compat-args">Compatibility Argument
+             Matchers</see> in the NSubstitute documentation.
+             </summary>
+        </member>
+        <member name="F:NSubstitute.Compatibility.CompatArg.Instance">
+            <summary>
+            Get the CompatArg instance.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Compatibility.CompatArg.Any``1">
+            <summary>
+            Match any argument value compatible with type <typeparamref name="T"/>.
+            This is provided for compatibility with older compilers --
+            if possible use <see cref="M:NSubstitute.Arg.Any``1" /> instead.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Compatibility.CompatArg.Is``1(``0)">
+            <summary>
+            Match argument that is equal to <paramref name="value"/>.
+            This is provided for compatibility with older compilers --
+            if possible use <see cref="M:NSubstitute.Arg.Is``1(``0)" /> instead.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Compatibility.CompatArg.Is``1(System.Linq.Expressions.Expression{System.Predicate{``0}})">
+            <summary>
+            Match argument that satisfies <paramref name="predicate"/>. 
+            If the <paramref name="predicate"/> throws an exception for an argument it will be treated as non-matching.
+            This is provided for compatibility with older compilers --
+            if possible use <see cref="M:NSubstitute.Arg.Is``1(System.Linq.Expressions.Expression{System.Predicate{``0}})" /> instead.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Compatibility.CompatArg.Invoke">
+            <summary>
+            Invoke any <see cref="T:System.Action"/> argument whenever a matching call is made to the substitute.
+            This is provided for compatibility with older compilers --
+            if possible use <see cref="M:NSubstitute.Arg.Invoke" /> instead.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Compatibility.CompatArg.Invoke``1(``0)">
+            <summary>
+            Invoke any <see cref="T:System.Action`1"/> argument with specified argument whenever a matching call is made to the substitute.
+            This is provided for compatibility with older compilers --
+            if possible use <see cref="M:NSubstitute.Arg.Invoke``1(``0)" /> instead.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Compatibility.CompatArg.Invoke``2(``0,``1)">
+            <summary>
+            Invoke any <see cref="T:System.Action`2"/> argument with specified arguments whenever a matching call is made to the substitute.
+            This is provided for compatibility with older compilers --
+            if possible use <see cref="M:NSubstitute.Arg.Invoke``2(``0,``1)" /> instead.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Compatibility.CompatArg.Invoke``3(``0,``1,``2)">
+            <summary>
+            Invoke any <see cref="T:System.Action`3"/> argument with specified arguments whenever a matching call is made to the substitute.
+            This is provided for compatibility with older compilers --
+            if possible use <see cref="M:NSubstitute.Arg.Invoke``3(``0,``1,``2)" /> instead.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Compatibility.CompatArg.Invoke``4(``0,``1,``2,``3)">
+            <summary>
+            Invoke any <see cref="T:System.Action`4"/> argument with specified arguments whenever a matching call is made to the substitute.
+            This is provided for compatibility with older compilers --
+            if possible use <see cref="M:NSubstitute.Arg.Invoke``4(``0,``1,``2,``3)" /> instead.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Compatibility.CompatArg.InvokeDelegate``1(System.Object[])">
+            <summary>
+            Invoke any <typeparamref name="TDelegate"/> argument with specified arguments whenever a matching call is made to the substitute.
+            This is provided for compatibility with older compilers --
+            if possible use <see cref="M:NSubstitute.Arg.InvokeDelegate``1(System.Object[])" /> instead.
+            </summary>
+            <param name="arguments">Arguments to pass to delegate.</param>
+        </member>
+        <member name="M:NSubstitute.Compatibility.CompatArg.Do``1(System.Action{``0})">
+            <summary>
+            Capture any argument compatible with type <typeparamref name="T"/> and use it to call the <paramref name="useArgument"/> function 
+            whenever a matching call is made to the substitute.
+            This is provided for compatibility with older compilers --
+            if possible use <see cref="M:NSubstitute.Arg.Do``1(System.Action{``0})" /> instead.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Core.Arguments.ArgumentMatcher.Enqueue``1(NSubstitute.Core.Arguments.IArgumentMatcher{``0})">
+            <summary>
+            Enqueues a matcher for the method argument in current position and returns the value which should be
+            passed back to the method you invoke.
+            </summary>
+        </member>
+        <member name="T:NSubstitute.Core.Arguments.IArgumentMatcher">
+            <summary>
+            Provides a specification for arguments for use with <see ctype="Arg.Matches (IArgumentMatcher)" />.
+            Can additionally implement <see cref="T:NSubstitute.Core.IDescribeNonMatches" /> to give descriptions when arguments do not match.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Core.Arguments.IArgumentMatcher.IsSatisfiedBy(System.Object)">
+            <summary>
+            Checks whether the <paramref name="argument"/> satisfies the condition of the matcher.
+            If this throws an exception the argument will be treated as non-matching.
+            </summary>
+        </member>
+        <member name="T:NSubstitute.Core.Arguments.IArgumentMatcher`1">
+            <summary>
+            Provides a specification for arguments for use with <see ctype="Arg.Matches &lt; T &gt;(IArgumentMatcher)" />.
+            Can additionally implement <see ctype="IDescribeNonMatches" /> to give descriptions when arguments do not match.
+            </summary>
+            <typeparam name="T">Matches arguments of type <typeparamref name="T"/> or compatible type.</typeparam>
+        </member>
+        <member name="M:NSubstitute.Core.Arguments.IArgumentMatcher`1.IsSatisfiedBy(`0)">
+            <summary>
+            Checks whether the <paramref name="argument"/> satisfies the condition of the matcher.
+            If this throws an exception the argument will be treated as non-matching.
+            </summary>
+        </member>
+        <member name="P:NSubstitute.Core.CallBaseConfiguration.CallBaseByDefault">
+            <inheritdoc />
+        </member>
+        <member name="M:NSubstitute.Core.CallBaseConfiguration.Exclude(NSubstitute.Core.ICallSpecification)">
+            <inheritdoc />
+        </member>
+        <member name="M:NSubstitute.Core.CallBaseConfiguration.Include(NSubstitute.Core.ICallSpecification)">
+            <inheritdoc />
+        </member>
+        <member name="M:NSubstitute.Core.CallBaseConfiguration.ShouldCallBase(NSubstitute.Core.ICall)">
+            <inheritdoc />
+        </member>
+        <member name="T:NSubstitute.Core.CallCollection.IReceivedCallEntry">
+            <summary>
+            Performance optimization. Allows to mark call as deleted without allocating extra wrapper.
+            To play safely, we track ownership, so object can be re-used only once.
+            </summary>
+        </member>
+        <member name="T:NSubstitute.Core.CallCollection.ReceivedCallEntry">
+            <summary>
+            Wrapper to track that particular entry was deleted.
+            That is needed because concurrent collections don't have a Delete method.
+            Notice, in most cases the original <see cref="P:NSubstitute.Core.CallCollection.ReceivedCallEntry.Call"/> instance will be used as a wrapper itself.
+            </summary>
+        </member>
+        <member name="P:NSubstitute.Core.CallInfo.Item(System.Int32)">
+            <summary>
+            Gets the nth argument to this call.
+            </summary>
+            <param name="index">Index of argument</param>
+            <returns>The value of the argument at the given index</returns>
+        </member>
+        <member name="M:NSubstitute.Core.CallInfo.Args">
+            <summary>
+            Get the arguments passed to this call.
+            </summary>
+            <returns>Array of all arguments passed to this call</returns>
+        </member>
+        <member name="M:NSubstitute.Core.CallInfo.ArgTypes">
+            <summary>
+            Gets the types of all the arguments passed to this call.
+            </summary>
+            <returns>Array of types of all arguments passed to this call</returns>
+        </member>
+        <member name="M:NSubstitute.Core.CallInfo.Arg``1">
+            <summary>
+            Gets the argument of type `T` passed to this call. This will throw if there are no arguments
+            of this type, or if there is more than one matching argument.
+            </summary>
+            <typeparam name="T">The type of the argument to retrieve</typeparam>
+            <returns>The argument passed to the call, or throws if there is not exactly one argument of this type</returns>
+        </member>
+        <member name="M:NSubstitute.Core.CallInfo.ArgAt``1(System.Int32)">
+            <summary>
+            Gets the argument passed to this call at the specified zero-based position, converted to type `T`.
+            This will throw if there are no arguments, if the argument is out of range or if it
+            cannot be converted to the specified type.
+            </summary>
+            <typeparam name="T">The type of the argument to retrieve</typeparam>
+            <param name="position">The zero-based position of the argument to retrieve</param>
+            <returns>The argument passed to the call, or throws if there is not exactly one argument of this type</returns>
+        </member>
+        <member name="M:NSubstitute.Core.ConfiguredCall.AndDoes(System.Action{NSubstitute.Core.CallInfo})">
+            <summary>
+            Adds a callback to execute for matching calls.
+            </summary>
+            <param name="action">an action to call</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Core.DependencyInjection.INSubContainer.Customize">
+            <summary>
+            Creates a new container based on the current one,
+            which can be configured to override the existing registrations without affecting the existing container.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Core.DependencyInjection.INSubContainer.CreateScope">
+            <summary>
+            Create an explicit scope, so all dependencies with the <see cref="F:NSubstitute.Core.DependencyInjection.NSubLifetime.PerScope"/> lifetime
+            are preserved for multiple resolve requests.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Core.DependencyInjection.IConfigurableNSubContainer.Decorate``1(System.Func{``0,NSubstitute.Core.DependencyInjection.INSubResolver,``0})">
+            <summary>
+            Decorates the original implementation with a custom decorator.
+            The factory method is provided with an original implementation instance.
+            The lifetime of decorated implementation is used.
+            </summary>
+        </member>
+        <member name="T:NSubstitute.Core.DependencyInjection.NSubContainer">
+            <summary>
+            Tiny and very limited implementation of the DI services.
+            Container supports the following features required by NSubstitute:
+                - Registration by type with automatic constructor injection
+                - Registration of factory methods for the complex objects
+                - Support of the most required lifetimes:
+                    - <see cref="F:NSubstitute.Core.DependencyInjection.NSubLifetime.Transient" />
+                    - <see cref="F:NSubstitute.Core.DependencyInjection.NSubLifetime.PerScope" />
+                    - <see cref="F:NSubstitute.Core.DependencyInjection.NSubLifetime.Singleton" />
+                - Immutability (via interfaces) and customization by creating a nested container
+            </summary>
+        </member>
+        <member name="F:NSubstitute.Core.DependencyInjection.NSubLifetime.Singleton">
+            <summary>
+            Value is created only once.
+            </summary>
+        </member>
+        <member name="F:NSubstitute.Core.DependencyInjection.NSubLifetime.PerScope">
+            <summary>
+            Value is created only once per scope. Allows to share the same instance across the objects in the same graph.
+            If no explicit scope is created, an implicit scope is created per single resolve request.
+            </summary>
+        </member>
+        <member name="F:NSubstitute.Core.DependencyInjection.NSubLifetime.Transient">
+            <summary>
+            New value is created for each time.
+            </summary>
+        </member>
+        <member name="P:NSubstitute.Core.DependencyInjection.NSubstituteDefaultFactory.DefaultContainer">
+            <summary>
+            The default NSubstitute registrations. Feel free to configure the existing container to customize
+            and override NSubstitute parts.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Core.Extensions.IsCompatibleWith(System.Object,System.Type)">
+            <summary>
+            Checks if the instance can be used when a <paramref name="type"/> is expected.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Core.Extensions.Join(System.Collections.Generic.IEnumerable{System.String},System.String)">
+            <summary>
+            Join the <paramref name="strings"/> using <paramref name="separator"/>.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Core.Extensions.AsArray``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Tries to cast sequence to array first before making a new array sequence.
+            </summary>
+        </member>
+        <member name="P:NSubstitute.Core.ICallBaseConfiguration.CallBaseByDefault">
+            <summary>
+            Gets or sets whether base method should be called by default.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Core.ICallBaseConfiguration.Exclude(NSubstitute.Core.ICallSpecification)">
+            <summary>
+            Specifies whether base method should be always ignored for the matching call.
+            If method is both explicitly excluded and included, base method is _not_ called.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Core.ICallBaseConfiguration.Include(NSubstitute.Core.ICallSpecification)">
+            <summary>
+            Specifies whether base method should be called for the matching call.
+            If method is both explicitly excluded and included, base method is _not_ called.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Core.ICallBaseConfiguration.ShouldCallBase(NSubstitute.Core.ICall)">
+            <summary>
+            Tests whether base method should be called for the call given the existing configuration.
+            </summary>
+        </member>
+        <member name="P:NSubstitute.Core.ICallRouter.CallBaseByDefault">
+            <summary>
+            Specifies whether base method should be called by default.
+            </summary>
+            <remarks>
+            This configuration is considered only when base method exists (e.g. you created a substitute for
+            the AbstractType with method implementation).
+            </remarks>
+        </member>
+        <member name="T:NSubstitute.Core.CallHandlerFactory">
+            <summary>
+                Factory method which creates <see cref="T:NSubstitute.Core.ICallHandler" /> from the <see cref="T:NSubstitute.Core.ISubstituteState" />.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Core.IDescribeNonMatches.DescribeFor(System.Object)">
+            <summary>
+            Describes how the <paramref name="argument" /> does not match the condition specified by this class, or <see cref="F:System.String.Empty"/>
+            if a detailed description can not be provided for the argument.
+            </summary>
+            <param name="argument"></param>
+            <returns>Description of the non-match, or <see cref="F:System.String.Empty" /> if no description can be provided.</returns>
+        </member>
+        <member name="T:NSubstitute.Core.ICallIndependentReturn">
+            <summary>
+            Performance optimization. Allows to not construct <see cref="T:NSubstitute.Core.CallInfo"/> if configured result doesn't depend on it.
+            </summary>
+        </member>
+        <member name="P:NSubstitute.Core.ISubstitutionContext.ThreadContext">
+            <summary>
+            A thread bound state of the NSubstitute context. Usually this API is used to provide the fluent
+            features of the NSubstitute.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Core.IThreadLocalContext.SetNextRoute(NSubstitute.Core.ICallRouter,System.Func{NSubstitute.Core.ISubstituteState,NSubstitute.Routing.IRoute})">
+            <summary>
+            Sets the route to use for the next call dispatch on the current thread for the specified <paramref name="callRouter"/>.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Core.IThreadLocalContext.UseNextRoute(NSubstitute.Core.ICallRouter)">
+            <summary>
+            Returns the previously configured next route and resets the stored value.
+            If route was configured for the different router, returns <see langword="null"/> and persist the route info.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Core.IThreadLocalContext.UsePendingRaisingEventArgumentsFactory">
+            <summary>
+            Returns the previously set arguments factory and resets the stored value.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Core.IThreadLocalContext.RunInQueryContext(System.Action,NSubstitute.Core.IQuery)">
+            <summary>
+            Invokes the passed callback in a context of the specified query.
+            </summary>
+        </member>
+        <member name="T:NSubstitute.Core.Maybe`1">
+            <summary>
+            Particularly poor implementation of Maybe/Option type.
+            This is just filling an immediate need; use FSharpOption or XSharpx or similar for a
+            real implementation.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:NSubstitute.Core.RobustThreadLocal`1">
+            <summary>
+            Delegates to ThreadLocal&lt;T&gt;, but wraps Value property access in try/catch to swallow ObjectDisposedExceptions.
+            These can occur if the Value property is accessed from the finalizer thread. Because we can't detect this, we'll
+            just swallow the exception (the finalizer thread won't be using any of the values from thread local storage anyway).
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Core.SubstituteFactory.Create(System.Type[],System.Object[])">
+            <summary>
+            Create a substitute for the given types.
+            </summary>
+            <param name="typesToProxy"></param>
+            <param name="constructorArguments"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Core.SubstituteFactory.CreatePartial(System.Type[],System.Object[])">
+            <summary>
+            Create an instance of the given types, with calls configured to call the base implementation
+            where possible. Parts of the instance can be substituted using
+            <see cref="M:NSubstitute.SubstituteExtensions.Returns``1(``0,``0,``0[])">Returns()</see>.
+            </summary>
+            <param name="typesToProxy"></param>
+            <param name="constructorArguments"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Core.WhenCalled`1.Do(System.Action{NSubstitute.Core.CallInfo})">
+            <summary>
+            Perform this action when called.
+            </summary>
+            <param name="callbackWithArguments"></param>
+        </member>
+        <member name="M:NSubstitute.Core.WhenCalled`1.Do(NSubstitute.Callback)">
+            <summary>
+            Perform this configured callback when called.
+            </summary>
+            <param name="callback"></param>
+        </member>
+        <member name="M:NSubstitute.Core.WhenCalled`1.DoNotCallBase">
+            <summary>
+            Do not call the base implementation on future calls. For use with partial substitutes.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Core.WhenCalled`1.CallBase">
+            <summary>
+            Call the base implementation of future calls. For use with non-partial class substitutes.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Core.WhenCalled`1.Throw(System.Exception)">
+            <summary>
+            Throw the specified exception when called.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Core.WhenCalled`1.Throw``1">
+            <summary>
+            Throw an exception of the given type when called.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Core.WhenCalled`1.Throw(System.Func{NSubstitute.Core.CallInfo,System.Exception})">
+            <summary>
+            Throw an exception generated by the specified function when called.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.ClearExtensions.ClearExtensions.ClearSubstitute``1(``0,NSubstitute.ClearOptions)">
+            <summary>
+            Clears received calls, configured return values and/or call actions for this substitute.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="substitute"></param>
+            <param name="options">Specifies what to clear on the substitute. Can be combined with <code>|</code> to 
+            clear multiple aspects at once.</param>
+            <remarks>
+            </remarks>
+        </member>
+        <member name="M:NSubstitute.Extensions.ConfigurationExtensions.Configure``1(``0)">
+            <summary>
+            A hint for the NSubstitute that the subsequent method/property call is about to be configured.
+            For example: substitute.Configure().GetValue().Returns(1,2,3);
+            <para>
+            NOTICE, you _don't need_ to invoke this method for the basic configuration scenarios.
+            Ensure you don't overuse this method and it is applied only if strictly required.
+            </para>
+            <remarks>
+            Due to the NSubstitute configuration syntax it is often impossible to recognise during the method call
+            dispatch whether this is a setup phase or a regular method call.
+            Usually it doesn't matter, however sometimes method invocation could lead to undesired side effects
+            (e.g. the previously configured value is returned, base method is invoked). In that case you might want to
+            provide NSubstitute with a hint that you are configuring a method, so it handles the call in configuration mode.
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Extensions.ReturnsForAllExtensions.ReturnsForAll``1(System.Object,``0)">
+            <summary>
+            Configure default return value for all methods that return the specified type
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name = "substitute"></param>
+            <param name="returnThis"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Extensions.ReturnsForAllExtensions.ReturnsForAll``1(System.Object,System.Func{NSubstitute.Core.CallInfo,``0})">
+            <summary>
+            Configure default return value for all methods that return the specified type, calculated by a function
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="substitute"></param>
+            <param name="returnThis"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.ExceptionExtensions.ExceptionExtensions.Throws(System.Object,System.Exception)">
+            <summary>
+            Throw an exception for this call.
+            </summary>
+            <param name="value"></param>
+            <param name="ex">Exception to throw</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.ExceptionExtensions.ExceptionExtensions.Throws``1(System.Object)">
+            <summary>
+            Throw an exception of the given type for this call.
+            </summary>
+            <typeparam name="TException">Type of exception to throw</typeparam>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.ExceptionExtensions.ExceptionExtensions.Throws(System.Object,System.Func{NSubstitute.Core.CallInfo,System.Exception})">
+            <summary>
+            Throw an exception for this call, as generated by the specified function.
+            </summary>
+            <param name="value"></param>
+            <param name="createException">Func creating exception object</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.ExceptionExtensions.ExceptionExtensions.ThrowsForAnyArgs(System.Object,System.Exception)">
+            <summary>
+            Throw an exception for this call made with any arguments.
+            </summary>
+            <param name="value"></param>
+            <param name="ex">Exception to throw</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.ExceptionExtensions.ExceptionExtensions.ThrowsForAnyArgs``1(System.Object)">
+            <summary>
+            Throws an exception of the given type for this call made with any arguments.
+            </summary>
+            <typeparam name="TException">Type of exception to throw</typeparam>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.ExceptionExtensions.ExceptionExtensions.ThrowsForAnyArgs(System.Object,System.Func{NSubstitute.Core.CallInfo,System.Exception})">
+            <summary>
+            Throws an exception for this call made with any arguments, as generated by the specified function.
+            </summary>
+            <param name="value"></param>
+            <param name="createException">Func creating exception object</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.ExceptionExtensions.ExceptionExtensions.ThrowsAsync(System.Threading.Tasks.Task,System.Exception)">
+            <summary>
+            Throw an exception for this call.
+            </summary>
+            <param name="value"></param>
+            <param name="ex">Exception to throw</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.ExceptionExtensions.ExceptionExtensions.ThrowsAsync``1(System.Threading.Tasks.Task{``0},System.Exception)">
+            <summary>
+            Throw an exception for this call.
+            </summary>
+            <param name="value"></param>
+            <param name="ex">Exception to throw</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.ExceptionExtensions.ExceptionExtensions.ThrowsAsync``1(System.Threading.Tasks.Task)">
+            <summary>
+            Throw an exception of the given type for this call.
+            </summary>
+            <typeparam name="TException">Type of exception to throw</typeparam>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.ExceptionExtensions.ExceptionExtensions.ThrowsAsync(System.Threading.Tasks.Task,System.Func{NSubstitute.Core.CallInfo,System.Exception})">
+            <summary>
+            Throw an exception for this call, as generated by the specified function.
+            </summary>
+            <param name="value"></param>
+            <param name="createException">Func creating exception object</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.ExceptionExtensions.ExceptionExtensions.ThrowsAsync``1(System.Threading.Tasks.Task{``0},System.Func{NSubstitute.Core.CallInfo,System.Exception})">
+            <summary>
+            Throw an exception for this call, as generated by the specified function.
+            </summary>
+            <param name="value"></param>
+            <param name="createException">Func creating exception object</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.ExceptionExtensions.ExceptionExtensions.ThrowsAsyncForAnyArgs(System.Threading.Tasks.Task,System.Exception)">
+            <summary>
+            Throw an exception for this call made with any arguments.
+            </summary>
+            <param name="value"></param>
+            <param name="ex">Exception to throw</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.ExceptionExtensions.ExceptionExtensions.ThrowsAsyncForAnyArgs``1(System.Threading.Tasks.Task{``0},System.Exception)">
+            <summary>
+            Throw an exception for this call made with any arguments.
+            </summary>
+            <param name="value"></param>
+            <param name="ex">Exception to throw</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.ExceptionExtensions.ExceptionExtensions.ThrowsAsyncForAnyArgs``1(System.Threading.Tasks.Task)">
+            <summary>
+            Throws an exception of the given type for this call made with any arguments.
+            </summary>
+            <typeparam name="TException">Type of exception to throw</typeparam>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.ExceptionExtensions.ExceptionExtensions.ThrowsAsyncForAnyArgs(System.Threading.Tasks.Task,System.Func{NSubstitute.Core.CallInfo,System.Exception})">
+            <summary>
+            Throws an exception for this call made with any arguments, as generated by the specified function.
+            </summary>
+            <param name="value"></param>
+            <param name="createException">Func creating exception object</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.ExceptionExtensions.ExceptionExtensions.ThrowsAsyncForAnyArgs``1(System.Threading.Tasks.Task{``0},System.Func{NSubstitute.Core.CallInfo,System.Exception})">
+            <summary>
+            Throws an exception for this call made with any arguments, as generated by the specified function.
+            </summary>
+            <param name="value"></param>
+            <param name="createException">Func creating exception object</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.ReceivedExtensions.ReceivedExtensions.Received``1(``0,NSubstitute.ReceivedExtensions.Quantity)">
+            <summary>
+            Checks this substitute has received the following call the required number of times.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="substitute"></param>
+            <param name="requiredQuantity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.ReceivedExtensions.ReceivedExtensions.ReceivedWithAnyArgs``1(``0,NSubstitute.ReceivedExtensions.Quantity)">
+            <summary>
+            Checks this substitute has received the following call with any arguments the required number of times.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="substitute"></param>
+            <param name="requiredQuantity"></param>
+            <returns></returns>
+        </member>
+        <member name="T:NSubstitute.ReceivedExtensions.Quantity">
+            <summary>
+            Represents a quantity. Primarily used for specifying a required amount of calls to a member.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.ReceivedExtensions.Quantity.Within(System.Int32,System.Int32)">
+            <summary>
+            A non-zero quantity between the given minimum and maximum numbers (inclusive).
+            </summary>
+            <param name="minInclusive">Minimum quantity (inclusive). Must be greater than or equal to 0.</param>
+            <param name="maxInclusive">Maximum quantity (inclusive). Must be greater than minInclusive.</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.ReceivedExtensions.Quantity.Matches``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Returns whether the given collection contains the required quantity of items.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="items"></param>
+            <returns>true if the collection has the required quantity; otherwise false.</returns>
+        </member>
+        <member name="M:NSubstitute.ReceivedExtensions.Quantity.RequiresMoreThan``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Returns whether the given collections needs more items to satisfy the required quantity.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="items"></param>
+            <returns>true if the collection needs more items to match this quantity; otherwise false.</returns>
+        </member>
+        <member name="M:NSubstitute.ReceivedExtensions.Quantity.Describe(System.String,System.String)">
+            <summary>
+            Describe this quantity using the given noun variants.
+            For example, `Describe("item", "items")` could return the description:
+            "more than 1 item, but less than 10 items".
+            </summary>
+            <param name="singularNoun"></param>
+            <param name="pluralNoun"></param>
+            <returns>A string describing the required quantity of items identified by the provided noun forms.</returns>
+        </member>
+        <member name="M:NSubstitute.ReturnsExtensions.ReturnsExtensions.ReturnsNull``1(``0)">
+            <summary>
+            Set null as returned value for this call.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.ReturnsExtensions.ReturnsExtensions.ReturnsNullForAnyArgs``1(``0)">
+            <summary>
+            Set null as returned value for this call made with any arguments.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.ReturnsExtensions.ReturnsExtensions.ReturnsNull``1(System.Nullable{``0})">
+            <summary>
+            Set null as returned value for this call.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.ReturnsExtensions.ReturnsExtensions.ReturnsNullForAnyArgs``1(System.Nullable{``0})">
+            <summary>
+            Set null as returned value for this call made with any arguments.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.ReturnsExtensions.ReturnsExtensions.ReturnsNull``1(System.Threading.Tasks.Task{``0})">
+            <summary>
+            Set null as returned value for this call.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.ReturnsExtensions.ReturnsExtensions.ReturnsNull``1(System.Threading.Tasks.ValueTask{``0})">
+            <summary>
+            Set null as returned value for this call.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.ReturnsExtensions.ReturnsExtensions.ReturnsNullForAnyArgs``1(System.Threading.Tasks.Task{``0})">
+            <summary>
+            Set null as returned value for this call made with any arguments.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.ReturnsExtensions.ReturnsExtensions.ReturnsNullForAnyArgs``1(System.Threading.Tasks.ValueTask{``0})">
+            <summary>
+            Set null as returned value for this call made with any arguments.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.ReturnsExtensions.ReturnsExtensions.ReturnsNull``1(System.Threading.Tasks.Task{System.Nullable{``0}})">
+            <summary>
+            Set null as returned value for this call.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.ReturnsExtensions.ReturnsExtensions.ReturnsNullForAnyArgs``1(System.Threading.Tasks.Task{System.Nullable{``0}})">
+            <summary>
+            Set null as returned value for this call made with any arguments.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.ReturnsExtensions.ReturnsExtensions.ReturnsNull``1(System.Threading.Tasks.ValueTask{System.Nullable{``0}})">
+            <summary>
+            Set null as returned value for this call.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.ReturnsExtensions.ReturnsExtensions.ReturnsNullForAnyArgs``1(System.Threading.Tasks.ValueTask{System.Nullable{``0}})">
+            <summary>
+            Set null as returned value for this call made with any arguments.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.SwitchToFullDispatchMode">
+            <summary>
+            Switches interceptor to dispatch calls via the full pipeline.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Raise.EventWith``1(System.Object,``0)">
+            <summary>
+            Raise an event for an <c>EventHandler&lt;TEventArgs&gt;</c> event with the provided <paramref name="sender"/> and <paramref name="eventArgs"/>.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Raise.EventWith``1(``0)">
+            <summary>
+            Raise an event for an <c>EventHandler&lt;TEventArgs&gt;</c> event with the substitute as the sender and the provided <paramref name="eventArgs" />.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Raise.EventWith``1">
+            <summary>
+            Raise an event for an <c>EventHandler&lt;EventArgsT&gt;</c> event with the substitute as the sender
+            and with a default instance of <typeparamref name="TEventArgs" />.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Raise.Event">
+            <summary>
+            Raise an event for an <c>EventHandler</c> or <c>EventHandler&lt;EventArgs&gt;</c> event with the substitute
+            as the sender and with empty <c>EventArgs</c>.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Raise.Event``1(System.Object[])">
+            <summary>
+            Raise an event of type <typeparamref name="THandler" /> with the provided arguments. If no arguments are provided
+            NSubstitute will try to provide reasonable defaults.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Raise.FixParamsArrayAmbiguity(System.Object[],System.Type)">
+            <summary>
+            If delegate takes single parameter of array type, it's impossible to distinguish
+            whether input array represents all arguments, or the first argument only.
+            If we find that ambiguity might happen, we wrap user input in an extra array.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Received.InOrder(System.Action)">
+            <summary>
+            Asserts the calls to the substitutes contained in the given Action were
+            received by these substitutes in the same order. Calls to property getters are not included
+            in the assertion.
+            </summary>
+            <param name="calls">Action containing calls to substitutes in the expected order</param>
+        </member>
+        <member name="T:NSubstitute.Routing.Handlers.ClearLastCallRouterHandler">
+            <summary>
+            Clears last call router on SubstitutionContext for routes that do not require it.
+            </summary>
+            <remarks>
+            This is to help prevent static state bleeding over into future calls.
+            </remarks>
+        </member>
+        <member name="T:NSubstitute.Substitute">
+            <summary>
+            Create a substitute for one or more types. For example: <c>Substitute.For&lt;ISomeType&gt;()</c> 
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Substitute.For``1(System.Object[])">
+            <summary>
+            Substitute for an interface or class.
+            <para>Be careful when specifying a class, as all non-virtual members will actually be executed. Only virtual members 
+            can be recorded or have return values specified.</para>
+            </summary>
+            <typeparam name="T">The type of interface or class to substitute.</typeparam>
+            <param name="constructorArguments">Arguments required to construct a class being substituted. Not required for interfaces or classes with default constructors.</param>
+            <returns>A substitute for the interface or class.</returns>
+        </member>
+        <member name="M:NSubstitute.Substitute.For``2(System.Object[])">
+            <summary>
+            <para>Substitute for multiple interfaces or a class that implements an interface. At most one class can be specified.</para>
+            <para>Be careful when specifying a class, as all non-virtual members will actually be executed. Only virtual members 
+            can be recorded or have return values specified.</para>
+            </summary>
+            <typeparam name="T1">The type of interface or class to substitute.</typeparam>
+            <typeparam name="T2">An additional interface or class (maximum of one class) the substitute should implement.</typeparam>
+            <param name="constructorArguments">Arguments required to construct a class being substituted. Not required for interfaces or classes with default constructors.</param>
+            <returns>A substitute of type T1, that also implements T2.</returns>
+        </member>
+        <member name="M:NSubstitute.Substitute.For``3(System.Object[])">
+            <summary>
+            <para>Substitute for multiple interfaces or a class that implements multiple interfaces. At most one class can be specified.</para>
+            If additional interfaces are required use the <see cref="M:NSubstitute.Substitute.For(System.Type[],System.Object[])" /> overload.
+            <para>Be careful when specifying a class, as all non-virtual members will actually be executed. Only virtual members 
+            can be recorded or have return values specified.</para>
+            </summary>
+            <typeparam name="T1">The type of interface or class to substitute.</typeparam>
+            <typeparam name="T2">An additional interface or class (maximum of one class) the substitute should implement.</typeparam>
+            <typeparam name="T3">An additional interface or class (maximum of one class) the substitute should implement.</typeparam>
+            <param name="constructorArguments">Arguments required to construct a class being substituted. Not required for interfaces or classes with default constructors.</param>
+            <returns>A substitute of type T1, that also implements T2 and T3.</returns>
+        </member>
+        <member name="M:NSubstitute.Substitute.For(System.Type[],System.Object[])">
+            <summary>
+            <para>Substitute for multiple interfaces or a class that implements multiple interfaces. At most one class can be specified.</para>
+            <para>Be careful when specifying a class, as all non-virtual members will actually be executed. Only virtual members 
+            can be recorded or have return values specified.</para>
+            </summary>
+            <param name="typesToProxy">The types of interfaces or a type of class and multiple interfaces the substitute should implement.</param>
+            <param name="constructorArguments">Arguments required to construct a class being substituted. Not required for interfaces or classes with default constructors.</param>
+            <returns>A substitute implementing the specified types.</returns>
+        </member>
+        <member name="M:NSubstitute.Substitute.ForPartsOf``1(System.Object[])">
+            <summary>
+            Create a substitute for a class that behaves just like a real instance of the class, but also
+            records calls made to its virtual members and allows for specific members to be substituted
+            by using <see cref="M:NSubstitute.Core.WhenCalled`1.DoNotCallBase">When(() => call).DoNotCallBase()</see> or by
+            <see cref="M:NSubstitute.SubstituteExtensions.Returns``1(``0,``0,``0[])">setting a value to return value</see> for that member.
+            </summary>
+            <typeparam name="T">The type to substitute for parts of. Must be a class; not a delegate or interface.</typeparam>
+            <param name="constructorArguments"></param>
+            <returns>An instance of the class that will execute real methods when called, but allows parts to be selectively 
+            overridden via `Returns` and `When..DoNotCallBase`.</returns>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.Received``1(``0)">
+            <summary>
+            Checks this substitute has received the following call.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.Received``1(``0,System.Int32)">
+            <summary>
+            Checks this substitute has received the following call the required number of times.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.DidNotReceive``1(``0)">
+            <summary>
+            Checks this substitute has not received the following call.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.ReceivedWithAnyArgs``1(``0)">
+            <summary>
+            Checks this substitute has received the following call with any arguments.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.ReceivedWithAnyArgs``1(``0,System.Int32)">
+            <summary>
+            Checks this substitute has received the following call with any arguments the required number of times.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.DidNotReceiveWithAnyArgs``1(``0)">
+            <summary>
+            Checks this substitute has not received the following call with any arguments.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.ReceivedCalls``1(``0)">
+            <summary>
+            Returns the calls received by this substitute.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.ClearReceivedCalls``1(``0)">
+            <summary>
+            Forget all the calls this substitute has received.
+            </summary>
+            <remarks>
+            Note that this will not clear any results set up for the substitute using Returns().
+            See <see cref="M:NSubstitute.ClearExtensions.ClearExtensions.ClearSubstitute``1(``0,NSubstitute.ClearOptions)"/> for more options with resetting
+            a substitute.
+            </remarks>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.Returns``1(``0,``0,``0[])">
+            <summary>
+            Set a return value for this call.
+            </summary>
+            <param name="value"></param>
+            <param name="returnThis">Value to return</param>
+            <param name="returnThese">Optionally return these values next</param>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.Returns``1(``0,System.Func{NSubstitute.Core.CallInfo,``0},System.Func{NSubstitute.Core.CallInfo,``0}[])">
+            <summary>
+            Set a return value for this call, calculated by the provided function.
+            </summary>
+            <param name="value"></param>
+            <param name="returnThis">Function to calculate the return value</param>
+            <param name="returnThese">Optionally use these functions next</param>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.ReturnsForAnyArgs``1(``0,``0,``0[])">
+            <summary>
+            Set a return value for this call made with any arguments.
+            </summary>
+            <param name="value"></param>
+            <param name="returnThis">Value to return</param>
+            <param name="returnThese">Optionally return these values next</param>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.ReturnsForAnyArgs``1(``0,System.Func{NSubstitute.Core.CallInfo,``0},System.Func{NSubstitute.Core.CallInfo,``0}[])">
+            <summary>
+            Set a return value for this call made with any arguments, calculated by the provided function.
+            </summary>
+            <param name="value"></param>
+            <param name="returnThis">Function to calculate the return value</param>
+            <param name="returnThese">Optionally use these functions next</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.Returns``1(System.Threading.Tasks.Task{``0},``0,``0[])">
+            <summary>
+            Set a return value for this call. The value(s) to be returned will be wrapped in Tasks.
+            </summary>
+            <param name="value"></param>
+            <param name="returnThis">Value to return. Will be wrapped in a Task</param>
+            <param name="returnThese">Optionally use these values next</param>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.Returns``1(System.Threading.Tasks.Task{``0},System.Func{NSubstitute.Core.CallInfo,``0},System.Func{NSubstitute.Core.CallInfo,``0}[])">
+            <summary>
+            Set a return value for this call, calculated by the provided function. The value(s) to be returned will be wrapped in Tasks.
+            </summary>
+            <param name="value"></param>
+            <param name="returnThis">Function to calculate the return value</param>
+            <param name="returnThese">Optionally use these functions next</param>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.ReturnsForAnyArgs``1(System.Threading.Tasks.Task{``0},``0,``0[])">
+            <summary>
+            Set a return value for this call made with any arguments. The value(s) to be returned will be wrapped in Tasks.
+            </summary>
+            <param name="value"></param>
+            <param name="returnThis">Value to return</param>
+            <param name="returnThese">Optionally return these values next</param>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.ReturnsForAnyArgs``1(System.Threading.Tasks.Task{``0},System.Func{NSubstitute.Core.CallInfo,``0},System.Func{NSubstitute.Core.CallInfo,``0}[])">
+            <summary>
+            Set a return value for this call made with any arguments, calculated by the provided function. The value(s) to be returned will be wrapped in Tasks.
+            </summary>
+            <param name="value"></param>
+            <param name="returnThis">Function to calculate the return value</param>
+            <param name="returnThese">Optionally use these functions next</param>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.Returns``1(System.Threading.Tasks.ValueTask{``0},``0,``0[])">
+            <summary>
+            Set a return value for this call. The value(s) to be returned will be wrapped in ValueTasks.
+            </summary>
+            <param name="value"></param>
+            <param name="returnThis">Value to return. Will be wrapped in a ValueTask</param>
+            <param name="returnThese">Optionally use these values next</param>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.Returns``1(System.Threading.Tasks.ValueTask{``0},System.Func{NSubstitute.Core.CallInfo,``0},System.Func{NSubstitute.Core.CallInfo,``0}[])">
+            <summary>
+            Set a return value for this call, calculated by the provided function. The value(s) to be returned will be wrapped in ValueTasks.
+            </summary>
+            <param name="value"></param>
+            <param name="returnThis">Function to calculate the return value</param>
+            <param name="returnThese">Optionally use these functions next</param>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.ReturnsForAnyArgs``1(System.Threading.Tasks.ValueTask{``0},``0,``0[])">
+            <summary>
+            Set a return value for this call made with any arguments. The value(s) to be returned will be wrapped in ValueTasks.
+            </summary>
+            <param name="value"></param>
+            <param name="returnThis">Value to return</param>
+            <param name="returnThese">Optionally return these values next</param>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.ReturnsForAnyArgs``1(System.Threading.Tasks.ValueTask{``0},System.Func{NSubstitute.Core.CallInfo,``0},System.Func{NSubstitute.Core.CallInfo,``0}[])">
+            <summary>
+            Set a return value for this call made with any arguments, calculated by the provided function. The value(s) to be returned will be wrapped in ValueTasks.
+            </summary>
+            <param name="value"></param>
+            <param name="returnThis">Function to calculate the return value</param>
+            <param name="returnThese">Optionally use these functions next</param>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.When``1(``0,System.Action{``0})">
+            <summary>
+            Perform an action when this member is called.
+            Must be followed by <see cref="M:NSubstitute.Core.WhenCalled`1.Do(System.Action{NSubstitute.Core.CallInfo})"/> to provide the callback.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.WhenForAnyArgs``1(``0,System.Action{``0})">
+            <summary>
+            Perform an action when this member is called with any arguments.
+            Must be followed by <see cref="M:NSubstitute.Core.WhenCalled`1.Do(System.Action{NSubstitute.Core.CallInfo})"/> to provide the callback.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.When``1(``0,System.Func{``0,System.Threading.Tasks.Task})">
+            <summary>
+            Perform an action when this member is called.
+            Must be followed by <see cref="M:NSubstitute.Core.WhenCalled`1.Do(System.Action{NSubstitute.Core.CallInfo})"/> to provide the callback.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.WhenForAnyArgs``1(``0,System.Func{``0,System.Threading.Tasks.Task})">
+            <summary>
+            Perform an action when this member is called with any arguments.
+            Must be followed by <see cref="M:NSubstitute.Core.WhenCalled`1.Do(System.Action{NSubstitute.Core.CallInfo})"/> to provide the callback.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.When``2(``0,System.Func{``0,System.Threading.Tasks.ValueTask{``1}})">
+            <summary>
+            Perform an action when this member is called.
+            Must be followed by <see cref="M:NSubstitute.Core.WhenCalled`1.Do(System.Action{NSubstitute.Core.CallInfo})"/> to provide the callback.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.WhenForAnyArgs``2(``0,System.Func{``0,System.Threading.Tasks.ValueTask{``1}})">
+            <summary>
+            Perform an action when this member is called with any arguments.
+            Must be followed by <see cref="M:NSubstitute.Core.WhenCalled`1.Do(System.Action{NSubstitute.Core.CallInfo})"/> to provide the callback.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.AllowNullAttribute">
+            <summary>Specifies that null is allowed as an input even if the corresponding type disallows it.</summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.DisallowNullAttribute">
+            <summary>Specifies that null is disallowed as an input even if the corresponding type allows it.</summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.MaybeNullAttribute">
+            <summary>Specifies that an output may be null even if the corresponding type disallows it.</summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.NotNullAttribute">
+            <summary>Specifies that an output will not be null even if the corresponding type allows it.</summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute">
+            <summary>Specifies that when a method returns <see cref="P:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute.ReturnValue"/>, the parameter may be null even if the corresponding type disallows it.</summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute.#ctor(System.Boolean)">
+            <summary>Initializes the attribute with the specified return value condition.</summary>
+            <param name="returnValue">
+            The return value condition. If the method returns this value, the associated parameter may be null.
+            </param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute.ReturnValue">
+            <summary>Gets the return value condition.</summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute">
+            <summary>Specifies that when a method returns <see cref="P:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.ReturnValue"/>, the parameter will not be null even if the corresponding type allows it.</summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.#ctor(System.Boolean)">
+            <summary>Initializes the attribute with the specified return value condition.</summary>
+            <param name="returnValue">
+            The return value condition. If the method returns this value, the associated parameter will not be null.
+            </param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.ReturnValue">
+            <summary>Gets the return value condition.</summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute">
+            <summary>Specifies that the output will be non-null if the named parameter is non-null.</summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute.#ctor(System.String)">
+            <summary>Initializes the attribute with the associated parameter name.</summary>
+            <param name="parameterName">
+            The associated parameter name.  The output will be non-null if the argument to the parameter specified is non-null.
+            </param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute.ParameterName">
+            <summary>Gets the associated parameter name.</summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute">
+            <summary>Applied to a method that will never return under any circumstance.</summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute">
+            <summary>Specifies that the method will not return if the associated Boolean parameter is passed the specified value.</summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute.#ctor(System.Boolean)">
+            <summary>Initializes the attribute with the specified parameter value.</summary>
+            <param name="parameterValue">
+            The condition parameter value. Code after the method will be considered unreachable by diagnostics if the argument to
+            the associated parameter matches this value.
+            </param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute.ParameterValue">
+            <summary>Gets the condition parameter value.</summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute">
+            <summary>Specifies that the method or property will ensure that the listed field and property members have not-null values.</summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute.#ctor(System.String)">
+            <summary>Initializes the attribute with a field or property member.</summary>
+            <param name="member">
+            The field or property member that is promised to be not-null.
+            </param>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute.#ctor(System.String[])">
+            <summary>Initializes the attribute with the list of field and property members.</summary>
+            <param name="members">
+            The list of field and property members that are promised to be not-null.
+            </param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute.Members">
+            <summary>Gets field or property member names.</summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute">
+            <summary>Specifies that the method or property will ensure that the listed field and property members have not-null values when returning with the specified return value condition.</summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.#ctor(System.Boolean,System.String)">
+            <summary>Initializes the attribute with the specified return value condition and a field or property member.</summary>
+            <param name="returnValue">
+            The return value condition. If the method returns this value, the associated parameter will not be null.
+            </param>
+            <param name="member">
+            The field or property member that is promised to be not-null.
+            </param>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.#ctor(System.Boolean,System.String[])">
+            <summary>Initializes the attribute with the specified return value condition and list of field and property members.</summary>
+            <param name="returnValue">
+            The return value condition. If the method returns this value, the associated parameter will not be null.
+            </param>
+            <param name="members">
+            The list of field and property members that are promised to be not-null.
+            </param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.ReturnValue">
+            <summary>Gets the return value condition.</summary>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.Members">
+            <summary>Gets field or property member names.</summary>
+        </member>
+    </members>
+</doc>
