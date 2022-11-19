@@ -55,6 +55,11 @@ public class I : MonoBehaviour
         return obj.ToObject<string>();
     }
 
+    public static string S(string key, params object[] args)
+    {
+        return string.Format(S(key), args);
+    }
+
     private void ReloadLocale()
     {
         string path = Path.Combine(Application.streamingAssetsPath, "Locales", currentLocale.ToString()) + ".json";
