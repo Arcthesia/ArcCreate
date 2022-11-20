@@ -1,6 +1,6 @@
 using System;
 
-namespace Arc.ChartFormat
+namespace ArcCreate.ChartFormat
 {
     public class ChartFormatException : Exception
     {

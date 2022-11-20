@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Arc.ChartFormat
+namespace ArcCreate.ChartFormat
 {
     public class RawArc : RawEvent
     {

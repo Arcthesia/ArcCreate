@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace Arc.ChartFormat
+namespace ArcCreate.ChartFormat
 {
     /// <summary>
     /// Create a writer based on target file name.

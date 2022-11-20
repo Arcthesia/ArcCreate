@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Arc.ChartFormat
+namespace ArcCreate.ChartFormat
 {
     public class RawCamera : RawEvent
     {

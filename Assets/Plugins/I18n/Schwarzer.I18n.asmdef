@@ -1,10 +1,6 @@
 {
     "name": "Schwarzer.I18n",
-    "references": [
-        "GUID:f65c6ed45cb82d74d8e3d365a6f5fd85",
-        "Schwarzer.Shell"
-    ],
-    "optionalUnityReferences": [],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
@@ -12,5 +8,6 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": []
+    "versionDefines": [],
+    "noEngineReferences": false
 }

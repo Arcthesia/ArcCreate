@@ -3,7 +3,9 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Arc.ChartFormat"
+        "ArcCreate.ChartFormat",
+        "ArcCreate.Gameplay",
+        "ArcCreate.Utility"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

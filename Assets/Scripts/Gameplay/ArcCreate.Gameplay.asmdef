@@ -1,0 +1,17 @@
+{
+    "name": "ArcCreate.Gameplay",
+    "references": [
+        "GUID:bc9459cff53879146aae30bc07a3bf9b",
+        "GUID:5a90b6a42fe02ee42b9280a92e2fb82d",
+        "GUID:01ac7ee8347a8dc4ab295317e5a85380"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

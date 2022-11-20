@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using ArcCreate.Utility.Parser;
 using UnityEngine;
 
-namespace Arc.ChartFormat
+namespace ArcCreate.ChartFormat
 {
     /// <summary>
     /// Object for reading a .aff chart file.

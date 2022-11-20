@@ -1,38 +1,36 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public static class Pools
 {
-    public const string DefaultPoolName = "";
-    private static readonly Dictionary<(Type, string), object> TypeToPoolMap = new Dictionary<(Type, string), object>();
+    private static readonly Dictionary<string, object> NameToPoolMap = new Dictionary<string, object>();
 
-    public static void New<T>(GameObject prefab, Transform parent, int capacity, string name = DefaultPoolName)
+    public static void New<T>(string name, GameObject prefab, Transform parent, int capacity)
         where T : Component
     {
-        if (TypeToPoolMap.ContainsKey((typeof(T), name)))
+        if (NameToPoolMap.ContainsKey(name))
         {
             return;
         }
 
-        TypeToPoolMap.Add((typeof(T), name), new Pool<T>(prefab, parent, capacity));
+        NameToPoolMap.Add(name, new Pool<T>(prefab, parent, capacity));
     }
 
-    public static Pool<T> Get<T>(string name = DefaultPoolName)
+    public static Pool<T> Get<T>(string name)
         where T : Component
     {
-        return TypeToPoolMap[(typeof(T), name)] as Pool<T>;
+        return NameToPoolMap[name] as Pool<T>;
     }
 
-    public static void Destroy<T>(string name = DefaultPoolName)
+    public static void Destroy<T>(string name)
         where T : Component
     {
-        if (!TypeToPoolMap.ContainsKey((typeof(T), name)))
+        if (!NameToPoolMap.ContainsKey(name))
         {
             return;
         }
 
-        (TypeToPoolMap[(typeof(T), name)] as Pool<T>).Destroy();
-        TypeToPoolMap.Remove((typeof(T), name));
+        (NameToPoolMap[name] as Pool<T>).Destroy();
+        NameToPoolMap.Remove(name);
     }
 }

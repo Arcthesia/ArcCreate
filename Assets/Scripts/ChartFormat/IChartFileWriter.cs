@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Arc.ChartFormat
+namespace ArcCreate.ChartFormat
 {
     public interface IChartFileWriter
     {

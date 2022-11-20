@@ -1,6 +1,6 @@
 ﻿using NAudio.Wave;
 
-namespace Utility.Mp3Converter
+namespace ArcCreate.Utility.Mp3Converter
 {
     public static class Mp3Converter
     {
