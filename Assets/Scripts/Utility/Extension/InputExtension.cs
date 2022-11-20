@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Utility.Extension
+namespace ArcCreate.Utility.Extension
 {
     public static class InputExtension
     {

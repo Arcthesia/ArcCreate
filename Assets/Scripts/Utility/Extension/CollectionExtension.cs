@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Utility.Extension
+namespace ArcCreate.Utility.Extension
 {
     public static class CollectionExtension
     {

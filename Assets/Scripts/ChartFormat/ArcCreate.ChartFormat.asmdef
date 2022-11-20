@@ -1,0 +1,16 @@
+{
+    "name": "ArcCreate.ChartFormat",
+    "references": [
+        "Schwarzer.I18n",
+        "ArcCreate.Utility"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

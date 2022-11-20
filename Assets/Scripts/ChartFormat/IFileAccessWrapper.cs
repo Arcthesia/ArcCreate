@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace Arc.ChartFormat
+namespace ArcCreate.ChartFormat
 {
     public interface IFileAccessWrapper
     {

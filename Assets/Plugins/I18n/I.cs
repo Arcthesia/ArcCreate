@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -76,7 +75,6 @@ public class I : MonoBehaviour
             error += "Locale file loading error\n\n";
             error += Ex.ToString();
             File.WriteAllText(log, error);
-            Utility.Shell.OpenExplorer(log);
         }
     }
 

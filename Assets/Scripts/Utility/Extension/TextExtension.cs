@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Utility.Extension
+namespace ArcCreate.Utility.Extension
 {
     public static class TextExtension
     {

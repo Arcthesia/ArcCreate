@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Arc.ChartFormat
+namespace ArcCreate.ChartFormat
 {
     /// <summary>
     /// Class for serializing a chart into possibly multiple chart files.

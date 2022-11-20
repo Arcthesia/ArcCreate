@@ -1,0 +1,66 @@
+namespace ArcCreate.Gameplay.Data
+{
+    /// <summary>
+    /// Base class for all chart events.
+    /// </summary>
+    public abstract class ArcEvent
+    {
+        private int timingGroup;
+
+        /// <summary>
+        /// Gets or sets the note's timing.
+        /// </summary>
+        /// <value>The note's timing.</value>
+        public int Timing { get; set; }
+
+        /// <summary>
+        /// Gets or sets the note's timing group.
+        /// Upon notifying manager classes of these changes with <see cref="IChartControl.NotifyChange(System.Collections.Generic.IEnumerable{ArcEvent})"/>,
+        /// the note will be moved to the correct timing group.
+        /// </summary>
+        /// <value>The note's timing group.</value>
+        public int TimingGroup
+        {
+            get => timingGroup;
+            set
+            {
+                TimingGroupChangedFrom = timingGroup;
+                timingGroup = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating the previous timing group value of this note.
+        /// Used to relocate the note whenever there's a change in its timing group property.
+        /// </summary>
+        public int TimingGroupChangedFrom { get; internal set; } = int.MinValue;
+
+        /// <summary>
+        /// Gets a value indicating whether this note's timing group property has been changed
+        /// and it has not been moved to the correct timing group yet.
+        /// </summary>
+        public bool TimingGroupChanged => TimingGroupChangedFrom == int.MinValue && TimingGroupChangedFrom != TimingGroup;
+
+        public void ResetTimingGroupChangedFrom() => TimingGroupChangedFrom = int.MinValue;
+
+        /// <summary>
+        /// Get a new event instance with the same values.
+        /// Note that the new event is only a copy of the note's data, and will not be added to the chart.
+        /// </summary>
+        /// <returns>The new event.</returns>
+        public abstract ArcEvent Clone();
+
+        /// <summary>
+        /// Assign values to this note.
+        /// </summary>
+        /// <param name="newValues">The event to copy values from.</param>
+        public virtual void Assign(ArcEvent newValues)
+        {
+            Timing = newValues.Timing;
+            TimingGroup = newValues.TimingGroup;
+        }
+
+        // public NoteGroup NoteGroup => Managers.Chart.GetNoteGroup(TimingGroup);
+        // public bool NoInput => NoteGroup.GroupProperties.NoInput;
+    }
+}

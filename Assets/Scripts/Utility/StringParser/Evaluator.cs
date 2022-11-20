@@ -1,44 +1,47 @@
 using Jace;
 
-public class Evaluator
+namespace ArcCreate.Utility.Parser
 {
-    private static readonly CalculationEngine Engine = new CalculationEngine();
-
-    public static float Float(string str)
+    public class Evaluator
     {
-        return (float)Engine.Calculate(str);
-    }
+        private static readonly CalculationEngine Engine = new CalculationEngine();
 
-    public static int Int(string str)
-    {
-        return (int)System.Math.Round(Engine.Calculate(str));
-    }
-
-    public static bool TryFloat(string str, out float value)
-    {
-        try
+        public static float Float(string str)
         {
-            value = Float(str);
-            return true;
+            return (float)Engine.Calculate(str);
         }
-        catch
-        {
-            value = 0;
-            return false;
-        }
-    }
 
-    public static bool TryInt(string str, out int value)
-    {
-        try
+        public static int Int(string str)
         {
-            value = Int(str);
-            return true;
+            return (int)System.Math.Round(Engine.Calculate(str));
         }
-        catch
+
+        public static bool TryFloat(string str, out float value)
         {
-            value = 0;
-            return false;
+            try
+            {
+                value = Float(str);
+                return true;
+            }
+            catch
+            {
+                value = 0;
+                return false;
+            }
+        }
+
+        public static bool TryInt(string str, out int value)
+        {
+            try
+            {
+                value = Int(str);
+                return true;
+            }
+            catch
+            {
+                value = 0;
+                return false;
+            }
         }
     }
 }

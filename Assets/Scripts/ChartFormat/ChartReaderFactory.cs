@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace Arc.ChartFormat
+namespace ArcCreate.ChartFormat
 {
     /// <summary>
     /// Create and initialize objects of type <see cref="ChartReader"/> based on the provided path.

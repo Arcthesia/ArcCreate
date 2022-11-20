@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using ArcCreate.Utility.Parser;
 
-namespace Arc.ChartFormat
+namespace ArcCreate.ChartFormat
 {
     public class RawTimingGroup
     {

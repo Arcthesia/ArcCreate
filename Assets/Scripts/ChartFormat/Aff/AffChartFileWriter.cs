@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace Arc.ChartFormat
+namespace ArcCreate.ChartFormat
 {
     /// <summary>
     /// Class for writing a single .aff chart file.

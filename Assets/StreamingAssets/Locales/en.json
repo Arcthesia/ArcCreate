@@ -13,7 +13,7 @@
       "BaseBPMZero": "Base BPM can not be zero.",
       "DurationNegative": "Duration of an this event type can not be negative.",
       "DurationZero": "Duration of this event type can not be zero.",
-      "ArcTapOutOfRange": "ArcTap is outside the timing range of its parent arc.",
+      "ArcTapOutOfRange": "ArcTap is outside the timing range of its parent ArcCreate.",
       "TimingGroupPropertiesInvalid": "Invalid timing group properties definition.",
       "SymbolError": "Possibly wrong syntax.\nException: {0}\nStack trace:{1}"
     }

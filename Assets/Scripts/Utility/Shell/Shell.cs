@@ -2,7 +2,7 @@ using SFB;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Utility
+namespace ArcCreate.Utility
 {
     public class Shell
     {

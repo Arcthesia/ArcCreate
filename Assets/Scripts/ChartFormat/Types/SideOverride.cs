@@ -1,4 +1,4 @@
-namespace Arc.ChartFormat
+namespace ArcCreate.ChartFormat
 {
     public enum SideOverride
     {

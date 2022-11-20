@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3ca7bbd6bd51854e8f01d3bb8133562, type: 3}
+  m_Name: AlignmentConflict
+  m_EditorClassIdentifier: 
+  Name: conflict
+  DefaultNoteOption: {fileID: 11400000, guid: f2d92ade5980a60498adf7c45f5810f8, type: 2}
+  DefaultParticleOption: {fileID: 11400000, guid: 289603ed90d69ac4b8d45d930aebb979,
+    type: 2}
+  DefaultTrackOption: {fileID: 11400000, guid: 3ac9ff2f57bb65141b7d48ddbb5e9b51, type: 2}
+  DefaultSingleLineOption: {fileID: 11400000, guid: 9cf1a968eccf9af48badfc3a2ed68683,
+    type: 2}
+  DefaultAccentOption: {fileID: 11400000, guid: 2051f235d7fdb9f4eb62731dd20fbb37,
+    type: 2}
+  JacketShadowSkin: {fileID: 0}
