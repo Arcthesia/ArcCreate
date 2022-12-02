@@ -4,11 +4,11 @@ using UnityEngine.Events;
 
 namespace ArcCreate
 {
-    [CreateAssetMenu(fileName = "String", menuName = "ScriptableObject/String")]
+    [CreateAssetMenu(fileName = "Sprite", menuName = "ScriptableObject/Sprite")]
     public class SpriteSO : ScriptableObject
     {
         private Sprite value;
-        public Sprite Value 
+        public Sprite Value
         {
             get => value;
             set
@@ -18,7 +18,7 @@ namespace ArcCreate
             }
         }
 
-        public OnChangeEvent OnValueChange { get; set; }
+        public OnChangeEvent OnValueChange { get; set; } = new OnChangeEvent();
 
         public class OnChangeEvent : UnityEvent<Sprite>
         {

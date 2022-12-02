@@ -11,10 +11,10 @@ namespace ArcCreate.Gameplay.Skin
         public Color ConnectionLineColor;
         public Mesh ArcTapMesh;
         public Mesh ArcTapSfxMesh;
-        public Sprite ArcCapSprite;
 
         public abstract (Mesh mesh, Material material) GetArcTapSkin(ArcTap note);
         public abstract (Sprite normal, Sprite highlight) GetHoldSkin(Hold note);
         public abstract Sprite GetTapSkin(Tap note);
+        public abstract Sprite GetArcCapSprite(Arc arc);
     }
 }

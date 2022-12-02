@@ -1,7 +1,9 @@
 {
     "name": "ArcCreate.Utility",
     "references": [
-        "SFB.Runtime"
+        "SFB.Runtime",
+        "Unity.TextMeshPro",
+        "YamlDotNet"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

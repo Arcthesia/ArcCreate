@@ -11,6 +11,7 @@ namespace ArcCreate.Gameplay.Skin
         public Sprite HoldSkin;
         public Sprite HoldHighlightSkin;
         public Material ArcTapSkin;
+        public Sprite ArcCapSprite;
 
         public override (Mesh mesh, Material material) GetArcTapSkin(ArcTap note)
             => note.Sfx == "none" ? (ArcTapMesh, ArcTapSkin) : (ArcTapSfxMesh, ArcTapSfxSkin);
@@ -20,5 +21,8 @@ namespace ArcCreate.Gameplay.Skin
 
         public override Sprite GetTapSkin(Tap note)
             => TapSkin;
+
+        public override Sprite GetArcCapSprite(Arc arc)
+            => ArcCapSprite;
     }
 }

@@ -204,7 +204,7 @@ namespace Tests.Unit
                 TimingGroup = tg,
                 Timing = timing,
                 Bpm = bpm,
-                BeatsPerLine = bpl,
+                Divisor = bpl,
                 Type = RawEventType.Timing,
             };
         }

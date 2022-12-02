@@ -10,5 +10,7 @@ namespace ArcCreate.Gameplay.Skin
         (Sprite normal, Sprite highlight) GetHoldSkin(Hold note);
 
         (Mesh mesh, Material material) GetArcTapSkin(ArcTap note);
+
+        Sprite GetArcCapSprite(Arc arc);
     }
 }

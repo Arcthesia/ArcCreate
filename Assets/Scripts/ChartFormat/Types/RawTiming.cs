@@ -4,6 +4,6 @@ namespace ArcCreate.ChartFormat
     {
         public float Bpm { get; set; }
 
-        public float BeatsPerLine { get; set; }
+        public float Divisor { get; set; }
     }
 }

@@ -13,6 +13,12 @@ public class Pool<T>
     private Queue<T> available;
     private HashSet<T> occupied;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Pool{T}"/> class.
+    /// </summary>
+    /// <param name="prefab">The prefab of the GameObject.</param>
+    /// <param name="parent">The default parent.</param>
+    /// <param name="capacity">The intial capacity of the pool.</param>
     public Pool(GameObject prefab, Transform parent, int capacity = 50)
     {
         this.prefab = prefab;
@@ -28,6 +34,9 @@ public class Pool<T>
 
     public List<T> CurrentlyOccupied => new List<T>(occupied);
 
+    /// <summary>
+    /// Expand the pool by one object.
+    /// </summary>
     public void AddNewObject()
     {
         GameObject obj = GameObject.Instantiate(prefab, parent);
@@ -53,7 +62,7 @@ public class Pool<T>
         T obj = available.Dequeue();
         occupied.Add(obj);
 
-        if (newParent == null)
+        if (newParent != null)
         {
             obj.transform.SetParent(newParent, true);
         }

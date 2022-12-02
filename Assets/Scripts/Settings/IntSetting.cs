@@ -13,6 +13,8 @@ namespace ArcCreate
             this.settings = settings;
 
             value = PlayerPrefs.GetInt(settings, defaultValue);
+
+            OnValueChanged = new OnChangeEvent();
         }
 
         public OnChangeEvent OnValueChanged { get; set; }

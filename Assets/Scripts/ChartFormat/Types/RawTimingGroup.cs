@@ -50,7 +50,7 @@ namespace ArcCreate.ChartFormat
                                 opt,
                                 File,
                                 line,
-                                I.S("Format.Exception.TimingGroupPropertiesInvalid"));
+                                I18n.S("Format.Exception.TimingGroupPropertiesInvalid"));
                     }
                 }
                 else
@@ -78,7 +78,7 @@ namespace ArcCreate.ChartFormat
                                 opt,
                                 File,
                                 line,
-                                I.S("Format.Exception.TimingGroupProperties.Invalid"));
+                                I18n.S("Format.Exception.TimingGroupProperties.Invalid"));
                     }
                 }
             }

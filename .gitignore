@@ -12,6 +12,7 @@
 /自定义背景(User Backgrounds)/
 /Rendering/
 /[Tt]est/
+/Assets/InitTestScene**.unity
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta

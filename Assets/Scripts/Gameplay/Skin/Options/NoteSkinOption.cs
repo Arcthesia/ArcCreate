@@ -52,16 +52,16 @@ namespace ArcCreate.Gameplay.Skin
             }
         }
 
-        public Sprite GetArcCapSprite()
+        public Sprite GetArcCapSprite(Arc arc)
         {
             if (CurrentMode == InputMode.Controller
              || CurrentMode == InputMode.AutoController)
             {
-                return JoyconSkin.ArcCapSprite;
+                return JoyconSkin.GetArcCapSprite(arc);
             }
             else
             {
-                return TouchSkin.ArcCapSprite;
+                return TouchSkin.GetArcCapSprite(arc);
             }
         }
     }

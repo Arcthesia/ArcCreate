@@ -1,0 +1,42 @@
+Format:
+  Exception:
+    Message: |-
+      An exception occured while reading the chart file {File}
+      At: line {LineNumber}
+      While parsing event of type: {EventType}
+      With the following: "{Content}".
+      {Reason}
+    MessageUnknownReason: |-
+      An unknown error occurred while reading the chart file {File}
+      At: line {LineNumber}
+      While parsing event of type: {EventType}
+      With the followng "{Content}".
+    AudioOffsetInvalid: |-
+      Invalid audio offset definition.
+    TimingPointDensityFactorInvalid: |-
+      Invalid timing point density factor definition.
+    BaseTimingInvalid: |-
+      Invalid base timing definition. Ensure your chart file starts with a timing event at 0ms.
+    IncludeReferencedMultipleTimes: |-
+      A chart file was already included but is being referenced again.
+    IncludeAReferencedFragment: |-
+      A chart file was already referenced as a fragment but is being included again.
+    TimingGroupPairInvalid: |-
+      Invalid timing group symbol pairing. Make sure to enclose timing group definitions properly with "};".
+    DivisorNegative: |-
+      Divisor property of timing event can not be negative.
+    BaseBPMZero: |-
+      Base BPM can not be zero.
+    DurationNegative: |-
+      Duration of an this event type can not be negative.
+    DurationZero: |-
+      Duration of this event type can not be zero.
+    ArcTapOutOfRange: |-
+      ArcTap is outside the timing range of its parent Arc.
+    TimingGroupPropertiesInvalid: |-
+      Invalid timing group properties definition.
+    SymbolError: |-
+      Possibly wrong syntax.
+      Exception: {Exception}
+      Stack trace:
+      {StackTrace}
