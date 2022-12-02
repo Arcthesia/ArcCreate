@@ -14,6 +14,8 @@ namespace ArcCreate
             this.settings = settings;
 
             value = PlayerPrefs.GetFloat(settings, defaultValue);
+
+            OnValueChanged = new OnChangeEvent();
         }
 
         public float Value

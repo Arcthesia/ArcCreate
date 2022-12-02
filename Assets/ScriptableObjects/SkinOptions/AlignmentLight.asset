@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3ca7bbd6bd51854e8f01d3bb8133562, type: 3}
+  m_Name: AlignmentLight
+  m_EditorClassIdentifier: 
+  Name: light
+  DefaultNoteOption: {fileID: 11400000, guid: 2be55caad14d6b4439594b1dce765220, type: 2}
+  DefaultParticleOption: {fileID: 11400000, guid: b79ef2fbba0553a40a67c4ea23783bdd,
+    type: 2}
+  DefaultTrackOption: {fileID: 11400000, guid: 2b38a27a52dd90446810dadaf69ca756, type: 2}
+  DefaultSingleLineOption: {fileID: 11400000, guid: 9cf1a968eccf9af48badfc3a2ed68683,
+    type: 2}
+  DefaultAccentOption: {fileID: 11400000, guid: 9b032e888267a6548b8d6ba0c55c38cc,
+    type: 2}
+  JacketShadowSkin: {fileID: 0}

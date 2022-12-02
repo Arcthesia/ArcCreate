@@ -12,7 +12,7 @@ namespace ArcCreate.ChartFormat
     public partial class AffChartReader
     {
         /// <summary>
-        /// Parse a timing aff line of the format "timing([start],[bpm],[beatPerLine]);".
+        /// Parse a timing aff line of the format "timing([start],[bpm],[divisor]);".
         /// </summary>
         /// <param name="line">The string to parse.</param>
         /// <returns>The parsed object.</returns>
@@ -24,22 +24,22 @@ namespace ArcCreate.ChartFormat
                 s.Skip("timing(".Length);
                 int tick = s.ReadInt(",");
                 float bpm = s.ReadFloat(",");
-                float beatsPerLine = s.ReadFloat(")");
+                float divisor = s.ReadFloat(")");
 
-                if (beatsPerLine < 0)
+                if (divisor < 0)
                 {
-                    throw new ChartFormatException(I.S("Format.Exception.BeatsPerLineNegative"));
+                    throw new ChartFormatException(I18n.S("Format.Exception.DivisorNegative"));
                 }
 
                 if (tick == 0 && bpm == 0)
                 {
-                    throw new ChartFormatException(I.S("Format.Exception.BaseBPMNegative"));
+                    throw new ChartFormatException(I18n.S("Format.Exception.BaseBpmNegative"));
                 }
 
                 return new RawTiming()
                 {
                     Timing = tick,
-                    BeatsPerLine = beatsPerLine,
+                    Divisor = divisor,
                     Bpm = bpm,
                     Type = RawEventType.Timing,
                     TimingGroup = currentTimingGroup,
@@ -51,7 +51,7 @@ namespace ArcCreate.ChartFormat
             }
             catch (Exception ex)
             {
-                throw new ChartFormatException(I.S("Format.Exception.SymbolError", ex.Message, ex.StackTrace));
+                throw GenerateException(ex);
             }
         }
 
@@ -82,7 +82,7 @@ namespace ArcCreate.ChartFormat
             }
             catch (Exception ex)
             {
-                throw new ChartFormatException(I.S("Format.Exception.SymbolError", ex.Message, ex.StackTrace));
+                throw GenerateException(ex);
             }
         }
 
@@ -102,7 +102,7 @@ namespace ArcCreate.ChartFormat
                 int track = s.ReadInt(")");
                 if (endtick <= tick)
                 {
-                    throw new ChartFormatException(I.S("Format.Exception.DurationNegative"));
+                    throw new ChartFormatException(I18n.S("Format.Exception.DurationNegative"));
                 }
 
                 return new RawHold()
@@ -120,7 +120,7 @@ namespace ArcCreate.ChartFormat
             }
             catch (Exception ex)
             {
-                throw new ChartFormatException(I.S("Format.Exception.SymbolError", ex.Message, ex.StackTrace));
+                throw GenerateException(ex);
             }
         }
 
@@ -157,7 +157,7 @@ namespace ArcCreate.ChartFormat
                         int timing = s.ReadInt(")");
                         if (timing < tick || timing > endtick)
                         {
-                            throw new ChartFormatException(I.S("Format.Exception.ArcTapOutOfRange"));
+                            throw new ChartFormatException(I18n.S("Format.Exception.ArcTapOutOfRange"));
                         }
 
                         arctap.Add(timing);
@@ -170,7 +170,7 @@ namespace ArcCreate.ChartFormat
 
                 if (endtick < tick)
                 {
-                    throw new ChartFormatException(I.S("Format.Exception.DurationNegative"));
+                    throw new ChartFormatException(I18n.S("Format.Exception.DurationNegative"));
                 }
 
                 return new RawArc()
@@ -196,7 +196,7 @@ namespace ArcCreate.ChartFormat
             }
             catch (Exception ex)
             {
-                throw new ChartFormatException(I.S("Format.Exception.SymbolError", ex.Message, ex.StackTrace));
+                throw GenerateException(ex);
             }
         }
 
@@ -220,7 +220,7 @@ namespace ArcCreate.ChartFormat
 
                 if (duration < 0)
                 {
-                    throw new ChartFormatException(I.S("Format.Exception.DurationNegative"));
+                    throw new ChartFormatException(I18n.S("Format.Exception.DurationNegative"));
                 }
 
                 return new RawCamera()
@@ -240,7 +240,7 @@ namespace ArcCreate.ChartFormat
             }
             catch (Exception ex)
             {
-                throw new ChartFormatException(I.S("Format.Exception.SymbolError", ex.Message, ex.StackTrace));
+                throw GenerateException(ex);
             }
         }
 
@@ -330,7 +330,7 @@ namespace ArcCreate.ChartFormat
             }
             catch (Exception ex)
             {
-                throw new ChartFormatException(I.S("Format.Exception.SymbolError", ex.Message, ex.StackTrace));
+                throw GenerateException(ex);
             }
         }
 
@@ -358,7 +358,7 @@ namespace ArcCreate.ChartFormat
             catch (Exception ex)
             {
                 return new RawTimingGroup() { File = path };
-                throw new ChartFormatException(I.S("Format.Exception.SymbolError", ex.Message, ex.StackTrace));
+                throw GenerateException(ex);
             }
         }
 
@@ -378,7 +378,7 @@ namespace ArcCreate.ChartFormat
             }
             catch (Exception ex)
             {
-                throw new ChartFormatException(I.S("Format.Exception.SymbolError", ex.Message, ex.StackTrace));
+                throw GenerateException(ex);
             }
         }
 
@@ -399,8 +399,19 @@ namespace ArcCreate.ChartFormat
             }
             catch (Exception ex)
             {
-                throw new ChartFormatException(I.S("Format.Exception.SymbolError", ex.Message, ex.StackTrace));
+                throw GenerateException(ex);
             }
+        }
+
+        private ChartFormatException GenerateException(Exception ex)
+        {
+            return new ChartFormatException(I18n.S(
+                "Format.Exception.SymbolError",
+                new Dictionary<string, string>()
+                {
+                        { "Exception", ex.Message },
+                        { "StackTrace", ex.StackTrace },
+                }));
         }
 
         private string SwitchFileName(string currentPath, string target)

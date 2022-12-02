@@ -4,11 +4,15 @@ root=true
 [Assets/Plugins/**.cs]
 generated_code = true
 
+[**/RangeTree/**.cs]
+generated_code = true
+
 [*.cs]
 # Unsupported C# features
 dotnet_diagnostic.IDE0090.severity = none
 dotnet_diagnostic.IDE0063.severity = none
 dotnet_diagnostic.IDE0066.severity = none
+dotnet_diagnostic.IDE0054.severity = none
 
 # Unnecessary value assignment
 dotnet_diagnostic.IDE0059.severity = none

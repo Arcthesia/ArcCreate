@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace ArcCreate.ChartFormat
 {
@@ -10,12 +11,29 @@ namespace ArcCreate.ChartFormat
         }
 
         public ChartFormatException(RawEventType type, string content, string file, int line)
-            : base(I.S("Format.Exception.MessageUnknownReason", file, line, type, content))
+            : base(I18n.S(
+                "Format.Exception.MessageUnknownReason",
+                new Dictionary<string, object>()
+                {
+                    { "File", file },
+                    { "LineNumber", line },
+                    { "Content", content },
+                    { "EventType", type },
+                }))
         {
         }
 
         public ChartFormatException(RawEventType type, string content, string file, int line, string reason)
-            : base(I.S("Format.Exception.Message", file, line, type, content, reason))
+            : base(I18n.S(
+                "Format.Exception.Message",
+                new Dictionary<string, object>()
+                {
+                    { "File", file },
+                    { "LineNumber", line },
+                    { "Content", content },
+                    { "EventType", type },
+                    { "Reason", reason },
+                }))
         {
         }
     }

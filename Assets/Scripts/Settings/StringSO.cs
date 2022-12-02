@@ -8,7 +8,7 @@ namespace ArcCreate
     public class StringSO : ScriptableObject
     {
         private string value;
-        public string Value 
+        public string Value
         {
             get => value;
             set
@@ -18,7 +18,7 @@ namespace ArcCreate
             }
         }
 
-        public OnChangeEvent OnValueChange { get; set; }
+        public OnChangeEvent OnValueChange { get; set; } = new OnChangeEvent();
 
         public class OnChangeEvent : UnityEvent<string>
         {

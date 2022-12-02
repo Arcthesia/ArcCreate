@@ -1,11 +1,15 @@
 {
   "dependencies": {
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+    "com.kyub.emojisearch": "https://gitlab-ci-token:glpat-c6ymx9eBXkdQhFhCMaLg@gitlab.com/KyubInteractive/kyublibs.git#com.kyub.emojisearch-1.1.5",
     "com.unity.2d.sprite": "1.0.0",
-    "com.unity.ide.visualstudio": "2.0.11",
+    "com.unity.ide.visualstudio": "2.0.12",
     "com.unity.ide.vscode": "1.2.4",
+    "com.unity.inputsystem": "1.2.0",
     "com.unity.test-framework": "1.1.29",
     "com.unity.textmeshpro": "2.1.6",
     "com.unity.timeline": "1.2.18",
+    "com.unity.toolchain.linux-x86_64": "2.0.3",
     "com.unity.ugui": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",

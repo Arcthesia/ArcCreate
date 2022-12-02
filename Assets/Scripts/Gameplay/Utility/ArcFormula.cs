@@ -51,14 +51,14 @@ namespace ArcCreate.Gameplay
             return Mathf.RoundToInt((x - (Values.LaneWidth * 2.5f)) / -Values.LaneWidth);
         }
 
-        public static float FloorPositionToZ(double fp)
-        {
-            return (float)(fp * Settings.DropRate.Value / Values.BaseBpm * -1000);
-        }
-
         public static double ZToFloorPosition(float z)
         {
-            return (double)z * Values.BaseBpm / (Settings.DropRate.Value * -1000);
+            return (double)(z * Settings.DropRate.Value / Values.BaseBpm * -1000);
+        }
+
+        public static float FloorPositionToZ(double fp)
+        {
+            return (float)fp * Values.BaseBpm / (Settings.DropRate.Value * -1000);
         }
 
         public static float S(float start, float end, float t)
@@ -170,6 +170,7 @@ namespace ArcCreate.Gameplay
 
         public static float CalculateTapSizeScalar(float z)
         {
+            z = Mathf.Abs(z);
             return Mathf.Abs(1.5f + (3.25f * z / Values.TrackLength));
         }
 

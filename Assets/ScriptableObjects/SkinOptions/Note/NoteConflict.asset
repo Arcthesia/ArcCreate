@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6dce790f6f75174f84263bd9163011f, type: 3}
+  m_Name: NoteConflict
+  m_EditorClassIdentifier: 
+  Name: conflict
+  TouchSkin: {fileID: 11400000, guid: 0fad05c4bfd0c49448b0991481b345f5, type: 2}
+  JoyconSkin: {fileID: 11400000, guid: 4919f3a895b16b4428cc76b3e568a47d, type: 2}

@@ -13,6 +13,7 @@ namespace ArcCreate.Gameplay.Skin
         public Sprite HoldSkinRight;
         public Sprite HoldHighlightSkinLeft;
         public Sprite HoldHighlightSkinRight;
+        public Sprite[] ArcCapSprites;
         public Material ArcTapSkinLeft;
         public Material ArcTapSkinMiddle;
         public Material ArcTapSkinRight;
@@ -42,5 +43,14 @@ namespace ArcCreate.Gameplay.Skin
 
         public override Sprite GetTapSkin(Tap note)
             => (note.Lane <= 2) ? TapSkinLeft : TapSkinRight;
+
+        public override Sprite GetArcCapSprite(Arc arc)
+        {
+            if (arc.Color < 0 || arc.Color > ArcCapSprites.Length)
+            {
+                return ArcCapSprites[ArcCapSprites.Length - 1];
+            }
+            return ArcCapSprites[arc.Color];
+        }
     }
 }

@@ -52,7 +52,7 @@ namespace ArcCreate.ChartFormat
                     lines[0],
                     path,
                     1,
-                    I.S("Format.Exception.AudioOffsetInvalid"));
+                    I18n.S("Format.Exception.AudioOffsetInvalid"));
             }
 
             try
@@ -78,7 +78,7 @@ namespace ArcCreate.ChartFormat
                     lines[1],
                     path,
                     2,
-                    I.S("Format.Exception.TimingPointDensityFactorInvalid"));
+                    I18n.S("Format.Exception.TimingPointDensityFactorInvalid"));
             }
 
             int chartBeginning = 2;
@@ -93,11 +93,11 @@ namespace ArcCreate.ChartFormat
 
             try
             {
-                ParseTiming(lines[chartBeginning]);
+                Events.Add(ParseTiming(lines[chartBeginning]));
             }
             catch (Exception)
             {
-                throw new ChartFormatException(RawEventType.Timing, lines[2], path, 3, I.S("Format.Exception.BaseTimingInvalid"));
+                throw new ChartFormatException(RawEventType.Timing, lines[2], path, 3, I18n.S("Format.Exception.BaseTimingInvalid"));
             }
 
             for (int i = chartBeginning + 1; i < lines.Length; ++i)
@@ -156,7 +156,7 @@ namespace ArcCreate.ChartFormat
                                     line,
                                     path,
                                     i,
-                                    I.S("Format.Exception.IncludeReferencedMultipleTimes"));
+                                    I18n.S("Format.Exception.IncludeReferencedMultipleTimes"));
                             }
 
                             if (AllFragments.Contains(fullInclPath))
@@ -166,7 +166,7 @@ namespace ArcCreate.ChartFormat
                                     line,
                                     path,
                                     i,
-                                    I.S("Format.Exception.IncludeAReferencedFragment"));
+                                    I18n.S("Format.Exception.IncludeAReferencedFragment"));
                             }
 
                             AddInclude(inclPath);
@@ -183,7 +183,7 @@ namespace ArcCreate.ChartFormat
                                     line,
                                     path,
                                     i,
-                                    I.S("Format.Exception.IncludeReferencedMultipleTimes"));
+                                    I18n.S("Format.Exception.IncludeReferencedMultipleTimes"));
                             }
 
                             AddFragment(timing, fragPath);
@@ -214,7 +214,7 @@ namespace ArcCreate.ChartFormat
             Events.Sort((RawEvent a, RawEvent b) => { return a.Timing.CompareTo(b.Timing); });
             if (currentTimingGroup != 0)
             {
-                throw new ChartFormatException(I.S("Format.Exception.TimingGroupPairInvalid"));
+                throw new ChartFormatException(I18n.S("Format.Exception.TimingGroupPairInvalid"));
             }
         }
 

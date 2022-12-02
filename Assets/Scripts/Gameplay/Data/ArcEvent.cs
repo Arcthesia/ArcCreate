@@ -1,3 +1,5 @@
+using ArcCreate.Gameplay.Chart;
+
 namespace ArcCreate.Gameplay.Data
 {
     /// <summary>
@@ -15,7 +17,7 @@ namespace ArcCreate.Gameplay.Data
 
         /// <summary>
         /// Gets or sets the note's timing group.
-        /// Upon notifying manager classes of these changes with <see cref="IChartControl.NotifyChange(System.Collections.Generic.IEnumerable{ArcEvent})"/>,
+        /// Upon notifying manager classes of these changes with <see cref="IChartControl.UpdateEvents(System.Collections.Generic.IEnumerable{ArcEvent})"/>,
         /// the note will be moved to the correct timing group.
         /// </summary>
         /// <value>The note's timing group.</value>
@@ -28,6 +30,14 @@ namespace ArcCreate.Gameplay.Data
                 timingGroup = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the timing group instance.
+        /// </summary>
+        /// <value>The timing group instance.</value>
+        public TimingGroup TimingGroupInstance { get; set; }
+
+        public bool NoInput => TimingGroupInstance.GroupProperties.NoInput;
 
         /// <summary>
         /// Gets a value indicating the previous timing group value of this note.
@@ -59,8 +69,5 @@ namespace ArcCreate.Gameplay.Data
             Timing = newValues.Timing;
             TimingGroup = newValues.TimingGroup;
         }
-
-        // public NoteGroup NoteGroup => Managers.Chart.GetNoteGroup(TimingGroup);
-        // public bool NoInput => NoteGroup.GroupProperties.NoInput;
     }
 }

@@ -25,7 +25,7 @@ namespace Tests.Unit
 
             Assert.That(e.Timing, Is.EqualTo(timing));
             Assert.That(e.Bpm, Is.EqualTo(bpm));
-            Assert.That(e.BeatsPerLine, Is.EqualTo(bpl));
+            Assert.That(e.Divisor, Is.EqualTo(bpl));
         }
 
         [TestCase(0, 0, 4)]

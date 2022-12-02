@@ -5,7 +5,8 @@
         "UnityEditor.TestRunner",
         "ArcCreate.ChartFormat",
         "ArcCreate.Gameplay",
-        "ArcCreate.Utility"
+        "ArcCreate.Utility",
+        "UniTask"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

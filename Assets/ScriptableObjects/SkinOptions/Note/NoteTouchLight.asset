@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7e5414a228195c4299f177a46a7a701, type: 3}
+  m_Name: NoteTouchLight
+  m_EditorClassIdentifier: 
+  Name: light
+  ArcTapSfxSkin: {fileID: 2100000, guid: b4c28abdd82feb2419d58042a5c809f6, type: 2}
+  ConnectionLineColor: {r: 0.47058824, g: 0.78431374, b: 0.8627451, a: 1}
+  ArcTapMesh: {fileID: 2917635366719238280, guid: 47a8c4c421f6d5848b7369402970b18f,
+    type: 3}
+  ArcTapSfxMesh: {fileID: 89046849237724230, guid: 47a8c4c421f6d5848b7369402970b18f,
+    type: 3}
+  TapSkin: {fileID: 21300000, guid: e2e574235a007dd43b0310c02f4cabe0, type: 3}
+  HoldSkin: {fileID: 21300000, guid: fa0a2bc320e57c3449d94b6b22eea6b5, type: 3}
+  HoldHighlightSkin: {fileID: 21300000, guid: 0ad54e43fd3e27546ad3a22495f859c5, type: 3}
+  ArcTapSkin: {fileID: 2100000, guid: 1de31d1320a53d44bb33988cb1db13fb, type: 2}
+  ArcCapSprite: {fileID: 21300000, guid: 6f7323c1674871d41a1cc25fbcf709a5, type: 3}

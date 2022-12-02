@@ -73,7 +73,7 @@ namespace ArcCreate.ChartFormat
             {
                 case RawEventType.Timing:
                     RawTiming timing = affEvent as RawTiming;
-                    stream.WriteLine($"{indent}timing({timing.Timing},{timing.Bpm:f2},{timing.BeatsPerLine:f2});");
+                    stream.WriteLine($"{indent}timing({timing.Timing},{timing.Bpm:f2},{timing.Divisor:f2});");
                     break;
 
                 case RawEventType.Tap:
