@@ -38,7 +38,7 @@ namespace ArcCreate.Gameplay
 
         public static bool WithinRenderRange(float z)
         {
-            return z >= -Values.TrackLength && z <= Values.TrackLength;
+            return z >= -Values.TrackLengthForward && z <= Values.TrackLengthBackward;
         }
 
         public static int ArcXToLane(float x)
@@ -170,13 +170,22 @@ namespace ArcCreate.Gameplay
 
         public static float CalculateTapSizeScalar(float z)
         {
-            z = Mathf.Abs(z);
-            return Mathf.Abs(1.5f + (3.25f * z / Values.TrackLength));
+            if (z <= 0)
+            {
+                return Mathf.Abs(1.5f + (3.25f * -z / Values.TrackLengthForward));
+            }
+
+            return Mathf.Abs(1.5f + (3.25f * z / Values.TrackLengthBackward));
         }
 
         public static float CalculateFadeOutAlpha(float z)
         {
-            return Mathf.Clamp((Values.TrackLength - z) / Values.NoteFadeOutLength, 0, 1);
+            if (z <= 0)
+            {
+                return Mathf.Clamp((Values.TrackLengthForward + z) / Values.NoteFadeOutLength, 0, 1);
+            }
+
+            return Mathf.Clamp((Values.TrackLengthBackward - z) / Values.NoteFadeOutLength, 0, 1);
         }
     }
 }

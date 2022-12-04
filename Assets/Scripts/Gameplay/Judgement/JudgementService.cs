@@ -51,8 +51,6 @@ namespace ArcCreate.Gameplay.Judgement
                 (gameplayCamera.WorldToScreenPoint(Vector3.zero).x
                - gameplayCamera.WorldToScreenPoint(new Vector3(Values.LaneWidth, 0, 0)).x)
                / 2;
-
-            print(gameplayCamera.WorldToScreenPoint(Vector3.zero) + " " + gameplayCamera.WorldToScreenPoint(new Vector3(Values.LaneWidth, 0, 0)));
         }
 
         private void OnDestroy()

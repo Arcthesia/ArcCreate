@@ -1,5 +1,6 @@
 using System.IO;
 using ArcCreate.ChartFormat;
+using ArcCreate.Gameplay.Audio;
 using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.Skin;
 using ArcCreate.SceneTransition;
@@ -16,11 +17,14 @@ namespace ArcCreate.Gameplay
     {
         [SerializeField] private ChartService chartService;
         [SerializeField] private SkinService skinService;
+        [SerializeField] private AudioService audioService;
         [SerializeField] private AudioClip testAudio;
 
         public IChartControl Chart => chartService;
 
         public ISkinControl Skin => skinService;
+
+        public IAudioControl Audio => audioService;
 
         protected override void OnNoBootScene()
         {
@@ -65,8 +69,8 @@ namespace ArcCreate.Gameplay
             ChartReader reader = ChartReaderFactory.GetReader(new PhysicalFileAccess(), path);
             reader.Parse();
             Chart.LoadChart(reader);
-            Chart.AudioClip = testAudio;
-            Chart.Play();
+            Audio.AudioClip = testAudio;
+            Audio.PlayWithDelay(0, 2000);
         }
 
         private void Update()

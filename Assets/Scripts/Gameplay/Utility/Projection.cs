@@ -27,7 +27,7 @@ namespace ArcCreate.Gameplay
             int lane = Values.InvalidLane;
 
             // Check if cast falls out of acceptable range
-            if (lProjPosZ >= -Values.MinInputLaneZ && lProjPosZ <= Values.TrackLength)
+            if (lProjPosZ >= -Values.MinInputLaneZ && lProjPosZ <= Values.TrackLengthBackward)
             {
                 lane = ArcFormula.WorldXToLane(lProjPosX);
                 lane = (int)Mathf.Clamp(lane, Values.LaneFrom, Values.LaneTo);

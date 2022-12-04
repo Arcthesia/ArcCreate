@@ -21,7 +21,7 @@ namespace ArcCreate.Gameplay
         private int cachedIndex;
         private bool nextRebisectAvailable;
         private bool nextIncrementAvailable;
-        private bool prevIncrementAvailable;
+        private bool prevDecrementAvailable;
         private bool prevRebisectAvailable;
         private bool hasResetted = true;
         private readonly List<T> list;
@@ -69,8 +69,11 @@ namespace ArcCreate.Gameplay
              || (prevRebisectAvailable && value.CompareTo(prevRebisect) <= 0)
              || (nextRebisectAvailable && value.CompareTo(nextRebisect) >= 0))
             {
+                hasResetted = false;
                 cachedIndex = list.BisectLeft(value, property);
                 cachedIndex = Mathf.Clamp(cachedIndex, 0, count - 1);
+                RecalculateCheckpoints();
+                previousCachedIndex = cachedIndex;
             }
 
             if (nextIncrementAvailable && value.CompareTo(nextIncrement) > 0)
@@ -79,7 +82,7 @@ namespace ArcCreate.Gameplay
                 cachedIndex = Mathf.Min(cachedIndex, count - 1);
             }
 
-            if (prevIncrementAvailable && value.CompareTo(prevDecrement) <= 0)
+            if (prevDecrementAvailable && value.CompareTo(prevDecrement) <= 0)
             {
                 cachedIndex--;
                 cachedIndex = Mathf.Max(cachedIndex, 0);
@@ -100,7 +103,7 @@ namespace ArcCreate.Gameplay
         {
             nextRebisectAvailable = false;
             nextIncrementAvailable = false;
-            prevIncrementAvailable = false;
+            prevDecrementAvailable = false;
             prevRebisectAvailable = false;
             hasResetted = true;
         }
@@ -110,11 +113,11 @@ namespace ArcCreate.Gameplay
             if (cachedIndex >= 1)
             {
                 prevDecrement = property(list[cachedIndex - 1]);
-                prevIncrementAvailable = true;
+                prevDecrementAvailable = true;
             }
             else
             {
-                prevIncrementAvailable = false;
+                prevDecrementAvailable = false;
             }
 
             if (cachedIndex >= 2)

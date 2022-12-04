@@ -5498,4 +5498,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chartService: {fileID: 316340656}
   skinService: {fileID: 2124235711}
+  audioService: {fileID: 744329227}
   testAudio: {fileID: 8300000, guid: c277ac71a78e6c24e81cf0d7cb9a5fc3, type: 3}
