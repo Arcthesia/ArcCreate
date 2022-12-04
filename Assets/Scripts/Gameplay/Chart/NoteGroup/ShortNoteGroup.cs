@@ -16,7 +16,7 @@ namespace ArcCreate.Gameplay.Chart
         private CachedBisect<Note, int> timingSearch;
         private CachedBisect<Note, double> floorPositionSearch;
         private int lastRenderRangeLower = int.MaxValue;
-        private int lastRenderRangeUpper = int.MaxValue;
+        private int lastRenderRangeUpper = int.MaxValue - 1;
 
         public override int ResetJudgeToTiming(int timing)
         {
@@ -60,17 +60,18 @@ namespace ArcCreate.Gameplay.Chart
 
         private void UpdateRender(int timing, double floorPosition, GroupProperties groupProperties)
         {
-            double fpDist = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLength));
+            double fpDistForward = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLengthForward));
+            double fpDistBackward = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLengthBackward));
             double renderFrom =
                 (groupProperties.NoInput && !groupProperties.NoClip) ?
                 floorPosition :
-                floorPosition - fpDist;
-            double renderTo = floorPosition + fpDist;
+                floorPosition - fpDistBackward;
+            double renderTo = floorPosition + fpDistForward;
 
             int renderIndex = floorPositionSearch.Bisect(renderFrom);
 
             // Disable old notes
-            for (int i = lastRenderRangeLower; i < lastRenderRangeUpper; i++)
+            for (int i = lastRenderRangeLower; i <= lastRenderRangeUpper; i++)
             {
                 Note note = floorPositionSearch.List[i];
 
@@ -100,7 +101,7 @@ namespace ArcCreate.Gameplay.Chart
                 renderIndex++;
             }
 
-            lastRenderRangeUpper = renderIndex;
+            lastRenderRangeUpper = Mathf.Min(renderIndex, floorPositionSearch.List.Count - 1);
         }
     }
 }

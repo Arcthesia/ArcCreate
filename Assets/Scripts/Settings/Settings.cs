@@ -4,6 +4,7 @@ namespace ArcCreate
 {
     public class Settings : MonoBehaviour
     {
+        public static readonly IntSetting GlobalAudioOffset = new IntSetting("GlobalAudioOffset", 0);
         public static readonly IntSetting Framerate = new IntSetting("Framerate", 60);
         public static readonly IntSetting VSync = new IntSetting("VSync", 1);
         public static readonly BoolSetting ShowFPSCounter = new BoolSetting("ShowFrameCounter", false);

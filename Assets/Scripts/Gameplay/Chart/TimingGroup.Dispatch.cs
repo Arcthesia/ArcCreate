@@ -12,7 +12,7 @@ namespace ArcCreate.Gameplay.Chart
     public partial class TimingGroup
     {
         private NoteGroup<Tap, TapBehaviour> taps;
-        // private NoteGroup<Hold, HoldBehaviour> holds;
+        private NoteGroup<Hold, HoldBehaviour> holds;
         // private NoteGroup<Arc, ArcBehaviour> arcs;
         // private NoteGroup<ArcTap, ArcTapBehaviour> arcTaps;
         private GroupProperties groupProperties;
@@ -38,12 +38,12 @@ namespace ArcCreate.Gameplay.Chart
             groupProperties = new GroupProperties(tg.Properties);
 
             taps = new TapNoteGroup();
-            // holds = new HoldNoteGroup();
+            holds = new HoldNoteGroup();
             // arcs = new ArcNoteGroup();
             // arcTaps = new ArcTapNoteGroup();
 
             taps.Load(tg.Taps, parent);
-            // holds.Load(tg.Holds, parent);
+            holds.Load(tg.Holds, parent);
             // arcs.Load(tg.Arcs, parent);
             // arcTaps.Load(tg.ArcTaps, parent);
             timings = tg.Timings;
@@ -78,7 +78,7 @@ namespace ArcCreate.Gameplay.Chart
         {
             double floorPosition = GetFloorPosition(timing);
             taps.Update(timing, floorPosition, groupProperties);
-            // holds.Update(timing, floorPosition, groupProperties);
+            holds.Update(timing, floorPosition, groupProperties);
             // arcs.Update(timing, floorPosition, groupProperties);
             // arcTaps.Update(timing, floorPosition, groupProperties);
         }
@@ -89,7 +89,7 @@ namespace ArcCreate.Gameplay.Chart
         public void ReloadSkin()
         {
             taps.ReloadSkin();
-            // holds.ReloadSkin();
+            holds.ReloadSkin();
             // arcs.ReloadSkin();
             // arcTaps.ReloadSkin();
         }
@@ -103,7 +103,7 @@ namespace ArcCreate.Gameplay.Chart
         {
             int combo = 0;
             combo += taps.ResetJudgeToTiming(timing);
-            // combo += holds.ResetJudgeToTiming(timing);
+            combo += holds.ResetJudgeToTiming(timing);
             // combo += arcs.ResetJudgeToTiming(timing);
             // combo += arcTaps.ResetJudgeToTiming(timing);
             return combo;
@@ -117,7 +117,7 @@ namespace ArcCreate.Gameplay.Chart
         {
             int combo = 0;
             combo += taps.TotalCombo();
-            // combo += holds.TotalCombo();
+            combo += holds.TotalCombo();
             // combo += arcs.TotalCombo();
             // combo += arcTaps.TotalCombo();
             return combo;
@@ -136,10 +136,10 @@ namespace ArcCreate.Gameplay.Chart
                 return taps.Notes.Cast<T>().ToList();
             }
 
-            // if (typeof(T) == typeof(Hold))
-            // {
-            //     return holds.Notes.Cast<T>().ToList();
-            // }
+            if (typeof(T) == typeof(Hold))
+            {
+                return holds.Notes.Cast<T>().ToList();
+            }
 
             // if (typeof(T) == typeof(ArcTap))
             // {
@@ -166,7 +166,7 @@ namespace ArcCreate.Gameplay.Chart
         {
             Object.Destroy(parent.gameObject);
             taps.Clear();
-            // holds.Clear();
+            holds.Clear();
             // arcTaps.Clear();
             // arcs.Clear();
         }
@@ -188,10 +188,10 @@ namespace ArcCreate.Gameplay.Chart
                 this.taps.Add(taps);
             }
 
-            // if (holds.Any())
-            // {
-            //     this.holds.Add(holds);
-            // }
+            if (holds.Any())
+            {
+                this.holds.Add(holds);
+            }
 
             // if (arcs.Any())
             // {
@@ -226,10 +226,10 @@ namespace ArcCreate.Gameplay.Chart
                 this.taps.Remove(taps);
             }
 
-            // if (holds.Any())
-            // {
-            //     this.holds.Remove(holds);
-            // }
+            if (holds.Any())
+            {
+                this.holds.Remove(holds);
+            }
 
             // if (arcs.Any())
             // {
@@ -264,10 +264,10 @@ namespace ArcCreate.Gameplay.Chart
                 this.taps.Update(taps);
             }
 
-            // if (holds.Any())
-            // {
-            //     this.holds.Update(holds);
-            // }
+            if (holds.Any())
+            {
+                this.holds.Update(holds);
+            }
 
             // if (arcs.Any())
             // {

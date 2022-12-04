@@ -3,16 +3,45 @@ using UnityEngine.Video;
 
 namespace ArcCreate.Gameplay.Audio
 {
-    public class AudioService : MonoBehaviour, IAudioService
+    public class AudioService : MonoBehaviour, IAudioService, IAudioControl
     {
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private VideoPlayer videoPlayer;
 
+        /// <summary>
+        /// Timing at which the audio started playing from.
+        /// </summary>
         private int startTime = 0;
-        private int delay = 0;
+
+        /// <summary>
+        /// Time (in dsp unit) at which the audio started playing.
+        /// </summary>
         private double dspStartPlayingTime = 0;
-        private int timing;
+
+        /// <summary>
+        /// Whether to let the timing stay unchanged until the audio start playing, or to increate it linearly.
+        /// </summary>
         private bool stationaryBeforeStart;
+
+        /// <summary>
+        /// The current timing value in ms.
+        /// </summary>
+        private int timing;
+
+        /// <summary>
+        /// Last timing the audio was paused at.
+        /// </summary>
+        private int lastPausedTiming = 0;
+
+        /// <summary>
+        /// Whether to return to <see cref="onPauseReturnTo"/> timing point after next pause.
+        /// </summary>
+        private bool returnOnPause = false;
+
+        /// <summary>
+        /// Return to this timing point after next pause.
+        /// </summary>
+        private int onPauseReturnTo = 0;
 
         public AudioSource AudioSource => audioSource;
 
@@ -29,39 +58,63 @@ namespace ArcCreate.Gameplay.Audio
                     Pause();
                     Play(timing, 0);
                 }
-
-                Services.Chart.ResetJudge();
+                else
+                {
+                    Services.Chart.ResetJudge();
+                }
             }
         }
 
-        public int SongLength { get; set; }
+        public int AudioLength { get; private set; }
 
         public bool IsPlaying { get => audioSource.isPlaying; }
 
-        public void LoadClip(AudioClip clip)
+        public bool AutomaticallyReturnOnAudioEnd { get; set; } = true;
+
+        public AudioClip AudioClip
         {
-            audioSource.clip = clip;
-            SongLength = Mathf.RoundToInt(clip.length * 1000);
+            get => audioSource.clip;
+            set
+            {
+                audioSource.clip = value;
+                AudioLength = Mathf.RoundToInt(value.length * 1000);
+            }
         }
 
-        public void Resume(int delay = 0)
-        {
-            Play(timing);
-            stationaryBeforeStart = true;
-        }
+        private int FullOffset => Values.ChartAudioOffset + Settings.GlobalAudioOffset.Value;
 
-        public void Play(int timing = 0, int delay = 0)
+        public void UpdateTime()
         {
-            stationaryBeforeStart = timing <= 0;
-            this.delay = delay;
-            dspStartPlayingTime = AudioSettings.dspTime;
-            startTime = timing;
-            audioSource.PlayScheduled(dspStartPlayingTime + ((double)delay / 1000));
+            double dspTime = AudioSettings.dspTime;
+
+            if (!IsPlaying)
+            {
+                return;
+            }
+
+            if (stationaryBeforeStart)
+            {
+                dspTime = System.Math.Max(dspTime, dspStartPlayingTime);
+            }
+
+            int timePassedSinceAudioStart = Mathf.RoundToInt((float)((dspTime - dspStartPlayingTime) * 1000));
+            timing = timePassedSinceAudioStart + startTime - FullOffset;
+
+            if (AutomaticallyReturnOnAudioEnd && timing > AudioLength)
+            {
+                Stop();
+            }
         }
 
         public void Pause()
         {
+            lastPausedTiming = timing;
             audioSource.Stop();
+            if (returnOnPause)
+            {
+                lastPausedTiming = onPauseReturnTo;
+                timing = onPauseReturnTo;
+            }
         }
 
         public void Stop()
@@ -70,21 +123,67 @@ namespace ArcCreate.Gameplay.Audio
             Timing = 0;
         }
 
-        public void UpdateTime()
+        public void PlayImmediately(int timing)
         {
-            double dspTime = AudioSettings.dspTime;
-            if (!IsPlaying)
-            {
-                return;
-            }
+            Play(timing, 0);
+            stationaryBeforeStart = false;
+            returnOnPause = false;
+        }
 
-            if (dspTime < (dspStartPlayingTime + (delay / 1000)) && stationaryBeforeStart)
-            {
-                return;
-            }
+        public void PlayWithDelay(int timing, int delayMs)
+        {
+            Play(timing, delayMs);
+            stationaryBeforeStart = false;
+            returnOnPause = false;
+        }
 
-            timing = Mathf.RoundToInt(
-                ((float)(dspTime - dspStartPlayingTime) * 1000) + startTime - delay) - Values.Offset;
+        public void ResumeImmediately()
+        {
+            Play(lastPausedTiming);
+            stationaryBeforeStart = true;
+            returnOnPause = false;
+        }
+
+        public void ResumeWithDelay(int delayMs)
+        {
+            Play(lastPausedTiming, delayMs);
+            stationaryBeforeStart = true;
+            returnOnPause = false;
+        }
+
+        public void ResumeReturnableImmediately()
+        {
+            Play(lastPausedTiming);
+            stationaryBeforeStart = true;
+            returnOnPause = true;
+            onPauseReturnTo = timing;
+        }
+
+        public void ResumeReturnableWithDelay(int delayMs)
+        {
+            Play(lastPausedTiming, delayMs);
+            stationaryBeforeStart = true;
+            returnOnPause = true;
+            onPauseReturnTo = timing;
+        }
+
+        private void Play(int timing = 0, int delay = 0)
+        {
+            delay = Mathf.Max(delay, 0);
+            Services.Chart.ResetJudge();
+
+            audioSource.time = (float)timing / 1000;
+
+            dspStartPlayingTime = AudioSettings.dspTime + ((double)delay / 1000);
+            startTime = timing;
+            if (delay > 0)
+            {
+                audioSource.PlayScheduled(dspStartPlayingTime);
+            }
+            else
+            {
+                audioSource.Play();
+            }
         }
     }
 }

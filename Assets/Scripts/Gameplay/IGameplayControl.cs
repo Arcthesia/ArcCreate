@@ -16,5 +16,11 @@ namespace ArcCreate.Gameplay
         /// </summary>
         /// <value>The skin controller.</value>
         ISkinControl Skin { get; }
+
+        /// <summary>
+        /// Gets the controller for audio related functionality.
+        /// </summary>
+        /// <value>The audio controller.</value>
+        IAudioControl Audio { get; }
     }
 }

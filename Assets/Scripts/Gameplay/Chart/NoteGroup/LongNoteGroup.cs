@@ -52,12 +52,13 @@ namespace ArcCreate.Gameplay.Chart
 
         private void UpdateRender(int timing, double floorPosition, GroupProperties groupProperties)
         {
-            double fpDist = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLength));
+            double fpDistForward = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLengthForward));
+            double fpDistBackward = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLengthBackward));
             double renderFrom =
                 (groupProperties.NoInput && !groupProperties.NoClip) ?
                 floorPosition :
-                floorPosition - fpDist;
-            double renderTo = floorPosition + fpDist;
+                floorPosition - fpDistBackward;
+            double renderTo = floorPosition + fpDistForward;
 
             List<RangeValuePair<double, Note>> notesInRange = floorPositionTree[renderFrom, renderTo].ToList();
 

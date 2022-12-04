@@ -5,8 +5,9 @@ namespace ArcCreate.Gameplay
     public static class Values
     {
         // Playfield
-        public const float TrackLength = 100;
-        public const float MinInputLaneZ = TrackLength / 10f;
+        public const float TrackLengthForward = 100;
+        public const float TrackLengthBackward = 53.5f;
+        public const float MinInputLaneZ = TrackLengthForward / 10f;
         public const float LaneWidth = 4.25f;
         public const float NoteFadeOutLength = 10;
         public const float ArcY0 = 1f;
@@ -52,7 +53,7 @@ namespace ArcCreate.Gameplay
         // I sure hope no charter will make use of lane -2147483648
         public const int InvalidLane = int.MinValue;
 
-        public static int Offset { get; set; } = 0;
+        public static int ChartAudioOffset { get; set; } = 0;
 
         public static float BaseBpm { get; set; } = 100;
 

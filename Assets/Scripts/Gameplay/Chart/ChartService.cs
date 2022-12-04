@@ -41,12 +41,12 @@ namespace ArcCreate.Gameplay.Chart
             }
         }
 
-        public int AudioOffset
+        public int ChartAudioOffset
         {
-            get => Values.Offset;
+            get => Values.ChartAudioOffset;
             set
             {
-                Values.Offset = value;
+                Values.ChartAudioOffset = value;
                 ResetJudge();
             }
         }
@@ -59,12 +59,6 @@ namespace ArcCreate.Gameplay.Chart
                 Values.TimingPointDensity = value;
                 ResetJudge();
             }
-        }
-
-        public AudioClip AudioClip
-        {
-            get => Services.Audio.AudioSource.clip;
-            set => Services.Audio.LoadClip(value);
         }
 
         public void ReloadSkin()
@@ -177,7 +171,7 @@ namespace ArcCreate.Gameplay.Chart
         {
             Clear();
 
-            Values.Offset = chart.AudioOffset;
+            Values.ChartAudioOffset = chart.AudioOffset;
             Values.TimingPointDensity = chart.TimingPointDensity;
 
             int i = 0;
@@ -328,32 +322,35 @@ namespace ArcCreate.Gameplay.Chart
             }
         }
 
-        public void Play()
-        {
-            //TODO: Add different modes for delay before audio starts
-            Services.Audio.Play(0);
-        }
-
         private void Awake()
         {
             Pools.New<TapBehaviour>("tap", tapPrefab, transform, tapCapacity);
-            // Pools.New<HoldBehaviour>("hold", holdPrefab, transform, holdCapacity);
+            Pools.New<HoldBehaviour>("hold", holdPrefab, transform, holdCapacity);
             // Pools.New<ArcBehaviour>("arc", arcPrefab, transform, arcCapacity);
             // Pools.New<ArcTapBehaviour>("arctap", arcTapPrefab, transform, arcTapCapacity);
             // Pools.New<ArcSegment>("segment", arcSegmentPrefab, transform, arcSegmentCapacity);
             Pools.New<LineRenderer>("connectionLine", connectionLinePrefab, transform, connectionLineCapacity);
             Pools.New<Transform>("beatline", beatlinePrefab, transform, beatlineCapacity);
+
+            Settings.GlobalAudioOffset.OnValueChanged.AddListener(OnGlobalOffsetChange);
         }
 
         private void OnDestroy()
         {
             Pools.Destroy<TapBehaviour>("tap");
-            // Pools.Destroy<HoldBehaviour>("hold");
+            Pools.Destroy<HoldBehaviour>("hold");
             // Pools.Destroy<ArcBehaviour>("arc");
             // Pools.Destroy<ArcTapBehaviour>("arctap");
             // Pools.Destroy<ArcSegment>("segment");
             Pools.Destroy<LineRenderer>("connectionLine");
             Pools.Destroy<Transform>("beatline");
+
+            Settings.GlobalAudioOffset.OnValueChanged.RemoveListener(OnGlobalOffsetChange);
+        }
+
+        private void OnGlobalOffsetChange(int offset)
+        {
+            ResetJudge();
         }
     }
 }

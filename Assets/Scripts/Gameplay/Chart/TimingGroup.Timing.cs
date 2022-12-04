@@ -94,7 +94,7 @@ namespace ArcCreate.Gameplay.Chart
                 }
             }
 
-            return Mathf.Clamp(closestMatch, 0, Services.Audio.SongLength);
+            return Mathf.Clamp(closestMatch, 0, Services.Audio.AudioLength);
         }
 
         /// <summary>
