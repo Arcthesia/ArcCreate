@@ -41,6 +41,20 @@ If you're writing a complex pieces of code, and you want to make sure that it fu
 
 If you want to make any major changes to the application, such as addition of entirely new features, or major refactoring, make sure to discuss with me before doing anything. This helps both you and me from wasting each other times, and I can offer some advices if necessary. For small changes feel free to open a PR without discussing beforehands.
 
+### Optimization guidelines
+
+#### Only optimize where necessary
+
+In other words, try to optimize on code paths that are run every single frame. It's also recommended that you profile the game before trying optimize, since you might waste a bunch of time at best, or make the problem worse at worst.
+
+#### Avoid allocating memory at runtime
+
+Allocating memory will generate garbage, which needs to be cleaned up later. This is called garbage collection. This is one of the biggest cause of performance issue in C# programs. 
+
+Worse, a small amount of allocation each frame will still cause issue. As we don't know when the garbage collector wil be run, it might try to clean up a bunch of garbage at once, which might cause lag spikes. This is extremely detrimental to a rhythm game like ArcCreate. It also doesn't help that Unity's garbage collector is one of the least optimized out there. Therefore you should minimize memory allocation as much as possible.
+
+You can read [the official guide by Unity](https://docs.unity3d.com/Manual/performance-garbage-collection-best-practices.html), or [this article by Sebastiano Mandalà](https://www.sebaslab.com/zero-allocation-code-in-unity/), which goes in depth about how you'd achieve this.
+
 ### Git workflow
 
 (Inspired by [NodeJs's documentation](https://github.com/nodejs/node/blob/main/doc/contributing/pull-requests.md))
@@ -74,7 +88,7 @@ For every commit, make sure to write descriptive commit names of the following f
 > Issue: (issue url here)
 > ```
 
-To submit your changes, create a pull request. Make sure to rebase your branch your branch with upstream to synchronize your changes with the newest version from the main repository.
+To submit your changes, create a pull request. Make sure to rebase your branch with upstream to synchronize your changes with the newest version from the main repository.
 ```
 git fetch upstream HEAD
 git rebase FETCH_HEAD
