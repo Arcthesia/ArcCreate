@@ -2341,6 +2341,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 744329229}
   videoPlayer: {fileID: 744329228}
+  timingSlider: {fileID: 1838480513}
 --- !u!328 &744329228
 VideoPlayer:
   m_ObjectHideFlags: 0
@@ -5231,6 +5232,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   comboText: {fileID: 1502162281}
   scoreText: {fileID: 1987114695}
+  comboLostColor: {r: 0.7075472, g: 0, b: 0.02858189, a: 0.8}
 --- !u!1 &2103231687
 GameObject:
   m_ObjectHideFlags: 0

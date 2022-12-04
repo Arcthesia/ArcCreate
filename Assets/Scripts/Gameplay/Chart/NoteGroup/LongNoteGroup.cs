@@ -25,6 +25,18 @@ namespace ArcCreate.Gameplay.Chart
             UpdateRender(timing, floorPosition, groupProperties);
         }
 
+        public override int ComboAt(int timing)
+        {
+            var notes = timingTree[int.MinValue, timing];
+            int combo = 0;
+            foreach (var note in notes)
+            {
+                combo += note.Value.ComboAt(timing);
+            }
+
+            return combo;
+        }
+
         public override void RebuildList()
         {
             timingTree.Clear();

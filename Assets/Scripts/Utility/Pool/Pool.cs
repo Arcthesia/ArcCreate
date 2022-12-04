@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ArcCreate.Utility.Extension;
 using UnityEngine;
 
 /// <summary>
@@ -25,6 +26,7 @@ public class Pool<T>
         this.parent = parent;
         available = new Queue<T>(capacity);
         occupied = new HashSet<T>();
+        occupied.SetCapacity(capacity);
 
         for (int i = 0; i < capacity; i++)
         {

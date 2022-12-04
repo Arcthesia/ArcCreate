@@ -21,6 +21,12 @@ namespace ArcCreate.Gameplay
         int AudioLength { get; }
 
         /// <summary>
+        /// Gets a value indicating whether or not the audio is playing.
+        /// </summary>
+        /// <value>Whether or not the audio is playing.</value>
+        bool IsPlaying { get; }
+
+        /// <summary>
         /// Gets or sets the audio clip to play.
         /// </summary>
         /// <value>The audio clip.</value>

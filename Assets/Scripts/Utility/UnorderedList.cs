@@ -43,5 +43,10 @@ namespace ArcCreate.Utility
             list[index] = list[list.Count - 1];
             list.RemoveAt(list.Count - 1);
         }
+
+        public void Clear()
+        {
+            list.Clear();
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace ArcCreate.Utility.Extension
 {
@@ -105,6 +106,25 @@ namespace ArcCreate.Utility.Extension
 
             low = UnityEngine.Mathf.Clamp(low, 0, list.Count - 1);
             return low;
+        }
+
+        public static void SetCapacity<T>(this HashSet<T> hs, int capacity)
+        {
+            HashSetDelegateHolder<T>.InitializeMethod.Invoke(hs, new object[] { capacity });
+        }
+
+        public static HashSet<T> GetHashSet<T>(int capacity)
+        {
+            var hashSet = new HashSet<T>();
+            hashSet.SetCapacity(capacity);
+            return hashSet;
+        }
+
+        private static class HashSetDelegateHolder<T>
+        {
+            private const BindingFlags Flags = BindingFlags.Instance | BindingFlags.NonPublic;
+
+            public static MethodInfo InitializeMethod { get; } = typeof(HashSet<T>).GetMethod("Initialize", Flags);
         }
     }
 }

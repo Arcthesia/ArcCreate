@@ -11,5 +11,7 @@ namespace ArcCreate.Gameplay.Score
         void ProcessJudgement(JudgementResult result);
 
         void ResetScoreTo(int currentCombo, int totalCombo);
+
+        void UpdateDisplay(int currentTiming);
     }
 }

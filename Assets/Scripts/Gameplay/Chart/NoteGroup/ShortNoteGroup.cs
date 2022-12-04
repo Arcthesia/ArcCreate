@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
+using ArcCreate.Utility.Extension;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Chart
@@ -18,9 +18,9 @@ namespace ArcCreate.Gameplay.Chart
         private int lastRenderRangeLower = int.MaxValue;
         private int lastRenderRangeUpper = int.MaxValue - 1;
 
-        public override int ResetJudgeToTiming(int timing)
+        public override int ComboAt(int timing)
         {
-            return base.ResetJudgeToTiming(timing);
+            return timingSearch.List.BisectRight(timing, note => note.Timing);
         }
 
         public override void Update(int timing, double floorPosition, GroupProperties groupProperties)

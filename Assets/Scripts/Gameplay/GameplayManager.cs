@@ -77,11 +77,16 @@ namespace ArcCreate.Gameplay
         {
             Services.Audio.UpdateTime();
             Services.Particle.UpdateParticles();
-            int currentTiming = Services.Audio.Timing;
-
             Services.InputFeedback.UpdateInputFeedback();
-            Services.Chart.UpdateChart(Services.Audio.Timing);
-            Services.Judgement.ProcessInput(Services.Audio.Timing);
+
+            int currentTiming = Services.Audio.Timing;
+            Services.Chart.UpdateChart(currentTiming);
+            if (Services.Audio.IsPlaying || Values.IsRendering)
+            {
+                Services.Judgement.ProcessInput(currentTiming);
+            }
+
+            Services.Score.UpdateDisplay(currentTiming);
         }
     }
 }

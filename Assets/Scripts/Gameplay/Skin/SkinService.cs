@@ -63,6 +63,8 @@ namespace ArcCreate.Gameplay.Skin
         private int lowColorShaderId;
         private int shadowColorShaderId;
 
+        private Color currentComboColor;
+
         public Sprite BackgroundSprite
         {
             get => background.sprite;
@@ -177,8 +179,11 @@ namespace ArcCreate.Gameplay.Skin
 
                 comboText.color = accentOpt.ComboColor;
                 comboText.outlineColor = accentOpt.ComboColor;
+                currentComboColor = accentOpt.ComboColor;
             }
         }
+
+        public Color ComboColor => currentComboColor;
 
         public Color DefaultTraceColor => defaultTraceColor;
 
@@ -275,6 +280,7 @@ namespace ArcCreate.Gameplay.Skin
 
             currentAlignment = alignmentOptions[0];
             currentNoteSkin = currentAlignment.DefaultNoteOption;
+            currentComboColor = currentAlignment.DefaultAccentOption.ComboColor;
 
             ResetTraceColors();
             ResetArcColors();
