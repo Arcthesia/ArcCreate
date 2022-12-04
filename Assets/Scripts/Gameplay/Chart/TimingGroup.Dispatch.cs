@@ -97,13 +97,22 @@ namespace ArcCreate.Gameplay.Chart
         /// <summary>
         /// Reset the judge of all notes of this timing group.
         /// </summary>
-        /// <param name="timing">The current timing.</param>
-        /// <returns>Theoretical max combo at the specified timing.</returns>
-        public int ResetJudgeToTiming(int timing)
+        public void ResetJudge()
+        {
+            taps.ResetJudge();
+            holds.ResetJudge();
+        }
+
+        /// <summary>
+        /// Get the total max combo count at provided timing value.
+        /// </summary>
+        /// <param name="timing">The timing value.</param>
+        /// <returns>Max combo at the specified timing.</returns>
+        public int ComboAt(int timing)
         {
             int combo = 0;
-            combo += taps.ResetJudgeToTiming(timing);
-            combo += holds.ResetJudgeToTiming(timing);
+            combo += taps.ComboAt(timing);
+            combo += holds.ComboAt(timing);
             // combo += arcs.ResetJudgeToTiming(timing);
             // combo += arcTaps.ResetJudgeToTiming(timing);
             return combo;

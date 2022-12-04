@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Video;
 
 namespace ArcCreate.Gameplay.Audio
@@ -7,6 +8,7 @@ namespace ArcCreate.Gameplay.Audio
     {
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private VideoPlayer videoPlayer;
+        [SerializeField] private Slider timingSlider;
 
         /// <summary>
         /// Timing at which the audio started playing from.
@@ -104,6 +106,8 @@ namespace ArcCreate.Gameplay.Audio
             {
                 Stop();
             }
+
+            timingSlider.value = (float)timing / AudioLength;
         }
 
         public void Pause()
@@ -170,6 +174,7 @@ namespace ArcCreate.Gameplay.Audio
         private void Play(int timing = 0, int delay = 0)
         {
             delay = Mathf.Max(delay, 0);
+            this.timing = timing;
             Services.Chart.ResetJudge();
 
             audioSource.time = (float)timing / 1000;

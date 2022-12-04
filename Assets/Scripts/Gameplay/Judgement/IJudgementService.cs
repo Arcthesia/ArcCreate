@@ -18,5 +18,10 @@ namespace ArcCreate.Gameplay.Judgement
         /// </summary>
         /// <param name="currentTiming">The current timing.</param>
         void ProcessInput(int currentTiming);
+
+        /// <summary>
+        /// Clear all pending requests.
+        /// </summary>
+        void ClearRequests();
     }
 }

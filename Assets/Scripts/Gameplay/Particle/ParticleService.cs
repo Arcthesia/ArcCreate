@@ -150,13 +150,13 @@ namespace ArcCreate.Gameplay.Particle
 
             if (result.IsEarly())
             {
-                earlyLateText.text = Early;
+                earlyLateText.SetText(Early);
                 earlyLateText.color = earlyColor;
                 lastEarlyLateRealTime = Time.realtimeSinceStartup;
             }
             else if (result.IsLate())
             {
-                earlyLateText.text = Late;
+                earlyLateText.SetText(Late);
                 earlyLateText.color = lateColor;
                 lastEarlyLateRealTime = Time.realtimeSinceStartup;
             }

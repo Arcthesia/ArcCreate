@@ -75,14 +75,23 @@ namespace ArcCreate.Gameplay.Chart
             int currentCombo = 0;
             int timing = Services.Audio.Timing;
             int totalCombo = 0;
+            InputMode inputMode = (InputMode)Settings.InputMode.Value;
+            bool isAuto = inputMode == InputMode.Auto || inputMode == InputMode.AutoController;
+
             for (int i = 0; i < timingGroups.Count; i++)
             {
                 TimingGroup tg = timingGroups[i];
-                currentCombo += tg.ResetJudgeToTiming(Services.Audio.Timing);
+                tg.ResetJudge();
+                if (isAuto)
+                {
+                    currentCombo += tg.ComboAt(Services.Audio.Timing);
+                }
+
                 totalCombo += tg.TotalCombo();
             }
 
             Services.Score.ResetScoreTo(currentCombo, totalCombo);
+            Services.Judgement.ClearRequests();
         }
 
         public List<T> Find<T, R>(R valueMin, R valueMax, Func<T, R> property)
@@ -165,6 +174,7 @@ namespace ArcCreate.Gameplay.Chart
         public void LoadChart(ChartReader reader)
         {
             LoadChart(new ArcChart(reader));
+            Timing = 0;
         }
 
         public void LoadChart(ArcChart chart)

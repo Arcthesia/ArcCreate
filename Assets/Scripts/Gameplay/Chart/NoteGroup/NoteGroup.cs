@@ -62,20 +62,21 @@ namespace ArcCreate.Gameplay.Chart
         /// <summary>
         /// Reset judgement of all notes of this group.
         /// </summary>
-        /// <param name="timing">The timing to reset to.</param>
-        /// <returns>The theoretical max combo value at the given timing value.</returns>
-        public virtual int ResetJudgeToTiming(int timing)
+        public virtual void ResetJudge()
         {
-            int combo = 0;
             for (int i = 0; i < notes.Count; i++)
             {
                 Note note = notes[i];
                 note.ResetJudge();
-                combo += note.ComboAt(timing);
             }
-
-            return combo;
         }
+
+        /// <summary>
+        /// Get the total max combo count at provided timing value.
+        /// </summary>
+        /// <param name="timing">The timing value.</param>
+        /// <returns>Max combo at the specified timing.</returns>
+        public abstract int ComboAt(int timing);
 
         /// <summary>
         /// Total combo count of all notes of this group.
@@ -87,7 +88,6 @@ namespace ArcCreate.Gameplay.Chart
             for (int i = 0; i < notes.Count; i++)
             {
                 Note note = notes[i];
-                note.ResetJudge();
                 combo += note.TotalCombo;
             }
 

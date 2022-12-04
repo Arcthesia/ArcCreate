@@ -9,6 +9,12 @@ namespace ArcCreate.Gameplay.Skin
     public interface ISkinService
     {
         /// <summary>
+        /// Gets the combo color of the current skin.
+        /// </summary>
+        /// <value>The combo color.</value>
+        Color ComboColor { get; }
+
+        /// <summary>
         /// Gets or sets the background's sprite.
         /// </summary>
         /// <value>The background's sprite.</value>

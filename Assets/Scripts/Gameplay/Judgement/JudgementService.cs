@@ -17,6 +17,11 @@ namespace ArcCreate.Gameplay.Judgement
             tapRequests.Add(request);
         }
 
+        public void ClearRequests()
+        {
+            tapRequests.Clear();
+        }
+
         public void ProcessInput(int currentTiming)
         {
             PruneExpiredRequests(currentTiming);

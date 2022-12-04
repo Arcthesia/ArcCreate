@@ -44,11 +44,12 @@ namespace ArcCreate.Gameplay
 
         // Judgement
         public const int MaxScore = 10_000_000;
-        public const float ScoreModifyDelay = 0.5f;
+        public const int ScoreModifyDelay = 500;
         public const float FarPenaltyMultipler = 0.5f;
         public const int ArcLockDuration = 500;
         public const int ArcGraceDuration = 1000;
         public const int ArcRedFlashCycle = 500;
+        public const float ComboLostFlashDuration = 0.1f;
 
         // I sure hope no charter will make use of lane -2147483648
         public const int InvalidLane = int.MinValue;
