@@ -19,11 +19,12 @@ namespace ArcCreate.Gameplay
         public const float LaneFeedbackFadeoutDuration = 0.15f;
         public const float LaneFeedbackMaxAlpha = 0.15f;
 
-        // Judgement
+        // Judgement winodw
         public const int LostJudgeWindow = 150;
         public const int FarJudgeWindow = 100;
         public const int PureJudgeWindow = 50;
         public const int MaxJudgeWindow = 25;
+        public const int HoldLostLateJudgeWindow = 500;
 
         // Visual
         public const int HoldFlashCycle = 4;
@@ -40,7 +41,7 @@ namespace ArcCreate.Gameplay
         public const float ArcOffsetVoid = 0.9f;
         public const float TraceAlphaScalar = 0.4779405f;
         public const float ShortTraceAlphaScalar = TraceAlphaScalar * 0.5f;
-        public const float TextParticleYOffset = 0.75f;
+        public const float TextParticleYOffset = 1.5f;
 
         // Judgement
         public const int MaxScore = 10_000_000;
@@ -50,6 +51,20 @@ namespace ArcCreate.Gameplay
         public const int ArcGraceDuration = 1000;
         public const int ArcRedFlashCycle = 500;
         public const float ComboLostFlashDuration = 0.1f;
+
+        // Strings
+        public const string EarlyText = "EARLY";
+        public const string LateText = "LATE";
+        public const string TapPoolName = "tap";
+        public const string HoldPoolName = "hold";
+        public const string ArcTapPoolName = "arctap";
+        public const string ArcPoolName = "arc";
+        public const string ArcSegmentPoolName = "arcsegment";
+        public const string ConnectonLinePoolName = "connectionline";
+        public const string BeatlinePoolName = "beatline";
+        public const string TextParticlePoolName = "textparticle";
+        public const string TapParticlePoolName = "tapparticle";
+        public const string LongParticlePoolName = "longparticle";
 
         // I sure hope no charter will make use of lane -2147483648
         public const int InvalidLane = int.MinValue;
@@ -68,6 +83,6 @@ namespace ArcCreate.Gameplay
 
         public static float LaneTo { get; set; } = 4;
 
-        public static float TapScreenHitbox { get; set; } = 1;
+        public static float LaneScreenHitbox { get; set; } = 1;
     }
 }

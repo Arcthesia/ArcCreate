@@ -9,7 +9,12 @@ namespace ArcCreate.Gameplay.Judgement.Input
             throw new System.NotImplementedException();
         }
 
-        public void HandleTaps(int currentTiming, UnorderedList<TapJudgementRequest> tapRequests)
+        public void HandleTapRequests(int currentTiming, UnorderedList<LaneTapJudgementRequest> tapRequests)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void HandleLaneHoldRequests(int currentTiming, UnorderedList<LaneHoldJudgementRequest> holdRequests)
         {
             throw new System.NotImplementedException();
         }

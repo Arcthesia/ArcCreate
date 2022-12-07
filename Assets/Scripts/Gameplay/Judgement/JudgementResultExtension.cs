@@ -4,37 +4,41 @@ namespace ArcCreate.Gameplay.Judgement
     {
         public static JudgementResult CalculateJudgeResult(this int inputTime, int trueTime)
         {
-            if (inputTime >= trueTime + Values.FarJudgeWindow)
+            return CalculateJudgeResult(inputTime - trueTime);
+        }
+
+        public static JudgementResult CalculateJudgeResult(this int offset)
+        {
+            if (offset >= Values.FarJudgeWindow)
             {
                 return JudgementResult.LostLate;
             }
 
-            if (inputTime >= trueTime + Values.PureJudgeWindow)
+            if (offset >= Values.PureJudgeWindow)
             {
                 return JudgementResult.FarLate;
             }
 
-            if (inputTime >= trueTime + Values.MaxJudgeWindow)
+            if (offset >= Values.MaxJudgeWindow)
             {
                 return JudgementResult.PureLate;
             }
 
-            if (inputTime >= trueTime - Values.MaxJudgeWindow)
+            if (offset >= -Values.MaxJudgeWindow)
             {
                 return JudgementResult.Max;
             }
 
-            if (inputTime >= trueTime - Values.PureJudgeWindow)
+            if (offset >= -Values.PureJudgeWindow)
             {
                 return JudgementResult.PureEarly;
             }
 
-            if (inputTime >= trueTime - Values.FarJudgeWindow)
+            if (offset >= -Values.FarJudgeWindow)
             {
                 return JudgementResult.FarEarly;
             }
 
-            /*--------------------------------------------------*/
             return JudgementResult.LostEarly;
         }
 

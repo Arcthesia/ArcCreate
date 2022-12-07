@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
 {
-    public class Arc : LongNote
+    public class Arc : LongNote, ILongNote<ArcBehaviour>
     {
         public float XStart { get; set; }
 
@@ -22,6 +22,8 @@ namespace ArcCreate.Gameplay.Data
         public ArcLineType LineType { get; set; }
 
         public List<ArcTap> ArcTaps { get; set; } = new List<ArcTap>();
+
+        public bool IsAssignedInstance => throw new System.NotImplementedException();
 
         public override ArcEvent Clone()
         {
@@ -80,6 +82,46 @@ namespace ArcCreate.Gameplay.Data
 
             float p = Mathf.Clamp((timing - Timing) / (EndTiming - Timing), 0, 1);
             return ArcFormula.ArcYToWorld(ArcFormula.Y(YStart, YEnd, p, LineType));
+        }
+
+        public void AssignInstance(ArcBehaviour instance)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ArcBehaviour RevokeInstance()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void ResetJudge()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Rebuild()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void ReloadSkin()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void UpdateJudgement(int timing, GroupProperties groupProperties)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void UpdateInstance(int timing, double floorPosition, GroupProperties groupProperties)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int CompareTo(INote<ArcBehaviour> other)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

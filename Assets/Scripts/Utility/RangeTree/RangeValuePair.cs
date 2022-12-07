@@ -8,28 +8,45 @@ namespace ArcCreate.Utility.RangeTree
     /// Represents a range of values.
     /// Both values must be of the same type and comparable.
     /// </summary>
-    /// <typeparam name="TKey">Type of the values.</typeparam>
+    /// <typeparam name="TKey">Type of the range.</typeparam>
+    /// <typeparam name="TValue">Type of the value.</typeparam>
     public struct RangeValuePair<TKey, TValue> : IEquatable<RangeValuePair<TKey, TValue>>
     {
-        public TKey From { get; }
-        public TKey To { get; }
-        public TValue Value { get; }
-
         /// <summary>
-        /// Initializes a new <see cref="RangeValuePair&lt;TKey, TValue&gt;"/> instance.
+        /// Initializes a new instance of the <see cref="RangeValuePair{TKey, TValue}"/> struct.
         /// </summary>
-        public RangeValuePair(TKey from, TKey to, TValue value) : this()
+        /// <param name="from">Lower end of the node's range.</param>
+        /// <param name="to">Upper end of the node's range.</param>
+        /// <param name="value">Value of the node.</param>
+        public RangeValuePair(TKey from, TKey to, TValue value)
+            : this()
         {
             From = from;
             To = to;
             Value = value;
         }
 
+        public TKey From { get; }
+
+        public TKey To { get; }
+
+        public TValue Value { get; }
+
+        public static bool operator ==(RangeValuePair<TKey, TValue> left, RangeValuePair<TKey, TValue> right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(RangeValuePair<TKey, TValue> left, RangeValuePair<TKey, TValue> right)
+        {
+            return !(left == right);
+        }
+
         /// <summary>
-        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// Returns a <see cref="string"/> that represents this instance.
         /// </summary>
         /// <returns>
-        /// A <see cref="System.String"/> that represents this instance.
+        /// A <see cref="string"/> that represents this instance.
         /// </returns>
         public override string ToString()
         {
@@ -40,11 +57,20 @@ namespace ArcCreate.Utility.RangeTree
         {
             var hash = 23;
             if (From != null)
-                hash = hash * 37 + From.GetHashCode();
+            {
+                hash = (hash * 37) + From.GetHashCode();
+            }
+
             if (To != null)
-                hash = hash * 37 + To.GetHashCode();
+            {
+                hash = (hash * 37) + To.GetHashCode();
+            }
+
             if (Value != null)
-                hash = hash * 37 + Value.GetHashCode();
+            {
+                hash = (hash * 37) + Value.GetHashCode();
+            }
+
             return hash;
         }
 
@@ -58,19 +84,11 @@ namespace ArcCreate.Utility.RangeTree
         public override bool Equals(object obj)
         {
             if (!(obj is RangeValuePair<TKey, TValue>))
+            {
                 return false;
+            }
 
             return Equals((RangeValuePair<TKey, TValue>)obj);
-        }
-
-        public static bool operator ==(RangeValuePair<TKey, TValue> left, RangeValuePair<TKey, TValue> right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(RangeValuePair<TKey, TValue> left, RangeValuePair<TKey, TValue> right)
-        {
-            return !(left == right);
         }
     }
 }

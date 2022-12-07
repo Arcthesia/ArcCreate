@@ -13,15 +13,17 @@ public static class Pools
     /// <param name="parent">The parent transform.</param>
     /// <param name="capacity">The initial capacity of the pool.</param>
     /// <typeparam name="T">The component to pool.</typeparam>
-    public static void New<T>(string name, GameObject prefab, Transform parent, int capacity)
+    /// <returns>The newly created pool, or an already existing pool if it has been created already.</returns>
+    public static Pool<T> New<T>(string name, GameObject prefab, Transform parent, int capacity)
         where T : Component
     {
         if (NameToPoolMap.ContainsKey(name))
         {
-            return;
+            return NameToPoolMap[name] as Pool<T>;
         }
 
         NameToPoolMap.Add(name, new Pool<T>(prefab, parent, capacity));
+        return NameToPoolMap[name] as Pool<T>;
     }
 
     /// <summary>

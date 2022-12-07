@@ -20,6 +20,8 @@ namespace ArcCreate.Gameplay
         [SerializeField] private AudioService audioService;
         [SerializeField] private AudioClip testAudio;
 
+        private bool loaded = false;
+
         public IChartControl Chart => chartService;
 
         public ISkinControl Skin => skinService;
@@ -32,7 +34,7 @@ namespace ArcCreate.Gameplay
             Settings.InputMode.Value = (int)InputMode.Touch;
 
             // Load test chart
-            string path = Path.Combine(Application.streamingAssetsPath, "test_tap.aff");
+            string path = Path.Combine(Application.streamingAssetsPath, "test_hold.aff");
             if (Application.platform == RuntimePlatform.Android)
             {
                 ImportTestChartAndroid(path).Forget();
@@ -71,10 +73,16 @@ namespace ArcCreate.Gameplay
             Chart.LoadChart(reader);
             Audio.AudioClip = testAudio;
             Audio.PlayWithDelay(0, 2000);
+            loaded = true;
         }
 
         private void Update()
         {
+            if (!loaded)
+            {
+                return;
+            }
+
             Services.Audio.UpdateTime();
             Services.Particle.UpdateParticles();
             Services.InputFeedback.UpdateInputFeedback();

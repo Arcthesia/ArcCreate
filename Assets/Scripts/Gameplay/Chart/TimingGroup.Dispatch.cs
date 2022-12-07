@@ -13,8 +13,8 @@ namespace ArcCreate.Gameplay.Chart
     {
         private NoteGroup<Tap, TapBehaviour> taps;
         private NoteGroup<Hold, HoldBehaviour> holds;
-        // private NoteGroup<Arc, ArcBehaviour> arcs;
-        // private NoteGroup<ArcTap, ArcTapBehaviour> arcTaps;
+        private NoteGroup<Arc, ArcBehaviour> arcs;
+        private NoteGroup<ArcTap, ArcTapBehaviour> arcTaps;
         private GroupProperties groupProperties;
         private Transform parent;
 
@@ -39,13 +39,13 @@ namespace ArcCreate.Gameplay.Chart
 
             taps = new TapNoteGroup();
             holds = new HoldNoteGroup();
-            // arcs = new ArcNoteGroup();
-            // arcTaps = new ArcTapNoteGroup();
+            arcs = new ArcNoteGroup();
+            arcTaps = new ArcTapNoteGroup();
 
             taps.Load(tg.Taps, parent);
             holds.Load(tg.Holds, parent);
-            // arcs.Load(tg.Arcs, parent);
-            // arcTaps.Load(tg.ArcTaps, parent);
+            arcs.Load(tg.Arcs, parent);
+            arcTaps.Load(tg.ArcTaps, parent);
             timings = tg.Timings;
             OnTimingListChange();
         }
@@ -56,6 +56,11 @@ namespace ArcCreate.Gameplay.Chart
         /// <param name="parent">The parent transform for all notes of this timing group.</param>
         public void Load(Transform parent)
         {
+            taps = new TapNoteGroup();
+            holds = new HoldNoteGroup();
+            arcs = new ArcNoteGroup();
+            arcTaps = new ArcTapNoteGroup();
+
             this.parent = parent;
             groupProperties = new GroupProperties();
             timings = new List<TimingEvent>
@@ -68,6 +73,10 @@ namespace ArcCreate.Gameplay.Chart
                     Divisor = 4f,
                 },
             };
+            taps.Load(new List<Tap>(), parent);
+            holds.Load(new List<Hold>(), parent);
+            arcs.Load(new List<Arc>(), parent);
+            arcTaps.Load(new List<ArcTap>(), parent);
         }
 
         /// <summary>
@@ -79,8 +88,8 @@ namespace ArcCreate.Gameplay.Chart
             double floorPosition = GetFloorPosition(timing);
             taps.Update(timing, floorPosition, groupProperties);
             holds.Update(timing, floorPosition, groupProperties);
-            // arcs.Update(timing, floorPosition, groupProperties);
-            // arcTaps.Update(timing, floorPosition, groupProperties);
+            arcs.Update(timing, floorPosition, groupProperties);
+            arcTaps.Update(timing, floorPosition, groupProperties);
         }
 
         /// <summary>
@@ -90,8 +99,8 @@ namespace ArcCreate.Gameplay.Chart
         {
             taps.ReloadSkin();
             holds.ReloadSkin();
-            // arcs.ReloadSkin();
-            // arcTaps.ReloadSkin();
+            arcs.ReloadSkin();
+            arcTaps.ReloadSkin();
         }
 
         /// <summary>
@@ -101,6 +110,8 @@ namespace ArcCreate.Gameplay.Chart
         {
             taps.ResetJudge();
             holds.ResetJudge();
+            arcs.ResetJudge();
+            arcTaps.ResetJudge();
         }
 
         /// <summary>
@@ -110,11 +121,16 @@ namespace ArcCreate.Gameplay.Chart
         /// <returns>Max combo at the specified timing.</returns>
         public int ComboAt(int timing)
         {
+            if (groupProperties.NoInput)
+            {
+                return 0;
+            }
+
             int combo = 0;
             combo += taps.ComboAt(timing);
             combo += holds.ComboAt(timing);
-            // combo += arcs.ResetJudgeToTiming(timing);
-            // combo += arcTaps.ResetJudgeToTiming(timing);
+            combo += arcs.ComboAt(timing);
+            combo += arcTaps.ComboAt(timing);
             return combo;
         }
 
@@ -124,11 +140,16 @@ namespace ArcCreate.Gameplay.Chart
         /// <returns>The total combo count.</returns>
         public int TotalCombo()
         {
+            if (groupProperties.NoInput)
+            {
+                return 0;
+            }
+
             int combo = 0;
             combo += taps.TotalCombo();
             combo += holds.TotalCombo();
-            // combo += arcs.TotalCombo();
-            // combo += arcTaps.TotalCombo();
+            combo += arcs.TotalCombo();
+            combo += arcTaps.TotalCombo();
             return combo;
         }
 
@@ -150,16 +171,15 @@ namespace ArcCreate.Gameplay.Chart
                 return holds.Notes.Cast<T>().ToList();
             }
 
-            // if (typeof(T) == typeof(ArcTap))
-            // {
-            //     return arcTaps.Notes.Cast<T>().ToList();
-            // }
+            if (typeof(T) == typeof(ArcTap))
+            {
+                return arcTaps.Notes.Cast<T>().ToList();
+            }
 
             // if (typeof(T) == typeof(Arc))
             // {
             //     return arcs.Notes.Cast<T>().ToList();
             // }
-
             if (typeof(T) == typeof(TimingEvent))
             {
                 return timings.Cast<T>().ToList();
@@ -176,8 +196,8 @@ namespace ArcCreate.Gameplay.Chart
             Object.Destroy(parent.gameObject);
             taps.Clear();
             holds.Clear();
-            // arcTaps.Clear();
-            // arcs.Clear();
+            arcTaps.Clear();
+            arcs.Clear();
         }
 
         /// <summary>
@@ -202,15 +222,15 @@ namespace ArcCreate.Gameplay.Chart
                 this.holds.Add(holds);
             }
 
-            // if (arcs.Any())
-            // {
-            //     this.arcs.Add(arcs);
-            // }
+            if (arcs.Any())
+            {
+                this.arcs.Add(arcs);
+            }
 
-            // if (arcTaps.Any())
-            // {
-            //     this.arcTaps.Add(arcTaps);
-            // }
+            if (arcTaps.Any())
+            {
+                this.arcTaps.Add(arcTaps);
+            }
 
             if (timings.Any())
             {
@@ -240,15 +260,15 @@ namespace ArcCreate.Gameplay.Chart
                 this.holds.Remove(holds);
             }
 
-            // if (arcs.Any())
-            // {
-            //     this.arcs.Remove(arcs);
-            // }
+            if (arcs.Any())
+            {
+                this.arcs.Remove(arcs);
+            }
 
-            // if (arcTaps.Any())
-            // {
-            //     this.arcTaps.Remove(arcTaps);
-            // }
+            if (arcTaps.Any())
+            {
+                this.arcTaps.Remove(arcTaps);
+            }
 
             if (timings.Any())
             {
@@ -278,15 +298,15 @@ namespace ArcCreate.Gameplay.Chart
                 this.holds.Update(holds);
             }
 
-            // if (arcs.Any())
-            // {
-            //     this.arcs.Update(arcs);
-            // }
+            if (arcs.Any())
+            {
+                this.arcs.Update(arcs);
+            }
 
-            // if (arcTaps.Any())
-            // {
-            //     this.arcTaps.Update(arcTaps);
-            // }
+            if (arcTaps.Any())
+            {
+                this.arcTaps.Update(arcTaps);
+            }
 
             if (timings.Any())
             {

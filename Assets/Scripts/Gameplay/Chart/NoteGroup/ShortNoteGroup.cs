@@ -25,6 +25,11 @@ namespace ArcCreate.Gameplay.Chart
 
         public override void Update(int timing, double floorPosition, GroupProperties groupProperties)
         {
+            if (Notes.Count == 0)
+            {
+                return;
+            }
+
             UpdateJudgement(timing, groupProperties);
             UpdateRender(timing, floorPosition, groupProperties);
         }
@@ -94,7 +99,7 @@ namespace ArcCreate.Gameplay.Chart
 
                 if (!note.IsAssignedInstance)
                 {
-                    note.AssignInstance(Pool.Get());
+                    note.AssignInstance(Pool.Get(ParentTransform));
                 }
 
                 note.UpdateInstance(timing, floorPosition, groupProperties);

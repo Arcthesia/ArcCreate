@@ -334,26 +334,26 @@ namespace ArcCreate.Gameplay.Chart
 
         private void Awake()
         {
-            Pools.New<TapBehaviour>("tap", tapPrefab, transform, tapCapacity);
-            Pools.New<HoldBehaviour>("hold", holdPrefab, transform, holdCapacity);
-            // Pools.New<ArcBehaviour>("arc", arcPrefab, transform, arcCapacity);
-            // Pools.New<ArcTapBehaviour>("arctap", arcTapPrefab, transform, arcTapCapacity);
-            // Pools.New<ArcSegment>("segment", arcSegmentPrefab, transform, arcSegmentCapacity);
-            Pools.New<LineRenderer>("connectionLine", connectionLinePrefab, transform, connectionLineCapacity);
-            Pools.New<Transform>("beatline", beatlinePrefab, transform, beatlineCapacity);
+            Pools.New<TapBehaviour>(Values.TapPoolName, tapPrefab, transform, tapCapacity);
+            Pools.New<HoldBehaviour>(Values.HoldPoolName, holdPrefab, transform, holdCapacity);
+            Pools.New<ArcBehaviour>(Values.ArcPoolName, arcPrefab, transform, arcCapacity);
+            Pools.New<ArcTapBehaviour>(Values.ArcTapPoolName, arcTapPrefab, transform, arcTapCapacity);
+            Pools.New<ArcSegmentBehaviour>(Values.ArcSegmentPoolName, arcSegmentPrefab, transform, arcSegmentCapacity);
+            Pools.New<LineRenderer>(Values.ConnectonLinePoolName, connectionLinePrefab, transform, connectionLineCapacity);
+            Pools.New<Transform>(Values.BeatlinePoolName, beatlinePrefab, transform, beatlineCapacity);
 
             Settings.GlobalAudioOffset.OnValueChanged.AddListener(OnGlobalOffsetChange);
         }
 
         private void OnDestroy()
         {
-            Pools.Destroy<TapBehaviour>("tap");
-            Pools.Destroy<HoldBehaviour>("hold");
-            // Pools.Destroy<ArcBehaviour>("arc");
-            // Pools.Destroy<ArcTapBehaviour>("arctap");
-            // Pools.Destroy<ArcSegment>("segment");
-            Pools.Destroy<LineRenderer>("connectionLine");
-            Pools.Destroy<Transform>("beatline");
+            Pools.Destroy<TapBehaviour>(Values.TapPoolName);
+            Pools.Destroy<HoldBehaviour>(Values.HoldPoolName);
+            Pools.Destroy<ArcBehaviour>(Values.ArcPoolName);
+            Pools.Destroy<ArcTapBehaviour>(Values.ArcTapPoolName);
+            Pools.Destroy<ArcSegmentBehaviour>(Values.ArcSegmentPoolName);
+            Pools.Destroy<LineRenderer>(Values.ConnectonLinePoolName);
+            Pools.Destroy<Transform>(Values.BeatlinePoolName);
 
             Settings.GlobalAudioOffset.OnValueChanged.RemoveListener(OnGlobalOffsetChange);
         }

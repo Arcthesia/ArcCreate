@@ -31,11 +31,7 @@ namespace ArcCreate.Gameplay.Data
             }
         }
 
-        /// <summary>
-        /// Gets or sets the timing group instance.
-        /// </summary>
-        /// <value>The timing group instance.</value>
-        public TimingGroup TimingGroupInstance { get; set; }
+        public TimingGroup TimingGroupInstance => Services.Chart.GetTimingGroup(TimingGroup);
 
         public bool NoInput => TimingGroupInstance.GroupProperties.NoInput;
 

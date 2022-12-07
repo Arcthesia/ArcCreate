@@ -7,28 +7,29 @@ namespace ArcCreate.Gameplay.Judgement.Input
 {
     public class TouchInputHandler : IInputHandler
     {
-        private readonly Queue<TouchInput> currentInputs = new Queue<TouchInput>();
+        private readonly List<TouchInput> currentInputs = new List<TouchInput>(10);
 
         public void PollInput()
         {
             var touches = Touch.activeTouches;
+            currentInputs.Clear();
             for (int i = 0; i < touches.Count; i++)
             {
                 var touch = touches[i];
 
                 TouchInput input = new TouchInput(touch, GetCameraRay(touch));
-                currentInputs.Enqueue(input);
+                currentInputs.Add(input);
 
                 Services.InputFeedback.LaneFeedback(input.Lane);
                 Services.InputFeedback.FloatlineFeedback(input.VerticalY);
             }
         }
 
-        public void HandleTaps(int currentTiming, UnorderedList<TapJudgementRequest> tapRequests)
+        public void HandleTapRequests(int currentTiming, UnorderedList<LaneTapJudgementRequest> laneTapRequests)
         {
-            while (currentInputs.Count > 0)
+            for (int inpIndex = 0; inpIndex < currentInputs.Count; inpIndex++)
             {
-                TouchInput input = currentInputs.Dequeue();
+                TouchInput input = currentInputs[inpIndex];
                 if (!input.IsTap)
                 {
                     continue;
@@ -37,12 +38,12 @@ namespace ArcCreate.Gameplay.Judgement.Input
                 int minTimingDifference = int.MaxValue;
                 float minPositionDifference = float.MaxValue;
                 bool applicableRequestExists = false;
-                TapJudgementRequest applicableRequest = default;
+                LaneTapJudgementRequest applicableRequest = default;
                 int applicableRequestIndex = 0;
 
-                for (int i = tapRequests.Count - 1; i >= 0; i--)
+                for (int i = laneTapRequests.Count - 1; i >= 0; i--)
                 {
-                    TapJudgementRequest req = tapRequests[i];
+                    LaneTapJudgementRequest req = laneTapRequests[i];
                     int timingDifference = req.AutoAt - currentTiming;
                     if (timingDifference > minTimingDifference)
                     {
@@ -55,7 +56,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
                     float distanceToNote = deltaToNote.sqrMagnitude;
 
                     if (distanceToNote <= minPositionDifference
-                     && TapCollide(input, screenPosition, req.Lane))
+                     && LaneCollide(input, screenPosition, req.Lane))
                     {
                         minTimingDifference = timingDifference;
                         minPositionDifference = distanceToNote;
@@ -67,23 +68,43 @@ namespace ArcCreate.Gameplay.Judgement.Input
 
                 if (applicableRequestExists)
                 {
-                    JudgementResult result = currentTiming.CalculateJudgeResult(applicableRequest.AutoAt);
-                    applicableRequest.Receiver.ProcessJudgement(result);
-                    Services.InputFeedback.LaneFeedback(applicableRequest.Receiver.Lane);
-                    tapRequests.RemoveAt(applicableRequestIndex);
+                    applicableRequest.Receiver.ProcessLaneTapJudgement(currentTiming - applicableRequest.AutoAt);
+                    laneTapRequests.RemoveAt(applicableRequestIndex);
                 }
             }
         }
 
-        private bool TapCollide(TouchInput input, Vector3 screenPosition, int lane)
+        public void HandleLaneHoldRequests(int currentTiming, UnorderedList<LaneHoldJudgementRequest> requests)
+        {
+            for (int inpIndex = 0; inpIndex < currentInputs.Count; inpIndex++)
+            {
+                TouchInput input = currentInputs[inpIndex];
+
+                for (int i = requests.Count - 1; i >= 0; i--)
+                {
+                    LaneHoldJudgementRequest req = requests[i];
+
+                    Vector3 worldPosition = new Vector3(ArcFormula.LaneToWorldX(req.Lane), 0, 0);
+                    Vector3 screenPosition = Services.Camera.GameplayCamera.WorldToScreenPoint(worldPosition);
+
+                    if (LaneCollide(input, screenPosition, req.Lane))
+                    {
+                        req.Receiver.ProcessLaneHoldJudgement(currentTiming - req.AutoAt);
+                        requests.RemoveAt(i);
+                    }
+                }
+            }
+        }
+
+        private bool LaneCollide(TouchInput input, Vector3 screenPosition, int lane)
         {
             if (input.Lane == lane)
             {
                 return true;
             }
 
-            if (Mathf.Abs(input.ScreenX - screenPosition.x) <= Values.TapScreenHitbox
-             && Mathf.Abs(input.ScreenY - screenPosition.y) <= Values.TapScreenHitbox)
+            if (Mathf.Abs(input.ScreenX - screenPosition.x) <= Values.LaneScreenHitbox
+             && Mathf.Abs(input.ScreenY - screenPosition.y) <= Values.LaneScreenHitbox)
             {
                 return true;
             }

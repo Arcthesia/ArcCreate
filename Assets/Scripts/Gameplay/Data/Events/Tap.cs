@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
 {
-    public class Tap : Note, INote<TapBehaviour>
+    public class Tap : Note, INote<TapBehaviour>, ILaneTapJudgementReceiver
     {
         private TapBehaviour instance;
         private bool judgementRequestSent = false;
@@ -62,7 +62,7 @@ namespace ArcCreate.Gameplay.Data
 
         public int CompareTo(INote<TapBehaviour> other)
         {
-            return CompareTo(other as Tap);
+            return Timing.CompareTo(other.Timing);
         }
 
         public void UpdateInstance(int timing, double floorPosition, GroupProperties groupProperties)
@@ -85,14 +85,20 @@ namespace ArcCreate.Gameplay.Data
             instance.SetColor(color);
         }
 
-        public void ProcessJudgement(JudgementResult result)
+        public void ProcessLaneTapJudgement(int offset)
         {
+            JudgementResult result = offset.CalculateJudgeResult();
             Services.Particle.PlayTapParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0), result);
             Services.Particle.PlayTextParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0), result);
             Services.Score.ProcessJudgement(result);
             if (instance != null)
             {
                 instance.gameObject.SetActive(false);
+            }
+
+            if (!result.IsLost())
+            {
+                Services.InputFeedback.LaneFeedback(Lane);
             }
         }
 
@@ -108,7 +114,7 @@ namespace ArcCreate.Gameplay.Data
         private void RequestJudgement()
         {
             Services.Judgement.Request(
-                new TapJudgementRequest()
+                new LaneTapJudgementRequest()
                 {
                     ExpireAtTiming = Timing + Values.LostJudgeWindow,
                     AutoAt = Timing,

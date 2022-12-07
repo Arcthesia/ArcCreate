@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.RangeTree;
 using UnityEngine;
@@ -17,10 +16,15 @@ namespace ArcCreate.Gameplay.Chart
     {
         private readonly RangeTree<int, Note> timingTree = new RangeTree<int, Note>();
         private readonly RangeTree<double, Note> floorPositionTree = new RangeTree<double, Note>();
-        private List<RangeValuePair<double, Note>> previousNotesInRange = new List<RangeValuePair<double, Note>>();
+        private readonly List<Note> previousNotesInRange = new List<Note>();
 
         public override void Update(int timing, double floorPosition, GroupProperties groupProperties)
         {
+            if (Notes.Count == 0)
+            {
+                return;
+            }
+
             UpdateJudgement(timing, groupProperties);
             UpdateRender(timing, floorPosition, groupProperties);
         }
@@ -29,9 +33,11 @@ namespace ArcCreate.Gameplay.Chart
         {
             var notes = timingTree[int.MinValue, timing];
             int combo = 0;
-            foreach (var note in notes)
+
+            while (notes.MoveNext())
             {
-                combo += note.Value.ComboAt(timing);
+                var note = notes.Current;
+                combo += note.ComboAt(timing);
             }
 
             return combo;
@@ -52,13 +58,19 @@ namespace ArcCreate.Gameplay.Chart
 
         private void UpdateJudgement(int timing, GroupProperties groupProperties)
         {
+            if (groupProperties.NoInput)
+            {
+                return;
+            }
+
             int judgeFrom = timing - Values.LostJudgeWindow;
-            int judgeTo = timing + Values.LostJudgeWindow;
+            int judgeTo = timing + Values.HoldLostLateJudgeWindow;
             var notesInRange = timingTree[judgeFrom, judgeTo];
 
-            foreach (var pair in notesInRange)
+            while (notesInRange.MoveNext())
             {
-                pair.Value.UpdateJudgement(timing, groupProperties);
+                var note = notesInRange.Current;
+                note.UpdateJudgement(timing, groupProperties);
             }
         }
 
@@ -72,31 +84,32 @@ namespace ArcCreate.Gameplay.Chart
                 floorPosition - fpDistBackward;
             double renderTo = floorPosition + fpDistForward;
 
-            List<RangeValuePair<double, Note>> notesInRange = floorPositionTree[renderFrom, renderTo].ToList();
+            var notesInRange = floorPositionTree[renderFrom, renderTo];
 
             // Disable old notes
             for (int i = 0; i < previousNotesInRange.Count; i++)
             {
-                RangeValuePair<double, Note> pair = previousNotesInRange[i];
-                if (pair.From < renderFrom || pair.To > renderTo)
+                Note note = previousNotesInRange[i];
+                if (note.FloorPosition < renderFrom || note.EndFloorPosition > renderTo)
                 {
-                    Pool.Return(pair.Value.RevokeInstance());
+                    Pool.Return(note.RevokeInstance());
                 }
             }
+
+            previousNotesInRange.Clear();
 
             // Update notes
-            for (int i = 0; i < notesInRange.Count; i++)
+            while (notesInRange.MoveNext())
             {
-                RangeValuePair<double, Note> pair = notesInRange[i];
-                if (!pair.Value.IsAssignedInstance)
+                var note = notesInRange.Current;
+                if (!note.IsAssignedInstance)
                 {
-                    pair.Value.AssignInstance(Pool.Get());
+                    note.AssignInstance(Pool.Get(ParentTransform));
                 }
 
-                pair.Value.UpdateInstance(timing, floorPosition, groupProperties);
+                note.UpdateInstance(timing, floorPosition, groupProperties);
+                previousNotesInRange.Add(note);
             }
-
-            previousNotesInRange = notesInRange;
         }
     }
 }

@@ -9,17 +9,23 @@ namespace ArcCreate.Gameplay.Judgement
     public class JudgementService : MonoBehaviour, IJudgementService
     {
         [SerializeField] private Camera gameplayCamera;
-        private readonly UnorderedList<TapJudgementRequest> tapRequests = new UnorderedList<TapJudgementRequest>(32);
+        private readonly UnorderedList<LaneTapJudgementRequest> laneTapRequests = new UnorderedList<LaneTapJudgementRequest>(32);
+        private readonly UnorderedList<LaneHoldJudgementRequest> laneHoldRequests = new UnorderedList<LaneHoldJudgementRequest>(32);
         private IInputHandler inputHandler;
 
-        public void Request(TapJudgementRequest request)
+        public void Request(LaneTapJudgementRequest request)
         {
-            tapRequests.Add(request);
+            laneTapRequests.Add(request);
+        }
+
+        public void Request(LaneHoldJudgementRequest request)
+        {
+            laneHoldRequests.Add(request);
         }
 
         public void ClearRequests()
         {
-            tapRequests.Clear();
+            laneTapRequests.Clear();
         }
 
         public void ProcessInput(int currentTiming)
@@ -29,18 +35,29 @@ namespace ArcCreate.Gameplay.Judgement
             // Manually update input system to minimalize lag
             InputSystem.Update();
             inputHandler.PollInput();
-            inputHandler.HandleTaps(currentTiming, tapRequests);
+            inputHandler.HandleTapRequests(currentTiming, laneTapRequests);
+            inputHandler.HandleLaneHoldRequests(currentTiming, laneHoldRequests);
         }
 
         private void PruneExpiredRequests(int currentTiming)
         {
-            for (int i = tapRequests.Count - 1; i >= 0; i--)
+            for (int i = laneTapRequests.Count - 1; i >= 0; i--)
             {
-                var req = tapRequests[i];
+                var req = laneTapRequests[i];
                 if (currentTiming >= req.ExpireAtTiming)
                 {
-                    req.Receiver.ProcessJudgement(JudgementResult.LostLate);
-                    tapRequests.RemoveAt(i);
+                    req.Receiver.ProcessLaneTapJudgement(currentTiming - req.AutoAt);
+                    laneTapRequests.RemoveAt(i);
+                }
+            }
+
+            for (int i = laneHoldRequests.Count - 1; i >= 0; i--)
+            {
+                var req = laneHoldRequests[i];
+                if (currentTiming >= req.ExpireAtTiming)
+                {
+                    req.Receiver.ProcessLaneHoldJudgement(currentTiming - req.AutoAt);
+                    laneHoldRequests.RemoveAt(i);
                 }
             }
         }
@@ -52,7 +69,7 @@ namespace ArcCreate.Gameplay.Judgement
             InputSystem.pollingFrequency = 240;
             EnhancedTouchSupport.Enable();
 
-            Values.TapScreenHitbox =
+            Values.LaneScreenHitbox =
                 (gameplayCamera.WorldToScreenPoint(Vector3.zero).x
                - gameplayCamera.WorldToScreenPoint(new Vector3(Values.LaneWidth, 0, 0)).x)
                / 2;

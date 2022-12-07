@@ -10,10 +10,17 @@ namespace ArcCreate.Gameplay.Judgement.Input
         void PollInput();
 
         /// <summary>
-        /// Handle tap requests. Make sure request lists are free from expired requests.
+        /// Handle lane tap requests. Make sure request lists are free from expired requests.
         /// </summary>
         /// <param name="currentTiming">The current audio timing.</param>
-        /// <param name="tapRequests">List of tap requests.</param>
-        void HandleTaps(int currentTiming, UnorderedList<TapJudgementRequest> tapRequests);
+        /// <param name="laneTapRequests">List of lane tap requests.</param>
+        void HandleTapRequests(int currentTiming, UnorderedList<LaneTapJudgementRequest> laneTapRequests);
+
+        /// <summary>
+        /// Handle lane hold requests. Make sure request lists are free from expired requests.
+        /// </summary>
+        /// <param name="currentTiming">The current audio timing.</param>
+        /// <param name="requests">List of requests.</param>
+        void HandleLaneHoldRequests(int currentTiming, UnorderedList<LaneHoldJudgementRequest> requests);
     }
 }

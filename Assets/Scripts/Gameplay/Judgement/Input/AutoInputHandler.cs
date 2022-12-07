@@ -8,15 +8,28 @@ namespace ArcCreate.Gameplay.Judgement.Input
         {
         }
 
-        public void HandleTaps(int currentTiming, UnorderedList<TapJudgementRequest> tapRequests)
+        public void HandleTapRequests(int currentTiming, UnorderedList<LaneTapJudgementRequest> tapRequests)
         {
             for (int i = tapRequests.Count - 1; i >= 0; i--)
             {
-                TapJudgementRequest req = tapRequests[i];
+                LaneTapJudgementRequest req = tapRequests[i];
                 if (currentTiming >= req.AutoAt)
                 {
-                    req.Receiver.ProcessJudgement(JudgementResult.Max);
+                    req.Receiver.ProcessLaneTapJudgement(0);
                     tapRequests.RemoveAt(i);
+                }
+            }
+        }
+
+        public void HandleLaneHoldRequests(int currentTiming, UnorderedList<LaneHoldJudgementRequest> holdRequests)
+        {
+            for (int i = holdRequests.Count - 1; i >= 0; i--)
+            {
+                LaneHoldJudgementRequest req = holdRequests[i];
+                if (currentTiming >= req.AutoAt)
+                {
+                    req.Receiver.ProcessLaneHoldJudgement(0);
+                    holdRequests.RemoveAt(i);
                 }
             }
         }
