@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ArcCreate.Gameplay.Data;
 using ArcCreate.Gameplay.Judgement;
 using TMPro;
 using UnityEngine;
@@ -7,9 +8,6 @@ namespace ArcCreate.Gameplay.Particle
 {
     public class ParticleService : MonoBehaviour, IParticleService
     {
-        public const string Early = "EARLY";
-        public const string Late = "LATE";
-
         [SerializeField] private Camera gameplayCamera;
 
         [Header("Text particle")]
@@ -36,14 +34,17 @@ namespace ArcCreate.Gameplay.Particle
         [Header("Numbers")]
         [SerializeField] private int tapParticlePoolCount = 50;
         [SerializeField] private int textParticlePoolCount = 50;
+        [SerializeField] private int longParticlePoolCount = 10;
         [SerializeField] private float tapParticleLength = 0.3f;
         [SerializeField] private float textParticleLength = 0.5f;
         [SerializeField] private float earlyLateLength = 0.5f;
         [SerializeField] private float earlyLateFromY;
         [SerializeField] private float earlyLateToY;
+        [SerializeField] private float longParticlePersistDuration;
 
         private Pool<Particle> tapParticlePool;
         private Pool<Particle> textParticlePool;
+        private Pool<Particle> longParticlePool;
         private float lastEarlyLateRealTime = float.MinValue;
 
         private readonly Queue<ParticleSchedule> playingTapParticleQueue
@@ -52,9 +53,14 @@ namespace ArcCreate.Gameplay.Particle
         private readonly Queue<ParticleSchedule> playingTextParticleQueue
             = new Queue<ParticleSchedule>();
 
+        private readonly Dictionary<LongNote, ParticleSchedule> playingLongParticles
+            = new Dictionary<LongNote, ParticleSchedule>(10);
+
+        private readonly List<LongNote> longParticlesToPrune = new List<LongNote>();
+
         public void UpdateParticles()
         {
-            float currentRealTime = Time.realtimeSinceStartup;
+            float currentRealTime = Time.time;
             while (playingTapParticleQueue.Count > 0)
             {
                 ParticleSchedule ps = playingTapParticleQueue.Peek();
@@ -98,6 +104,25 @@ namespace ArcCreate.Gameplay.Particle
                 c.a = a;
                 earlyLateText.color = c;
             }
+
+            longParticlesToPrune.Clear();
+            foreach (var pair in playingLongParticles)
+            {
+                LongNote reference = pair.Key;
+                ParticleSchedule schedule = pair.Value;
+                if (currentRealTime >= schedule.ExpireAt)
+                {
+                    schedule.Particle.Stop();
+                    longParticlePool.Return(schedule.Particle);
+                    longParticlesToPrune.Add(reference);
+                }
+            }
+
+            for (int i = 0; i < longParticlesToPrune.Count; i++)
+            {
+                LongNote reference = longParticlesToPrune[i];
+                playingLongParticles.Remove(reference);
+            }
         }
 
         public void PlayTapParticle(Vector3 worldPosition, JudgementResult result)
@@ -113,7 +138,7 @@ namespace ArcCreate.Gameplay.Particle
             ps.Play();
             playingTapParticleQueue.Enqueue(new ParticleSchedule()
             {
-                ExpireAt = Time.realtimeSinceStartup + tapParticleLength,
+                ExpireAt = Time.time + tapParticleLength,
                 Particle = ps,
             });
         }
@@ -144,43 +169,104 @@ namespace ArcCreate.Gameplay.Particle
 
             playingTextParticleQueue.Enqueue(new ParticleSchedule()
             {
-                ExpireAt = Time.realtimeSinceStartup + textParticleLength,
+                ExpireAt = Time.time + textParticleLength,
                 Particle = ps,
             });
 
             if (result.IsEarly())
             {
-                earlyLateText.SetText(Early);
+                earlyLateText.SetText(Values.EarlyText);
                 earlyLateText.color = earlyColor;
-                lastEarlyLateRealTime = Time.realtimeSinceStartup;
+                lastEarlyLateRealTime = Time.time;
             }
             else if (result.IsLate())
             {
-                earlyLateText.SetText(Late);
+                earlyLateText.SetText(Values.LateText);
                 earlyLateText.color = lateColor;
-                lastEarlyLateRealTime = Time.realtimeSinceStartup;
+                lastEarlyLateRealTime = Time.time;
+            }
+        }
+
+        public void PlayLongParticle(LongNote reference, Vector3 worldPosition)
+        {
+            float currentRealTime = Time.time;
+            Vector2 screenPos = ConvertToScreen(worldPosition);
+
+            if (!playingLongParticles.ContainsKey(reference))
+            {
+                Particle ps = longParticlePool.Get();
+                ps.transform.localPosition = screenPos;
+                ps.Play();
+
+                playingLongParticles.Add(
+                    reference,
+                    new ParticleSchedule()
+                    {
+                        ExpireAt = currentRealTime + longParticlePersistDuration,
+                        Particle = ps,
+                    });
+            }
+            else
+            {
+                ParticleSchedule ps = playingLongParticles[reference];
+                ps.Particle.transform.localPosition = screenPos;
+                playingLongParticles[reference] = new ParticleSchedule()
+                {
+                    ExpireAt = currentRealTime + longParticlePersistDuration,
+                    Particle = ps.Particle,
+                };
             }
         }
 
         public void SetTapParticleSkin(Texture particleTexture)
         {
-            tapParticlePrefab.GetComponent<ParticleSystemRenderer>().sharedMaterial.mainTexture = particleTexture;
-            Pools.Destroy<Particle>("TapParticle");
-            Pools.New<Particle>("TapParticle", tapParticlePrefab, tapParticleParent, tapParticlePoolCount);
+            tapParticlePrefab.GetComponent<ParticleSystemRenderer>().material.mainTexture = particleTexture;
+            Pools.Destroy<Particle>(Values.TapParticlePoolName);
+            tapParticlePool = Pools.New<Particle>(
+                Values.TapParticlePoolName,
+                tapParticlePrefab,
+                tapParticleParent,
+                tapParticlePoolCount);
+        }
+
+        public void SetLongParticleSkin(Color colorMin, Color colorMax)
+        {
+            var module = longNoteParticlePrefab.GetComponent<ParticleSystem>().main;
+            module.startColor = new ParticleSystem.MinMaxGradient(colorMin, colorMax);
+            Pools.Destroy<Particle>(Values.LongParticlePoolName);
+            longParticlePool = Pools.New<Particle>(
+                Values.LongParticlePoolName,
+                longNoteParticlePrefab,
+                longNoteParticleParent,
+                longParticlePoolCount);
         }
 
         private void Awake()
         {
-            Pools.New<Particle>("TapParticle", tapParticlePrefab, tapParticleParent, tapParticlePoolCount);
-            tapParticlePool = Pools.Get<Particle>("TapParticle");
-            Pools.New<Particle>("TextParticle", textParticlePrefab, textParticleParent, textParticlePoolCount);
-            textParticlePool = Pools.Get<Particle>("TextParticle");
+            tapParticlePool = Pools.New<Particle>(
+                Values.TapParticlePoolName,
+                tapParticlePrefab,
+                tapParticleParent,
+                tapParticlePoolCount);
+
+            textParticlePool = Pools.New<Particle>(
+                Values.TextParticlePoolName,
+                textParticlePrefab,
+                textParticleParent,
+                textParticlePoolCount);
+
+            longParticlePool = Pools.New<Particle>(
+                Values.LongParticlePoolName,
+                longNoteParticlePrefab,
+                longNoteParticleParent,
+                longParticlePoolCount);
         }
 
         private void OnDestroy()
         {
-            Pools.Destroy<Particle>("TapParticle");
-            Pools.Destroy<Particle>("TextParticle");
+            Pools.Destroy<Particle>(Values.TapParticlePoolName);
+            Pools.Destroy<Particle>(Values.TextParticlePoolName);
+            Pools.Destroy<Particle>(Values.LongParticlePoolName);
         }
 
         private Vector2 ConvertToScreen(Vector3 world)

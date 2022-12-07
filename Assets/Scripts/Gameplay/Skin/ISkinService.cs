@@ -35,10 +35,8 @@ namespace ArcCreate.Gameplay.Skin
         /// normal: The default material.<br/>
         /// highlight: The highlighted material.<br/>
         /// arcCap: The sprite for its arc cap.<br/>
-        /// psMin: The minimum color for particle system.<br/>
-        /// psMax: The maximum color for particle system.
         /// </returns>
-        (Material normal, Material highlight, Sprite arcCap, Color psMin, Color psMax) GetArcSkin(Arc note);
+        (Material normal, Material highlight, Sprite arcCap) GetArcSkin(Arc note);
 
         /// <summary>
         /// Get the skin for a tap note.

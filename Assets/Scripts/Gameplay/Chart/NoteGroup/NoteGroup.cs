@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
 using UnityEngine;
@@ -119,6 +118,10 @@ namespace ArcCreate.Gameplay.Chart
             {
                 OnRemove(note);
                 this.notes.Remove(note);
+                if (note.IsAssignedInstance)
+                {
+                    Pool.Return(note.RevokeInstance());
+                }
             }
         }
 

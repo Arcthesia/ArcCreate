@@ -8,7 +8,7 @@ namespace ArcCreate.Gameplay.Score
     /// </summary>
     public interface IScoreService
     {
-        void ProcessJudgement(JudgementResult result);
+        void ProcessJudgement(JudgementResult result, int count = 1);
 
         void ResetScoreTo(int currentCombo, int totalCombo);
 

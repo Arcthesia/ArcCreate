@@ -1,12 +1,10 @@
-using ArcCreate.Gameplay.Data;
-
 namespace ArcCreate.Gameplay.Judgement
 {
-    public struct TapJudgementRequest
+    public struct LaneTapJudgementRequest
     {
         public int ExpireAtTiming;
         public int AutoAt;
         public int Lane;
-        public Tap Receiver;
+        public ILaneTapJudgementReceiver Receiver;
     }
 }

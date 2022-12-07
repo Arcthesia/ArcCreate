@@ -11,7 +11,13 @@ namespace ArcCreate.Gameplay.Judgement
         /// Add a judgement request to be processed later.
         /// </summary>
         /// <param name="request">The request details.</param>
-        void Request(TapJudgementRequest request);
+        void Request(LaneTapJudgementRequest request);
+
+        /// <summary>
+        /// Add a judgement request to be processed later.
+        /// </summary>
+        /// <param name="request">The request details.</param>
+        void Request(LaneHoldJudgementRequest request);
 
         /// <summary>
         /// Start processing user input. Should be done after all notes requested for judgements as necessary.

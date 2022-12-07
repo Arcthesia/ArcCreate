@@ -23,7 +23,7 @@ namespace ArcCreate.Gameplay.Score
 
         private int CurrentScoreTotal => Mathf.RoundToInt(currentScoreFull + currentScorePartial);
 
-        public void ProcessJudgement(JudgementResult result)
+        public void ProcessJudgement(JudgementResult result, int count = 1)
         {
             if (result.IsLost())
             {
@@ -45,15 +45,15 @@ namespace ArcCreate.Gameplay.Score
             float scoreToAdd = 0;
             if (result.IsFar())
             {
-                scoreToAdd = scorePerNote * Values.FarPenaltyMultipler;
+                scoreToAdd = scorePerNote * Values.FarPenaltyMultipler * count;
             }
             else if (result.IsMax())
             {
-                scoreToAdd = scorePerNote + 1;
+                scoreToAdd = (scorePerNote + 1) * count;
             }
             else
             {
-                scoreToAdd = scorePerNote;
+                scoreToAdd = scorePerNote * count;
             }
 
             pendingScoreEvents.Add(new ScoreEvent()

@@ -56,9 +56,6 @@ namespace ArcCreate.Gameplay.Skin
         private string currentAccentOption;
         private string currentSingleLineOption;
 
-        private Color holdEffectColorMin;
-        private Color holdEffectColorMax;
-
         private int highColorShaderId;
         private int lowColorShaderId;
         private int shadowColorShaderId;
@@ -125,8 +122,7 @@ namespace ArcCreate.Gameplay.Skin
                 particleOpt = particleOpt != null ? particleOpt : currentAlignment.DefaultParticleOption;
 
                 Services.Particle.SetTapParticleSkin(particleOpt.ParticleSkin);
-                holdEffectColorMax = particleOpt.HoldEffectColorMax;
-                holdEffectColorMin = particleOpt.HoldEffectColorMin;
+                Services.Particle.SetLongParticleSkin(particleOpt.HoldEffectColorMin, particleOpt.HoldEffectColorMax);
             }
         }
 
@@ -206,21 +202,21 @@ namespace ArcCreate.Gameplay.Skin
         public (Mesh mesh, Material material) GetArcTapSkin(ArcTap note)
             => currentNoteSkin.GetArcTapSkin(note);
 
-        public (Material normal, Material highlight, Sprite arcCap, Color psMin, Color psMax) GetArcSkin(Arc note)
+        public (Material normal, Material highlight, Sprite arcCap) GetArcSkin(Arc note)
         {
             Sprite arcCap = currentNoteSkin.GetArcCapSprite(note);
 
             if (note.IsVoid)
             {
-                return (traceMaterial, traceMaterial, arcCap, holdEffectColorMax, holdEffectColorMin);
+                return (traceMaterial, traceMaterial, arcCap);
             }
 
             if (note.Color < 0 || note.Color >= arcMaterials.Count)
             {
-                return (arcMaterials[0], arcHighlightMaterials[0], arcCap, holdEffectColorMax, holdEffectColorMin);
+                return (arcMaterials[0], arcHighlightMaterials[0], arcCap);
             }
 
-            return (arcMaterials[note.Color], arcHighlightMaterials[note.Color], arcCap, holdEffectColorMax, holdEffectColorMin);
+            return (arcMaterials[note.Color], arcHighlightMaterials[note.Color], arcCap);
         }
 
         public (Sprite lane, Sprite extraLane) GetTrackSprite(string name)

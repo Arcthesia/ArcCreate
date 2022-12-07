@@ -3,9 +3,9 @@
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {} 
+		_Color ("Color", Color) = (1,1,1,1)
 		_Alpha ("Alpha", Float) = 1
 		_Highlight("Highlight", Int) = 0
-		_Color ("Color", Color) = (1,1,1,1)
 	}
 	SubShader
 	{
@@ -26,12 +26,14 @@
 			struct appdata
 			{
 				float4 vertex : POSITION;
+				float4 color : COLOR;
 				float2 uv : TEXCOORD0;
 			};
 
 			struct v2f
 			{
 				float4 vertex : SV_POSITION;
+				float4 color : COLOR;
 				float2 uv : TEXCOORD0;
 			};
 			
@@ -51,6 +53,7 @@
 			{
 				v2f o;
 				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.color = v.color * _Color;
 				o.uv = v.uv;
 				return o;
 			}
@@ -63,7 +66,7 @@
 				{
 					c = Highlight(c);
 				}
-				return c * _Color;
+				return c * i.color;
 			}
 			ENDCG
 		}

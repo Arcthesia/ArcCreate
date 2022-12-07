@@ -10,37 +10,36 @@ namespace ArcCreate.Utility.RangeTree
     /// its subtree. Also contains methods to query the subtree.
     /// Basically, all interval tree logic is here.
     /// </summary>
-    internal class RangeTreeNode<TKey, TValue> : IComparer<RangeValuePair<TKey, TValue>>
+    /// <typeparam name="TKey">Type of node's key.</typeparam>
+    /// <typeparam name="TValue">Type of node's value.</typeparam>
+    public class RangeTreeNode<TKey, TValue> : IComparer<RangeValuePair<TKey, TValue>>
     {
-        private static Stack<RangeTreeNode<TKey, TValue>> stack = new Stack<RangeTreeNode<TKey, TValue>>();
-        private TKey _center;
-        private RangeTreeNode<TKey, TValue> _leftNode;
-        private RangeTreeNode<TKey, TValue> _rightNode;
-        private RangeValuePair<TKey, TValue>[] _items;
-
-        private readonly IComparer<TKey> _comparer;
+        private readonly IComparer<TKey> comparer;
 
         /// <summary>
-        /// Initializes an empty node.
+        /// Initializes a new instance of the <see cref="RangeTreeNode{TKey, TValue}"/> class.
+        /// The initialized node is empty.
         /// </summary>
         /// <param name="comparer">The comparer used to compare two items.</param>
         public RangeTreeNode(IComparer<TKey> comparer)
         {
-            _comparer = comparer ?? Comparer<TKey>.Default;
+            this.comparer = comparer ?? Comparer<TKey>.Default;
 
-            _center = default(TKey);
-            _leftNode = null;
-            _rightNode = null;
-            _items = null;
+            Center = default;
+            LeftNode = null;
+            RightNode = null;
+            Items = null;
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="RangeTreeNode{TKey, TValue}"/> class.
         /// Initializes a node with a list of items, builds the sub tree.
         /// </summary>
+        /// <param name="items">The list of items of this node.</param>
         /// <param name="comparer">The comparer used to compare two items.</param>
         public RangeTreeNode(IList<RangeValuePair<TKey, TValue>> items, IComparer<TKey> comparer)
         {
-            _comparer = comparer ?? Comparer<TKey>.Default;
+            this.comparer = comparer ?? Comparer<TKey>.Default;
 
             // first, find the median
             var endPoints = new List<TKey>(items.Count * 2);
@@ -49,10 +48,11 @@ namespace ArcCreate.Utility.RangeTree
                 endPoints.Add(item.From);
                 endPoints.Add(item.To);
             }
-            endPoints.Sort(_comparer);
+
+            endPoints.Sort(this.comparer);
 
             // the median is used as center value
-            _center = endPoints[endPoints.Count / 2];
+            Center = endPoints[endPoints.Count / 2];
 
             var inner = new List<RangeValuePair<TKey, TValue>>();
             var left = new List<RangeValuePair<TKey, TValue>>();
@@ -64,93 +64,90 @@ namespace ArcCreate.Utility.RangeTree
             // otherwise (range overlaps the center), add the item to this node's items
             foreach (var o in items)
             {
-                if (_comparer.Compare(o.To, _center) < 0)
+                if (this.comparer.Compare(o.To, Center) < 0)
+                {
                     left.Add(o);
-                else if (_comparer.Compare(o.From, _center) > 0)
+                }
+                else if (this.comparer.Compare(o.From, Center) > 0)
+                {
                     right.Add(o);
+                }
                 else
+                {
                     inner.Add(o);
+                }
             }
 
             // sort the items, this way the query is faster later on
             if (inner.Count > 0)
             {
                 if (inner.Count > 1)
+                {
                     inner.Sort(this);
-                _items = inner.ToArray();
+                }
+
+                this.Items = inner.ToArray();
             }
             else
             {
-                _items = null;
+                this.Items = null;
             }
 
             // create left and right nodes, if there are any items
             if (left.Count > 0)
-                _leftNode = new RangeTreeNode<TKey, TValue>(left, _comparer);
-            if (right.Count > 0)
-                _rightNode = new RangeTreeNode<TKey, TValue>(right, _comparer);
-        }
-
-
-
-        /// <summary>
-        /// Performans a "stab" query with a single value.
-        /// All items with overlapping ranges are returned.
-        /// </summary>
-        public IEnumerable<RangeValuePair<TKey, TValue>> Query(TKey value)
-        {
-            // If the node has items, check for leaves containing the value.
-            if (_items != null)
             {
-                foreach (var o in _items)
-                {
-                    if (_comparer.Compare(o.From, value) > 0)
-                        break;
-                    else if (_comparer.Compare(value, o.From) >= 0 && _comparer.Compare(value, o.To) <= 0)
-                        yield return o;
-                }
+                LeftNode = new RangeTreeNode<TKey, TValue>(left, this.comparer);
             }
 
-            // go to the left or go to the right of the tree, depending
-            // where the query value lies compared to the center
-            var centerComp = _comparer.Compare(value, _center);
-            if (_leftNode != null && centerComp < 0)
-                foreach (var o in _leftNode.Query(value))
-                    yield return o;
-            else if (_rightNode != null && centerComp > 0)
-                foreach (var o in _rightNode.Query(value))
-                    yield return o;
+            if (right.Count > 0)
+            {
+                RightNode = new RangeTreeNode<TKey, TValue>(right, this.comparer);
+            }
         }
 
-        /// <summary>
-        /// Performans a range query.
-        /// All items with overlapping ranges are returned.
-        /// </summary>
-        public IEnumerable<RangeValuePair<TKey, TValue>> Query(TKey from, TKey to)
+        public TKey Center { get; private set; }
+
+        public RangeTreeNode<TKey, TValue> LeftNode { get; private set; }
+
+        public RangeTreeNode<TKey, TValue> RightNode { get; private set; }
+
+        public RangeValuePair<TKey, TValue>[] Items { get; private set; }
+
+        public TKey Max
         {
-            // Modified by 0thElement to be more efficient.
-            stack.Clear();
-            stack.Push(this);
-
-            while (stack.Count > 0)
+            get
             {
-                var node = stack.Pop();
-                if (node._items != null)
+                if (RightNode != null)
                 {
-                    for (int i = 0; i < node._items.Length; i++)
-                    {
-                        RangeValuePair<TKey, TValue> o = node._items[i];
-                        if (_comparer.Compare(o.From, to) > 0)
-                            break;
-                        else if (_comparer.Compare(to, o.From) >= 0 && _comparer.Compare(from, o.To) <= 0)
-                            yield return o;
-                    }
+                    return RightNode.Max;
                 }
+                else if (Items != null)
+                {
+                    return Items.Max(i => i.To);
+                }
+                else
+                {
+                    return default;
+                }
+            }
+        }
 
-                if (node._leftNode != null && _comparer.Compare(from, node._center) < 0)
-                    stack.Push(node._leftNode);
-                if (node._rightNode != null && _comparer.Compare(to, node._center) > 0)
-                    stack.Push(node._rightNode);
+        public TKey Min
+        {
+            get
+            {
+                if (LeftNode != null)
+                {
+                    return LeftNode.Max;
+                }
+                else if (Items != null)
+                {
+                    return Items.Max(i => i.From);
+                }
+                else
+                {
+                    return default;
+                }
             }
         }
 
@@ -159,40 +156,18 @@ namespace ArcCreate.Utility.RangeTree
         /// If both are equal, the comparison of the To values is returned.
         /// 0 if both ranges are equal.
         /// </summary>
-        /// <param name="y">The other.</param>
-        /// <returns></returns>
+        /// <param name="x">One node.</param>
+        /// <param name="y">Other node.</param>
+        /// <returns>Integer value comparing the two node.</returns>
         int IComparer<RangeValuePair<TKey, TValue>>.Compare(RangeValuePair<TKey, TValue> x, RangeValuePair<TKey, TValue> y)
         {
-            var fromComp = _comparer.Compare(x.From, y.From);
+            var fromComp = comparer.Compare(x.From, y.From);
             if (fromComp == 0)
-                return _comparer.Compare(x.To, y.To);
+            {
+                return comparer.Compare(x.To, y.To);
+            }
+
             return fromComp;
-        }
-
-        public TKey Max
-        {
-            get
-            {
-                if (_rightNode != null)
-                    return _rightNode.Max;
-                else if (_items != null)
-                    return _items.Max(i => i.To);
-                else
-                    return default(TKey);
-            }
-        }
-
-        public TKey Min
-        {
-            get
-            {
-                if (_leftNode != null)
-                    return _leftNode.Max;
-                else if (_items != null)
-                    return _items.Max(i => i.From);
-                else
-                    return default(TKey);
-            }
         }
     }
 }

@@ -8,7 +8,11 @@ namespace ArcCreate.Gameplay.Judgement.Input
         {
         }
 
-        public void HandleTaps(int currentTiming, UnorderedList<TapJudgementRequest> tapRequests)
+        public void HandleTapRequests(int currentTiming, UnorderedList<LaneTapJudgementRequest> tapRequests)
+        {
+        }
+
+        public void HandleLaneHoldRequests(int currentTiming, UnorderedList<LaneHoldJudgementRequest> holdRequests)
         {
         }
     }

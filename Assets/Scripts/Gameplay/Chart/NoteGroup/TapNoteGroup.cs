@@ -4,7 +4,7 @@ namespace ArcCreate.Gameplay.Chart
 {
     public class TapNoteGroup : ShortNoteGroup<Tap, TapBehaviour>
     {
-        public override string PoolName => "tap";
+        public override string PoolName => Values.TapPoolName;
 
         protected override void OnAdd(Tap note)
         {

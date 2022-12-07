@@ -3,11 +3,10 @@
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
+		_Color ("Color", Color) = (1,1,1,1)
 		_From ("From", Float) = 0
 		_To ("To",Float) = 1
-		_Alpha ("Alpha", Float) = 1
 		_Highlight("Highlight", Int) = 0
-		_Color ("Color", Color) = (1,1,1,1)
 		_Shear("Shear", Vector) = (0,0,0,0)
 	}
 	SubShader
@@ -29,6 +28,7 @@
 			struct appdata
 			{
 				float4 vertex : POSITION;
+				float4 color : COLOR;
 				float2 uv : TEXCOORD0;
 			};
 
@@ -36,6 +36,7 @@
 			{
 				float4 vertex : SV_POSITION;
 				float2 uv : TEXCOORD0;
+				float4 color : COLOR;
 				float3 worldpos : TEXCOORD1;
 			};
 			
@@ -48,7 +49,6 @@
 			v2f vert (appdata v)
 			{
 				v2f o;
-				float4 vertex = v.vertex; 
 				float x = _Shear.x;
 				float y = _Shear.y;
 				float4x4 transformMatrix = float4x4(
@@ -56,10 +56,11 @@
                     0,1,y,0,
                     0,0,1,0,
                     0,0,0,1);
-				vertex = mul(transformMatrix, vertex);
+				float4 vertex = mul(transformMatrix, v.vertex);
 
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = v.uv;
+				o.color = v.color * _Color;
 				o.worldpos = mul(unity_ObjectToWorld, v.vertex);
 				return o;
 			}
@@ -76,12 +77,12 @@
 			{
 			    if(i.uv.y > _To || i.uv.y < _From || i.worldpos.z > 100 || i.worldpos.z < -100) return 0;
 				i.uv.y = (i.uv.y - 1) * _To/(_To-_From) + 1;
-				half4 c = half4(tex2D(_MainTex,i.uv).rgb, _Alpha); 
+				half4 c = half4(tex2D(_MainTex,i.uv).rgb, 1); 
 				if(_Highlight == 1) 
 				{
 					c = Highlight(c);
 				};
-				return c * _Color;
+				return c * i.color;
 			}
 			ENDCG
 		}

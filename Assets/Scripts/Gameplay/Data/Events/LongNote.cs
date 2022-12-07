@@ -51,17 +51,6 @@ namespace ArcCreate.Gameplay.Data
             return Mathf.Clamp(combo, 0, totalCombo);
         }
 
-        public override int CompareTo(Note other)
-        {
-            LongNote note = other as LongNote;
-            if (note.Timing == Timing)
-            {
-                return EndTiming.CompareTo(note.EndTiming);
-            }
-
-            return Timing.CompareTo(note.EndTiming);
-        }
-
         public override void Assign(ArcEvent newValues)
         {
             base.Assign(newValues);

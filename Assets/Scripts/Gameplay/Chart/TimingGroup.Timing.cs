@@ -155,10 +155,17 @@ namespace ArcCreate.Gameplay.Chart
         {
             taps.Notes.ForEach(n =>
             {
-                n.TimingGroupInstance = this;
                 n.FloorPosition = GetFloorPosition(n.Timing);
             });
             taps.RebuildList();
+
+            holds.Notes.ForEach(n =>
+            {
+                n.FloorPosition = GetFloorPosition(n.Timing);
+                n.EndFloorPosition = GetFloorPosition(n.EndTiming);
+                n.Rebuild();
+            });
+            holds.RebuildList();
 
             // holds.Notes.ForEach(n => n.RecalculateJudgeTimings());
             // arcs.Notes.ForEach(n => n.RecalculateJudgeTimings());
