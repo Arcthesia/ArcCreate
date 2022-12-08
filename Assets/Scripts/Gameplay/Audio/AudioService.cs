@@ -100,7 +100,16 @@ namespace ArcCreate.Gameplay.Audio
             }
 
             int timePassedSinceAudioStart = Mathf.RoundToInt((float)((dspTime - dspStartPlayingTime) * 1000));
-            timing = timePassedSinceAudioStart + startTime - FullOffset;
+            int newTiming = timePassedSinceAudioStart + startTime - FullOffset;
+
+            if (timing != newTiming && dspTime >= dspStartPlayingTime)
+            {
+                timing += Mathf.RoundToInt(Time.deltaTime * 1000);
+            }
+            else
+            {
+                timing = newTiming;
+            }
 
             if (AutomaticallyReturnOnAudioEnd && timing > AudioLength)
             {
