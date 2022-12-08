@@ -28,13 +28,18 @@ namespace ArcCreate.Gameplay
 
         public IAudioControl Audio => audioService;
 
+        public override void OnUnloadScene()
+        {
+            Application.targetFrameRate = 60;
+        }
+
         protected override void OnNoBootScene()
         {
             // Use touch
             Settings.InputMode.Value = (int)InputMode.Touch;
 
             // Load test chart
-            string path = Path.Combine(Application.streamingAssetsPath, "test_hold.aff");
+            string path = Path.Combine(Application.streamingAssetsPath, "test_tap.aff");
             if (Application.platform == RuntimePlatform.Android)
             {
                 ImportTestChartAndroid(path).Forget();
@@ -43,6 +48,11 @@ namespace ArcCreate.Gameplay
             {
                 ImportTestChart(path);
             }
+        }
+
+        protected override void OnSceneLoad()
+        {
+            Application.targetFrameRate = Screen.currentResolution.refreshRate;
         }
 
         private async UniTask ImportTestChartAndroid(string path)
