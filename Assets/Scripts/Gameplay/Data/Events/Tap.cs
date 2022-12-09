@@ -117,7 +117,7 @@ namespace ArcCreate.Gameplay.Data
                 new LaneTapJudgementRequest()
                 {
                     ExpireAtTiming = Timing + Values.LostJudgeWindow,
-                    AutoAt = Timing,
+                    AutoAtTiming = Timing,
                     Lane = Lane,
                     Receiver = this,
                 });

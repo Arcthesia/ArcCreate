@@ -34,9 +34,9 @@ namespace ArcCreate.Gameplay.Skin
         /// <returns>A tuple of:<br/>
         /// normal: The default material.<br/>
         /// highlight: The highlighted material.<br/>
-        /// arcCap: The sprite for its arc cap.<br/>
+        /// heightIndicatorColor: The color for its height indicato.<br/>
         /// </returns>
-        (Material normal, Material highlight, Sprite arcCap) GetArcSkin(Arc note);
+        (Material normal, Material highlight, Sprite arcCap, Color heightIndicatorColor) GetArcSkin(Arc note);
 
         /// <summary>
         /// Get the skin for a tap note.

@@ -63,7 +63,7 @@ namespace ArcCreate.Gameplay.Data
                             TimingGroup = raw.TimingGroup,
                             Color = raw.Color,
                             EndTiming = raw.EndTiming,
-                            IsVoid = raw.IsTrace,
+                            IsTrace = raw.IsTrace,
                             LineType = raw.LineType.ToArcLineType(),
                             Timing = raw.Timing,
                             XEnd = raw.XEnd,
@@ -75,7 +75,7 @@ namespace ArcCreate.Gameplay.Data
 
                         if (raw.ArcTaps != null)
                         {
-                            arc.IsVoid = true;
+                            arc.IsTrace = true;
                             foreach (int t in raw.ArcTaps)
                             {
                                 ArcTap arctap = new ArcTap() { Timing = t, Arc = arc };

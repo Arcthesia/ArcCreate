@@ -39,7 +39,7 @@ namespace ArcCreate.Gameplay
             Settings.InputMode.Value = (int)InputMode.Touch;
 
             // Load test chart
-            string path = Path.Combine(Application.streamingAssetsPath, "test_tap.aff");
+            string path = Path.Combine(Application.streamingAssetsPath, "test_arc.aff");
             if (Application.platform == RuntimePlatform.Android)
             {
                 ImportTestChartAndroid(path).Forget();
@@ -66,7 +66,7 @@ namespace ArcCreate.Gameplay
             }
 
             byte[] data = www.downloadHandler.data;
-            string copyPath = Path.Combine(Application.temporaryCachePath, "test_tap.aff");
+            string copyPath = Path.Combine(Application.temporaryCachePath, "test_arc.aff");
             using (FileStream fs = new FileStream(copyPath, FileMode.OpenOrCreate, FileAccess.Write))
             {
                 fs.Write(data, 0, data.Length);

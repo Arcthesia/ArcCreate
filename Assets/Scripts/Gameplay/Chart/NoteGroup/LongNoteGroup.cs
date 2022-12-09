@@ -18,6 +18,8 @@ namespace ArcCreate.Gameplay.Chart
         private readonly RangeTree<double, Note> floorPositionTree = new RangeTree<double, Note>();
         private readonly List<Note> previousNotesInRange = new List<Note>();
 
+        protected RangeTree<int, Note> TimingTree => timingTree;
+
         public override void Update(int timing, double floorPosition, GroupProperties groupProperties)
         {
             if (Notes.Count == 0)
@@ -90,7 +92,7 @@ namespace ArcCreate.Gameplay.Chart
             for (int i = 0; i < previousNotesInRange.Count; i++)
             {
                 Note note = previousNotesInRange[i];
-                if (note.FloorPosition < renderFrom || note.EndFloorPosition > renderTo)
+                if (note.EndFloorPosition < renderFrom || note.FloorPosition > renderTo)
                 {
                     Pool.Return(note.RevokeInstance());
                 }

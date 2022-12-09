@@ -167,6 +167,14 @@ namespace ArcCreate.Gameplay.Chart
             });
             holds.RebuildList();
 
+            arcs.Notes.ForEach(n =>
+            {
+                n.FloorPosition = GetFloorPosition(n.Timing);
+                n.EndFloorPosition = GetFloorPosition(n.EndTiming);
+                n.Rebuild();
+            });
+            arcs.RebuildList();
+
             // holds.Notes.ForEach(n => n.RecalculateJudgeTimings());
             // arcs.Notes.ForEach(n => n.RecalculateJudgeTimings());
         }

@@ -25,7 +25,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
             }
         }
 
-        public void HandleTapRequests(int currentTiming, UnorderedList<LaneTapJudgementRequest> laneTapRequests)
+        public void HandleLaneTapRequests(int currentTiming, UnorderedList<LaneTapJudgementRequest> requests)
         {
             for (int inpIndex = 0; inpIndex < currentInputs.Count; inpIndex++)
             {
@@ -41,10 +41,10 @@ namespace ArcCreate.Gameplay.Judgement.Input
                 LaneTapJudgementRequest applicableRequest = default;
                 int applicableRequestIndex = 0;
 
-                for (int i = laneTapRequests.Count - 1; i >= 0; i--)
+                for (int i = requests.Count - 1; i >= 0; i--)
                 {
-                    LaneTapJudgementRequest req = laneTapRequests[i];
-                    int timingDifference = req.AutoAt - currentTiming;
+                    LaneTapJudgementRequest req = requests[i];
+                    int timingDifference = req.AutoAtTiming - currentTiming;
                     if (timingDifference > minTimingDifference)
                     {
                         continue;
@@ -68,8 +68,8 @@ namespace ArcCreate.Gameplay.Judgement.Input
 
                 if (applicableRequestExists)
                 {
-                    applicableRequest.Receiver.ProcessLaneTapJudgement(currentTiming - applicableRequest.AutoAt);
-                    laneTapRequests.RemoveAt(applicableRequestIndex);
+                    applicableRequest.Receiver.ProcessLaneTapJudgement(currentTiming - applicableRequest.AutoAtTiming);
+                    requests.RemoveAt(applicableRequestIndex);
                 }
             }
         }
@@ -89,11 +89,15 @@ namespace ArcCreate.Gameplay.Judgement.Input
 
                     if (LaneCollide(input, screenPosition, req.Lane))
                     {
-                        req.Receiver.ProcessLaneHoldJudgement(currentTiming - req.AutoAt);
+                        req.Receiver.ProcessLaneHoldJudgement(currentTiming - req.AutoAtTiming);
                         requests.RemoveAt(i);
                     }
                 }
             }
+        }
+
+        public void HandleArcRequests(int currentTiming, UnorderedList<ArcJudgementRequest> requests)
+        {
         }
 
         private bool LaneCollide(TouchInput input, Vector3 screenPosition, int lane)

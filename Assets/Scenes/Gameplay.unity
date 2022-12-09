@@ -1100,11 +1100,11 @@ MonoBehaviour:
     type: 3}
   holdPrefab: {fileID: 8091136549597130254, guid: 61aac3db29a749e43bf2e2f39b217098,
     type: 3}
-  arcPrefab: {fileID: 3356024652915668126, guid: 5fc67ba7b77a8cc1ab16a0175f267ad5,
+  arcPrefab: {fileID: 6493265056140967981, guid: 5fc67ba7b77a8cc1ab16a0175f267ad5,
     type: 3}
   arcSegmentPrefab: {fileID: 2268305965253930116, guid: fa6de7da8a59b5190938959a305d2dab,
     type: 3}
-  arcTapPrefab: {fileID: 3356024652915668126, guid: 5fc67ba7b77a8cc1ab16a0175f267ad5,
+  arcTapPrefab: {fileID: 1024612122497654, guid: 622778095345621428203a69092836c0,
     type: 3}
   connectionLinePrefab: {fileID: 1685863836277190, guid: c3a0387527e7abe49902bb065a738f3d,
     type: 3}
