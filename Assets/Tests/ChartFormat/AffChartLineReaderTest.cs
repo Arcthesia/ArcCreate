@@ -79,10 +79,10 @@ namespace Tests.Unit
         [TestCase(0, 1000, 0, 0, 1, 1, "b", 0, true, "none")]
         [TestCase(1000, 1000, 0, 0, 1, 1, "b", 0, true, "none")]
         [TestCase(1000, 1000, 0, 0, 1, 1, "b", 1, true, "none")]
-        public void ParseArc(int timing, int endTiming, float xS, float xE, float yS, float yE, string type, int color, bool isVoid, string sfx)
+        public void ParseArc(int timing, int endTiming, float xS, float xE, float yS, float yE, string type, int color, bool isTrace, string sfx)
         {
             RawArc e = reader.ParseArc(
-                $"arc({timing},{endTiming},{xS},{xE},{type},{yS},{yE},{color},{sfx},{(isVoid ? "true" : "false")});");
+                $"arc({timing},{endTiming},{xS},{xE},{type},{yS},{yE},{color},{sfx},{(isTrace ? "true" : "false")});");
 
             Assert.That(e.Timing, Is.EqualTo(timing));
             Assert.That(e.EndTiming, Is.EqualTo(endTiming));
@@ -92,18 +92,18 @@ namespace Tests.Unit
             Assert.That(e.YEnd, Is.EqualTo(yE));
             Assert.That(e.LineType, Is.EqualTo(type));
             Assert.That(e.Color, Is.EqualTo(color));
-            Assert.That(e.IsTrace, Is.EqualTo(isVoid));
+            Assert.That(e.IsTrace, Is.EqualTo(isTrace));
             Assert.That(e.Sfx, Is.EqualTo(sfx));
         }
 
         [TestCase(1000, 0, 0, 0, 1, 1, "b", 0, true, "none")]
-        public void ParseArcFail(int timing, int endTiming, float xS, float xE, float yS, float yE, string type, int color, bool isVoid, string sfx)
+        public void ParseArcFail(int timing, int endTiming, float xS, float xE, float yS, float yE, string type, int color, bool isTrace, string sfx)
         {
             Assert.That(
                 () =>
                 {
                     RawArc e = reader.ParseArc(
-                        $"arc({timing},{endTiming},{xS},{xE},{type},{yS},{yE},{color},{sfx},{(isVoid ? "true" : "false")});");
+                        $"arc({timing},{endTiming},{xS},{xE},{type},{yS},{yE},{color},{sfx},{(isTrace ? "true" : "false")});");
                 }, Throws.Exception.TypeOf<ChartFormatException>());
         }
 
@@ -140,9 +140,9 @@ namespace Tests.Unit
                 {
                     string arctapString = "";
                     foreach (int t in timings)
-                        {
-                            arctapString += $"arctap({t}),";
-                        }
+                    {
+                        arctapString += $"arctap({t}),";
+                    }
 
                     arctapString = arctapString.Substring(0, arctapString.Length - 1);
 

@@ -338,7 +338,7 @@ namespace ArcCreate.Gameplay.Chart
             Pools.New<HoldBehaviour>(Values.HoldPoolName, holdPrefab, transform, holdCapacity);
             Pools.New<ArcBehaviour>(Values.ArcPoolName, arcPrefab, transform, arcCapacity);
             Pools.New<ArcTapBehaviour>(Values.ArcTapPoolName, arcTapPrefab, transform, arcTapCapacity);
-            Pools.New<ArcSegmentBehaviour>(Values.ArcSegmentPoolName, arcSegmentPrefab, transform, arcSegmentCapacity);
+            Pools.New<ArcSegment>(Values.ArcSegmentPoolName, arcSegmentPrefab, transform, arcSegmentCapacity);
             Pools.New<LineRenderer>(Values.ConnectonLinePoolName, connectionLinePrefab, transform, connectionLineCapacity);
             Pools.New<Transform>(Values.BeatlinePoolName, beatlinePrefab, transform, beatlineCapacity);
 
@@ -351,7 +351,7 @@ namespace ArcCreate.Gameplay.Chart
             Pools.Destroy<HoldBehaviour>(Values.HoldPoolName);
             Pools.Destroy<ArcBehaviour>(Values.ArcPoolName);
             Pools.Destroy<ArcTapBehaviour>(Values.ArcTapPoolName);
-            Pools.Destroy<ArcSegmentBehaviour>(Values.ArcSegmentPoolName);
+            Pools.Destroy<ArcSegment>(Values.ArcSegmentPoolName);
             Pools.Destroy<LineRenderer>(Values.ConnectonLinePoolName);
             Pools.Destroy<Transform>(Values.BeatlinePoolName);
 

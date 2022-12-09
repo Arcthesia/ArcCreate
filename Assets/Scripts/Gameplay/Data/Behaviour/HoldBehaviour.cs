@@ -6,11 +6,11 @@ namespace ArcCreate.Gameplay.Data
     [RequireComponent(typeof(SpriteRenderer))]
     public class HoldBehaviour : MonoBehaviour
     {
+        private static readonly int FromShaderId = Shader.PropertyToID("_From");
+        private static readonly int ShearShaderId = Shader.PropertyToID("_Shear");
+        private static MaterialPropertyBlock mpb;
         private static Quaternion baseLocalRotation;
         private static Vector3 baseLocalScale;
-        private static int fromShaderId;
-        private static int shearShaderId;
-        private static MaterialPropertyBlock mpb;
         private SpriteRenderer spriteRenderer;
         private Sprite normalSprite;
         private Sprite highlightSprite;
@@ -58,12 +58,12 @@ namespace ArcCreate.Gameplay.Data
 
         public void SetFallDirection(Vector3 dir)
         {
-            Vector3 displacement = dir * transform.lossyScale.z;
+            dir = dir.normalized;
             spriteRenderer.GetPropertyBlock(mpb);
-            mpb.SetVector(shearShaderId, new Vector4(
-                displacement.x / displacement.z,
-                displacement.y / displacement.z,
-                0,
+            mpb.SetVector(ShearShaderId, new Vector4(
+                dir.x,
+                dir.y,
+                1,
                 0));
             spriteRenderer.SetPropertyBlock(mpb);
         }
@@ -71,7 +71,7 @@ namespace ArcCreate.Gameplay.Data
         public void SetFrom(float from)
         {
             spriteRenderer.GetPropertyBlock(mpb);
-            mpb.SetFloat(fromShaderId, from);
+            mpb.SetFloat(FromShaderId, from);
             spriteRenderer.SetPropertyBlock(mpb);
         }
 
@@ -82,10 +82,7 @@ namespace ArcCreate.Gameplay.Data
             baseLocalRotation = transform.localRotation;
             baseLocalScale = transform.localScale;
 
-            fromShaderId = Shader.PropertyToID("_From");
-            shearShaderId = Shader.PropertyToID("_Shear");
-
-            mpb = mpb ?? new MaterialPropertyBlock();
+            mpb = new MaterialPropertyBlock();
         }
     }
 }

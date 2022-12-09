@@ -1,10 +1,22 @@
 using System.Collections.Generic;
+using ArcCreate.Gameplay.Judgement;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
 {
-    public class Arc : LongNote, ILongNote<ArcBehaviour>
+    public class Arc : LongNote, ILongNote<ArcBehaviour>, IArcJudgementReceiver
     {
+        private ArcBehaviour instance;
+        private bool highlight = false;
+        private bool judgementRequestSent = false;
+        private bool hasBeenHitOnce = false;
+        private int flashCount = 0;
+        private float arcGroupAlpha = 1;
+        private int firstArcOfGroupTiming;
+
+        // Avoid infinite recursion
+        private bool recursivelyCalled = false;
+
         public float XStart { get; set; }
 
         public float YStart { get; set; }
@@ -15,7 +27,7 @@ namespace ArcCreate.Gameplay.Data
 
         public int Color { get; set; }
 
-        public bool IsVoid { get; set; }
+        public bool IsTrace { get; set; }
 
         public string Sfx { get; set; }
 
@@ -23,7 +35,32 @@ namespace ArcCreate.Gameplay.Data
 
         public List<ArcTap> ArcTaps { get; set; } = new List<ArcTap>();
 
-        public bool IsAssignedInstance => throw new System.NotImplementedException();
+        public HashSet<Arc> NextArcs { get; } = new HashSet<Arc>();
+
+        public HashSet<Arc> PreviousArcs { get; } = new HashSet<Arc>();
+
+        public bool IsAssignedInstance => instance != null;
+
+        public float SegmentLength => ArcFormula.CalculateArcSegmentLength(EndTiming - Timing);
+
+        public bool IsFirstArcOfGroup => PreviousArcs.Count == 0;
+
+        public bool ShouldDrawHeightIndicator => !IsTrace && (YStart != YEnd || IsFirstArcOfGroup);
+
+        public float ArcCapSize => IsTrace ? Values.TraceCapSize : Values.ArcCapSize;
+
+        public bool Highlight
+        {
+            get => highlight;
+            set
+            {
+                highlight = value;
+                if (instance != null)
+                {
+                    instance.Highlight = value;
+                }
+            }
+        }
 
         public override ArcEvent Clone()
         {
@@ -37,7 +74,7 @@ namespace ArcCreate.Gameplay.Data
                 YStart = YStart,
                 YEnd = YEnd,
                 Color = Color,
-                IsVoid = IsVoid,
+                IsTrace = IsTrace,
                 TimingGroup = TimingGroup,
             };
             foreach (var arctap in ArcTaps)
@@ -58,8 +95,134 @@ namespace ArcCreate.Gameplay.Data
             YStart = n.YStart;
             YEnd = n.YEnd;
             Color = n.Color;
-            IsVoid = n.IsVoid;
+            IsTrace = n.IsTrace;
             TimingGroup = n.TimingGroup;
+        }
+
+        public void AssignInstance(ArcBehaviour instance)
+        {
+            this.instance = instance;
+            instance.SetData(this);
+            ReloadSkin();
+            RebuildSegments();
+        }
+
+        public ArcBehaviour RevokeInstance()
+        {
+            var result = instance;
+            instance = null;
+            return result;
+        }
+
+        public void ResetJudge()
+        {
+            ResetJudgeTimings();
+            Highlight = false;
+            judgementRequestSent = false;
+            arcGroupAlpha = 1;
+        }
+
+        public void Rebuild()
+        {
+            if (IsFirstArcOfGroup)
+            {
+                SetGroupFirstTiming(Timing);
+            }
+
+            RecalculateJudgeTimings();
+            RebuildSegments();
+        }
+
+        public void ReloadSkin()
+        {
+            var (normal, highlight, arcCap, heightIndicatorColor) = Services.Skin.GetArcSkin(this);
+            instance.SetSkin(normal, highlight, arcCap, heightIndicatorColor);
+        }
+
+        public void UpdateJudgement(int timing, GroupProperties groupProperties)
+        {
+            if (timing >= Timing && !judgementRequestSent)
+            {
+                RequestJudgement(timing);
+                judgementRequestSent = true;
+            }
+        }
+
+        public void UpdateInstance(int timing, double floorPosition, GroupProperties groupProperties)
+        {
+            if (instance == null)
+            {
+                return;
+            }
+
+            float z = ZPos(floorPosition);
+
+            Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(WorldXAt(Timing), WorldYAt(Timing), 0);
+            Quaternion rot = groupProperties.RotationIndividual;
+            Vector3 scl = groupProperties.ScaleIndividual;
+            instance.SetTransform(pos, rot, scl);
+            instance.UpdateSegmentsPosition(floorPosition, groupProperties.FallDirection);
+
+            float alpha = 1;
+            if (!IsTrace)
+            {
+                if (Highlight)
+                {
+                    flashCount = (flashCount + 1) % Values.ArcFlashCycle;
+                    if (flashCount == 0)
+                    {
+                        alpha = Values.FlashArcAlphaScalar;
+                    }
+                }
+                else
+                {
+                    if (timing >= firstArcOfGroupTiming)
+                    {
+                        alpha = Values.MissedArcAlphaScalar;
+                    }
+                }
+
+                alpha *= Values.MaxArcAlpha;
+            }
+            else
+            {
+                alpha = EndTiming - Timing <= 1 ? Values.MaxArcAlpha / 2 : Values.MaxArcAlpha;
+            }
+
+            Color color = groupProperties.Color;
+            color.a *= Mathf.Min(alpha, arcGroupAlpha);
+            instance.SetColor(color);
+
+            if (hasBeenHitOnce || IsTrace)
+            {
+                instance.ClipTo(timing, floorPosition, timing, floorPosition);
+            }
+            else
+            {
+                instance.ClipTo(timing, floorPosition, Timing, FloorPosition);
+            }
+
+            if (Highlight && timing <= EndTiming)
+            {
+                Services.Particle.PlayLongParticle(
+                    this,
+                    new Vector3(WorldXAt(timing), WorldYAt(timing), 0));
+            }
+        }
+
+        public void ProcessArcJudgement(int offset)
+        {
+        }
+
+        public int CompareTo(INote<ArcBehaviour> other)
+        {
+            LongNote note = other as LongNote;
+            if (note.Timing == Timing)
+            {
+                return EndTiming.CompareTo(note.EndTiming);
+            }
+
+            return Timing.CompareTo(note.EndTiming);
         }
 
         public float WorldXAt(int timing)
@@ -69,7 +232,7 @@ namespace ArcCreate.Gameplay.Data
                 return ArcFormula.ArcXToWorld(XStart);
             }
 
-            float p = Mathf.Clamp((timing - Timing) / (EndTiming - Timing), 0, 1);
+            float p = Mathf.Clamp((float)(timing - Timing) / (EndTiming - Timing), 0, 1);
             return ArcFormula.ArcXToWorld(ArcFormula.X(XStart, XEnd, p, LineType));
         }
 
@@ -77,51 +240,67 @@ namespace ArcCreate.Gameplay.Data
         {
             if (EndTiming == Timing)
             {
-                return ArcFormula.ArcYToWorld(XStart);
+                return ArcFormula.ArcYToWorld(YStart);
             }
 
-            float p = Mathf.Clamp((timing - Timing) / (EndTiming - Timing), 0, 1);
+            float p = Mathf.Clamp((float)(timing - Timing) / (EndTiming - Timing), 0, 1);
             return ArcFormula.ArcYToWorld(ArcFormula.Y(YStart, YEnd, p, LineType));
         }
 
-        public void AssignInstance(ArcBehaviour instance)
+        private void RebuildSegments()
         {
-            throw new System.NotImplementedException();
+            if (instance == null)
+            {
+                return;
+            }
+
+            instance.RebuildSegments();
         }
 
-        public ArcBehaviour RevokeInstance()
+        private void RequestJudgement(int currentTiming)
         {
-            throw new System.NotImplementedException();
+            Services.Judgement.Request(new ArcJudgementRequest()
+            {
+                ExpireAtTiming = currentTiming + Values.HoldLostLateJudgeWindow,
+                AutoAtTiming = currentTiming,
+                X = WorldXAt(currentTiming),
+                Y = WorldYAt(currentTiming),
+                Receiver = this,
+            });
         }
 
-        public void ResetJudge()
+        private void SetGroupHighlight(bool highlight)
         {
-            throw new System.NotImplementedException();
+            if (recursivelyCalled)
+            {
+                return;
+            }
+
+            recursivelyCalled = true;
+            foreach (Arc arc in NextArcs)
+            {
+                arc.SetGroupHighlight(highlight);
+            }
+
+            Highlight = highlight;
+            recursivelyCalled = false;
         }
 
-        public void Rebuild()
+        private void SetGroupFirstTiming(int timing)
         {
-            throw new System.NotImplementedException();
-        }
+            if (recursivelyCalled)
+            {
+                return;
+            }
 
-        public void ReloadSkin()
-        {
-            throw new System.NotImplementedException();
-        }
+            recursivelyCalled = true;
+            foreach (Arc arc in NextArcs)
+            {
+                arc.SetGroupFirstTiming(timing);
+            }
 
-        public void UpdateJudgement(int timing, GroupProperties groupProperties)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void UpdateInstance(int timing, double floorPosition, GroupProperties groupProperties)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public int CompareTo(INote<ArcBehaviour> other)
-        {
-            throw new System.NotImplementedException();
+            firstArcOfGroupTiming = timing;
+            recursivelyCalled = false;
         }
     }
 }

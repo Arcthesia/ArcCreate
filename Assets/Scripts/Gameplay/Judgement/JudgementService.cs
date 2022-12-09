@@ -11,6 +11,7 @@ namespace ArcCreate.Gameplay.Judgement
         [SerializeField] private Camera gameplayCamera;
         private readonly UnorderedList<LaneTapJudgementRequest> laneTapRequests = new UnorderedList<LaneTapJudgementRequest>(32);
         private readonly UnorderedList<LaneHoldJudgementRequest> laneHoldRequests = new UnorderedList<LaneHoldJudgementRequest>(32);
+        private readonly UnorderedList<ArcJudgementRequest> arcRequests = new UnorderedList<ArcJudgementRequest>(32);
         private IInputHandler inputHandler;
 
         public void Request(LaneTapJudgementRequest request)
@@ -21,6 +22,11 @@ namespace ArcCreate.Gameplay.Judgement
         public void Request(LaneHoldJudgementRequest request)
         {
             laneHoldRequests.Add(request);
+        }
+
+        public void Request(ArcJudgementRequest request)
+        {
+            arcRequests.Add(request);
         }
 
         public void ClearRequests()
@@ -35,8 +41,9 @@ namespace ArcCreate.Gameplay.Judgement
             // Manually update input system to minimalize lag
             InputSystem.Update();
             inputHandler.PollInput();
-            inputHandler.HandleTapRequests(currentTiming, laneTapRequests);
+            inputHandler.HandleLaneTapRequests(currentTiming, laneTapRequests);
             inputHandler.HandleLaneHoldRequests(currentTiming, laneHoldRequests);
+            inputHandler.HandleArcRequests(currentTiming, arcRequests);
         }
 
         private void PruneExpiredRequests(int currentTiming)
@@ -46,7 +53,7 @@ namespace ArcCreate.Gameplay.Judgement
                 var req = laneTapRequests[i];
                 if (currentTiming >= req.ExpireAtTiming)
                 {
-                    req.Receiver.ProcessLaneTapJudgement(currentTiming - req.AutoAt);
+                    req.Receiver.ProcessLaneTapJudgement(currentTiming - req.AutoAtTiming);
                     laneTapRequests.RemoveAt(i);
                 }
             }
@@ -56,8 +63,18 @@ namespace ArcCreate.Gameplay.Judgement
                 var req = laneHoldRequests[i];
                 if (currentTiming >= req.ExpireAtTiming)
                 {
-                    req.Receiver.ProcessLaneHoldJudgement(currentTiming - req.AutoAt);
+                    req.Receiver.ProcessLaneHoldJudgement(currentTiming - req.AutoAtTiming);
                     laneHoldRequests.RemoveAt(i);
+                }
+            }
+
+            for (int i = arcRequests.Count - 1; i >= 0; i--)
+            {
+                var req = arcRequests[i];
+                if (currentTiming >= req.ExpireAtTiming)
+                {
+                    req.Receiver.ProcessArcJudgement(currentTiming - req.AutoAtTiming);
+                    arcRequests.RemoveAt(i);
                 }
             }
         }

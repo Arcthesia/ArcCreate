@@ -37,18 +37,25 @@ namespace ArcCreate.Gameplay
         public const float MissedHoldAlphaScalar = 0.5f;
         public const float HoldLengthScalar = 1 / 3.79f;
         public const float ArcTapMiddleWorldXRange = 0.5f;
-        public const float ArcOffsetNormal = 0.15f;
-        public const float ArcOffsetVoid = 0.9f;
+        public const float ArcMeshOffsetNormal = 0.15f;
+        public const float ArcMeshOffsetTrace = 0.9f;
         public const float TraceAlphaScalar = 0.4779405f;
         public const float ShortTraceAlphaScalar = TraceAlphaScalar * 0.5f;
         public const float TextParticleYOffset = 1.5f;
+        public const float ArcSegmentLength = 1000f / 14f;
+        public const float ArcCapSize = 0.35f;
+        public const float ArcCapSizeAdditionMax = 0.5f;
+        public const float TraceCapSize = 0.21f;
+        public const float ArcCapAlpha = 1f;
+        public const float TraceCapAlpha = 0.5f;
+        public const float TraceAlpha = 0.4779405f;
 
         // Judgement
         public const int MaxScore = 10_000_000;
         public const int ScoreModifyDelay = 500;
         public const float FarPenaltyMultipler = 0.5f;
         public const int ArcLockDuration = 500;
-        public const int ArcGraceDuration = 1000;
+        public const int ArcGraceDuration = 600;
         public const int ArcRedFlashCycle = 500;
         public const float ComboLostFlashDuration = 0.1f;
 

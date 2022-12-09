@@ -8,28 +8,41 @@ namespace ArcCreate.Gameplay.Judgement.Input
         {
         }
 
-        public void HandleTapRequests(int currentTiming, UnorderedList<LaneTapJudgementRequest> tapRequests)
+        public void HandleLaneTapRequests(int currentTiming, UnorderedList<LaneTapJudgementRequest> requests)
         {
-            for (int i = tapRequests.Count - 1; i >= 0; i--)
+            for (int i = requests.Count - 1; i >= 0; i--)
             {
-                LaneTapJudgementRequest req = tapRequests[i];
-                if (currentTiming >= req.AutoAt)
+                LaneTapJudgementRequest req = requests[i];
+                if (currentTiming >= req.AutoAtTiming)
                 {
                     req.Receiver.ProcessLaneTapJudgement(0);
-                    tapRequests.RemoveAt(i);
+                    requests.RemoveAt(i);
                 }
             }
         }
 
-        public void HandleLaneHoldRequests(int currentTiming, UnorderedList<LaneHoldJudgementRequest> holdRequests)
+        public void HandleLaneHoldRequests(int currentTiming, UnorderedList<LaneHoldJudgementRequest> requests)
         {
-            for (int i = holdRequests.Count - 1; i >= 0; i--)
+            for (int i = requests.Count - 1; i >= 0; i--)
             {
-                LaneHoldJudgementRequest req = holdRequests[i];
-                if (currentTiming >= req.AutoAt)
+                LaneHoldJudgementRequest req = requests[i];
+                if (currentTiming >= req.AutoAtTiming)
                 {
                     req.Receiver.ProcessLaneHoldJudgement(0);
-                    holdRequests.RemoveAt(i);
+                    requests.RemoveAt(i);
+                }
+            }
+        }
+
+        public void HandleArcRequests(int currentTiming, UnorderedList<ArcJudgementRequest> requests)
+        {
+            for (int i = requests.Count - 1; i >= 0; i--)
+            {
+                ArcJudgementRequest req = requests[i];
+                if (currentTiming >= req.AutoAtTiming)
+                {
+                    req.Receiver.ProcessArcJudgement(0);
+                    requests.RemoveAt(i);
                 }
             }
         }
