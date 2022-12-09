@@ -8,6 +8,8 @@ namespace Tests.Unit
         private ArcColorLogic colorBlue;
         private ArcColorLogic colorRed;
 
+        private readonly int arcLockDuration = ArcFormula.CalculateArcLockDuration(100);
+
         [SetUp]
         public void SetUp()
         {
@@ -151,11 +153,11 @@ namespace Tests.Unit
 
             ArcColorLogic.NewFrame(1000);
             colorBlue.ExistsArcWithinRange(true);
-            colorBlue.FingerLifted(0);
+            colorBlue.FingerLifted(0, arcLockDuration);
 
             Assert.That(colorBlue.ShouldAcceptInput(1), Is.False);
             Assert.That(colorBlue.ShouldAcceptInput(0), Is.False);
-            ArcColorLogic.NewFrame(1000 + (Values.ArcLockDuration / 2));
+            ArcColorLogic.NewFrame(1000 + (arcLockDuration / 2));
             colorBlue.ExistsArcWithinRange(true);
             Assert.That(colorBlue.ShouldAcceptInput(0), Is.False);
         }
@@ -169,11 +171,11 @@ namespace Tests.Unit
 
             ArcColorLogic.NewFrame(1000);
             colorBlue.ExistsArcWithinRange(true);
-            colorBlue.FingerLifted(0);
+            colorBlue.FingerLifted(0, arcLockDuration);
             colorBlue.FingerHit(hittingFinger, 0);
 
             Assert.That(colorBlue.RedArcValue, Is.EqualTo(1));
-            ArcColorLogic.NewFrame(1000 + (Values.ArcLockDuration / 2));
+            ArcColorLogic.NewFrame(1000 + (arcLockDuration / 2));
             colorBlue.ExistsArcWithinRange(true);
             Assert.That(colorBlue.RedArcValue, Is.LessThan(1));
         }
@@ -185,9 +187,9 @@ namespace Tests.Unit
             colorBlue.FingerHit(0, 0);
             ArcColorLogic.NewFrame(1000);
             colorBlue.ExistsArcWithinRange(true);
-            colorBlue.FingerLifted(0);
+            colorBlue.FingerLifted(0, arcLockDuration);
 
-            ArcColorLogic.NewFrame(1000 + Values.ArcLockDuration + 1);
+            ArcColorLogic.NewFrame(1000 + arcLockDuration + 1);
             colorBlue.ExistsArcWithinRange(true);
             colorBlue.FingerHit(0, 50);
             colorBlue.FingerHit(1, 0);
@@ -205,9 +207,9 @@ namespace Tests.Unit
             colorBlue.FingerHit(0, 0);
             ArcColorLogic.NewFrame(1000);
             colorBlue.ExistsArcWithinRange(true);
-            colorBlue.FingerLifted(0);
+            colorBlue.FingerLifted(0, arcLockDuration);
 
-            ArcColorLogic.NewFrame(1000 + (Values.ArcLockDuration / 2));
+            ArcColorLogic.NewFrame(1000 + (arcLockDuration / 2));
             colorBlue.ExistsArcWithinRange(false);
             colorBlue.FingerHit(1, 0);
 
@@ -224,9 +226,9 @@ namespace Tests.Unit
 
             ArcColorLogic.NewFrame(1000);
             colorBlue.ExistsArcWithinRange(false);
-            colorBlue.FingerLifted(0);
+            colorBlue.FingerLifted(0, arcLockDuration);
 
-            ArcColorLogic.NewFrame(1000 + (Values.ArcLockDuration / 2));
+            ArcColorLogic.NewFrame(1000 + (arcLockDuration / 2));
             colorBlue.ExistsArcWithinRange(true);
             colorBlue.FingerHit(1, 0);
 
@@ -256,7 +258,7 @@ namespace Tests.Unit
             colorBlue.FingerHit(0, 0);
             ArcColorLogic.NewFrame(1000);
             colorBlue.ExistsArcWithinRange(true);
-            colorBlue.FingerLifted(0);
+            colorBlue.FingerLifted(0, arcLockDuration);
 
             colorBlue.StartGracePeriod();
 

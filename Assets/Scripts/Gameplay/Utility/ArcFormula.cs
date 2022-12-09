@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
 using UnityEngine;
 
@@ -186,6 +187,17 @@ namespace ArcCreate.Gameplay
             }
 
             return Mathf.Clamp((Values.TrackLengthBackward - z) / Values.NoteFadeOutLength, 0, 1);
+        }
+
+        public static int CalculateArcLockDuration(float arcJudgeInterval)
+        {
+            return Mathf.Min(Mathf.RoundToInt(arcJudgeInterval * 4), 1000);
+        }
+
+        public static float CalculateArcSegmentLength(int duration)
+        {
+            float length = Values.ArcSegmentLength;
+            return duration < 1000 ? length : length * 2;
         }
     }
 }

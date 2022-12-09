@@ -88,8 +88,8 @@ public class Pool<T>
         occupied.Remove(obj);
         available.Enqueue(obj);
 
-        obj.transform.SetParent(parent, true);
         obj.gameObject.SetActive(false);
+        obj.transform.SetParent(parent, true);
     }
 
     /// <summary>

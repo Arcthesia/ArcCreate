@@ -7,7 +7,7 @@
 		_From ("From", Float) = 0
 		_To ("To",Float) = 1
 		_Highlight("Highlight", Int) = 0
-		_Shear("Shear", Vector) = (0,0,0,0)
+		_Shear("Shear", Vector) = (0,0,1,0)
 	}
 	SubShader
 	{
@@ -51,17 +51,18 @@
 				v2f o;
 				float x = _Shear.x;
 				float y = _Shear.y;
+				float z = _Shear.z;
 				float4x4 transformMatrix = float4x4(
-                    1,0,x,0,
-                    0,1,y,0,
-                    0,0,1,0,
+                    1,x,0,0,
+                    0,z,0,0,
+                    0,y,1,0,
                     0,0,0,1);
 				float4 vertex = mul(transformMatrix, v.vertex);
 
-				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.vertex = UnityObjectToClipPos(vertex);
 				o.uv = v.uv;
 				o.color = v.color * _Color;
-				o.worldpos = mul(unity_ObjectToWorld, v.vertex);
+				o.worldpos = mul(unity_ObjectToWorld, vertex);
 				return o;
 			}
 

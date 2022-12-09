@@ -47,6 +47,7 @@ namespace ArcCreate.Gameplay.Skin
         [SerializeField] private Material traceMaterial;
         private readonly List<Material> arcMaterials = new List<Material>();
         private readonly List<Material> arcHighlightMaterials = new List<Material>();
+        private readonly List<Color> arcHeightIndicatorColors = new List<Color>();
 
         private AlignmentOption currentAlignment;
         private NoteSkinOption currentNoteSkin;
@@ -202,21 +203,21 @@ namespace ArcCreate.Gameplay.Skin
         public (Mesh mesh, Material material) GetArcTapSkin(ArcTap note)
             => currentNoteSkin.GetArcTapSkin(note);
 
-        public (Material normal, Material highlight, Sprite arcCap) GetArcSkin(Arc note)
+        public (Material normal, Material highlight, Sprite arcCap, Color heightIndicatorColor) GetArcSkin(Arc note)
         {
             Sprite arcCap = currentNoteSkin.GetArcCapSprite(note);
 
-            if (note.IsVoid)
+            if (note.IsTrace)
             {
-                return (traceMaterial, traceMaterial, arcCap);
+                return (traceMaterial, traceMaterial, arcCap, Color.white);
             }
 
             if (note.Color < 0 || note.Color >= arcMaterials.Count)
             {
-                return (arcMaterials[0], arcHighlightMaterials[0], arcCap);
+                return (arcMaterials[0], arcHighlightMaterials[0], arcCap, arcHeightIndicatorColors[0]);
             }
 
-            return (arcMaterials[note.Color], arcHighlightMaterials[note.Color], arcCap);
+            return (arcMaterials[note.Color], arcHighlightMaterials[note.Color], arcCap, arcHeightIndicatorColors[note.Color]);
         }
 
         public (Sprite lane, Sprite extraLane) GetTrackSprite(string name)
@@ -229,7 +230,6 @@ namespace ArcCreate.Gameplay.Skin
         public void SetTraceColor(Color color, Color shadow)
         {
             traceMaterial.SetColor(highColorShaderId, color);
-            traceMaterial.SetColor(lowColorShaderId, color);
             traceMaterial.SetColor(shadowColorShaderId, shadow);
         }
 
@@ -239,6 +239,7 @@ namespace ArcCreate.Gameplay.Skin
             arcHighlightMaterials.ForEach(Destroy);
             arcMaterials.Clear();
             arcHighlightMaterials.Clear();
+            arcHeightIndicatorColors.Clear();
 
             int max = Mathf.Min(arcs.Count, arcLows.Count);
             for (int i = 0; i < max; i++)
@@ -247,13 +248,17 @@ namespace ArcCreate.Gameplay.Skin
                 mat.SetColor(highColorShaderId, arcs[i]);
                 mat.SetColor(lowColorShaderId, arcLows[i]);
                 mat.SetColor(shadowColorShaderId, shadow);
+                mat.renderQueue = mat.renderQueue + max - i;
                 arcMaterials.Add(mat);
 
                 Material hmat = Instantiate(baseArcHighlightMaterial);
                 hmat.SetColor(highColorShaderId, arcs[i]);
                 hmat.SetColor(lowColorShaderId, arcLows[i]);
                 hmat.SetColor(shadowColorShaderId, shadow);
+                hmat.renderQueue = hmat.renderQueue + max - i;
                 arcHighlightMaterials.Add(hmat);
+
+                arcHeightIndicatorColors.Add(arcs[i]);
             }
         }
 

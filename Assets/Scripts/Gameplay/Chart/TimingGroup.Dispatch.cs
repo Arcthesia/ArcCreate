@@ -176,10 +176,11 @@ namespace ArcCreate.Gameplay.Chart
                 return arcTaps.Notes.Cast<T>().ToList();
             }
 
-            // if (typeof(T) == typeof(Arc))
-            // {
-            //     return arcs.Notes.Cast<T>().ToList();
-            // }
+            if (typeof(T) == typeof(Arc))
+            {
+                return arcs.Notes.Cast<T>().ToList();
+            }
+
             if (typeof(T) == typeof(TimingEvent))
             {
                 return timings.Cast<T>().ToList();

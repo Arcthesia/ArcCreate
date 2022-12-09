@@ -112,6 +112,7 @@ namespace ArcCreate.Gameplay.Data
             Vector3 scl = groupProperties.ScaleIndividual;
             scl.y *= z - endZ;
             instance.SetTransform(pos, rot, scl);
+            instance.SetFallDirection(groupProperties.FallDirection);
 
             float alpha = 1;
             if (Highlight)
@@ -207,7 +208,7 @@ namespace ArcCreate.Gameplay.Data
             Services.Judgement.Request(new LaneTapJudgementRequest()
             {
                 ExpireAtTiming = EndTiming,
-                AutoAt = Timing,
+                AutoAtTiming = Timing,
                 Lane = Lane,
                 Receiver = this,
             });
@@ -218,7 +219,7 @@ namespace ArcCreate.Gameplay.Data
             Services.Judgement.Request(new LaneHoldJudgementRequest()
             {
                 ExpireAtTiming = currentTiming + Values.HoldLostLateJudgeWindow,
-                AutoAt = currentTiming,
+                AutoAtTiming = currentTiming,
                 Lane = Lane,
                 Receiver = this,
             });

@@ -20,8 +20,8 @@ namespace ArcCreate.Gameplay
         private bool wrongFingerHitThisFrame = false;
         private bool existsArcWithinRangeThisFrame = false;
         private bool isAssigningThisFrame = false;
-        private int lastLockedAt = int.MinValue;
-        private int lastGraceAt = int.MinValue;
+        private int lockUntil = int.MinValue;
+        private int graceUntil = int.MinValue;
 
         private float currentRedArcValue = 0;
         private bool isRedValueFlashing = false;
@@ -59,10 +59,10 @@ namespace ArcCreate.Gameplay
         private bool IsFingerAssigned { get; set; }
 
         private bool IsInputLocked
-            => frameTiming <= lastLockedAt + Values.ArcLockDuration;
+            => frameTiming <= lockUntil;
 
         private bool IsGraceActive
-            => frameTiming <= lastGraceAt + Values.ArcGraceDuration;
+            => frameTiming <= graceUntil;
 
         /// <summary>
         /// Get the instance for a color.
@@ -108,14 +108,15 @@ namespace ArcCreate.Gameplay
         /// </summary>
         public void StartGracePeriod()
         {
-            lastGraceAt = frameTiming;
+            graceUntil = frameTiming + Values.ArcGraceDuration;
         }
 
         /// <summary>
         /// Notify that a finger is no longer touching the screen.
         /// </summary>
         /// <param name="fingerId">The finger id.</param>
-        public void FingerLifted(int fingerId)
+        /// <param name="arcJudgeInterval">The judgement interval of an arc of this color.</param>
+        public void FingerLifted(int fingerId, float arcJudgeInterval)
         {
             if (fingerId == AssignedFingerId)
             {
@@ -123,7 +124,7 @@ namespace ArcCreate.Gameplay
 
                 if (existsArcWithinRangeThisFrame)
                 {
-                    LockInput();
+                    LockInput(arcJudgeInterval);
                 }
             }
         }
@@ -247,14 +248,15 @@ namespace ArcCreate.Gameplay
             AssignedFingerId = UnassignedFingerId;
         }
 
-        private void LockInput()
+        private void LockInput(float arcJudgeInterval)
         {
-            lastLockedAt = frameTiming;
+            int lockDuration = ArcFormula.CalculateArcLockDuration(arcJudgeInterval);
+            lockUntil = frameTiming + lockDuration;
         }
 
         private void UnlockInput()
         {
-            lastLockedAt = int.MinValue;
+            lockUntil = int.MinValue;
         }
 
         private bool IsFingerAssignedToAnotherColor(int fingerId)
