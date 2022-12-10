@@ -7,20 +7,21 @@ namespace ArcCreate.Gameplay.Judgement.Input
     {
         public int Id;
         public int Lane;
-        public float ScreenX;
-        public float ScreenY;
-        public float VerticalX;
-        public float VerticalY;
+        public Vector3 ScreenPos;
+        public Vector3 VerticalPos;
         public bool IsTap;
+        public UnityEngine.InputSystem.TouchPhase Phase;
 
         public TouchInput(Touch touch, Ray cameraRay)
         {
             Id = touch.touchId;
-            ScreenX = touch.screenPosition.x;
-            ScreenY = touch.screenPosition.y;
+            ScreenPos = new Vector3(touch.screenPosition.x, touch.screenPosition.y);
             IsTap = touch.began;
+            Phase = touch.phase;
 
-            (Lane, VerticalX, VerticalY) = Projection.CastRayOntoPlayfield(cameraRay);
+            (int lane, float vx, float vy) = Projection.CastRayOntoPlayfield(cameraRay);
+            VerticalPos = new Vector3(vx, vy);
+            Lane = lane;
         }
     }
 }

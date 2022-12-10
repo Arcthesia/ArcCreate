@@ -58,6 +58,10 @@ namespace ArcCreate.Gameplay
         public const int ArcGraceDuration = 600;
         public const int ArcRedFlashCycle = 500;
         public const float ComboLostFlashDuration = 0.1f;
+        public const float ArcHitboxX = 1.955f;
+        public const float ArcHitboxY = 1.8f;
+        public const float ArcTapHitboxX = 2.975f;
+        public const float ArcTapHitboxY = 2.25f;
 
         // Strings
         public const string EarlyText = "EARLY";

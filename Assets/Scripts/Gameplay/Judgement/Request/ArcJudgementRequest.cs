@@ -1,11 +1,12 @@
+using ArcCreate.Gameplay.Data;
+
 namespace ArcCreate.Gameplay.Judgement
 {
     public struct ArcJudgementRequest
     {
         public int ExpireAtTiming;
         public int AutoAtTiming;
-        public float X;
-        public float Y;
+        public Arc Arc;
         public IArcJudgementReceiver Receiver;
     }
 }

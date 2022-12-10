@@ -53,10 +53,10 @@ namespace ArcCreate.Gameplay.Data
 
         public void UpdatePosition(double floorPosition, Vector3 fallDirection, float parentZ)
         {
-            float startZ = ArcFormula.FloorPositionToZ(FloorPosition - floorPosition) - parentZ;
-            float endZ = ArcFormula.FloorPositionToZ(EndFloorPosition - floorPosition) - parentZ;
-            Vector3 startPos = StartPosition + (startZ * fallDirection);
-            Vector3 endPos = EndPosition + (endZ * fallDirection);
+            float startZ = ArcFormula.FloorPositionToZ(FloorPosition - floorPosition);
+            float endZ = ArcFormula.FloorPositionToZ(EndFloorPosition - floorPosition);
+            Vector3 startPos = StartPosition + ((startZ - parentZ) * fallDirection);
+            Vector3 endPos = EndPosition + ((endZ - parentZ) * fallDirection);
             Vector3 dir = endPos - startPos;
 
             transform.localPosition = startPos;
@@ -67,6 +67,8 @@ namespace ArcCreate.Gameplay.Data
                 dir.z,
                 0));
             meshRenderer.SetPropertyBlock(mpb);
+
+            gameObject.SetActive(startZ >= -Values.TrackLengthForward && endZ <= Values.TrackLengthBackward);
         }
 
         private void Awake()
