@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
@@ -39,6 +38,8 @@ namespace ArcCreate.Gameplay.Data
             meshRenderer.GetPropertyBlock(mpb);
             mpb.SetFloat(FromShaderId, from);
             meshRenderer.SetPropertyBlock(mpb);
+
+            gameObject.SetActive(from < 1);
         }
 
         public void SetMaterial(Material material)

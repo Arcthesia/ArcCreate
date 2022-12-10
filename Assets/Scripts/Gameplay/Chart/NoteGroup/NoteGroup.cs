@@ -153,6 +153,21 @@ namespace ArcCreate.Gameplay.Chart
         public abstract void RebuildList();
 
         /// <summary>
+        /// Find all notes of this group that match the queried timing.
+        /// </summary>
+        /// <param name="timing">The query timing value.</param>
+        /// <returns>All matching notes of this note group.</returns>
+        public abstract IEnumerable<Note> FindByTiming(int timing);
+
+        /// <summary>
+        /// Find all notes of this group that are bounded by the provided timing range.
+        /// </summary>
+        /// <param name="from">The query timing lower range.</param>
+        /// <param name="to">The query timing upper range.</param>
+        /// <returns>All notes with matching timing value.</returns>
+        public abstract IEnumerable<Note> FindEventsWithinRange(int from, int to);
+
+        /// <summary>
         /// Called after notes are loaded into the group.
         /// </summary>
         protected abstract void SetupNotes();
