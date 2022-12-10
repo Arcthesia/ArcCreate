@@ -11,10 +11,10 @@ namespace ArcCreate.Gameplay.Chart
     /// </summary>
     public partial class TimingGroup
     {
-        private NoteGroup<Tap, TapBehaviour> taps;
-        private NoteGroup<Hold, HoldBehaviour> holds;
-        private NoteGroup<Arc, ArcBehaviour> arcs;
-        private NoteGroup<ArcTap, ArcTapBehaviour> arcTaps;
+        private TapNoteGroup taps;
+        private HoldNoteGroup holds;
+        private ArcNoteGroup arcs;
+        private ArcTapNoteGroup arcTaps;
         private GroupProperties groupProperties;
         private Transform parent;
 
@@ -158,35 +158,132 @@ namespace ArcCreate.Gameplay.Chart
         /// </summary>
         /// <typeparam name="T">The event type.</typeparam>
         /// <returns>List of events of the type <c>T</c>.</returns>
-        public List<T> GetEventType<T>()
+        public IEnumerable<T> GetEventType<T>()
             where T : ArcEvent
         {
             if (typeof(T) == typeof(Tap))
             {
-                return taps.Notes.Cast<T>().ToList();
+                return taps.Notes.Cast<T>();
             }
 
             if (typeof(T) == typeof(Hold))
             {
-                return holds.Notes.Cast<T>().ToList();
+                return holds.Notes.Cast<T>();
             }
 
             if (typeof(T) == typeof(ArcTap))
             {
-                return arcTaps.Notes.Cast<T>().ToList();
+                return arcTaps.Notes.Cast<T>();
             }
 
             if (typeof(T) == typeof(Arc))
             {
-                return arcs.Notes.Cast<T>().ToList();
+                return arcs.Notes.Cast<T>();
             }
 
             if (typeof(T) == typeof(TimingEvent))
             {
-                return timings.Cast<T>().ToList();
+                return timings.Cast<T>();
             }
 
-            return new List<T>();
+            return Enumerable.Empty<T>();
+        }
+
+        /// <summary>
+        /// Find all events of this group that have matching timing value.
+        /// </summary>
+        /// <param name="timing">The query timing value.</param>
+        /// <typeparam name="T">Event type to search for.</typeparam>
+        /// <returns>All events with matching timing value.</returns>
+        public IEnumerable<T> FindByTiming<T>(int timing)
+            where T : ArcEvent
+        {
+            if (typeof(T) == typeof(Tap))
+            {
+                return taps.FindByTiming(timing).Cast<T>();
+            }
+
+            if (typeof(T) == typeof(Hold))
+            {
+                return holds.FindByTiming(timing).Cast<T>();
+            }
+
+            if (typeof(T) == typeof(ArcTap))
+            {
+                return arcTaps.FindByTiming(timing).Cast<T>();
+            }
+
+            if (typeof(T) == typeof(Arc))
+            {
+                return arcs.FindByTiming(timing).Cast<T>();
+            }
+
+            if (typeof(T) == typeof(TimingEvent))
+            {
+                return FindTimingEventsByTiming(timing).Cast<T>();
+            }
+
+            return Enumerable.Empty<T>();
+        }
+
+        /// <summary>
+        /// Find all long notes of this group that have matching end timing value.
+        /// </summary>
+        /// <param name="endTiming">The query end timing value.</param>
+        /// <typeparam name="T">Long note type to search for.</typeparam>
+        /// <returns>All long notes with matching end timing value.</returns>
+        public IEnumerable<T> FindByEndTiming<T>(int endTiming)
+            where T : LongNote
+        {
+            if (typeof(T) == typeof(Hold))
+            {
+                return holds.FindByEndTiming(endTiming).Cast<T>();
+            }
+
+            if (typeof(T) == typeof(Arc))
+            {
+                return arcs.FindByEndTiming(endTiming).Cast<T>();
+            }
+
+            return Enumerable.Empty<T>();
+        }
+
+        /// <summary>
+        /// Find all events of this group that are bounded by the provided timing range.
+        /// </summary>
+        /// <param name="from">The query timing lower range.</param>
+        /// <param name="to">The query timing upper range.</param>
+        /// <typeparam name="T">Event type to search for.</typeparam>
+        /// <returns>All events with matching timing value.</returns>
+        public IEnumerable<T> FindEventsWithinRange<T>(int from, int to)
+            where T : ArcEvent
+        {
+            if (typeof(T) == typeof(Tap))
+            {
+                return taps.FindEventsWithinRange(from, to).Cast<T>();
+            }
+
+            if (typeof(T) == typeof(Hold))
+            {
+                return holds.FindEventsWithinRange(from, to).Cast<T>();
+            }
+
+            if (typeof(T) == typeof(ArcTap))
+            {
+                return arcTaps.FindEventsWithinRange(from, to).Cast<T>();
+            }
+
+            if (typeof(T) == typeof(Arc))
+            {
+                return arcs.FindEventsWithinRange(from, to).Cast<T>();
+            }
+
+            if (typeof(T) == typeof(TimingEvent))
+            {
+                return FindTimingEventsWithinRange(from, to).Cast<T>();
+            }
+
+            return Enumerable.Empty<T>();
         }
 
         /// <summary>

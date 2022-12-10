@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility;
 using UnityEngine;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
@@ -25,7 +26,10 @@ namespace ArcCreate.Gameplay.Judgement.Input
             }
         }
 
-        public void HandleLaneTapRequests(int currentTiming, UnorderedList<LaneTapJudgementRequest> requests)
+        public void HandleTapRequests(
+            int currentTiming,
+            UnorderedList<LaneTapJudgementRequest> laneTapRequests,
+            UnorderedList<ArcTapJudgementRequest> arcTapRequests)
         {
             for (int inpIndex = 0; inpIndex < currentInputs.Count; inpIndex++)
             {
@@ -37,13 +41,14 @@ namespace ArcCreate.Gameplay.Judgement.Input
 
                 int minTimingDifference = int.MaxValue;
                 float minPositionDifference = float.MaxValue;
-                bool applicableRequestExists = false;
-                LaneTapJudgementRequest applicableRequest = default;
-                int applicableRequestIndex = 0;
 
-                for (int i = requests.Count - 1; i >= 0; i--)
+                bool applicableLaneRequestExists = false;
+                LaneTapJudgementRequest applicableLaneRequest = default;
+                int applicableLaneRequestIndex = 0;
+
+                for (int i = laneTapRequests.Count - 1; i >= 0; i--)
                 {
-                    LaneTapJudgementRequest req = requests[i];
+                    LaneTapJudgementRequest req = laneTapRequests[i];
                     int timingDifference = req.AutoAtTiming - currentTiming;
                     if (timingDifference > minTimingDifference)
                     {
@@ -60,16 +65,50 @@ namespace ArcCreate.Gameplay.Judgement.Input
                     {
                         minTimingDifference = timingDifference;
                         minPositionDifference = distanceToNote;
-                        applicableRequestExists = true;
-                        applicableRequest = req;
-                        applicableRequestIndex = i;
+                        applicableLaneRequestExists = true;
+                        applicableLaneRequest = req;
+                        applicableLaneRequestIndex = i;
                     }
                 }
 
-                if (applicableRequestExists)
+                bool applicableArcTapRequestExists = false;
+                ArcTapJudgementRequest applicableArcTapRequest = default;
+                int applicableArcTapRequestIndex = 0;
+
+                for (int i = arcTapRequests.Count - 1; i >= 0; i--)
                 {
-                    applicableRequest.Receiver.ProcessLaneTapJudgement(currentTiming - applicableRequest.AutoAtTiming);
-                    requests.RemoveAt(applicableRequestIndex);
+                    ArcTapJudgementRequest req = arcTapRequests[i];
+                    int timingDifference = req.AutoAtTiming - currentTiming;
+                    if (timingDifference > minTimingDifference)
+                    {
+                        continue;
+                    }
+
+                    Vector3 worldPosition = new Vector3(req.X, req.Y, 0);
+                    Vector3 screenPosition = Services.Camera.GameplayCamera.WorldToScreenPoint(worldPosition);
+                    Vector3 deltaToNote = screenPosition - input.ScreenPos;
+                    float distanceToNote = deltaToNote.sqrMagnitude;
+
+                    if (distanceToNote <= minPositionDifference
+                     && ArcTapCollide(input.ScreenPos, screenPosition))
+                    {
+                        minTimingDifference = timingDifference;
+                        minPositionDifference = distanceToNote;
+                        applicableArcTapRequestExists = true;
+                        applicableArcTapRequest = req;
+                        applicableArcTapRequestIndex = i;
+                    }
+                }
+
+                if (applicableArcTapRequestExists)
+                {
+                    applicableArcTapRequest.Receiver.ProcessArcTapJudgement(currentTiming - applicableArcTapRequest.AutoAtTiming);
+                    arcTapRequests.RemoveAt(applicableArcTapRequestIndex);
+                }
+                else if (applicableLaneRequestExists)
+                {
+                    applicableLaneRequest.Receiver.ProcessLaneTapJudgement(currentTiming - applicableLaneRequest.AutoAtTiming);
+                    laneTapRequests.RemoveAt(applicableLaneRequestIndex);
                 }
             }
         }
@@ -133,7 +172,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
                     Vector3 screenPosition1 = Services.Camera.GameplayCamera.WorldToScreenPoint(worldPosition1);
                     Vector3 screenPosition2 = Services.Camera.GameplayCamera.WorldToScreenPoint(worldPosition2);
 
-                    if (ArcCollide(screenPosition1, screenPosition2))
+                    if (ArcHitboxCollide(screenPosition1, screenPosition2))
                     {
                         graceActive = true;
                         break;
@@ -163,13 +202,11 @@ namespace ArcCreate.Gameplay.Judgement.Input
                         continue;
                     }
 
-                    Vector3 worldPosition = new Vector3(req.Arc.WorldXAt(currentTiming), req.Arc.WorldYAt(currentTiming), 0);
-                    Vector3 screenPosition = Services.Camera.GameplayCamera.WorldToScreenPoint(worldPosition);
-
-                    bool collide = ArcCollide(input.ScreenPos, screenPosition);
-
+                    bool collide = ArcCollide(input, req.Arc, currentTiming);
                     if (collide)
                     {
+                        Vector3 worldPosition = new Vector3(req.Arc.WorldXAt(currentTiming), req.Arc.WorldYAt(currentTiming), 0);
+                        Vector3 screenPosition = Services.Camera.GameplayCamera.WorldToScreenPoint(worldPosition);
                         float distance = (screenPosition - input.ScreenPos).sqrMagnitude;
                         colorLogic.FingerHit(input.Id, distance);
                     }
@@ -190,10 +227,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
                     ArcJudgementRequest req = requests[i];
                     ArcColorLogic colorLogic = ArcColorLogic.Get(req.Arc.Color);
 
-                    Vector3 worldPosition = new Vector3(req.Arc.WorldXAt(currentTiming), req.Arc.WorldYAt(currentTiming), 0);
-                    Vector3 screenPosition = Services.Camera.GameplayCamera.WorldToScreenPoint(worldPosition);
-
-                    bool collide = ArcCollide(input.ScreenPos, screenPosition);
+                    bool collide = ArcCollide(input, req.Arc, currentTiming);
                     bool acceptInput = colorLogic.ShouldAcceptInput(input.Id);
 
                     if (collide && acceptInput)
@@ -207,7 +241,21 @@ namespace ArcCreate.Gameplay.Judgement.Input
             ArcColorLogic.ApplyRedValue();
         }
 
-        private bool ArcCollide(Vector3 screenPosition1, Vector3 screenPosition2)
+        private bool ArcCollide(TouchInput touch, Arc arc, int currentTiming)
+        {
+            Vector3 arcWorldPosition = new Vector3(arc.WorldXAt(currentTiming), arc.WorldYAt(currentTiming));
+            float skyInputY = Services.Judgement.SkyInputY;
+            if (arcWorldPosition.y <= skyInputY)
+            {
+                touch.VerticalPos.y = Mathf.Min(touch.VerticalPos.y, skyInputY);
+            }
+
+            Vector3 arcScreenPos = Services.Camera.GameplayCamera.WorldToScreenPoint(arcWorldPosition);
+            Vector3 touchScreenPos = Services.Camera.GameplayCamera.WorldToScreenPoint(touch.VerticalPos);
+            return ArcHitboxCollide(arcScreenPos, touchScreenPos);
+        }
+
+        private bool ArcHitboxCollide(Vector3 screenPosition1, Vector3 screenPosition2)
         {
             float dx = Mathf.Abs(screenPosition1.x - screenPosition2.x);
             float dy = Mathf.Abs(screenPosition1.x - screenPosition2.y);

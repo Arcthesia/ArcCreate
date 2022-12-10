@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ namespace ArcCreate.Gameplay.Data
     {
         private TapBehaviour instance;
         private bool judgementRequestSent = false;
+
+        public HashSet<ArcTap> ConnectedArcTaps { get; } = new HashSet<ArcTap>();
 
         public int Lane { get; set; }
 

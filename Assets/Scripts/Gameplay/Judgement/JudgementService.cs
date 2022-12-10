@@ -9,10 +9,14 @@ namespace ArcCreate.Gameplay.Judgement
     public class JudgementService : MonoBehaviour, IJudgementService
     {
         [SerializeField] private Camera gameplayCamera;
+        [SerializeField] private Transform skyInput;
         private readonly UnorderedList<LaneTapJudgementRequest> laneTapRequests = new UnorderedList<LaneTapJudgementRequest>(32);
         private readonly UnorderedList<LaneHoldJudgementRequest> laneHoldRequests = new UnorderedList<LaneHoldJudgementRequest>(32);
         private readonly UnorderedList<ArcJudgementRequest> arcRequests = new UnorderedList<ArcJudgementRequest>(32);
+        private readonly UnorderedList<ArcTapJudgementRequest> arcTapRequests = new UnorderedList<ArcTapJudgementRequest>(32);
         private IInputHandler inputHandler;
+
+        public float SkyInputY => skyInput.position.y;
 
         public void Request(LaneTapJudgementRequest request)
         {
@@ -29,6 +33,11 @@ namespace ArcCreate.Gameplay.Judgement
             arcRequests.Add(request);
         }
 
+        public void Request(ArcTapJudgementRequest request)
+        {
+            arcTapRequests.Add(request);
+        }
+
         public void ClearRequests()
         {
             laneTapRequests.Clear();
@@ -41,7 +50,7 @@ namespace ArcCreate.Gameplay.Judgement
             // Manually update input system to minimalize lag
             InputSystem.Update();
             inputHandler.PollInput();
-            inputHandler.HandleLaneTapRequests(currentTiming, laneTapRequests);
+            inputHandler.HandleTapRequests(currentTiming, laneTapRequests, arcTapRequests);
             inputHandler.HandleLaneHoldRequests(currentTiming, laneHoldRequests);
             inputHandler.HandleArcRequests(currentTiming, arcRequests);
         }
@@ -75,6 +84,16 @@ namespace ArcCreate.Gameplay.Judgement
                 {
                     req.Receiver.ProcessArcJudgement(currentTiming - req.AutoAtTiming);
                     arcRequests.RemoveAt(i);
+                }
+            }
+
+            for (int i = arcTapRequests.Count - 1; i >= 0; i--)
+            {
+                var req = arcTapRequests[i];
+                if (currentTiming >= req.ExpireAtTiming)
+                {
+                    req.Receiver.ProcessArcTapJudgement(currentTiming - req.AutoAtTiming);
+                    arcTapRequests.RemoveAt(i);
                 }
             }
         }

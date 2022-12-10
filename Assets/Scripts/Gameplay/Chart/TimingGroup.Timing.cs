@@ -178,5 +178,27 @@ namespace ArcCreate.Gameplay.Chart
             // holds.Notes.ForEach(n => n.RecalculateJudgeTimings());
             // arcs.Notes.ForEach(n => n.RecalculateJudgeTimings());
         }
+
+        private IEnumerable<TimingEvent> FindTimingEventsByTiming(int timing)
+        {
+            int i = timings.BisectLeft(timing, n => n.Timing);
+
+            while (i >= 0 && i < timings.Count && timings[i].Timing == timing)
+            {
+                yield return timings[i];
+                i++;
+            }
+        }
+
+        private IEnumerable<TimingEvent> FindTimingEventsWithinRange(int from, int to)
+        {
+            int fromI = timings.BisectLeft(from, n => n.Timing);
+            int toI = timings.BisectRight(to, n => n.Timing);
+
+            for (int i = fromI; i <= toI; i++)
+            {
+                yield return timings[i];
+            }
+        }
     }
 }

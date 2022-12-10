@@ -58,6 +58,37 @@ namespace ArcCreate.Gameplay.Chart
             }
         }
 
+        public override IEnumerable<Note> FindByTiming(int timing)
+        {
+            var overlap = TimingTree[timing, timing];
+            while (overlap.MoveNext())
+            {
+                yield return overlap.Current;
+            }
+        }
+
+        public IEnumerable<Note> FindByEndTiming(int endTiming)
+        {
+            var overlap = TimingTree[endTiming, endTiming];
+            while (overlap.MoveNext())
+            {
+                yield return overlap.Current;
+            }
+        }
+
+        public override IEnumerable<Note> FindEventsWithinRange(int from, int to)
+        {
+            var overlap = TimingTree[from, to];
+            while (overlap.MoveNext())
+            {
+                Note note = overlap.Current;
+                if (note.Timing >= from && note.EndTiming <= to)
+                {
+                    yield return note;
+                }
+            }
+        }
+
         private void UpdateJudgement(int timing, GroupProperties groupProperties)
         {
             if (groupProperties.NoInput)
