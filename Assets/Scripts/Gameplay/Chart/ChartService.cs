@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.ChartFormat;
 using ArcCreate.Gameplay.Data;
-using ArcCreate.Utility.Extension;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Chart
@@ -94,40 +92,76 @@ namespace ArcCreate.Gameplay.Chart
             Services.Judgement.ClearRequests();
         }
 
-        public List<T> Find<T, R>(R valueMin, R valueMax, Func<T, R> property)
-            where T : Note
-            where R : IComparable<R>
+        public IEnumerable<T> FindByTiming<T>(int timing)
+            where T : ArcEvent
         {
-            List<T> result = new List<T>();
+            // if (typeof(T) == typeof(ScenecontrolEvent))
+            // {
+            //     foreach (var note in scenecontrolManager.FindByTiming(timing))
+            //     {
+            //         yield return note as T;
+            //     }
+            // }
+
+            // if (typeof(T) == typeof(CameraEvent))
+            // {
+            //     foreach (var note in cameraManager.FindByTiming(timing))
+            //     {
+            //         yield return note as T;
+            //     }
+            // }
             for (int i = 0; i < timingGroups.Count; i++)
             {
                 TimingGroup tg = timingGroups[i];
-                List<T> notes = tg.GetEventType<T>();
-                int nearest = notes.BisectLeft(valueMin, property);
-
-                int lowest = nearest;
-                while (property(notes[lowest]).CompareTo(valueMin) >= 0)
+                IEnumerable<T> groupNotes = tg.FindByTiming<T>(timing);
+                foreach (T note in groupNotes)
                 {
-                    lowest--;
-                }
-
-                lowest++;
-
-                int highest = nearest;
-                while (property(notes[highest]).CompareTo(valueMax) <= 0)
-                {
-                    highest++;
-                }
-
-                highest--;
-
-                for (int j = lowest; j <= highest; j++)
-                {
-                    result.Add(notes[j]);
+                    yield return note;
                 }
             }
+        }
 
-            return result;
+        public IEnumerable<T> FindByEndTiming<T>(int endTiming)
+            where T : LongNote
+        {
+            for (int i = 0; i < timingGroups.Count; i++)
+            {
+                TimingGroup tg = timingGroups[i];
+                IEnumerable<T> groupNotes = tg.FindByEndTiming<T>(endTiming);
+                foreach (T note in groupNotes)
+                {
+                    yield return note;
+                }
+            }
+        }
+
+        public IEnumerable<T> FindEventsWithinRange<T>(int from, int to)
+            where T : ArcEvent
+        {
+            // if (typeof(T) == typeof(ScenecontrolEvent))
+            // {
+            //     foreach (var note in scenecontrolManager.FindWithinRange(from, to))
+            //     {
+            //         yield return note as T;
+            //     }
+            // }
+
+            // if (typeof(T) == typeof(CameraEvent))
+            // {
+            //     foreach (var note in cameraManager.FindWithinRange(from, to))
+            //     {
+            //         yield return note as T;
+            //     }
+            // }
+            for (int i = 0; i < timingGroups.Count; i++)
+            {
+                TimingGroup tg = timingGroups[i];
+                IEnumerable<T> groupNotes = tg.FindEventsWithinRange<T>(from, to);
+                foreach (T note in groupNotes)
+                {
+                    yield return note;
+                }
+            }
         }
 
         public IEnumerable<T> GetAll<T>()
@@ -151,10 +185,9 @@ namespace ArcCreate.Gameplay.Chart
             for (int i = 0; i < timingGroups.Count; i++)
             {
                 TimingGroup tg = timingGroups[i];
-                List<T> groupNotes = tg.GetEventType<T>();
-                for (int j = 0; j < groupNotes.Count; j++)
+                IEnumerable<T> groupNotes = tg.GetEventType<T>();
+                foreach (T note in groupNotes)
                 {
-                    T note = groupNotes[j];
                     yield return note;
                 }
             }

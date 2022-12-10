@@ -33,12 +33,8 @@ namespace ArcCreate.Gameplay.Chart
 
         private void ChainArcIntoGroups(Arc arc)
         {
-            var overlapStart = TimingTree[arc.Timing, arc.Timing];
-            var overlapEnd = TimingTree[arc.EndTiming, arc.EndTiming];
-
-            while (overlapStart.MoveNext())
+            foreach (Arc overlap in FindByEndTiming(arc.Timing))
             {
-                Arc overlap = overlapStart.Current;
                 if (IsChained(overlap, arc))
                 {
                     arc.PreviousArcs.Add(overlap);
@@ -46,9 +42,8 @@ namespace ArcCreate.Gameplay.Chart
                 }
             }
 
-            while (overlapEnd.MoveNext())
+            foreach (Arc overlap in FindByTiming(arc.EndTiming))
             {
-                Arc overlap = overlapEnd.Current;
                 if (IsChained(arc, overlap))
                 {
                     arc.NextArcs.Add(overlap);

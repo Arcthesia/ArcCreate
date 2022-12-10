@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Extension;
 using UnityEngine;
@@ -38,6 +39,30 @@ namespace ArcCreate.Gameplay.Chart
         {
             timingSearch = new CachedBisect<Note, int>(Notes, note => note.Timing);
             floorPositionSearch = new CachedBisect<Note, double>(Notes, note => note.FloorPosition);
+        }
+
+        public override IEnumerable<Note> FindByTiming(int timing)
+        {
+            // Avoid modifying the cache of search tree.
+            int i = timingSearch.List.BisectLeft(timing, n => n.Timing);
+
+            while (i >= 0 && i < timingSearch.List.Count && timingSearch.List[i].Timing == timing)
+            {
+                yield return timingSearch.List[i];
+                i++;
+            }
+        }
+
+        public override IEnumerable<Note> FindEventsWithinRange(int from, int to)
+        {
+            // Avoid modifying the cache of search tree.
+            int fromI = timingSearch.List.BisectLeft(from, n => n.Timing);
+            int toI = timingSearch.List.BisectRight(to, n => n.Timing);
+
+            for (int i = fromI; i <= toI; i++)
+            {
+                yield return timingSearch.List[i];
+            }
         }
 
         private void UpdateJudgement(int timing, GroupProperties groupProperties)
