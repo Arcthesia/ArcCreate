@@ -60,6 +60,7 @@ namespace ArcCreate.Gameplay.Skin
         private int highColorShaderId;
         private int lowColorShaderId;
         private int shadowColorShaderId;
+        private int redValueShaderId;
 
         private Color currentComboColor;
 
@@ -272,11 +273,23 @@ namespace ArcCreate.Gameplay.Skin
             SetArcColors(defaultArcColors, defaultArcLowColors, defaultShadowColor);
         }
 
+        public void ApplyRedArcValue(int color, float value)
+        {
+            if (color < 0 || color >= arcMaterials.Count)
+            {
+                return;
+            }
+
+            Material mat = arcMaterials[color];
+            mat.SetFloat(redValueShaderId, value);
+        }
+
         private void Awake()
         {
             highColorShaderId = Shader.PropertyToID("_Color");
             lowColorShaderId = Shader.PropertyToID("_LowColor");
             shadowColorShaderId = Shader.PropertyToID("_ShadowColor");
+            redValueShaderId = Shader.PropertyToID("_RedValue");
             Settings.InputMode.OnValueChanged.AddListener(ReloadNoteSkin);
 
             currentAlignment = alignmentOptions[0];

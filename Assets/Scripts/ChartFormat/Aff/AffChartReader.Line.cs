@@ -147,6 +147,12 @@ namespace ArcCreate.ChartFormat
                 string effect = s.ReadString(",");
                 bool istrace = s.ReadBool(")");
                 List<int> arctap = null;
+
+                if (color < 0)
+                {
+                    throw new ChartFormatException(I18n.S("Format.Exception.ArcColorNegative"));
+                }
+
                 if (s.Current != ";")
                 {
                     arctap = new List<int>();

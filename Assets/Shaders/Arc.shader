@@ -6,9 +6,11 @@
 		_Color ("Color", Color) = (1,1,1,1)
 		_ShadowColor ("ShadowColor", Color) = (1,1,1,1)
 		_LowColor ("LowColor", Color) = (1,1,1,1)
+		_RedColor ("RedColor", Color) = (1,1,1,1)
 		_From ("From", Float) = 0
 		_Selected ("Selected", Int) = 0
 		_ColorTG ("ColorTG", Color) = (1,1,1,1)
+		_RedValue ("RedValue", Float) = 0
 		_Shear("Shear", Vector) = (0,0,1,0)
 	}
 	SubShader
@@ -117,6 +119,8 @@
 			 
 			int _Selected;
 			float _From;
+			float _RedValue;
+			float4 _RedColor;
 			float4 _Color, _LowColor, _ColorTG;
 			float4 _Shear;
             float4 _MainTex_ST;
@@ -155,10 +159,11 @@
 				float4 c = tex2D(_MainTex,i.uv); 
 				
 				float4 inColor = lerp(_LowColor, _Color, clamp((i.worldpos.y - 1) / 4.5f, 0, 1));
+				float4 color = lerp(inColor, _RedColor, _RedValue);
 
 				if(_Selected == 1) 
 				{
-					inColor = Highlight(inColor);
+					color = Highlight(color);
 				}
 
 				c *= inColor * _ColorTG;  
@@ -199,6 +204,8 @@
 			 
 			int _Selected;
 			float _From;
+			float _RedValue;
+			float4 _RedColor;
 			float4 _Color, _LowColor, _ColorTG;
 			float4 _Shear;
             float4 _MainTex_ST;
@@ -237,13 +244,14 @@
 				float4 c = tex2D(_MainTex,i.uv); 
 				
 				float4 inColor = lerp(_LowColor, _Color, clamp((i.worldpos.y - 1) / 4.5f, 0, 1));
+				float4 color = lerp(inColor, _RedColor, _RedValue);
 
 				if(_Selected == 1) 
 				{
-					inColor = Highlight(inColor);
+					color = Highlight(color);
 				}
 
-				c *= inColor * _ColorTG;  
+				c *= color * _ColorTG;  
 				return c;
 			}
 			ENDCG

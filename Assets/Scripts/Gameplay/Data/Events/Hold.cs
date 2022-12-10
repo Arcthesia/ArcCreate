@@ -218,7 +218,7 @@ namespace ArcCreate.Gameplay.Data
         {
             Services.Judgement.Request(new LaneHoldJudgementRequest()
             {
-                ExpireAtTiming = currentTiming + Values.HoldLostLateJudgeWindow,
+                ExpireAtTiming = currentTiming + Values.FarJudgeWindow,
                 AutoAtTiming = currentTiming,
                 Lane = Lane,
                 Receiver = this,

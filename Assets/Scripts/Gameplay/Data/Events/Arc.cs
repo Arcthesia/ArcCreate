@@ -12,7 +12,7 @@ namespace ArcCreate.Gameplay.Data
         private bool hasBeenHitOnce = false;
         private int flashCount = 0;
         private float arcGroupAlpha = 1;
-        private int firstArcOfGroupTiming;
+        private Arc firstArcOfGroup;
 
         // Avoid infinite recursion
         private bool recursivelyCalled = false;
@@ -126,7 +126,7 @@ namespace ArcCreate.Gameplay.Data
         {
             if (IsFirstArcOfGroup)
             {
-                SetGroupFirstTiming(Timing);
+                SetGroupFirst(this);
             }
 
             RecalculateJudgeTimings();
@@ -141,7 +141,7 @@ namespace ArcCreate.Gameplay.Data
 
         public void UpdateJudgement(int timing, GroupProperties groupProperties)
         {
-            if (timing >= Timing && !judgementRequestSent)
+            if (!IsTrace && timing >= Timing && Timing < EndTiming && !judgementRequestSent)
             {
                 RequestJudgement(timing);
                 judgementRequestSent = true;
@@ -176,7 +176,7 @@ namespace ArcCreate.Gameplay.Data
                 }
                 else
                 {
-                    if (timing >= firstArcOfGroupTiming)
+                    if (timing >= firstArcOfGroup.Timing)
                     {
                         alpha = Values.MissedArcAlphaScalar;
                     }
@@ -212,6 +212,51 @@ namespace ArcCreate.Gameplay.Data
 
         public void ProcessArcJudgement(int offset)
         {
+            int currentTiming = Services.Audio.Timing;
+            if (currentTiming > EndTiming)
+            {
+                return;
+            }
+
+            judgementRequestSent = false;
+
+            float x = WorldXAt(currentTiming);
+            float y = WorldYAt(currentTiming);
+            Vector3 currentPos = new Vector3(x, y);
+
+            if (offset >= Values.HoldLostLateJudgeWindow)
+            {
+                SetGroupHighlight(false);
+
+                int missCount = UpdateCurrentJudgePointTiming(currentTiming - Values.HoldLostLateJudgeWindow);
+                if (missCount > 0)
+                {
+                    Services.Score.ProcessJudgement(JudgementResult.LostLate, missCount);
+                    Services.Particle.PlayTextParticle(currentPos, JudgementResult.LostLate);
+                }
+
+                RequestJudgement(currentTiming);
+                judgementRequestSent = true;
+                return;
+            }
+
+            int hitCount = UpdateCurrentJudgePointTiming(currentTiming);
+            if (hitCount > 0)
+            {
+                Services.Score.ProcessJudgement(JudgementResult.Max, hitCount);
+                Services.Particle.PlayTextParticle(currentPos, JudgementResult.Max);
+            }
+
+            if (currentTiming <= EndTiming)
+            {
+                Services.Particle.PlayLongParticle(firstArcOfGroup, currentPos);
+            }
+
+            SetGroupHighlight(true);
+            hasBeenHitOnce = true;
+
+            RequestJudgement(currentTiming);
+            judgementRequestSent = true;
         }
 
         public int CompareTo(INote<ArcBehaviour> other)
@@ -263,8 +308,7 @@ namespace ArcCreate.Gameplay.Data
             {
                 ExpireAtTiming = currentTiming + Values.HoldLostLateJudgeWindow,
                 AutoAtTiming = currentTiming,
-                X = WorldXAt(currentTiming),
-                Y = WorldYAt(currentTiming),
+                Arc = this,
                 Receiver = this,
             });
         }
@@ -286,7 +330,7 @@ namespace ArcCreate.Gameplay.Data
             recursivelyCalled = false;
         }
 
-        private void SetGroupFirstTiming(int timing)
+        private void SetGroupFirst(Arc arc)
         {
             if (recursivelyCalled)
             {
@@ -294,12 +338,12 @@ namespace ArcCreate.Gameplay.Data
             }
 
             recursivelyCalled = true;
-            foreach (Arc arc in NextArcs)
+            foreach (Arc next in NextArcs)
             {
-                arc.SetGroupFirstTiming(timing);
+                next.SetGroupFirst(arc);
             }
 
-            firstArcOfGroupTiming = timing;
+            firstArcOfGroup = arc;
             recursivelyCalled = false;
         }
     }

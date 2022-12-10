@@ -1907,7 +1907,7 @@ MonoBehaviour:
   earlyLateLength: 0.5
   earlyLateFromY: 35
   earlyLateToY: 50
-  longParticlePersistDuration: 0.15
+  longParticlePersistDuration: 0.1
 --- !u!1 &600956901
 GameObject:
   m_ObjectHideFlags: 0
