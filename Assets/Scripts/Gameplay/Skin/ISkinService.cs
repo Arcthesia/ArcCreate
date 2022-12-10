@@ -74,5 +74,12 @@ namespace ArcCreate.Gameplay.Skin
         /// extraLane: The extra lane's material.
         /// </returns>
         (Sprite lane, Sprite extraLane) GetTrackSprite(string name);
+
+        /// <summary>
+        /// Apply red arc value to a color.
+        /// </summary>
+        /// <param name="color">The color id.</param>
+        /// <param name="value">The red arc value from 0 to 1.</param>
+        void ApplyRedArcValue(int color, float value);
     }
 }

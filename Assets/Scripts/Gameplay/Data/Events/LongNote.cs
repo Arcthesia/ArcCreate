@@ -16,6 +16,8 @@ namespace ArcCreate.Gameplay.Data
 
         public override int TotalCombo => totalCombo;
 
+        public int TimeIncrement => timeIncrement;
+
         /// <summary>
         /// Recalculate the judge timings value of this note.
         /// </summary>

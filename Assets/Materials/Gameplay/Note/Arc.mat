@@ -68,6 +68,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _RedValue: 0
     - _Selected: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -79,5 +80,6 @@ Material:
     - _ColorTG: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _LowColor: {r: 0.09803922, g: 0.627451, b: 0.92156863, a: 0.8509804}
+    - _RedColor: {r: 1, g: 0, b: 0, a: 1}
     - _ShadowColor: {r: 0.3529412, g: 0.3529412, b: 0.3529412, a: 0.3529412}
     - _Shear: {r: 0, g: 0, b: 1, a: 0}

@@ -11,6 +11,8 @@ Format:
       At: line {LineNumber}
       While parsing event of type: {EventType}
       With the followng "{Content}".
+    ArcColorNegative: |-
+      Arc color id can not be negative.
     AudioOffsetInvalid: |-
       Invalid audio offset definition.
     TimingPointDensityFactorInvalid: |-

@@ -11,7 +11,7 @@ namespace ArcCreate.Gameplay
 
         // In an attempt to contain all the logic into a single class,
         // expect the innerworkings of this to be very messy...
-        private static readonly Dictionary<int, ArcColorLogic> Instances = new Dictionary<int, ArcColorLogic>();
+        private static readonly List<ArcColorLogic> Instances = new List<ArcColorLogic>();
         private static int frameTiming;
         private readonly int color;
         private int assignedFingerId = UnassignedFingerId;
@@ -30,6 +30,8 @@ namespace ArcCreate.Gameplay
         {
             this.color = color;
         }
+
+        public static int MaxColor => Instances.Count - 1;
 
         /// <summary>
         /// Gets the color id of this instance.
@@ -71,9 +73,14 @@ namespace ArcCreate.Gameplay
         /// <returns>The instance for the color.</returns>
         public static ArcColorLogic Get(int color)
         {
-            if (!Instances.ContainsKey(color))
+            if (color < 0)
             {
-                Instances.Add(color, new ArcColorLogic(color));
+                throw new System.Exception();
+            }
+
+            while (color >= Instances.Count)
+            {
+                Instances.Add(new ArcColorLogic(color));
             }
 
             return Instances[color];
@@ -87,6 +94,15 @@ namespace ArcCreate.Gameplay
             Instances.Clear();
         }
 
+        public static void ApplyRedValue()
+        {
+            for (int i = 0; i < Instances.Count; i++)
+            {
+                ArcColorLogic color = Instances[i];
+                Services.Skin.ApplyRedArcValue(i, color.RedArcValue);
+            }
+        }
+
         /// <summary>
         /// Notify all colors that a new frame has started at the timing.
         /// It's important that this method is called BEFORE any other method each frame.
@@ -96,10 +112,23 @@ namespace ArcCreate.Gameplay
         {
             int lastFrameTiming = frameTiming;
             frameTiming = timing;
-            foreach (ArcColorLogic color in Instances.Values)
+            for (int i = 0; i < Instances.Count; i++)
             {
+                ArcColorLogic color = Instances[i];
                 color.ResetIntraframeState();
                 color.UpdateRedArcValue(frameTiming - lastFrameTiming);
+            }
+        }
+
+        /// <summary>
+        /// Notify that two arcs of different colors collided and a grace period should start.
+        /// </summary>
+        public static void StartGracePeriodForAllColors()
+        {
+            for (int i = 0; i < Instances.Count; i++)
+            {
+                ArcColorLogic color = Instances[i];
+                color.StartGracePeriod();
             }
         }
 
@@ -261,8 +290,9 @@ namespace ArcCreate.Gameplay
 
         private bool IsFingerAssignedToAnotherColor(int fingerId)
         {
-            foreach (ArcColorLogic color in Instances.Values)
+            for (int i = 0; i < Instances.Count; i++)
             {
+                ArcColorLogic color = Instances[i];
                 if (color != this && color.AssignedFingerId == fingerId)
                 {
                     return true;
@@ -274,6 +304,11 @@ namespace ArcCreate.Gameplay
 
         private void FlashRedArc()
         {
+            if (currentRedArcValue > 0)
+            {
+                return;
+            }
+
             currentRedArcValue = 1;
             isRedValueFlashing = true;
         }
