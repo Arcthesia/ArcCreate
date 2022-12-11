@@ -12,7 +12,7 @@ namespace ArcCreate.Gameplay.Data
 
         public int Duration { get; set; }
 
-        public float Percent { get; set; }
+        public bool IsReset => CameraType == CameraType.Reset;
 
         public override ArcEvent Clone()
         {
@@ -22,7 +22,6 @@ namespace ArcCreate.Gameplay.Data
                 Duration = Duration,
                 CameraType = CameraType,
                 Move = Move,
-                Percent = Percent,
                 Rotate = Rotate,
                 TimingGroup = TimingGroup,
             };
@@ -39,31 +38,36 @@ namespace ArcCreate.Gameplay.Data
             TimingGroup = n.TimingGroup;
         }
 
-        public void Update(int timing)
+        public int CompareTo(CameraEvent other)
         {
-            if (timing > this.Timing + Duration)
+            if (Timing == other.Timing)
             {
-                Percent = 1;
-                return;
-            }
-            else if (timing < this.Timing)
-            {
-                Percent = 0;
-                return;
+                return Duration.CompareTo(other.Duration);
             }
 
-            Percent = Mathf.Clamp(((1f * timing) - this.Timing) / Duration, 0, 1);
+            return Timing.CompareTo(other.Timing);
+        }
+
+        public float PercentAt(int timing)
+        {
+            if (timing > Timing + Duration)
+            {
+                return 1;
+            }
+            else if (timing < Timing)
+            {
+                return 0;
+            }
+
+            float p = Mathf.Clamp((float)(timing - Timing) / Duration, 0, 1);
             switch (CameraType)
             {
                 case CameraType.Qi:
-                    Percent = ArcFormula.Qi(Percent);
-                    break;
+                    return ArcFormula.Qi(p);
                 case CameraType.Qo:
-                    Percent = ArcFormula.Qo(Percent);
-                    break;
-                case CameraType.S:
-                    Percent = ArcFormula.S(0, 1, Percent);
-                    break;
+                    return ArcFormula.Qo(p);
+                default:
+                    return p;
             }
         }
     }
