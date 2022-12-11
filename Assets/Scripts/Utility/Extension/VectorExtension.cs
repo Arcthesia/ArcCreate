@@ -26,5 +26,15 @@ namespace ArcCreate.Utility.Extension
         {
             return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
         }
+
+        /// <summary>
+        /// Whether the vector contains NaN in any of it's coordinate.
+        /// </summary>
+        /// <param name="vec">The vector to checl.</param>
+        /// <returns>The bool value.</returns>
+        public static bool IsNaN(this Vector3 vec)
+        {
+            return float.IsNaN(vec.x) || float.IsNaN(vec.y) || float.IsNaN(vec.z);
+        }
     }
 }

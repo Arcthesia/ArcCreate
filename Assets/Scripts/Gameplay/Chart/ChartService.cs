@@ -95,21 +95,22 @@ namespace ArcCreate.Gameplay.Chart
         public IEnumerable<T> FindByTiming<T>(int timing)
             where T : ArcEvent
         {
-            // if (typeof(T) == typeof(ScenecontrolEvent))
-            // {
-            //     foreach (var note in scenecontrolManager.FindByTiming(timing))
-            //     {
-            //         yield return note as T;
-            //     }
-            // }
+            if (typeof(T) == typeof(ScenecontrolEvent))
+            {
+                foreach (var note in Services.Scenecontrol.FindByTiming(timing))
+                {
+                    yield return note as T;
+                }
+            }
 
-            // if (typeof(T) == typeof(CameraEvent))
-            // {
-            //     foreach (var note in cameraManager.FindByTiming(timing))
-            //     {
-            //         yield return note as T;
-            //     }
-            // }
+            if (typeof(T) == typeof(CameraEvent))
+            {
+                foreach (var note in Services.Camera.FindByTiming(timing))
+                {
+                    yield return note as T;
+                }
+            }
+
             for (int i = 0; i < timingGroups.Count; i++)
             {
                 TimingGroup tg = timingGroups[i];
@@ -138,21 +139,22 @@ namespace ArcCreate.Gameplay.Chart
         public IEnumerable<T> FindEventsWithinRange<T>(int from, int to)
             where T : ArcEvent
         {
-            // if (typeof(T) == typeof(ScenecontrolEvent))
-            // {
-            //     foreach (var note in scenecontrolManager.FindWithinRange(from, to))
-            //     {
-            //         yield return note as T;
-            //     }
-            // }
+            if (typeof(T) == typeof(ScenecontrolEvent))
+            {
+                foreach (var note in Services.Scenecontrol.FindWithinRange(from, to))
+                {
+                    yield return note as T;
+                }
+            }
 
-            // if (typeof(T) == typeof(CameraEvent))
-            // {
-            //     foreach (var note in cameraManager.FindWithinRange(from, to))
-            //     {
-            //         yield return note as T;
-            //     }
-            // }
+            if (typeof(T) == typeof(CameraEvent))
+            {
+                foreach (var note in Services.Camera.FindWithinRange(from, to))
+                {
+                    yield return note as T;
+                }
+            }
+
             for (int i = 0; i < timingGroups.Count; i++)
             {
                 TimingGroup tg = timingGroups[i];
@@ -167,21 +169,22 @@ namespace ArcCreate.Gameplay.Chart
         public IEnumerable<T> GetAll<T>()
             where T : ArcEvent
         {
-            // if (typeof(T) == typeof(ScenecontrolEvent))
-            // {
-            //     foreach (var note in scenecontrolManager.Events)
-            //     {
-            //         yield return note as T;
-            //     }
-            // }
+            if (typeof(T) == typeof(ScenecontrolEvent))
+            {
+                foreach (var note in Services.Scenecontrol.Events)
+                {
+                    yield return note as T;
+                }
+            }
 
-            // if (typeof(T) == typeof(CameraEvent))
-            // {
-            //     foreach (var note in cameraManager.Events)
-            //     {
-            //         yield return note as T;
-            //     }
-            // }
+            if (typeof(T) == typeof(CameraEvent))
+            {
+                foreach (var note in Services.Camera.Events)
+                {
+                    yield return note as T;
+                }
+            }
+
             for (int i = 0; i < timingGroups.Count; i++)
             {
                 TimingGroup tg = timingGroups[i];
@@ -227,75 +230,78 @@ namespace ArcCreate.Gameplay.Chart
                 timingGroups.Add(newTg);
             }
 
-            // cameraManager.Load(chart.Cameras);
-            // scenecontrolManager.Load(chart.SceneControls);
+            Services.Camera.Load(chart.Cameras);
+            Services.Scenecontrol.Load(chart.SceneControls);
             ResetJudge();
         }
 
         public void AddEvents(IEnumerable<ArcEvent> e)
         {
-            // foreach (var n in e)
-            // {
-            //     if (n.TimingGroup >= timingGroups.Count)
-            //     {
-            //         GetNoteGroup(n.TimingGroup);
-            //     }
-            // }
+            foreach (var n in e)
+            {
+                if (n.TimingGroup >= timingGroups.Count)
+                {
+                    GetTimingGroup(n.TimingGroup);
+                }
+            }
 
-            // if (e is CameraEvent)
-            // {
-            //     cameraManager.Add(e);
-            // }
-            // else if (e is ScenecontrolEvent)
-            // {
-            //     cameraManager.Add(e);
-            // }
-            // else
-            // {
+            IEnumerable<CameraEvent> cameraEvents = e.Where(n => n is CameraEvent).Cast<CameraEvent>();
+            IEnumerable<ScenecontrolEvent> scEvents = e.Where(n => n is ScenecontrolEvent).Cast<ScenecontrolEvent>();
+
+            if (cameraEvents.Any())
+            {
+                Services.Camera.Add(cameraEvents);
+            }
+
+            if (scEvents.Any())
+            {
+                Services.Scenecontrol.Add(scEvents);
+            }
+
             for (int i = 0; i < timingGroups.Count; i++)
             {
                 TimingGroup tg = timingGroups[i];
                 tg.AddEvents(e.Where(n => n.TimingGroup == tg.GroupNumber));
             }
-
-            // }
         }
 
         public void RemoveEvents(IEnumerable<ArcEvent> e)
         {
-            // if (e is CameraEvent)
-            // {
-            //     cameraManager.Remove(e);
-            // }
-            // else if (e is ScenecontrolEvent)
-            // {
-            //     scenecontrolManager.Remove(e);
-            // }
-            // else
-            // {
+            IEnumerable<CameraEvent> cameraEvents = e.Where(n => n is CameraEvent).Cast<CameraEvent>();
+            IEnumerable<ScenecontrolEvent> scEvents = e.Where(n => n is ScenecontrolEvent).Cast<ScenecontrolEvent>();
+
+            if (cameraEvents.Any())
+            {
+                Services.Camera.Remove(cameraEvents);
+            }
+
+            if (scEvents.Any())
+            {
+                Services.Scenecontrol.Remove(scEvents);
+            }
+
             for (int i = 0; i < timingGroups.Count; i++)
             {
                 TimingGroup tg = timingGroups[i];
                 tg.RemoveEvents(e.Where(n => n.TimingGroup == tg.GroupNumber));
             }
-
-            // }
         }
 
         public void UpdateEvents(IEnumerable<ArcEvent> e)
         {
-            // IEnumerable<CameraEvent> cameraEvents = e.Where(n => n is CameraEvent).Cast<CameraEvent>();
-            // IEnumerable<ScenecontrolEvent> scEvents = e.Where(n => n is ScenecontrolEvent).Cast<ScenecontrolEvent>();
+            IEnumerable<CameraEvent> cameraEvents = e.Where(n => n is CameraEvent).Cast<CameraEvent>();
+            IEnumerable<ScenecontrolEvent> scEvents = e.Where(n => n is ScenecontrolEvent).Cast<ScenecontrolEvent>();
 
-            // if (cameraEvents.Any())
-            // {
-            //     cameraManager.Change(cameraEvents);
-            // }
+            if (cameraEvents.Any())
+            {
+                Services.Camera.Change(cameraEvents);
+            }
 
-            // if (scEvents.Any())
-            // {
-            //     scenecontrolManager.Change(scEvents);
-            // }
+            if (scEvents.Any())
+            {
+                Services.Scenecontrol.Change(scEvents);
+            }
+
             List<ArcEvent> tgChanged = e.Where(n => n.TimingGroupChanged).ToList();
             if (tgChanged.Count > 0)
             {
