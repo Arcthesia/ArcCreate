@@ -43,6 +43,11 @@ namespace ArcCreate.Gameplay.Chart
         public override IEnumerable<Note> FindByTiming(int timing)
         {
             // Avoid modifying the cache of search tree.
+            if (Notes.Count == 0)
+            {
+                yield break;
+            }
+
             int i = timingSearch.List.BisectLeft(timing, n => n.Timing);
 
             while (i >= 0 && i < timingSearch.List.Count && timingSearch.List[i].Timing == timing)
@@ -54,6 +59,11 @@ namespace ArcCreate.Gameplay.Chart
 
         public override IEnumerable<Note> FindEventsWithinRange(int from, int to)
         {
+            if (Notes.Count == 0)
+            {
+                yield break;
+            }
+
             // Avoid modifying the cache of search tree.
             int fromI = timingSearch.List.BisectLeft(from, n => n.Timing);
             int toI = timingSearch.List.BisectRight(to, n => n.Timing);

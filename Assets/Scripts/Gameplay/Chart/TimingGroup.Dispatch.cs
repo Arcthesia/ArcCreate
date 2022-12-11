@@ -47,6 +47,10 @@ namespace ArcCreate.Gameplay.Chart
             arcs.Load(tg.Arcs, parent);
             arcTaps.Load(tg.ArcTaps, parent);
             timings = tg.Timings;
+            taps.SetupNotes();
+            holds.SetupNotes();
+            arcs.SetupNotes();
+            arcTaps.SetupNotes();
             OnTimingListChange();
         }
 

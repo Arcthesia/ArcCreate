@@ -7,6 +7,15 @@ namespace ArcCreate.Gameplay.Chart
     {
         public override string PoolName => Values.ArcTapPoolName;
 
+        public override void SetupNotes()
+        {
+            for (int i = 0; i < Notes.Count; i++)
+            {
+                ArcTap arcTap = Notes[i];
+                SetupConnection(arcTap);
+            }
+        }
+
         protected override void OnAdd(ArcTap note)
         {
             SetupConnection(note);
@@ -20,15 +29,6 @@ namespace ArcCreate.Gameplay.Chart
         protected override void OnRemove(ArcTap note)
         {
             RemoveConnection(note);
-        }
-
-        protected override void SetupNotes()
-        {
-            for (int i = 0; i < Notes.Count; i++)
-            {
-                ArcTap arcTap = Notes[i];
-                SetupConnection(arcTap);
-            }
         }
 
         private void SetupConnection(ArcTap note)

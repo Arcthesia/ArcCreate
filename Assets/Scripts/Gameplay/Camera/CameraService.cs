@@ -100,15 +100,17 @@ namespace ArcCreate.Gameplay.GameplayCamera
                     break;
                 }
 
-                if (cam.IsReset)
+                isReset = cam.IsReset;
+                if (isReset)
                 {
+                    isReset = true;
                     position = ResetPosition;
                     rotation = ResetRotation;
                 }
 
                 float percent = cam.PercentAt(currentTiming);
-                position += new Vector3(0f - cam.Move.x, cam.Move.y, cam.Move.z) * percent / 100f;
-                rotation += new Vector3(0f - cam.Rotate.y, 0f - cam.Rotate.x, cam.Rotate.z) * percent;
+                position += new Vector3(-cam.Move.x, cam.Move.y, cam.Move.z) * percent / 100f;
+                rotation += new Vector3(-cam.Rotate.y, -cam.Rotate.x, cam.Rotate.z) * percent;
             }
 
             if (position.IsNaN() || rotation.IsNaN())

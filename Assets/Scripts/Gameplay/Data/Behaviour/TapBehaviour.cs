@@ -40,7 +40,7 @@ namespace ArcCreate.Gameplay.Data
             spriteRenderer.color = color;
         }
 
-        public void SetConnectionLines(List<ArcTap> arcTaps, Vector3 tapWorldPos)
+        public void SetConnectionLines(HashSet<ArcTap> arcTaps, Vector3 tapWorldPos)
         {
             for (int i = 0; i < connectionLines.Count; i++)
             {
@@ -50,14 +50,16 @@ namespace ArcCreate.Gameplay.Data
 
             connectionLines.Clear();
 
-            for (int i = 0; i < arcTaps.Count; i++)
+            foreach (ArcTap arcTap in arcTaps)
             {
-                ArcTap arcTap = arcTaps[i];
                 Vector3 arcTapPos = new Vector3(arcTap.WorldX, arcTap.WorldY);
-                Vector3 dist = arcTapPos - tapWorldPos;
 
-                LineRenderer line = connectionLinePool.Get(transform);
-                line.DrawLine(Vector3.zero, dist);
+                LineRenderer line = connectionLinePool.Get(transform, false);
+                line.DrawLine(Vector3.zero, new Vector3(
+                    (arcTapPos.x - tapWorldPos.x) / baseLocalScale.x,
+                    0,
+                    arcTapPos.y - tapWorldPos.y));
+
                 connectionLines.Add(line);
             }
         }
