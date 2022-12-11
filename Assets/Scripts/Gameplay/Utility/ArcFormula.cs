@@ -53,12 +53,12 @@ namespace ArcCreate.Gameplay
 
         public static double ZToFloorPosition(float z)
         {
-            return (double)(z * Settings.DropRate.Value / Values.BaseBpm * -1000);
+            return (double)(z / Settings.DropRate.Value * Values.BaseBpm * -1000);
         }
 
         public static float FloorPositionToZ(double fp)
         {
-            return (float)fp * Values.BaseBpm / (Settings.DropRate.Value * -1000);
+            return (float)(fp / Values.BaseBpm * Settings.DropRate.Value / -1000);
         }
 
         public static float S(float start, float end, float t)

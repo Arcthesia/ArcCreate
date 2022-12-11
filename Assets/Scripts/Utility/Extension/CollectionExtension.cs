@@ -21,6 +21,7 @@ namespace ArcCreate.Utility.Extension
         /// <summary>
         /// Search for smallest index within a sorted list, whose corresponding item is greater than or equal to the provided value.
         /// Example: for the list [0, 0, 1, 2, 2, 3], searching for 2 will return the index 3.
+        /// The returned index is guaranteed to be within the range of the list.
         /// </summary>
         /// <param name="list">The list to bisect.</param>
         /// <param name="value">The value to search for.</param>
@@ -64,29 +65,21 @@ namespace ArcCreate.Utility.Extension
         }
 
         /// <summary>
-        /// Search for largest index within a sorted list, whose corresponding item is less than or equal to the provided value.
-        /// Example: for the list [0, 0, 1, 2, 2, 3], searching for 2 will return the index 4.
+        /// Search for smallest index within a sorted list, whose corresponding item is greater than the provided value.
+        /// Example: for the list [0, 0, 1, 2, 2, 3], searching for 2 will return the index 5.
+        /// If the search value is greater than any item in the list, the list's count value will be returned.
+        /// If the search value is smaller than any item in the list, 0 will be returned.
         /// </summary>
         /// <param name="list">The list to bisect.</param>
         /// <param name="value">The value to search for.</param>
         /// <param name="property">Function to extract property <see cref="{R}"/> from items.</param>
         /// <typeparam name="T">Type of the list.</typeparam>
         /// <typeparam name="R">Type of the property to search by.</typeparam>
-        /// <returns>The index found, which is always within the index range of the list.</returns>
+        /// <returns>The index found.</returns>
         public static int BisectRight<T, R>(this IList<T> list, R value, Func<T, R> property)
             where R : IComparable<R>
         {
             // Copied implementation from python lol
-            if (value.CompareTo(property(list[0])) <= 0)
-            {
-                return 0;
-            }
-
-            if (value.CompareTo(property(list[list.Count - 1])) >= 0)
-            {
-                return list.Count - 1;
-            }
-
             int low = 0;
             int high = list.Count;
             int mid;

@@ -9,6 +9,7 @@ namespace ArcCreate.Gameplay.Data
         private static MaterialPropertyBlock mpb;
         private static Quaternion baseLocalRotation;
         private static Vector3 baseLocalScale;
+        private static Color baseShadowColor;
 
         [SerializeField] private SpriteRenderer shadowRenderer;
         [SerializeField] private MeshFilter meshFilter;
@@ -23,7 +24,7 @@ namespace ArcCreate.Gameplay.Data
             mpb.SetColor(ColorShaderId, color);
             meshRenderer.SetPropertyBlock(mpb);
 
-            shadowRenderer.color = color;
+            shadowRenderer.color = baseShadowColor * color;
         }
 
         public void SetData(ArcTap arcTap)
@@ -44,19 +45,22 @@ namespace ArcCreate.Gameplay.Data
             transform.localScale = baseLocalScale.Multiply(scl);
 
             Vector3 shadowPos = shadowTransform.localPosition;
-            shadowPos.z = -transform.position.z;
+            shadowPos.y = -transform.position.y;
             shadowTransform.localPosition = shadowPos;
         }
 
         public void Awake()
         {
             shadowTransform = shadowRenderer.transform;
+            baseLocalRotation = transform.localRotation;
+            baseLocalScale = transform.localScale;
 
             mpb = new MaterialPropertyBlock();
             meshRenderer.sortingLayerName = "Arc";
             meshRenderer.sortingOrder = 4;
             shadowRenderer.sortingLayerName = "Arc";
             shadowRenderer.sortingOrder = 3;
+            baseShadowColor = shadowRenderer.color;
         }
     }
 }

@@ -54,7 +54,10 @@ namespace ArcCreate.Gameplay.Chart
             {
                 Note note = Notes[i];
                 timingTree.Add(note.Timing, note.EndTiming, note);
-                floorPositionTree.Add(note.FloorPosition, note.EndFloorPosition, note);
+
+                double fpStart = System.Math.Min(note.FloorPosition, note.EndFloorPosition);
+                double fpEnd = System.Math.Max(note.FloorPosition, note.EndFloorPosition);
+                floorPositionTree.Add(fpStart, fpEnd, note);
             }
         }
 
