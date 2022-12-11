@@ -9,6 +9,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
     {
         private List<ScenecontrolEvent> events = new List<ScenecontrolEvent>();
 
+        [SerializeField] private SpriteRenderer trackSpriteRenderer;
+        [SerializeField] private SpriteRenderer skyInputLineSpriteRenderer;
+        private float trackOffset = 0;
+        private float count = 0;
+        private int loopSwitch = 1;
+        private readonly int offsetShaderId = Shader.PropertyToID("_Offset");
+
         public List<ScenecontrolEvent> Events => events;
 
         public void Load(List<ScenecontrolEvent> cameras)
@@ -62,11 +69,40 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public void UpdateScenecontrol(int currentTiming)
         {
+            // TEMPORARY BEFORE A PROPER SCENECONTROL SYSTEM IS IMPLEMENTED
+            float bpm = Services.Chart.GetTimingGroup(0).GetBpm(currentTiming);
+            float beatDuration = (bpm != 0) ? 60.0f / bpm : Mathf.Infinity;
+
+            bpm = Mathf.Abs(bpm);
+
+            count += Time.deltaTime * loopSwitch;
+            if (count >= beatDuration)
+            {
+                count = beatDuration;
+                loopSwitch *= -1;
+            }
+            else if (count <= 0)
+            {
+                count = 0;
+                loopSwitch *= -1;
+            }
+
+            float currentAlpha = Mathf.Lerp(0.75f, 1.0f, count / beatDuration);
+            skyInputLineSpriteRenderer.color = new Color(1, 1, 1, currentAlpha);
+
+            float speed = Services.Audio.IsPlaying ? bpm / Values.BaseBpm : 0;
+            trackOffset += Time.deltaTime * speed * 6;
+            trackSpriteRenderer.sharedMaterial.SetFloat(offsetShaderId, trackOffset);
         }
 
         private void RebuildList()
         {
             events.Sort((a, b) => a.Timing.CompareTo(b.Timing));
+        }
+
+        private void Awake()
+        {
+            trackSpriteRenderer.sharedMaterial = Instantiate(trackSpriteRenderer.sharedMaterial);
         }
     }
 }
