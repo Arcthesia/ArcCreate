@@ -3755,6 +3755,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bbf661babd42fa058d3eaa3b3f56760, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trackSpriteRenderer: {fileID: 1445769243}
+  skyInputLineSpriteRenderer: {fileID: 658714734}
 --- !u!4 &1382682620
 Transform:
   m_ObjectHideFlags: 0
