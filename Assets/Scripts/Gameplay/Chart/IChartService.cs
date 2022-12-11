@@ -19,6 +19,11 @@ namespace ArcCreate.Gameplay.Chart
         void ResetJudge();
 
         /// <summary>
+        /// Reload beatline display.
+        /// </summary>
+        void ReloadBeatline();
+
+        /// <summary>
         /// Get all notes of a type.
         /// </summary>
         /// <typeparam name="T">The event type.</typeparam>

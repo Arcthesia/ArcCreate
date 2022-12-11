@@ -28,6 +28,7 @@ namespace ArcCreate.Gameplay.Chart
         [SerializeField] private int beatlineCapacity;
 
         private readonly List<TimingGroup> timingGroups = new List<TimingGroup>();
+        private BeatlineDisplay beatlineDisplay = new BeatlineDisplay();
 
         public int Timing
         {
@@ -232,7 +233,14 @@ namespace ArcCreate.Gameplay.Chart
 
             Services.Camera.Load(chart.Cameras);
             Services.Scenecontrol.Load(chart.SceneControls);
+
+            ReloadBeatline();
             ResetJudge();
+        }
+
+        public void ReloadBeatline()
+        {
+            beatlineDisplay.LoadFromTimingList();
         }
 
         public void AddEvents(IEnumerable<ArcEvent> e)
@@ -368,6 +376,11 @@ namespace ArcCreate.Gameplay.Chart
             {
                 TimingGroup tg = timingGroups[i];
                 tg.UpdateGroup(currentTiming);
+
+                if (i == 0)
+                {
+                    beatlineDisplay.UpdateBeatlines(tg.GetFloorPosition(currentTiming));
+                }
             }
         }
 

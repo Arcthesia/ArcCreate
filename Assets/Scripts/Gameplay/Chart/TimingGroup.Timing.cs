@@ -14,6 +14,8 @@ namespace ArcCreate.Gameplay.Chart
         // Maybe a cached bisect here would be better. Too lazy to implement one for BisectRight though.
         private List<TimingEvent> timings = new List<TimingEvent>();
 
+        public List<TimingEvent> Timings => timings;
+
         public TimingEvent GetEventAt(int timing)
         {
             int index = timings.BisectRight(timing, ev => ev.Timing);
@@ -130,6 +132,10 @@ namespace ArcCreate.Gameplay.Chart
             Sort();
             RecalculateFloorPosition();
             RecalculateNoteFloorPosition();
+            if (GroupNumber == 0)
+            {
+                Services.Chart.ReloadBeatline();
+            }
         }
 
         private void Sort()
