@@ -178,6 +178,16 @@ namespace ArcCreate.Gameplay
             return Mathf.Abs(1.5f + (3.25f * z / Values.TrackLengthBackward));
         }
 
+        public static float CalculateBeatlineSizeScalar(float z)
+        {
+            if (z <= 0)
+            {
+                return Mathf.Abs(20f + (40f * -z / Values.TrackLengthForward));
+            }
+
+            return Mathf.Abs(20f + (40f * z / Values.TrackLengthBackward));
+        }
+
         public static float CalculateFadeOutAlpha(float z)
         {
             if (z <= 0)

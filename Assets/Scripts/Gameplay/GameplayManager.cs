@@ -80,8 +80,8 @@ namespace ArcCreate.Gameplay
         {
             ChartReader reader = ChartReaderFactory.GetReader(new PhysicalFileAccess(), path);
             reader.Parse();
-            Chart.LoadChart(reader);
             Audio.AudioClip = testAudio;
+            Chart.LoadChart(reader);
             Audio.PlayWithDelay(0, 2000);
             loaded = true;
         }

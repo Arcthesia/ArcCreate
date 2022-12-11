@@ -3609,7 +3609,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameplayCamera: {fileID: 613949612}
-  skyInput: {fileID: 0}
+  skyInput: {fileID: 658714733}
 --- !u!1 &1285855345
 GameObject:
   m_ObjectHideFlags: 0

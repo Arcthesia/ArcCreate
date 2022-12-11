@@ -16,8 +16,7 @@ namespace ArcCreate.Gameplay.Chart
     {
         private CachedBisect<Note, int> timingSearch;
         private CachedBisect<Note, double> floorPositionSearch;
-        private int lastRenderRangeLower = int.MaxValue;
-        private int lastRenderRangeUpper = int.MaxValue - 1;
+        private readonly List<Note> previousNotesInRange = new List<Note>();
 
         public override int ComboAt(int timing)
         {
@@ -101,9 +100,9 @@ namespace ArcCreate.Gameplay.Chart
             int renderIndex = floorPositionSearch.Bisect(renderFrom);
 
             // Disable old notes
-            for (int i = lastRenderRangeLower; i <= lastRenderRangeUpper; i++)
+            for (int i = 0; i < previousNotesInRange.Count; i++)
             {
-                Note note = floorPositionSearch.List[i];
+                Note note = previousNotesInRange[i];
 
                 if (note.FloorPosition < renderFrom || note.FloorPosition > renderTo)
                 {
@@ -111,7 +110,7 @@ namespace ArcCreate.Gameplay.Chart
                 }
             }
 
-            lastRenderRangeLower = renderIndex;
+            previousNotesInRange.Clear();
 
             // Update notes
             while (renderIndex < floorPositionSearch.List.Count)
@@ -129,9 +128,8 @@ namespace ArcCreate.Gameplay.Chart
 
                 note.UpdateInstance(timing, floorPosition, groupProperties);
                 renderIndex++;
+                previousNotesInRange.Add(note);
             }
-
-            lastRenderRangeUpper = Mathf.Min(renderIndex, floorPositionSearch.List.Count - 1);
         }
     }
 }
