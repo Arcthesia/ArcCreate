@@ -4,6 +4,7 @@ using ArcCreate.Gameplay.GameplayCamera;
 using ArcCreate.Gameplay.InputFeedback;
 using ArcCreate.Gameplay.Judgement;
 using ArcCreate.Gameplay.Particle;
+using ArcCreate.Gameplay.Scenecontrol;
 using ArcCreate.Gameplay.Score;
 using ArcCreate.Gameplay.Skin;
 using UnityEngine;
@@ -20,6 +21,7 @@ namespace ArcCreate.Gameplay
         [SerializeField] private JudgementService judgement;
         [SerializeField] private InputFeedbackService inputFeedback;
         [SerializeField] private ScoreService score;
+        [SerializeField] private ScenecontrolService scenecontrol;
 
         public static ISkinService Skin { get; private set; }
 
@@ -35,6 +37,8 @@ namespace ArcCreate.Gameplay
 
         public static IInputFeedbackService InputFeedback { get; private set; }
 
+        public static IScenecontrolService Scenecontrol { get; private set; }
+
         public static IScoreService Score { get; private set; }
 
         private void Awake()
@@ -46,6 +50,7 @@ namespace ArcCreate.Gameplay
             Audio = audio;
             Score = score;
             InputFeedback = inputFeedback;
+            Scenecontrol = scenecontrol;
             Camera = camera;
         }
     }

@@ -63,6 +63,17 @@ namespace ArcCreate.Gameplay
         public const float ArcTapHitboxX = 2.975f;
         public const float ArcTapHitboxY = 2.25f;
 
+        // Camera
+        public const float CameraY = 9f;
+        public const float CameraZ = 9f;
+        public const float CameraZTablet = 8f;
+        public const float CameraRotX = 26.565f;
+        public const float CameraRotXTablet = 27.378f;
+        public const float SkyInputLabelX = -7.1f;
+        public const float SkyInputLabelXTablet = -6.5f;
+        public const float CameraTiltSpeed = 6f;
+        public const float CameraArcPosScalar = 0.05f;
+
         // Strings
         public const string EarlyText = "EARLY";
         public const string LateText = "LATE";

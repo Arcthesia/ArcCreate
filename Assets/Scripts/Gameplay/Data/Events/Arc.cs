@@ -173,6 +173,11 @@ namespace ArcCreate.Gameplay.Data
                     {
                         alpha = Values.FlashArcAlphaScalar;
                     }
+
+                    if (timing <= EndTiming)
+                    {
+                        Services.Camera.AddTiltToCamera(WorldXAt(timing));
+                    }
                 }
                 else
                 {
