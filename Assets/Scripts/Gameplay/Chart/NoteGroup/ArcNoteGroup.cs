@@ -6,6 +6,15 @@ namespace ArcCreate.Gameplay.Chart
     {
         public override string PoolName => Values.ArcPoolName;
 
+        public override void SetupNotes()
+        {
+            for (int i = 0; i < Notes.Count; i++)
+            {
+                Arc arc = Notes[i];
+                ChainArcIntoGroups(arc);
+            }
+        }
+
         protected override void OnAdd(Arc note)
         {
             ChainArcIntoGroups(note);
@@ -20,15 +29,6 @@ namespace ArcCreate.Gameplay.Chart
         protected override void OnRemove(Arc note)
         {
             RemoveArcFromChainGroups(note);
-        }
-
-        protected override void SetupNotes()
-        {
-            for (int i = 0; i < Notes.Count; i++)
-            {
-                Arc arc = Notes[i];
-                ChainArcIntoGroups(arc);
-            }
         }
 
         private void ChainArcIntoGroups(Arc arc)

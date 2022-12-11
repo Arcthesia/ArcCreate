@@ -7,6 +7,15 @@ namespace ArcCreate.Gameplay.Chart
     {
         public override string PoolName => Values.TapPoolName;
 
+        public override void SetupNotes()
+        {
+            for (int i = 0; i < Notes.Count; i++)
+            {
+                Tap tap = Notes[i];
+                SetupConnection(tap);
+            }
+        }
+
         protected override void OnAdd(Tap note)
         {
             SetupConnection(note);
@@ -22,19 +31,9 @@ namespace ArcCreate.Gameplay.Chart
             RemoveConnection(note);
         }
 
-        protected override void SetupNotes()
-        {
-            for (int i = 0; i < Notes.Count; i++)
-            {
-                Tap tap = Notes[i];
-                SetupConnection(tap);
-            }
-        }
-
         private void SetupConnection(Tap note)
         {
             RemoveConnection(note);
-            note.Rebuild();
 
             IEnumerable<ArcTap> connectedArcTaps
                 = Services.Chart.FindByTiming<ArcTap>(note.Timing);
@@ -43,6 +42,8 @@ namespace ArcCreate.Gameplay.Chart
             {
                 note.ConnectedArcTaps.Add(arcTap);
             }
+
+            note.Rebuild();
         }
 
         private void RemoveConnection(Tap note)

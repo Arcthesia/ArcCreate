@@ -13,7 +13,7 @@ namespace ArcCreate.Gameplay.Chart
         where Note : INote<Behaviour>
         where Behaviour : MonoBehaviour
     {
-        private List<Note> notes;
+        private List<Note> notes = new List<Note>();
 
         public List<Note> Notes => notes;
 
@@ -43,7 +43,6 @@ namespace ArcCreate.Gameplay.Chart
             ParentTransform = parent;
             this.notes = notes;
             RebuildList();
-            SetupNotes();
         }
 
         /// <summary>
@@ -170,7 +169,7 @@ namespace ArcCreate.Gameplay.Chart
         /// <summary>
         /// Called after notes are loaded into the group.
         /// </summary>
-        protected abstract void SetupNotes();
+        public abstract void SetupNotes();
 
         /// <summary>
         /// Called after a note was added to the group.

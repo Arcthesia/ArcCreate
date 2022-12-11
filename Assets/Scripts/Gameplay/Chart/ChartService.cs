@@ -227,8 +227,8 @@ namespace ArcCreate.Gameplay.Chart
                 ChartTimingGroup tg = chart.TimingGroups[j];
                 GameObject go = Instantiate(timingGroupPrefab, transform);
                 TimingGroup newTg = new TimingGroup(i);
-                newTg.Load(tg, go.transform);
                 timingGroups.Add(newTg);
+                newTg.Load(tg, go.transform);
             }
 
             Services.Camera.Load(chart.Cameras);

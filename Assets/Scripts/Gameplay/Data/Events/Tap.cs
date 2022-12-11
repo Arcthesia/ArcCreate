@@ -19,6 +19,9 @@ namespace ArcCreate.Gameplay.Data
         {
             this.instance = instance;
             instance.SetData(this);
+            instance.SetConnectionLines(
+                ConnectedArcTaps,
+                new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0));
             ReloadSkin();
         }
 
@@ -53,6 +56,12 @@ namespace ArcCreate.Gameplay.Data
 
         public void Rebuild()
         {
+            if (instance != null)
+            {
+                instance.SetConnectionLines(
+                    ConnectedArcTaps,
+                    new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0));
+            }
         }
 
         public void ReloadSkin()

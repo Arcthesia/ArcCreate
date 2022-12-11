@@ -6,6 +6,10 @@ namespace ArcCreate.Gameplay.Chart
     {
         public override string PoolName => "hold";
 
+        public override void SetupNotes()
+        {
+        }
+
         protected override void OnAdd(Hold note)
         {
         }
@@ -15,10 +19,6 @@ namespace ArcCreate.Gameplay.Chart
         }
 
         protected override void OnUpdate(Hold note)
-        {
-        }
-
-        protected override void SetupNotes()
         {
         }
     }

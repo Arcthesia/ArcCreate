@@ -86,7 +86,6 @@ namespace ArcCreate.Gameplay.Data
             Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(WorldX, WorldY, 0);
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
-            scl.y = ArcFormula.CalculateTapSizeScalar(z) * scl.y;
             instance.SetTransform(pos, rot, scl);
 
             float alpha = ArcFormula.CalculateFadeOutAlpha(z);

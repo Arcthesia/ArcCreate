@@ -19,6 +19,7 @@ namespace ArcCreate.Gameplay
         [SerializeField] private SkinService skinService;
         [SerializeField] private AudioService audioService;
         [SerializeField] private AudioClip testAudio;
+        [SerializeField] private string testPlayChartFileName = "test_chart.aff";
 
         private bool loaded = false;
 
@@ -39,7 +40,7 @@ namespace ArcCreate.Gameplay
             Settings.InputMode.Value = (int)InputMode.Touch;
 
             // Load test chart
-            string path = Path.Combine(Application.streamingAssetsPath, "test_arc.aff");
+            string path = Path.Combine(Application.streamingAssetsPath, testPlayChartFileName);
             if (Application.platform == RuntimePlatform.Android)
             {
                 ImportTestChartAndroid(path).Forget();

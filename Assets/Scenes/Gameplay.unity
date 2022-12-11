@@ -234,7 +234,7 @@ RectTransform:
   - {fileID: 1987114694}
   - {fileID: 1838480512}
   m_Father: {fileID: 246210308}
-  m_RootOrder: 0
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -342,7 +342,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 246210308}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -917,11 +917,11 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.68, y: 0.68, z: 1}
   m_Children:
-  - {fileID: 26643349}
   - {fileID: 1645364857}
   - {fileID: 59862588}
   - {fileID: 1931114823}
   - {fileID: 1905251842}
+  - {fileID: 26643349}
   m_Father: {fileID: 1060812227}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1113,12 +1113,12 @@ MonoBehaviour:
   timingGroupPrefab: {fileID: 1307461155714892973, guid: 04203e75665f4694aa6fe23eff79d3b1,
     type: 3}
   tapCapacity: 50
-  holdCapacity: 50
-  arcCapacity: 50
-  arcSegmentCapacity: 250
+  holdCapacity: 20
+  arcCapacity: 20
+  arcSegmentCapacity: 500
   arcTapCapacity: 50
-  connectionLineCapacity: 50
-  beatlineCapacity: 50
+  connectionLineCapacity: 20
+  beatlineCapacity: 20
 --- !u!1 &371341941
 GameObject:
   m_ObjectHideFlags: 0
@@ -4194,7 +4194,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 246210308}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4847,7 +4847,7 @@ RectTransform:
   - {fileID: 537426951}
   - {fileID: 1987312592}
   m_Father: {fileID: 246210308}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -4893,7 +4893,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 246210308}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5743,3 +5743,4 @@ MonoBehaviour:
   skinService: {fileID: 2124235711}
   audioService: {fileID: 744329227}
   testAudio: {fileID: 8300000, guid: c277ac71a78e6c24e81cf0d7cb9a5fc3, type: 3}
+  testPlayChartFileName: test_chart.aff

@@ -53,8 +53,9 @@ public class Pool<T>
     /// </summary>
     /// <param name="newParent">Transform to parent the returned object to.
     /// Null means its parent is unchanged.</param>
+    /// <param name="worldPositionStay">Whether the world position of the object will stay unchanged after parenting to the new transform.</param>
     /// <returns>An object from the pool.</returns>
-    public T Get(Transform newParent = null)
+    public T Get(Transform newParent = null, bool worldPositionStay = true)
     {
         if (available.Count == 0)
         {
@@ -66,7 +67,7 @@ public class Pool<T>
 
         if (newParent != null)
         {
-            obj.transform.SetParent(newParent, true);
+            obj.transform.SetParent(newParent, worldPositionStay);
         }
 
         obj.gameObject.SetActive(true);

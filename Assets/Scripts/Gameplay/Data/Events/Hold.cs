@@ -106,7 +106,6 @@ namespace ArcCreate.Gameplay.Data
 
             float z = ZPos(floorPosition);
             float endZ = EndZPos(floorPosition);
-
             Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;

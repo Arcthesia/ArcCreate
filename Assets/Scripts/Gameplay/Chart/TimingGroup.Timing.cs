@@ -11,14 +11,14 @@ namespace ArcCreate.Gameplay.Chart
     /// </summary>
     public partial class TimingGroup
     {
-        // Maybe a cached bisect here would be better. Too lazy to implement one for BisectRight though.
         private List<TimingEvent> timings = new List<TimingEvent>();
 
         public List<TimingEvent> Timings => timings;
 
         public TimingEvent GetEventAt(int timing)
         {
-            int index = timings.BisectRight(timing, ev => ev.Timing);
+            int index = timings.BisectRight(timing, ev => ev.Timing) - 1;
+            index = Mathf.Max(index, 0);
             return timings[index];
         }
 
@@ -36,7 +36,7 @@ namespace ArcCreate.Gameplay.Chart
         {
             TimingEvent note = GetEventAt(timing);
             double baseFloorPosition = note.FloorPosition;
-            return baseFloorPosition + (note.Bpm * (timing - note.Timing));
+            return baseFloorPosition + ((double)note.Bpm * (timing - note.Timing));
         }
 
         public float GetDivisor(int timing)
@@ -151,7 +151,7 @@ namespace ArcCreate.Gameplay.Chart
                 TimingEvent curr = timings[i];
                 TimingEvent next = timings[i + 1];
                 curr.FloorPosition = floorPosition;
-                floorPosition += curr.Bpm * (next.Timing - curr.Timing);
+                floorPosition += (double)curr.Bpm * (next.Timing - curr.Timing);
             }
 
             timings[timings.Count - 1].FloorPosition = floorPosition;
@@ -162,8 +162,16 @@ namespace ArcCreate.Gameplay.Chart
             taps.Notes.ForEach(n =>
             {
                 n.FloorPosition = GetFloorPosition(n.Timing);
+                n.Rebuild();
             });
             taps.RebuildList();
+
+            arcTaps.Notes.ForEach(n =>
+            {
+                n.FloorPosition = GetFloorPosition(n.Timing);
+                n.Rebuild();
+            });
+            arcTaps.RebuildList();
 
             holds.Notes.ForEach(n =>
             {
@@ -180,9 +188,6 @@ namespace ArcCreate.Gameplay.Chart
                 n.Rebuild();
             });
             arcs.RebuildList();
-
-            // holds.Notes.ForEach(n => n.RecalculateJudgeTimings());
-            // arcs.Notes.ForEach(n => n.RecalculateJudgeTimings());
         }
 
         private IEnumerable<TimingEvent> FindTimingEventsByTiming(int timing)
