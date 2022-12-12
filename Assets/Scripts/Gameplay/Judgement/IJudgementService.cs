@@ -42,8 +42,8 @@ namespace ArcCreate.Gameplay.Judgement
         void ProcessInput(int currentTiming);
 
         /// <summary>
-        /// Clear all pending requests.
+        /// Reset judgement state.
         /// </summary>
-        void ClearRequests();
+        void ResetJudge();
     }
 }

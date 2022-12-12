@@ -66,7 +66,7 @@ namespace ArcCreate.Gameplay.Data
             instance.SetSkin(mesh, mat);
         }
 
-        public void UpdateJudgement(int timing, GroupProperties groupProperties)
+        public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)
         {
             if (!judgementRequestSent)
             {
@@ -75,14 +75,14 @@ namespace ArcCreate.Gameplay.Data
             }
         }
 
-        public void UpdateInstance(int timing, double floorPosition, GroupProperties groupProperties)
+        public void UpdateInstance(int currentTiming, double currentFloorPosition, GroupProperties groupProperties)
         {
             if (instance == null)
             {
                 return;
             }
 
-            float z = ZPos(floorPosition);
+            float z = ZPos(currentFloorPosition);
             Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(WorldX, WorldY, 0);
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;

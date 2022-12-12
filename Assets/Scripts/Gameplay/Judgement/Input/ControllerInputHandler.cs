@@ -26,5 +26,10 @@ namespace ArcCreate.Gameplay.Judgement.Input
         {
             throw new System.NotImplementedException();
         }
+
+        public void ResetJudge()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

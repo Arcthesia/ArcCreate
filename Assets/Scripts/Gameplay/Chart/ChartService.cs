@@ -90,7 +90,7 @@ namespace ArcCreate.Gameplay.Chart
             }
 
             Services.Score.ResetScoreTo(currentCombo, totalCombo);
-            Services.Judgement.ClearRequests();
+            Services.Judgement.ResetJudge();
         }
 
         public IEnumerable<T> FindByTiming<T>(int timing)
