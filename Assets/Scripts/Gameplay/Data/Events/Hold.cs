@@ -11,6 +11,7 @@ namespace ArcCreate.Gameplay.Data
         private bool locked = true;
         private bool tapJudgementRequestSent = false;
         private bool holdJudgementRequestSent = false;
+        private int highlightUntil = int.MinValue;
 
         public int Lane { get; set; }
 
@@ -66,6 +67,7 @@ namespace ArcCreate.Gameplay.Data
             ResetJudgeTimings();
             locked = true;
             Highlight = false;
+            highlightUntil = int.MinValue;
             tapJudgementRequestSent = false;
             holdJudgementRequestSent = false;
             FloorPosition = TimingGroupInstance.GetFloorPosition(Timing);
@@ -82,30 +84,30 @@ namespace ArcCreate.Gameplay.Data
             instance.SetSprite(normal, highlight);
         }
 
-        public void UpdateJudgement(int timing, GroupProperties groupProperties)
+        public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)
         {
-            if (locked && !tapJudgementRequestSent)
+            if (currentTiming >= Timing - Values.LostJudgeWindow && locked && !tapJudgementRequestSent)
             {
                 RequestTapJudgement();
                 tapJudgementRequestSent = true;
             }
 
-            if (timing >= Timing && !holdJudgementRequestSent)
+            if (currentTiming >= Timing && !holdJudgementRequestSent)
             {
-                RequestHoldJudgement(timing);
+                RequestHoldJudgement(currentTiming);
                 holdJudgementRequestSent = true;
             }
         }
 
-        public void UpdateInstance(int timing, double floorPosition, GroupProperties groupProperties)
+        public void UpdateInstance(int currentTiming, double currentFloorPosition, GroupProperties groupProperties)
         {
             if (instance == null)
             {
                 return;
             }
 
-            float z = ZPos(floorPosition);
-            float endZ = EndZPos(floorPosition);
+            float z = ZPos(currentFloorPosition);
+            float endZ = EndZPos(currentFloorPosition);
             Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
@@ -114,6 +116,8 @@ namespace ArcCreate.Gameplay.Data
             instance.SetFallDirection(groupProperties.FallDirection);
 
             float alpha = 1;
+
+            Highlight = currentTiming <= highlightUntil;
             if (Highlight)
             {
                 flashCount = (flashCount + 1) % Values.HoldFlashCycle;
@@ -124,7 +128,7 @@ namespace ArcCreate.Gameplay.Data
             }
             else
             {
-                if (timing >= Timing)
+                if (currentTiming >= Timing)
                 {
                     alpha = Values.MissedHoldAlphaScalar;
                 }
@@ -138,14 +142,14 @@ namespace ArcCreate.Gameplay.Data
 
             if (!locked)
             {
-                instance.SetFrom((float)((floorPosition - FloorPosition) / (EndFloorPosition - FloorPosition)));
+                instance.SetFrom((float)((currentFloorPosition - FloorPosition) / (EndFloorPosition - FloorPosition)));
             }
             else
             {
                 instance.SetFrom(0);
             }
 
-            if (Highlight && timing <= EndTiming)
+            if (Highlight && currentTiming <= EndTiming)
             {
                 Services.Particle.PlayLongParticle(this, new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0));
             }
@@ -188,7 +192,7 @@ namespace ArcCreate.Gameplay.Data
 
             if (locked || offset >= Values.HoldLostLateJudgeWindow)
             {
-                Highlight = false;
+                highlightUntil = int.MinValue;
                 int missCount = UpdateCurrentJudgePointTiming(currentTiming - Values.HoldLostLateJudgeWindow);
                 if (missCount > 0)
                 {
@@ -217,7 +221,7 @@ namespace ArcCreate.Gameplay.Data
         {
             Services.Judgement.Request(new LaneHoldJudgementRequest()
             {
-                ExpireAtTiming = currentTiming + Values.FarJudgeWindow,
+                ExpireAtTiming = currentTiming + Values.HoldLostLateJudgeWindow,
                 AutoAtTiming = currentTiming,
                 Lane = Lane,
                 Receiver = this,
@@ -231,7 +235,7 @@ namespace ArcCreate.Gameplay.Data
 
         private void OnHit(int currentTiming)
         {
-            int hitCount = UpdateCurrentJudgePointTiming(currentTiming);
+            int hitCount = UpdateCurrentJudgePointTiming(currentTiming + Values.FarJudgeWindow);
             if (hitCount > 0)
             {
                 Services.Score.ProcessJudgement(JudgementResult.Max, hitCount);
@@ -244,8 +248,7 @@ namespace ArcCreate.Gameplay.Data
                 Services.Particle.PlayLongParticle(this, new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0));
             }
 
-            Highlight = true;
-
+            highlightUntil = currentTiming + Values.HoldHighlightPersistDuration;
             RequestHoldJudgement(currentTiming);
             holdJudgementRequestSent = true;
         }

@@ -59,17 +59,17 @@ namespace ArcCreate.Gameplay.Data
         /// <summary>
         /// Update the note's judgement state. May be called even without an instance attached.
         /// </summary>
-        /// <param name="timing">The timing to update to.</param>
+        /// <param name="currentTiming">The timing to update to.</param>
         /// <param name="groupProperties">The properties object of the notes' timing group.</param>
-        void UpdateJudgement(int timing, GroupProperties groupProperties);
+        void UpdateJudgement(int currentTiming, GroupProperties groupProperties);
 
         /// <summary>
         /// Update the note's instance.
         /// It's guaranteed that the note's instance must be attached in order for this to be called.
         /// </summary>
-        /// <param name="timing">The timing to update to.</param>
-        /// <param name="floorPosition">The floor position corresponding to the timing value.</param>
+        /// <param name="currentTiming">The timing to update to.</param>
+        /// <param name="currentFloorPosition">The floor position corresponding to the timing value.</param>
         /// <param name="groupProperties">The properties object of the notes' timing group.</param>
-        void UpdateInstance(int timing, double floorPosition, GroupProperties groupProperties);
+        void UpdateInstance(int currentTiming, double currentFloorPosition, GroupProperties groupProperties);
     }
 }

@@ -59,5 +59,10 @@ namespace ArcCreate.Gameplay.Judgement.Input
                 }
             }
         }
+
+        public void ResetJudge()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

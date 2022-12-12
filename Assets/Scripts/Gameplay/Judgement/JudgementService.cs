@@ -38,9 +38,13 @@ namespace ArcCreate.Gameplay.Judgement
             arcTapRequests.Add(request);
         }
 
-        public void ClearRequests()
+        public void ResetJudge()
         {
             laneTapRequests.Clear();
+            laneHoldRequests.Clear();
+            arcRequests.Clear();
+            arcTapRequests.Clear();
+            inputHandler.ResetJudge();
         }
 
         public void ProcessInput(int currentTiming)

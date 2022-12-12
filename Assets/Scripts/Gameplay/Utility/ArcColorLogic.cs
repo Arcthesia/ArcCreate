@@ -22,6 +22,7 @@ namespace ArcCreate.Gameplay
         private bool isAssigningThisFrame = false;
         private int lockUntil = int.MinValue;
         private int graceUntil = int.MinValue;
+        private int redValueConstantUntil = int.MinValue;
 
         private float currentRedArcValue = 0;
         private bool isRedValueFlashing = false;
@@ -189,22 +190,25 @@ namespace ArcCreate.Gameplay
                 FlashRedArc();
             }
 
-            if (!IsFingerAssigned || IsGraceActive || isAssigningThisFrame)
+            if (!IsFingerAssigned || isAssigningThisFrame)
             {
                 if (!IsGraceActive && IsFingerAssignedToAnotherColor(fingerId))
                 {
                     ConstantRedArc();
                 }
-                else if (!IsInputLocked)
+                else
                 {
-                    if (distance < minDistanceThisFrame)
+                    if (!IsInputLocked)
                     {
-                        minDistanceThisFrame = distance;
-                        AssignedFingerId = fingerId;
-                        ResetRedArcValue();
-                    }
+                        if (distance < minDistanceThisFrame)
+                        {
+                            minDistanceThisFrame = distance;
+                            AssignedFingerId = fingerId;
+                            ResetRedArcValue();
+                        }
 
-                    isAssigningThisFrame = true;
+                        isAssigningThisFrame = true;
+                    }
                 }
             }
         }
@@ -259,8 +263,13 @@ namespace ArcCreate.Gameplay
             }
 
             // Just to be safe
-            ResetRedArcValue();
-            return fingerId == AssignedFingerId;
+            if (fingerId == AssignedFingerId)
+            {
+                ResetRedArcValue();
+                return true;
+            }
+
+            return false;
         }
 
         private void ResetIntraframeState()
@@ -270,6 +279,11 @@ namespace ArcCreate.Gameplay
             assignedFingerMissedThisFrame = false;
             existsArcWithinRangeThisFrame = false;
             isAssigningThisFrame = false;
+
+            if (!isRedValueFlashing && frameTiming >= redValueConstantUntil && currentRedArcValue == 1)
+            {
+                ResetRedArcValue();
+            }
         }
 
         private void ResetAssignedFinger()
@@ -316,6 +330,7 @@ namespace ArcCreate.Gameplay
         private void ConstantRedArc()
         {
             currentRedArcValue = 1;
+            redValueConstantUntil = frameTiming + Values.HoldHighlightPersistDuration;
             isRedValueFlashing = false;
         }
 
@@ -323,6 +338,7 @@ namespace ArcCreate.Gameplay
         {
             currentRedArcValue = 0;
             isRedValueFlashing = false;
+            redValueConstantUntil = int.MinValue;
         }
 
         private void UpdateRedArcValue(float deltaTime)
