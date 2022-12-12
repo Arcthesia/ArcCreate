@@ -23,11 +23,11 @@ This project has already been configured to work with StyleCop linter, and will 
 
 Refer to [Microsoft's guide on XML documentation tags here](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/recommended-tags).
 
-All public members (i.e methods and properties) of a class should be properly documented with XML tags (these information will even appear when you hover over them!). If you're on VSCode, the [C# XML Documentations Comments](https://marketplace.visualstudio.com/items?itemName=k--kato.docomment) extension is very handy for quickly writing these.
+Public members (i.e methods and properties) of a class should be properly documented with XML tags (these information will even appear when you hover over them!). If you're on VSCode, the [C# XML Documentations Comments](https://marketplace.visualstudio.com/items?itemName=k--kato.docomment) extension is very handy for quickly writing these.
 
 The reason I'm enforcing this is that I have massive skill issue in understanding other's code. Proper documentations makes it more clear what your code is actually doing and make it so that others have an easier time interfacing with your code.
 
-Note that you can skip writing documentation for private members, and members that are very obvious what they are (for example, the `Timing` property of a note).
+Note that you can skip writing documentation for private members, and members that are very obvious what they are (for example, the `Timing` property of a note). Also if you anticipate that a class will not be used in too many places, not writing documentation for it is also acceptable.
 
 #### Write tests when necessary
 
