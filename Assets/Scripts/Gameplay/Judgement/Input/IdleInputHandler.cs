@@ -22,5 +22,9 @@ namespace ArcCreate.Gameplay.Judgement.Input
         public void HandleLaneHoldRequests(int currentTiming, UnorderedList<LaneHoldJudgementRequest> requests)
         {
         }
+
+        public void ResetJudge()
+        {
+        }
     }
 }

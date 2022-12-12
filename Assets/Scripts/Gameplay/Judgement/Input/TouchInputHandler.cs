@@ -163,9 +163,18 @@ namespace ArcCreate.Gameplay.Judgement.Input
             for (int i = requests.Count - 1; i >= 0; i--)
             {
                 ArcJudgementRequest req1 = requests[i];
+                if (currentTiming > req1.Arc.EndTiming)
+                {
+                    continue;
+                }
+
                 for (int j = i - 1; j >= 0; j--)
                 {
-                    ArcJudgementRequest req2 = requests[i];
+                    ArcJudgementRequest req2 = requests[j];
+                    if (currentTiming > req2.Arc.EndTiming)
+                    {
+                        continue;
+                    }
 
                     Vector3 worldPosition1 = new Vector3(req1.Arc.WorldXAt(currentTiming), req1.Arc.WorldYAt(currentTiming), 0);
                     Vector3 worldPosition2 = new Vector3(req2.Arc.WorldXAt(currentTiming), req2.Arc.WorldYAt(currentTiming), 0);
@@ -241,6 +250,11 @@ namespace ArcCreate.Gameplay.Judgement.Input
             ArcColorLogic.ApplyRedValue();
         }
 
+        public void ResetJudge()
+        {
+            ArcColorLogic.ResetAll();
+        }
+
         private bool ArcCollide(TouchInput touch, Arc arc, int currentTiming)
         {
             Vector3 arcWorldPosition = new Vector3(arc.WorldXAt(currentTiming), arc.WorldYAt(currentTiming));
@@ -258,10 +272,10 @@ namespace ArcCreate.Gameplay.Judgement.Input
         private bool ArcHitboxCollide(Vector3 screenPosition1, Vector3 screenPosition2)
         {
             float dx = Mathf.Abs(screenPosition1.x - screenPosition2.x);
-            float dy = Mathf.Abs(screenPosition1.x - screenPosition2.y);
+            float dy = Mathf.Abs(screenPosition1.y - screenPosition2.y);
 
             return dx <= Values.LaneScreenHitbox * Values.ArcHitboxX / Values.LaneWidth
-                || dy <= Values.LaneScreenHitbox * Values.ArcHitboxY / Values.LaneWidth;
+                && dy <= Values.LaneScreenHitbox * Values.ArcHitboxY / Values.LaneWidth;
         }
 
         private bool ArcTapCollide(Vector3 screenPosition1, Vector3 screenPosition2)
@@ -270,7 +284,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
             float dy = Mathf.Abs(screenPosition1.x - screenPosition2.y);
 
             return dx <= Values.LaneScreenHitbox * Values.ArcTapHitboxX / Values.LaneWidth
-                || dy <= Values.LaneScreenHitbox * Values.ArcTapHitboxY / Values.LaneWidth;
+                && dy <= Values.LaneScreenHitbox * Values.ArcTapHitboxY / Values.LaneWidth;
         }
 
         private bool LaneCollide(TouchInput input, Vector3 screenPosition, int lane)

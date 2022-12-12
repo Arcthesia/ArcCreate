@@ -77,14 +77,23 @@ namespace ArcCreate.Gameplay.Data
             return Timing.CompareTo(other.Timing);
         }
 
-        public void UpdateInstance(int timing, double floorPosition, GroupProperties groupProperties)
+        public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)
+        {
+            if (!judgementRequestSent)
+            {
+                RequestJudgement();
+                judgementRequestSent = true;
+            }
+        }
+
+        public void UpdateInstance(int currentTiming, double currentFloorPosition, GroupProperties groupProperties)
         {
             if (instance == null)
             {
                 return;
             }
 
-            float z = ZPos(floorPosition);
+            float z = ZPos(currentFloorPosition);
             Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
@@ -111,15 +120,6 @@ namespace ArcCreate.Gameplay.Data
             if (!result.IsLost())
             {
                 Services.InputFeedback.LaneFeedback(Lane);
-            }
-        }
-
-        public void UpdateJudgement(int timing, GroupProperties groupProperties)
-        {
-            if (!judgementRequestSent)
-            {
-                RequestJudgement();
-                judgementRequestSent = true;
             }
         }
 

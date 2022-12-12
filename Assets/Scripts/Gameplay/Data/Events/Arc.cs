@@ -12,6 +12,7 @@ namespace ArcCreate.Gameplay.Data
         private bool hasBeenHitOnce = false;
         private int flashCount = 0;
         private float arcGroupAlpha = 1;
+        private int highlightUntil = int.MinValue;
         private Arc firstArcOfGroup;
 
         // Avoid infinite recursion
@@ -118,6 +119,7 @@ namespace ArcCreate.Gameplay.Data
         {
             ResetJudgeTimings();
             Highlight = false;
+            highlightUntil = int.MinValue;
             judgementRequestSent = false;
             arcGroupAlpha = 1;
         }
@@ -139,33 +141,34 @@ namespace ArcCreate.Gameplay.Data
             instance.SetSkin(normal, highlight, arcCap, heightIndicatorColor);
         }
 
-        public void UpdateJudgement(int timing, GroupProperties groupProperties)
+        public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)
         {
-            if (!IsTrace && timing >= Timing && Timing < EndTiming && !judgementRequestSent)
+            if (!IsTrace && currentTiming >= Timing && Timing < EndTiming && !judgementRequestSent)
             {
-                RequestJudgement(timing);
+                RequestJudgement(currentTiming);
                 judgementRequestSent = true;
             }
         }
 
-        public void UpdateInstance(int timing, double floorPosition, GroupProperties groupProperties)
+        public void UpdateInstance(int currentTiming, double currentFloorPosition, GroupProperties groupProperties)
         {
             if (instance == null)
             {
                 return;
             }
 
-            float z = ZPos(floorPosition);
+            float z = ZPos(currentFloorPosition);
 
             Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(WorldXAt(Timing), WorldYAt(Timing), 0);
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
             instance.SetTransform(pos, rot, scl);
-            instance.UpdateSegmentsPosition(floorPosition, groupProperties.FallDirection);
+            instance.UpdateSegmentsPosition(currentFloorPosition, groupProperties.FallDirection);
 
             float alpha = 1;
             if (!IsTrace)
             {
+                Highlight = currentTiming <= highlightUntil;
                 if (Highlight)
                 {
                     flashCount = (flashCount + 1) % Values.ArcFlashCycle;
@@ -174,14 +177,14 @@ namespace ArcCreate.Gameplay.Data
                         alpha = Values.FlashArcAlphaScalar;
                     }
 
-                    if (timing <= EndTiming)
+                    if (currentTiming <= EndTiming)
                     {
-                        Services.Camera.AddTiltToCamera(WorldXAt(timing));
+                        Services.Camera.AddTiltToCamera(WorldXAt(currentTiming));
                     }
                 }
                 else
                 {
-                    if (timing >= firstArcOfGroup.Timing)
+                    if (currentTiming >= firstArcOfGroup.Timing)
                     {
                         alpha = Values.MissedArcAlphaScalar;
                     }
@@ -200,29 +203,24 @@ namespace ArcCreate.Gameplay.Data
 
             if (hasBeenHitOnce || IsTrace)
             {
-                instance.ClipTo(timing, floorPosition, timing, floorPosition);
+                instance.ClipTo(currentTiming, currentFloorPosition, currentTiming, currentFloorPosition);
             }
             else
             {
-                instance.ClipTo(timing, floorPosition, Timing, FloorPosition);
+                instance.ClipTo(currentTiming, currentFloorPosition, Timing, FloorPosition);
             }
 
-            if (Highlight && timing <= EndTiming)
+            if (Highlight && currentTiming >= Timing && currentTiming <= EndTiming)
             {
                 Services.Particle.PlayLongParticle(
                     this,
-                    new Vector3(WorldXAt(timing), WorldYAt(timing), 0));
+                    new Vector3(WorldXAt(currentTiming), WorldYAt(currentTiming), 0));
             }
         }
 
         public void ProcessArcJudgement(int offset)
         {
             int currentTiming = Services.Audio.Timing;
-            if (currentTiming > EndTiming)
-            {
-                return;
-            }
-
             judgementRequestSent = false;
 
             float x = WorldXAt(currentTiming);
@@ -231,7 +229,7 @@ namespace ArcCreate.Gameplay.Data
 
             if (offset >= Values.HoldLostLateJudgeWindow)
             {
-                SetGroupHighlight(false);
+                SetGroupHighlight(int.MinValue);
 
                 int missCount = UpdateCurrentJudgePointTiming(currentTiming - Values.HoldLostLateJudgeWindow);
                 if (missCount > 0)
@@ -245,23 +243,22 @@ namespace ArcCreate.Gameplay.Data
                 return;
             }
 
-            int hitCount = UpdateCurrentJudgePointTiming(currentTiming);
-            if (hitCount > 0)
-            {
-                Services.Score.ProcessJudgement(JudgementResult.Max, hitCount);
-                Services.Particle.PlayTextParticle(currentPos, JudgementResult.Max);
-            }
-
             if (currentTiming <= EndTiming)
             {
+                int hitCount = UpdateCurrentJudgePointTiming(currentTiming + Values.FarJudgeWindow);
+                if (hitCount > 0)
+                {
+                    Services.Score.ProcessJudgement(JudgementResult.Max, hitCount);
+                    Services.Particle.PlayTextParticle(currentPos, JudgementResult.Max);
+                }
+
                 Services.Particle.PlayLongParticle(firstArcOfGroup, currentPos);
+                SetGroupHighlight(currentTiming + Values.HoldHighlightPersistDuration);
+                hasBeenHitOnce = true;
+
+                RequestJudgement(currentTiming);
+                judgementRequestSent = true;
             }
-
-            SetGroupHighlight(true);
-            hasBeenHitOnce = true;
-
-            RequestJudgement(currentTiming);
-            judgementRequestSent = true;
         }
 
         public int CompareTo(INote<ArcBehaviour> other)
@@ -318,7 +315,7 @@ namespace ArcCreate.Gameplay.Data
             });
         }
 
-        private void SetGroupHighlight(bool highlight)
+        private void SetGroupHighlight(int highlightUntil)
         {
             if (recursivelyCalled)
             {
@@ -328,10 +325,10 @@ namespace ArcCreate.Gameplay.Data
             recursivelyCalled = true;
             foreach (Arc arc in NextArcs)
             {
-                arc.SetGroupHighlight(highlight);
+                arc.SetGroupHighlight(highlightUntil);
             }
 
-            Highlight = highlight;
+            this.highlightUntil = highlightUntil;
             recursivelyCalled = false;
         }
 

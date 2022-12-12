@@ -33,5 +33,10 @@ namespace ArcCreate.Gameplay.Judgement.Input
         /// <param name="currentTiming">The current audio timing.</param>
         /// <param name="requests">List of requests.</param>
         void HandleArcRequests(int currentTiming, UnorderedList<ArcJudgementRequest> requests);
+
+        /// <summary>
+        /// Reset judgement state.
+        /// </summary>
+        void ResetJudge();
     }
 }
