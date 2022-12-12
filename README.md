@@ -13,24 +13,24 @@ Additionally, no textures are included within the repository as of currently to 
 ### Gameplay
 - [x] Gameplay rendering
 - [x] Gameplay judgement
-- [] Pause menu
-- [] Compiled scenecontrol support
-- [] Support for controller input
-- [] Level selection menu
-- [] Level management menu
-- [] Import level from package file
-- [] Settings menu
+- [ ] Pause menu
+- [ ] Compiled scenecontrol support
+- [ ] Support for controller input
+- [ ] Level selection menu
+- [ ] Level management menu
+- [ ] Import level from package file
+- [ ] Settings menu
 
 ### Editor (Desktop only)
-- [] Project metadata management
-- [] Project skin settings
-- [] Note editing
-- [] Timing, camera editing
-- [] Custom hotkeys configuration
-- [] FFmpeg rendering support
-- [] Lua macro support
-- [] Lua scenecontrol editing & compiling
-- [] LAN communication between desktop and mobile
+- [ ] Project metadata management
+- [ ] Project skin settings
+- [ ] Note editing
+- [ ] Timing, camera editing
+- [ ] Custom hotkeys configuration
+- [ ] FFmpeg rendering support
+- [ ] Lua macro support
+- [ ] Lua scenecontrol editing & compiling
+- [ ] LAN communication between desktop and mobile
 
 # Contributing
 
