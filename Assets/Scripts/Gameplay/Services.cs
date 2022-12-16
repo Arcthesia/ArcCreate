@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace ArcCreate.Gameplay
 {
-    public class Services : MonoBehaviour
+    internal class Services : MonoBehaviour
     {
         [SerializeField] private SkinService skin;
         [SerializeField] private new AudioService audio;

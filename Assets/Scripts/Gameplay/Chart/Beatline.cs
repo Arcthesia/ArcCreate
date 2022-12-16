@@ -4,7 +4,6 @@ namespace ArcCreate.Gameplay.Chart
 {
     public class Beatline
     {
-        private static Vector3 baseScale;
         private Transform instance;
         private readonly double floorPosition;
 

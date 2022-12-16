@@ -28,7 +28,7 @@ namespace ArcCreate.Gameplay.Chart
         [SerializeField] private int beatlineCapacity;
 
         private readonly List<TimingGroup> timingGroups = new List<TimingGroup>();
-        private BeatlineDisplay beatlineDisplay = new BeatlineDisplay();
+        private readonly BeatlineDisplay beatlineDisplay = new BeatlineDisplay();
 
         public int Timing
         {
