@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
 using ArcCreate.Utility;
 using TMPro;

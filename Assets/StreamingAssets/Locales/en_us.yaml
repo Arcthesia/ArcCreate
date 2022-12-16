@@ -42,3 +42,11 @@ Format:
       Exception: {Exception}
       Stack trace:
       {StackTrace}
+
+Compose:
+  Exception:
+    FileDoesNotExist: |-
+      Trying to read file located at {Path} but it does not exist. The file might have been deleted.
+    LoadImage: |-
+      An error occured while trying to load the image located at {Path}.
+      {Error}
