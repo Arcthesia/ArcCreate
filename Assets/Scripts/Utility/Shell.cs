@@ -25,6 +25,17 @@ namespace ArcCreate.Utility
             }
         }
 
+        public static string OpenFileDialog(string filterName, string[] extension, string title = "", string initPath = "")
+        {
+            ExtensionFilter filter = new ExtensionFilter()
+            {
+                Name = filterName,
+                Extensions = extension,
+            };
+
+            return OpenFileDialog(filter, title, initPath);
+        }
+
         public static string OpenFileDialog(ExtensionFilter filter, string title = "", string initPath = "")
         {
             ExtensionFilter[] filters = new ExtensionFilter[] { filter };
