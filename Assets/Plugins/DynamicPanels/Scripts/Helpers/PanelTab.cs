@@ -68,9 +68,16 @@ namespace DynamicPanels
 
         [SerializeField]
         private Button closeButton;
+
+        [SerializeField]
+        private float activeWidth;
+
+        [SerializeField]
+        private float inactiveWidth;
 #pragma warning restore 0649
 
         internal InternalSettings Internal { get; private set; }
+        private RectTransform rect;
 
         private string m_id = null;
         public string ID
@@ -160,6 +167,7 @@ namespace DynamicPanels
         {
             m_minSize = new Vector2(100f, 100f);
             Internal = new InternalSettings(this);
+            rect = GetComponent<RectTransform>();
 
             iconHolder.preserveAspect = true;
 
@@ -207,11 +215,15 @@ namespace DynamicPanels
                 {
                     background.color = m_panel.TabSelectedColor;
                     nameHolder.color = m_panel.TabSelectedTextColor;
+                    nameHolder.gameObject.SetActive(true);
+                    rect.sizeDelta = new Vector2(activeWidth, rect.sizeDelta.x);
                 }
                 else
                 {
                     background.color = m_panel.TabNormalColor;
                     nameHolder.color = m_panel.TabNormalTextColor;
+                    nameHolder.gameObject.SetActive(false);
+                    rect.sizeDelta = new Vector2(inactiveWidth, rect.sizeDelta.x);
                 }
 
                 Content.gameObject.SetActive(activeState);
