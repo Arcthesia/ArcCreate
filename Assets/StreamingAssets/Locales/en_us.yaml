@@ -50,3 +50,77 @@ Compose:
     LoadImage: |-
       An error occured while trying to load the image located at {Path}.
       {Error}
+  UI:
+    PanelNames:
+      Toolbox: Toolbox
+      Gameplay: Gameplay
+      Timeline: Timeline
+      Project: Project
+      Groups: Groups
+      LAN: LAN
+      Export: Export
+      Settings: Settings
+    Placeholder:
+      Text: Empty...
+      File: No file selected...
+      Image: No image selected...
+      ImagePrompt: Click to select image
+    Top:
+      Label:
+        New: New
+        Open: Open
+        Save: Save
+        InputMode: Input Mode
+        FullScreen: Full Screen
+        Chart: Chart
+    Project:
+      Label:
+        ChartFile: Chart file
+        Information: Information
+        Title: Title
+        Composer: Composer
+        Illustrator: Illustrator
+        Charter: Charter
+        BaseBPM: Base BPM
+        ChartConstant: Chart Constant
+        DifficultyName: Difficulty Name
+        DifficultyColor: Difficulty Color
+        Files: Files
+        Audio: Audio
+        JacketArt: Jacket Art
+        Background: Background
+        Video: Video
+        Skin: Skin
+        Side: Side
+        Note: Note
+        Particle: Particle
+        Accent: Accent
+        Track: Track
+        SingleLine: Single Line
+        Colors: Colors
+        TraceBody: Trace Body
+        Shadow: Shadow
+        ArcColors: Arc Colors
+        Blue: Blue (0)
+        Red: Red (1)
+        Green: Green (2)
+        Custom: Custom ({Id})
+        AddArcColor: Add arc color
+      Options:
+        Inherit: Inherit
+        Light: Light
+        Conflict: Conflict
+        Colorless: Colorless
+        MiraiLight: Mirai Light
+        MiraiConflict: Mirai Conflict
+        Dynamix: Dynamix
+        Black: Black
+        Nijuusei: Nijuusei
+        Rei: Rei
+        DarkVs: DarkVs
+        Tempest: Tempest
+        Finale: Finale
+        Pentiment: Pentiment
+        Arcana: Arcana
+        None: None
+        Neo: Neo

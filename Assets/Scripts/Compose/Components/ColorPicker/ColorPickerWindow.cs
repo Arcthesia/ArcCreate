@@ -45,7 +45,6 @@ namespace ArcCreate.Compose.Components
         {
             window.SetActive(true);
             closeButton.gameObject.SetActive(true);
-            EventSystem.current.SetSelectedGameObject(gameObject);
 
             picker.SetColorWithoutNotify(setColor);
 
@@ -216,9 +215,6 @@ namespace ArcCreate.Compose.Components
             valueField.onEndEdit.AddListener(OnHSVFieldConfirm);
 
             hexField.onEndEdit.AddListener(OnHexFieldConfirm);
-
-            closeButton.gameObject.SetActive(false);
-            window.SetActive(false);
         }
 
         private void OnDestroy()

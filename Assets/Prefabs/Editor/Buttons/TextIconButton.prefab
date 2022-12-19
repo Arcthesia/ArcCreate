@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 5857211232651233454}
   - component: {fileID: 5857211232651233448}
   - component: {fileID: 5857211232651233455}
+  - component: {fileID: 8005136037278581440}
   m_Layer: 9
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -152,10 +153,10 @@ RectTransform:
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 15, y: 0}
-  m_SizeDelta: {x: -30, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 30, y: 0}
+  m_SizeDelta: {x: 49, y: 0}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &5857211232651233448
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -183,7 +184,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: 'Missing locale: (en_us)'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 719521a317a14994681f6ad786ac487d, type: 2}
   m_sharedMaterial: {fileID: 123608983947645345, guid: 719521a317a14994681f6ad786ac487d,
@@ -211,7 +212,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14
+  m_fontSize: 12
   m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 0
@@ -227,7 +228,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -253,6 +254,22 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &8005136037278581440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5857211232651233453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa6fc087ddc496cd8b2bca022991ecd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 
+  readIdFromContent: 0
+  parent: {fileID: 5857211233024722020}
+  spacing: 35
 --- !u!1 &5857211233024722011
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,7 +305,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 78, y: 0}
+  m_SizeDelta: {x: 181.67, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5857211233050127012
 GameObject:

@@ -9,7 +9,6 @@ namespace ArcCreate.Compose.Components
 {
     public class ColorInputField : MonoBehaviour, IPointerDownHandler
     {
-        [SerializeField] private TMP_Text hexText;
         [SerializeField] private Image colorPreview;
         [SerializeField] private Image colorWithAlphaPreview;
         [SerializeField] private Color currentColor;
@@ -28,13 +27,11 @@ namespace ArcCreate.Compose.Components
         {
             currentColor = color;
             SetColorPreview(color);
-            hexText.text = currentColor.ConvertToHexCode();
             OnValueChange?.Invoke(color);
         }
 
         private void Awake()
         {
-            hexText.text = currentColor.ConvertToHexCode();
             SetColorPreview(currentColor);
         }
 

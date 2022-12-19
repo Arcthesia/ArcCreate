@@ -17,7 +17,7 @@ public static class I18n
 
     private static Dictionary<string, string> strings = new Dictionary<string, string>();
 
-    public static UnityEvent OnLocaleChanged { get; private set; } = new UnityEvent();
+    public static event Action OnLocaleChanged;
 
     /// <summary>
     /// Gets the currently active locale.
@@ -84,6 +84,7 @@ public static class I18n
     {
         string previousLocale = CurrentLocale;
         var previousStrings = new Dictionary<string, string>(strings);
+        strings.Clear();
 
         CurrentLocale = locale;
         try
@@ -137,6 +138,8 @@ public static class I18n
 
             Extract(mapping, "");
         }
+
+        OnLocaleChanged?.Invoke();
     }
 
     private static void Extract(YamlMappingNode node, string key)
