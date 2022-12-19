@@ -26,6 +26,32 @@ namespace ArcCreate.Compose.Components
 
         public bool IsValidPath => File.Exists(CurrentPath);
 
+        public void ClearContent()
+        {
+            CurrentPath = null;
+            OnInvalidFilePath();
+            OnValueChanged?.Invoke(null);
+
+            contentText.text = string.Empty;
+            contentText.gameObject.SetActive(false);
+            placeholderText.gameObject.SetActive(true);
+            if (required)
+            {
+                invalidIndicator.SetActive(true);
+            }
+
+            clearButton.gameObject.SetActive(false);
+        }
+
+        public void SetPath(string path)
+        {
+            if (File.Exists(path))
+            {
+                CurrentPath = path;
+                OnValueChanged.Invoke(path);
+            }
+        }
+
         protected virtual void OnValidFilePath(string path)
         {
         }
@@ -88,23 +114,6 @@ namespace ArcCreate.Compose.Components
             placeholderText.gameObject.SetActive(false);
             invalidIndicator.SetActive(false);
             clearButton.gameObject.SetActive(true);
-        }
-
-        private void ClearContent()
-        {
-            CurrentPath = null;
-            OnInvalidFilePath();
-            OnValueChanged?.Invoke(null);
-
-            contentText.text = string.Empty;
-            contentText.gameObject.SetActive(false);
-            placeholderText.gameObject.SetActive(true);
-            if (required)
-            {
-                invalidIndicator.SetActive(true);
-            }
-
-            clearButton.gameObject.SetActive(false);
         }
     }
 }
