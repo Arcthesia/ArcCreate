@@ -50,6 +50,11 @@ Compose:
     LoadImage: |-
       An error occured while trying to load the image located at {Path}.
       {Error}
+    LoadProject: |-
+      An error occured while trying to load the project file located at {Path}.
+      The file could have been saved incorrectly.
+      You can try modifying it manually, or you can delete the file and create a new project.
+      {Error}
   UI:
     PanelNames:
       Toolbox: Toolbox
@@ -75,6 +80,7 @@ Compose:
         Chart: Chart
     Project:
       Label:
+        NewChart: New cart file
         ChartFile: Chart file
         Information: Information
         Title: Title

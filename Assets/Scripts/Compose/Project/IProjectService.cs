@@ -1,15 +1,17 @@
-using UnityEngine.Events;
+using System;
 
 namespace ArcCreate.Compose.Project
 {
     public interface IProjectService
     {
-        UnityEvent<ProjectSettings> OnProjectLoad { get; }
-
-        UnityEvent<ChartSettings> OnChartLoad { get; }
+        event Action<ChartSettings> OnChartLoad;
 
         ProjectSettings CurrentProject { get; }
 
         ChartSettings CurrentChart { get; }
+
+        void CreateNewProject(ProjectSettings project);
+
+        void CreateNewChart(string name);
     }
 }
