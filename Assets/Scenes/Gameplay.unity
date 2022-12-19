@@ -5613,6 +5613,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 289603ed90d69ac4b8d45d930aebb979, type: 2}
   - {fileID: 11400000, guid: 6557de25f2ae5994ebc9ad7a500502e2, type: 2}
   - {fileID: 11400000, guid: cbcb0b58ca46cd84e91314b5431892ff, type: 2}
+  - {fileID: 11400000, guid: 9a7ffe8d412ca3a9fa0fe836c3f1ff05, type: 2}
   trackSkinOptions:
   - {fileID: 11400000, guid: 2b38a27a52dd90446810dadaf69ca756, type: 2}
   - {fileID: 11400000, guid: 3ac9ff2f57bb65141b7d48ddbb5e9b51, type: 2}

@@ -92,15 +92,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14
-  m_fontSizeBase: 14
+  m_fontSize: 12
+  m_fontSizeBase: 12
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 4
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -296,18 +296,7 @@ MonoBehaviour:
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
-  m_Text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras venenatis
-    purus quis tortor consectetur blandit. Phasellus convallis odio diam, sed porttitor
-    ex imperdiet vel. Proin feugiat odio vitae est dictum, in posuere elit vehicula.
-    Fusce laoreet turpis a ullamcorper viverra. Aliquam erat volutpat. Mauris vitae
-    diam ac tellus ultricies ornare vel vel libero. Ut aliquam condimentum efficitur.
-    Phasellus at elementum libero. Nam vestibulum, nulla et vehicula imperdiet, mi
-    augue gravida metus, quis dignissim arcu tortor et leo. Curabitur nec molestie
-    libero, ac faucibus erat. Praesent sodales diam eget libero facilisis, tincidunt
-    accumsan magna suscipit. Praesent porttitor dapibus justo, quis vestibulum lorem.
-
-
-'
+  m_Text: 
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
@@ -354,8 +343,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -2.5}
-  m_SizeDelta: {x: -20, y: -5}
+  m_AnchoredPosition: {x: 0, y: -3.5}
+  m_SizeDelta: {x: -20, y: -7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5283801742690316749
 MonoBehaviour:
@@ -383,6 +372,7 @@ GameObject:
   - component: {fileID: 5283801743228556052}
   - component: {fileID: 5283801743228556053}
   - component: {fileID: 5283801743228556054}
+  - component: {fileID: 4313117125083176416}
   m_Layer: 9
   m_Name: Placeholder
   m_TagString: Untagged
@@ -424,7 +414,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5283801743228556048}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
@@ -436,7 +426,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Enter text...
+  m_text: Empty...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 719521a317a14994681f6ad786ac487d, type: 2}
   m_sharedMaterial: {fileID: 123608983947645345, guid: 719521a317a14994681f6ad786ac487d,
@@ -464,8 +454,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14
-  m_fontSizeBase: 14
+  m_fontSize: 12
+  m_fontSizeBase: 12
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -482,7 +472,7 @@ MonoBehaviour:
   m_charWidthMaxAdj: 0
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
+  m_overflowMode: 1
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
@@ -526,6 +516,20 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &4313117125083176416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5283801743228556048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32ed771c5ecb9c0b803c7385241b686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: Compose.UI.Placeholder.Text
+  readIdFromContent: 0
 --- !u!1 &5283801743632170354
 GameObject:
   m_ObjectHideFlags: 0
@@ -590,15 +594,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras venenatis
-    purus quis tortor consectetur blandit. Phasellus convallis odio diam, sed porttitor
-    ex imperdiet vel. Proin feugiat odio vitae est dictum, in posuere elit vehicula.
-    Fusce laoreet turpis a ullamcorper viverra. Aliquam erat volutpat. Mauris vitae
-    diam ac tellus ultricies ornare vel vel libero. Ut aliquam condimentum efficitur.
-    Phasellus at elementum libero. Nam vestibulum, nulla et vehicula imperdiet, mi
-    augue gravida metus, quis dignissim arcu tortor et leo. Curabitur nec molestie
-    libero, ac faucibus erat. Praesent sodales diam eget libero facilisis, tincidunt
-    accumsan magna suscipit. Praesent porttitor dapibus justo, quis vestibulum lorem.\n\n\u200B"
+  m_text: "\u200B"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 719521a317a14994681f6ad786ac487d, type: 2}
   m_sharedMaterial: {fileID: 123608983947645345, guid: 719521a317a14994681f6ad786ac487d,
@@ -626,8 +622,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14
-  m_fontSizeBase: 14
+  m_fontSize: 12
+  m_fontSizeBase: 12
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -644,7 +640,7 @@ MonoBehaviour:
   m_charWidthMaxAdj: 0
   m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
+  m_overflowMode: 2
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
