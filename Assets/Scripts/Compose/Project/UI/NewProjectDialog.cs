@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using ArcCreate.Compose.Components;
-using ArcCreate.Compose.Project;
 using ArcCreate.Utility.Parser;
 using TMPro;
 using UnityEngine;
@@ -13,7 +12,9 @@ namespace ArcCreate.Compose.Project
     {
         [SerializeField] private FileSelectField projectFileField;
         [SerializeField] private Button confirmButton;
+        [SerializeField] private Button closeButton;
         [SerializeField] private TMP_InputField startingChartFileField;
+        [SerializeField] private TMP_Dropdown startingChartFileExtension;
         [SerializeField] private FileSelectField audioFileField;
         [SerializeField] private TMP_InputField baseBPMField;
         [SerializeField] private ImageFileSelectField jacketArtField;
@@ -21,7 +22,8 @@ namespace ArcCreate.Compose.Project
 
         private string currentFolder;
 
-        private string StartingChartFile => startingChartFileField.text;
+        private string StartingChartFile
+            => startingChartFileField.text + startingChartFileExtension.options[startingChartFileExtension.value].text;
 
         public void Open()
         {
@@ -30,7 +32,7 @@ namespace ArcCreate.Compose.Project
 
         public void Close()
         {
-            gameObject.SetActive(true);
+            gameObject.SetActive(false);
         }
 
         private void OnConfirm()
@@ -43,6 +45,7 @@ namespace ArcCreate.Compose.Project
                 {
                     new ChartSettings()
                     {
+                        ChartPath = StartingChartFile,
                         BaseBpm = Evaluator.Float(baseBPMField.text),
                         AudioPath = audioFileField.CurrentPath,
                         JacketPath = jacketArtField.CurrentPath,
@@ -116,6 +119,7 @@ namespace ArcCreate.Compose.Project
         private void Awake()
         {
             confirmButton.onClick.AddListener(OnConfirm);
+            closeButton.onClick.AddListener(Close);
             projectFileField.OnValueChanged += OnFolderSelect;
             startingChartFileField.onValueChanged.AddListener(OnChartFile);
             ClearFields();
@@ -124,6 +128,7 @@ namespace ArcCreate.Compose.Project
         private void OnDestroy()
         {
             confirmButton.onClick.RemoveListener(OnConfirm);
+            closeButton.onClick.RemoveListener(Close);
             projectFileField.OnValueChanged -= OnFolderSelect;
             startingChartFileField.onValueChanged.RemoveListener(OnChartFile);
         }
