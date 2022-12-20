@@ -11,6 +11,7 @@ dotnet_diagnostic.IDE0063.severity = none
 dotnet_diagnostic.IDE0066.severity = none
 dotnet_diagnostic.IDE0054.severity = none
 dotnet_diagnostic.IDE0083.severity = none
+dotnet_diagnostic.IDE0019.severity = none
 
 # Unnecessary value assignment
 dotnet_diagnostic.IDE0059.severity = none
