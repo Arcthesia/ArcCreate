@@ -15,10 +15,12 @@ namespace ArcCreate.Compose.Components
         [SerializeField] private Button clearButton;
         [SerializeField] private GameObject invalidIndicator;
         [SerializeField] private bool required;
+        [SerializeField] private bool isSaveFile;
         [SerializeField] private string title;
         [SerializeField] private string initPathPrefKey;
         [SerializeField] private string extensionFilterName;
         [SerializeField] private string[] acceptedExtensions;
+        [SerializeField] private string defaultSaveFileName;
 
         public event Action<string> OnValueChanged;
 
@@ -97,7 +99,10 @@ namespace ArcCreate.Compose.Components
 
         private void OnOpenBrowserClick()
         {
-            string path = Shell.OpenFileDialog(extensionFilterName, acceptedExtensions, title, PlayerPrefs.GetString(initPathPrefKey, ""));
+            string path =
+                isSaveFile ?
+                Shell.SaveFileDialog(extensionFilterName, acceptedExtensions, title, PlayerPrefs.GetString(initPathPrefKey, ""), defaultSaveFileName) :
+                Shell.OpenFileDialog(extensionFilterName, acceptedExtensions, title, PlayerPrefs.GetString(initPathPrefKey, ""));
             PlayerPrefs.SetString(initPathPrefKey, Path.GetDirectoryName(path));
 
             if (string.IsNullOrEmpty(path))
