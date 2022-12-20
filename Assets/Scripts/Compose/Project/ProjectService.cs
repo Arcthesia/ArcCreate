@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using ArcCreate.Utility;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using YamlDotNet.Serialization;
@@ -14,7 +15,7 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private Button newProjectButton;
         [SerializeField] private Button openProjectButton;
         [SerializeField] private Button saveProjectButton;
-        [SerializeField] private Dropdown chartSelectDropdown;
+        [SerializeField] private TMP_Dropdown chartSelectDropdown;
         [SerializeField] private NewProjectDialog newProjectDialog;
         [SerializeField] private NewChartDialog newChartDialog;
 
@@ -42,9 +43,9 @@ namespace ArcCreate.Compose.Project
                     }));
                 }
 
-                CopyIfNotLocal(chart.AudioPath, dir);
-                CopyIfNotLocal(chart.BackgroundPath, dir);
-                CopyIfNotLocal(chart.JacketPath, dir);
+                chart.AudioPath = CopyIfNotLocal(chart.AudioPath, dir);
+                chart.BackgroundPath = CopyIfNotLocal(chart.BackgroundPath, dir);
+                chart.JacketPath = CopyIfNotLocal(chart.JacketPath, dir);
             }
 
             Serialize(projectSettings);
@@ -55,7 +56,15 @@ namespace ArcCreate.Compose.Project
         {
             ChartSettings newChart = CurrentChart.Clone();
             newChart.ChartPath = chartFilePath;
+
             CurrentProject.Charts.Add(newChart);
+            CurrentProject.Charts.Sort((a, b) => a.ChartPath.CompareTo(b.ChartPath));
+
+            CurrentChart = newChart;
+            CurrentProject.LastOpenedChartPath = newChart.ChartPath;
+
+            PopulateSelectDropdown(CurrentProject);
+            OnChartLoad?.Invoke(CurrentChart);
         }
 
         private void OnNewProjectPressed()
@@ -67,7 +76,7 @@ namespace ArcCreate.Compose.Project
         {
             string path = Shell.OpenFileDialog(
                 filterName: "ArcCreate Project",
-                extension: new string[] { Strings.ProjectExtension },
+                extension: new string[] { Strings.ProjectExtensionWithoutDot },
                 title: "Open ArcCreate Project",
                 initPath: PlayerPrefs.GetString("LastProjectPath", ""));
 
@@ -90,12 +99,24 @@ namespace ArcCreate.Compose.Project
             // Last option in list
             if (dropdownIndex == CurrentProject.Charts.Count)
             {
+                for (int i = 0; i < CurrentProject.Charts.Count; i++)
+                {
+                    ChartSettings chart = CurrentProject.Charts[i];
+
+                    if (chart.ChartPath == CurrentChart.ChartPath)
+                    {
+                        chartSelectDropdown.SetValueWithoutNotify(i);
+                        break;
+                    }
+                }
+
                 newChartDialog.Open();
                 return;
             }
 
             CurrentChart = CurrentProject.Charts[dropdownIndex];
-            OnChartLoad.Invoke(CurrentChart);
+            CurrentProject.LastOpenedChartPath = CurrentChart.ChartPath;
+            OnChartLoad?.Invoke(CurrentChart);
         }
 
         private void Awake()
@@ -114,43 +135,36 @@ namespace ArcCreate.Compose.Project
             chartSelectDropdown.onValueChanged.RemoveListener(OnChartSelect);
         }
 
-        private void CopyIfNotLocal(string path, string dir)
+        private string CopyIfNotLocal(string path, string dir)
         {
             if (string.IsNullOrEmpty(path))
             {
-                return;
+                return null;
             }
 
             path = Path.GetFullPath(path);
             dir = Path.GetFullPath(dir);
 
-            if (Path.GetDirectoryName(path) != dir)
+            if (path.StartsWith(dir))
+            {
+                return path.Substring(dir.Length);
+            }
+            else
             {
                 string fileName = Path.GetFileName(path);
-
-                File.Copy(path, Path.Combine(dir, fileName));
+                File.Copy(path, Path.Combine(dir, fileName), true);
+                return fileName;
             }
         }
 
         private void OpenProject(string path)
         {
             ProjectSettings project = Deserialize(path);
+            project.Path = path;
             CurrentProject = project;
+            PopulateSelectDropdown(project);
 
-            var dropdownOptions = new List<Dropdown.OptionData>();
-            foreach (var chart in project.Charts)
-            {
-                dropdownOptions.Add(new Dropdown.OptionData(chart.ChartPath));
-
-                if (chart.ChartPath == project.LastOpenedChartPath)
-                {
-                    CurrentChart = chart;
-                }
-            }
-
-            dropdownOptions.Add(new Dropdown.OptionData(I18n.S("Compose.UI.Project.Label.NewChart")));
-
-            OnChartLoad.Invoke(CurrentChart);
+            OnChartLoad?.Invoke(CurrentChart);
         }
 
         private void Serialize(ProjectSettings projectSettings)
@@ -159,7 +173,7 @@ namespace ArcCreate.Compose.Project
                 .WithNamingConvention(new CamelCaseNamingConvention())
                 .Build();
             string yaml = serializer.Serialize(projectSettings);
-            File.WriteAllText(yaml, projectSettings.Path);
+            File.WriteAllText(projectSettings.Path, yaml);
         }
 
         private ProjectSettings Deserialize(string path)
@@ -180,6 +194,27 @@ namespace ArcCreate.Compose.Project
                     { "Error", e.Message },
                 }));
             }
+        }
+
+        private void PopulateSelectDropdown(ProjectSettings project)
+        {
+            var dropdownOptions = new List<TMP_Dropdown.OptionData>();
+            int currentChartIndex = 0;
+            for (int i = 0; i < project.Charts.Count; i++)
+            {
+                ChartSettings chart = project.Charts[i];
+                dropdownOptions.Add(new TMP_Dropdown.OptionData(chart.ChartPath));
+
+                if (chart.ChartPath == project.LastOpenedChartPath)
+                {
+                    CurrentChart = chart;
+                    currentChartIndex = i;
+                }
+            }
+
+            dropdownOptions.Add(new TMP_Dropdown.OptionData(I18n.S("Compose.UI.Project.Label.NewChart")));
+            chartSelectDropdown.options = dropdownOptions;
+            chartSelectDropdown.SetValueWithoutNotify(currentChartIndex);
         }
     }
 }

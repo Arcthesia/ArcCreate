@@ -36,7 +36,7 @@ namespace ArcCreate.Utility
             return OpenFileDialog(filter, title, initPath);
         }
 
-        public static string SaveFileDialog(string filterName, string[] extension, string title = "", string initPath = "")
+        public static string SaveFileDialog(string filterName, string[] extension, string title = "", string initPath = "", string defaultName = "")
         {
             ExtensionFilter filter = new ExtensionFilter()
             {
@@ -44,7 +44,7 @@ namespace ArcCreate.Utility
                 Extensions = extension,
             };
 
-            return SaveFileDialog(filter, title, initPath);
+            return SaveFileDialog(filter, title, initPath, defaultName);
         }
 
         public static string OpenFileDialog(ExtensionFilter filter, string title = "", string initPath = "")

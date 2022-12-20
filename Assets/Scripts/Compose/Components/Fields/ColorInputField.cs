@@ -20,10 +20,10 @@ namespace ArcCreate.Compose.Components
         public void OnPointerDown(PointerEventData eventData)
         {
             Services.ColorPicker.OpenAt(eventData.position, currentColor);
-            Services.ColorPicker.OnColorChanged = OnColorPickerChange;
+            Services.ColorPicker.OnColorChanged = SetValue;
         }
 
-        private void OnColorPickerChange(Color color)
+        public void SetValue(Color color)
         {
             currentColor = color;
             SetColorPreview(color);

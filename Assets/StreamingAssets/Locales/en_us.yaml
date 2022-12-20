@@ -55,7 +55,22 @@ Compose:
       The file could have been saved incorrectly.
       You can try modifying it manually, or you can delete the file and create a new project.
       {Error}
+    ChartFileAlreadyExists: |-
+      Chart is already included in the project
+    InvalidChartFile: |-
+      The provided chart file name is invalid
   UI:
+    Common:
+      Confirm: Confirm
+      Cancel: Cancel
+      Close: Close
+      NotRequired: (not required)
+      Extension: Extension
+    Placeholder:
+      Text: Empty...
+      File: No file selected...
+      Image: No image selected...
+      ImagePrompt: Click to select image
     PanelNames:
       Toolbox: Toolbox
       Gameplay: Gameplay
@@ -65,11 +80,6 @@ Compose:
       LAN: LAN
       Export: Export
       Settings: Settings
-    Placeholder:
-      Text: Empty...
-      File: No file selected...
-      Image: No image selected...
-      ImagePrompt: Click to select image
     Top:
       Label:
         New: New
@@ -80,13 +90,16 @@ Compose:
         Chart: Chart
     Project:
       Label:
-        NewChart: New cart file
+        NewChart: New Chart
+        NewProject: New Project
+        ProjectFile: Project File
         ChartFile: Chart file
         Information: Information
         Title: Title
         Composer: Composer
         Illustrator: Illustrator
         Charter: Charter
+        BPM: BPM
         BaseBPM: Base BPM
         ChartConstant: Chart Constant
         DifficultyName: Difficulty Name

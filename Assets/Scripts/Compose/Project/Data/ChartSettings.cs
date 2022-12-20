@@ -6,7 +6,7 @@ namespace ArcCreate.Compose.Project
     {
         public string Title { get; set; }
 
-        public string Artist { get; set; }
+        public string Composer { get; set; }
 
         public string Charter { get; set; }
 
@@ -43,7 +43,7 @@ namespace ArcCreate.Compose.Project
             return new ChartSettings()
             {
                 Title = Title,
-                Artist = Artist,
+                Composer = Composer,
                 Charter = Charter,
                 Illustrator = Illustrator,
                 BaseBpm = BaseBpm,
