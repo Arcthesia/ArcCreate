@@ -141,6 +141,10 @@ namespace ArcCreate.SceneTransition
             {
                 SceneManager.LoadScene(SceneNames.DefaultScene, LoadSceneMode.Additive);
             }
+            else
+            {
+                currentSceneRepresentative.OnNoBootScene();
+            }
         }
 
         private void OnShutterCloseCallback()

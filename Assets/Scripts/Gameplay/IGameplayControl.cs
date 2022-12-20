@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace ArcCreate.Gameplay
 {
     /// <summary>
@@ -22,5 +24,18 @@ namespace ArcCreate.Gameplay
         /// </summary>
         /// <value>The audio controller.</value>
         IAudioControl Audio { get; }
+
+        /// <summary>
+        /// Set the target texture to render the gameplay scene to.
+        /// Value of null will set target to the whole screen.
+        /// </summary>
+        /// <param name="renderTexture">The target render texture.</param>
+        void SetTargetRenderTexture(RenderTexture renderTexture);
+
+        /// <summary>
+        /// Apply aspect ratio to the camera.
+        /// </summary>
+        /// <param name="aspectRatio">The aspect ratio.</param>
+        void ApplyAspect(float aspectRatio);
     }
 }
