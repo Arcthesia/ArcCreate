@@ -15,6 +15,14 @@ namespace ArcCreate.SceneTransition
         {
         }
 
+        /// <summary>
+        /// Called if the scene is started directly (i.e. started within the editor).
+        /// For testing purposes only.
+        /// </summary>
+        public virtual void OnNoBootScene()
+        {
+        }
+
         protected IEnumerator EndOfFrame(Action action)
         {
             yield return new WaitForEndOfFrame();
@@ -32,14 +40,6 @@ namespace ArcCreate.SceneTransition
         /// Called when the scene is loaded.
         /// </summary>
         protected virtual void OnSceneLoad()
-        {
-        }
-
-        /// <summary>
-        /// Called if the scene is started directly (i.e. started within the editor).
-        /// For testing purposes only.
-        /// </summary>
-        protected virtual void OnNoBootScene()
         {
         }
 

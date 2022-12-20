@@ -34,7 +34,7 @@ namespace ArcCreate.Gameplay
             Application.targetFrameRate = 60;
         }
 
-        protected override void OnNoBootScene()
+        public override void OnNoBootScene()
         {
             // Use touch
             Settings.InputMode.Value = (int)InputMode.Touch;
@@ -49,6 +49,16 @@ namespace ArcCreate.Gameplay
             {
                 ImportTestChart(path);
             }
+        }
+
+        public void SetTargetRenderTexture(RenderTexture renderTexture)
+        {
+            Services.Camera.GameplayCamera.targetTexture = renderTexture;
+        }
+
+        public void ApplyAspect(float aspect)
+        {
+            Services.Camera.GameplayCamera.aspect = aspect;
         }
 
         protected override void OnSceneLoad()

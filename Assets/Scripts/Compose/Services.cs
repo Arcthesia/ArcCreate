@@ -1,5 +1,6 @@
 using ArcCreate.Compose.Components;
 using ArcCreate.Compose.Project;
+using ArcCreate.Gameplay;
 using UnityEngine;
 
 namespace ArcCreate.Compose
@@ -12,6 +13,8 @@ namespace ArcCreate.Compose
         public static IProjectService Project { get; private set; }
 
         public static IColorPickerService ColorPicker { get; private set; }
+
+        public static IGameplayControl Gameplay { get; set; }
 
         private void Awake()
         {
