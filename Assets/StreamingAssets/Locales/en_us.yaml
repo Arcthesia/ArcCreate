@@ -87,6 +87,7 @@ Compose:
         Save: Save
         InputMode: Input Mode
         FullScreen: Full Screen
+        ToggleFullScreenHint: Press F11 to toggle full screen mode.
         Chart: Chart
     Project:
       Label:
