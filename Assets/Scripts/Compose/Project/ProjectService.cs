@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using ArcCreate.Utility;
+using ArcCreate.Utility.Extension;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,9 +16,14 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private Button newProjectButton;
         [SerializeField] private Button openProjectButton;
         [SerializeField] private Button saveProjectButton;
+        [SerializeField] private Button openFolderButton;
+        [SerializeField] private CanvasGroup toggleInteractiveCanvas;
+        [SerializeField] private GameObject noProjectLoadedHint;
         [SerializeField] private TMP_Dropdown chartSelectDropdown;
         [SerializeField] private NewProjectDialog newProjectDialog;
         [SerializeField] private NewChartDialog newChartDialog;
+        [SerializeField] private List<Color> defaultDifficultyColors;
+        [SerializeField] private List<string> defaultDifficultyNames;
 
         public event Action<ChartSettings> OnChartLoad;
 
@@ -25,29 +31,56 @@ namespace ArcCreate.Compose.Project
 
         public ChartSettings CurrentChart { get; private set; }
 
-        public void CreateNewProject(ProjectSettings projectSettings)
+        public List<Color> DefaultDifficultyColors => defaultDifficultyColors;
+
+        public void CreateNewProject(NewProjectInfo info)
         {
-            string dir = Path.GetDirectoryName(projectSettings.Path);
+            string dir = Path.GetDirectoryName(info.ProjectFile.FullPath);
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
             }
 
-            foreach (ChartSettings chart in projectSettings.Charts)
+            if (!File.Exists(info.AudioPath.FullPath))
             {
-                if (!File.Exists(chart.AudioPath))
+                throw new ComposeException(I18n.S("Compose.Exception.FileDoesNotExist", new Dictionary<string, object>
                 {
-                    throw new ComposeException(I18n.S("Compose.Exception.FileDoesNotExist", new Dictionary<string, object>
-                    {
-                        { "Path", chart.AudioPath },
-                    }));
-                }
-
-                chart.AudioPath = CopyIfNotLocal(chart.AudioPath, dir);
-                chart.BackgroundPath = CopyIfNotLocal(chart.BackgroundPath, dir);
-                chart.JacketPath = CopyIfNotLocal(chart.JacketPath, dir);
+                    { "Path", info.AudioPath.FullPath },
+                }));
             }
 
+            if (info.AudioPath.ShouldCopy)
+            {
+                File.Copy(info.AudioPath.OriginalPath, info.AudioPath.FullPath);
+            }
+
+            if (info.BackgroundPath.ShouldCopy)
+            {
+                File.Copy(info.BackgroundPath.OriginalPath, info.BackgroundPath.FullPath);
+            }
+
+            if (info.JacketPath.ShouldCopy)
+            {
+                File.Copy(info.JacketPath.OriginalPath, info.JacketPath.FullPath);
+            }
+
+            ChartSettings chart = new ChartSettings()
+            {
+                ChartPath = info.StartingChartPath,
+                BaseBpm = info.BaseBPM,
+                AudioPath = info.AudioPath.ShortenedPath,
+                JacketPath = info.JacketPath.ShortenedPath,
+                BackgroundPath = info.BackgroundPath.ShortenedPath,
+            };
+
+            ProjectSettings projectSettings = new ProjectSettings()
+            {
+                Path = info.ProjectFile.FullPath,
+                LastOpenedChartPath = info.StartingChartPath,
+                Charts = new List<ChartSettings>() { chart },
+            };
+
+            AutofillChart(chart);
             Serialize(projectSettings);
             OpenProject(projectSettings.Path);
         }
@@ -56,6 +89,7 @@ namespace ArcCreate.Compose.Project
         {
             ChartSettings newChart = CurrentChart.Clone();
             newChart.ChartPath = chartFilePath;
+            AutofillChart(newChart);
 
             CurrentProject.Charts.Add(newChart);
             CurrentProject.Charts.Sort((a, b) => a.ChartPath.CompareTo(b.ChartPath));
@@ -119,12 +153,25 @@ namespace ArcCreate.Compose.Project
             OnChartLoad?.Invoke(CurrentChart);
         }
 
+        private void OpenProjectFolder()
+        {
+            if (CurrentProject == null)
+            {
+                return;
+            }
+
+            Shell.OpenExplorer(Path.GetDirectoryName(CurrentProject.Path));
+        }
+
         private void Awake()
         {
             newProjectButton.onClick.AddListener(OnNewProjectPressed);
             openProjectButton.onClick.AddListener(OnOpenProjectPressed);
             saveProjectButton.onClick.AddListener(OnSaveProjectPressed);
             chartSelectDropdown.onValueChanged.AddListener(OnChartSelect);
+            openFolderButton.onClick.AddListener(OpenProjectFolder);
+            toggleInteractiveCanvas.interactable = false;
+            noProjectLoadedHint.SetActive(true);
         }
 
         private void OnDestroy()
@@ -133,28 +180,7 @@ namespace ArcCreate.Compose.Project
             openProjectButton.onClick.RemoveListener(OnOpenProjectPressed);
             saveProjectButton.onClick.RemoveListener(OnSaveProjectPressed);
             chartSelectDropdown.onValueChanged.RemoveListener(OnChartSelect);
-        }
-
-        private string CopyIfNotLocal(string path, string dir)
-        {
-            if (string.IsNullOrEmpty(path))
-            {
-                return null;
-            }
-
-            path = Path.GetFullPath(path);
-            dir = Path.GetFullPath(dir);
-
-            if (path.StartsWith(dir))
-            {
-                return path.Substring(dir.Length);
-            }
-            else
-            {
-                string fileName = Path.GetFileName(path);
-                File.Copy(path, Path.Combine(dir, fileName), true);
-                return fileName;
-            }
+            openFolderButton.onClick.RemoveListener(OpenProjectFolder);
         }
 
         private void OpenProject(string path)
@@ -163,6 +189,9 @@ namespace ArcCreate.Compose.Project
             project.Path = path;
             CurrentProject = project;
             PopulateSelectDropdown(project);
+
+            toggleInteractiveCanvas.interactable = true;
+            noProjectLoadedHint.SetActive(false);
 
             OnChartLoad?.Invoke(CurrentChart);
         }
@@ -215,6 +244,36 @@ namespace ArcCreate.Compose.Project
             dropdownOptions.Add(new TMP_Dropdown.OptionData(I18n.S("Compose.UI.Project.Label.NewChart")));
             chartSelectDropdown.options = dropdownOptions;
             chartSelectDropdown.SetValueWithoutNotify(currentChartIndex);
+        }
+
+        private void AutofillChart(ChartSettings chart)
+        {
+            chart.Title = Strings.DefaultTitle;
+            chart.Composer = Strings.DefaultComposer;
+
+            switch (chart.ChartPath.Split('.')[0])
+            {
+                case "0":
+                    chart.DifficultyColor = defaultDifficultyColors[0].ConvertToHexCode();
+                    chart.Difficulty = defaultDifficultyNames[0];
+                    break;
+                case "1":
+                    chart.DifficultyColor = defaultDifficultyColors[1].ConvertToHexCode();
+                    chart.Difficulty = defaultDifficultyNames[1];
+                    break;
+                case "2":
+                    chart.DifficultyColor = defaultDifficultyColors[2].ConvertToHexCode();
+                    chart.Difficulty = defaultDifficultyNames[2];
+                    break;
+                case "3":
+                    chart.DifficultyColor = defaultDifficultyColors[3].ConvertToHexCode();
+                    chart.Difficulty = defaultDifficultyNames[3];
+                    break;
+                default:
+                    chart.DifficultyColor = defaultDifficultyColors[2].ConvertToHexCode();
+                    chart.Difficulty = defaultDifficultyNames[2];
+                    break;
+            }
         }
     }
 }

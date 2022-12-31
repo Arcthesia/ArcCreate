@@ -1,4 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
@@ -84,6 +89,11 @@ namespace ArcCreate.Gameplay.Audio
         }
 
         private int FullOffset => Values.ChartAudioOffset + Settings.GlobalAudioOffset.Value;
+
+        public void LoadAudio(string path)
+        {
+            StartLoadingAudio(path).Forget();
+        }
 
         public void UpdateTime()
         {
@@ -197,6 +207,26 @@ namespace ArcCreate.Gameplay.Audio
             else
             {
                 audioSource.Play();
+            }
+        }
+
+        private async UniTask StartLoadingAudio(string path)
+        {
+            using (UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(
+                Uri.EscapeUriString("file:///" + path.Replace("\\", "/")),
+                path.EndsWith("wav") ? AudioType.WAV : AudioType.OGGVORBIS))
+            {
+                await req.SendWebRequest();
+                if (!string.IsNullOrWhiteSpace(req.error))
+                {
+                    throw new IOException(I18n.S("Gameplay.Exception.LoadAudio", new Dictionary<string, object>()
+                    {
+                        { "Path", path },
+                        { "Error", req.error },
+                    }));
+                }
+
+                AudioClip = DownloadHandlerAudioClip.GetContent(req);
             }
         }
     }

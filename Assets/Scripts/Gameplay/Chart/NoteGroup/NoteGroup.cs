@@ -53,7 +53,10 @@ namespace ArcCreate.Gameplay.Chart
             for (int i = 0; i < notes.Count; i++)
             {
                 Note note = notes[i];
-                note.ReloadSkin();
+                if (note.IsAssignedInstance)
+                {
+                    note.ReloadSkin();
+                }
             }
         }
 

@@ -37,37 +37,45 @@ namespace ArcCreate.Compose.Project
 
         private void OnConfirm()
         {
-            ProjectSettings project = new ProjectSettings()
+            if (audioFileField.CurrentPath == null
+             || projectFileField.CurrentPath == null
+             || startingChartFileField.text == null)
             {
-                Path = projectFileField.CurrentPath,
-                LastOpenedChartPath = StartingChartFile,
-                Charts = new List<ChartSettings>()
-                {
-                    new ChartSettings()
-                    {
-                        ChartPath = StartingChartFile,
-                        BaseBpm = Evaluator.Float(baseBPMField.text),
-                        AudioPath = audioFileField.CurrentPath,
-                        JacketPath = jacketArtField.CurrentPath,
-                        BackgroundPath = backgroundField.CurrentPath,
-                    },
-                },
-            };
+                return;
+            }
 
-            Services.Project.CreateNewProject(project);
+            Services.Project.CreateNewProject(new NewProjectInfo()
+            {
+                ProjectFile = projectFileField.CurrentPath,
+                StartingChartPath = StartingChartFile,
+                BaseBPM = Evaluator.Float(baseBPMField.text),
+                AudioPath = audioFileField.CurrentPath,
+                JacketPath = jacketArtField.CurrentPath,
+                BackgroundPath = backgroundField.CurrentPath,
+            });
 
             Close();
             ClearFields();
         }
 
-        private void OnFolderSelect(string folder)
+        private void OnProjectFileSelect(FilePath path)
         {
-            currentFolder = Path.GetDirectoryName(folder);
+            if (path == null)
+            {
+                return;
+            }
+
+            currentFolder = Path.GetDirectoryName(path.FullPath);
             AutofillFields();
         }
 
         private void OnChartFile(string path)
         {
+            if (string.IsNullOrEmpty(path))
+            {
+                startingChartFileField.text = Strings.DefaultChartFileName;
+            }
+
             AutofillFields();
         }
 
@@ -120,7 +128,7 @@ namespace ArcCreate.Compose.Project
         {
             confirmButton.onClick.AddListener(OnConfirm);
             closeButton.onClick.AddListener(Close);
-            projectFileField.OnValueChanged += OnFolderSelect;
+            projectFileField.OnValueChanged += OnProjectFileSelect;
             startingChartFileField.onValueChanged.AddListener(OnChartFile);
             ClearFields();
         }
@@ -129,7 +137,7 @@ namespace ArcCreate.Compose.Project
         {
             confirmButton.onClick.RemoveListener(OnConfirm);
             closeButton.onClick.RemoveListener(Close);
-            projectFileField.OnValueChanged -= OnFolderSelect;
+            projectFileField.OnValueChanged -= OnProjectFileSelect;
             startingChartFileField.onValueChanged.RemoveListener(OnChartFile);
         }
 

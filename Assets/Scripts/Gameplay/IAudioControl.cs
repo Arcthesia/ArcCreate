@@ -86,5 +86,11 @@ namespace ArcCreate.Gameplay
         /// </summary>
         /// <param name="delayMs">The delay after which audio starts playing.</param>
         void ResumeReturnableWithDelay(int delayMs);
+
+        /// <summary>
+        /// Load the audio clip from the specified path.
+        /// </summary>
+        /// <param name="path">The path to load.</param>
+        void LoadAudio(string path);
     }
 }

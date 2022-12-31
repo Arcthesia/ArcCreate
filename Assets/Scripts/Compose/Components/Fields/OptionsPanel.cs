@@ -3,6 +3,11 @@ using UnityEngine;
 
 namespace ArcCreate.Compose.Components
 {
+    /// <summary>
+    /// Field for selecting a one out of a limited number of options.
+    /// Does not support changing the option list on runtime.
+    /// The option list will be created based on all <see cref="Option"/> components attached to children of this component's GameObject.
+    /// </summary>
     public class OptionsPanel : MonoBehaviour
     {
         private Option[] options;
@@ -46,6 +51,20 @@ namespace ArcCreate.Compose.Components
         {
             value = option.Value;
             SetHighlight(option);
+            OnValueChanged?.Invoke(option.Value);
+        }
+
+        public Option GetOptionByValue(string value)
+        {
+            foreach (var opt in options)
+            {
+                if (opt.Value == value)
+                {
+                    return opt;
+                }
+            }
+
+            return null;
         }
 
         private void SetHighlight(Option option)

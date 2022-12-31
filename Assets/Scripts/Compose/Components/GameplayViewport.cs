@@ -3,6 +3,9 @@ using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Components
 {
+    /// <summary>
+    /// Component for handling resizing the viewport.
+    /// </summary>
     public class GameplayViewport : MonoBehaviour
     {
         [SerializeField] private float debounceSeconds = 1f;

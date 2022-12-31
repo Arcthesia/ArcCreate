@@ -1,9 +1,21 @@
-using UnityEngine;
-
 namespace ArcCreate.Compose.Project
 {
     public class ChartSettings
     {
+        public string ChartPath { get; set; }
+
+        public string AudioPath { get; set; }
+
+        public string JacketPath { get; set; }
+
+        public float BaseBpm { get; set; }
+
+        public bool SyncBaseBpm { get; set; } = true;
+
+        public string BackgroundPath { get; set; }
+
+        public string VideoPath { get; set; }
+
         public string Title { get; set; }
 
         public string Composer { get; set; }
@@ -12,31 +24,17 @@ namespace ArcCreate.Compose.Project
 
         public string Illustrator { get; set; }
 
-        public float BaseBpm { get; set; }
-
-        public bool SyncBaseBpm { get; set; } = true;
-
         public string Difficulty { get; set; }
 
         public float ChartConstant { get; set; }
 
-        public Color DifficultyColor { get; set; }
+        public string DifficultyColor { get; set; }
 
         public SkinSettings Skin { get; set; }
 
         public ColorSettings Colors { get; set; }
 
         public int LastWorkingTiming { get; set; }
-
-        public string ChartPath { get; set; }
-
-        public string AudioPath { get; set; }
-
-        public string JacketPath { get; set; }
-
-        public string BackgroundPath { get; set; }
-
-        public string VideoPath { get; set; }
 
         public ChartSettings Clone()
         {

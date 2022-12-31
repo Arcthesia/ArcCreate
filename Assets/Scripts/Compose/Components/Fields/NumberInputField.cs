@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Components
 {
+    /// <summary>
+    /// Component for number input fields.
+    /// Provides an increase and decrease button.
+    /// </summary>
     [RequireComponent(typeof(TMP_InputField))]
     public class NumberInputField : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {

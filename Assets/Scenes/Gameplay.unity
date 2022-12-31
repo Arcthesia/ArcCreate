@@ -1776,6 +1776,7 @@ GameObject:
   - component: {fileID: 537426951}
   - component: {fileID: 537426953}
   - component: {fileID: 537426952}
+  - component: {fileID: 537426954}
   m_Layer: 8
   m_Name: DifficultyImage
   m_TagString: Untagged
@@ -1839,6 +1840,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 537426950}
   m_CullTransparentMesh: 0
+--- !u!114 &537426954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 537426950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 350317960584e1a47add90594d1656a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteSO: {fileID: 0}
+  colorSO: {fileID: 11400000, guid: fcc2c6a77178aeb9b83a38d101b8d383, type: 2}
 --- !u!1 &541294086
 GameObject:
   m_ObjectHideFlags: 0
@@ -4165,6 +4180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteSO: {fileID: 11400000, guid: f891964018fd9694e809f066d5cc42a5, type: 2}
+  colorSO: {fileID: 0}
 --- !u!1 &1697655872
 GameObject:
   m_ObjectHideFlags: 0
@@ -5150,6 +5166,7 @@ GameObject:
   - component: {fileID: 1987312592}
   - component: {fileID: 1987312594}
   - component: {fileID: 1987312593}
+  - component: {fileID: 1987312595}
   m_Layer: 8
   m_Name: DifficultyText
   m_TagString: Untagged
@@ -5274,6 +5291,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1987312591}
   m_CullTransparentMesh: 0
+--- !u!114 &1987312595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1987312591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 073b49fc68b58fd42b77f5604ba150fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stringSO: {fileID: 11400000, guid: 2183fb8a99ecebddbae026540f52df24, type: 2}
 --- !u!1 &1989008254
 GameObject:
   m_ObjectHideFlags: 0
@@ -5511,9 +5541,12 @@ MonoBehaviour:
   - {fileID: 2103231689}
   - {fileID: 5387788}
   - {fileID: 494440779}
+  jacketSO: {fileID: 11400000, guid: f891964018fd9694e809f066d5cc42a5, type: 2}
   jacketShadowSO: {fileID: 11400000, guid: 87bb86310a4e98348915ef433efa2753, type: 2}
+  defaultJacket: {fileID: 21300000, guid: a971cf2da077b1c4ba78f60362e51a29, type: 3}
   background: {fileID: 431220131}
-  videoBackgroundRenderer: {fileID: 0}
+  defaultBackground: {fileID: 21300000, guid: 60ec4d2a20505ed4983a1875e88ac3e7, type: 3}
+  videoBackgroundRenderer: {fileID: 600956901}
   videoBackground: {fileID: 600956904}
   alignmentOptions:
   - {fileID: 11400000, guid: 5addfb3e558b39f498d54a0ef0e03353, type: 2}
