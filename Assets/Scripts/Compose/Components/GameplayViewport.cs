@@ -16,6 +16,25 @@ namespace ArcCreate.Compose.Components
         private float previousHeight;
         private float applyNewSizeAfter = float.MaxValue;
 
+        public void ResizeNow()
+        {
+            float width = viewport.rect.width;
+            float height = viewport.rect.height;
+            applyNewSizeAfter = Time.realtimeSinceStartup;
+
+            var texture = viewportImage.texture as RenderTexture;
+            if (texture == null)
+            {
+                return;
+            }
+
+            texture.Release();
+            texture.width = (int)width;
+            texture.height = (int)height;
+            Services.Gameplay.ApplyAspect(width / height);
+            applyNewSizeAfter = float.MaxValue;
+        }
+
         private void Update()
         {
             float width = viewport.rect.width;
@@ -30,17 +49,7 @@ namespace ArcCreate.Compose.Components
 
             if (Time.realtimeSinceStartup >= applyNewSizeAfter)
             {
-                var texture = viewportImage.texture as RenderTexture;
-                if (texture == null)
-                {
-                    return;
-                }
-
-                texture.Release();
-                texture.width = (int)width;
-                texture.height = (int)height;
-                Services.Gameplay.ApplyAspect(width / height);
-                applyNewSizeAfter = float.MaxValue;
+                ResizeNow();
             }
         }
     }
