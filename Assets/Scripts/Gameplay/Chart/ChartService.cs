@@ -50,6 +50,16 @@ namespace ArcCreate.Gameplay.Chart
             }
         }
 
+        public float BaseBpm
+        {
+            get => Values.BaseBpm;
+            set
+            {
+                Values.BaseBpm = BaseBpm;
+                ResetJudge();
+            }
+        }
+
         public float TimingPointDensityFactor
         {
             get => Values.TimingPointDensity;

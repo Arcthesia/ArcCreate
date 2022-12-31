@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace ArcCreate.Compose.Components
 {
-    [ExecuteInEditMode]
     public class IconText : I18nText
     {
         [SerializeField] private RectTransform parent;

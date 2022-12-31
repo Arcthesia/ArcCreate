@@ -1,17 +1,41 @@
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace ArcCreate.Compose.Project
 {
     public interface IProjectService
     {
+        /// <summary>
+        /// Event invoked after a chart has been loaded.
+        /// </summary>
         event Action<ChartSettings> OnChartLoad;
 
+        /// <summary>
+        /// Gets the current project settings.
+        /// </summary>
+        /// <value>The project settings.</value>
         ProjectSettings CurrentProject { get; }
 
+        /// <summary>
+        /// Gets the current chart settings.
+        /// </summary>
+        /// <value>The chart settings.</value>
         ChartSettings CurrentChart { get; }
 
-        void CreateNewProject(ProjectSettings project);
+        List<Color> DefaultDifficultyColors { get; }
 
+        /// <summary>
+        /// Create a new project and load it.
+        /// This will copy all files to the new project's folder.
+        /// </summary>
+        /// <param name="info">Details of the new project.</param>
+        void CreateNewProject(NewProjectInfo info);
+
+        /// <summary>
+        /// Create a new chart and add it to the current project.
+        /// </summary>
+        /// <param name="name">The name of the chart file.</param>
         void CreateNewChart(string name);
     }
 }

@@ -243,6 +243,9 @@ namespace ArcCreate.Gameplay.Particle
 
         private void Awake()
         {
+            tapParticlePrefab = Instantiate(tapParticlePrefab, transform);
+            longNoteParticlePrefab = Instantiate(longNoteParticlePrefab, transform);
+
             tapParticlePool = Pools.New<Particle>(
                 Values.TapParticlePoolName,
                 tapParticlePrefab,

@@ -14,6 +14,12 @@ namespace ArcCreate.Gameplay
         int ChartAudioOffset { get; set; }
 
         /// <summary>
+        /// Gets or sets the base bpm of the current chart.
+        /// </summary>
+        /// <value>The base bpm.</value>
+        float BaseBpm { get; set; }
+
+        /// <summary>
         /// Gets or sets the timing point density factor.
         /// Setting the timing will cause score to reset to 0.
         /// </summary>

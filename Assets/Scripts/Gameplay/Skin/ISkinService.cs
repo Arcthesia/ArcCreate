@@ -15,19 +15,6 @@ namespace ArcCreate.Gameplay.Skin
         Color ComboColor { get; }
 
         /// <summary>
-        /// Gets or sets the background's sprite.
-        /// </summary>
-        /// <value>The background's sprite.</value>
-        Sprite BackgroundSprite { get; set; }
-
-        /// <summary>
-        /// Gets or sets the video background's url.
-        /// Setting it to null will disable the video background renderer.
-        /// </summary>
-        /// <value>The video background's url.</value>
-        string VideoBackgroundUrl { get; set; }
-
-        /// <summary>
         /// Get the skin for an arc note.
         /// </summary>
         /// <param name="note">The note to get the skin for.</param>

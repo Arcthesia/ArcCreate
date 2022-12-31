@@ -125,6 +125,9 @@ Compose:
         Green: Green (2)
         Custom: Custom ({Id})
         AddArcColor: Add arc color
+        NoProjectLoaded: |-
+          No project loaded.
+          Create or open a new project
       Options:
         Inherit: Inherit
         Light: Light
@@ -143,3 +146,17 @@ Compose:
         Arcana: Arcana
         None: None
         Neo: Neo
+        Past: Past
+        Present: Present
+        Future: Future
+        Beyond: Beyond
+
+Gameplay:
+  Exception:
+    LoadAudio: |-
+      An error occured while trying to load the audio file located at {Path}.
+      {Error}
+  HUD:
+    Play: Play
+    Retry: Retry
+    Return: Return
