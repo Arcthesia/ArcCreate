@@ -3,11 +3,14 @@ using ArcCreate.Utility.Extension;
 using ArcCreate.Utility.Parser;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Components
 {
+    /// <summary>
+    /// Component for handling color picker window.
+    /// The same color picker window can be reused for different input fields.
+    /// </summary>
     public class ColorPickerWindow : MonoBehaviour, IColorPickerService
     {
         [SerializeField] private GameObject window;
@@ -46,7 +49,7 @@ namespace ArcCreate.Compose.Components
             window.SetActive(true);
             closeButton.gameObject.SetActive(true);
 
-            picker.SetColorWithoutNotify(setColor);
+            Color = setColor;
 
             float screenWidth = Screen.width;
             float screenHeight = Screen.height;

@@ -1,5 +1,6 @@
-using System;
+using System.IO;
 using ArcCreate.Compose.Components;
+using ArcCreate.Utility.Mp3Converter;
 using UnityEngine;
 
 namespace ArcCreate.Compose.Project
@@ -19,9 +20,9 @@ namespace ArcCreate.Compose.Project
             video.SetPath(chart.VideoPath);
         }
 
-        private new void Awake()
+        private new void Start()
         {
-            base.Awake();
+            base.Start();
             audioFile.OnValueChanged += OnAudioFile;
             jacket.OnValueChanged += OnJacket;
             background.OnValueChanged += OnBackground;
@@ -36,24 +37,60 @@ namespace ArcCreate.Compose.Project
             video.OnValueChanged -= OnVideo;
         }
 
-        private void OnAudioFile(string obj)
+        private void OnAudioFile(FilePath path)
         {
-            throw new NotImplementedException();
+            if (path == null)
+            {
+                audioFile.SetPathWithoutNotify(Target.AudioPath);
+                return;
+            }
+
+            if (Path.GetExtension(path.FullPath) == ".mp3")
+            {
+                FilePath converted = FilePath.Local(
+                    directory: Path.GetDirectoryName(Services.Project.CurrentProject.Path),
+                    originalPath: Path.ChangeExtension(path.FullPath, ".wav"));
+
+                Mp3Converter.Mp3ToWav(path.FullPath, converted.FullPath);
+
+                Target.AudioPath = converted.ShortenedPath;
+                Services.Gameplay.Audio.LoadAudio(converted.FullPath);
+                return;
+            }
+
+            Target.AudioPath = path.ShortenedPath;
+            Services.Gameplay.Audio.LoadAudio(path.FullPath);
         }
 
-        private void OnJacket(string obj)
+        private void OnJacket(FilePath path)
         {
-            throw new NotImplementedException();
+            if (path == null)
+            {
+                Target.JacketPath = null;
+                Services.Gameplay.Skin.SetDefaultJacket();
+                return;
+            }
+
+            Target.JacketPath = path.ShortenedPath;
+            Services.Gameplay.Skin.LoadJacket(path.FullPath);
         }
 
-        private void OnBackground(string obj)
+        private void OnBackground(FilePath path)
         {
-            throw new NotImplementedException();
+            if (path == null)
+            {
+                Target.BackgroundPath = null;
+                Services.Gameplay.Skin.SetDefaultBackground();
+            }
+
+            Target.BackgroundPath = path.ShortenedPath;
+            Services.Gameplay.Skin.LoadBackground(path.FullPath);
         }
 
-        private void OnVideo(string obj)
+        private void OnVideo(FilePath path)
         {
-            throw new NotImplementedException();
+            Target.VideoPath = path.ShortenedPath;
+            Services.Gameplay.Skin.VideoBackgroundUrl = "file:///" + path.FullPath.Replace("\\", "/");
         }
     }
 }

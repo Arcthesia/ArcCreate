@@ -7,6 +7,10 @@ using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Components
 {
+    /// <summary>
+    /// Field for selecting an image file.
+    /// Includes an image preview.
+    /// </summary>
     public class ImageFileSelectField : FileSelectField
     {
         [SerializeField] private RawImage previewImage;
@@ -18,7 +22,7 @@ namespace ArcCreate.Compose.Components
             hint.SetActive(true);
         }
 
-        protected override void OnValidFilePath(string path)
+        protected override void OnValidFilePath(FilePath path)
         {
             if (previewImage.texture != null)
             {
@@ -26,7 +30,7 @@ namespace ArcCreate.Compose.Components
             }
 
             previewImage.gameObject.SetActive(true);
-            StartLoadingImage(path).Forget();
+            StartLoadingImage(path.FullPath).Forget();
             hint.SetActive(false);
         }
 

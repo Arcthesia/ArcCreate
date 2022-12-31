@@ -6,7 +6,7 @@ namespace ArcCreate.Compose.Project
     {
         protected ChartSettings Target { get; private set; }
 
-        protected void Awake()
+        protected void Start()
         {
             Services.Project.OnChartLoad += OnChartLoad;
         }

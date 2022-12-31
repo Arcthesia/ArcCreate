@@ -7,6 +7,10 @@ using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Components
 {
+    /// <summary>
+    /// Field for selecting a file on the file system.
+    /// This will open the operating system's file picker.
+    /// </summary>
     public class FileSelectField : MonoBehaviour
     {
         [SerializeField] private TMP_Text contentText;
@@ -16,18 +20,36 @@ namespace ArcCreate.Compose.Components
         [SerializeField] private GameObject invalidIndicator;
         [SerializeField] private bool required;
         [SerializeField] private bool isSaveFile;
+        [SerializeField] private bool isLocalFileSelector;
         [SerializeField] private string title;
         [SerializeField] private string initPathPrefKey;
         [SerializeField] private string extensionFilterName;
         [SerializeField] private string[] acceptedExtensions;
         [SerializeField] private string defaultSaveFileName;
 
-        public event Action<string> OnValueChanged;
+        /// <summary>
+        /// Event invoked after a file path has been set.
+        /// </summary>
+        public event Action<FilePath> OnValueChanged;
 
-        public string CurrentPath { get; private set; } = null;
+        /// <summary>
+        /// Gets the currently selected file path.
+        /// </summary>
+        /// <value>A file path instance.</value>
+        public FilePath CurrentPath { get; private set; } = null;
 
-        public bool IsValidPath => File.Exists(CurrentPath);
+        /// <summary>
+        /// Gets a value indicating whether or not the current path exists on the file system.
+        /// </summary>
+        /// <returns>The boolean value.</returns>
+        public bool IsValidPath => File.Exists(CurrentPath.FullPath);
 
+        private string CurrentProjectFolder => Path.GetDirectoryName(Services.Project.CurrentProject.Path);
+
+        /// <summary>
+        /// Clear this field.
+        /// This will invoke <see cref="OnValueChanged"/> event with a null value.
+        /// </summary>
         public void ClearContent()
         {
             CurrentPath = null;
@@ -45,16 +67,80 @@ namespace ArcCreate.Compose.Components
             clearButton.gameObject.SetActive(false);
         }
 
+        /// <summary>
+        /// Set the path for this field and invoke <see cref="OnValueChangeed"/> event.
+        /// If the provided path is invalid, no change will be made.
+        /// </summary>
+        /// <param name="path">The file path.</param>
         public void SetPath(string path)
         {
-            if (File.Exists(path))
+            FilePath oldPath = CurrentPath;
+            SetPathWithoutNotify(path);
+
+            if (oldPath != CurrentPath)
             {
-                CurrentPath = path;
-                OnValueChanged.Invoke(path);
+                OnValueChanged?.Invoke(CurrentPath);
             }
         }
 
-        protected virtual void OnValidFilePath(string path)
+        /// <summary>
+        /// Set the path for this field without invoking <see cref="OnValueChangeed"/> event.
+        /// If the provided path is invalid, no change will be made.
+        /// </summary>
+        /// <param name="path">The file path.</param>
+        public void SetPathWithoutNotify(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
+            bool found = false;
+            if (isLocalFileSelector)
+            {
+                if (File.Exists(path))
+                {
+                    FilePath newFilePath = FilePath.Local(CurrentProjectFolder, path);
+                    if (newFilePath.ShouldCopy)
+                    {
+                        File.Copy(path, newFilePath.FullPath, true);
+                    }
+
+                    CurrentPath = newFilePath;
+                    found = true;
+                }
+                else
+                {
+                    string full = Path.Combine(CurrentProjectFolder, path);
+                    if (File.Exists(full))
+                    {
+                        CurrentPath = FilePath.Local(CurrentProjectFolder, full);
+                        found = true;
+                    }
+                }
+            }
+            else
+            {
+                if (File.Exists(path))
+                {
+                    FilePath newFilePath = FilePath.Global(path);
+                    CurrentPath = newFilePath;
+                    found = true;
+                }
+            }
+
+            if (found)
+            {
+                contentText.text = CurrentPath.ShortenedPath;
+                contentText.gameObject.SetActive(true);
+                placeholderText.gameObject.SetActive(false);
+                invalidIndicator.SetActive(false);
+                clearButton.gameObject.SetActive(true);
+                OnValidFilePath(CurrentPath);
+            }
+        }
+
+        protected virtual void OnValidFilePath(FilePath path)
         {
         }
 
@@ -64,28 +150,8 @@ namespace ArcCreate.Compose.Components
 
         protected void Awake()
         {
-            if (!required)
-            {
-                invalidIndicator.SetActive(false);
-            }
-            else
-            {
-                invalidIndicator.SetActive(string.IsNullOrEmpty(contentText.text));
-            }
-
-            if (!string.IsNullOrEmpty(contentText.text))
-            {
-                if (File.Exists(contentText.text))
-                {
-                    CurrentPath = contentText.text;
-                    invalidIndicator.SetActive(false);
-                }
-                else
-                {
-                    contentText.text = string.Empty;
-                    invalidIndicator.SetActive(required);
-                }
-            }
+            contentText.text = string.Empty;
+            invalidIndicator.SetActive(required);
 
             openButton.onClick.AddListener(OnOpenBrowserClick);
             clearButton.onClick.AddListener(ClearContent);
@@ -110,11 +176,23 @@ namespace ArcCreate.Compose.Components
                 return;
             }
 
-            CurrentPath = path;
+            if (isLocalFileSelector)
+            {
+                CurrentPath = FilePath.Local(CurrentProjectFolder, path);
+                if (CurrentPath.ShouldCopy)
+                {
+                    File.Copy(path, CurrentPath.FullPath, true);
+                }
+            }
+            else
+            {
+                CurrentPath = FilePath.Global(path);
+            }
+
             OnValidFilePath(CurrentPath);
             OnValueChanged?.Invoke(CurrentPath);
 
-            contentText.text = path;
+            contentText.text = CurrentPath.ShortenedPath;
             contentText.gameObject.SetActive(true);
             placeholderText.gameObject.SetActive(false);
             invalidIndicator.SetActive(false);

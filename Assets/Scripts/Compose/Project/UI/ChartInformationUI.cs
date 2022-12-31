@@ -1,7 +1,10 @@
-using System;
+using System.Collections.Generic;
 using ArcCreate.Compose.Components;
+using ArcCreate.Utility.Extension;
+using ArcCreate.Utility.Parser;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Project
 {
@@ -16,6 +19,15 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private TMP_InputField difficultyName;
         [SerializeField] private ColorInputField difficultyColor;
 
+        [SerializeField] private StringSO titleSO;
+        [SerializeField] private StringSO composerSO;
+        [SerializeField] private StringSO illustratorSO;
+        [SerializeField] private StringSO charterSO;
+        [SerializeField] private StringSO difficultyNameSO;
+        [SerializeField] private ColorSO difficultyColorSO;
+
+        [SerializeField] private List<Button> diffColorPresets;
+
         protected override void ApplyChartSettings(ChartSettings chart)
         {
             title.text = chart.Title ?? "";
@@ -24,13 +36,15 @@ namespace ArcCreate.Compose.Project
             charter.text = chart.Charter ?? "";
             baseBpm.text = chart.BaseBpm.ToString();
             chartConstant.text = chart.ChartConstant.ToString();
-            difficultyName.text = chart.Difficulty.ToString();
-            difficultyColor.SetValue(chart.DifficultyColor);
+            difficultyName.text = chart.Difficulty?.ToString() ?? "";
+
+            chart.DifficultyColor.ConvertHexToColor(out Color c);
+            difficultyColor.SetValue(c);
         }
 
-        private new void Awake()
+        private new void Start()
         {
-            base.Awake();
+            base.Start();
             title.onEndEdit.AddListener(OnTitle);
             composer.onEndEdit.AddListener(OnComposer);
             illustrator.onEndEdit.AddListener(OnIllustrator);
@@ -39,6 +53,15 @@ namespace ArcCreate.Compose.Project
             chartConstant.onEndEdit.AddListener(OnChartConstant);
             difficultyName.onEndEdit.AddListener(OnDifficultyName);
             difficultyColor.OnValueChange += OnDifficultyColor;
+
+            for (int i = 0; i < diffColorPresets.Count; i++)
+            {
+                Button btn = diffColorPresets[i];
+                btn.onClick.AddListener(() =>
+                {
+                    OnDiffColorPreset(btn);
+                });
+            }
         }
 
         private void OnDestroy()
@@ -51,46 +74,82 @@ namespace ArcCreate.Compose.Project
             chartConstant.onEndEdit.RemoveListener(OnChartConstant);
             difficultyName.onEndEdit.RemoveListener(OnDifficultyName);
             difficultyColor.OnValueChange -= OnDifficultyColor;
+
+            for (int i = 0; i < diffColorPresets.Count; i++)
+            {
+                Button btn = diffColorPresets[i];
+                btn.onClick.RemoveAllListeners();
+            }
         }
 
-        private void OnTitle(string arg0)
+        private void OnTitle(string value)
         {
-            throw new NotImplementedException();
+            Target.Title = value;
+            titleSO.Value = value;
         }
 
-        private void OnComposer(string arg0)
+        private void OnComposer(string value)
         {
-            throw new NotImplementedException();
+            Target.Composer = value;
+            composerSO.Value = value;
         }
 
-        private void OnIllustrator(string arg0)
+        private void OnIllustrator(string value)
         {
-            throw new NotImplementedException();
+            Target.Illustrator = value;
+            illustratorSO.Value = value;
         }
 
-        private void OnCharter(string arg0)
+        private void OnCharter(string value)
         {
-            throw new NotImplementedException();
+            Target.Charter = value;
+            charterSO.Value = value;
         }
 
-        private void OnBaseBpm(string arg0)
+        private void OnBaseBpm(string value)
         {
-            throw new NotImplementedException();
+            if (Evaluator.TryFloat(value, out float bpm))
+            {
+                Target.BaseBpm = bpm;
+                Services.Gameplay.Chart.BaseBpm = bpm;
+            }
         }
 
-        private void OnChartConstant(string arg0)
+        private void OnChartConstant(string value)
         {
-            throw new NotImplementedException();
+            if (Evaluator.TryFloat(value, out float cc))
+            {
+                Target.ChartConstant = cc;
+            }
         }
 
-        private void OnDifficultyName(string arg0)
+        private void OnDifficultyName(string value)
         {
-            throw new NotImplementedException();
+            Target.Difficulty = value;
+            difficultyNameSO.Value = value;
         }
 
-        private void OnDifficultyColor(Color obj)
+        private void OnDifficultyColor(Color color)
         {
-            throw new NotImplementedException();
+            Target.DifficultyColor = color.ConvertToHexCode();
+            difficultyColorSO.Value = color;
+        }
+
+        private void OnDiffColorPreset(Button button)
+        {
+            int index = 0;
+            for (int i = 0; i < diffColorPresets.Count; i++)
+            {
+                if (diffColorPresets[i] == button)
+                {
+                    index = i;
+                    break;
+                }
+            }
+
+            Color c = Services.Project.DefaultDifficultyColors[index];
+            OnDifficultyColor(c);
+            difficultyColor.SetValueWithoutNotify(c);
         }
     }
 }
