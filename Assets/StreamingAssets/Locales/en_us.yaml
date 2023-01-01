@@ -59,6 +59,8 @@ Compose:
       Chart is already included in the project
     InvalidChartFile: |-
       The provided chart file name is invalid
+    NoChartIncluded: |-
+      Invalid project file: No chart is included within this project.
   UI:
     Common:
       Confirm: Confirm

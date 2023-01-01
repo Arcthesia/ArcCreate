@@ -37,5 +37,18 @@ namespace ArcCreate.Compose.Project
         /// </summary>
         /// <param name="name">The name of the chart file.</param>
         void CreateNewChart(string name);
+
+        /// <summary>
+        /// Load a chart and invoke <see cref="OnChartLoad"/>.
+        /// </summary>
+        /// <param name="chart">The chart to load.</param>
+        void OpenChart(ChartSettings chart);
+
+        /// <summary>
+        /// Remove a chart from the current project (without deleting the actual chart file on the file system).
+        /// Removing the currently active chart is not allowed and will be ignored.
+        /// </summary>
+        /// <param name="chart">The chart to remove.</param>
+        void RemoveChart(ChartSettings chart);
     }
 }

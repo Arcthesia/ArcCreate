@@ -31,6 +31,8 @@ namespace ArcCreate.Compose.Project
                 Destroy(arc.gameObject);
             }
 
+            arcCustom.Clear();
+
             var defaultArc = Services.Gameplay.Skin.DefaultArcColors;
             var defaultArcLow = Services.Gameplay.Skin.DefaultArcLowColors;
             var defaultTrace = Services.Gameplay.Skin.DefaultTraceColor;
