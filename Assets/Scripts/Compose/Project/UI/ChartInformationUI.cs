@@ -15,6 +15,7 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private TMP_InputField illustrator;
         [SerializeField] private TMP_InputField charter;
         [SerializeField] private TMP_InputField baseBpm;
+        [SerializeField] private Toggle syncBaseBpm;
         [SerializeField] private TMP_InputField chartConstant;
         [SerializeField] private TMP_InputField difficultyName;
         [SerializeField] private ColorInputField difficultyColor;
@@ -35,6 +36,7 @@ namespace ArcCreate.Compose.Project
             illustrator.text = chart.Illustrator ?? "";
             charter.text = chart.Charter ?? "";
             baseBpm.text = chart.BaseBpm.ToString();
+            syncBaseBpm.isOn = chart.SyncBaseBpm;
             chartConstant.text = chart.ChartConstant.ToString();
             difficultyName.text = chart.Difficulty?.ToString() ?? "";
 
@@ -50,6 +52,7 @@ namespace ArcCreate.Compose.Project
             illustrator.onEndEdit.AddListener(OnIllustrator);
             charter.onEndEdit.AddListener(OnCharter);
             baseBpm.onEndEdit.AddListener(OnBaseBpm);
+            syncBaseBpm.onValueChanged.AddListener(OnSyncBaseBPM);
             chartConstant.onEndEdit.AddListener(OnChartConstant);
             difficultyName.onEndEdit.AddListener(OnDifficultyName);
             difficultyColor.OnValueChange += OnDifficultyColor;
@@ -113,6 +116,11 @@ namespace ArcCreate.Compose.Project
                 Target.BaseBpm = bpm;
                 Services.Gameplay.Chart.BaseBpm = bpm;
             }
+        }
+
+        private void OnSyncBaseBPM(bool value)
+        {
+            Target.SyncBaseBpm = value;
         }
 
         private void OnChartConstant(string value)
