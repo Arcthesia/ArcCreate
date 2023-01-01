@@ -102,6 +102,7 @@ Compose:
         Charter: Charter
         BPM: BPM
         BaseBPM: Base BPM
+        SyncBaseBPM: Sync
         ChartConstant: Chart Constant
         DifficultyName: Difficulty Name
         DifficultyColor: Difficulty Color

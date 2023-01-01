@@ -63,6 +63,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   highColor: {fileID: 4878887634156948741}
   lowColor: {fileID: 4397024788401719661}
+  label: {fileID: 3272447328697507330}
+  resetButton: {fileID: 7772815562235623088}
 --- !u!1 &3272447328697507332
 GameObject:
   m_ObjectHideFlags: 0
@@ -74,7 +76,6 @@ GameObject:
   - component: {fileID: 3272447328697507331}
   - component: {fileID: 3272447328697507329}
   - component: {fileID: 3272447328697507330}
-  - component: {fileID: 4397024788923482842}
   m_Layer: 9
   m_Name: Label
   m_TagString: Untagged
@@ -198,20 +199,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &4397024788923482842
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3272447328697507332}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a32ed771c5ecb9c0b803c7385241b686, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: Compose.UI.Project.Label.Blue
-  readIdFromContent: 0
 --- !u!1 &4397024787994477432
 GameObject:
   m_ObjectHideFlags: 0
@@ -1379,3 +1366,15 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 4397024789447922762}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7772815562235623088 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6258816205848568570, guid: b478ebaa3ae36f1fe9dc18ef70e70acc,
+    type: 3}
+  m_PrefabInstance: {fileID: 4397024789447922762}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

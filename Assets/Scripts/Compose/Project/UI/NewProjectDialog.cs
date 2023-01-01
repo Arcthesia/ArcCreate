@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.IO;
 using ArcCreate.Compose.Components;
 using ArcCreate.Utility.Parser;
