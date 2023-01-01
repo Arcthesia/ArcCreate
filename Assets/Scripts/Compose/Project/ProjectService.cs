@@ -19,7 +19,8 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private Button openFolderButton;
         [SerializeField] private CanvasGroup toggleInteractiveCanvas;
         [SerializeField] private GameObject noProjectLoadedHint;
-        [SerializeField] private TMP_Dropdown chartSelectDropdown;
+        [SerializeField] private ChartPicker chartPicker;
+        [SerializeField] private TMP_Text currentChartPath;
         [SerializeField] private NewProjectDialog newProjectDialog;
         [SerializeField] private NewChartDialog newChartDialog;
         [SerializeField] private List<Color> defaultDifficultyColors;
@@ -97,8 +98,28 @@ namespace ArcCreate.Compose.Project
             CurrentChart = newChart;
             CurrentProject.LastOpenedChartPath = newChart.ChartPath;
 
-            PopulateSelectDropdown(CurrentProject);
+            chartPicker.SetOptions(CurrentProject.Charts, CurrentChart);
+            currentChartPath.text = CurrentChart.ChartPath;
             OnChartLoad?.Invoke(CurrentChart);
+        }
+
+        public void OpenChart(ChartSettings chart)
+        {
+            CurrentChart = chart;
+            CurrentProject.LastOpenedChartPath = CurrentChart.ChartPath;
+            currentChartPath.text = CurrentChart.ChartPath;
+            OnChartLoad?.Invoke(CurrentChart);
+        }
+
+        public void RemoveChart(ChartSettings chart)
+        {
+            if (chart == CurrentChart)
+            {
+                return;
+            }
+
+            CurrentProject.Charts.Remove(chart);
+            chartPicker.SetOptions(CurrentProject.Charts, CurrentChart);
         }
 
         private void OnNewProjectPressed()
@@ -128,31 +149,6 @@ namespace ArcCreate.Compose.Project
             Serialize(CurrentProject);
         }
 
-        private void OnChartSelect(int dropdownIndex)
-        {
-            // Last option in list
-            if (dropdownIndex == CurrentProject.Charts.Count)
-            {
-                for (int i = 0; i < CurrentProject.Charts.Count; i++)
-                {
-                    ChartSettings chart = CurrentProject.Charts[i];
-
-                    if (chart.ChartPath == CurrentChart.ChartPath)
-                    {
-                        chartSelectDropdown.SetValueWithoutNotify(i);
-                        break;
-                    }
-                }
-
-                newChartDialog.Open();
-                return;
-            }
-
-            CurrentChart = CurrentProject.Charts[dropdownIndex];
-            CurrentProject.LastOpenedChartPath = CurrentChart.ChartPath;
-            OnChartLoad?.Invoke(CurrentChart);
-        }
-
         private void OpenProjectFolder()
         {
             if (CurrentProject == null)
@@ -168,7 +164,6 @@ namespace ArcCreate.Compose.Project
             newProjectButton.onClick.AddListener(OnNewProjectPressed);
             openProjectButton.onClick.AddListener(OnOpenProjectPressed);
             saveProjectButton.onClick.AddListener(OnSaveProjectPressed);
-            chartSelectDropdown.onValueChanged.AddListener(OnChartSelect);
             openFolderButton.onClick.AddListener(OpenProjectFolder);
             toggleInteractiveCanvas.interactable = false;
             noProjectLoadedHint.SetActive(true);
@@ -179,7 +174,6 @@ namespace ArcCreate.Compose.Project
             newProjectButton.onClick.RemoveListener(OnNewProjectPressed);
             openProjectButton.onClick.RemoveListener(OnOpenProjectPressed);
             saveProjectButton.onClick.RemoveListener(OnSaveProjectPressed);
-            chartSelectDropdown.onValueChanged.RemoveListener(OnChartSelect);
             openFolderButton.onClick.RemoveListener(OpenProjectFolder);
         }
 
@@ -188,11 +182,27 @@ namespace ArcCreate.Compose.Project
             ProjectSettings project = Deserialize(path);
             project.Path = path;
             CurrentProject = project;
-            PopulateSelectDropdown(project);
+
+            if (project.Charts.Count == 0)
+            {
+                throw new ComposeException(I18n.S("Compose.Exception.NoChartIncluded"));
+            }
+
+            CurrentChart = project.Charts[0];
+            foreach (ChartSettings chart in project.Charts)
+            {
+                if (chart.ChartPath == project.LastOpenedChartPath)
+                {
+                    CurrentChart = chart;
+                }
+            }
+
+            chartPicker.SetOptions(CurrentProject.Charts, CurrentChart);
 
             toggleInteractiveCanvas.interactable = true;
             noProjectLoadedHint.SetActive(false);
 
+            currentChartPath.text = CurrentChart.ChartPath;
             OnChartLoad?.Invoke(CurrentChart);
         }
 
@@ -223,27 +233,6 @@ namespace ArcCreate.Compose.Project
                     { "Error", e.Message },
                 }));
             }
-        }
-
-        private void PopulateSelectDropdown(ProjectSettings project)
-        {
-            var dropdownOptions = new List<TMP_Dropdown.OptionData>();
-            int currentChartIndex = 0;
-            for (int i = 0; i < project.Charts.Count; i++)
-            {
-                ChartSettings chart = project.Charts[i];
-                dropdownOptions.Add(new TMP_Dropdown.OptionData(chart.ChartPath));
-
-                if (chart.ChartPath == project.LastOpenedChartPath)
-                {
-                    CurrentChart = chart;
-                    currentChartIndex = i;
-                }
-            }
-
-            dropdownOptions.Add(new TMP_Dropdown.OptionData(I18n.S("Compose.UI.Project.Label.NewChart")));
-            chartSelectDropdown.options = dropdownOptions;
-            chartSelectDropdown.SetValueWithoutNotify(currentChartIndex);
         }
 
         private void AutofillChart(ChartSettings chart)
