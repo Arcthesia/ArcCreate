@@ -1,5 +1,7 @@
 using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Components
 {
@@ -10,11 +12,23 @@ namespace ArcCreate.Compose.Components
     {
         [SerializeField] private ColorInputField highColor;
         [SerializeField] private ColorInputField lowColor;
+        [SerializeField] private TMP_Text label;
+        [SerializeField] private Button resetButton;
 
         /// <summary>
         /// Event invoked after either high color or low color value has changed.
         /// </summary>
         public event Action<(Color high, Color low)> OnValueChange;
+
+        public string Label
+        {
+            get => label.text;
+            set => label.text = value;
+        }
+
+        public Color DefaultColorHigh { get; set; }
+
+        public Color DefaultColorLow { get; set; }
 
         public Color High => highColor.Value;
 
@@ -47,6 +61,20 @@ namespace ArcCreate.Compose.Components
         {
             highColor.OnValueChange += OnChange;
             lowColor.OnValueChange += OnChange;
+            resetButton.onClick.AddListener(ResetColor);
+        }
+
+        private void OnDestroy()
+        {
+            highColor.OnValueChange -= OnChange;
+            lowColor.OnValueChange -= OnChange;
+            resetButton.onClick.RemoveListener(ResetColor);
+        }
+
+        private void ResetColor()
+        {
+            highColor.SetValue(DefaultColorHigh);
+            lowColor.SetValue(DefaultColorLow);
         }
 
         private void OnChange(Color obj)

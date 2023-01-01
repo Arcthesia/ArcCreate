@@ -16,8 +16,11 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private ArcColorInputField arcGreen;
         [SerializeField] private List<ArcColorInputField> arcCustom;
         [SerializeField] private Button newArcColorButton;
+        [SerializeField] private Button resetTraceButton;
+        [SerializeField] private Button resetShadowButton;
         [SerializeField] private Transform arcParent;
         [SerializeField] private GameObject colorInputFieldPrefab;
+        [SerializeField] private RectTransform layout;
         private float applyAfter = float.MaxValue;
 
         protected override void ApplyChartSettings(ChartSettings chart)
@@ -32,6 +35,13 @@ namespace ArcCreate.Compose.Project
             var defaultArcLow = Services.Gameplay.Skin.DefaultArcLowColors;
             var defaultTrace = Services.Gameplay.Skin.DefaultTraceColor;
             var defaultShadow = Services.Gameplay.Skin.DefaultShadowColor;
+
+            arcBlue.DefaultColorHigh = defaultArc[0];
+            arcRed.DefaultColorHigh = defaultArc[1];
+            arcGreen.DefaultColorHigh = defaultArc[2];
+            arcBlue.DefaultColorLow = defaultArcLow[0];
+            arcRed.DefaultColorLow = defaultArcLow[1];
+            arcGreen.DefaultColorLow = defaultArcLow[2];
 
             if (chart.Colors == null)
             {
@@ -80,12 +90,13 @@ namespace ArcCreate.Compose.Project
 
             if (count <= 2)
             {
-                arcRed.SetValueWithoutNotify(defaultArc[2], defaultArc[2]);
+                arcGreen.SetValueWithoutNotify(defaultArc[2], defaultArcLow[2]);
             }
             else
             {
                 chart.Colors.Arc[2].ConvertHexToColor(out Color high);
                 chart.Colors.ArcLow[2].ConvertHexToColor(out Color low);
+                arcGreen.SetValueWithoutNotify(high, low);
             }
         }
 
@@ -100,6 +111,8 @@ namespace ArcCreate.Compose.Project
             arcBlue.OnValueChange += Schedule;
 
             newArcColorButton.onClick.AddListener(OnNewArcColorButton);
+            resetTraceButton.onClick.AddListener(ResetTrace);
+            resetShadowButton.onClick.AddListener(ResetShadow);
         }
 
         private void OnDestroy()
@@ -117,6 +130,8 @@ namespace ArcCreate.Compose.Project
             }
 
             newArcColorButton.onClick.RemoveListener(OnNewArcColorButton);
+            resetTraceButton.onClick.RemoveListener(ResetTrace);
+            resetShadowButton.onClick.RemoveListener(ResetShadow);
         }
 
         private void Schedule(Color obj)
@@ -129,9 +144,20 @@ namespace ArcCreate.Compose.Project
             applyAfter = Time.realtimeSinceStartup + debounceSeconds;
         }
 
+        private void ResetTrace()
+        {
+            traceBody.SetValue(Services.Gameplay.Skin.DefaultTraceColor);
+        }
+
+        private void ResetShadow()
+        {
+            shadow.SetValue(Services.Gameplay.Skin.DefaultShadowColor);
+        }
+
         private void OnNewArcColorButton()
         {
             NewArcColor(Services.Gameplay.Skin.UnknownArcColor, Services.Gameplay.Skin.UnknownArcLowColor);
+            ApplyColorSettings();
         }
 
         private void NewArcColor(Color high, Color low)
@@ -139,8 +165,22 @@ namespace ArcCreate.Compose.Project
             GameObject go = Instantiate(colorInputFieldPrefab, arcParent);
             var comp = go.GetComponent<ArcColorInputField>();
             comp.OnValueChange += Schedule;
+            comp.DefaultColorHigh = Services.Gameplay.Skin.UnknownArcColor;
+            comp.DefaultColorLow = Services.Gameplay.Skin.UnknownArcLowColor;
+            comp.Label = I18n.S("Compose.UI.Project.Label.Custom", new Dictionary<string, object>()
+            {
+                { "Id", arcCustom.Count + 3 },
+            });
             comp.SetValueWithoutNotify(high, low);
             arcCustom.Add(comp);
+
+            UpdateLayoutGroup();
+        }
+
+        private void UpdateLayoutGroup()
+        {
+            // WHY DOES THIS WORK?????
+            layout.sizeDelta = new Vector2(layout.sizeDelta.x + 1, layout.sizeDelta.y + 1);
         }
 
         private void ApplyColorSettings()

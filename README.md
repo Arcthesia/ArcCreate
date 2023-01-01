@@ -22,8 +22,8 @@ Additionally, no textures are included within the repository as of currently to 
 - [ ] Settings menu
 
 ### Editor (Desktop only)
-- [ ] Project metadata management
-- [ ] Project skin settings
+- [x] Project metadata management
+- [x] Project skin settings
 - [ ] Note editing
 - [ ] Timing, camera editing
 - [ ] Custom hotkeys configuration
