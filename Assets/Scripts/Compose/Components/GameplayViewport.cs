@@ -29,8 +29,8 @@ namespace ArcCreate.Compose.Components
             }
 
             texture.Release();
-            texture.width = (int)width;
-            texture.height = (int)height;
+            texture.width = (int)(width * 1.5f);
+            texture.height = (int)(height * 1.5f);
             Services.Gameplay.ApplyAspect(width / height);
             applyNewSizeAfter = float.MaxValue;
         }
