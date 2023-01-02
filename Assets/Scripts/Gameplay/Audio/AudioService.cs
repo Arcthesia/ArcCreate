@@ -13,6 +13,7 @@ namespace ArcCreate.Gameplay.Audio
     {
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private VideoPlayer videoPlayer;
+        [SerializeField] private AudioClipSO audioClipSO;
         [SerializeField] private Slider timingSlider;
 
         /// <summary>
@@ -226,8 +227,23 @@ namespace ArcCreate.Gameplay.Audio
                     }));
                 }
 
-                AudioClip = DownloadHandlerAudioClip.GetContent(req);
+                audioClipSO.Value = DownloadHandlerAudioClip.GetContent(req);
             }
+        }
+
+        private void Awake()
+        {
+            audioClipSO.OnValueChange.AddListener(OnClipLoad);
+        }
+
+        private void OnDestroy()
+        {
+            audioClipSO.OnValueChange.RemoveListener(OnClipLoad);
+        }
+
+        private void OnClipLoad(AudioClip clip)
+        {
+            AudioClip = clip;
         }
     }
 }

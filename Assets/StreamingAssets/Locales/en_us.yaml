@@ -154,6 +154,12 @@ Compose:
         Present: Present
         Future: Future
         Beyond: Beyond
+    Timeline:
+      Label:
+        Offset: Offset
+        Speed: Speed
+        TimingGroup: Group
+        Density: Density
 
 Gameplay:
   Exception:
