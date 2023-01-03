@@ -133,7 +133,7 @@ namespace ArcCreate.Compose.Project
         {
             string path = Shell.OpenFileDialog(
                 filterName: "ArcCreate Project",
-                extension: new string[] { Strings.ProjectExtensionWithoutDot },
+                extension: new string[] { Values.ProjectExtensionWithoutDot },
                 title: "Open ArcCreate Project",
                 initPath: PlayerPrefs.GetString("LastProjectPath", ""));
 
@@ -240,8 +240,8 @@ namespace ArcCreate.Compose.Project
 
         private void AutofillChart(ChartSettings chart)
         {
-            chart.Title = Strings.DefaultTitle;
-            chart.Composer = Strings.DefaultComposer;
+            chart.Title = Values.DefaultTitle;
+            chart.Composer = Values.DefaultComposer;
 
             switch (chart.ChartPath.Split('.')[0])
             {

@@ -1,6 +1,6 @@
 namespace ArcCreate.Compose
 {
-    public static class Strings
+    public static class Values
     {
         // Extensions
         public const string ProjectExtension = ".arcproj";
@@ -20,5 +20,8 @@ namespace ArcCreate.Compose
         public const string BackgroundFilePrefix = "bg_";
         public const string DefaultTitle = "Untitled";
         public const string DefaultComposer = "N/A";
+
+        // Pools
+        public const string TickPoolName = "TickPool";
     }
 }
