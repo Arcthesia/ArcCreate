@@ -6,8 +6,12 @@ namespace ArcCreate.Compose.Timeline
     public class TimelineService : MonoBehaviour, ITimelineService
     {
         [SerializeField] private WaveformDisplay waveformDisplay;
+
+        [Header("Markers")]
         [SerializeField] private Marker timingMarker;
         [SerializeField] private Marker returnTimingMarker;
+
+        [Header("Playback control")]
         [SerializeField] private Button pauseButton;
         [SerializeField] private GameObject pauseHighlight;
         [SerializeField] private Button playButton;
