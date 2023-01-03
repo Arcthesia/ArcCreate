@@ -122,7 +122,7 @@ namespace ArcCreate.Gameplay.Audio
                 timing = newTiming;
             }
 
-            if (AutomaticallyReturnOnAudioEnd && timing > AudioLength)
+            if (AutomaticallyReturnOnAudioEnd && timing >= AudioLength)
             {
                 Stop();
             }
@@ -189,6 +189,11 @@ namespace ArcCreate.Gameplay.Audio
             stationaryBeforeStart = true;
             returnOnPause = true;
             onPauseReturnTo = timing;
+        }
+
+        public void SetResumeAt(int timing)
+        {
+            lastPausedTiming = timing;
         }
 
         private void Play(int timing = 0, int delay = 0)

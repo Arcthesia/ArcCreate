@@ -21,8 +21,6 @@ namespace ArcCreate.Gameplay
         [SerializeField] private AudioClip testAudio;
         [SerializeField] private string testPlayChartFileName = "test_chart.aff";
 
-        private bool loaded = false;
-
         public IChartControl Chart => chartService;
 
         public ISkinControl Skin => skinService;
@@ -94,12 +92,11 @@ namespace ArcCreate.Gameplay
             Audio.AudioClip = testAudio;
             Chart.LoadChart(reader);
             Audio.PlayWithDelay(0, 2000);
-            loaded = true;
         }
 
         private void Update()
         {
-            if (!loaded)
+            if (!Services.Chart.IsLoaded)
             {
                 return;
             }

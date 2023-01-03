@@ -1,7 +1,8 @@
 {
     "name": "ArcCreate.Editor",
     "references": [
-        "GUID:90e3d095a2e0078458a68d742741768c"
+        "GUID:90e3d095a2e0078458a68d742741768c",
+        "GUID:00705dc9c9c277bae831342040e6da62"
     ],
     "includePlatforms": [
         "Editor"
