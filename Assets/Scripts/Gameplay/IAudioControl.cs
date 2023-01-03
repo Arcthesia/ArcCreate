@@ -95,6 +95,13 @@ namespace ArcCreate.Gameplay
         void SetResumeAt(int timing);
 
         /// <summary>
+        /// Set whether or not to return to a timing value after pausing.
+        /// </summary>
+        /// <param name="cond">Whether or not to return.</param>
+        /// <param name="timing">The timing to return to.</param>
+        void SetReturnOnPause(bool cond, int timing = 0);
+
+        /// <summary>
         /// Load the audio clip from the specified path.
         /// </summary>
         /// <param name="path">The path to load.</param>

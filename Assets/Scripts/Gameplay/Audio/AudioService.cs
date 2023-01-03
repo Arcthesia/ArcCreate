@@ -63,7 +63,7 @@ namespace ArcCreate.Gameplay.Audio
                 timing = value;
                 if (IsPlaying)
                 {
-                    Pause();
+                    audioSource.Stop();
                     Play(timing, 0);
                 }
                 else
@@ -194,6 +194,12 @@ namespace ArcCreate.Gameplay.Audio
         public void SetResumeAt(int timing)
         {
             lastPausedTiming = timing;
+        }
+
+        public void SetReturnOnPause(bool cond, int timing = 0)
+        {
+            returnOnPause = cond;
+            onPauseReturnTo = timing;
         }
 
         private void Play(int timing = 0, int delay = 0)

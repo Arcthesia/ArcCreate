@@ -6,6 +6,7 @@ using ArcCreate.Gameplay.Skin;
 using ArcCreate.SceneTransition;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Networking;
 
 namespace ArcCreate.Gameplay
@@ -20,6 +21,12 @@ namespace ArcCreate.Gameplay
         [SerializeField] private AudioService audioService;
         [SerializeField] private AudioClip testAudio;
         [SerializeField] private string testPlayChartFileName = "test_chart.aff";
+
+        public bool ShouldUpdateInputSystem
+        {
+            get => Values.ShouldUpdateInputSystem;
+            set => Values.ShouldUpdateInputSystem = value;
+        }
 
         public IChartControl Chart => chartService;
 
@@ -107,11 +114,7 @@ namespace ArcCreate.Gameplay
 
             int currentTiming = Services.Audio.Timing;
             Services.Chart.UpdateChart(currentTiming);
-            if (Services.Audio.IsPlaying || Values.IsRendering)
-            {
-                Services.Judgement.ProcessInput(currentTiming);
-            }
-
+            Services.Judgement.ProcessInput(currentTiming);
             Services.Score.UpdateDisplay(currentTiming);
             Services.Camera.UpdateCamera(currentTiming);
             Services.Scenecontrol.UpdateScenecontrol(currentTiming);
