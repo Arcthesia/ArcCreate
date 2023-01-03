@@ -30,6 +30,8 @@ namespace ArcCreate.Gameplay.Chart
         private readonly List<TimingGroup> timingGroups = new List<TimingGroup>();
         private readonly BeatlineDisplay beatlineDisplay = new BeatlineDisplay();
 
+        public bool IsLoaded { get; private set; }
+
         public int Timing
         {
             get => Services.Audio.Timing;
@@ -221,6 +223,7 @@ namespace ArcCreate.Gameplay.Chart
         public void LoadChart(ChartReader reader)
         {
             LoadChart(new ArcChart(reader));
+            IsLoaded = true;
             Timing = 0;
         }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using ArcCreate.ChartFormat;
 using ArcCreate.Utility;
 using ArcCreate.Utility.Extension;
 using TMPro;
@@ -108,6 +109,7 @@ namespace ArcCreate.Compose.Project
             CurrentChart = chart;
             CurrentProject.LastOpenedChartPath = CurrentChart.ChartPath;
             currentChartPath.text = CurrentChart.ChartPath;
+            LoadChart(CurrentChart.ChartPath);
             OnChartLoad?.Invoke(CurrentChart);
         }
 
@@ -203,6 +205,7 @@ namespace ArcCreate.Compose.Project
             noProjectLoadedHint.SetActive(false);
 
             currentChartPath.text = CurrentChart.ChartPath;
+            LoadChart(CurrentChart.ChartPath);
             OnChartLoad?.Invoke(CurrentChart);
         }
 
@@ -263,6 +266,13 @@ namespace ArcCreate.Compose.Project
                     chart.Difficulty = defaultDifficultyNames[2];
                     break;
             }
+        }
+
+        private void LoadChart(string chartPath)
+        {
+            string path = Path.Combine(CurrentProject.Path, chartPath);
+            ChartReader reader = ChartReaderFactory.GetReader(new PhysicalFileAccess(), path);
+            Services.Gameplay.Chart.LoadChart(reader);
         }
     }
 }

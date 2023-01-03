@@ -89,6 +89,12 @@ namespace ArcCreate.Gameplay
         void ResumeReturnableWithDelay(int delayMs);
 
         /// <summary>
+        /// Set the timing to jump to next resuming.
+        /// </summary>
+        /// <param name="timing">The timing value.</param>
+        void SetResumeAt(int timing);
+
+        /// <summary>
         /// Load the audio clip from the specified path.
         /// </summary>
         /// <param name="path">The path to load.</param>

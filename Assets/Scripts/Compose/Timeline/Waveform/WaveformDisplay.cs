@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -5,36 +6,51 @@ using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Timeline
 {
-    [RequireComponent(typeof(RawImage))]
-    public class WaveformDisplay : MonoBehaviour, IScrollHandler
+    public class WaveformDisplay : MonoBehaviour
     {
-        [SerializeField] private Camera mainCamera;
-        private RawImage image;
-        private RectTransform imageTransform;
+        [SerializeField] private RawImage image;
+        [SerializeField] private RectTransform container;
         [SerializeField] private float minViewLength = 0.5f;
-        [SerializeField] private double debounceSeconds = 0.2;
         [SerializeField] private AudioClipSO audioClipSO;
-        [SerializeField] private Color waveformBg;
-        [SerializeField] private Color waveformColor;
 
         private float scrollPivot;
-        [SerializeField] private float viewFromSecond;
-        [SerializeField] private float viewToSecond;
-        private float textureViewFromSecond;
-        private float textureViewToSecond;
+        private float viewFromSecond;
+        private float viewToSecond;
         private float minViewLengthOfClip;
-        private Vector2 baseAnchoredPosition;
-        [SerializeField] private double scheduledReset = double.MaxValue;
-        private AudioClip clip;
-        private Vector2 previousRect;
+        [SerializeField] private AudioClip clip;
         private Keyboard keyboard;
 
-        public void OnScroll(PointerEventData eventData)
-        {
-            Vector2 scrollDelta = eventData.scrollDelta;
+        private readonly int fromSampleShaderId = Shader.PropertyToID("_FromSample");
+        private readonly int toSampleShaderId = Shader.PropertyToID("_ToSample");
 
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(imageTransform, eventData.position, null, out Vector2 local);
-            scrollPivot = (local.x / imageTransform.rect.width) + 0.5f;
+        public event Action<float> OnWaveformDrag;
+
+        public int ViewFromTiming => Mathf.RoundToInt(viewFromSecond * 1000);
+
+        public int ViewToTiming => Mathf.RoundToInt(viewToSecond * 1000);
+
+        public void OnDrag(BaseEventData eventData)
+        {
+            var ev = eventData as PointerEventData;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(container, ev.position, null, out Vector2 local);
+            OnWaveformDrag?.Invoke(local.x);
+        }
+
+        public void OnPointerClick(BaseEventData eventData)
+        {
+            var ev = eventData as PointerEventData;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(container, ev.position, null, out Vector2 local);
+            OnWaveformDrag?.Invoke(local.x);
+        }
+
+        public void OnScroll(BaseEventData eventData)
+        {
+            var ev = eventData as PointerEventData;
+            Vector2 scrollDelta = ev.scrollDelta;
+            print(scrollDelta);
+
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(container, ev.position, null, out Vector2 local);
+            scrollPivot = (local.x / container.rect.width) + 0.5f;
             float scrollDir = Mathf.Sign(scrollDelta.y);
 
             if (keyboard.shiftKey.isPressed)
@@ -75,78 +91,41 @@ namespace ArcCreate.Compose.Timeline
                 viewToSecond = Mathf.Clamp(viewToSecond, viewFromSecond + viewSize, clip.length);
             }
 
-            // .        viewFrom-----------------------------viewTo
-            // .        [<--------------------------------------->]
-            // textureViewFrom-----------------------------textureViewTo
-            // [<----------------------------------------------------->]
-            AlignView();
+            ApplyViewRangeToWaveform();
         }
 
-        private void AlignView()
+        public void FocusOnTiming(float seconds)
         {
-            float tempScaleX = Mathf.Abs((textureViewToSecond - textureViewFromSecond) / (viewToSecond - viewFromSecond));
-            imageTransform.localScale = new Vector2(tempScaleX, 1);
+            float viewDistance = viewToSecond - viewFromSecond;
+            float newFrom = seconds - (viewDistance / 2);
+            newFrom = Mathf.Clamp(newFrom, 0, clip.length - viewDistance);
+            viewFromSecond = newFrom;
+            viewToSecond = viewFromSecond + viewDistance;
 
-            float pivotX = imageTransform.pivot.x;
-            float pivotXSecond = Mathf.Lerp(viewFromSecond, viewToSecond, pivotX);
-            float pivotXTextureSecond = Mathf.Lerp(textureViewFromSecond, textureViewToSecond, pivotX);
-            float diffSecondToMove = pivotXSecond - pivotXTextureSecond;
-            float diffXToMove = diffSecondToMove / (viewToSecond - viewFromSecond) * imageTransform.rect.width;
-
-            imageTransform.anchoredPosition = baseAnchoredPosition - new Vector2(diffXToMove, 0);
-
-            scheduledReset = Time.realtimeSinceStartup + debounceSeconds;
+            ApplyViewRangeToWaveform();
         }
 
-        private void SetWave()
+        public void GenerateWaveform()
         {
-            float midPoint = (viewFromSecond + viewToSecond) / 2;
-            float length = Mathf.Abs(viewToSecond - viewFromSecond);
-            minViewLengthOfClip = Mathf.Min(minViewLength, clip.length);
+            viewFromSecond = 0;
+            viewToSecond = clip.length;
+            Texture2D texture = WaveformGenerator.EncodeTexture(clip);
+            image.texture = texture;
+            image.material.mainTexture = texture;
 
-            textureViewFromSecond = midPoint - length;
-            textureViewToSecond = midPoint + length;
-            textureViewFromSecond = Mathf.Clamp(textureViewFromSecond, 0, clip.length);
-            textureViewToSecond = Mathf.Clamp(textureViewToSecond, 0, clip.length);
-
-            float width = imageTransform.rect.width * (textureViewToSecond - textureViewFromSecond) / length;
-            Vector2 size = new Vector2(width, imageTransform.rect.height);
-            if (size.x > 0 && size.y > 0)
-            {
-                image.texture = WaveformGenerator.GetWaveformTexture(clip, size, textureViewFromSecond, textureViewToSecond, waveformBg, waveformColor);
-            }
-
-            AlignView();
+            ApplyViewRangeToWaveform();
         }
 
-        private void Update()
+        private void ApplyViewRangeToWaveform()
         {
-            if (clip != null && (imageTransform.rect.width != previousRect.x || imageTransform.rect.height != previousRect.y))
-            {
-                scheduledReset = Time.realtimeSinceStartup + debounceSeconds;
-            }
-
-            previousRect = new Vector2(imageTransform.rect.width, imageTransform.rect.height);
-
-            if (Time.realtimeSinceStartup > scheduledReset)
-            {
-                SetWave();
-                scheduledReset = double.MaxValue;
-            }
+            image.material.SetInt(fromSampleShaderId, WaveformGenerator.SecondToSample(viewFromSecond, clip));
+            image.material.SetInt(toSampleShaderId, WaveformGenerator.SecondToSample(viewToSecond, clip));
         }
 
         private void Awake()
         {
-            image = GetComponent<RawImage>();
-            imageTransform = GetComponent<RectTransform>();
-
-            baseAnchoredPosition = imageTransform.anchoredPosition;
-
             viewFromSecond = 0;
-            textureViewFromSecond = 0;
             viewToSecond = 0;
-            textureViewToSecond = 0;
-
             audioClipSO.OnValueChange.AddListener(OnClipLoad);
             keyboard = InputSystem.GetDevice<Keyboard>();
         }
@@ -161,7 +140,8 @@ namespace ArcCreate.Compose.Timeline
             this.clip = clip;
             viewFromSecond = 0;
             viewToSecond = clip.length;
-            SetWave();
+            minViewLengthOfClip = Mathf.Min(clip.length, minViewLength);
+            GenerateWaveform();
         }
     }
 }
