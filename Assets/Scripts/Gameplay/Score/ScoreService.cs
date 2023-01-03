@@ -1,5 +1,6 @@
 using ArcCreate.Gameplay.Judgement;
 using ArcCreate.Utility;
+using ArcCreate.Utility.Extension;
 using TMPro;
 using UnityEngine;
 
@@ -111,39 +112,9 @@ namespace ArcCreate.Gameplay.Score
             SetScore(CurrentScoreTotal);
         }
 
-        private void SetArray(char[] array, int number, out int length)
-        {
-            bool isNegative = number < 0;
-            number = isNegative ? -number : number;
-
-            int i = array.Length - 1;
-            length = 0;
-            while (i >= 0 && number > 0)
-            {
-                array[i] = (char)('0' + (number % 10));
-                number /= 10;
-                length++;
-                i--;
-            }
-
-            if (isNegative)
-            {
-                if (i > 0)
-                {
-                    length++;
-                }
-                else
-                {
-                    i = 0;
-                }
-
-                array[i] = '-';
-            }
-        }
-
         private void SetScore(int score)
         {
-            SetArray(scoreCharArray, score, out int length);
+            scoreCharArray.SetNumberDigitsToArray(score, out int length);
             for (int i = scoreCharArray.Length - 8; i < scoreCharArray.Length - length; i++)
             {
                 scoreCharArray[i] = '0';
@@ -160,7 +131,7 @@ namespace ArcCreate.Gameplay.Score
                 comboText.color = Services.Skin.ComboColor;
                 comboText.outlineColor = Services.Skin.ComboColor;
 
-                SetArray(comboCharArray, combo, out int length);
+                comboCharArray.SetNumberDigitsToArray(combo, out int length);
                 comboText.SetCharArray(comboCharArray, comboCharArray.Length - length, length);
             }
             else

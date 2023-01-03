@@ -72,7 +72,7 @@ namespace ArcCreate.Compose.Project
         {
             if (string.IsNullOrEmpty(path))
             {
-                startingChartFileField.text = Strings.DefaultChartFileName;
+                startingChartFileField.text = Values.DefaultChartFileName;
             }
 
             AutofillFields();
@@ -87,25 +87,25 @@ namespace ArcCreate.Compose.Project
 
             string[] prefixes =
                 string.IsNullOrEmpty(StartingChartFile) ?
-                new string[] { Strings.BaseFileName } :
+                new string[] { Values.BaseFileName } :
                 new string[]
                 {
-                    Strings.BaseFileName,
+                    Values.BaseFileName,
                     Path.GetFileNameWithoutExtension(StartingChartFile),
                 };
 
             string[] backgroundPrefixes =
                 string.IsNullOrEmpty(StartingChartFile) ?
-                new string[] { Strings.BackgroundFileName } :
+                new string[] { Values.BackgroundFileName } :
                 new string[]
                 {
-                    Strings.BackgroundFileName,
-                    Path.GetFileNameWithoutExtension(Strings.BackgroundFilePrefix + StartingChartFile),
+                    Values.BackgroundFileName,
+                    Path.GetFileNameWithoutExtension(Values.BackgroundFilePrefix + StartingChartFile),
                 };
 
-            AutofillFilefield(prefixes, Strings.AudioExtensions, audioFileField);
-            AutofillFilefield(prefixes, Strings.ImageExtensions, jacketArtField);
-            AutofillFilefield(backgroundPrefixes, Strings.ImageExtensions, backgroundField);
+            AutofillFilefield(prefixes, Values.AudioExtensions, audioFileField);
+            AutofillFilefield(prefixes, Values.ImageExtensions, jacketArtField);
+            AutofillFilefield(backgroundPrefixes, Values.ImageExtensions, backgroundField);
         }
 
         private void AutofillFilefield(string[] prefixes, string[] exts, FileSelectField field)
@@ -143,9 +143,9 @@ namespace ArcCreate.Compose.Project
         private void ClearFields()
         {
             projectFileField.ClearContent();
-            startingChartFileField.text = Strings.DefaultChartFileName;
+            startingChartFileField.text = Values.DefaultChartFileName;
             audioFileField.ClearContent();
-            baseBPMField.text = Strings.DefaultBpm;
+            baseBPMField.text = Values.DefaultBpm;
             jacketArtField.ClearContent();
             backgroundField.ClearContent();
         }

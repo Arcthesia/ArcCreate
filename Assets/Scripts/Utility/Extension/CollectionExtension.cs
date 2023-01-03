@@ -65,6 +65,50 @@ namespace ArcCreate.Utility.Extension
         }
 
         /// <summary>
+        /// Search for smallest index within a sorted list, whose corresponding item is greater than or equal to the provided value.
+        /// Example: for the list [0, 0, 1, 2, 2, 3], searching for 2 will return the index 3.
+        /// The returned index is guaranteed to be within the range of the list.
+        /// </summary>
+        /// <param name="list">The list to bisect.</param>
+        /// <param name="value">The value to search for.</param>
+        /// <typeparam name="T">Type of the list.</typeparam>
+        /// <returns>The index found, which is always within the index range of the list.</returns>
+        public static int BisectLeft<T>(this IList<T> list, T value)
+            where T : IComparable<T>
+        {
+            // Copied implementation from python lol
+            if (value.CompareTo(list[0]) <= 0)
+            {
+                return 0;
+            }
+
+            if (value.CompareTo(list[list.Count - 1]) >= 0)
+            {
+                return list.Count - 1;
+            }
+
+            int low = 0;
+            int high = list.Count;
+            int mid;
+
+            while (low < high)
+            {
+                mid = (int)((low + high) / 2);
+                if (list[mid].CompareTo(value) < 0)
+                {
+                    low = mid + 1;
+                }
+                else
+                {
+                    high = mid;
+                }
+            }
+
+            low = UnityEngine.Mathf.Clamp(low, 0, list.Count - 1);
+            return low;
+        }
+
+        /// <summary>
         /// Search for smallest index within a sorted list, whose corresponding item is greater than the provided value.
         /// Example: for the list [0, 0, 1, 2, 2, 3], searching for 2 will return the index 5.
         /// If the search value is greater than any item in the list, the list's count value will be returned.
@@ -111,6 +155,36 @@ namespace ArcCreate.Utility.Extension
             var hashSet = new HashSet<T>();
             hashSet.SetCapacity(capacity);
             return hashSet;
+        }
+
+        public static void SetNumberDigitsToArray(this char[] array, int number, out int length)
+        {
+            bool isNegative = number < 0;
+            number = isNegative ? -number : number;
+
+            int i = array.Length - 1;
+            length = 0;
+            while (i >= 0 && number > 0)
+            {
+                array[i] = (char)('0' + (number % 10));
+                number /= 10;
+                length++;
+                i--;
+            }
+
+            if (isNegative)
+            {
+                if (i > 0)
+                {
+                    length++;
+                }
+                else
+                {
+                    i = 0;
+                }
+
+                array[i] = '-';
+            }
         }
 
         private static class HashSetDelegateHolder<T>
