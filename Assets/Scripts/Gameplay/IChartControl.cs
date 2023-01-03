@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ArcCreate.ChartFormat;
+using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.Data;
 
 namespace ArcCreate.Gameplay
@@ -50,5 +51,7 @@ namespace ArcCreate.Gameplay
         /// </summary>
         /// <param name="events">The events that has been changed.</param>
         void UpdateEvents(IEnumerable<ArcEvent> events);
+
+        TimingGroup GetTimingGroup(int group);
     }
 }

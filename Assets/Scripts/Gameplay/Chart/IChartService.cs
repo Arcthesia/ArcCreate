@@ -9,6 +9,12 @@ namespace ArcCreate.Gameplay.Chart
     public interface IChartService
     {
         /// <summary>
+        /// Gets a value indicating whether a chart has been loaded.
+        /// </summary>
+        /// <value>The boolean value.</value>
+        bool IsLoaded { get; }
+
+        /// <summary>
         /// Reload skin for all notes in the chart.
         /// </summary>
         void ReloadSkin();
