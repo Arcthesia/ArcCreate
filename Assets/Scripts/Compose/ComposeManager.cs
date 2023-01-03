@@ -37,6 +37,7 @@ namespace ArcCreate.Compose
                     var renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
                     gameplayView.texture = renderTexture;
                     gameplayControl.SetTargetRenderTexture(renderTexture);
+                    gameplayControl.ShouldUpdateInputSystem = false;
                 }).Forget();
         }
 

@@ -8,6 +8,13 @@ namespace ArcCreate.Gameplay
     public interface IGameplayControl
     {
         /// <summary>
+        /// Gets or sets a value indicating whether or not to let this module update InputSystem.
+        /// Set this to true if no other scene will update InputSystem themselves.
+        /// </summary>
+        /// <value>Whether or not to update InputSystem.</value>
+        bool ShouldUpdateInputSystem { get; set; }
+
+        /// <summary>
         /// Gets the controller for chart related functionality.
         /// </summary>
         /// <value>The chart controller.</value>
