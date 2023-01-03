@@ -11,6 +11,7 @@ namespace ArcCreate.Compose.Timeline
         [SerializeField] private RawImage image;
         [SerializeField] private RectTransform container;
         [SerializeField] private float minViewLength = 0.5f;
+        [SerializeField] private float minScrollDist = 0.20f;
         [SerializeField] private AudioClipSO audioClipSO;
 
         private float scrollPivot;
@@ -24,6 +25,10 @@ namespace ArcCreate.Compose.Timeline
         private readonly int toSampleShaderId = Shader.PropertyToID("_ToSample");
 
         public event Action<float> OnWaveformDrag;
+
+        public event Action OnWaveformScroll;
+
+        public event Action OnWaveformZoom;
 
         public int ViewFromTiming => Mathf.RoundToInt(viewFromSecond * 1000);
 
@@ -47,7 +52,6 @@ namespace ArcCreate.Compose.Timeline
         {
             var ev = eventData as PointerEventData;
             Vector2 scrollDelta = ev.scrollDelta;
-            print(scrollDelta);
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(container, ev.position, null, out Vector2 local);
             scrollPivot = (local.x / container.rect.width) + 0.5f;
@@ -77,18 +81,21 @@ namespace ArcCreate.Compose.Timeline
                 {
                     (viewFromSecond, viewToSecond) = (viewToSecond, viewFromSecond);
                 }
+
+                OnWaveformZoom?.Invoke();
             }
             else
             {
                 float viewSize = viewToSecond - viewFromSecond;
-                viewFromSecond += scrollDir / 10;
-                viewToSecond += scrollDir / 10;
+                viewFromSecond += scrollDir * Mathf.Max(viewSize / 10, minScrollDist);
+                viewToSecond += scrollDir * Mathf.Max(viewSize / 10, minScrollDist);
 
                 viewToSecond = Mathf.Clamp(viewToSecond, 0, clip.length);
                 viewFromSecond = Mathf.Clamp(viewFromSecond, 0, viewToSecond - viewSize);
 
                 viewFromSecond = Mathf.Clamp(viewFromSecond, 0, clip.length);
                 viewToSecond = Mathf.Clamp(viewToSecond, viewFromSecond + viewSize, clip.length);
+                OnWaveformScroll?.Invoke();
             }
 
             ApplyViewRangeToWaveform();
@@ -112,6 +119,7 @@ namespace ArcCreate.Compose.Timeline
             Texture2D texture = WaveformGenerator.EncodeTexture(clip);
             image.texture = texture;
             image.material.mainTexture = texture;
+            image.enabled = true;
 
             ApplyViewRangeToWaveform();
         }
@@ -126,6 +134,7 @@ namespace ArcCreate.Compose.Timeline
         {
             viewFromSecond = 0;
             viewToSecond = 0;
+            image.enabled = false;
             audioClipSO.OnValueChange.AddListener(OnClipLoad);
             keyboard = InputSystem.GetDevice<Keyboard>();
         }

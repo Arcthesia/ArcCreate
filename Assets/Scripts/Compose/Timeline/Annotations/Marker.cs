@@ -13,6 +13,7 @@ namespace ArcCreate.Compose.Timeline
         [SerializeField] private float spacing;
         private RectTransform rectTransform;
         private RectTransform parentRectTransform;
+        private bool queueTimingEdit = false;
 
         public event Action<Marker, int> OnValueChanged;
 
@@ -31,7 +32,7 @@ namespace ArcCreate.Compose.Timeline
         public void SetTiming(int timing)
         {
             Timing = timing;
-            timingField.text = timing.ToString();
+            SetFieldText(timing);
         }
 
         public void SetDragPosition(float x)
@@ -45,7 +46,7 @@ namespace ArcCreate.Compose.Timeline
             float p = (x + parentWidth) / (parentWidth * 2);
 
             Timing = Mathf.RoundToInt(Mathf.Lerp(viewFrom, viewTo, p));
-            timingField.text = Timing.ToString();
+            SetFieldText(Timing);
             OnValueChanged?.Invoke(this, Timing);
 
             AlignNumberBackground();
@@ -88,11 +89,24 @@ namespace ArcCreate.Compose.Timeline
         {
             if (Evaluator.TryFloat(val, out float num))
             {
-                Timing = Mathf.RoundToInt(num);
+                int timing = Mathf.RoundToInt(num);
+                Timing = Mathf.Clamp(timing, 0, Services.Gameplay.Audio.AudioLength);
                 OnValueChanged.Invoke(this, Timing);
             }
 
             timingField.text = num.ToString();
+        }
+
+        private void SetFieldText(int timing)
+        {
+            if (!timingField.isFocused)
+            {
+                timingField.text = timing.ToString();
+            }
+            else
+            {
+                queueTimingEdit = true;
+            }
         }
 
         private void Update()
@@ -105,6 +119,12 @@ namespace ArcCreate.Compose.Timeline
             float x = Mathf.Lerp(-parentWidth, parentWidth, p);
             rectTransform.anchoredPosition = new Vector2(x, rectTransform.anchoredPosition.y);
             AlignNumberBackground();
+
+            if (!timingField.isFocused && queueTimingEdit)
+            {
+                timingField.text = Timing.ToString();
+                queueTimingEdit = false;
+            }
         }
     }
 }

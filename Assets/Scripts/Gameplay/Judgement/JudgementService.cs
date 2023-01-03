@@ -52,7 +52,11 @@ namespace ArcCreate.Gameplay.Judgement
             PruneExpiredRequests(currentTiming);
 
             // Manually update input system to minimalize lag
-            InputSystem.Update();
+            if (Values.ShouldUpdateInputSystem)
+            {
+                InputSystem.Update();
+            }
+
             inputHandler.PollInput();
             inputHandler.HandleTapRequests(currentTiming, laneTapRequests, arcTapRequests);
             inputHandler.HandleLaneHoldRequests(currentTiming, laneHoldRequests);
