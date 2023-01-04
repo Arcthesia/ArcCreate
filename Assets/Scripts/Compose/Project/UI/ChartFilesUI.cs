@@ -1,5 +1,6 @@
 using System.IO;
 using ArcCreate.Compose.Components;
+using ArcCreate.Gameplay;
 using ArcCreate.Utility.Mp3Converter;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ namespace ArcCreate.Compose.Project
 {
     public class ChartFilesUI : ChartMetadataUI
     {
+        [SerializeField] private GameplayData gameplayData;
         [SerializeField] private FileSelectField audioFile;
         [SerializeField] private ImageFileSelectField jacket;
         [SerializeField] private ImageFileSelectField background;
@@ -54,12 +56,12 @@ namespace ArcCreate.Compose.Project
                 Mp3Converter.Mp3ToWav(path.FullPath, converted.FullPath);
 
                 Target.AudioPath = converted.ShortenedPath;
-                Services.Gameplay.Audio.LoadAudio(converted.FullPath);
+                gameplayData.LoadAudio(converted.FullPath);
                 return;
             }
 
             Target.AudioPath = path.ShortenedPath;
-            Services.Gameplay.Audio.LoadAudio(path.FullPath);
+            gameplayData.LoadAudio(path.FullPath);
         }
 
         private void OnJacket(FilePath path)
@@ -67,12 +69,12 @@ namespace ArcCreate.Compose.Project
             if (path == null)
             {
                 Target.JacketPath = null;
-                Services.Gameplay.Skin.SetDefaultJacket();
+                gameplayData.SetDefaultJacket();
                 return;
             }
 
             Target.JacketPath = path.ShortenedPath;
-            Services.Gameplay.Skin.LoadJacket(path.FullPath);
+            gameplayData.LoadJacket(path.FullPath);
         }
 
         private void OnBackground(FilePath path)
@@ -80,17 +82,18 @@ namespace ArcCreate.Compose.Project
             if (path == null)
             {
                 Target.BackgroundPath = null;
-                Services.Gameplay.Skin.SetDefaultBackground();
+                gameplayData.SetDefaultBackground();
+                return;
             }
 
             Target.BackgroundPath = path.ShortenedPath;
-            Services.Gameplay.Skin.LoadBackground(path.FullPath);
+            gameplayData.LoadBackground(path.FullPath);
         }
 
         private void OnVideo(FilePath path)
         {
             Target.VideoPath = path.ShortenedPath;
-            Services.Gameplay.Skin.VideoBackgroundUrl = "file:///" + path.FullPath.Replace("\\", "/");
+            gameplayData.VideoBackgroundUrl.Value = "file:///" + path.FullPath.Replace("\\", "/");
         }
     }
 }

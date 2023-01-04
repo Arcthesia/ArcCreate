@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using ArcCreate.ChartFormat;
+using ArcCreate.Gameplay;
 using ArcCreate.Utility;
 using ArcCreate.Utility.Extension;
 using TMPro;
@@ -14,6 +15,7 @@ namespace ArcCreate.Compose.Project
 {
     public class ProjectService : MonoBehaviour, IProjectService
     {
+        [SerializeField] private GameplayData gameplayData;
         [SerializeField] private Button newProjectButton;
         [SerializeField] private Button openProjectButton;
         [SerializeField] private Button saveProjectButton;
@@ -270,9 +272,11 @@ namespace ArcCreate.Compose.Project
 
         private void LoadChart(string chartPath)
         {
-            string path = Path.Combine(CurrentProject.Path, chartPath);
+            string dir = Path.GetDirectoryName(CurrentProject.Path);
+            string path = Path.Combine(dir, chartPath);
             ChartReader reader = ChartReaderFactory.GetReader(new PhysicalFileAccess(), path);
-            Services.Gameplay.Chart.LoadChart(reader);
+            reader.Parse();
+            gameplayData.LoadChart(reader);
         }
     }
 }

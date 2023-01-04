@@ -59,11 +59,8 @@ namespace ArcCreate.Compose.Components
             contentText.text = string.Empty;
             contentText.gameObject.SetActive(false);
             placeholderText.gameObject.SetActive(true);
-            if (required)
-            {
-                invalidIndicator.SetActive(true);
-            }
 
+            invalidIndicator.SetActive(required);
             clearButton.gameObject.SetActive(false);
         }
 

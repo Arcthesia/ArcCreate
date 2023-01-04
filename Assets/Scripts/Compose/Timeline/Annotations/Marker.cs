@@ -23,7 +23,7 @@ namespace ArcCreate.Compose.Timeline
         {
             float parentWidth = parentRectTransform.rect.width / 2;
 
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRectTransform, eventData.position, null, out Vector2 local);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRectTransform, eventData.position, eventData.enterEventCamera, out Vector2 local);
             local.x = Mathf.Clamp(local.x, -parentWidth, parentWidth);
 
             SetDragPosition(local.x);

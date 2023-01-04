@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
@@ -13,7 +8,7 @@ namespace ArcCreate.Gameplay.Audio
     {
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private VideoPlayer videoPlayer;
-        [SerializeField] private AudioClipSO audioClipSO;
+        [SerializeField] private GameplayData gameplayData;
         [SerializeField] private Slider timingSlider;
 
         /// <summary>
@@ -77,8 +72,6 @@ namespace ArcCreate.Gameplay.Audio
 
         public bool IsPlaying { get => audioSource.isPlaying; }
 
-        public bool AutomaticallyReturnOnAudioEnd { get; set; } = true;
-
         public AudioClip AudioClip
         {
             get => audioSource.clip;
@@ -90,11 +83,6 @@ namespace ArcCreate.Gameplay.Audio
         }
 
         private int FullOffset => Values.ChartAudioOffset + Settings.GlobalAudioOffset.Value;
-
-        public void LoadAudio(string path)
-        {
-            StartLoadingAudio(path).Forget();
-        }
 
         public void UpdateTime()
         {
@@ -122,11 +110,6 @@ namespace ArcCreate.Gameplay.Audio
                 timing = newTiming;
             }
 
-            if (AutomaticallyReturnOnAudioEnd && timing >= AudioLength)
-            {
-                Stop();
-            }
-
             timingSlider.value = (float)timing / AudioLength;
         }
 
@@ -144,6 +127,12 @@ namespace ArcCreate.Gameplay.Audio
         public void Stop()
         {
             audioSource.Stop();
+            if (returnOnPause)
+            {
+                lastPausedTiming = onPauseReturnTo;
+                timing = onPauseReturnTo;
+            }
+
             Timing = 0;
         }
 
@@ -222,34 +211,14 @@ namespace ArcCreate.Gameplay.Audio
             }
         }
 
-        private async UniTask StartLoadingAudio(string path)
-        {
-            using (UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(
-                Uri.EscapeUriString("file:///" + path.Replace("\\", "/")),
-                path.EndsWith("wav") ? AudioType.WAV : AudioType.OGGVORBIS))
-            {
-                await req.SendWebRequest();
-                if (!string.IsNullOrWhiteSpace(req.error))
-                {
-                    throw new IOException(I18n.S("Gameplay.Exception.LoadAudio", new Dictionary<string, object>()
-                    {
-                        { "Path", path },
-                        { "Error", req.error },
-                    }));
-                }
-
-                audioClipSO.Value = DownloadHandlerAudioClip.GetContent(req);
-            }
-        }
-
         private void Awake()
         {
-            audioClipSO.OnValueChange.AddListener(OnClipLoad);
+            gameplayData.AudioClip.OnValueChange += OnClipLoad;
         }
 
         private void OnDestroy()
         {
-            audioClipSO.OnValueChange.RemoveListener(OnClipLoad);
+            gameplayData.AudioClip.OnValueChange -= OnClipLoad;
         }
 
         private void OnClipLoad(AudioClip clip)
