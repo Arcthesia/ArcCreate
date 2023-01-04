@@ -8,6 +8,8 @@ namespace ArcCreate.Gameplay.Chart
 {
     public class ChartService : MonoBehaviour, IChartService, IChartControl
     {
+        [SerializeField] private GameplayData gameplayData;
+
         [Header("Prefabs")]
         [SerializeField] private GameObject tapPrefab;
         [SerializeField] private GameObject holdPrefab;
@@ -31,46 +33,6 @@ namespace ArcCreate.Gameplay.Chart
         private readonly BeatlineDisplay beatlineDisplay = new BeatlineDisplay();
 
         public bool IsLoaded { get; private set; }
-
-        public int Timing
-        {
-            get => Services.Audio.Timing;
-            set
-            {
-                Services.Audio.Timing = value;
-                ResetJudge();
-            }
-        }
-
-        public int ChartAudioOffset
-        {
-            get => Values.ChartAudioOffset;
-            set
-            {
-                Values.ChartAudioOffset = value;
-                ResetJudge();
-            }
-        }
-
-        public float BaseBpm
-        {
-            get => Values.BaseBpm;
-            set
-            {
-                Values.BaseBpm = BaseBpm;
-                ResetJudge();
-            }
-        }
-
-        public float TimingPointDensityFactor
-        {
-            get => Values.TimingPointDensity;
-            set
-            {
-                Values.TimingPointDensity = value;
-                ResetJudge();
-            }
-        }
 
         public void ReloadSkin()
         {
@@ -224,15 +186,15 @@ namespace ArcCreate.Gameplay.Chart
         {
             LoadChart(new ArcChart(reader));
             IsLoaded = true;
-            Timing = 0;
+            Services.Audio.Timing = 0;
         }
 
         public void LoadChart(ArcChart chart)
         {
             Clear();
 
-            Values.ChartAudioOffset = chart.AudioOffset;
-            Values.TimingPointDensity = chart.TimingPointDensity;
+            gameplayData.AudioOffset.Value = chart.AudioOffset;
+            gameplayData.TimingPointDensityFactor.Value = chart.TimingPointDensity;
 
             int i = 0;
             for (int j = 0; j < chart.TimingGroups.Count; j++)
@@ -408,6 +370,9 @@ namespace ArcCreate.Gameplay.Chart
             Pools.New<Transform>(Values.BeatlinePoolName, beatlinePrefab, transform, beatlineCapacity);
 
             Settings.GlobalAudioOffset.OnValueChanged.AddListener(OnGlobalOffsetChange);
+            gameplayData.BaseBpm.OnValueChange += OnBaseBpm;
+            gameplayData.TimingPointDensityFactor.OnValueChange += OnTimingPointDensityFactor;
+            gameplayData.AudioOffset.OnValueChange += OnChartAudioOffset;
         }
 
         private void OnDestroy()
@@ -421,6 +386,27 @@ namespace ArcCreate.Gameplay.Chart
             Pools.Destroy<Transform>(Values.BeatlinePoolName);
 
             Settings.GlobalAudioOffset.OnValueChanged.RemoveListener(OnGlobalOffsetChange);
+            gameplayData.BaseBpm.OnValueChange -= OnBaseBpm;
+            gameplayData.TimingPointDensityFactor.OnValueChange -= OnTimingPointDensityFactor;
+            gameplayData.AudioOffset.OnValueChange -= OnChartAudioOffset;
+        }
+
+        private void OnTimingPointDensityFactor(float value)
+        {
+            Values.TimingPointDensity = value;
+            ResetJudge();
+        }
+
+        private void OnBaseBpm(float value)
+        {
+            Values.BaseBpm = value;
+            ResetJudge();
+        }
+
+        private void OnChartAudioOffset(int value)
+        {
+            Values.ChartAudioOffset = value;
+            ResetJudge();
         }
 
         private void OnGlobalOffsetChange(int offset)

@@ -15,6 +15,12 @@ namespace ArcCreate.Gameplay.Skin
         Color ComboColor { get; }
 
         /// <summary>
+        /// Gets the default background according to current skin value.
+        /// </summary>
+        /// <value>The background sprite.</value>
+        Sprite DefaultBackground { get; }
+
+        /// <summary>
         /// Get the skin for an arc note.
         /// </summary>
         /// <param name="note">The note to get the skin for.</param>

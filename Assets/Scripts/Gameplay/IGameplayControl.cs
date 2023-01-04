@@ -33,16 +33,9 @@ namespace ArcCreate.Gameplay
         IAudioControl Audio { get; }
 
         /// <summary>
-        /// Set the target texture to render the gameplay scene to.
-        /// Value of null will set target to the whole screen.
+        /// Set the rectangle boundary to render this scene's camera onto.
         /// </summary>
-        /// <param name="renderTexture">The target render texture.</param>
-        void SetTargetRenderTexture(RenderTexture renderTexture);
-
-        /// <summary>
-        /// Apply aspect ratio to the camera.
-        /// </summary>
-        /// <param name="aspectRatio">The aspect ratio.</param>
-        void ApplyAspect(float aspectRatio);
+        /// <param name="rect">The rect boundary, normalized.</param>
+        void SetCameraViewportRect(Rect rect);
     }
 }

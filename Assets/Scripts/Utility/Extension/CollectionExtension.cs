@@ -112,7 +112,7 @@ namespace ArcCreate.Utility.Extension
         /// Search for smallest index within a sorted list, whose corresponding item is greater than the provided value.
         /// Example: for the list [0, 0, 1, 2, 2, 3], searching for 2 will return the index 5.
         /// If the search value is greater than any item in the list, the list's count value will be returned.
-        /// If the search value is smaller than any item in the list, 0 will be returned.
+        /// If the search value is smaller than any item in the list, -1 will be returned.
         /// </summary>
         /// <param name="list">The list to bisect.</param>
         /// <param name="value">The value to search for.</param>
@@ -141,7 +141,6 @@ namespace ArcCreate.Utility.Extension
                 }
             }
 
-            low = UnityEngine.Mathf.Clamp(low, 0, list.Count - 1);
             return low;
         }
 

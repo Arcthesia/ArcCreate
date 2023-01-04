@@ -14,12 +14,12 @@ namespace ArcCreate.Compose.Project
 
         protected override void ApplyChartSettings(ChartSettings chart)
         {
-            side.SetValueWithoutNotify(chart.Skin?.Side);
-            note.SetValueWithoutNotify(chart.Skin?.Note);
-            particle.SetValueWithoutNotify(chart.Skin?.Particle);
-            accent.SetValueWithoutNotify(chart.Skin?.Accent);
-            track.SetValueWithoutNotify(chart.Skin?.Track);
-            singleLine.SetValueWithoutNotify(chart.Skin?.SingleLine);
+            side.Value = chart.Skin?.Side;
+            note.Value = chart.Skin?.Note;
+            particle.Value = chart.Skin?.Particle;
+            accent.Value = chart.Skin?.Accent;
+            track.Value = chart.Skin?.Track;
+            singleLine.Value = chart.Skin?.SingleLine;
         }
 
         private new void Start()

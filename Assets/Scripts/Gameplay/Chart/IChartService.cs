@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ArcCreate.ChartFormat;
 using ArcCreate.Gameplay.Data;
 
 namespace ArcCreate.Gameplay.Chart
@@ -70,7 +71,7 @@ namespace ArcCreate.Gameplay.Chart
         /// Load a chart.
         /// </summary>
         /// <param name="chart">Chart to load.</param>
-        void LoadChart(ArcChart chart);
+        void LoadChart(ChartReader chart);
 
         /// <summary>
         /// Clear the chart.

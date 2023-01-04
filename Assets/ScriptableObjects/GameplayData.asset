@@ -9,6 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b55d930c77111449b04491f90b9f4cd, type: 3}
-  m_Name: Difficulty
+  m_Script: {fileID: 11500000, guid: 94cda80926ee35392898a97683c27fad, type: 3}
+  m_Name: GameplayData
   m_EditorClassIdentifier: 
+  defaultJacket: {fileID: 21300000, guid: a971cf2da077b1c4ba78f60362e51a29, type: 3}
+  defaultBackground: {fileID: 21300000, guid: 60ec4d2a20505ed4983a1875e88ac3e7, type: 3}

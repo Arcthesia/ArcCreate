@@ -28,18 +28,6 @@ namespace ArcCreate.Gameplay
         bool IsPlaying { get; }
 
         /// <summary>
-        /// Gets or sets the audio clip to play.
-        /// </summary>
-        /// <value>The audio clip.</value>
-        AudioClip AudioClip { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether or not to stop the audio and return to 0ms after the audio clip ends.
-        /// </summary>
-        /// <value>The bool setting. True by default.</value>
-        bool AutomaticallyReturnOnAudioEnd { get; set; }
-
-        /// <summary>
         /// Play the audio immediately without delay. See <see cref="PlayWithDelay"/> for playing audio with minimal audio lag.
         /// </summary>
         /// <param name="timing">The timing from which to start playing.</param>
@@ -100,11 +88,5 @@ namespace ArcCreate.Gameplay
         /// <param name="cond">Whether or not to return.</param>
         /// <param name="timing">The timing to return to.</param>
         void SetReturnOnPause(bool cond, int timing = 0);
-
-        /// <summary>
-        /// Load the audio clip from the specified path.
-        /// </summary>
-        /// <param name="path">The path to load.</param>
-        void LoadAudio(string path);
     }
 }

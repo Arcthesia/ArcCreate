@@ -34,9 +34,6 @@ namespace ArcCreate.Compose
                 {
                     var gameplayControl = rep as IGameplayControl;
                     Services.Gameplay = gameplayControl ?? throw new System.Exception("Could not load gameplay scene");
-                    var renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
-                    gameplayView.texture = renderTexture;
-                    gameplayControl.SetTargetRenderTexture(renderTexture);
                     gameplayControl.ShouldUpdateInputSystem = false;
                 }).Forget();
         }

@@ -53,7 +53,6 @@ namespace ArcCreate.Compose.Components
             gameplayViewport.SetParent(fullScreenTransform, false);
             toggleFullScreenHint.alpha = 1;
             toggleFullScreenHint.DOFade(0, hideHintDuration).SetDelay(hideHintDelay);
-            viewportResizer.ResizeNow();
             fullScreenBackground.SetActive(true);
             isFullScreen = true;
         }
@@ -61,7 +60,6 @@ namespace ArcCreate.Compose.Components
         private void ToDefault()
         {
             gameplayViewport.SetParent(defaultTransform, false);
-            viewportResizer.ResizeNow();
             toggleFullScreenHint.DOKill();
             toggleFullScreenHint.alpha = 0;
             fullScreenBackground.SetActive(false);
