@@ -275,6 +275,9 @@ namespace ArcCreate.Compose.Project
             string dir = Path.GetDirectoryName(CurrentProject.Path);
             string path = Path.Combine(dir, chartPath);
             ChartReader reader = ChartReaderFactory.GetReader(new PhysicalFileAccess(), path);
+
+            // Maybe move this somewhere else later
+            Values.EditingTimingGroup.Value = 0;
             reader.Parse();
             gameplayData.LoadChart(reader);
         }

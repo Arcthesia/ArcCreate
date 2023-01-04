@@ -29,7 +29,7 @@ namespace ArcCreate.Gameplay.Chart
 
         public float GetCurrentBpm()
         {
-            return GetBpm(Services.Audio.Timing);
+            return GetBpm(Services.Audio.ChartTiming);
         }
 
         public double GetFloorPosition(int timing)
@@ -62,7 +62,7 @@ namespace ArcCreate.Gameplay.Chart
             int length = timings.Count;
             TimingEvent first = timings[0];
 
-            int timing = Services.Audio.Timing;
+            int timing = Services.Audio.ChartTiming;
             int closestMatch = 0;
             int closestDiff = int.MaxValue;
 
@@ -106,7 +106,7 @@ namespace ArcCreate.Gameplay.Chart
         /// <returns>The floor position.</returns>
         public double GetFloorPositionFromCurrent(int timing)
         {
-            return GetFloorPosition(timing) - GetFloorPosition(Services.Audio.Timing);
+            return GetFloorPosition(timing) - GetFloorPosition(Services.Audio.ChartTiming);
         }
 
         private void AddTimings(IEnumerable<TimingEvent> timings)

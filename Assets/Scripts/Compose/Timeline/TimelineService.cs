@@ -55,11 +55,11 @@ namespace ArcCreate.Compose.Timeline
         {
             if (IsPlaying && !isWaveformDraggingThisFrame)
             {
-                timingMarker.SetTiming(Services.Gameplay.Audio.Timing);
+                timingMarker.SetTiming(Services.Gameplay.Audio.AudioTiming);
 
                 if (shouldFocusWaveformView)
                 {
-                    waveformDisplay.FocusOnTiming(Services.Gameplay.Audio.Timing / 1000f);
+                    waveformDisplay.FocusOnTiming(Services.Gameplay.Audio.AudioTiming / 1000f);
                 }
             }
 
@@ -69,8 +69,8 @@ namespace ArcCreate.Compose.Timeline
         private void Pause()
         {
             Services.Gameplay.Audio.Pause();
-            timingMarker.SetTiming(Services.Gameplay.Audio.Timing);
-            waveformDisplay.FocusOnTiming(Services.Gameplay.Audio.Timing / 1000f);
+            timingMarker.SetTiming(Services.Gameplay.Audio.AudioTiming);
+            waveformDisplay.FocusOnTiming(Services.Gameplay.Audio.AudioTiming / 1000f);
             pauseHighlight.SetActive(true);
             playHighlight.SetActive(false);
             playReturnHighlight.SetActive(false);
@@ -102,7 +102,7 @@ namespace ArcCreate.Compose.Timeline
             }
             else
             {
-                Services.Gameplay.Audio.SetReturnOnPause(true, Services.Gameplay.Audio.Timing);
+                Services.Gameplay.Audio.SetReturnOnPause(true, Services.Gameplay.Audio.AudioTiming);
             }
 
             pauseHighlight.SetActive(false);
@@ -110,7 +110,7 @@ namespace ArcCreate.Compose.Timeline
             playReturnHighlight.SetActive(true);
             shouldFocusWaveformView = true;
             returnTimingMarker.gameObject.SetActive(true);
-            returnTimingMarker.SetTiming(Services.Gameplay.Audio.Timing);
+            returnTimingMarker.SetTiming(Services.Gameplay.Audio.AudioTiming);
         }
 
         private void Stop()
@@ -119,14 +119,14 @@ namespace ArcCreate.Compose.Timeline
             pauseHighlight.SetActive(true);
             playHighlight.SetActive(false);
             playReturnHighlight.SetActive(false);
-            timingMarker.SetTiming(Services.Gameplay.Audio.Timing);
-            waveformDisplay.FocusOnTiming(Services.Gameplay.Audio.Timing / 1000f);
+            timingMarker.SetTiming(Services.Gameplay.Audio.AudioTiming);
+            waveformDisplay.FocusOnTiming(Services.Gameplay.Audio.AudioTiming / 1000f);
         }
 
         private void OnWaveformDrag(float x)
         {
             timingMarker.SetDragPosition(x);
-            Services.Gameplay.Audio.Timing = timingMarker.Timing;
+            Services.Gameplay.Audio.AudioTiming = timingMarker.Timing;
             Services.Gameplay.Audio.SetResumeAt(timingMarker.Timing);
             isWaveformDraggingThisFrame = true;
         }
@@ -138,7 +138,7 @@ namespace ArcCreate.Compose.Timeline
 
         private void OnTimingMarker(Marker marker, int timing)
         {
-            Services.Gameplay.Audio.Timing = timing;
+            Services.Gameplay.Audio.AudioTiming = timing;
             Services.Gameplay.Audio.SetResumeAt(timing);
             isWaveformDraggingThisFrame = true;
         }

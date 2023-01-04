@@ -58,7 +58,7 @@ namespace ArcCreate.Gameplay.Score
 
             pendingScoreEvents.Add(new ScoreEvent()
             {
-                Timing = Services.Audio.Timing,
+                Timing = Services.Audio.ChartTiming,
                 Score = scoreToAdd,
             });
         }

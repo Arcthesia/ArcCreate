@@ -46,7 +46,7 @@ namespace ArcCreate.Gameplay.Chart
         public void ResetJudge()
         {
             int currentCombo = 0;
-            int timing = Services.Audio.Timing;
+            int timing = Services.Audio.ChartTiming;
             int totalCombo = 0;
             InputMode inputMode = (InputMode)Settings.InputMode.Value;
             bool isAuto = inputMode == InputMode.Auto || inputMode == InputMode.AutoController;
@@ -57,7 +57,7 @@ namespace ArcCreate.Gameplay.Chart
                 tg.ResetJudge();
                 if (isAuto)
                 {
-                    currentCombo += tg.ComboAt(Services.Audio.Timing);
+                    currentCombo += tg.ComboAt(Services.Audio.ChartTiming);
                 }
 
                 totalCombo += tg.TotalCombo();
@@ -186,7 +186,7 @@ namespace ArcCreate.Gameplay.Chart
         {
             LoadChart(new ArcChart(reader));
             IsLoaded = true;
-            Services.Audio.Timing = 0;
+            Services.Audio.ChartTiming = 0;
         }
 
         public void LoadChart(ArcChart chart)

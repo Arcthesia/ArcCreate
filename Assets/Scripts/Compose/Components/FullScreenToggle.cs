@@ -18,8 +18,6 @@ namespace ArcCreate.Compose.Components
         [SerializeField] private float hideHintDuration;
         private Keyboard keyboard;
 
-        private bool isFullScreen = false;
-
         private void Awake()
         {
             fullScreenButton.onClick.AddListener(ToFullScreen);
@@ -37,7 +35,7 @@ namespace ArcCreate.Compose.Components
             // TODO: TEMPORARY UNTIL A PROPER KEYBIND SYSTEM IS IMPLEMENTED
             if (keyboard.f11Key.wasPressedThisFrame)
             {
-                if (isFullScreen)
+                if (Values.FullScreen.Value)
                 {
                     ToDefault();
                 }
@@ -54,7 +52,7 @@ namespace ArcCreate.Compose.Components
             toggleFullScreenHint.alpha = 1;
             toggleFullScreenHint.DOFade(0, hideHintDuration).SetDelay(hideHintDelay);
             fullScreenBackground.SetActive(true);
-            isFullScreen = true;
+            Values.FullScreen.Value = true;
         }
 
         private void ToDefault()
@@ -63,7 +61,7 @@ namespace ArcCreate.Compose.Components
             toggleFullScreenHint.DOKill();
             toggleFullScreenHint.alpha = 0;
             fullScreenBackground.SetActive(false);
-            isFullScreen = false;
+            Values.FullScreen.Value = false;
         }
     }
 }
