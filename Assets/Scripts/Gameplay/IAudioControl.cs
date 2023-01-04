@@ -6,14 +6,24 @@ namespace ArcCreate.Gameplay
     public interface IAudioControl
     {
         /// <summary>
-        /// Gets or sets the audio timing.
+        /// Gets or sets the audio's actual timing.
+        /// Setting this value will cause score to reset to 0.
+        /// Additionally jumping to the new timing will cause the audio to be played immediately without delay
+        /// which might cause audio lag. Consider <see cref="Pause"/> and <see cref="PlayWithDelay"/> if
+        /// this becomes an issue.
+        /// </summary>
+        /// <value>The audio timing.</value>
+        int AudioTiming { get; set; }
+
+        /// <summary>
+        /// Gets or sets the audio timing but offseted.
         /// Setting the timing will cause score to reset to 0.
         /// Additionally jumping to the new timing will cause the audio to be played immediately without delay
         /// which might cause audio lag. Consider <see cref="Pause"/> and <see cref="PlayWithDelay"/> if
         /// this becomes an issue.
         /// </summary>
         /// <value>The audio timing.</value>
-        int Timing { get; set; }
+        int ChartTiming { get; set; }
 
         /// <summary>
         /// Gets the length in ms of the currently playing audio clip.

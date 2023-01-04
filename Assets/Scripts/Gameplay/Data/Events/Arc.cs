@@ -220,7 +220,7 @@ namespace ArcCreate.Gameplay.Data
 
         public void ProcessArcJudgement(int offset)
         {
-            int currentTiming = Services.Audio.Timing;
+            int currentTiming = Services.Audio.ChartTiming;
             judgementRequestSent = false;
 
             float x = WorldXAt(currentTiming);
