@@ -108,7 +108,7 @@ namespace ArcCreate.Gameplay
             Services.Particle.UpdateParticles();
             Services.InputFeedback.UpdateInputFeedback();
 
-            int currentTiming = Services.Audio.Timing;
+            int currentTiming = Services.Audio.ChartTiming;
             Services.Chart.UpdateChart(currentTiming);
             Services.Judgement.ProcessInput(currentTiming);
             Services.Score.UpdateDisplay(currentTiming);

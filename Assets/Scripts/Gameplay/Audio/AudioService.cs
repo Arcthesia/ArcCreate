@@ -29,7 +29,7 @@ namespace ArcCreate.Gameplay.Audio
         /// <summary>
         /// The current timing value in ms.
         /// </summary>
-        private int timing;
+        private int audioTiming;
 
         /// <summary>
         /// Last timing the audio was paused at.
@@ -50,16 +50,25 @@ namespace ArcCreate.Gameplay.Audio
 
         public VideoPlayer VideoPlayer => videoPlayer;
 
-        public int Timing
+        public int ChartTiming
         {
-            get => timing;
+            get => AudioTiming - FullOffset;
             set
             {
-                timing = value;
+                AudioTiming = value + FullOffset;
+            }
+        }
+
+        public int AudioTiming
+        {
+            get => audioTiming;
+            set
+            {
+                audioTiming = value;
                 if (IsPlaying)
                 {
                     audioSource.Stop();
-                    Play(timing, 0);
+                    Play(audioTiming, 0);
                 }
                 else
                 {
@@ -101,26 +110,26 @@ namespace ArcCreate.Gameplay.Audio
             int timePassedSinceAudioStart = Mathf.RoundToInt((float)((dspTime - dspStartPlayingTime) * 1000));
             int newTiming = timePassedSinceAudioStart + startTime - FullOffset;
 
-            if (timing != newTiming && dspTime >= dspStartPlayingTime)
+            if (audioTiming != newTiming && dspTime >= dspStartPlayingTime)
             {
-                timing += Mathf.RoundToInt(Time.deltaTime * 1000);
+                audioTiming += Mathf.RoundToInt(Time.deltaTime * 1000);
             }
             else
             {
-                timing = newTiming;
+                audioTiming = newTiming;
             }
 
-            timingSlider.value = (float)timing / AudioLength;
+            timingSlider.value = (float)audioTiming / AudioLength;
         }
 
         public void Pause()
         {
-            lastPausedTiming = timing;
+            lastPausedTiming = audioTiming;
             audioSource.Stop();
             if (returnOnPause)
             {
                 lastPausedTiming = onPauseReturnTo;
-                timing = onPauseReturnTo;
+                audioTiming = onPauseReturnTo - FullOffset;
             }
         }
 
@@ -130,10 +139,10 @@ namespace ArcCreate.Gameplay.Audio
             if (returnOnPause)
             {
                 lastPausedTiming = onPauseReturnTo;
-                timing = onPauseReturnTo;
+                audioTiming = onPauseReturnTo;
             }
 
-            Timing = 0;
+            AudioTiming = 0;
         }
 
         public void PlayImmediately(int timing)
@@ -169,7 +178,7 @@ namespace ArcCreate.Gameplay.Audio
             Play(lastPausedTiming);
             stationaryBeforeStart = true;
             returnOnPause = true;
-            onPauseReturnTo = timing;
+            onPauseReturnTo = audioTiming;
         }
 
         public void ResumeReturnableWithDelay(int delayMs)
@@ -177,7 +186,7 @@ namespace ArcCreate.Gameplay.Audio
             Play(lastPausedTiming, delayMs);
             stationaryBeforeStart = true;
             returnOnPause = true;
-            onPauseReturnTo = timing;
+            onPauseReturnTo = audioTiming;
         }
 
         public void SetResumeAt(int timing)
@@ -194,10 +203,10 @@ namespace ArcCreate.Gameplay.Audio
         private void Play(int timing = 0, int delay = 0)
         {
             delay = Mathf.Max(delay, 0);
-            this.timing = timing;
+            audioTiming = timing;
             Services.Chart.ResetJudge();
 
-            audioSource.time = (float)timing / 1000;
+            audioSource.time = timing / 1000f;
 
             dspStartPlayingTime = AudioSettings.dspTime + ((double)delay / 1000);
             startTime = timing;

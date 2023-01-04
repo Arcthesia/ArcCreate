@@ -10,7 +10,7 @@ namespace ArcCreate
         public static readonly BoolSetting ShowFPSCounter = new BoolSetting("ShowFrameCounter", false);
         public static readonly BoolSetting AudioSync = new BoolSetting("AudioSync", false);
         public static readonly BoolSetting EditorAuto = new BoolSetting("Auto", true);
-        public static readonly IntSetting DropRate = new IntSetting("DropRate", 150);
+        public static readonly IntSetting DropRate = new IntSetting("DropRate", 300);
         public static readonly IntSetting ChartSortMode = new IntSetting("ChartSortMode", 0);
         public static readonly StringSetting X = new StringSetting("CustomGrid.X", "");
         public static readonly StringSetting Y = new StringSetting("CustomGrid.Y", "");

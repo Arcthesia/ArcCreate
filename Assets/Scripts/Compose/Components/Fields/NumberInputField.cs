@@ -16,7 +16,7 @@ namespace ArcCreate.Compose.Components
         private TMP_InputField inputField;
         [SerializeField] private Button increaseButton;
         [SerializeField] private Button decreaseButton;
-        [SerializeField] private int increment;
+        [SerializeField] private float increment;
 
         public void OnPointerEnter(PointerEventData eventData)
         {
@@ -32,16 +32,24 @@ namespace ArcCreate.Compose.Components
 
         private void Increment()
         {
-            Evaluator.TryFloat(inputField.text, out float val);
-            val += increment;
-            inputField.text = val.ToString();
+            if (Evaluator.TryFloat(inputField.text, out float val))
+            {
+                val += increment;
+                string str = val.ToString();
+                inputField.text = str;
+                inputField.onEndEdit.Invoke(str);
+            }
         }
 
         private void Decrement()
         {
-            Evaluator.TryFloat(inputField.text, out float val);
-            val -= increment;
-            inputField.text = val.ToString();
+            if (Evaluator.TryFloat(inputField.text, out float val))
+            {
+                val -= increment;
+                string str = val.ToString();
+                inputField.text = str;
+                inputField.onEndEdit.Invoke(str);
+            }
         }
 
         private void Awake()

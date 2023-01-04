@@ -168,7 +168,7 @@ namespace ArcCreate.Gameplay.Data
 
         public void ProcessLaneTapJudgement(int offset)
         {
-            int currentTiming = Services.Audio.Timing;
+            int currentTiming = Services.Audio.ChartTiming;
             if (currentTiming >= EndTiming)
             {
                 return;
@@ -187,7 +187,7 @@ namespace ArcCreate.Gameplay.Data
 
         public void ProcessLaneHoldJudgement(int offset)
         {
-            int currentTiming = Services.Audio.Timing;
+            int currentTiming = Services.Audio.ChartTiming;
             holdJudgementRequestSent = false;
 
             if (locked || offset >= Values.HoldLostLateJudgeWindow)

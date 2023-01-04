@@ -52,6 +52,7 @@ namespace ArcCreate.Compose.Timeline
             int viewFromTiming = Services.Timeline.ViewFromTiming;
             int viewToTiming = Services.Timeline.ViewToTiming;
             float width = tickParent.rect.width;
+            int offset = gameplayData.AudioOffset.Value;
 
             int indexFrom = timings.BisectLeft(viewFromTiming);
             indexFrom = Mathf.FloorToInt(indexFrom / skip) * skip;
@@ -61,9 +62,9 @@ namespace ArcCreate.Compose.Timeline
             if (!forced)
             {
                 float lastPos = float.MinValue;
-                while (i < timings.Count && timings[i] <= viewToTiming)
+                while (i < timings.Count && timings[i] + offset <= viewToTiming)
                 {
-                    float pos = (float)(timings[i] - viewFromTiming) / (viewToTiming - viewFromTiming) * width;
+                    float pos = (float)(timings[i] + offset - viewFromTiming) / (viewToTiming - viewFromTiming) * width;
                     if (Mathf.Abs(pos - lastPos) < minDistBetweenTicks)
                     {
                         return false;
@@ -75,9 +76,9 @@ namespace ArcCreate.Compose.Timeline
             }
 
             i = indexFrom;
-            while (i < timings.Count && timings[i] <= viewToTiming)
+            while (i < timings.Count && timings[i] + offset <= viewToTiming)
             {
-                float pos = (float)(timings[i] - viewFromTiming) / (viewToTiming - viewFromTiming) * width;
+                float pos = (float)(timings[i] + offset - viewFromTiming) / (viewToTiming - viewFromTiming) * width;
                 Tick tick = tickPool.Get();
                 tick.SetTick(pos, timings[i]);
                 i += skip;
@@ -88,8 +89,7 @@ namespace ArcCreate.Compose.Timeline
 
         private void GenerateTickData(int untilTiming)
         {
-            // TODO: Read editing timing group
-            TimingGroup tg = Services.Gameplay.Chart.GetTimingGroup(0);
+            TimingGroup tg = Services.Gameplay.Chart.GetTimingGroup(Values.EditingTimingGroup.Value);
             List<TimingEvent> timings = tg.Timings;
 
             timingEventsTiming.Clear();
@@ -165,25 +165,32 @@ namespace ArcCreate.Compose.Timeline
             tickPool = Pools.New<Tick>(Values.TickPoolName, tickPrefab, tickParent, tickCapacity);
             gameplayData.AudioClip.OnValueChange += OnAudioLoad;
             gameplayData.OnChartFileLoad += OnChartFileLoad;
+            Values.EditingTimingGroup.OnValueChange += OnEditingTimingGroup;
         }
 
         private void OnDestroy()
         {
             gameplayData.AudioClip.OnValueChange -= OnAudioLoad;
             gameplayData.OnChartFileLoad -= OnChartFileLoad;
+            Values.EditingTimingGroup.OnValueChange -= OnEditingTimingGroup;
         }
 
         private void OnAudioLoad(AudioClip clip)
         {
-            GenerateTickData(Mathf.RoundToInt(clip.length * 1000));
+            if (clip != null)
+            {
+                GenerateTickData(Mathf.RoundToInt(clip.length * 1000));
+            }
         }
 
         private void OnChartFileLoad()
         {
-            if (gameplayData.AudioClip.Value != null)
-            {
-                OnAudioLoad(gameplayData.AudioClip.Value);
-            }
+            OnAudioLoad(gameplayData.AudioClip.Value);
+        }
+
+        private void OnEditingTimingGroup(int group)
+        {
+            OnAudioLoad(gameplayData.AudioClip.Value);
         }
     }
 }

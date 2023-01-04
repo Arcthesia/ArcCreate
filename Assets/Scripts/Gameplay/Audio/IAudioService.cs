@@ -2,7 +2,7 @@ namespace ArcCreate.Gameplay.Audio
 {
     public interface IAudioService
     {
-        int Timing { get; set; }
+        int ChartTiming { get; set; }
 
         int AudioLength { get; }
 

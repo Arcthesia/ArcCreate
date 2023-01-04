@@ -2,6 +2,8 @@ namespace ArcCreate.Compose
 {
     public static class Values
     {
+        public const float DropRateScalar = 60;
+
         // Extensions
         public const string ProjectExtension = ".arcproj";
         public const string ProjectExtensionWithoutDot = "arcproj";
@@ -23,5 +25,9 @@ namespace ArcCreate.Compose
 
         // Pools
         public const string TickPoolName = "TickPool";
+
+        public static State<int> EditingTimingGroup { get; } = new State<int>();
+
+        public static State<bool> FullScreen { get; } = new State<bool>();
     }
 }
