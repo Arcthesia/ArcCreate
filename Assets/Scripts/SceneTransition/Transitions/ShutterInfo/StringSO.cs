@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace ArcCreate
+namespace ArcCreate.SceneTransition
 {
     [CreateAssetMenu(fileName = "String", menuName = "ScriptableObject/String")]
     public class StringSO : ScriptableObject

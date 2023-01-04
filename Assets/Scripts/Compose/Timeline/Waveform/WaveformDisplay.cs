@@ -1,4 +1,5 @@
 using System;
+using ArcCreate.Gameplay;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -8,11 +9,11 @@ namespace ArcCreate.Compose.Timeline
 {
     public class WaveformDisplay : MonoBehaviour
     {
+        [SerializeField] private GameplayData gameplayData;
         [SerializeField] private RawImage image;
         [SerializeField] private RectTransform container;
         [SerializeField] private float minViewLength = 0.5f;
         [SerializeField] private float minScrollDist = 0.20f;
-        [SerializeField] private AudioClipSO audioClipSO;
 
         private float scrollPivot;
         private float viewFromSecond;
@@ -37,14 +38,14 @@ namespace ArcCreate.Compose.Timeline
         public void OnDrag(BaseEventData eventData)
         {
             var ev = eventData as PointerEventData;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(container, ev.position, null, out Vector2 local);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(container, ev.position, ev.pressEventCamera, out Vector2 local);
             OnWaveformDrag?.Invoke(local.x);
         }
 
         public void OnPointerClick(BaseEventData eventData)
         {
             var ev = eventData as PointerEventData;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(container, ev.position, null, out Vector2 local);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(container, ev.position, ev.pressEventCamera, out Vector2 local);
             OnWaveformDrag?.Invoke(local.x);
         }
 
@@ -53,7 +54,7 @@ namespace ArcCreate.Compose.Timeline
             var ev = eventData as PointerEventData;
             Vector2 scrollDelta = ev.scrollDelta;
 
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(container, ev.position, null, out Vector2 local);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(container, ev.position, ev.pressEventCamera, out Vector2 local);
             scrollPivot = (local.x / container.rect.width) + 0.5f;
             float scrollDir = Mathf.Sign(scrollDelta.y);
 
@@ -135,13 +136,13 @@ namespace ArcCreate.Compose.Timeline
             viewFromSecond = 0;
             viewToSecond = 0;
             image.enabled = false;
-            audioClipSO.OnValueChange.AddListener(OnClipLoad);
+            gameplayData.AudioClip.OnValueChange += OnClipLoad;
             keyboard = InputSystem.GetDevice<Keyboard>();
         }
 
         private void OnDestroy()
         {
-            audioClipSO.OnValueChange.RemoveListener(OnClipLoad);
+            gameplayData.AudioClip.OnValueChange -= OnClipLoad;
         }
 
         private void OnClipLoad(AudioClip clip)

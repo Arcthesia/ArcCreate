@@ -18,13 +18,6 @@ namespace ArcCreate.Gameplay
         Color UnknownArcLowColor { get; }
 
         /// <summary>
-        /// Gets or sets the url to be played by video background renderer.
-        /// Setting it to null or empty string will disable the renderer.
-        /// </summary>
-        /// <value>The video background url.</value>
-        string VideoBackgroundUrl { get; set; }
-
-        /// <summary>
         /// Gets or sets the alignment skin option.
         /// If the name does not match any available option, a default option will be used.
         /// </summary>
@@ -95,21 +88,5 @@ namespace ArcCreate.Gameplay
         /// Reset arc colors to default.
         /// </summary>
         void ResetArcColors();
-
-        /// <summary>
-        /// Load the background from specified file path.
-        /// </summary>
-        /// <param name="path">The path to load.</param>
-        void LoadBackground(string path);
-
-        /// <summary>
-        /// Load the jacket art from specified file path.
-        /// </summary>
-        /// <param name="path">The path to load.</param>
-        void LoadJacket(string path);
-
-        void SetDefaultJacket();
-
-        void SetDefaultBackground();
     }
 }

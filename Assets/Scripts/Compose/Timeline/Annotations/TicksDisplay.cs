@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ArcCreate.Gameplay;
 using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Extension;
@@ -8,9 +9,9 @@ namespace ArcCreate.Compose.Timeline
 {
     public class TicksDisplay : MonoBehaviour
     {
+        [SerializeField] private GameplayData gameplayData;
         [SerializeField] private GameObject tickPrefab;
         [SerializeField] private RectTransform tickParent;
-        [SerializeField] private AudioClipSO clipSO;
         [SerializeField] private int tickCapacity;
         [SerializeField] private float maxBpmToCalculate = 1000;
         [SerializeField] private float minDistBetweenTicks = 200;
@@ -162,17 +163,27 @@ namespace ArcCreate.Compose.Timeline
         private void Awake()
         {
             tickPool = Pools.New<Tick>(Values.TickPoolName, tickPrefab, tickParent, tickCapacity);
-            clipSO.OnValueChange.AddListener(OnAudioLoad);
+            gameplayData.AudioClip.OnValueChange += OnAudioLoad;
+            gameplayData.OnChartFileLoad += OnChartFileLoad;
         }
 
         private void OnDestroy()
         {
-            clipSO.OnValueChange.RemoveListener(OnAudioLoad);
+            gameplayData.AudioClip.OnValueChange -= OnAudioLoad;
+            gameplayData.OnChartFileLoad -= OnChartFileLoad;
         }
 
         private void OnAudioLoad(AudioClip clip)
         {
             GenerateTickData(Mathf.RoundToInt(clip.length * 1000));
+        }
+
+        private void OnChartFileLoad()
+        {
+            if (gameplayData.AudioClip.Value != null)
+            {
+                OnAudioLoad(gameplayData.AudioClip.Value);
+            }
         }
     }
 }

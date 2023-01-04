@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ArcCreate.Compose.Components;
+using ArcCreate.Gameplay;
 using ArcCreate.Utility.Extension;
 using ArcCreate.Utility.Parser;
 using TMPro;
@@ -10,6 +11,7 @@ namespace ArcCreate.Compose.Project
 {
     public class ChartInformationUI : ChartMetadataUI
     {
+        [SerializeField] private GameplayData gameplayData;
         [SerializeField] private TMP_InputField title;
         [SerializeField] private TMP_InputField composer;
         [SerializeField] private TMP_InputField illustrator;
@@ -19,14 +21,6 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private TMP_InputField chartConstant;
         [SerializeField] private TMP_InputField difficultyName;
         [SerializeField] private ColorInputField difficultyColor;
-
-        [SerializeField] private StringSO titleSO;
-        [SerializeField] private StringSO composerSO;
-        [SerializeField] private StringSO illustratorSO;
-        [SerializeField] private StringSO charterSO;
-        [SerializeField] private StringSO difficultyNameSO;
-        [SerializeField] private ColorSO difficultyColorSO;
-
         [SerializeField] private List<Button> diffColorPresets;
 
         protected override void ApplyChartSettings(ChartSettings chart)
@@ -38,10 +32,18 @@ namespace ArcCreate.Compose.Project
             baseBpm.text = chart.BaseBpm.ToString();
             syncBaseBpm.isOn = chart.SyncBaseBpm;
             chartConstant.text = chart.ChartConstant.ToString();
-            difficultyName.text = chart.Difficulty?.ToString() ?? "";
+            difficultyName.text = chart.Difficulty ?? "";
 
             chart.DifficultyColor.ConvertHexToColor(out Color c);
             difficultyColor.SetValue(c);
+
+            gameplayData.Title.Value = chart.Title ?? "";
+            gameplayData.Composer.Value = chart.Composer ?? "";
+            gameplayData.Illustrator.Value = chart.Illustrator ?? "";
+            gameplayData.Charter.Value = chart.Charter ?? "";
+            gameplayData.BaseBpm.Value = chart.BaseBpm;
+            gameplayData.DifficultyName.Value = chart.Difficulty ?? "";
+            gameplayData.DifficultyColor.Value = c;
         }
 
         private new void Start()
@@ -88,25 +90,25 @@ namespace ArcCreate.Compose.Project
         private void OnTitle(string value)
         {
             Target.Title = value;
-            titleSO.Value = value;
+            gameplayData.Title.Value = value;
         }
 
         private void OnComposer(string value)
         {
             Target.Composer = value;
-            composerSO.Value = value;
+            gameplayData.Composer.Value = value;
         }
 
         private void OnIllustrator(string value)
         {
             Target.Illustrator = value;
-            illustratorSO.Value = value;
+            gameplayData.Illustrator.Value = value;
         }
 
         private void OnCharter(string value)
         {
             Target.Charter = value;
-            charterSO.Value = value;
+            gameplayData.Charter.Value = value;
         }
 
         private void OnBaseBpm(string value)
@@ -114,7 +116,7 @@ namespace ArcCreate.Compose.Project
             if (Evaluator.TryFloat(value, out float bpm))
             {
                 Target.BaseBpm = bpm;
-                Services.Gameplay.Chart.BaseBpm = bpm;
+                gameplayData.BaseBpm.Value = bpm;
             }
         }
 
@@ -134,13 +136,13 @@ namespace ArcCreate.Compose.Project
         private void OnDifficultyName(string value)
         {
             Target.Difficulty = value;
-            difficultyNameSO.Value = value;
+            gameplayData.DifficultyName.Value = value;
         }
 
         private void OnDifficultyColor(Color color)
         {
             Target.DifficultyColor = color.ConvertToHexCode();
-            difficultyColorSO.Value = color;
+            gameplayData.DifficultyColor.Value = color;
         }
 
         private void OnDiffColorPreset(Button button)

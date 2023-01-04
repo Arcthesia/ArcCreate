@@ -6,7 +6,6 @@ using ArcCreate.Gameplay.Skin;
 using ArcCreate.SceneTransition;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Networking;
 
 namespace ArcCreate.Gameplay
@@ -20,6 +19,8 @@ namespace ArcCreate.Gameplay
         [SerializeField] private SkinService skinService;
         [SerializeField] private AudioService audioService;
         [SerializeField] private AudioClip testAudio;
+        [SerializeField] private GameplayData gameplayData;
+        [SerializeField] private Camera gameplayCamera;
         [SerializeField] private string testPlayChartFileName = "test_chart.aff";
 
         public bool ShouldUpdateInputSystem
@@ -33,6 +34,11 @@ namespace ArcCreate.Gameplay
         public ISkinControl Skin => skinService;
 
         public IAudioControl Audio => audioService;
+
+        public void SetCameraViewportRect(Rect rect)
+        {
+            gameplayCamera.rect = rect;
+        }
 
         public override void OnUnloadScene()
         {
@@ -54,16 +60,6 @@ namespace ArcCreate.Gameplay
             {
                 ImportTestChart(path);
             }
-        }
-
-        public void SetTargetRenderTexture(RenderTexture renderTexture)
-        {
-            Services.Camera.GameplayCamera.targetTexture = renderTexture;
-        }
-
-        public void ApplyAspect(float aspect)
-        {
-            Services.Camera.GameplayCamera.aspect = aspect;
         }
 
         protected override void OnSceneLoad()
@@ -96,8 +92,8 @@ namespace ArcCreate.Gameplay
         {
             ChartReader reader = ChartReaderFactory.GetReader(new PhysicalFileAccess(), path);
             reader.Parse();
-            Audio.AudioClip = testAudio;
-            Chart.LoadChart(reader);
+            gameplayData.AudioClip.Value = testAudio;
+            chartService.LoadChart(reader);
             Audio.PlayWithDelay(0, 2000);
         }
 

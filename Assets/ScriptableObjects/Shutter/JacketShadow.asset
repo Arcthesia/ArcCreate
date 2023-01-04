@@ -9,6 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b92845ee7f72d94f9c8f51df9f5d6da, type: 3}
+  m_Script: {fileID: 11500000, guid: bbbc95c1ca6157019bb5013af0535e0c, type: 3}
   m_Name: JacketShadow
   m_EditorClassIdentifier: 

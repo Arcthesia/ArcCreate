@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Components
 {
@@ -8,49 +7,34 @@ namespace ArcCreate.Compose.Components
     /// </summary>
     public class GameplayViewport : MonoBehaviour
     {
-        [SerializeField] private float debounceSeconds = 1f;
+        [SerializeField] private Camera editorCamera;
         [SerializeField] private RectTransform viewport;
-        [SerializeField] private RawImage viewportImage;
+        private readonly Vector3[] corners = new Vector3[4];
 
-        private float previousWidth;
-        private float previousHeight;
-        private float applyNewSizeAfter = float.MaxValue;
-
-        public void ResizeNow()
+        private void Update()
         {
-            float width = viewport.rect.width;
-            float height = viewport.rect.height;
-            applyNewSizeAfter = Time.realtimeSinceStartup;
-
-            var texture = viewportImage.texture as RenderTexture;
-            if (texture == null)
+            if (Services.Gameplay == null)
             {
                 return;
             }
 
-            texture.Release();
-            texture.width = (int)(width * 1.5f);
-            texture.height = (int)(height * 1.5f);
-            Services.Gameplay.ApplyAspect(width / height);
-            applyNewSizeAfter = float.MaxValue;
-        }
+            viewport.GetWorldCorners(corners);
 
-        private void Update()
-        {
-            float width = viewport.rect.width;
-            float height = viewport.rect.height;
-            if (width != previousWidth || height != previousHeight)
-            {
-                applyNewSizeAfter = Time.realtimeSinceStartup + debounceSeconds;
-            }
+            Vector3 bottomLeft = editorCamera.WorldToScreenPoint(corners[0]);
+            Vector3 topRight = editorCamera.WorldToScreenPoint(corners[2]);
 
-            previousWidth = width;
-            previousHeight = height;
+            float x = bottomLeft.x;
+            float y = bottomLeft.y;
+            float width = topRight.x - bottomLeft.x;
+            float height = topRight.y - bottomLeft.y;
 
-            if (Time.realtimeSinceStartup >= applyNewSizeAfter)
-            {
-                ResizeNow();
-            }
+            Rect normalized = new Rect(
+                x / Screen.width,
+                y / Screen.height,
+                width / Screen.width,
+                height / Screen.height);
+
+            Services.Gameplay.SetCameraViewportRect(normalized);
         }
     }
 }

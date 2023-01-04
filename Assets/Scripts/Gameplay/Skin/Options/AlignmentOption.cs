@@ -13,5 +13,6 @@ namespace ArcCreate.Gameplay.Skin
         public SingleLineOption DefaultSingleLineOption;
         public AccentOption DefaultAccentOption;
         public Sprite JacketShadowSkin;
+        public Sprite DefaultBackground;
     }
 }

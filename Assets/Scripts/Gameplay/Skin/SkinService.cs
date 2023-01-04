@@ -1,18 +1,16 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using ArcCreate.Gameplay.Data;
-using Cysharp.Threading.Tasks;
+using ArcCreate.SceneTransition;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.UI;
-using UnityEngine.Video;
 
 namespace ArcCreate.Gameplay.Skin
 {
     public class SkinService : MonoBehaviour, ISkinService, ISkinControl
     {
+        [SerializeField] private GameplayData gameplayData;
+
         [Header("Objects")]
         [SerializeField] private SpriteRenderer singleLineL;
         [SerializeField] private SpriteRenderer singleLineR;
@@ -23,13 +21,7 @@ namespace ArcCreate.Gameplay.Skin
         [SerializeField] private SpriteRenderer trackExtraEdgeL;
         [SerializeField] private SpriteRenderer trackExtraEdgeR;
         [SerializeField] private SpriteRenderer[] criticalLines = new SpriteRenderer[4];
-        [SerializeField] private SpriteSO jacketSO;
         [SerializeField] private SpriteSO jacketShadowSO;
-        [SerializeField] private Sprite defaultJacket;
-        [SerializeField] private Image background;
-        [SerializeField] private Sprite defaultBackground;
-        [SerializeField] private GameObject videoBackgroundRenderer;
-        [SerializeField] private VideoPlayer videoBackground;
 
         [Header("Skin Options")]
         [SerializeField] private List<AlignmentOption> alignmentOptions;
@@ -68,20 +60,7 @@ namespace ArcCreate.Gameplay.Skin
         private int shadowColorShaderId;
         private int redValueShaderId;
 
-        private bool isUsingDefaultBackground = true;
-        private bool isUsingDefaultJacket = true;
-
         private Color currentComboColor;
-
-        public string VideoBackgroundUrl
-        {
-            get => videoBackground.url;
-            set
-            {
-                videoBackground.url = value;
-                videoBackgroundRenderer.SetActive(string.IsNullOrEmpty(value));
-            }
-        }
 
         public string AlignmentSkin
         {
@@ -100,6 +79,7 @@ namespace ArcCreate.Gameplay.Skin
                 TrackSkin = currentTrackOption;
                 SingleLineSkin = currentSingleLineOption;
                 AccentSkin = currentAccentOption;
+                gameplayData.NotifySkinValuesChange();
             }
         }
 
@@ -114,6 +94,7 @@ namespace ArcCreate.Gameplay.Skin
 
                 currentNoteSkin = noteSkinOpt;
                 ReloadNoteSkin(Settings.InputMode.Value);
+                gameplayData.NotifySkinValuesChange();
             }
         }
 
@@ -128,6 +109,7 @@ namespace ArcCreate.Gameplay.Skin
 
                 Services.Particle.SetTapParticleSkin(particleOpt.ParticleSkin);
                 Services.Particle.SetLongParticleSkin(particleOpt.HoldEffectColorMin, particleOpt.HoldEffectColorMax);
+                gameplayData.NotifySkinValuesChange();
             }
         }
 
@@ -145,6 +127,7 @@ namespace ArcCreate.Gameplay.Skin
                 trackExtraEdgeR.sprite = trackOpt.TrackSkin;
                 trackExtraL.sprite = trackOpt.TrackExtraSkin;
                 trackExtraR.sprite = trackOpt.TrackExtraSkin;
+                gameplayData.NotifySkinValuesChange();
             }
         }
 
@@ -161,6 +144,7 @@ namespace ArcCreate.Gameplay.Skin
                 singleLineL.enabled = lineOpt.Enable;
                 singleLineR.sprite = lineOpt.SingleLineSkin;
                 singleLineR.enabled = lineOpt.Enable;
+                gameplayData.NotifySkinValuesChange();
             }
         }
 
@@ -181,6 +165,7 @@ namespace ArcCreate.Gameplay.Skin
                 comboText.color = accentOpt.ComboColor;
                 comboText.outlineColor = accentOpt.ComboColor;
                 currentComboColor = accentOpt.ComboColor;
+                gameplayData.NotifySkinValuesChange();
             }
         }
 
@@ -197,6 +182,8 @@ namespace ArcCreate.Gameplay.Skin
         public Color UnknownArcColor => unknownArcColor;
 
         public Color UnknownArcLowColor => unknownArcLowColor;
+
+        public Sprite DefaultBackground => currentAlignment.DefaultBackground;
 
         public Sprite GetTapSkin(Tap note)
             => currentNoteSkin.GetTapSkin(note);
@@ -285,58 +272,6 @@ namespace ArcCreate.Gameplay.Skin
 
             Material mat = arcMaterials[color];
             mat.SetFloat(redValueShaderId, value);
-        }
-
-        public void LoadJacket(string path)
-        {
-            if (string.IsNullOrEmpty(path) || !File.Exists(path))
-            {
-                jacketSO.Value = defaultJacket;
-                isUsingDefaultJacket = true;
-            }
-
-            if (jacketSO.Value != null && !isUsingDefaultJacket)
-            {
-                Destroy(jacketSO.Value);
-            }
-
-            Texture2D t = new Texture2D(1, 1);
-            t.LoadImage(File.ReadAllBytes(path), true);
-            Sprite sprite = Sprite.Create(t, new Rect(0, 0, t.width, t.height), new Vector2(0.5f, 0.5f));
-            jacketSO.Value = sprite;
-            isUsingDefaultJacket = false;
-        }
-
-        public void SetDefaultJacket()
-        {
-            jacketSO.Value = defaultJacket;
-            isUsingDefaultJacket = true;
-        }
-
-        public void LoadBackground(string path)
-        {
-            if (string.IsNullOrEmpty(path) || !File.Exists(path))
-            {
-                background.sprite = defaultBackground;
-                isUsingDefaultBackground = true;
-            }
-
-            if (background.sprite != null && !isUsingDefaultBackground)
-            {
-                Destroy(background.sprite);
-            }
-
-            Texture2D t = new Texture2D(1, 1);
-            t.LoadImage(File.ReadAllBytes(path), true);
-            Sprite sprite = Sprite.Create(t, new Rect(0, 0, t.width, t.height), new Vector2(0.5f, 0.5f));
-            background.sprite = sprite;
-            isUsingDefaultBackground = false;
-        }
-
-        public void SetDefaultBackground()
-        {
-            background.sprite = defaultBackground;
-            isUsingDefaultBackground = true;
         }
 
         private void Awake()
