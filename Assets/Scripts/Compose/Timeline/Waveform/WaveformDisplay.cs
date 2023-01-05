@@ -57,17 +57,18 @@ namespace ArcCreate.Compose.Timeline
             RectTransformUtility.ScreenPointToLocalPointInRectangle(container, ev.position, ev.pressEventCamera, out Vector2 local);
             scrollPivot = (local.x / container.rect.width) + 0.5f;
             float scrollDir = Mathf.Sign(scrollDelta.y);
+            float scrollSensitivity = Settings.ScrollSensitivityTimeline.Value;
 
             if (keyboard.shiftKey.isPressed)
             {
-                scrollDir *= 4;
+                scrollDir *= 5;
             }
 
             if (keyboard.ctrlKey.isPressed)
             {
                 float pivotSecond = Mathf.Lerp(viewFromSecond, viewToSecond, scrollPivot);
                 float oldViewSize = viewToSecond - viewFromSecond;
-                float viewSize = oldViewSize * (1 - (scrollDir / 10));
+                float viewSize = oldViewSize * (1 - (scrollDir * scrollSensitivity));
                 viewSize = Mathf.Max(viewSize, minViewLengthOfClip);
 
                 // x -----scrollPivot ------ pivotSecond -------- 1 - scrollPivot --------- y
@@ -88,8 +89,8 @@ namespace ArcCreate.Compose.Timeline
             else
             {
                 float viewSize = viewToSecond - viewFromSecond;
-                viewFromSecond += scrollDir * Mathf.Max(viewSize / 10, minScrollDist);
-                viewToSecond += scrollDir * Mathf.Max(viewSize / 10, minScrollDist);
+                viewFromSecond -= scrollDir * Mathf.Max(viewSize * scrollSensitivity, minScrollDist);
+                viewToSecond -= scrollDir * Mathf.Max(viewSize * scrollSensitivity, minScrollDist);
 
                 viewToSecond = Mathf.Clamp(viewToSecond, 0, clip.length);
                 viewFromSecond = Mathf.Clamp(viewFromSecond, 0, viewToSecond - viewSize);
