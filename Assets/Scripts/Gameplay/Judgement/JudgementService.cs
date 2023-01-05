@@ -54,7 +54,7 @@ namespace ArcCreate.Gameplay.Judgement
             // Manually update input system to minimalize lag
             if (Values.ShouldUpdateInputSystem)
             {
-                InputSystem.Update();
+                // InputSystem.Update();
             }
 
             inputHandler.PollInput();
