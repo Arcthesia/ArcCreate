@@ -40,7 +40,7 @@ namespace ArcCreate.Compose
 
         private void Update()
         {
-            InputSystem.Update();
+            // InputSystem.Update();
         }
     }
 }

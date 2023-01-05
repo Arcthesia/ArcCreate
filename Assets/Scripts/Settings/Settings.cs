@@ -25,6 +25,23 @@ namespace ArcCreate
         public static readonly FloatSetting MusicAudio = new FloatSetting("SoundPreferences.ChartAudio", 0.7f);
         public static readonly FloatSetting EffectAudio = new FloatSetting("SoundPreferences.EffectAudio", 0.7f);
         public static readonly IntSetting InputMode = new IntSetting("Gameplay.InputMode", 0);
+        public static readonly FloatSetting ScrollSensitivityVertical =
+            new FloatSetting(
+                "ScrollSensitivity.Vertical",
+                Application.platform == RuntimePlatform.LinuxPlayer
+                || Application.platform == RuntimePlatform.LinuxEditor ? -1000 : 10);
+
+        public static readonly FloatSetting ScrollSensitivityHorizontal =
+            new FloatSetting(
+                "ScrollSensitivity.Horizontal",
+                Application.platform == RuntimePlatform.LinuxPlayer
+                || Application.platform == RuntimePlatform.LinuxEditor ? 500 : -5);
+
+        public static readonly FloatSetting ScrollSensitivityTimeline =
+            new FloatSetting(
+                "ScrollSensitivity.Timeline",
+                Application.platform == RuntimePlatform.LinuxPlayer
+                || Application.platform == RuntimePlatform.LinuxEditor ? -0.2f : 0.2f);
 
         private void Awake()
         {
