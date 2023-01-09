@@ -78,7 +78,7 @@ Compose:
       Gameplay: Gameplay
       Timeline: Timeline
       Project: Project
-      Groups: Groups
+      Events: Events
       LAN: LAN
       Export: Export
       Settings: Settings
@@ -160,6 +160,19 @@ Compose:
         Speed: Speed
         TimingGroup: Group
         Density: Density
+    Group:
+      Label:
+        Select: Select
+        Edit: Edit
+      Actions:
+        AddGroup: Add group
+        DeleteGroup: Delete group
+        AddEvent: Add event
+        DeleteEvent: Delete event
+      Mode:
+        Timing: Timing
+        Camera: Camera
+        Scenecontrol: Scene
 
 Gameplay:
   Exception:
