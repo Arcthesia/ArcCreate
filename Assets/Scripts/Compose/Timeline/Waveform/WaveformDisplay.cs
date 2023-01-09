@@ -9,13 +9,13 @@ namespace ArcCreate.Compose.Timeline
 {
     public class WaveformDisplay : MonoBehaviour
     {
+        [SerializeField] private Camera editorCamera;
         [SerializeField] private GameplayData gameplayData;
         [SerializeField] private RawImage image;
         [SerializeField] private RectTransform container;
         [SerializeField] private float minViewLength = 0.5f;
         [SerializeField] private float minScrollDist = 0.20f;
 
-        private float scrollPivot;
         private float viewFromSecond;
         private float viewToSecond;
         private float minViewLengthOfClip;
@@ -38,14 +38,14 @@ namespace ArcCreate.Compose.Timeline
         public void OnDrag(BaseEventData eventData)
         {
             var ev = eventData as PointerEventData;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(container, ev.position, ev.pressEventCamera, out Vector2 local);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(container, ev.position, editorCamera, out Vector2 local);
             OnWaveformDrag?.Invoke(local.x);
         }
 
         public void OnPointerClick(BaseEventData eventData)
         {
             var ev = eventData as PointerEventData;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(container, ev.position, ev.pressEventCamera, out Vector2 local);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(container, ev.position, editorCamera, out Vector2 local);
             OnWaveformDrag?.Invoke(local.x);
         }
 
@@ -54,8 +54,8 @@ namespace ArcCreate.Compose.Timeline
             var ev = eventData as PointerEventData;
             Vector2 scrollDelta = ev.scrollDelta;
 
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(container, ev.position, ev.pressEventCamera, out Vector2 local);
-            scrollPivot = (local.x / container.rect.width) + 0.5f;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(container, ev.position, editorCamera, out Vector2 local);
+            float scrollPivot = Mathf.Clamp(local.x / container.rect.width, -0.5f, 0.5f) + 0.5f;
             float scrollDir = Mathf.Sign(scrollDelta.y);
             float scrollSensitivity = Settings.ScrollSensitivityTimeline.Value;
 
@@ -89,8 +89,11 @@ namespace ArcCreate.Compose.Timeline
             else
             {
                 float viewSize = viewToSecond - viewFromSecond;
-                viewFromSecond -= scrollDir * Mathf.Max(viewSize * scrollSensitivity, minScrollDist);
-                viewToSecond -= scrollDir * Mathf.Max(viewSize * scrollSensitivity, minScrollDist);
+                float offset = Mathf.Max(viewSize * Mathf.Abs(scrollSensitivity), minScrollDist);
+                offset *= Mathf.Sign(scrollSensitivity);
+
+                viewFromSecond -= scrollDir * offset;
+                viewToSecond -= scrollDir * offset;
 
                 viewToSecond = Mathf.Clamp(viewToSecond, 0, clip.length);
                 viewFromSecond = Mathf.Clamp(viewFromSecond, 0, viewToSecond - viewSize);
