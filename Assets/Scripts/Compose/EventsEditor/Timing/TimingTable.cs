@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using ArcCreate.Compose.Components;
+using ArcCreate.Compose.Timeline;
 using ArcCreate.Gameplay;
 using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.Data;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace ArcCreate.Compose.EventsEditor
@@ -14,10 +14,33 @@ namespace ArcCreate.Compose.EventsEditor
         [SerializeField] private GameplayData gameplayData;
         [SerializeField] private Button addButton;
         [SerializeField] private Button removeButton;
+        [SerializeField] private Color markerColor;
+        [SerializeField] private Marker marker;
+
+        public override TimingEvent Selected
+        {
+            get => base.Selected;
+            set
+            {
+                base.Selected = value;
+                marker.gameObject.SetActive(value != null);
+                UpdateMarker();
+            }
+        }
 
         public void Rebuild()
         {
             ReloadGroup(Values.EditingTimingGroup.Value);
+        }
+
+        public void UpdateMarker()
+        {
+            if (Selected == null)
+            {
+                return;
+            }
+
+            marker.SetTiming(Selected.Timing);
         }
 
         protected override void Update()
@@ -32,6 +55,7 @@ namespace ArcCreate.Compose.EventsEditor
             gameplayData.OnChartFileLoad += OnChart;
             addButton.onClick.AddListener(OnAddButton);
             removeButton.onClick.AddListener(OnRemoveButton);
+            marker.OnDragDebounced += OnMarker;
         }
 
         protected override void OnDestroy()
@@ -41,6 +65,7 @@ namespace ArcCreate.Compose.EventsEditor
             gameplayData.OnChartFileLoad -= OnChart;
             addButton.onClick.RemoveListener(OnAddButton);
             removeButton.onClick.RemoveListener(OnRemoveButton);
+            marker.OnDragDebounced -= OnMarker;
         }
 
         private void OnAddButton()
@@ -106,11 +131,13 @@ namespace ArcCreate.Compose.EventsEditor
 
         private void OnEdittingTimingGroup(int group)
         {
+            Selected = null;
             ReloadGroup(group);
         }
 
         private void OnChart()
         {
+            Selected = null;
             ReloadGroup(0);
         }
 
@@ -118,6 +145,35 @@ namespace ArcCreate.Compose.EventsEditor
         {
             TimingGroup tg = Services.Gameplay.Chart.GetTimingGroup(group);
             SetData(tg.Timings);
+        }
+
+        private void OnMarker(Marker marker, int timing)
+        {
+            if (Selected == null)
+            {
+                return;
+            }
+
+            Selected.Timing = timing;
+            Services.Gameplay.Chart.UpdateEvents(new List<ArcEvent> { Selected });
+            Rebuild();
+            JumpTo(IndexOf(Selected));
+        }
+
+        private void OnEnable()
+        {
+            if (marker != null)
+            {
+                marker.gameObject.SetActive(Selected != null);
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (marker != null)
+            {
+                marker.gameObject.SetActive(false);
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ using ArcCreate.Utility.Parser;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Timeline
 {
@@ -11,11 +12,16 @@ namespace ArcCreate.Compose.Timeline
         [SerializeField] private TMP_InputField timingField;
         [SerializeField] private RectTransform numberBackground;
         [SerializeField] private float spacing;
+        [SerializeField] private float debounceSeconds = 0.5f;
+
+        private float schedule = float.MaxValue;
         private RectTransform rectTransform;
         private RectTransform parentRectTransform;
         private bool queueTimingEdit = false;
 
         public event Action<Marker, int> OnValueChanged;
+
+        public event Action<Marker, int> OnDragDebounced;
 
         public int Timing { get; private set; }
 
@@ -27,12 +33,15 @@ namespace ArcCreate.Compose.Timeline
             local.x = Mathf.Clamp(local.x, -parentWidth, parentWidth);
 
             SetDragPosition(local.x);
+
+            schedule = Time.realtimeSinceStartup + debounceSeconds;
         }
 
         public void SetTiming(int timing)
         {
             Timing = timing;
             SetFieldText(timing);
+            Update();
         }
 
         public void SetDragPosition(float x)
@@ -91,7 +100,8 @@ namespace ArcCreate.Compose.Timeline
             {
                 int timing = Mathf.RoundToInt(num);
                 Timing = Mathf.Clamp(timing, 0, Services.Gameplay.Audio.AudioLength);
-                OnValueChanged.Invoke(this, Timing);
+                OnValueChanged?.Invoke(this, Timing);
+                OnDragDebounced?.Invoke(this, Timing);
             }
 
             timingField.text = num.ToString();
@@ -124,6 +134,12 @@ namespace ArcCreate.Compose.Timeline
             {
                 timingField.text = Timing.ToString();
                 queueTimingEdit = false;
+            }
+
+            if (Time.realtimeSinceStartup >= schedule)
+            {
+                schedule = float.MaxValue;
+                OnDragDebounced?.Invoke(this, Timing);
             }
         }
     }

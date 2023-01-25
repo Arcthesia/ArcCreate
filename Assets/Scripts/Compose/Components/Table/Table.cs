@@ -21,7 +21,7 @@ namespace ArcCreate.Compose.Components
         private List<T> data = new List<T>();
         private float rowHeight;
 
-        public T Selected
+        public virtual T Selected
         {
             get => selected;
             set

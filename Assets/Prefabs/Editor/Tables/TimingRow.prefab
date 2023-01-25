@@ -510,6 +510,7 @@ MonoBehaviour:
   timingField: {fileID: 515272288878199414}
   bpmField: {fileID: 2037337626164647049}
   divisorField: {fileID: 2037337625325596721}
+  markerColor: {r: 0.8980392, g: 0.7058824, b: 0.023529412, a: 1}
 --- !u!222 &7007971134660853910
 CanvasRenderer:
   m_ObjectHideFlags: 0
