@@ -1,4 +1,5 @@
 using ArcCreate.ChartFormat;
+using ArcCreate.Gameplay.Skin;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
@@ -7,7 +8,7 @@ namespace ArcCreate.Gameplay.Data
     {
         public GroupProperties()
         {
-            // SkinOverride = NoteSkinOverride.Default;
+            SkinOverride = NoteSkinOverride.Default;
             FadingHolds = false;
             NoInput = false;
             NoClip = false;
@@ -17,7 +18,7 @@ namespace ArcCreate.Gameplay.Data
 
         public GroupProperties(RawTimingGroup raw)
         {
-            // SkinOverride = (NoteSkinOverride)(int)raw.Side;
+            SkinOverride = (NoteSkinOverride)(int)raw.Side;
             FadingHolds = raw.FadingHolds;
             NoInput = raw.NoInput;
             NoClip = raw.NoClip;
@@ -25,7 +26,8 @@ namespace ArcCreate.Gameplay.Data
             AngleY = raw.AngleY;
         }
 
-        // public NoteSkinOverride SkinOverride;
+        public NoteSkinOverride SkinOverride { get; set; }
+
         public Color Color { get; set; } = Color.white;
 
         public Vector3 ScaleIndividual { get; set; } = Vector3.one;
@@ -64,7 +66,7 @@ namespace ArcCreate.Gameplay.Data
         {
             return new RawTimingGroup
             {
-                // Side = (SideOverride)(int)SkinOverride,
+                Side = (SideOverride)(int)SkinOverride,
                 FadingHolds = FadingHolds,
                 NoInput = NoInput,
                 NoClip = NoClip,

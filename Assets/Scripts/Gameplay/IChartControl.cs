@@ -7,6 +7,8 @@ namespace ArcCreate.Gameplay
 {
     public interface IChartControl
     {
+        List<TimingGroup> TimingGroups { get; }
+
         /// <summary>
         /// Add events to the currently playing chart.
         /// </summary>
@@ -27,5 +29,7 @@ namespace ArcCreate.Gameplay
         void UpdateEvents(IEnumerable<ArcEvent> events);
 
         TimingGroup GetTimingGroup(int group);
+
+        void RemoveTimingGroup(TimingGroup group);
     }
 }

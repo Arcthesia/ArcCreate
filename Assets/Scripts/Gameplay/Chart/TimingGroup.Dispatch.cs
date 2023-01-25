@@ -27,6 +27,13 @@ namespace ArcCreate.Gameplay.Chart
 
         public GroupProperties GroupProperties => groupProperties;
 
+        // TODO: logic for scenecontrol to set visibility at the same time
+        public bool IsVisible
+        {
+            get => parent.gameObject.activeSelf;
+            set => parent.gameObject.SetActive(value);
+        }
+
         /// <summary>
         /// Load a timing group data representation into this instance.
         /// </summary>
@@ -81,6 +88,11 @@ namespace ArcCreate.Gameplay.Chart
             holds.Load(new List<Hold>(), parent);
             arcs.Load(new List<Arc>(), parent);
             arcTaps.Load(new List<ArcTap>(), parent);
+        }
+
+        public void SetGroupProperties(GroupProperties prop)
+        {
+            groupProperties = prop;
         }
 
         /// <summary>
