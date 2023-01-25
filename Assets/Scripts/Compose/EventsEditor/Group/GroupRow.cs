@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ArcCreate.ChartFormat;
 using ArcCreate.Compose.Components;
@@ -12,9 +13,12 @@ namespace ArcCreate.Compose.EventsEditor
     public class GroupRow : Row<TimingGroup>, IPointerClickHandler
     {
         [SerializeField] private GameObject highlight;
-        [SerializeField] private TMP_Text nameText;
+        [SerializeField] private TMP_InputField nameField;
         [SerializeField] private TMP_InputField propertiesField;
         [SerializeField] private Toggle visibilityButton;
+
+        private bool nameIsNull = true;
+        private string previousNameDisplay;
 
         public override bool Highlighted
         {
@@ -34,7 +38,7 @@ namespace ArcCreate.Compose.EventsEditor
         public override void RemoveReference()
         {
             Reference = null;
-            nameText.text = string.Empty;
+            nameField.gameObject.SetActive(false);
             propertiesField.gameObject.SetActive(false);
             visibilityButton.gameObject.SetActive(false);
             highlight.SetActive(false);
@@ -42,11 +46,13 @@ namespace ArcCreate.Compose.EventsEditor
 
         public override void SetInteractable(bool interactable)
         {
+            nameField.interactable = interactable;
             propertiesField.interactable = interactable;
             visibilityButton.interactable = interactable;
 
             if (Reference != null && Reference.GroupNumber == 0)
             {
+                nameField.interactable = false;
                 propertiesField.interactable = false;
             }
 
@@ -59,29 +65,93 @@ namespace ArcCreate.Compose.EventsEditor
         public override void SetReference(TimingGroup datum)
         {
             Reference = datum;
-            nameText.text = datum.GroupNumber.ToString();
-            propertiesField.text = datum.GroupProperties.ToRaw().ToString();
+            propertiesField.text = Reference.GroupProperties.ToRaw().ToStringWithoutName();
+            nameField.gameObject.SetActive(true);
             propertiesField.gameObject.SetActive(true);
             visibilityButton.gameObject.SetActive(true);
             visibilityButton.isOn = Reference.IsVisible;
 
             highlight.SetActive(Reference.GroupNumber == Values.EditingTimingGroup.Value);
+
             if (Reference.GroupNumber == 0)
             {
-                propertiesField.interactable = false;
+                nameField.text = "Base group";
+                propertiesField.gameObject.SetActive(false);
             }
+            else
+            {
+                if (string.IsNullOrEmpty(Reference.GroupProperties.Name))
+                {
+                    nameField.text = $"Group {Reference.GroupNumber}";
+                    nameIsNull = true;
+                }
+                else
+                {
+                    nameField.text = $"{Reference.GroupProperties.Name} ({Reference.GroupNumber})";
+                    nameIsNull = false;
+                }
+            }
+
+            previousNameDisplay = nameField.text;
         }
 
         private void Awake()
         {
+            nameField.onEndEdit.AddListener(OnName);
             propertiesField.onEndEdit.AddListener(OnProperties);
             visibilityButton.onValueChanged.AddListener(OnVisiblity);
+
+            nameField.onSelect.AddListener(OnNameSelect);
+            propertiesField.onSelect.AddListener(OnPropertiesSelect);
         }
 
         private void OnDestroy()
         {
+            nameField.onEndEdit.RemoveListener(OnName);
             propertiesField.onEndEdit.RemoveListener(OnProperties);
             visibilityButton.onValueChanged.AddListener(OnVisiblity);
+
+            nameField.onSelect.RemoveListener(OnPropertiesSelect);
+            propertiesField.onSelect.AddListener(OnPropertiesSelect);
+        }
+
+        private void OnNameSelect(string arg)
+        {
+            Table.Selected = Reference;
+            Values.EditingTimingGroup.Value = Reference.GroupNumber;
+            nameField.text = Reference.GroupProperties.Name ?? string.Empty;
+        }
+
+        private void OnPropertiesSelect(string arg)
+        {
+            Table.Selected = Reference;
+            Values.EditingTimingGroup.Value = Reference.GroupNumber;
+        }
+
+        private void OnName(string value)
+        {
+            if (value == previousNameDisplay)
+            {
+                return;
+            }
+
+            value = value.Trim();
+            value = value.Replace("=", string.Empty);
+            value = value.Replace(",", string.Empty);
+            value = value.Replace("\"", string.Empty);
+
+            if (string.IsNullOrEmpty(value))
+            {
+                Reference.GroupProperties.Name = null;
+                nameField.text = $"Group {Reference.GroupNumber}";
+                nameIsNull = true;
+                return;
+            }
+
+            Reference.GroupProperties.Name = value;
+            nameField.text = $"{Reference.GroupProperties.Name} ({Reference.GroupNumber})";
+            previousNameDisplay = nameField.text;
+            nameIsNull = false;
         }
 
         private void OnProperties(string value)
@@ -89,7 +159,10 @@ namespace ArcCreate.Compose.EventsEditor
             try
             {
                 // TODO: Hook to undo/redo management
-                RawTimingGroup group = new RawTimingGroup(value);
+                RawTimingGroup group = new RawTimingGroup(value)
+                {
+                    Name = Reference.GroupProperties.Name,
+                };
                 Reference.SetGroupProperties(new Gameplay.Data.GroupProperties(group));
             }
             catch (ChartFormatException e)
@@ -101,7 +174,7 @@ namespace ArcCreate.Compose.EventsEditor
             }
             finally
             {
-                propertiesField.text = Reference.GroupProperties.ToRaw().ToString();
+                propertiesField.text = Reference.GroupProperties.ToRaw().ToStringWithoutName();
             }
         }
 

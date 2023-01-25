@@ -38,6 +38,9 @@ namespace ArcCreate.ChartFormat
                     float val;
                     switch (type)
                     {
+                        case "name":
+                            Name = value.Trim('"');
+                            break;
                         case "anglex":
                             valid = Evaluator.TryFloat(value, out val);
                             AngleX = valid ? val : 0;
@@ -86,6 +89,8 @@ namespace ArcCreate.ChartFormat
             }
         }
 
+        public string Name { get; set; } = null;
+
         public bool NoInput { get; set; } = false;
 
         public bool NoClip { get; set; } = false;
@@ -104,7 +109,24 @@ namespace ArcCreate.ChartFormat
 
         public override string ToString()
         {
+            var opts = GetPropertyStrings(true);
+            return string.Join(",", opts);
+        }
+
+        public string ToStringWithoutName()
+        {
+            var opts = GetPropertyStrings(false);
+            return string.Join(",", opts);
+        }
+
+        private List<string> GetPropertyStrings(bool withName)
+        {
             List<string> opts = new List<string>();
+            if (withName && !string.IsNullOrEmpty(Name))
+            {
+                opts.Add($"name=\"{Name}\"");
+            }
+
             if (NoInput)
             {
                 opts.Add("noinput");
@@ -135,7 +157,7 @@ namespace ArcCreate.ChartFormat
                 opts.Add(Side == SideOverride.Light ? "light" : "conflict");
             }
 
-            return string.Join(",", opts);
+            return opts;
         }
     }
 }
