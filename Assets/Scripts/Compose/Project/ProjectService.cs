@@ -58,12 +58,12 @@ namespace ArcCreate.Compose.Project
                 File.Copy(info.AudioPath.OriginalPath, info.AudioPath.FullPath);
             }
 
-            if (info.BackgroundPath.ShouldCopy)
+            if (info.BackgroundPath?.ShouldCopy ?? false)
             {
                 File.Copy(info.BackgroundPath.OriginalPath, info.BackgroundPath.FullPath);
             }
 
-            if (info.JacketPath.ShouldCopy)
+            if (info.JacketPath?.ShouldCopy ?? false)
             {
                 File.Copy(info.JacketPath.OriginalPath, info.JacketPath.FullPath);
             }
@@ -73,8 +73,8 @@ namespace ArcCreate.Compose.Project
                 ChartPath = info.StartingChartPath,
                 BaseBpm = info.BaseBPM,
                 AudioPath = info.AudioPath.ShortenedPath,
-                JacketPath = info.JacketPath.ShortenedPath,
-                BackgroundPath = info.BackgroundPath.ShortenedPath,
+                JacketPath = info.JacketPath?.ShortenedPath,
+                BackgroundPath = info.BackgroundPath?.ShortenedPath,
             };
 
             ProjectSettings projectSettings = new ProjectSettings()

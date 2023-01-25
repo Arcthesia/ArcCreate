@@ -8,63 +8,76 @@ namespace ArcCreate.Compose.Components
     [RequireComponent(typeof(RectTransform))]
     public abstract class Table<T> : MonoBehaviour, IScrollHandler
     {
-        private RectTransform rectTransform;
         [SerializeField] private GameObject rowPrefab;
+        [SerializeField] private RectTransform rowParent;
         [SerializeField] private int maxRowCount = 50;
         [SerializeField] private Scrollbar verticalScrollbar;
-        [SerializeField] private Scrollbar horizontalScrollbar;
-        [SerializeField] private ColumnNamesRow columnNamesRow;
-        [SerializeField] private List<Column> columns;
-        [SerializeField] private int staticColumnsCount = 1;
+        [SerializeField] private ScrollReceiver scrollReceiver;
+        private T selected;
 
         private float prevHeight;
         private Pool<Row<T>> rowPool;
         private readonly List<Row<T>> rows = new List<Row<T>>();
         private List<T> data = new List<T>();
+        private float rowHeight;
 
-        private int StartPos { get; set; } = 0;
-
-        private int EndPos => StartPos + rows.Count;
-
-        private float StaticWidth
+        public T Selected
         {
-            get
+            get => selected;
+            set
             {
-                float w = 0;
-                for (int i = 0; i < Mathf.Min(columns.Count - 1, staticColumnsCount); i++)
+                selected = value;
+                if (value != null)
                 {
-                    Column column = columns[i];
-                    w += column.Size;
+                    UpdateRowHighlight();
                 }
-
-                return w;
             }
         }
 
-        private float TotalWidth
-        {
-            get
-            {
-                float w = 0;
-                foreach (var column in columns)
-                {
-                    w += column.Size;
-                }
+        protected List<Row<T>> Rows => rows;
 
-                return Mathf.Max(rectTransform.rect.width, w - StaticWidth);
-            }
-        }
+        protected List<T> Data => data;
 
-        public void SetColumns(List<Column> columns)
-        {
-            this.columns = columns;
-            UpdateHorizontalScrollbar();
-        }
+        protected int StartPos { get; set; } = 0;
+
+        protected int EndPos => StartPos + rows.Count;
 
         public void SetData(List<T> data)
         {
             this.data = data;
+            ClampStartPos();
             BuildList();
+        }
+
+        public void JumpTo(int index)
+        {
+            while (index < StartPos && StartPos > 0)
+            {
+                StartPos -= 1;
+            }
+
+            while (index >= EndPos && EndPos < Data.Count)
+            {
+                StartPos += 1;
+            }
+
+            ClampStartPos();
+            UpdateVerticalScrollbar();
+            BuildList();
+        }
+
+        public int IndexOf(T datum)
+        {
+            for (int i = 0; i < data.Count; i++)
+            {
+                T t = data[i];
+                if (ReferenceEquals(t, datum))
+                {
+                    return i;
+                }
+            }
+
+            return default;
         }
 
         public void OnScroll(PointerEventData eventData)
@@ -72,25 +85,21 @@ namespace ArcCreate.Compose.Components
             float delta = eventData.scrollDelta.y;
             int count = rows.Count;
 
-            int oldStartPos = StartPos;
-            StartPos += (int)Mathf.Sign(delta * Settings.ScrollSensitivityVertical.Value);
-            if (StartPos < 0 || EndPos > count)
-            {
-                StartPos = oldStartPos;
-            }
-
+            StartPos -= (int)Mathf.Sign(delta * Settings.ScrollSensitivityVertical.Value);
+            ClampStartPos();
             UpdateVerticalScrollbar();
             BuildList();
+            UnfocusRowFields();
         }
 
-        protected void Update()
+        protected virtual void Update()
         {
-            if (rectTransform.rect.height != prevHeight)
+            if (rowParent.rect.height != prevHeight)
             {
                 RebuildRows();
             }
 
-            prevHeight = rectTransform.rect.height;
+            prevHeight = rowParent.rect.height;
         }
 
         protected void RebuildRows()
@@ -100,15 +109,15 @@ namespace ArcCreate.Compose.Components
 
             float currentHeight = 0;
             int count = 0;
-            while (currentHeight <= rectTransform.rect.height)
+            while (currentHeight + rowHeight <= rowParent.rect.height)
             {
                 Row<T> row = rowPool.Get();
                 rows.Add(row);
                 row.Table = this;
 
                 row.RectTransform.anchoredPosition = new Vector2(
-                    currentHeight,
-                    row.RectTransform.anchoredPosition.y);
+                    row.RectTransform.anchoredPosition.x,
+                    -currentHeight);
                 currentHeight += row.RectTransform.rect.height;
 
                 // Avoid crashing the operating system if the prefab's height is 0
@@ -118,26 +127,26 @@ namespace ArcCreate.Compose.Components
                     return;
                 }
             }
+
+            ClampStartPos();
+            BuildList();
         }
 
-        protected void Awake()
+        protected virtual void Awake()
         {
-            rectTransform = GetComponent<RectTransform>();
-            rowPool = Pools.New<Row<T>>(rowPrefab.name, rowPrefab, transform, 1);
+            rowPool = Pools.New<Row<T>>(rowPrefab.name, rowPrefab, rowParent, 1);
             verticalScrollbar.onValueChanged.AddListener(OnVerticalScrollbar);
-            horizontalScrollbar.onValueChanged.AddListener(OnHorizontalScrollbar);
+            scrollReceiver.OnScroll += OnScroll;
             RebuildRows();
 
-            if (columns != null && columns.Count > 0)
-            {
-                columnNamesRow.SetReference(columns);
-            }
+            rowHeight = rowPrefab.GetComponent<RectTransform>().rect.height;
         }
 
-        protected void OnDestroy()
+        protected virtual void OnDestroy()
         {
             verticalScrollbar.onValueChanged.RemoveListener(OnVerticalScrollbar);
-            horizontalScrollbar.onValueChanged.RemoveListener(OnHorizontalScrollbar);
+            scrollReceiver.OnScroll -= OnScroll;
+            Pools.Destroy<Row<T>>(rowPrefab.name);
         }
 
         private void BuildList()
@@ -147,23 +156,26 @@ namespace ArcCreate.Compose.Components
             float size = (float)rows.Count / (extracount + rows.Count);
             verticalScrollbar.size = size;
 
-            int rowIdx = 0;
+            int rowId = 0;
             int end = EndPos > count ? count : EndPos;
             for (int k = StartPos; k < end; ++k)
             {
-                Row<T> row = rows[rowIdx++];
+                Row<T> row = rows[rowId];
                 T datum = data[k];
                 row.SetReference(datum);
                 row.SetInteractable(true);
+                rowId++;
             }
 
             // Disable unused
-            for (int k = rowIdx; k < rows.Count; ++k)
+            for (int k = rowId; k < rows.Count; ++k)
             {
                 Row<T> row = rows[k];
                 row.RemoveReference();
                 row.SetInteractable(false);
             }
+
+            UpdateRowHighlight();
         }
 
         private void OnVerticalScrollbar(float value)
@@ -171,27 +183,15 @@ namespace ArcCreate.Compose.Components
             int count = data.Count;
             int extracount = count - rows.Count;
             extracount = extracount < 0 ? 0 : extracount;
-            float size = (float)rows.Count / (extracount + rows.Count);
+            float size = (extracount + rows.Count == 0) ?
+                         1 :
+                         (float)rows.Count / (extracount + rows.Count);
             verticalScrollbar.size = size;
 
             float pos = verticalScrollbar.value;
             StartPos = Mathf.RoundToInt(pos * extracount);
+            ClampStartPos();
             BuildList();
-        }
-
-        private void OnHorizontalScrollbar(float value)
-        {
-            float totalWidth = TotalWidth;
-            float staticWidth = StaticWidth;
-            float viewWidth = rectTransform.rect.width - staticWidth;
-
-            float x = Mathf.Lerp(0, -totalWidth + viewWidth, horizontalScrollbar.value);
-            foreach (var row in rows)
-            {
-                row.SetHorizontalScroll(x);
-            }
-
-            columnNamesRow.SetHorizontalScroll(x);
         }
 
         private void UpdateVerticalScrollbar()
@@ -199,7 +199,9 @@ namespace ArcCreate.Compose.Components
             int count = data.Count;
             int extracount = count - rows.Count;
             extracount = extracount < 0 ? 0 : extracount;
-            float size = (float)rows.Count / (extracount + rows.Count);
+            float size = (extracount + rows.Count == 0) ?
+                         1 :
+                         (float)rows.Count / (extracount + rows.Count);
             verticalScrollbar.size = size;
 
             if (extracount <= 0)
@@ -212,16 +214,22 @@ namespace ArcCreate.Compose.Components
             }
         }
 
-        private void UpdateHorizontalScrollbar()
+        private void UpdateRowHighlight()
         {
-            float totalWidth = TotalWidth;
-            float staticWidth = StaticWidth;
-            float viewWidth = rectTransform.rect.width - staticWidth;
+            foreach (var row in rows)
+            {
+                row.Highlighted = (Selected != null) && ReferenceEquals(row.Reference, Selected);
+            }
+        }
 
-            horizontalScrollbar.size = viewWidth / totalWidth;
+        private void UnfocusRowFields()
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+        }
 
-            // Will also trigger OnHorizontalScrollbar
-            horizontalScrollbar.value = 0;
+        private void ClampStartPos()
+        {
+            StartPos = Mathf.Clamp(StartPos, 0, Mathf.Max(0, data.Count - rows.Count));
         }
     }
 }
