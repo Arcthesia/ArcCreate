@@ -34,6 +34,8 @@ namespace ArcCreate.Gameplay.Chart
 
         public bool IsLoaded { get; private set; }
 
+        public List<TimingGroup> TimingGroups => timingGroups;
+
         public void ReloadSkin()
         {
             for (int i = 0; i < timingGroups.Count; i++)
@@ -337,12 +339,19 @@ namespace ArcCreate.Gameplay.Chart
 
             while (tg >= timingGroups.Count)
             {
+                GameObject go = Instantiate(timingGroupPrefab, transform);
                 TimingGroup newTg = new TimingGroup(timingGroups.Count);
-                newTg.Load(transform);
+                newTg.Load(go.transform);
                 timingGroups.Add(newTg);
             }
 
             return timingGroups[tg];
+        }
+
+        public void RemoveTimingGroup(TimingGroup group)
+        {
+            group.Clear();
+            timingGroups.Remove(group);
         }
 
         public void UpdateChart(int currentTiming)

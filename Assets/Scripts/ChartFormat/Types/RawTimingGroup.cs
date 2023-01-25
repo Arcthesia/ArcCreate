@@ -5,6 +5,8 @@ namespace ArcCreate.ChartFormat
 {
     public class RawTimingGroup
     {
+        // Might be problematic when multiple chart formats is introduced, as this class only serialize / deserialize to aff.
+        // Don't wnat to think about it now though.
         public RawTimingGroup()
         {
             NoInput = false;
