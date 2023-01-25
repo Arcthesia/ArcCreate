@@ -8,6 +8,7 @@ namespace ArcCreate.Gameplay.Data
     {
         public GroupProperties()
         {
+            Name = null;
             SkinOverride = NoteSkinOverride.Default;
             FadingHolds = false;
             NoInput = false;
@@ -18,6 +19,7 @@ namespace ArcCreate.Gameplay.Data
 
         public GroupProperties(RawTimingGroup raw)
         {
+            Name = raw.Name;
             SkinOverride = (NoteSkinOverride)(int)raw.Side;
             FadingHolds = raw.FadingHolds;
             NoInput = raw.NoInput;
@@ -25,6 +27,8 @@ namespace ArcCreate.Gameplay.Data
             AngleX = raw.AngleX;
             AngleY = raw.AngleY;
         }
+
+        public string Name { get; set; }
 
         public NoteSkinOverride SkinOverride { get; set; }
 
@@ -66,6 +70,7 @@ namespace ArcCreate.Gameplay.Data
         {
             return new RawTimingGroup
             {
+                Name = Name,
                 Side = (SideOverride)(int)SkinOverride,
                 FadingHolds = FadingHolds,
                 NoInput = NoInput,
