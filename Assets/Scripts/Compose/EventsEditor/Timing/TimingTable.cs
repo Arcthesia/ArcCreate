@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using ArcCreate.Compose.Components;
+using ArcCreate.Compose.History;
 using ArcCreate.Compose.Timeline;
 using ArcCreate.Gameplay;
 using ArcCreate.Gameplay.Chart;
@@ -52,6 +54,7 @@ namespace ArcCreate.Compose.EventsEditor
             base.Awake();
             Values.EditingTimingGroup.OnValueChange += OnEdittingTimingGroup;
             gameplayData.OnChartFileLoad += OnChart;
+            gameplayData.OnChartEdit += OnChartEdit;
             addButton.onClick.AddListener(OnAddButton);
             removeButton.onClick.AddListener(OnRemoveButton);
             marker.OnDragDebounced += OnMarker;
@@ -62,9 +65,16 @@ namespace ArcCreate.Compose.EventsEditor
             base.OnDestroy();
             Values.EditingTimingGroup.OnValueChange -= OnEdittingTimingGroup;
             gameplayData.OnChartFileLoad -= OnChart;
+            gameplayData.OnChartEdit -= OnChartEdit;
             addButton.onClick.RemoveListener(OnAddButton);
             removeButton.onClick.RemoveListener(OnRemoveButton);
             marker.OnDragDebounced -= OnMarker;
+        }
+
+        private void OnChartEdit()
+        {
+            Rebuild();
+            UpdateMarker();
         }
 
         private void OnAddButton()
@@ -108,7 +118,8 @@ namespace ArcCreate.Compose.EventsEditor
                 }
             }
 
-            Services.Gameplay.Chart.AddEvents(new List<ArcEvent> { timing });
+            Services.History.AddCommand(new EventCommand(
+                add: new List<ArcEvent>() { timing }));
             Selected = timing;
             Rebuild();
             JumpTo(IndexOf(timing));
@@ -122,7 +133,8 @@ namespace ArcCreate.Compose.EventsEditor
             }
 
             int index = IndexOf(Selected);
-            Services.Gameplay.Chart.RemoveEvents(new List<ArcEvent> { Selected });
+            Services.History.AddCommand(new EventCommand(
+                remove: new List<ArcEvent>() { Selected }));
             Selected = Data[Mathf.Max(index - 1, 0)];
             Rebuild();
             JumpTo(index - 1);
@@ -153,8 +165,10 @@ namespace ArcCreate.Compose.EventsEditor
                 return;
             }
 
-            Selected.Timing = timing;
-            Services.Gameplay.Chart.UpdateEvents(new List<ArcEvent> { Selected });
+            TimingEvent newValue = Selected.Clone() as TimingEvent;
+            newValue.Timing = timing;
+            Services.History.AddCommand(new EventCommand(
+                update: new List<(ArcEvent instance, ArcEvent newValue)> { (Selected, newValue) }));
             Rebuild();
             JumpTo(IndexOf(Selected));
         }

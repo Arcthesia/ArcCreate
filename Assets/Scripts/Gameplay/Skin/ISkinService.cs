@@ -6,7 +6,7 @@ namespace ArcCreate.Gameplay.Skin
     /// <summary>
     /// Interface for providing skins related services to internal (Gameplay) classes.
     /// </summary>
-    public interface ISkinService
+    public interface ISkinService : ISkinControl
     {
         /// <summary>
         /// Gets the combo color of the current skin.
