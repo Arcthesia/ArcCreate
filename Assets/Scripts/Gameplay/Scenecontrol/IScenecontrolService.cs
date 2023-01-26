@@ -55,5 +55,10 @@ namespace ArcCreate.Gameplay.Scenecontrol
         /// </summary>
         /// <param name="events">The events collection.</param>
         void Change(IEnumerable<ScenecontrolEvent> events);
+
+        /// <summary>
+        /// Clear all events.
+        /// </summary>
+        void Clear();
     }
 }

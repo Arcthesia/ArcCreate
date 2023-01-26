@@ -71,5 +71,10 @@ namespace ArcCreate.Gameplay.GameplayCamera
         /// </summary>
         /// <param name="events">The events collection.</param>
         void Change(IEnumerable<CameraEvent> events);
+
+        /// <summary>
+        /// Clear all events.
+        /// </summary>
+        void Clear();
     }
 }

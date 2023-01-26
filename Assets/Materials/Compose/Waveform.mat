@@ -60,7 +60,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _FromSample: 0
+    - _FromSample: 869665
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -72,7 +72,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _ToSample: 8363495
+    - _ToSample: 1229174
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:

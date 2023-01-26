@@ -1,22 +1,22 @@
 using System.Collections.Generic;
+using System.Linq;
 using ArcCreate.Compose.Components;
 using ArcCreate.Compose.Timeline;
 using ArcCreate.Gameplay;
-using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.Data;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace ArcCreate.Compose.EventsEditor
 {
-    public class TimingTable : Table<TimingEvent>
+    public class CameraTable : Table<CameraEvent>
     {
         [SerializeField] private GameplayData gameplayData;
         [SerializeField] private Button addButton;
         [SerializeField] private Button removeButton;
-        [SerializeField] private Marker marker;
+        [SerializeField] private MarkerRange marker;
 
-        public override TimingEvent Selected
+        public override CameraEvent Selected
         {
             get => base.Selected;
             set
@@ -39,7 +39,7 @@ namespace ArcCreate.Compose.EventsEditor
                 return;
             }
 
-            marker.SetTiming(Selected.Timing);
+            marker.SetTiming(Selected.Timing, Selected.Timing + Selected.Duration);
         }
 
         protected override void Update()
@@ -69,16 +69,23 @@ namespace ArcCreate.Compose.EventsEditor
 
         private void OnAddButton()
         {
-            TimingEvent timing;
+            CameraEvent cam;
 
             if (Selected == null)
             {
-                TimingEvent lastEvent = Data[Data.Count - 1];
-                timing = new TimingEvent()
+                int t = 0;
+                if (Data.Count > 0)
                 {
-                    Timing = lastEvent.Timing + 1,
-                    Bpm = lastEvent.Bpm,
-                    Divisor = lastEvent.Divisor,
+                    t = Data[Data.Count - 1].Timing + 1;
+                }
+
+                cam = new CameraEvent()
+                {
+                    Timing = t,
+                    Move = Vector3.zero,
+                    Rotate = Vector3.zero,
+                    CameraType = Gameplay.Data.CameraType.L,
+                    Duration = 1,
                     TimingGroup = Values.EditingTimingGroup.Value,
                 };
             }
@@ -88,7 +95,7 @@ namespace ArcCreate.Compose.EventsEditor
 
                 while (true)
                 {
-                    foreach (TimingEvent ev in Data)
+                    foreach (CameraEvent ev in Data)
                     {
                         if (ev.Timing == t)
                         {
@@ -97,21 +104,23 @@ namespace ArcCreate.Compose.EventsEditor
                         }
                     }
 
-                    timing = new TimingEvent()
+                    cam = new CameraEvent()
                     {
                         Timing = t,
-                        Bpm = Selected.Bpm,
-                        Divisor = Selected.Divisor,
+                        Move = Vector3.zero,
+                        Rotate = Vector3.zero,
+                        CameraType = Gameplay.Data.CameraType.L,
+                        Duration = 1,
                         TimingGroup = Values.EditingTimingGroup.Value,
                     };
                     break;
                 }
             }
 
-            Services.Gameplay.Chart.AddEvents(new List<ArcEvent> { timing });
-            Selected = timing;
+            Services.Gameplay.Chart.AddEvents(new List<ArcEvent> { cam });
+            Selected = cam;
             Rebuild();
-            JumpTo(IndexOf(timing));
+            JumpTo(IndexOf(cam));
         }
 
         private void OnRemoveButton()
@@ -142,11 +151,11 @@ namespace ArcCreate.Compose.EventsEditor
 
         private void ReloadGroup(int group)
         {
-            TimingGroup tg = Services.Gameplay.Chart.GetTimingGroup(group);
-            SetData(tg.Timings);
+            List<CameraEvent> cam = Services.Gameplay.Chart.GetAll<CameraEvent>().Where(c => c.TimingGroup == group).ToList();
+            SetData(cam);
         }
 
-        private void OnMarker(Marker marker, int timing)
+        private void OnMarker(int timing, int endTiming)
         {
             if (Selected == null)
             {
@@ -154,6 +163,7 @@ namespace ArcCreate.Compose.EventsEditor
             }
 
             Selected.Timing = timing;
+            Selected.Duration = endTiming - timing;
             Services.Gameplay.Chart.UpdateEvents(new List<ArcEvent> { Selected });
             Rebuild();
             JumpTo(IndexOf(Selected));
