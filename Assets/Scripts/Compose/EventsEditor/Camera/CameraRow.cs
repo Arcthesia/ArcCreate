@@ -1,13 +1,15 @@
 using System.Collections.Generic;
 using ArcCreate.Compose.Components;
+using ArcCreate.Compose.History;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Parser;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace ArcCreate.Compose.EventsEditor
 {
-    public class CameraRow : Row<CameraEvent>
+    public class CameraRow : Row<CameraEvent>, IPointerClickHandler
     {
         [SerializeField] private GameObject highlight;
         [SerializeField] private GameObject nonFields;
@@ -73,6 +75,11 @@ namespace ArcCreate.Compose.EventsEditor
             rotYField.SetTextWithoutNotify(Reference.Rotate.y.ToString());
             rotZField.SetTextWithoutNotify(Reference.Rotate.z.ToString());
             easingField.SetValueWithoutNotify((int)Reference.CameraType);
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            Table.Selected = Reference;
         }
 
         private void Awake()
@@ -145,15 +152,27 @@ namespace ArcCreate.Compose.EventsEditor
              && Evaluator.TryFloat(rotYField.text, out float ry)
              && Evaluator.TryFloat(rotZField.text, out float rz))
             {
-                Reference.Timing = timing;
-                Reference.Duration = duration;
-                Reference.Move = new Vector3(mx, my, mz);
-                Reference.Rotate = new Vector3(rx, ry, rz);
-                Reference.CameraType = (Gameplay.Data.CameraType)easingField.value;
+                var type = (Gameplay.Data.CameraType)easingField.value;
 
-                // TODO: Hook to undo/redo management
-                Services.Gameplay.Chart.UpdateEvents(new List<ArcEvent> { Reference });
-                ((CameraTable)Table).Rebuild();
+                if (timing != Reference.Timing || duration != Reference.Duration || type != Reference.CameraType
+                 || mx != Reference.Move.x || my != Reference.Move.y || mz != Reference.Move.z
+                 || rx != Reference.Rotate.x || ry != Reference.Rotate.y || rz != Reference.Rotate.z)
+                {
+                    CameraEvent newValue = new CameraEvent()
+                    {
+                        Timing = timing,
+                        Duration = duration,
+                        Move = new Vector3(mx, my, mz),
+                        Rotate = new Vector3(rx, ry, rz),
+                        CameraType = (Gameplay.Data.CameraType)easingField.value,
+                        TimingGroup = Reference.TimingGroup,
+                    };
+
+                    Services.History.AddCommand(new EventCommand(
+                        update: new List<(ArcEvent instance, ArcEvent newValue)> { (Reference, newValue) }));
+
+                    ((CameraTable)Table).Rebuild();
+                }
             }
 
             timingField.SetTextWithoutNotify(Reference.Timing.ToString());

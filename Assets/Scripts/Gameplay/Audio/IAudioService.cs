@@ -1,13 +1,7 @@
 namespace ArcCreate.Gameplay.Audio
 {
-    public interface IAudioService
+    public interface IAudioService : IAudioControl
     {
-        int ChartTiming { get; set; }
-
-        int AudioLength { get; }
-
-        bool IsPlaying { get; }
-
         /// <summary>
         /// Update the timing value.
         /// </summary>

@@ -10,7 +10,6 @@ namespace ArcCreate.Gameplay.Data
                 case CameraType.Reset: return "reset";
                 case CameraType.Qi: return "qi";
                 case CameraType.Qo: return "qo";
-                case CameraType.S: return "s";
                 default: return "reset";
             }
         }
@@ -23,7 +22,7 @@ namespace ArcCreate.Gameplay.Data
                 case "reset": return CameraType.Reset;
                 case "qi": return CameraType.Qi;
                 case "qo": return CameraType.Qo;
-                case "s": return CameraType.S;
+                case "s": return CameraType.L;
                 default: return CameraType.Reset;
             }
         }

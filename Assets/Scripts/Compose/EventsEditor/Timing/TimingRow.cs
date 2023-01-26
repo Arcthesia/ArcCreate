@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ArcCreate.Compose.Components;
+using ArcCreate.Compose.History;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Parser;
 using TMPro;
@@ -82,13 +83,21 @@ namespace ArcCreate.Compose.EventsEditor
              && Evaluator.TryFloat(bpmField.text, out float bpm)
              && Evaluator.TryFloat(divisorField.text, out float divisor))
             {
-                Reference.Timing = timing;
-                Reference.Bpm = bpm;
-                Reference.Divisor = divisor;
+                if (timing != Reference.Timing || bpm != Reference.Bpm || divisor != Reference.Divisor)
+                {
+                    TimingEvent newValue = new TimingEvent()
+                    {
+                        Timing = timing,
+                        Bpm = bpm,
+                        Divisor = divisor,
+                        TimingGroup = Reference.TimingGroup,
+                    };
 
-                // TODO: Hook to undo/redo management
-                Services.Gameplay.Chart.UpdateEvents(new List<ArcEvent> { Reference });
-                ((TimingTable)Table).Rebuild();
+                    Services.History.AddCommand(new EventCommand(
+                        update: new List<(ArcEvent instance, ArcEvent newValue)> { (Reference, newValue) }));
+
+                    ((TimingTable)Table).Rebuild();
+                }
             }
 
             timingField.SetTextWithoutNotify(Reference.Timing.ToString());

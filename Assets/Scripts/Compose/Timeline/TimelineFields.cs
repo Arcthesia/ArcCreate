@@ -73,8 +73,11 @@ namespace ArcCreate.Compose.Timeline
         {
             if (Evaluator.TryInt(value, out int group))
             {
-                Values.EditingTimingGroup.Value = group;
+                var tg = Services.Gameplay.Chart.GetTimingGroup(group);
+                Values.EditingTimingGroup.Value = tg.GroupNumber;
             }
+
+            groupField.SetTextWithoutNotify(Values.EditingTimingGroup.Value.ToString());
         }
     }
 }

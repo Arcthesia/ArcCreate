@@ -6,6 +6,5 @@ namespace ArcCreate.Gameplay.Data
         Qi,
         Qo,
         Reset,
-        S,
     }
 }
