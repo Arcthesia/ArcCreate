@@ -127,6 +127,7 @@ namespace ArcCreate.Compose.EventsEditor
             }
 
             Services.History.AddCommand(new EventCommand(
+                name: I18n.S("Compose.Notify.History.AddCamera"),
                 add: new List<ArcEvent>() { cam }));
             Selected = cam;
             Rebuild();
@@ -142,6 +143,7 @@ namespace ArcCreate.Compose.EventsEditor
 
             int index = IndexOf(Selected);
             Services.History.AddCommand(new EventCommand(
+                name: I18n.S("Compose.Notify.History.RemoveCamera"),
                 remove: new List<ArcEvent>() { Selected }));
             Selected = Data[Mathf.Max(index - 1, 0)];
             Rebuild();
@@ -177,6 +179,7 @@ namespace ArcCreate.Compose.EventsEditor
             newValue.Timing = timing;
             newValue.Duration = endTiming - timing;
             Services.History.AddCommand(new EventCommand(
+                name: I18n.S("Compose.Notify.History.EditCamera"),
                 update: new List<(ArcEvent instance, ArcEvent newValue)> { (Selected, newValue) }));
             Rebuild();
             JumpTo(IndexOf(Selected));

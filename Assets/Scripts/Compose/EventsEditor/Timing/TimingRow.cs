@@ -95,6 +95,7 @@ namespace ArcCreate.Compose.EventsEditor
                     };
 
                     Services.History.AddCommand(new EventCommand(
+                        name: I18n.S("Compose.Notify.History.History.EditTiming"),
                         update: new List<(ArcEvent instance, ArcEvent newValue)> { (Reference, newValue) }));
 
                     ((TimingTable)Table).Rebuild();

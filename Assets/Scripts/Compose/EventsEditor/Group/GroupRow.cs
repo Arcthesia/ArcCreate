@@ -17,7 +17,6 @@ namespace ArcCreate.Compose.EventsEditor
         [SerializeField] private TMP_InputField propertiesField;
         [SerializeField] private Toggle visibilityButton;
 
-        private bool nameIsNull = true;
         private string previousNameDisplay;
 
         public override bool Highlighted
@@ -83,12 +82,10 @@ namespace ArcCreate.Compose.EventsEditor
                 if (string.IsNullOrEmpty(Reference.GroupProperties.Name))
                 {
                     nameField.text = $"Group {Reference.GroupNumber}";
-                    nameIsNull = true;
                 }
                 else
                 {
                     nameField.text = $"{Reference.GroupProperties.Name} ({Reference.GroupNumber})";
-                    nameIsNull = false;
                 }
             }
 
@@ -144,14 +141,12 @@ namespace ArcCreate.Compose.EventsEditor
             {
                 Reference.GroupProperties.Name = null;
                 nameField.text = $"Group {Reference.GroupNumber}";
-                nameIsNull = true;
                 return;
             }
 
             Reference.GroupProperties.Name = value;
             nameField.text = $"{Reference.GroupProperties.Name} ({Reference.GroupNumber})";
             previousNameDisplay = nameField.text;
-            nameIsNull = false;
         }
 
         private void OnProperties(string value)
@@ -164,6 +159,12 @@ namespace ArcCreate.Compose.EventsEditor
                     Name = Reference.GroupProperties.Name,
                 };
                 Reference.SetGroupProperties(new Gameplay.Data.GroupProperties(group));
+
+                Debug.Log(I18n.S(
+                    "Compose.Notify.History.EditGroup", new Dictionary<string, object>
+                    {
+                        { "Number", Reference.GroupNumber },
+                    }));
             }
             catch (ChartFormatException e)
             {
