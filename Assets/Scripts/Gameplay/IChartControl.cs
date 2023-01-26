@@ -28,8 +28,25 @@ namespace ArcCreate.Gameplay
         /// <param name="events">The events that has been changed.</param>
         void UpdateEvents(IEnumerable<ArcEvent> events);
 
-        TimingGroup GetTimingGroup(int group);
+        /// <summary>
+        /// Get the timing group from a timing group number, and create new default timing groups if it does not exist yet.
+        /// </summary>
+        /// <param name="tg">The timing group number.</param>
+        /// <returns>The timing group of that number.</returns>
+        TimingGroup GetTimingGroup(int tg);
 
+        /// <summary>
+        /// Remove a timing group and all of its events.
+        /// </summary>
+        /// <param name="group">The timing group to remove.</param>
         void RemoveTimingGroup(TimingGroup group);
+
+        /// <summary>
+        /// Get all notes of a type.
+        /// </summary>
+        /// <typeparam name="T">The event type.</typeparam>
+        /// <returns>All notes of the specified type.</returns>
+        IEnumerable<T> GetAll<T>()
+            where T : ArcEvent;
     }
 }

@@ -182,6 +182,8 @@ namespace ArcCreate.Gameplay.Chart
             }
 
             timingGroups.Clear();
+            Services.Camera.Clear();
+            Services.Scenecontrol.Clear();
         }
 
         public void LoadChart(ChartReader reader)

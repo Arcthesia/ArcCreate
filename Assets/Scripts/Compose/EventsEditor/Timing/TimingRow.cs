@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using ArcCreate.Compose.Components;
-using ArcCreate.Compose.Timeline;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Parser;
 using TMPro;
@@ -92,9 +91,9 @@ namespace ArcCreate.Compose.EventsEditor
                 ((TimingTable)Table).Rebuild();
             }
 
-            timingField.text = Reference.Timing.ToString();
-            bpmField.text = Reference.Bpm.ToString();
-            divisorField.text = Reference.Divisor.ToString();
+            timingField.SetTextWithoutNotify(Reference.Timing.ToString());
+            bpmField.SetTextWithoutNotify(Reference.Bpm.ToString());
+            divisorField.SetTextWithoutNotify(Reference.Divisor.ToString());
             ((TimingTable)Table).UpdateMarker();
         }
     }
