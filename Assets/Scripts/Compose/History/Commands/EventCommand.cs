@@ -14,10 +14,12 @@ namespace ArcCreate.Compose.History
         private readonly List<(ArcEvent instance, ArcEvent oldValue, ArcEvent newValue)> update;
 
         public EventCommand(
+            string name,
             IEnumerable<ArcEvent> add = null,
             IEnumerable<ArcEvent> remove = null,
             IEnumerable<(ArcEvent instance, ArcEvent newValue)> update = null)
         {
+            Name = name;
             this.add = add?.ToList();
             this.remove = remove?.ToList();
             this.update = update?.Select(pair => (pair.instance, pair.instance.Clone(), pair.newValue)).ToList() ?? null;
@@ -26,6 +28,8 @@ namespace ArcCreate.Compose.History
             removeAvailable = remove?.Any() ?? false;
             updateAvailable = update?.Any() ?? false;
         }
+
+        public string Name { get; private set; }
 
         public void Execute()
         {

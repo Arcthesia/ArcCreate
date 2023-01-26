@@ -25,6 +25,7 @@ namespace ArcCreate.Compose.History
             command.Execute();
 
             OnCommand();
+            Notify("Compose.Notify.History.Execute", command);
         }
 
         public void Redo()
@@ -39,6 +40,7 @@ namespace ArcCreate.Compose.History
             undoStack.Push(cmd);
 
             OnCommand();
+            Notify("Compose.Notify.History.Redo", cmd);
         }
 
         public void Undo()
@@ -53,6 +55,7 @@ namespace ArcCreate.Compose.History
             redoStack.Push(cmd);
 
             OnCommand();
+            Notify("Compose.Notify.History.Undo", cmd);
         }
 
         private void Awake()
@@ -76,6 +79,14 @@ namespace ArcCreate.Compose.History
             redoButton.interactable = redoStack.Count > 0;
 
             LastEdit = DateTime.Now;
+        }
+
+        private void Notify(string i18nKey, ICommand cmd)
+        {
+            Debug.Log(I18n.S(i18nKey, new Dictionary<string, object>
+            {
+                { "Name", cmd.Name },
+            }));
         }
     }
 }

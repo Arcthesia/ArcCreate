@@ -63,6 +63,35 @@ Compose:
       Invalid project file: No chart is included within this project.
     InvalidGroupProperties: |-
       Invalid timing group properties. {Message}
+  Notify:
+    GameplayLoaded: Gameplay scene loaded successfully
+    History:
+      Execute: |-
+        Executed command: {Name}
+      Undo: |-
+        Undo command: {Name}
+      AddTiming: Add timing event
+      EditTiming: Edit timing event
+      RemoveTiming: Remove timing event
+      AddCamera: Add camera event
+      EditCamera: Edit camera event
+      RemoveCamera: Remove camera event
+      AddGroup: Added timing group {Number}
+      EditGroup: Edited timing group {Number}
+      RemoveGroup: Removed timing group {Number}
+    Project:
+      CreateProject: |-
+        Created new project
+        at: {Path}
+      OpenProject: |-
+        Opened project
+        at: {Path}
+      SaveProject: |-
+        Saved project
+        at: {Path}
+      OpenChart: Opened chart file {Path}
+      CreateChart: Created chart file {Path}
+      RemoveChart: Removed chart file {Path} from project
   UI:
     Common:
       Confirm: Confirm

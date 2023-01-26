@@ -25,6 +25,7 @@ namespace ArcCreate
         public static readonly FloatSetting MusicAudio = new FloatSetting("SoundPreferences.ChartAudio", 0.7f);
         public static readonly FloatSetting EffectAudio = new FloatSetting("SoundPreferences.EffectAudio", 0.7f);
         public static readonly IntSetting InputMode = new IntSetting("Gameplay.InputMode", 0);
+        public static readonly BoolSetting EnableEasterEggs = new BoolSetting("Fun.EasterEggs", Application.isEditor);
         public static readonly FloatSetting ScrollSensitivityVertical =
             new FloatSetting(
                 "ScrollSensitivity.Vertical",

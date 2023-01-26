@@ -5,13 +5,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ArcCreate.Compose.Components
+namespace ArcCreate.Compose.Popups
 {
     /// <summary>
     /// Component for handling color picker window.
     /// The same color picker window can be reused for different input fields.
     /// </summary>
-    public class ColorPickerWindow : MonoBehaviour, IColorPickerService
+    public class ColorPickerWindow : MonoBehaviour
     {
         [SerializeField] private GameObject window;
         [SerializeField] private ColorPicker picker;

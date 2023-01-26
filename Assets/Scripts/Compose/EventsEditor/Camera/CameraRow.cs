@@ -169,6 +169,7 @@ namespace ArcCreate.Compose.EventsEditor
                     };
 
                     Services.History.AddCommand(new EventCommand(
+                        name: I18n.S("Compose.Notify.History.EditCamera"),
                         update: new List<(ArcEvent instance, ArcEvent newValue)> { (Reference, newValue) }));
 
                     ((CameraTable)Table).Rebuild();

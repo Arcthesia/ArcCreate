@@ -1,5 +1,5 @@
-using ArcCreate.Compose.Components;
 using ArcCreate.Compose.History;
+using ArcCreate.Compose.Popups;
 using ArcCreate.Compose.Project;
 using ArcCreate.Compose.Timeline;
 using ArcCreate.Gameplay;
@@ -10,13 +10,13 @@ namespace ArcCreate.Compose
     internal class Services : MonoBehaviour
     {
         [SerializeField] private ProjectService project;
-        [SerializeField] private ColorPickerWindow colorPicker;
+        [SerializeField] private PopupsService popups;
         [SerializeField] private TimelineService timeline;
         [SerializeField] private HistoryService history;
 
         public static IProjectService Project { get; private set; }
 
-        public static IColorPickerService ColorPicker { get; private set; }
+        public static IPopupsService Popups { get; private set; }
 
         public static ITimelineService Timeline { get; private set; }
 
@@ -27,7 +27,7 @@ namespace ArcCreate.Compose
         private void Awake()
         {
             Project = project;
-            ColorPicker = colorPicker;
+            Popups = popups;
             Timeline = timeline;
             History = history;
         }

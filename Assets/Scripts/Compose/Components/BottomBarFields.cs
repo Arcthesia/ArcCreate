@@ -1,23 +1,24 @@
+using System;
 using ArcCreate.Gameplay;
 using ArcCreate.Utility.Parser;
 using TMPro;
 using UnityEngine;
 
-namespace ArcCreate.Compose.Timeline
+namespace ArcCreate.Compose.Components
 {
-    public class TimelineFields : MonoBehaviour
+    public class BottomBarFields : MonoBehaviour
     {
         [SerializeField] private GameplayData gameplayData;
         [SerializeField] private TMP_InputField offsetField;
         [SerializeField] private TMP_InputField speedField;
+        [SerializeField] private TMP_InputField densityField;
         [SerializeField] private TMP_InputField groupField;
 
         private void Awake()
         {
-            speedField.onEndEdit.AddListener(OnSpeedField);
-            groupField.onEndEdit.AddListener(OnGroupField);
             offsetField.onEndEdit.AddListener(OnOffsetField);
             speedField.onEndEdit.AddListener(OnSpeedField);
+            densityField.onEndEdit.AddListener(OnDensityField);
             groupField.onEndEdit.AddListener(OnGroupField);
 
             gameplayData.AudioOffset.OnValueChange += OnGameplayOffset;
@@ -31,6 +32,7 @@ namespace ArcCreate.Compose.Timeline
         {
             offsetField.onEndEdit.RemoveListener(OnOffsetField);
             speedField.onEndEdit.RemoveListener(OnSpeedField);
+            densityField.onEndEdit.RemoveListener(OnDensityField);
             groupField.onEndEdit.RemoveListener(OnGroupField);
 
             gameplayData.AudioOffset.OnValueChange -= OnGameplayOffset;
@@ -67,6 +69,15 @@ namespace ArcCreate.Compose.Timeline
             {
                 Settings.DropRate.Value = Mathf.RoundToInt(speed * Values.DropRateScalar);
             }
+        }
+
+        private void OnDensityField(string value)
+        {
+            // if there's ever a command interface then this will be moved there
+            EasterEggs.TryTrigger(value);
+
+            // TODO: Implement density grid lol
+            densityField.text = "4";
         }
 
         private void OnGroupField(string value)
