@@ -29,7 +29,7 @@ namespace ArcCreate.Gameplay
         void UpdateEvents(IEnumerable<ArcEvent> events);
 
         /// <summary>
-        /// Get the timing group from a timing group number, and create new default timing groups if it does not exist yet.
+        /// Get the timing group from a timing group number, and create a new default timing group if it does not exist yet.
         /// </summary>
         /// <param name="tg">The timing group number.</param>
         /// <returns>The timing group of that number.</returns>

@@ -249,6 +249,8 @@ namespace ArcCreate.Gameplay.Chart
                 TimingGroup tg = timingGroups[i];
                 tg.AddEvents(e.Where(n => n.TimingGroup == tg.GroupNumber));
             }
+
+            gameplayData.NotifyChartEdit();
         }
 
         public void RemoveEvents(IEnumerable<ArcEvent> e)
@@ -271,6 +273,8 @@ namespace ArcCreate.Gameplay.Chart
                 TimingGroup tg = timingGroups[i];
                 tg.RemoveEvents(e.Where(n => n.TimingGroup == tg.GroupNumber));
             }
+
+            gameplayData.NotifyChartEdit();
         }
 
         public void UpdateEvents(IEnumerable<ArcEvent> e)
@@ -329,6 +333,8 @@ namespace ArcCreate.Gameplay.Chart
                 TimingGroup tg = timingGroups[i];
                 tg.UpdateEvents(tgUnchanged.Where(n => n.TimingGroup == tg.GroupNumber));
             }
+
+            gameplayData.NotifyChartEdit();
         }
 
         public TimingGroup GetTimingGroup(int tg)
@@ -338,12 +344,13 @@ namespace ArcCreate.Gameplay.Chart
                 return timingGroups[0];
             }
 
-            while (tg >= timingGroups.Count)
+            if (tg >= timingGroups.Count)
             {
                 GameObject go = Instantiate(timingGroupPrefab, transform);
                 TimingGroup newTg = new TimingGroup(timingGroups.Count);
                 newTg.Load(go.transform);
                 timingGroups.Add(newTg);
+                return newTg;
             }
 
             return timingGroups[tg];

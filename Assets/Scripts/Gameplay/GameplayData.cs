@@ -22,6 +22,8 @@ namespace ArcCreate.Gameplay
 
         public event Action OnSkinValuesChange;
 
+        public event Action OnChartEdit;
+
 #pragma warning disable
         /// <summary>
         /// The background sprite.
@@ -186,6 +188,11 @@ namespace ArcCreate.Gameplay
             }
 
             OnSkinValuesChange?.Invoke();
+        }
+
+        internal void NotifyChartEdit()
+        {
+            OnChartEdit?.Invoke();
         }
 
         private async UniTask StartLoadingAudio(string path)
