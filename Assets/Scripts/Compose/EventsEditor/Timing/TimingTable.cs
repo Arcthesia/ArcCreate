@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using ArcCreate.Compose.Components;
 using ArcCreate.Compose.History;

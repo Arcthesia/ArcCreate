@@ -32,7 +32,7 @@ namespace ArcCreate.Compose.EventsEditor
 
         public override void SetInteractable(bool interactable)
         {
-            timingField.interactable = interactable;
+            timingField.interactable = interactable && (Reference?.Timing != 0);
             bpmField.interactable = interactable;
             divisorField.interactable = interactable;
 
@@ -48,6 +48,7 @@ namespace ArcCreate.Compose.EventsEditor
             timingField.SetTextWithoutNotify(datum.Timing.ToString());
             bpmField.SetTextWithoutNotify(datum.Bpm.ToString());
             divisorField.SetTextWithoutNotify(datum.Divisor.ToString());
+            timingField.interactable = datum.Timing != 0;
         }
 
         private void Awake()
@@ -87,7 +88,7 @@ namespace ArcCreate.Compose.EventsEditor
                 {
                     TimingEvent newValue = new TimingEvent()
                     {
-                        Timing = timing,
+                        Timing = timing == 0 ? 1 : timing,
                         Bpm = bpm,
                         Divisor = divisor,
                         TimingGroup = Reference.TimingGroup,

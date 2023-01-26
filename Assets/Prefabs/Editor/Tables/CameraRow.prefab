@@ -1201,6 +1201,8 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: Reset
       m_Image: {fileID: 0}
+    - m_Text: S
+      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
