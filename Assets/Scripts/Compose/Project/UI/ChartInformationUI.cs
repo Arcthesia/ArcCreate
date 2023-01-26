@@ -97,6 +97,19 @@ namespace ArcCreate.Compose.Project
         {
             Target.Composer = value;
             gameplayData.Composer.Value = value;
+
+            if (Settings.EnableEasterEggs.Value)
+            {
+                if (Target.ChartConstant >= 11 && Target.Composer.Contains("xi"))
+                {
+                    EasterEggs.TryTrigger("xixi");
+                }
+
+                if (Target.Composer.ToLower() == "bts")
+                {
+                    EasterEggs.TryTrigger("btstan");
+                }
+            }
         }
 
         private void OnIllustrator(string value)
@@ -118,6 +131,11 @@ namespace ArcCreate.Compose.Project
                 Target.BaseBpm = bpm;
                 gameplayData.BaseBpm.Value = bpm;
             }
+
+            if (Settings.EnableEasterEggs.Value && Target.BaseBpm >= 300)
+            {
+                EasterEggs.TryTrigger("sdvx");
+            }
         }
 
         private void OnSyncBaseBPM(bool value)
@@ -130,6 +148,19 @@ namespace ArcCreate.Compose.Project
             if (Evaluator.TryFloat(value, out float cc))
             {
                 Target.ChartConstant = cc;
+            }
+
+            if (Settings.EnableEasterEggs.Value)
+            {
+                if (Target.ChartConstant >= 11 && Target.Composer.Contains("xi"))
+                {
+                    EasterEggs.TryTrigger("xixi");
+                }
+
+                if (Target.ChartConstant >= 13)
+                {
+                    EasterEggs.TryTrigger("overshart");
+                }
             }
         }
 

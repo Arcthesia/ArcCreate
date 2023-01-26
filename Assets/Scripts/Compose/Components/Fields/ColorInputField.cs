@@ -1,4 +1,5 @@
 using System;
+using ArcCreate.Compose.Popups;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -23,8 +24,8 @@ namespace ArcCreate.Compose.Components
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            Services.ColorPicker.OpenAt(eventData.position, currentColor);
-            Services.ColorPicker.OnColorChanged = SetValue;
+            ColorPickerWindow window = Services.Popups.OpenColorPicker(eventData.position, currentColor);
+            window.OnColorChanged = SetValue;
         }
 
         /// <summary>

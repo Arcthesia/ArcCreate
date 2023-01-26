@@ -87,6 +87,12 @@ namespace ArcCreate.Compose.Project
             AutofillChart(chart);
             Serialize(projectSettings);
             OpenProject(projectSettings.Path);
+
+            Debug.Log(
+                I18n.S("Compose.Notify.Project.NewProject", new Dictionary<string, object>()
+                {
+                    { "Path", projectSettings.Path },
+                }));
         }
 
         public void CreateNewChart(string chartFilePath)
@@ -104,6 +110,12 @@ namespace ArcCreate.Compose.Project
             chartPicker.SetOptions(CurrentProject.Charts, CurrentChart);
             currentChartPath.text = CurrentChart.ChartPath;
             OnChartLoad?.Invoke(CurrentChart);
+
+            Debug.Log(
+                I18n.S("Compose.Notify.Project.CreateChart", new Dictionary<string, object>()
+                {
+                    { "Path", chartFilePath },
+                }));
         }
 
         public void OpenChart(ChartSettings chart)
@@ -124,6 +136,12 @@ namespace ArcCreate.Compose.Project
 
             CurrentProject.Charts.Remove(chart);
             chartPicker.SetOptions(CurrentProject.Charts, CurrentChart);
+
+            Debug.Log(
+                I18n.S("Compose.Notify.Project.RemoveChart", new Dictionary<string, object>()
+                {
+                    { "Path", chart.ChartPath },
+                }));
         }
 
         private void OnNewProjectPressed()
@@ -209,6 +227,12 @@ namespace ArcCreate.Compose.Project
             currentChartPath.text = CurrentChart.ChartPath;
             LoadChart(CurrentChart.ChartPath);
             OnChartLoad?.Invoke(CurrentChart);
+
+            Debug.Log(
+                I18n.S("Compose.Notify.Project.OpenProject", new Dictionary<string, object>()
+                {
+                    { "Path", path },
+                }));
         }
 
         private void Serialize(ProjectSettings projectSettings)
@@ -218,6 +242,12 @@ namespace ArcCreate.Compose.Project
                 .Build();
             string yaml = serializer.Serialize(projectSettings);
             File.WriteAllText(projectSettings.Path, yaml);
+
+            Debug.Log(
+                I18n.S("Compose.Notify.Project.SaveProject", new Dictionary<string, object>()
+                {
+                    { "Path", projectSettings.Path },
+                }));
         }
 
         private ProjectSettings Deserialize(string path)
@@ -280,6 +310,12 @@ namespace ArcCreate.Compose.Project
             Values.EditingTimingGroup.Value = 0;
             reader.Parse();
             gameplayData.LoadChart(reader);
+
+            Debug.Log(
+                I18n.S("Compose.Notify.Project.OpenChart", new Dictionary<string, object>()
+                {
+                    { "Path", chartPath },
+                }));
         }
     }
 }

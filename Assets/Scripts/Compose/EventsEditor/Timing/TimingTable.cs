@@ -118,6 +118,7 @@ namespace ArcCreate.Compose.EventsEditor
             }
 
             Services.History.AddCommand(new EventCommand(
+                name: I18n.S("Compose.Notify.History.AddTiming"),
                 add: new List<ArcEvent>() { timing }));
             Selected = timing;
             Rebuild();
@@ -133,6 +134,7 @@ namespace ArcCreate.Compose.EventsEditor
 
             int index = IndexOf(Selected);
             Services.History.AddCommand(new EventCommand(
+                name: I18n.S("Compose.Notify.RemoveTiming"),
                 remove: new List<ArcEvent>() { Selected }));
             Selected = Data[Mathf.Max(index - 1, 0)];
             Rebuild();
@@ -167,6 +169,7 @@ namespace ArcCreate.Compose.EventsEditor
             TimingEvent newValue = Selected.Clone() as TimingEvent;
             newValue.Timing = timing;
             Services.History.AddCommand(new EventCommand(
+                name: I18n.S("Compose.Notify.History.EditTiming"),
                 update: new List<(ArcEvent instance, ArcEvent newValue)> { (Selected, newValue) }));
             Rebuild();
             JumpTo(IndexOf(Selected));
