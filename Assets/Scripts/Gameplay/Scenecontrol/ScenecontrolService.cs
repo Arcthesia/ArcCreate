@@ -24,6 +24,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
             RebuildList();
         }
 
+        public void Clear()
+        {
+            events.Clear();
+        }
+
         public void Add(IEnumerable<ScenecontrolEvent> events)
         {
             this.events.AddRange(events);

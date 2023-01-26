@@ -33,6 +33,11 @@ namespace ArcCreate.Gameplay.GameplayCamera
             RebuildList();
         }
 
+        public void Clear()
+        {
+            events.Clear();
+        }
+
         public void Add(IEnumerable<CameraEvent> events)
         {
             this.events.AddRange(events);
