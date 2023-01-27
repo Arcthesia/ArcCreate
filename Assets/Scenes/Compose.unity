@@ -1627,6 +1627,7 @@ RectTransform:
   - {fileID: 920188529}
   - {fileID: 1423151600}
   - {fileID: 1804436545}
+  - {fileID: 1462068364}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -31986,6 +31987,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d819e747da136543caaa244e3b247606, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1462068363
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1462068364}
+  m_Layer: 9
+  m_Name: CustomDialogs
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1462068364
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1462068363}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 86582844}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1467808208
 GameObject:
   m_ObjectHideFlags: 0
@@ -32248,8 +32284,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2adaa4b35901b2477bd5ad6986239ff2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textDialogPrefab: {fileID: 0}
-  textDialogParent: {fileID: 0}
+  textDialogPrefab: {fileID: 1292130010199685801, guid: 45b9e8c1eb716f71ea139f7ccc3de000,
+    type: 3}
+  textDialogParent: {fileID: 1462068364}
   notification: {fileID: 944069819}
   colorPickerWindow: {fileID: 129313210}
   vineboom: {fileID: 8300000, guid: c979888a02bd90068acfdf7340076f3e, type: 3}

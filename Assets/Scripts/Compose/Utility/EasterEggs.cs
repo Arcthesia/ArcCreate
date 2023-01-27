@@ -31,6 +31,7 @@ namespace ArcCreate.Compose
             { "vineboom", "🗿" },
             { "inthatlight", "I find deliverance..." },
             { "taronuke", "💕" },
+            { "camellia", "WE ARE READY TO BREAK YOUR REALITY" },
         };
 
         public static void AddAffectedByColor(Graphic graphic)
