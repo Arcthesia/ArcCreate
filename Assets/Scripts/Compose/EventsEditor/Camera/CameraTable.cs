@@ -223,10 +223,10 @@ namespace ArcCreate.Compose.EventsEditor
 
         private async UniTask BeginFreeCamera(CameraEvent target)
         {
-            Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.CameraRecordHelp"));
+            Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.FreeCameraEditHelp"));
 
             Keyboard keyboard = InputSystem.GetDevice<Keyboard>();
-            Camera cam = Services.Gameplay.GameplayCamera;
+            Camera cam = Services.Gameplay.Camera.GameplayCamera;
             CameraEvent oldValue = target.Clone() as CameraEvent;
 
             Services.Gameplay.Audio.ChartTiming = target.Timing + target.Duration;
@@ -362,7 +362,6 @@ namespace ArcCreate.Compose.EventsEditor
 
                 await UniTask.NextFrame();
             }
-
         }
     }
 }

@@ -8,12 +8,6 @@ namespace ArcCreate.Gameplay
     public interface IGameplayControl
     {
         /// <summary>
-        /// Gets the gameplay camera of this scene.
-        /// </summary>
-        /// <value>The gameplay camera.</value>
-        Camera GameplayCamera { get; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether or not to let this module update InputSystem.
         /// Set this to true if no other scene will update InputSystem themselves.
         /// </summary>
@@ -37,6 +31,12 @@ namespace ArcCreate.Gameplay
         /// </summary>
         /// <value>The audio controller.</value>
         IAudioControl Audio { get; }
+
+        /// <summary>
+        /// Gets the controller for camera related functionality.
+        /// </summary>
+        /// <value>The camera controller.</value>
+        ICameraControl Camera { get; }
 
         /// <summary>
         /// Set the rectangle boundary to render this scene's camera onto.

@@ -8,7 +8,7 @@ public class I18nText : MonoBehaviour
     [SerializeField] private bool readIdFromContent = false;
     private TMP_Text text;
 
-    protected TMP_Text Text => text;
+    public TMP_Text Text => text;
 
     public virtual void ApplyLocale()
     {
