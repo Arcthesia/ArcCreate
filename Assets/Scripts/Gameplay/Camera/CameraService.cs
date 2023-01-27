@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ArcCreate.Gameplay.GameplayCamera
 {
-    public class CameraService : MonoBehaviour, ICameraService
+    public class CameraService : MonoBehaviour, ICameraService, ICameraControl
     {
         [SerializeField] private Camera gameplayCamera;
         [SerializeField] private Transform skyInputLabel;
@@ -17,6 +17,12 @@ namespace ArcCreate.Gameplay.GameplayCamera
         public Camera GameplayCamera => gameplayCamera;
 
         public List<CameraEvent> Events => events;
+
+        public bool IsEditorCamera { get; set; }
+
+        public Vector3 EditorCameraPosition { get; set; }
+
+        public Vector3 EditorCameraRotation { get; set; }
 
         private bool Is16By9
             => 1.77777779f - (1f * gameplayCamera.pixelWidth / gameplayCamera.pixelHeight) < 0.1f;
@@ -88,6 +94,13 @@ namespace ArcCreate.Gameplay.GameplayCamera
 
         public void UpdateCamera(int currentTiming)
         {
+            if (IsEditorCamera)
+            {
+                GameplayCamera.transform.localPosition = EditorCameraPosition;
+                GameplayCamera.transform.localRotation = Quaternion.Euler(EditorCameraRotation);
+                return;
+            }
+
             skyInputLabel.localPosition = new Vector3(
                 Is16By9 ? Values.SkyInputLabelX : Values.SkyInputLabelXTablet,
                 skyInputLabel.localPosition.y,

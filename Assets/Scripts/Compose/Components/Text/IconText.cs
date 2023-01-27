@@ -10,7 +10,11 @@ namespace ArcCreate.Compose.Components
         public override void ApplyLocale()
         {
             base.ApplyLocale();
+            UpdateSize();
+        }
 
+        public void UpdateSize()
+        {
             float textWidth = Text.preferredWidth;
             parent.sizeDelta = new Vector2(
                 textWidth + spacing,
