@@ -92,6 +92,21 @@ Compose:
       OpenChart: Opened chart file {Path}
       CreateChart: Created chart file {Path}
       RemoveChart: Removed chart file {Path} from project
+  Dialog:
+    RemoveGroup:
+      Title: Remove timing group
+      Content: |-
+        Are you sure you want to remove this timing group and all of its content? (no undo)
+      Yes: Remove
+      No: Cancel
+    RemoveChart:
+      Title: Remove chart file
+      Content: |-
+        Are you sure you want to remove this chart file from the project?
+
+        The file itself will NOT be deleted and can be added back to the project later, but any metadata associated with it will be lost.
+      Yes: Remove
+      No: Cancel
   UI:
     Common:
       Confirm: Confirm

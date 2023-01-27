@@ -40,7 +40,25 @@ namespace ArcCreate.Compose.Project
 
         private void Remove()
         {
-            // TODO: Add confirmation dialog
+            Services.Popups.CreateTextDialog(
+                I18n.S("Compose.Dialog.RemoveChart.Title"),
+                I18n.S("Compose.Dialog.RemoveChart.Content"),
+                new Popups.ButtonSetting
+                {
+                    Text = I18n.S("Compose.Dialog.RemoveChart.Yes"),
+                    Callback = OnRemoveConfirm,
+                    ButtonColor = Popups.ButtonColor.Danger,
+                },
+                new Popups.ButtonSetting
+                {
+                    Text = I18n.S("Compose.Dialog.RemoveChart.No"),
+                    Callback = null,
+                    ButtonColor = Popups.ButtonColor.Default,
+                });
+        }
+
+        private void OnRemoveConfirm()
+        {
             Services.Project.RemoveChart(chart);
         }
 

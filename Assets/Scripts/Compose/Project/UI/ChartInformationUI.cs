@@ -109,6 +109,11 @@ namespace ArcCreate.Compose.Project
                 {
                     EasterEggs.TryTrigger("btstan");
                 }
+
+                if (Target.Composer.ToLower().Contains("camellia") || Target.Composer.Contains("かめりあ"))
+                {
+                    EasterEggs.TryTrigger("camellia");
+                }
             }
         }
 

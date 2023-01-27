@@ -153,7 +153,7 @@ namespace ArcCreate.Compose.EventsEditor
         {
             try
             {
-                // TODO: Hook to undo/redo management
+                // Hooking group editting to HistoryService is considered. But it seems very hard...
                 RawTimingGroup group = new RawTimingGroup(value)
                 {
                     Name = Reference.GroupProperties.Name,

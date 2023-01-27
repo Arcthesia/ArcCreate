@@ -66,7 +66,25 @@ namespace ArcCreate.Compose.EventsEditor
                 return;
             }
 
-            // TODO: Confirmation dialog + undo / redo
+            Services.Popups.CreateTextDialog(
+                I18n.S("Compose.Dialog.RemoveGroup.Title"),
+                I18n.S("Compose.Dialog.RemoveGroup.Content"),
+                new Popups.ButtonSetting
+                {
+                    Text = I18n.S("Compose.Dialog.RemoveGroup.Yes"),
+                    Callback = OnRemoveConfirm,
+                    ButtonColor = Popups.ButtonColor.Danger,
+                },
+                new Popups.ButtonSetting
+                {
+                    Text = I18n.S("Compose.Dialog.RemoveGroup.No"),
+                    Callback = null,
+                    ButtonColor = Popups.ButtonColor.Default,
+                });
+        }
+
+        private void OnRemoveConfirm()
+        {
             int index = IndexOf(Selected);
             int num = Selected.GroupNumber;
             Services.Gameplay.Chart.RemoveTimingGroup(Selected);
