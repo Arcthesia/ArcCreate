@@ -35,6 +35,8 @@ namespace ArcCreate.Gameplay
 
         public IAudioControl Audio => audioService;
 
+        public Camera GameplayCamera => gameplayCamera;
+
         public void SetCameraViewportRect(Rect rect)
         {
             gameplayCamera.rect = rect;
