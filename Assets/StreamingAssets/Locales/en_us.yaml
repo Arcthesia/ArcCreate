@@ -65,6 +65,17 @@ Compose:
       Invalid timing group properties. {Message}
   Notify:
     GameplayLoaded: Gameplay scene loaded successfully
+    CameraRecordHelp: |-
+      Recording camera event (hover for more info)
+      
+      WASD: Move forward/left/backward/right
+      Space: Move upward
+      Shift: Move downward
+      IJKL: Rotate up/left/down/right
+      U: Roll left
+      O: Roll right
+      Esc: Cancel
+      Enter: Confirm
     History:
       Execute: |-
         Executed command: {Name}
@@ -216,6 +227,13 @@ Compose:
         DeleteGroup: Delete group
         AddEvent: Add event
         DeleteEvent: Delete event
+        FreeCamera: Free camera
+      CameraView:
+        Default: Default view
+        Stationary: Stationary view
+        ZoomedOut: Zoomed out view
+        BirdsEye1: Bird's-eye view 1
+        BirdsEye2: Bird's-eye view 2
       Mode:
         Timing: Timing
         Camera: Camera

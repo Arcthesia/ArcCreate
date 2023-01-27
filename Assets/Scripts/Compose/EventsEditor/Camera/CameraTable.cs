@@ -5,7 +5,10 @@ using ArcCreate.Compose.History;
 using ArcCreate.Compose.Timeline;
 using ArcCreate.Gameplay;
 using ArcCreate.Gameplay.Data;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace ArcCreate.Compose.EventsEditor
@@ -15,6 +18,10 @@ namespace ArcCreate.Compose.EventsEditor
         [SerializeField] private GameplayData gameplayData;
         [SerializeField] private Button addButton;
         [SerializeField] private Button removeButton;
+        [SerializeField] private Button freeCameraButton;
+        [SerializeField] private Image freeCameraButtonImage;
+        [SerializeField] private Color highlightColor;
+        [SerializeField] private Color normalColor;
         [SerializeField] private MarkerRange marker;
 
         public override CameraEvent Selected
@@ -56,6 +63,7 @@ namespace ArcCreate.Compose.EventsEditor
             gameplayData.OnChartEdit += OnChartEdit;
             addButton.onClick.AddListener(OnAddButton);
             removeButton.onClick.AddListener(OnRemoveButton);
+            freeCameraButton.onClick.AddListener(OnFreeCameraButton);
             marker.OnDragDebounced += OnMarker;
         }
 
@@ -67,6 +75,7 @@ namespace ArcCreate.Compose.EventsEditor
             gameplayData.OnChartEdit -= OnChartEdit;
             addButton.onClick.RemoveListener(OnAddButton);
             removeButton.onClick.RemoveListener(OnRemoveButton);
+            freeCameraButton.onClick.RemoveListener(OnFreeCameraButton);
             marker.OnDragDebounced -= OnMarker;
         }
 
@@ -199,6 +208,161 @@ namespace ArcCreate.Compose.EventsEditor
             {
                 marker.gameObject.SetActive(false);
             }
+        }
+
+        private void OnFreeCameraButton()
+        {
+            if (Selected == null)
+            {
+                return;
+            }
+
+            JumpTo(IndexOf(Selected));
+            BeginFreeCamera(Selected).Forget();
+        }
+
+        private async UniTask BeginFreeCamera(CameraEvent target)
+        {
+            Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.CameraRecordHelp"));
+
+            Keyboard keyboard = InputSystem.GetDevice<Keyboard>();
+            Camera cam = Services.Gameplay.GameplayCamera;
+            CameraEvent oldValue = target.Clone() as CameraEvent;
+
+            Services.Gameplay.Audio.ChartTiming = target.Timing + target.Duration;
+            EventSystem.current.SetSelectedGameObject(null);
+
+            List<CameraEvent> updateList = new List<CameraEvent> { target };
+            Quaternion rotateRightBy90 = Quaternion.Euler(0, 90, 0);
+            float sensitivity = Settings.CameraSensitivity.Value;
+
+            freeCameraButtonImage.color = highlightColor;
+
+            // TODO: Temporary until a proper hotkey system is implemented
+            while (true)
+            {
+                float rotAmount = sensitivity * Time.deltaTime;
+                float movAmount = rotAmount * 50;
+
+                if (keyboard.ctrlKey.isPressed)
+                {
+                    rotAmount *= 3;
+                    movAmount *= 3;
+                }
+
+                Vector3 forwardVector = cam.transform.forward.normalized;
+                forwardVector.x = -forwardVector.x;
+                forwardVector.y = 0;
+                Vector3 leftVector = new Vector3(forwardVector.z, 0, -forwardVector.x);
+
+                if (keyboard.wKey.isPressed)
+                {
+                    // Move forward
+                    target.Move = target.Move + (forwardVector * movAmount);
+                }
+
+                if (keyboard.sKey.isPressed)
+                {
+                    // Move backward
+                    target.Move = target.Move - (forwardVector * movAmount);
+                }
+
+                if (keyboard.aKey.isPressed)
+                {
+                    // Move left
+                    target.Move = target.Move + (leftVector * movAmount);
+                }
+
+                if (keyboard.dKey.isPressed)
+                {
+                    // Move right
+                    target.Move = target.Move - (leftVector * movAmount);
+                }
+
+                if (keyboard.spaceKey.isPressed)
+                {
+                    // Move up
+                    target.Move = new Vector3(target.Move.x, target.Move.y + movAmount, target.Move.z);
+                }
+
+                if (keyboard.shiftKey.isPressed)
+                {
+                    // Move down
+                    target.Move = new Vector3(target.Move.x, target.Move.y - movAmount, target.Move.z);
+                }
+
+                if (keyboard.iKey.isPressed)
+                {
+                    // Rotate up
+                    target.Rotate = new Vector3(target.Rotate.x, target.Rotate.y + rotAmount, target.Rotate.z);
+                }
+
+                if (keyboard.kKey.isPressed)
+                {
+                    // Rotate down
+                    target.Rotate = new Vector3(target.Rotate.x, target.Rotate.y - rotAmount, target.Rotate.z);
+                }
+
+                if (keyboard.jKey.isPressed)
+                {
+                    // Rotate left
+                    target.Rotate = new Vector3(target.Rotate.x + rotAmount, target.Rotate.y, target.Rotate.z);
+                }
+
+                if (keyboard.lKey.isPressed)
+                {
+                    // Rotate right
+                    target.Rotate = new Vector3(target.Rotate.x - rotAmount, target.Rotate.y, target.Rotate.z);
+                }
+
+                if (keyboard.uKey.isPressed)
+                {
+                    // Roll left
+                    target.Rotate = new Vector3(target.Rotate.x, target.Rotate.y, target.Rotate.z - rotAmount);
+                }
+
+                if (keyboard.oKey.isPressed)
+                {
+                    // Roll right
+                    target.Rotate = new Vector3(target.Rotate.x, target.Rotate.y, target.Rotate.z + rotAmount);
+                }
+
+                target.Move = new Vector3(
+                    Mathf.Round(target.Move.x * 100) / 100,
+                    Mathf.Round(target.Move.y * 100) / 100,
+                    Mathf.Round(target.Move.z * 100) / 100);
+                target.Rotate = new Vector3(
+                    Mathf.Round(target.Rotate.x * 100) / 100,
+                    Mathf.Round(target.Rotate.y * 100) / 100,
+                    Mathf.Round(target.Rotate.z * 100) / 100);
+
+                Services.Gameplay.Chart.UpdateEvents(updateList);
+
+                if (keyboard.enterKey.isPressed)
+                {
+                    Rebuild();
+
+                    CameraEvent newValue = target.Clone() as CameraEvent;
+                    target.Assign(oldValue);
+                    Services.History.AddCommand(new EventCommand(
+                        name: I18n.S("Compose.Notify.History.EditCamera"),
+                        update: new List<(ArcEvent instance, ArcEvent newValue)> { (target, newValue) }));
+
+                    freeCameraButtonImage.color = normalColor;
+                    return;
+                }
+
+                if (keyboard.escapeKey.isPressed)
+                {
+                    target.Assign(oldValue);
+                    Services.Gameplay.Chart.UpdateEvents(updateList);
+                    freeCameraButtonImage.color = normalColor;
+                    return;
+                }
+
+                await UniTask.NextFrame();
+            }
+
         }
     }
 }
