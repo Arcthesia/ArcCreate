@@ -25,7 +25,7 @@ Additionally, no textures are included within the repository as of currently to 
 - [x] Project metadata management
 - [x] Project skin settings
 - [ ] Note editing
-- [ ] Timing, camera editing
+- [x] Timing, camera editing
 - [ ] Custom hotkeys configuration
 - [ ] FFmpeg rendering support
 - [ ] Lua macro support
