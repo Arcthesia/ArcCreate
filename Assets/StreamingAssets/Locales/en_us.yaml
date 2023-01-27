@@ -65,8 +65,8 @@ Compose:
       Invalid timing group properties. {Message}
   Notify:
     GameplayLoaded: Gameplay scene loaded successfully
-    CameraRecordHelp: |-
-      Recording camera event (hover for more info)
+    FreeCameraEditHelp: |-
+      Starting free camera (hover for more info)
       
       WASD: Move forward/left/backward/right
       Space: Move upward
