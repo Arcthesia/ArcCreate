@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using ArcCreate.ChartFormat;
+using ArcCreate.Compose.Navigation;
 using ArcCreate.Gameplay;
 using ArcCreate.Utility;
 using ArcCreate.Utility.Extension;
@@ -13,6 +14,7 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace ArcCreate.Compose.Project
 {
+    [EditorScope("Project")]
     public class ProjectService : MonoBehaviour, IProjectService
     {
         [SerializeField] private GameplayData gameplayData;
@@ -144,11 +146,13 @@ namespace ArcCreate.Compose.Project
                 }));
         }
 
+        [EditorAction("New", false, "<c-n>")]
         private void OnNewProjectPressed()
         {
             newProjectDialog.Open();
         }
 
+        [EditorAction("Open", false, "<c-o>")]
         private void OnOpenProjectPressed()
         {
             string path = Shell.OpenFileDialog(
@@ -166,6 +170,7 @@ namespace ArcCreate.Compose.Project
             OpenProject(path);
         }
 
+        [EditorAction("Save", false, "<c-s>")]
         private void OnSaveProjectPressed()
         {
             Serialize(CurrentProject);

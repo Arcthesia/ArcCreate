@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using ArcCreate.Compose.Navigation;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace ArcCreate.Compose.History
 {
+    [EditorScope("History")]
     public class HistoryService : MonoBehaviour, IHistoryService
     {
         [SerializeField] private Button undoButton;
@@ -18,6 +20,10 @@ namespace ArcCreate.Compose.History
 
         public DateTime LastEdit { get; private set; }
 
+        public int UndoCount => undoStack.Count;
+
+        public int RedoCount => redoStack.Count;
+
         public void AddCommand(ICommand command)
         {
             undoStack.Push(command);
@@ -28,6 +34,8 @@ namespace ArcCreate.Compose.History
             Notify("Compose.Notify.History.Execute", command);
         }
 
+        [EditorAction(null, false, "<c-y>", "<c-Z>")]
+        [RequireRedoStack]
         public void Redo()
         {
             if (redoStack.Count <= 0)
@@ -43,6 +51,8 @@ namespace ArcCreate.Compose.History
             Notify("Compose.Notify.History.Redo", cmd);
         }
 
+        [EditorAction(null, false, "<c-z>")]
+        [RequireUndoStack]
         public void Undo()
         {
             if (undoStack.Count <= 0)
@@ -87,6 +97,22 @@ namespace ArcCreate.Compose.History
             {
                 { "Name", cmd.Name },
             }));
+        }
+
+        public class RequireUndoStackAttribute : ContextRequirementAttribute
+        {
+            public override bool CheckRequirement()
+            {
+                return Services.History.UndoCount > 0;
+            }
+        }
+
+        public class RequireRedoStackAttribute : ContextRequirementAttribute
+        {
+            public override bool CheckRequirement()
+            {
+                return Services.History.RedoCount > 0;
+            }
         }
     }
 }

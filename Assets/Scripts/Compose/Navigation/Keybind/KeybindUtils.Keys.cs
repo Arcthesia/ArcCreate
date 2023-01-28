@@ -8,7 +8,7 @@ namespace ArcCreate.Compose.Navigation
     /// </summary>
     public static partial class KeybindUtils
     {
-        public static readonly Dictionary<string, Key> KeyMap = new Dictionary<string, Key>()
+        public static readonly Dictionary<string, Key> KeyAlias = new Dictionary<string, Key>()
         {
             // Alphanumeric
             { "a", Key.A },
@@ -91,8 +91,8 @@ namespace ArcCreate.Compose.Navigation
             { ".", Key.Period },
             { "/", Key.Slash },
             { "\\", Key.Backslash },
-            { "{", Key.LeftBracket },
-            { "}", Key.RightBracket },
+            { "[", Key.LeftBracket },
+            { "]", Key.RightBracket },
             { "-", Key.Minus },
             { "=", Key.Equals },
 
@@ -232,9 +232,17 @@ namespace ArcCreate.Compose.Navigation
             { Key.Backslash, "|" },
             { Key.Semicolon, ":" },
             { Key.Quote, "\"" },
-            { Key.Semicolon, "<" },
+            { Key.Comma, "<" },
             { Key.Period, ">" },
             { Key.Slash, "?" },
+        };
+
+        public static readonly Dictionary<string, string> ModMap = new Dictionary<string, string>()
+        {
+            { "c", "Ctrl" },
+            { "s", "Shift" },
+            { "u", "u" },
+            { "a", "Alt" },
         };
     }
 }

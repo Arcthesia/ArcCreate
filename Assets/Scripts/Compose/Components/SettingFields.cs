@@ -1,4 +1,3 @@
-using System;
 using ArcCreate.Gameplay;
 using ArcCreate.Utility.Parser;
 using TMPro;
@@ -6,22 +5,19 @@ using UnityEngine;
 
 namespace ArcCreate.Compose.Components
 {
-    public class BottomBarFields : MonoBehaviour
+    public class SettingFields : MonoBehaviour
     {
         [SerializeField] private GameplayData gameplayData;
-        [SerializeField] private TMP_InputField offsetField;
         [SerializeField] private TMP_InputField speedField;
         [SerializeField] private TMP_InputField densityField;
         [SerializeField] private TMP_InputField groupField;
 
         private void Awake()
         {
-            offsetField.onEndEdit.AddListener(OnOffsetField);
             speedField.onEndEdit.AddListener(OnSpeedField);
             densityField.onEndEdit.AddListener(OnDensityField);
             groupField.onEndEdit.AddListener(OnGroupField);
 
-            gameplayData.AudioOffset.OnValueChange += OnGameplayOffset;
             Settings.DropRate.OnValueChanged.AddListener(OnSettingDropRate);
             Values.EditingTimingGroup.OnValueChange += OnGroup;
 
@@ -30,19 +26,12 @@ namespace ArcCreate.Compose.Components
 
         private void OnDestroy()
         {
-            offsetField.onEndEdit.RemoveListener(OnOffsetField);
             speedField.onEndEdit.RemoveListener(OnSpeedField);
             densityField.onEndEdit.RemoveListener(OnDensityField);
             groupField.onEndEdit.RemoveListener(OnGroupField);
 
-            gameplayData.AudioOffset.OnValueChange -= OnGameplayOffset;
             Settings.DropRate.OnValueChanged.RemoveListener(OnSettingDropRate);
             Values.EditingTimingGroup.OnValueChange -= OnGroup;
-        }
-
-        private void OnGameplayOffset(int offset)
-        {
-            offsetField.text = offset.ToString();
         }
 
         private void OnSettingDropRate(int dropRate)
@@ -53,14 +42,6 @@ namespace ArcCreate.Compose.Components
         private void OnGroup(int group)
         {
             groupField.text = group.ToString();
-        }
-
-        private void OnOffsetField(string value)
-        {
-            if (Evaluator.TryFloat(value, out float offset))
-            {
-                gameplayData.AudioOffset.Value = Mathf.RoundToInt(offset);
-            }
         }
 
         private void OnSpeedField(string value)

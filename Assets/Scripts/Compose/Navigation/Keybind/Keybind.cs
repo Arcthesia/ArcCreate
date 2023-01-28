@@ -25,45 +25,67 @@ namespace ArcCreate.Compose.Navigation
     /// </summary>
     public class Keybind
     {
-        private int currentKeystrokeIndex = 0;
+        private int index = 0;
 
-        public Keybind(Keystroke[] keystrokes)
+        public Keybind(Keystroke[] keystrokes, IAction action)
         {
-            Keystrokes = keystrokes;
+            InputActions = new InputAction[keystrokes.Length];
+            Action = action;
+
+            for (int i = 0; i < keystrokes.Length; i++)
+            {
+                Keystroke keystroke = keystrokes[i];
+                InputAction inputAction = keystroke.ToAction();
+                InputActions[i] = inputAction;
+
+                if (keystroke.ActuateOnRelease)
+                {
+                    inputAction.canceled += OnKeystroke;
+                }
+                else
+                {
+                    inputAction.performed += OnKeystroke;
+                }
+
+                inputAction.Enable();
+            }
         }
 
         public IAction Action { get; set; }
 
-        public Keystroke[] Keystrokes { get; private set; }
+        public InputAction[] InputActions { get; private set; }
 
-        public KeybindResponse CheckKeystroke(Keyboard keyboard)
+        public void Destroy()
         {
-            Keystroke keystroke = Keystrokes[currentKeystrokeIndex];
-            bool keystrokeHit = keystroke.Check(keyboard);
-
-            if (keystrokeHit)
+            foreach (InputAction inputAction in InputActions)
             {
-                currentKeystrokeIndex += 1;
-                if (currentKeystrokeIndex > Keystrokes.Length)
+                inputAction.Disable();
+            }
+        }
+
+        public void Reset()
+        {
+            index = 0;
+        }
+
+        private void OnKeystroke(InputAction.CallbackContext obj)
+        {
+            if (ReferenceEquals(obj.action, InputActions[index]))
+            {
+                index++;
+                if (index >= InputActions.Length)
                 {
-                    ResetState();
-                    return KeybindResponse.Complete;
-                }
-                else
-                {
-                    return KeybindResponse.Incomplete;
+                    index = 0;
+                    if (Services.Navigation.ShouldExecute(Action))
+                    {
+                        Action.Execute();
+                    }
                 }
             }
             else
             {
-                ResetState();
-                return KeybindResponse.Invalid;
+                index = 0;
             }
-        }
-
-        public void ResetState()
-        {
-            currentKeystrokeIndex = 0;
         }
     }
 }

@@ -13,12 +13,12 @@ namespace ArcCreate.Compose.Navigation
         /// <summary>
         /// Initializes a new instance of the <see cref="EditorScopeAttribute"/> class.
         /// </summary>
-        /// <param name="displayName">The name of the scope displayed on the context menu.</param>
-        public EditorScopeAttribute(string displayName)
+        /// <param name="id">The id of the scope. Set to null to infer from class name.</param>
+        public EditorScopeAttribute(string id)
         {
-            DisplayName = displayName;
+            Id = id;
         }
 
-        public string DisplayName { get; private set; }
+        public string Id { get; private set; }
     }
 }
