@@ -4,9 +4,10 @@ namespace ArcCreate.Compose.Navigation
     {
         private bool executed = false;
 
-        public SubAction(string id, bool shouldDisplayOnContextMenu)
+        public SubAction(string id, string category, bool shouldDisplayOnContextMenu)
         {
             Id = id;
+            Category = category;
             ShouldDisplayOnContextMenu = shouldDisplayOnContextMenu;
         }
 
@@ -26,6 +27,8 @@ namespace ArcCreate.Compose.Navigation
         }
 
         public string Id { get; private set; }
+
+        public string Category { get; private set; }
 
         public bool ShouldDisplayOnContextMenu { get; private set; }
 

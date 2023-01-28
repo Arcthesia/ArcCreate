@@ -14,6 +14,7 @@ namespace ArcCreate.Compose.Popups
     public class ColorPickerWindow : MonoBehaviour
     {
         [SerializeField] private GameObject window;
+        [SerializeField] private RectTransform canvasRect;
         [SerializeField] private ColorPicker picker;
         [SerializeField] private Slider alphaSlider;
         [SerializeField] private Button closeButton;
@@ -51,21 +52,23 @@ namespace ArcCreate.Compose.Popups
 
             Color = setColor;
 
-            float screenWidth = Screen.width;
-            float screenHeight = Screen.height;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPosition, null, out Vector2 position);
+
+            float canvasWidth = canvasRect.rect.width;
+            float canvasHeight = canvasRect.rect.height;
             float rectWidth = rect.rect.width;
             float rectHeight = rect.rect.height;
             Vector2 pivot = rect.pivot;
 
             float x = Mathf.Clamp(
-                screenPosition.x,
-                minDistanceFromBorder + (rectWidth * pivot.x),
-                screenWidth - minDistanceFromBorder - (rectWidth * (1 - pivot.x)));
+                position.x,
+                -(canvasWidth / 2) + minDistanceFromBorder + (rectWidth * pivot.x),
+                (canvasWidth / 2) - minDistanceFromBorder - (rectWidth * (1 - pivot.x)));
 
             float y = Mathf.Clamp(
-                screenPosition.y,
-                minDistanceFromBorder + (rectHeight * pivot.y),
-                screenHeight - minDistanceFromBorder - (rectHeight * (1 - pivot.y)));
+                position.y,
+                -(canvasHeight / 2) + minDistanceFromBorder + (rectHeight * pivot.y),
+                (canvasHeight / 2) - minDistanceFromBorder - (rectHeight * (1 - pivot.y)));
 
             rect.anchoredPosition = new Vector2(x, y);
         }
@@ -192,8 +195,8 @@ namespace ArcCreate.Compose.Popups
         {
             picker.onColorChanged += OnPicker;
             rect = window.GetComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0, 0);
-            rect.anchorMax = new Vector2(0, 0);
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
 
             closeButton.onClick.AddListener(CloseWindow);
 

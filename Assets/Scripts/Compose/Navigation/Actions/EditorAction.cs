@@ -15,7 +15,7 @@ namespace ArcCreate.Compose.Navigation
             MethodInfo method,
             List<SubAction> subActions)
         {
-            DisplayName = id;
+            Id = id;
             ShouldDisplayOnContextMenu = shouldDisplayOnContextMenu;
             ContextRequirements = contextRequirements;
             Whitelist = whitelist;
@@ -34,7 +34,9 @@ namespace ArcCreate.Compose.Navigation
             }
         }
 
-        public string DisplayName { get; private set; }
+        public string Id { get; private set; }
+
+        public string Category => Scope.Id;
 
         public bool ShouldDisplayOnContextMenu { get; private set; }
 

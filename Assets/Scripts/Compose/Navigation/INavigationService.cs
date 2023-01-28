@@ -18,9 +18,10 @@ namespace ArcCreate.Compose.Navigation
         bool ShouldExecute(IAction action);
 
         /// <summary>
-        /// Gets all editor actions that has their requirements fulfilled.
+        /// Gets all actions that has their requirements fulfilled.
         /// </summary>
+        /// <param name="calledByAction">Whether or not this method was called through an action.</param>
         /// <returns>The list of available editor actions.</returns>
-        IEnumerable<EditorAction> GetCurrentlyAvailableActions();
+        List<IAction> GetContextMenuEntries(bool calledByAction = false);
     }
 }
