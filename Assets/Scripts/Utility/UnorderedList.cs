@@ -11,7 +11,7 @@ namespace ArcCreate.Utility
     /// (i.e from the last element to the first element).
     /// </remarks>
     /// <typeparam name="T">The type of the list elements.</typeparam>
-    public struct UnorderedList<T>
+    public readonly struct UnorderedList<T>
     {
         private readonly List<T> list;
 
