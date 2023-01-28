@@ -1,8 +1,11 @@
+using ArcCreate.Compose.Navigation;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Timeline
 {
+    [EditorScope("Playback")]
     public class TimelineService : MonoBehaviour, ITimelineService
     {
         [SerializeField] private WaveformDisplay waveformDisplay;
@@ -28,6 +31,46 @@ namespace ArcCreate.Compose.Timeline
         public int ViewToTiming => waveformDisplay.ViewToTiming;
 
         private bool IsPlaying => Services.Gameplay?.Audio.IsPlaying ?? false;
+
+        [EditorAction(null, false, "q")]
+        public void TogglePlay()
+        {
+            if (IsPlaying)
+            {
+                Pause();
+            }
+            else
+            {
+                Play();
+            }
+        }
+
+        [EditorAction("PlayReturn", false, "<space>")]
+        [SubAction("Return", false, "<u-space>")]
+        [SubAction("Pause", false, "q")]
+        public async UniTask StartPlayReturn(EditorAction action)
+        {
+            SubAction ret = action.GetSubAction("Return");
+            SubAction pause = action.GetSubAction("Pause");
+            PlayReturn();
+            while (true)
+            {
+                if (ret.WasExecuted)
+                {
+                    Pause();
+                    return;
+                }
+
+                if (pause.WasExecuted)
+                {
+                    Services.Gameplay.Audio.SetReturnOnPause(false);
+                    Pause();
+                    return;
+                }
+
+                await UniTask.NextFrame();
+            }
+        }
 
         private void Awake()
         {

@@ -1,4 +1,4 @@
-using System.Text;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace ArcCreate.Compose.Navigation
@@ -13,10 +13,11 @@ namespace ArcCreate.Compose.Navigation
         /// See: "https://github.com/lydell/vim-like-key-notation" for in-depth explanation of the format.
         /// </summary>
         /// <param name="keybindString">The string to parse.</param>
+        /// <param name="action">The action to bind to the keybind.</param>
         /// <param name="keybind">The output keybind.</param>
         /// <param name="reason">The reason for failing to parse the string. This argument will be null if the string is valid.</param>
         /// <returns>Whether or not parsing succeeded.</returns>
-        public static bool TryParseKeybind(string keybindString, out Keybind keybind, out string reason)
+        public static bool TryParseKeybind(string keybindString, IAction action, out Keybind keybind, out string reason)
         {
             MatchCollection matches = new Regex(@"<[^<>\s]+>|[\s\S]|^$").Matches(keybindString);
 
@@ -39,7 +40,7 @@ namespace ArcCreate.Compose.Navigation
                 }
             }
 
-            keybind = new Keybind(keystrokes);
+            keybind = new Keybind(keystrokes, action);
             reason = null;
             return true;
         }
@@ -63,11 +64,29 @@ namespace ArcCreate.Compose.Navigation
                     reason = I18n.S("Compose.Exception.Navigation.ParseWhitespace");
                     return false;
                 }
+
+                if (!KeyAlias.TryGetValue(keystrokeString.ToLower(), out var k))
+                {
+                    keystroke = default;
+                    reason = I18n.S("Compose.Exception.Navigation.InvalidKey", keystrokeString);
+                    return false;
+                }
+
+                keystroke = new Keystroke()
+                {
+                    Modifier1 = null,
+                    Modifier2 = null,
+                    ActuateOnRelease = false,
+                    Key = "<Keyboard>/" + k.ToString(),
+                };
+
+                reason = null;
+                return true;
             }
 
             Regex capture = new Regex(@"^<((?:[a-z]-)*)([a-z\d]+|[^<>\s])>$", RegexOptions.IgnoreCase);
             MatchCollection matches = capture.Matches(keystrokeString);
-            if (matches.Count != 1 || matches[0].Groups.Count != 2)
+            if (matches.Count != 1 || matches[0].Groups.Count != 3)
             {
                 keystroke = default;
                 reason = I18n.S("Compose.Exception.Navigation.InvalidKeystroke", keystrokeString);
@@ -76,8 +95,9 @@ namespace ArcCreate.Compose.Navigation
 
             string modifiersString = matches[0].Groups[1].Value.ToLower();
             string key = matches[0].Groups[2].Value;
+            string keyLower = key.ToLower();
 
-            if (!KeyMap.ContainsKey(key))
+            if (!KeyAlias.ContainsKey(keyLower))
             {
                 keystroke = default;
                 reason = I18n.S("Compose.Exception.Navigation.InvalidKey", key);
@@ -86,126 +106,65 @@ namespace ArcCreate.Compose.Navigation
 
             keystroke = new Keystroke()
             {
-                Key = KeyMap[key],
+                Key = "<Keyboard>/" + KeyAlias[keyLower].ToString(),
             };
+
+            HashSet<string> mappedMods = new HashSet<string>();
 
             if (IsShiftedKey.Contains(key) || (key.Length == 1 && char.IsUpper(key[0])))
             {
-                keystroke.ShiftKey = true;
+                mappedMods.Add("Shift");
             }
 
             string[] modifiers = modifiersString.Split('-');
             for (int i = 0; i < modifiers.Length - 1; i++)
             {
                 string mod = modifiers[i].ToLower();
-                if (mod != "c" && mod != "a" && mod != "m" && mod != "s")
+                if (!ModMap.ContainsKey(mod))
                 {
                     keystroke = default;
                     reason = I18n.S("Compose.Exception.Navigation.InvalidModifier", mod);
                     return false;
                 }
 
-                if ((keystroke.CtrlKey && mod == "c")
-                 || (keystroke.AltKey && mod == "a")
-                 || (keystroke.MetaKey && mod == "m")
-                 || (keystroke.ShiftKey && mod == "s"))
+                string mappedMod = ModMap[mod];
+                if (mappedMods.Contains(mappedMod))
                 {
                     keystroke = default;
                     reason = I18n.S("Compose.Exception.Navigation.DuplicateModifier", mod);
                     return false;
                 }
 
-                switch (mod)
+                mappedMods.Add(mappedMod);
+            }
+
+            if (mappedMods.Contains("u"))
+            {
+                keystroke.ActuateOnRelease = true;
+                mappedMods.Remove("u");
+            }
+
+            if (mappedMods.Count > 2)
+            {
+                keystroke = default;
+                reason = I18n.S("Compose.Exception.Navigation.TooManyModifiers", keystrokeString);
+                return false;
+            }
+
+            foreach (var modifier in mappedMods)
+            {
+                if (keystroke.Modifier1 == null)
                 {
-                    case "c":
-                        keystroke.CtrlKey = true;
-                        break;
-                    case "a":
-                        keystroke.AltKey = true;
-                        break;
-                    case "m":
-                        keystroke.MetaKey = true;
-                        break;
-                    case "s":
-                        keystroke.ShiftKey = true;
-                        break;
+                    keystroke.Modifier1 = modifier;
+                }
+                else
+                {
+                    keystroke.Modifier2 = modifier;
                 }
             }
 
             reason = null;
             return true;
-        }
-
-        /// <summary>
-        /// Converting a keybind into string.
-        /// </summary>
-        /// <param name="keybind">The keybind to convert.</param>
-        /// <returns>The converted string.</returns>
-        public static string ToKeybindString(this Keybind keybind)
-        {
-            StringBuilder s = new StringBuilder();
-            foreach (Keystroke keystroke in keybind.Keystrokes)
-            {
-                s.Append(ToKeystrokeString(keystroke));
-            }
-
-            return s.ToString();
-        }
-
-        /// <summary>
-        /// Converting a keystroke into string.
-        /// </summary>
-        /// <param name="keystroke">The keystroke to convert.</param>
-        /// <returns>The converted string.</returns>
-        public static string ToKeystrokeString(this Keystroke keystroke)
-        {
-            bool printShift = keystroke.ShiftKey;
-            string keyString = keystroke.Key.ToString();
-
-            if (keystroke.ShiftKey)
-            {
-                if (ShiftKeys.ContainsKey(keystroke.Key))
-                {
-                    keyString = ShiftKeys[keystroke.Key];
-                    printShift = false;
-                }
-                else if (keyString.Length == 1 && char.IsLetter(keyString[0]))
-                {
-                    keyString = keyString.ToUpper();
-                    printShift = false;
-                }
-            }
-
-            if (keystroke.CtrlKey || keystroke.AltKey || keystroke.MetaKey || printShift)
-            {
-                StringBuilder s = new StringBuilder();
-                s.Append("<");
-                if (keystroke.CtrlKey)
-                {
-                    s.Append("c-");
-                }
-
-                if (keystroke.AltKey)
-                {
-                    s.Append("a-");
-                }
-
-                if (keystroke.MetaKey)
-                {
-                    s.Append("m-");
-                }
-
-                if (printShift)
-                {
-                    s.Append("s-");
-                }
-
-                s.Append(keyString);
-                s.Append(">");
-                return s.ToString();
-            }
-
-            return keyString;
         }
     }
 }

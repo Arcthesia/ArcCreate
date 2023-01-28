@@ -1,26 +1,27 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Cysharp.Threading.Tasks;
 
 namespace ArcCreate.Compose.Navigation
 {
     public class EditorAction : IAction
     {
         public EditorAction(
-            string displayName,
+            string id,
             bool shouldDisplayOnContextMenu,
             List<IContextRequirement> contextRequirements,
             List<Type> whitelist,
-            object scopeInstance,
-            MethodInfo method)
+            EditorScope scope,
+            MethodInfo method,
+            List<SubAction> subActions)
         {
-            DisplayName = displayName;
+            DisplayName = id;
             ShouldDisplayOnContextMenu = shouldDisplayOnContextMenu;
             ContextRequirements = contextRequirements;
             Whitelist = whitelist;
-            ScopeInstance = scopeInstance;
+            Scope = scope;
             Method = method;
+            SubActions = subActions;
 
             bool shouldPassSelf = method.GetParameters().Length != 0;
             if (shouldPassSelf)
@@ -41,13 +42,11 @@ namespace ArcCreate.Compose.Navigation
 
         public List<Type> Whitelist { get; private set; }
 
-        public object ScopeInstance { get; private set; }
+        public EditorScope Scope { get; private set; }
 
         public MethodInfo Method { get; private set; }
 
         public List<SubAction> SubActions { get; private set; }
-
-        public List<Keybind> SubActionsKeybinds { get; private set; }
 
         public object[] ParamsToPass { get; private set; }
 
@@ -56,17 +55,17 @@ namespace ArcCreate.Compose.Navigation
             Services.Navigation.StartAction(this);
         }
 
-        public SubAction GetSubAction(string name)
+        public SubAction GetSubAction(string id)
         {
             foreach (SubAction sub in SubActions)
             {
-                if (sub.DisplayName == name)
+                if (sub.Id == id)
                 {
                     return sub;
                 }
             }
 
-            throw new Exception($"Invalid subaction name {name}");
+            throw new Exception($"Invalid sub-action id {id}");
         }
 
         public bool CheckRequirement()
