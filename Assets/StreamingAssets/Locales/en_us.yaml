@@ -63,6 +63,17 @@ Compose:
       Invalid project file: No chart is included within this project.
     InvalidGroupProperties: |-
       Invalid timing group properties. {Message}
+    Navigation:
+      ParseKeybind: |-
+        An exception occured while parsing the keybind: "{0}".
+      ParseWhitespace: |-
+        Invalid keybind: a keystroke can not be a whitespace.
+      InvalidKeystroke: |-
+        Invalid keystroke: The keystroke "{0}" does not follow the correct format.
+      InvalidKey: |-
+        Invalid key: The string "{0}" does not match any key.
+      InvalidModifier: |-
+        Invalid modifier: The string "{0}" does not match any modifier key.
   Notify:
     GameplayLoaded: Gameplay scene loaded successfully
     FreeCameraEditHelp: |-
