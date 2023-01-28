@@ -65,7 +65,7 @@ namespace ArcCreate.Compose.Navigation
                     return false;
                 }
 
-                if (!KeyAlias.TryGetValue(keystrokeString.ToLower(), out var k))
+                if (!TryGetKeyString(keystrokeString, out string k))
                 {
                     keystroke = default;
                     reason = I18n.S("Compose.Exception.Navigation.InvalidKey", keystrokeString);
@@ -77,7 +77,7 @@ namespace ArcCreate.Compose.Navigation
                     Modifier1 = null,
                     Modifier2 = null,
                     ActuateOnRelease = false,
-                    Key = "<Keyboard>/" + k.ToString(),
+                    Key = k,
                 };
 
                 reason = null;
@@ -97,17 +97,19 @@ namespace ArcCreate.Compose.Navigation
             string key = matches[0].Groups[2].Value;
             string keyLower = key.ToLower();
 
-            if (!KeyAlias.ContainsKey(keyLower))
+            if (TryGetKeyString(keyLower, out string keystring))
+            {
+                keystroke = new Keystroke()
+                {
+                    Key = keystring,
+                };
+            }
+            else
             {
                 keystroke = default;
                 reason = I18n.S("Compose.Exception.Navigation.InvalidKey", key);
                 return false;
             }
-
-            keystroke = new Keystroke()
-            {
-                Key = "<Keyboard>/" + KeyAlias[keyLower].ToString(),
-            };
 
             HashSet<string> mappedMods = new HashSet<string>();
 

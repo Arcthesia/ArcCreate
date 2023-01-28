@@ -35,7 +35,7 @@ namespace ArcCreate.Compose.Navigation
             for (int i = 0; i < keystrokes.Length; i++)
             {
                 Keystroke keystroke = keystrokes[i];
-                InputAction inputAction = keystroke.ToAction();
+                InputAction inputAction = keystroke.ToAction(action.Id);
                 InputActions[i] = inputAction;
 
                 if (keystroke.ActuateOnRelease)
