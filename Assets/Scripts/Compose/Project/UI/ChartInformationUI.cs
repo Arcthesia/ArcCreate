@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ArcCreate.Compose.Components;
 using ArcCreate.Gameplay;
@@ -18,6 +19,8 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private TMP_InputField charter;
         [SerializeField] private TMP_InputField baseBpm;
         [SerializeField] private Toggle syncBaseBpm;
+        [SerializeField] private TMP_InputField chartOffset;
+        [SerializeField] private TMP_InputField timingPointDensityFactor;
         [SerializeField] private TMP_InputField chartConstant;
         [SerializeField] private TMP_InputField difficultyName;
         [SerializeField] private ColorInputField difficultyColor;
@@ -59,6 +62,12 @@ namespace ArcCreate.Compose.Project
             difficultyName.onEndEdit.AddListener(OnDifficultyName);
             difficultyColor.OnValueChange += OnDifficultyColor;
 
+            gameplayData.AudioOffset.OnValueChange += OnGameplayAudioOffset;
+            chartOffset.onEndEdit.AddListener(OnChartOffset);
+
+            gameplayData.TimingPointDensityFactor.OnValueChange += OnGameplayDensityFactor;
+            timingPointDensityFactor.onEndEdit.AddListener(OnDesntiyFactor);
+
             for (int i = 0; i < diffColorPresets.Count; i++)
             {
                 Button btn = diffColorPresets[i];
@@ -80,10 +89,42 @@ namespace ArcCreate.Compose.Project
             difficultyName.onEndEdit.RemoveListener(OnDifficultyName);
             difficultyColor.OnValueChange -= OnDifficultyColor;
 
+            gameplayData.AudioOffset.OnValueChange -= OnGameplayAudioOffset;
+            chartOffset.onEndEdit.RemoveListener(OnChartOffset);
+
+            gameplayData.TimingPointDensityFactor.OnValueChange -= OnGameplayDensityFactor;
+            timingPointDensityFactor.onEndEdit.RemoveListener(OnDesntiyFactor);
+
             for (int i = 0; i < diffColorPresets.Count; i++)
             {
                 Button btn = diffColorPresets[i];
                 btn.onClick.RemoveAllListeners();
+            }
+        }
+
+        private void OnGameplayAudioOffset(int obj)
+        {
+            chartOffset.SetTextWithoutNotify(obj.ToString());
+        }
+
+        private void OnChartOffset(string value)
+        {
+            if (Evaluator.TryInt(value, out int offset))
+            {
+                gameplayData.AudioOffset.Value = offset;
+            }
+        }
+
+        private void OnGameplayDensityFactor(float obj)
+        {
+            timingPointDensityFactor.SetTextWithoutNotify(obj.ToString());
+        }
+
+        private void OnDesntiyFactor(string value)
+        {
+            if (Evaluator.TryInt(value, out int factor))
+            {
+                gameplayData.TimingPointDensityFactor.Value = factor;
             }
         }
 

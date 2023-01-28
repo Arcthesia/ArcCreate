@@ -7,40 +7,47 @@ namespace ArcCreate.Compose.Navigation
     /// </summary>
     public struct Keystroke
     {
-        public bool CtrlKey;
+        public string Modifier1;
+        public string Modifier2;
+        public string Key;
+        public bool ActuateOnRelease;
 
-        public bool AltKey;
-
-        public bool MetaKey;
-
-        public bool ShiftKey;
-
-        public Key Key;
-
-        // TODO: add more activation method like scroll, click etc.
-        public bool Check(Keyboard keyboard)
+        public InputAction ToAction()
         {
-            if (CtrlKey && !keyboard.ctrlKey.isPressed)
+            InputAction action = new InputAction
             {
-                return false;
+                bindingMask = InputBinding.MaskByGroup("Keyboard"),
+            };
+
+            if (Modifier1 != null && Modifier2 != null)
+            {
+                action.AddCompositeBinding("ButtonWithTwoModifiers")
+                    .With("Modifier1", "<Keyboard>/left" + Modifier1)
+                    .With("Modifier1", "<Keyboard>/right" + Modifier1)
+                    .With("Modifier2", "<Keyboard>/left" + Modifier2)
+                    .With("Modifier2", "<Keyboard>/right" + Modifier2)
+                    .With("Button", Key);
+            }
+            else if (Modifier1 != null)
+            {
+                action.AddCompositeBinding("ButtonWithOneModifier")
+                    .With("Modifier", "<Keyboard>/left" + Modifier1)
+                    .With("Modifier", "<Keyboard>/right" + Modifier1)
+                    .With("Button", Key);
+            }
+            else if (Modifier2 != null)
+            {
+                action.AddCompositeBinding("ButtonWithOneModifier")
+                    .With("Modifier", "<Keyboard>/left" + Modifier2)
+                    .With("Modifier", "<Keyboard>/right" + Modifier2)
+                    .With("Button", Key);
+            }
+            else
+            {
+                action.AddBinding(Key);
             }
 
-            if (AltKey && !keyboard.altKey.isPressed)
-            {
-                return false;
-            }
-
-            if (MetaKey && !(keyboard.leftMetaKey.isPressed || keyboard.rightMetaKey.isPressed))
-            {
-                return false;
-            }
-
-            if (ShiftKey && !keyboard.shiftKey.isPressed)
-            {
-                return false;
-            }
-
-            return keyboard[Key].isPressed;
+            return action;
         }
     }
 }

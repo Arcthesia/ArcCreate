@@ -136,12 +136,7 @@ namespace ArcCreate.Gameplay.Audio
         public void Stop()
         {
             audioSource.Stop();
-            if (returnOnPause)
-            {
-                lastPausedTiming = onPauseReturnTo;
-                audioTiming = onPauseReturnTo;
-            }
-
+            lastPausedTiming = 0;
             AudioTiming = 0;
         }
 

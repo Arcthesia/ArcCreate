@@ -2,19 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ArcCreate.Utility;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 
 namespace ArcCreate.Compose.Navigation
 {
+    [EditorScope("Navigation")]
     public class NavigationService : MonoBehaviour, INavigationService
     {
         private readonly List<EditorAction> allActions = new List<EditorAction>();
-        private readonly List<Keybind> actionKeybinds = new List<Keybind>();
-        private readonly UnorderedList<Keybind> keybindsInProgress = default;
-        private readonly UnorderedList<Keybind> subActionsKeybindsInProgress = default;
+        private readonly List<Keybind> keybinds = new List<Keybind>();
 
         // Last action in the list is considered top-priority, and only it will have sub-actions processed.
         // A stack was not used because lower-priority actions might exit early.
@@ -22,7 +20,7 @@ namespace ArcCreate.Compose.Navigation
 
         public void StartAction(EditorAction action)
         {
-            subActionsKeybindsInProgress.Clear();
+            CancelOngoingKeybinds();
             ExecuteActionTask(action).Forget();
         }
 
@@ -31,14 +29,49 @@ namespace ArcCreate.Compose.Navigation
             return allActions.Where(action => action.CheckRequirement());
         }
 
+        public bool ShouldExecute(IAction action)
+        {
+            EditorAction currentAction = null;
+            if (actionsInProgress.Count != 0)
+            {
+                currentAction = actionsInProgress[actionsInProgress.Count - 1];
+            }
+
+            if (action is EditorAction editorAction)
+            {
+                bool whitelisted = true;
+                if (currentAction != null && !currentAction.Whitelist.Contains(editorAction.Scope.Type))
+                {
+                    whitelisted = false;
+                }
+
+                return whitelisted && editorAction.CheckRequirement();
+            }
+            else if (action is SubAction subAction)
+            {
+                if (currentAction == null)
+                {
+                    return false;
+                }
+
+                return currentAction.SubActions.Contains(subAction);
+            }
+
+            return true;
+        }
+
+        [EditorAction("Cancel", false, "<esc>")]
+        private void CancelOngoingKeybinds()
+        {
+            foreach (var keybind in keybinds)
+            {
+                keybind.Reset();
+            }
+        }
+
         private void Awake()
         {
             RegisterMethods();
-        }
-
-        private void Update()
-        {
-            CheckKeybinds();
         }
 
         private void RegisterMethods()
@@ -46,11 +79,25 @@ namespace ArcCreate.Compose.Navigation
             IEnumerable<Type> types = Assembly.GetExecutingAssembly().GetTypes()
                 .Where(type => type.IsDefined(typeof(EditorScopeAttribute)));
 
-            actionKeybinds.Clear();
+            keybinds.Clear();
             foreach (Type type in types)
             {
-                string scopeName = type.GetCustomAttribute<EditorScopeAttribute>().DisplayName;
-                object instance = Activator.CreateInstance(type);
+                string scopeId = type.GetCustomAttribute<EditorScopeAttribute>().Id ?? type.Name;
+
+                object instance;
+                if (type.IsSubclassOf(typeof(Component)))
+                {
+                    instance = FindObjectOfType(type);
+                }
+                else
+                {
+                    instance = Activator.CreateInstance(type);
+                }
+
+                if (instance == null)
+                {
+                    throw new Exception($"Can not get an instance for type {type}");
+                }
 
                 foreach (MethodInfo method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
                 {
@@ -66,42 +113,44 @@ namespace ArcCreate.Compose.Navigation
 
                     // Resolve subactions
                     List<SubAction> subActionInstances = new List<SubAction>();
-                    List<Keybind> subActionKeybinds = new List<Keybind>();
                     if (subActions != null)
                     {
                         foreach (SubActionAttribute s in subActions)
                         {
-                            SubAction subAction = new SubAction(s.DisplayName, s.DisplayName != null);
+                            SubAction subAction = new SubAction(s.Id, s.Id != null);
                             foreach (string hotkey in s.DefaultHotkeys)
                             {
-                                if (KeybindUtils.TryParseKeybind(hotkey, out Keybind keybind, out string reason))
+                                if (KeybindUtils.TryParseKeybind(hotkey, subAction, out Keybind keybind, out string reason))
                                 {
-                                    keybind.Action = subAction;
-                                    subActionKeybinds.Add(keybind);
+                                    keybinds.Add(keybind);
                                 }
                                 else
                                 {
                                     Debug.LogWarning(reason);
                                 }
                             }
+
+                            subActionInstances.Add(subAction);
                         }
                     }
 
                     EditorAction action = new EditorAction(
-                        displayName: editorAction.DisplayName,
-                        shouldDisplayOnContextMenu: editorAction.DisplayName != null,
-                        contextRequirements: contextRequirements.Cast<IContextRequirement>().ToList(),
-                        whitelist: whitelist.Scopes.ToList(),
-                        scopeInstance: instance,
-                        method: method);
+                        id: editorAction.Id ?? method.Name,
+                        shouldDisplayOnContextMenu: editorAction.Id != null,
+                        contextRequirements: contextRequirements?.Cast<IContextRequirement>().ToList() ?? new List<IContextRequirement>(),
+                        whitelist: whitelist?.Scopes.ToList() ?? new List<Type>(),
+                        scope: new EditorScope(type, scopeId, instance),
+                        method: method,
+                        subActions: subActionInstances);
+
+                    action.Whitelist.Add(GetType());
 
                     // Resolve keybinds
                     foreach (string hotkey in editorAction.DefaultHotkeys)
                     {
-                        if (KeybindUtils.TryParseKeybind(hotkey, out Keybind keybind, out string reason))
+                        if (KeybindUtils.TryParseKeybind(hotkey, action, out Keybind keybind, out string reason))
                         {
-                            keybind.Action = action;
-                            actionKeybinds.Add(keybind);
+                            keybinds.Add(keybind);
                         }
                         else
                         {
@@ -114,153 +163,12 @@ namespace ArcCreate.Compose.Navigation
             }
         }
 
-        private void CheckKeybinds()
-        {
-            Keyboard keyboard = Keyboard.current;
-            bool actionExecuted = false;
-
-            if (!keyboard.anyKey.isPressed)
-            {
-                return;
-            }
-
-            EditorAction currentAction = null;
-            if (actionsInProgress.Count > 0)
-            {
-                currentAction = actionsInProgress[actionsInProgress.Count - 1];
-            }
-
-            // please help
-            // Check for action keybinds
-            if (keybindsInProgress.Count == 0)
-            {
-                // Check all keybinds
-                foreach (Keybind keybind in actionKeybinds)
-                {
-                    EditorAction action = keybind.Action as EditorAction;
-                    bool passWhitelist =
-                        currentAction == null || action == null ||
-                        currentAction.Whitelist.Contains(action.ScopeInstance);
-
-                    if (!passWhitelist)
-                    {
-                        continue;
-                    }
-
-                    KeybindResponse response = keybind.CheckKeystroke(keyboard);
-                    if (response == KeybindResponse.Complete)
-                    {
-                        bool requirementFulfilled = action?.CheckRequirement() ?? true;
-                        if (requirementFulfilled)
-                        {
-                            keybind.Action.Execute();
-                            actionExecuted = true;
-                        }
-                    }
-                    else if (response == KeybindResponse.Incomplete)
-                    {
-                        keybindsInProgress.Add(keybind);
-                    }
-                }
-            }
-            else
-            {
-                // Check keybinds already in progress
-                for (int i = keybindsInProgress.Count - 1; i >= 0; i--)
-                {
-                    Keybind keybind = keybindsInProgress[i];
-                    EditorAction action = keybind.Action as EditorAction;
-                    bool passWhitelist =
-                        currentAction == null || action == null ||
-                        currentAction.Whitelist.Contains(action.ScopeInstance);
-
-                    if (!passWhitelist)
-                    {
-                        continue;
-                    }
-
-                    KeybindResponse response = keybind.CheckKeystroke(keyboard);
-                    if (response == KeybindResponse.Complete)
-                    {
-                        bool requirementFulfilled = action?.CheckRequirement() ?? true;
-                        if (requirementFulfilled)
-                        {
-                            keybind.Action.Execute();
-                            actionExecuted = true;
-                        }
-                        else
-                        {
-                            keybindsInProgress.RemoveAt(i);
-                        }
-                    }
-                    else if (response == KeybindResponse.Invalid)
-                    {
-                        keybindsInProgress.RemoveAt(i);
-                    }
-                }
-            }
-
-            if (actionExecuted)
-            {
-                keybindsInProgress.Clear();
-            }
-
-            // i really mean it please help
-            if (currentAction != null)
-            {
-                // Check sub-action keybinds of currently active action
-                bool subActionExecuted = false;
-                if (subActionsKeybindsInProgress.Count == 0)
-                {
-                    // Check all sub-action keybinds
-                    foreach (Keybind keybind in currentAction.SubActionsKeybinds)
-                    {
-                        SubAction action = keybind.Action as SubAction;
-                        KeybindResponse response = keybind.CheckKeystroke(keyboard);
-                        if (response == KeybindResponse.Complete)
-                        {
-                            keybind.Action.Execute();
-                            subActionExecuted = true;
-                        }
-                        else if (response == KeybindResponse.Incomplete)
-                        {
-                            subActionsKeybindsInProgress.Add(keybind);
-                        }
-                    }
-                }
-                else
-                {
-                    // Check sub-action keybinds in progress
-                    for (int i = subActionsKeybindsInProgress.Count - 1; i >= 0; i--)
-                    {
-                        Keybind keybind = subActionsKeybindsInProgress[i];
-                        SubAction action = keybind.Action as SubAction;
-                        KeybindResponse response = keybind.CheckKeystroke(keyboard);
-                        if (response == KeybindResponse.Complete)
-                        {
-                            keybind.Action.Execute();
-                            subActionExecuted = true;
-                        }
-                        else if (response == KeybindResponse.Invalid)
-                        {
-                            subActionsKeybindsInProgress.RemoveAt(i);
-                        }
-                    }
-                }
-
-                if (subActionExecuted)
-                {
-                    subActionsKeybindsInProgress.Clear();
-                }
-            }
-        }
-
         private async UniTask ExecuteActionTask(EditorAction action)
         {
-            actionsInProgress.Remove(action);
+            actionsInProgress.Add(action);
 
             // This causes boxing but what else can you do
-            object obj = action.Method.Invoke(action.ScopeInstance, action.ParamsToPass);
+            object obj = action.Method.Invoke(action.Scope.Instance, action.ParamsToPass);
             if (obj is UniTask task)
             {
                 await task;
