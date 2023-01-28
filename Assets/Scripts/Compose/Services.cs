@@ -1,4 +1,5 @@
 using ArcCreate.Compose.History;
+using ArcCreate.Compose.Navigation;
 using ArcCreate.Compose.Popups;
 using ArcCreate.Compose.Project;
 using ArcCreate.Compose.Timeline;
@@ -13,6 +14,7 @@ namespace ArcCreate.Compose
         [SerializeField] private PopupsService popups;
         [SerializeField] private TimelineService timeline;
         [SerializeField] private HistoryService history;
+        [SerializeField] private NavigationService navigation;
 
         public static IProjectService Project { get; private set; }
 
@@ -24,12 +26,15 @@ namespace ArcCreate.Compose
 
         public static IHistoryService History { get; set; }
 
+        public static INavigationService Navigation { get; set; }
+
         private void Awake()
         {
             Project = project;
             Popups = popups;
             Timeline = timeline;
             History = history;
+            Navigation = navigation;
         }
     }
 }
