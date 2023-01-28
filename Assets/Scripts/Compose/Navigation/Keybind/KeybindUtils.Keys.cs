@@ -8,7 +8,7 @@ namespace ArcCreate.Compose.Navigation
     /// </summary>
     public static partial class KeybindUtils
     {
-        public static readonly Dictionary<string, Key> KeyAlias = new Dictionary<string, Key>()
+        public static readonly Dictionary<string, Key> KeyboardAlias = new Dictionary<string, Key>()
         {
             // Alphanumeric
             { "a", Key.A },
@@ -37,26 +37,6 @@ namespace ArcCreate.Compose.Navigation
             { "x", Key.X },
             { "y", Key.Y },
             { "z", Key.Z },
-            { "digit1", Key.Digit1 },
-            { "digit2", Key.Digit2 },
-            { "digit3", Key.Digit3 },
-            { "digit4", Key.Digit4 },
-            { "digit5", Key.Digit5 },
-            { "digit6", Key.Digit6 },
-            { "digit7", Key.Digit7 },
-            { "digit8", Key.Digit8 },
-            { "digit9", Key.Digit9 },
-            { "digit0", Key.Digit0 },
-            { "1", Key.Digit1 },
-            { "2", Key.Digit2 },
-            { "3", Key.Digit3 },
-            { "4", Key.Digit4 },
-            { "5", Key.Digit5 },
-            { "6", Key.Digit6 },
-            { "7", Key.Digit7 },
-            { "8", Key.Digit8 },
-            { "9", Key.Digit9 },
-            { "0", Key.Digit0 },
 
             // Arrows
             { "left", Key.LeftArrow },
@@ -182,16 +162,6 @@ namespace ArcCreate.Compose.Navigation
 
             // Shift modified
             { "~", Key.Backquote },
-            { "!", Key.Digit1 },
-            { "@", Key.Digit2 },
-            { "#", Key.Digit3 },
-            { "$", Key.Digit4 },
-            { "%", Key.Digit5 },
-            { "^", Key.Digit6 },
-            { "&", Key.Digit7 },
-            { "*", Key.Digit8 },
-            { "(", Key.Digit9 },
-            { ")", Key.Digit0 },
             { "_", Key.Minus },
             { "+", Key.Equals },
             { "{", Key.LeftBracket },
@@ -202,6 +172,49 @@ namespace ArcCreate.Compose.Navigation
             { "<", Key.Comma },
             { ">", Key.Period },
             { "?", Key.Slash },
+        };
+
+        public static readonly Dictionary<string, string> MiscKeyAlias = new Dictionary<string, string>()
+        {
+            { "digit1", "<Keyboard>/1" },
+            { "digit2", "<Keyboard>/2" },
+            { "digit3", "<Keyboard>/3" },
+            { "digit4", "<Keyboard>/4" },
+            { "digit5", "<Keyboard>/5" },
+            { "digit6", "<Keyboard>/6" },
+            { "digit7", "<Keyboard>/7" },
+            { "digit8", "<Keyboard>/8" },
+            { "digit9", "<Keyboard>/9" },
+            { "digit0", "<Keyboard>/0" },
+            { "1", "<Keyboard>/1" },
+            { "2", "<Keyboard>/2" },
+            { "3", "<Keyboard>/3" },
+            { "4", "<Keyboard>/4" },
+            { "5", "<Keyboard>/5" },
+            { "6", "<Keyboard>/6" },
+            { "7", "<Keyboard>/7" },
+            { "8", "<Keyboard>/8" },
+            { "9", "<Keyboard>/9" },
+            { "0", "<Keyboard>/0" },
+            { "!", "<Keyboard>/1" },
+            { "@", "<Keyboard>/2" },
+            { "#", "<Keyboard>/3" },
+            { "$", "<Keyboard>/4" },
+            { "%", "<Keyboard>/5" },
+            { "^", "<Keyboard>/6" },
+            { "&", "<Keyboard>/7" },
+            { "*", "<Keyboard>/8" },
+            { "(", "<Keyboard>/9" },
+            { ")", "<Keyboard>/0" },
+            { "mouse1", "<Mouse>/leftButton" },
+            { "btn1", "<Mouse>/leftButton" },
+            { "button1", "<Mouse>/leftButton" },
+            { "mouse2", "<Mouse>/rightButton" },
+            { "btn2", "<Mouse>/rightButton" },
+            { "button2", "<Mouse>/rightButton" },
+            { "mouse3", "<Mouse>/middleButton" },
+            { "btn3", "<Mouse>/middleButton" },
+            { "button3", "<Mouse>/middleButton" },
         };
 
         public static readonly HashSet<string> IsShiftedKey = new HashSet<string>()
@@ -244,5 +257,25 @@ namespace ArcCreate.Compose.Navigation
             { "u", "u" },
             { "a", "Alt" },
         };
+
+        public static bool TryGetKeyString(string alias, out string key)
+        {
+            alias = alias.ToLower();
+            if (KeyboardAlias.TryGetValue(alias, out Key keyboardKey))
+            {
+                key = "<Keyboard>/" + keyboardKey.ToString();
+                return true;
+            }
+            else if (MiscKeyAlias.TryGetValue(alias, out var miscKey))
+            {
+                key = miscKey;
+                return true;
+            }
+            else
+            {
+                key = null;
+                return false;
+            }
+        }
     }
 }

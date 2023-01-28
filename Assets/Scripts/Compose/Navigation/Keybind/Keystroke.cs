@@ -12,12 +12,9 @@ namespace ArcCreate.Compose.Navigation
         public string Key;
         public bool ActuateOnRelease;
 
-        public InputAction ToAction()
+        public InputAction ToAction(string name)
         {
-            InputAction action = new InputAction
-            {
-                bindingMask = InputBinding.MaskByGroup("Keyboard"),
-            };
+            InputAction action = new InputAction(name: name);
 
             if (Modifier1 != null && Modifier2 != null)
             {
