@@ -22,9 +22,9 @@ namespace ArcCreate.Compose.Navigation
             rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, rect.rect.height + button.Rect.rect.height);
         }
 
-        public void SetText(string text)
+        public void SetText(string i18nName)
         {
-            this.text.text = text;
+            text.text = I18n.S(i18nName);
         }
 
         private void Awake()

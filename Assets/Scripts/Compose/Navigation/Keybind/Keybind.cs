@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine.InputSystem;
 
 namespace ArcCreate.Compose.Navigation
@@ -26,10 +27,13 @@ namespace ArcCreate.Compose.Navigation
     public class Keybind
     {
         private int index = 0;
+        private bool isFinalKeyHeld = false;
 
         public Keybind(Keystroke[] keystrokes, IAction action)
         {
             InputActions = new InputAction[keystrokes.Length];
+            Keystrokes = keystrokes;
+
             Action = action;
 
             for (int i = 0; i < keystrokes.Length; i++)
@@ -38,7 +42,12 @@ namespace ArcCreate.Compose.Navigation
                 InputAction inputAction = keystroke.ToAction(action.Id);
                 InputActions[i] = inputAction;
 
-                if (keystroke.ActuateOnRelease)
+                if (i == keystrokes.Length - 1 && keystroke.ActuateOnHold)
+                {
+                    inputAction.performed += OnFinalKeystrokeDown;
+                    inputAction.canceled += OnFinalKeystrokeUp;
+                }
+                else if (keystroke.ActuateOnRelease)
                 {
                     inputAction.canceled += OnKeystroke;
                 }
@@ -55,10 +64,29 @@ namespace ArcCreate.Compose.Navigation
 
         public InputAction[] InputActions { get; private set; }
 
+        public Keystroke[] Keystrokes { get; private set; }
+
         public void Destroy()
         {
-            foreach (InputAction inputAction in InputActions)
+            for (int i = 0; i < Keystrokes.Length; i++)
             {
+                Keystroke keystroke = Keystrokes[i];
+                InputAction inputAction = InputActions[i];
+
+                if (i == Keystrokes.Length - 1 && keystroke.ActuateOnHold)
+                {
+                    inputAction.performed -= OnFinalKeystrokeDown;
+                    inputAction.canceled -= OnFinalKeystrokeUp;
+                }
+                else if (keystroke.ActuateOnRelease)
+                {
+                    inputAction.canceled -= OnKeystroke;
+                }
+                else
+                {
+                    inputAction.performed -= OnKeystroke;
+                }
+
                 inputAction.Disable();
             }
         }
@@ -85,6 +113,37 @@ namespace ArcCreate.Compose.Navigation
             else
             {
                 index = 0;
+            }
+        }
+
+        private void OnFinalKeystrokeDown(InputAction.CallbackContext obj)
+        {
+            if (index == InputActions.Length - 1)
+            {
+                index = 0;
+                isFinalKeyHeld = true;
+                if (Services.Navigation.ShouldExecute(Action))
+                {
+                    StartRepeatedExecution().Forget();
+                }
+            }
+            else
+            {
+                index = 0;
+            }
+        }
+
+        private void OnFinalKeystrokeUp(InputAction.CallbackContext obj)
+        {
+            isFinalKeyHeld = false;
+        }
+
+        private async UniTask StartRepeatedExecution()
+        {
+            while (isFinalKeyHeld)
+            {
+                Action.Execute();
+                await UniTask.NextFrame();
             }
         }
     }

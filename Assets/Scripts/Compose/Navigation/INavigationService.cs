@@ -11,6 +11,12 @@ namespace ArcCreate.Compose.Navigation
         void StartAction(EditorAction action);
 
         /// <summary>
+        /// Start an editor action from a path.
+        /// </summary>
+        /// <param name="path">The editor action path.</param>
+        void StartAction(string path);
+
+        /// <summary>
         /// Whether or not the action should be executed.
         /// </summary>
         /// <param name="action">The action to check.</param>

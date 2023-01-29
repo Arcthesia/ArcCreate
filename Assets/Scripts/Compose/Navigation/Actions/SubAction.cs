@@ -4,10 +4,12 @@ namespace ArcCreate.Compose.Navigation
     {
         private bool executed = false;
 
-        public SubAction(string id, string category, bool shouldDisplayOnContextMenu)
+        public SubAction(string id, string scopeId, string actionId, bool shouldDisplayOnContextMenu)
         {
             Id = id;
-            Category = category;
+            FullPath = $"{scopeId}.{actionId}.{id}";
+            CategoryI18nName = $"{Values.NavigationI18nPrefix}.{scopeId}.{actionId}";
+            I18nName = $"{Values.NavigationI18nPrefix}.{FullPath}";
             ShouldDisplayOnContextMenu = shouldDisplayOnContextMenu;
         }
 
@@ -28,7 +30,11 @@ namespace ArcCreate.Compose.Navigation
 
         public string Id { get; private set; }
 
-        public string Category { get; private set; }
+        public string FullPath { get; private set; }
+
+        public string CategoryI18nName { get; private set; }
+
+        public string I18nName { get; private set; }
 
         public bool ShouldDisplayOnContextMenu { get; private set; }
 

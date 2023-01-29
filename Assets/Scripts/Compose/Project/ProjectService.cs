@@ -171,8 +171,14 @@ namespace ArcCreate.Compose.Project
         }
 
         [EditorAction("Save", false, "<c-s>")]
+        [RequireGameplayLoaded]
         private void OnSaveProjectPressed()
         {
+            if (CurrentProject == null)
+            {
+                return;
+            }
+
             Serialize(CurrentProject);
         }
 

@@ -1,4 +1,5 @@
 using System.Collections;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,7 +32,7 @@ namespace ArcCreate.Compose.Popups
                 button.Setup(setting.Text, setting.Callback, color, this);
             }
 
-            StartCoroutine(SetBoxHeightCoroutine());
+            SetBoxHeightCoroutine().Forget();
         }
 
         public void CloseSelf()
@@ -40,9 +41,10 @@ namespace ArcCreate.Compose.Popups
         }
 
         // I hate unity so much
-        private IEnumerator SetBoxHeightCoroutine()
+        private async UniTask SetBoxHeightCoroutine()
         {
-            yield return null;
+            await UniTask.NextFrame();
+
             float preferredHeight = contentRect.rect.height;
             rect.SetSizeWithCurrentAnchors(
                 RectTransform.Axis.Vertical,

@@ -8,6 +8,12 @@ namespace ArcCreate.Gameplay
     public interface IGameplayControl
     {
         /// <summary>
+        /// Gets a value indicating whether or not the gameplay scene has successfully loaded a chart.
+        /// </summary>
+        /// <value>Whether or not a chart has been loaded.</value>
+        bool IsLoaded { get; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether or not to let this module update InputSystem.
         /// Set this to true if no other scene will update InputSystem themselves.
         /// </summary>

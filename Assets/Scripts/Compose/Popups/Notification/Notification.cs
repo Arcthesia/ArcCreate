@@ -34,7 +34,9 @@ namespace ArcCreate.Compose.Popups
         private const float FadeDelay = 10;
         private RectTransform mainTextRect;
 
-        private bool Overflow => mainText.preferredWidth > mainTextRect.rect.width;
+        private bool Overflow =>
+            mainText.preferredWidth > mainTextRect.rect.width
+            || mainText.preferredHeight > mainTextRect.rect.height;
 
         private Severity Severity
         {
