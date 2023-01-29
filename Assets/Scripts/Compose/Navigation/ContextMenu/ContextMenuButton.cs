@@ -19,8 +19,9 @@ namespace ArcCreate.Compose.Navigation
         {
             this.action = action;
             this.menu = menu;
-            text.text = action.Id;
-            Width = text.GetPreferredValues(action.Id).x;
+            string content = I18n.S(action.I18nName);
+            text.text = content;
+            Width = text.GetPreferredValues(content).x;
         }
 
         private void OnClick()

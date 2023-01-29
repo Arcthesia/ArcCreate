@@ -255,6 +255,7 @@ namespace ArcCreate.Compose.Navigation
             { "c", "Ctrl" },
             { "s", "Shift" },
             { "u", "u" },
+            { "h", "h" },
             { "a", "Alt" },
         };
 

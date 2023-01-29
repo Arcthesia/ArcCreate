@@ -133,6 +133,12 @@ Compose:
         The file itself will NOT be deleted and can be added back to the project later, but any metadata associated with it will be lost.
       Yes: Remove
       No: Cancel
+  Navigation:
+    Actions:
+      Camera:
+        Name: Camera
+        FreeCamera:
+          Name: Start free camera
   UI:
     Common:
       Confirm: Confirm

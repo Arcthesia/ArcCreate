@@ -23,6 +23,13 @@ namespace ArcCreate.Compose.Navigation
             Method = method;
             SubActions = subActions;
 
+            FullPath = $"{Scope.Id}.{id}";
+            I18nName = $"{Values.NavigationI18nPrefix}.{FullPath}";
+            if (subActions.Count > 0)
+            {
+                I18nName += ".Name";
+            }
+
             bool shouldPassSelf = method.GetParameters().Length != 0;
             if (shouldPassSelf)
             {
@@ -36,7 +43,11 @@ namespace ArcCreate.Compose.Navigation
 
         public string Id { get; private set; }
 
-        public string Category => Scope.Id;
+        public string FullPath { get; private set; }
+
+        public string CategoryI18nName => Scope.I18nName;
+
+        public string I18nName { get; private set; }
 
         public bool ShouldDisplayOnContextMenu { get; private set; }
 

@@ -11,6 +11,7 @@ namespace ArcCreate.Compose.Navigation
         public string Modifier2;
         public string Key;
         public bool ActuateOnRelease;
+        public bool ActuateOnHold;
 
         public InputAction ToAction(string name)
         {

@@ -146,6 +146,12 @@ namespace ArcCreate.Compose.Navigation
                 mappedMods.Remove("u");
             }
 
+            if (mappedMods.Contains("h"))
+            {
+                keystroke.ActuateOnHold = true;
+                mappedMods.Remove("h");
+            }
+
             if (mappedMods.Count > 2)
             {
                 keystroke = default;

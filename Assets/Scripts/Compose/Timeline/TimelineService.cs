@@ -33,6 +33,7 @@ namespace ArcCreate.Compose.Timeline
         private bool IsPlaying => Services.Gameplay?.Audio.IsPlaying ?? false;
 
         [EditorAction(null, false, "q")]
+        [RequireGameplayLoaded]
         public void TogglePlay()
         {
             if (IsPlaying)
@@ -48,6 +49,7 @@ namespace ArcCreate.Compose.Timeline
         [EditorAction("PlayReturn", false, "<space>")]
         [SubAction("Return", false, "<u-space>")]
         [SubAction("Pause", false, "q")]
+        [RequireGameplayLoaded]
         public async UniTask StartPlayReturn(EditorAction action)
         {
             SubAction ret = action.GetSubAction("Return");

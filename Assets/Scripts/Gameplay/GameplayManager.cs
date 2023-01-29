@@ -39,6 +39,8 @@ namespace ArcCreate.Gameplay
 
         public ICameraControl Camera => cameraService;
 
+        public bool IsLoaded => chartService.IsLoaded;
+
         public void SetCameraViewportRect(Rect rect)
         {
             gameplayCamera.rect = rect;
