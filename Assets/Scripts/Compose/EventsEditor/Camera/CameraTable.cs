@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.Compose.Components;
 using ArcCreate.Compose.History;
+using ArcCreate.Compose.Navigation;
 using ArcCreate.Compose.Timeline;
 using ArcCreate.Gameplay;
 using ArcCreate.Gameplay.Data;
@@ -13,6 +14,7 @@ using UnityEngine.UI;
 
 namespace ArcCreate.Compose.EventsEditor
 {
+    [EditorScope("Camera")]
     public class CameraTable : Table<CameraEvent>
     {
         [SerializeField] private GameplayData gameplayData;
@@ -31,6 +33,7 @@ namespace ArcCreate.Compose.EventsEditor
             {
                 base.Selected = value;
                 marker.gameObject.SetActive(value != null);
+                RequireCameraEventSelectedAttribute.IsSelected = value != null;
                 UpdateMarker();
             }
         }
@@ -48,6 +51,178 @@ namespace ArcCreate.Compose.EventsEditor
             }
 
             marker.SetTiming(Selected.Timing, Selected.Timing + Selected.Duration);
+        }
+
+        [EditorAction("FreeCamera", true)]
+        [RequireCameraEventSelected]
+        [SubAction("MoveForward", false, "<h-w>")]
+        [SubAction("MoveLeft", false, "<h-a>")]
+        [SubAction("MoveBackward", false, "<h-s>")]
+        [SubAction("MoveRight", false, "<h-d>")]
+        [SubAction("MoveUp", false, "<h-space>")]
+        [SubAction("MoveDown", false, "<h-shift>")]
+        [SubAction("LookUp", false, "<h-i>")]
+        [SubAction("LookLeft", false, "<h-j>")]
+        [SubAction("LookDown", false, "<h-k>")]
+        [SubAction("LookRight", false, "<h-l>")]
+        [SubAction("RollLeft", false, "<h-u>")]
+        [SubAction("RollRight", false, "<h-o>")]
+        [SubAction("Faster", false, "<h-ctrl>")]
+        [SubAction("Slower", false, "<h-alt>")]
+        [SubAction("Cancel", false, "<esc>")]
+        [SubAction("Confirm", false, "<cr>")]
+        public async UniTask BeginFreeCamera(EditorAction action)
+        {
+            SubAction moveForward = action.GetSubAction("MoveForward");
+            SubAction moveLeft = action.GetSubAction("MoveLeft");
+            SubAction moveBackward = action.GetSubAction("MoveBackward");
+            SubAction moveRight = action.GetSubAction("MoveRight");
+            SubAction moveUp = action.GetSubAction("MoveUp");
+            SubAction moveDown = action.GetSubAction("MoveDown");
+            SubAction lookUp = action.GetSubAction("LookUp");
+            SubAction lookLeft = action.GetSubAction("LookLeft");
+            SubAction lookDown = action.GetSubAction("LookDown");
+            SubAction lookRight = action.GetSubAction("LookRight");
+            SubAction rollLeft = action.GetSubAction("RollLeft");
+            SubAction rollRight = action.GetSubAction("RollRight");
+            SubAction faster = action.GetSubAction("Faster");
+            SubAction slower = action.GetSubAction("Slower");
+            SubAction cancel = action.GetSubAction("Cancel");
+            SubAction confirm = action.GetSubAction("Confirm");
+
+            CameraEvent target = Selected;
+            Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.FreeCameraEditHelp"));
+
+            Keyboard keyboard = InputSystem.GetDevice<Keyboard>();
+            Camera cam = Services.Gameplay.Camera.GameplayCamera;
+            CameraEvent oldValue = target.Clone() as CameraEvent;
+
+            Services.Gameplay.Audio.ChartTiming = target.Timing + target.Duration;
+            EventSystem.current.SetSelectedGameObject(null);
+
+            List<CameraEvent> updateList = new List<CameraEvent> { target };
+            Quaternion rotateRightBy90 = Quaternion.Euler(0, 90, 0);
+            float sensitivity = Settings.CameraSensitivity.Value;
+
+            freeCameraButtonImage.color = highlightColor;
+
+            while (true)
+            {
+                float rotAmount = sensitivity * Time.deltaTime;
+                float movAmount = rotAmount * 50;
+
+                if (faster.WasExecuted)
+                {
+                    rotAmount *= 4;
+                    movAmount *= 4;
+                }
+
+                if (slower.WasExecuted)
+                {
+                    rotAmount /= 4;
+                    movAmount /= 4;
+                }
+
+                Vector3 forwardVector = cam.transform.forward.normalized;
+                forwardVector.x = -forwardVector.x;
+                forwardVector.y = 0;
+                Vector3 leftVector = new Vector3(forwardVector.z, 0, -forwardVector.x);
+
+                if (moveForward.WasExecuted)
+                {
+                    target.Move = target.Move + (forwardVector * movAmount);
+                }
+
+                if (moveBackward.WasExecuted)
+                {
+                    target.Move = target.Move - (forwardVector * movAmount);
+                }
+
+                if (moveLeft.WasExecuted)
+                {
+                    target.Move = target.Move + (leftVector * movAmount);
+                }
+
+                if (moveRight.WasExecuted)
+                {
+                    target.Move = target.Move - (leftVector * movAmount);
+                }
+
+                if (moveUp.WasExecuted)
+                {
+                    target.Move = new Vector3(target.Move.x, target.Move.y + movAmount, target.Move.z);
+                }
+
+                if (moveDown.WasExecuted)
+                {
+                    target.Move = new Vector3(target.Move.x, target.Move.y - movAmount, target.Move.z);
+                }
+
+                if (lookUp.WasExecuted)
+                {
+                    target.Rotate = new Vector3(target.Rotate.x, target.Rotate.y + rotAmount, target.Rotate.z);
+                }
+
+                if (lookDown.WasExecuted)
+                {
+                    target.Rotate = new Vector3(target.Rotate.x, target.Rotate.y - rotAmount, target.Rotate.z);
+                }
+
+                if (lookLeft.WasExecuted)
+                {
+                    target.Rotate = new Vector3(target.Rotate.x + rotAmount, target.Rotate.y, target.Rotate.z);
+                }
+
+                if (lookRight.WasExecuted)
+                {
+                    target.Rotate = new Vector3(target.Rotate.x - rotAmount, target.Rotate.y, target.Rotate.z);
+                }
+
+                if (rollLeft.WasExecuted)
+                {
+                    target.Rotate = new Vector3(target.Rotate.x, target.Rotate.y, target.Rotate.z - rotAmount);
+                }
+
+                if (rollRight.WasExecuted)
+                {
+                    target.Rotate = new Vector3(target.Rotate.x, target.Rotate.y, target.Rotate.z + rotAmount);
+                }
+
+                target.Move = new Vector3(
+                    Mathf.Round(target.Move.x * 100) / 100,
+                    Mathf.Round(target.Move.y * 100) / 100,
+                    Mathf.Round(target.Move.z * 100) / 100);
+                target.Rotate = new Vector3(
+                    Mathf.Round(target.Rotate.x * 100) / 100,
+                    Mathf.Round(target.Rotate.y * 100) / 100,
+                    Mathf.Round(target.Rotate.z * 100) / 100);
+
+                Services.Gameplay.Chart.UpdateEvents(updateList);
+
+                if (confirm.WasExecuted)
+                {
+                    Rebuild();
+
+                    CameraEvent newValue = target.Clone() as CameraEvent;
+                    target.Assign(oldValue);
+                    Services.History.AddCommand(new EventCommand(
+                        name: I18n.S("Compose.Notify.History.EditCamera"),
+                        update: new List<(ArcEvent instance, ArcEvent newValue)> { (target, newValue) }));
+
+                    freeCameraButtonImage.color = normalColor;
+                    return;
+                }
+
+                if (cancel.WasExecuted)
+                {
+                    target.Assign(oldValue);
+                    Services.Gameplay.Chart.UpdateEvents(updateList);
+                    freeCameraButtonImage.color = normalColor;
+                    return;
+                }
+
+                await UniTask.NextFrame();
+            }
         }
 
         protected override void Update()
@@ -218,149 +393,16 @@ namespace ArcCreate.Compose.EventsEditor
             }
 
             JumpTo(IndexOf(Selected));
-            BeginFreeCamera(Selected).Forget();
+            Services.Navigation.StartAction("Camera.FreeCamera");
         }
 
-        private async UniTask BeginFreeCamera(CameraEvent target)
+        public class RequireCameraEventSelectedAttribute : ContextRequirementAttribute
         {
-            Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.FreeCameraEditHelp"));
+            public static bool IsSelected { get; set; } = false;
 
-            Keyboard keyboard = InputSystem.GetDevice<Keyboard>();
-            Camera cam = Services.Gameplay.Camera.GameplayCamera;
-            CameraEvent oldValue = target.Clone() as CameraEvent;
-
-            Services.Gameplay.Audio.ChartTiming = target.Timing + target.Duration;
-            EventSystem.current.SetSelectedGameObject(null);
-
-            List<CameraEvent> updateList = new List<CameraEvent> { target };
-            Quaternion rotateRightBy90 = Quaternion.Euler(0, 90, 0);
-            float sensitivity = Settings.CameraSensitivity.Value;
-
-            freeCameraButtonImage.color = highlightColor;
-
-            // TODO: Temporary until a proper hotkey system is implemented
-            while (true)
+            public override bool CheckRequirement()
             {
-                float rotAmount = sensitivity * Time.deltaTime;
-                float movAmount = rotAmount * 50;
-
-                if (keyboard.ctrlKey.isPressed)
-                {
-                    rotAmount *= 3;
-                    movAmount *= 3;
-                }
-
-                Vector3 forwardVector = cam.transform.forward.normalized;
-                forwardVector.x = -forwardVector.x;
-                forwardVector.y = 0;
-                Vector3 leftVector = new Vector3(forwardVector.z, 0, -forwardVector.x);
-
-                if (keyboard.wKey.isPressed)
-                {
-                    // Move forward
-                    target.Move = target.Move + (forwardVector * movAmount);
-                }
-
-                if (keyboard.sKey.isPressed)
-                {
-                    // Move backward
-                    target.Move = target.Move - (forwardVector * movAmount);
-                }
-
-                if (keyboard.aKey.isPressed)
-                {
-                    // Move left
-                    target.Move = target.Move + (leftVector * movAmount);
-                }
-
-                if (keyboard.dKey.isPressed)
-                {
-                    // Move right
-                    target.Move = target.Move - (leftVector * movAmount);
-                }
-
-                if (keyboard.spaceKey.isPressed)
-                {
-                    // Move up
-                    target.Move = new Vector3(target.Move.x, target.Move.y + movAmount, target.Move.z);
-                }
-
-                if (keyboard.shiftKey.isPressed)
-                {
-                    // Move down
-                    target.Move = new Vector3(target.Move.x, target.Move.y - movAmount, target.Move.z);
-                }
-
-                if (keyboard.iKey.isPressed)
-                {
-                    // Rotate up
-                    target.Rotate = new Vector3(target.Rotate.x, target.Rotate.y + rotAmount, target.Rotate.z);
-                }
-
-                if (keyboard.kKey.isPressed)
-                {
-                    // Rotate down
-                    target.Rotate = new Vector3(target.Rotate.x, target.Rotate.y - rotAmount, target.Rotate.z);
-                }
-
-                if (keyboard.jKey.isPressed)
-                {
-                    // Rotate left
-                    target.Rotate = new Vector3(target.Rotate.x + rotAmount, target.Rotate.y, target.Rotate.z);
-                }
-
-                if (keyboard.lKey.isPressed)
-                {
-                    // Rotate right
-                    target.Rotate = new Vector3(target.Rotate.x - rotAmount, target.Rotate.y, target.Rotate.z);
-                }
-
-                if (keyboard.uKey.isPressed)
-                {
-                    // Roll left
-                    target.Rotate = new Vector3(target.Rotate.x, target.Rotate.y, target.Rotate.z - rotAmount);
-                }
-
-                if (keyboard.oKey.isPressed)
-                {
-                    // Roll right
-                    target.Rotate = new Vector3(target.Rotate.x, target.Rotate.y, target.Rotate.z + rotAmount);
-                }
-
-                target.Move = new Vector3(
-                    Mathf.Round(target.Move.x * 100) / 100,
-                    Mathf.Round(target.Move.y * 100) / 100,
-                    Mathf.Round(target.Move.z * 100) / 100);
-                target.Rotate = new Vector3(
-                    Mathf.Round(target.Rotate.x * 100) / 100,
-                    Mathf.Round(target.Rotate.y * 100) / 100,
-                    Mathf.Round(target.Rotate.z * 100) / 100);
-
-                Services.Gameplay.Chart.UpdateEvents(updateList);
-
-                if (keyboard.enterKey.isPressed)
-                {
-                    Rebuild();
-
-                    CameraEvent newValue = target.Clone() as CameraEvent;
-                    target.Assign(oldValue);
-                    Services.History.AddCommand(new EventCommand(
-                        name: I18n.S("Compose.Notify.History.EditCamera"),
-                        update: new List<(ArcEvent instance, ArcEvent newValue)> { (target, newValue) }));
-
-                    freeCameraButtonImage.color = normalColor;
-                    return;
-                }
-
-                if (keyboard.escapeKey.isPressed)
-                {
-                    target.Assign(oldValue);
-                    Services.Gameplay.Chart.UpdateEvents(updateList);
-                    freeCameraButtonImage.color = normalColor;
-                    return;
-                }
-
-                await UniTask.NextFrame();
+                return IsSelected;
             }
         }
     }

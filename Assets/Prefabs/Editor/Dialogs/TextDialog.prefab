@@ -679,13 +679,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   titleText: {fileID: 1292130009230397984}
   contentText: {fileID: 1292130009991253188}
-  dummyText: {fileID: 0}
   contentRect: {fileID: 1292130009991253187}
   buttonPrefab: {fileID: 1487356334178746680, guid: 800adeae6cef7a38e83fcf80ca7b7c6e,
     type: 3}
   buttonParent: {fileID: 1292130009869949222}
-  extraHeight: 100
-  maxHeight: 300
+  extraHeight: 120
+  maxHeight: 8888
   buttonColors:
   - {r: 0.42745098, g: 0.42745098, b: 0.42745098, a: 1}
   - {r: 0.3882353, g: 0.7176471, b: 0.81960785, a: 1}

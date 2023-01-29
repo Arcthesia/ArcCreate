@@ -22,6 +22,7 @@ namespace ArcCreate.Compose
         public const string BackgroundFilePrefix = "bg_";
         public const string DefaultTitle = "Untitled";
         public const string DefaultComposer = "N/A";
+        public const string NavigationI18nPrefix = "Compose.Navigation.Actions";
 
         // Pools
         public const string TickPoolName = "TickPool";

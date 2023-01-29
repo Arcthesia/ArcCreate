@@ -81,6 +81,8 @@ namespace ArcCreate.Gameplay.Audio
 
         public bool IsPlaying { get => audioSource.isPlaying; }
 
+        public bool IsLoaded => audioSource.clip != null;
+
         public AudioClip AudioClip
         {
             get => audioSource.clip;

@@ -24,6 +24,18 @@ namespace ArcCreate.Compose.Navigation
             ExecuteActionTask(action).Forget();
         }
 
+        public void StartAction(string fullPath)
+        {
+            foreach (IAction action in allActions)
+            {
+                if (action.FullPath == fullPath)
+                {
+                    action.Execute();
+                    return;
+                }
+            }
+        }
+
         public List<IAction> GetContextMenuEntries(bool calledByAction = false)
         {
             if (calledByAction)
@@ -31,7 +43,7 @@ namespace ArcCreate.Compose.Navigation
                 EditorAction caller = actionsInProgress[actionsInProgress.Count - 1];
                 actionsInProgress.RemoveAt(actionsInProgress.Count - 1);
                 List<IAction> result = allActions
-                    .Where(action => ShouldExecute(action))
+                    .Where(action => ShouldExecute(action) && action.ShouldDisplayOnContextMenu)
                     .ToList();
                 actionsInProgress.Add(caller);
                 return result;
@@ -118,6 +130,7 @@ namespace ArcCreate.Compose.Navigation
                         continue;
                     }
 
+                    string actionId = editorAction.Id ?? method.Name;
                     ContextRequirementAttribute[] contextRequirements = method.GetCustomAttributes(typeof(ContextRequirementAttribute)) as ContextRequirementAttribute[];
                     SubActionAttribute[] subActions = method.GetCustomAttributes(typeof(SubActionAttribute)) as SubActionAttribute[];
                     WhitelistScopesAttribute whitelist = method.GetCustomAttribute(typeof(WhitelistScopesAttribute)) as WhitelistScopesAttribute;
@@ -128,7 +141,7 @@ namespace ArcCreate.Compose.Navigation
                     {
                         foreach (SubActionAttribute s in subActions)
                         {
-                            SubAction subAction = new SubAction(s.Id, editorAction.Id, s.ShouldDisplayOnContextMenu);
+                            SubAction subAction = new SubAction(s.Id, scopeId, actionId, s.ShouldDisplayOnContextMenu);
                             foreach (string hotkey in s.DefaultHotkeys)
                             {
                                 if (KeybindUtils.TryParseKeybind(hotkey, subAction, out Keybind keybind, out string reason))
@@ -147,7 +160,7 @@ namespace ArcCreate.Compose.Navigation
                     }
 
                     EditorAction action = new EditorAction(
-                        id: editorAction.Id ?? method.Name,
+                        id: actionId,
                         shouldDisplayOnContextMenu: editorAction.ShouldDisplayOnContextMenu,
                         contextRequirements: contextRequirements?.Cast<IContextRequirement>().ToList() ?? new List<IContextRequirement>(),
                         whitelist: whitelist?.Scopes.ToList() ?? new List<Type>(),

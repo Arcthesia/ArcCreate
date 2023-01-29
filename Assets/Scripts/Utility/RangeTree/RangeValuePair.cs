@@ -10,7 +10,7 @@ namespace ArcCreate.Utility.RangeTree
     /// </summary>
     /// <typeparam name="TKey">Type of the range.</typeparam>
     /// <typeparam name="TValue">Type of the value.</typeparam>
-    public struct RangeValuePair<TKey, TValue> : IEquatable<RangeValuePair<TKey, TValue>>
+    public readonly struct RangeValuePair<TKey, TValue> : IEquatable<RangeValuePair<TKey, TValue>>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RangeValuePair{TKey, TValue}"/> struct.

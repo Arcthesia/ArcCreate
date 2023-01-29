@@ -37,7 +37,7 @@ namespace ArcCreate.Compose.Navigation
             float height = 0;
             foreach (IAction entry in Services.Navigation.GetContextMenuEntries(true))
             {
-                if (categories.TryGetValue(entry.Category, out ContextMenuCategory category))
+                if (categories.TryGetValue(entry.CategoryI18nName, out ContextMenuCategory category))
                 {
                     ContextMenuButton button = buttonPool.Get(category.transform);
                     category.ConfigureButton(button);
@@ -50,10 +50,10 @@ namespace ArcCreate.Compose.Navigation
                     ContextMenuCategory newCategory = categoryPool.Get();
                     newCategory.transform.SetAsLastSibling();
                     newCategory.ResetSize();
-                    newCategory.SetText(entry.Category);
+                    newCategory.SetText(entry.CategoryI18nName);
                     height += newCategory.BaseHeight;
 
-                    categories.Add(entry.Category, newCategory);
+                    categories.Add(entry.CategoryI18nName, newCategory);
                     ContextMenuButton button = buttonPool.Get(newCategory.transform);
                     newCategory.ConfigureButton(button);
                     button.Setup(entry, this);

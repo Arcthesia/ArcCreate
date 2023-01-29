@@ -4,7 +4,11 @@ namespace ArcCreate.Compose.Navigation
     {
         string Id { get; }
 
-        string Category { get; }
+        string FullPath { get; }
+
+        string CategoryI18nName { get; }
+
+        string I18nName { get; }
 
         bool ShouldDisplayOnContextMenu { get; }
 
