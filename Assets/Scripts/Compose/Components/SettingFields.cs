@@ -80,7 +80,11 @@ namespace ArcCreate.Compose.Components
         private void OnDensityField(string value)
         {
             // if there's ever a command interface then this will be moved there
-            EasterEggs.TryTrigger(value);
+            if (EasterEggs.TryTrigger(value))
+            {
+                densityField.SetTextWithoutNotify(Values.BeatlineDensity.Value.ToString());
+                return;
+            }
 
             if (Evaluator.TryFloat(value, out float density))
             {

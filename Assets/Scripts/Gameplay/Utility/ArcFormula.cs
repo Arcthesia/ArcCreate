@@ -182,10 +182,10 @@ namespace ArcCreate.Gameplay
         {
             if (z <= 0)
             {
-                return Mathf.Abs(thickness + (thickness * 4 * -z / Values.TrackLengthForward));
+                return Mathf.Abs(thickness + (thickness * 3 * -z / Values.TrackLengthForward));
             }
 
-            return Mathf.Abs(thickness + (thickness * 4 * z / Values.TrackLengthBackward));
+            return Mathf.Abs(thickness + (thickness * 3 * z / Values.TrackLengthBackward));
         }
 
         public static float CalculateFadeOutAlpha(float z)

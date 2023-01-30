@@ -13229,7 +13229,7 @@ PrefabInstance:
     - target: {fileID: 3061022597843319718, guid: dd28de81c82f15ca4b19d66ca12d8b3c,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000020980835
+      value: -0.0000038146973
       objectReference: {fileID: 0}
     - target: {fileID: 3061022598639186141, guid: dd28de81c82f15ca4b19d66ca12d8b3c,
         type: 3}
@@ -24985,7 +24985,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6be198fafd7cf6da9b48ae0380b5a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameplayView: {fileID: 0}
 --- !u!1 &1022634570 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2161258059010554283, guid: d06bc5576e497b9ffa132a8d6ac6ce26,
@@ -41373,7 +41372,7 @@ MonoBehaviour:
   - Density: 4
     Color: {r: 1, g: 0.49019608, b: 0.49019608, a: 1}
   - Density: 0.25
-    Color: {r: 0.1764706, g: 0.5099326, b: 0.7372549, a: 1}
+    Color: {r: 0.1764706, g: 0.22857964, b: 0.7372549, a: 1}
   beatlineFallbackColor: {r: 0.6666667, g: 0.32941177, b: 0.627451, a: 1}
 --- !u!1 &1790867616
 GameObject:
