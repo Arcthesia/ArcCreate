@@ -23,6 +23,7 @@ namespace ArcCreate.Compose
         public const string DefaultTitle = "Untitled";
         public const string DefaultComposer = "N/A";
         public const string NavigationI18nPrefix = "Compose.Navigation.Actions";
+        public const string KeybindSettingsFileName = "keybind";
 
         // Pools
         public const string TickPoolName = "TickPool";

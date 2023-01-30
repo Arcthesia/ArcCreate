@@ -76,6 +76,8 @@ Compose:
         Invalid modifier: The string "{0}" does not match any modifier key.
       TooManyModifiers: |-
         Invalid keystroke: The keystroke "{0}" has too many modifiers (maximum is 2).
+      InvalidActionPath: |-
+        Invalid action path: The string "{0}" does not match any action.
   Notify:
     GameplayLoaded: Gameplay scene loaded successfully
     FreeCameraEditHelp: |-
@@ -134,6 +136,7 @@ Compose:
       Yes: Remove
       No: Cancel
   Navigation:
+    KeybindOverride: Overriding keybind for action {0}
     Actions:
       Camera:
         Name: Camera
@@ -261,6 +264,9 @@ Compose:
         Timing: Timing
         Camera: Camera
         Scenecontrol: Scene
+    Navigation:
+      Label:
+        ReloadKeybinds: Reload keybinds
 
 Gameplay:
   Exception:

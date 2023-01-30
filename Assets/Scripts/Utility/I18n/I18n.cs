@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using ArcCreate.Utilities;
 using UnityEngine;
-using UnityEngine.Events;
-using YamlDotNet.RepresentationModel;
 
 /// <summary>
 /// Internationalization.
@@ -84,7 +83,6 @@ public static class I18n
     {
         string previousLocale = CurrentLocale;
         var previousStrings = new Dictionary<string, string>(strings);
-        strings.Clear();
 
         CurrentLocale = locale;
         try
@@ -129,36 +127,12 @@ public static class I18n
             }
         }
 
-        var yaml = new YamlStream();
         using (FileStream stream = File.OpenRead(path))
         {
-            yaml.Load(new StreamReader(stream));
-
-            var mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
-
-            Extract(mapping, "");
+            strings.Clear();
+            YamlExtractor.ExtractTo(strings, new StreamReader(stream));
         }
 
         OnLocaleChanged?.Invoke();
-    }
-
-    private static void Extract(YamlMappingNode node, string key)
-    {
-        foreach (KeyValuePair<YamlNode, YamlNode> child in node.Children)
-        {
-            string nodeKey = (child.Key as YamlScalarNode).Value;
-            string newKey = string.IsNullOrEmpty(key) ? nodeKey : $"{key}.{nodeKey}";
-
-            YamlNode value = child.Value;
-            if (value is YamlScalarNode scalar)
-            {
-                string leaf = scalar.Value;
-                strings.Add(newKey, leaf);
-            }
-            else
-            {
-                Extract(value as YamlMappingNode, newKey);
-            }
-        }
     }
 }

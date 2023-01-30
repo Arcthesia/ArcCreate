@@ -219,10 +219,10 @@ namespace ArcCreate.Compose.Navigation
 
         public static readonly HashSet<string> IsShiftedKey = new HashSet<string>()
         {
-            "`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=",
-            "[", "]", "\\",
-            ";", "'",
-            ",", ".", "/",
+            "~", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+",
+            "{", "}", "|",
+            ":", "\"",
+            "<", ">", "?",
         };
 
         public static readonly Dictionary<Key, string> ShiftKeys = new Dictionary<Key, string>()

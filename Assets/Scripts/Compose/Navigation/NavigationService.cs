@@ -1,27 +1,88 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using ArcCreate.Utilities;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem.Utilities;
+using UnityEngine.UI;
+using YamlDotNet.RepresentationModel;
 
 namespace ArcCreate.Compose.Navigation
 {
     [EditorScope("Navigation")]
     public class NavigationService : MonoBehaviour, INavigationService
     {
+        [SerializeField] private Button reloadHotkeysButton;
+
         private readonly List<IAction> allActions = new List<IAction>();
         private readonly List<Keybind> keybinds = new List<Keybind>();
+        private readonly Dictionary<Type, object> instances = new Dictionary<Type, object>();
 
         // Last action in the list is considered top-priority, and only it will have sub-actions processed.
         // A stack was not used because lower-priority actions might exit early.
         private readonly List<EditorAction> actionsInProgress = new List<EditorAction>();
 
+        public void ReloadHotkeys()
+        {
+            foreach (var keybind in keybinds)
+            {
+                keybind.Destroy();
+            }
+
+            keybinds.Clear();
+
+            Dictionary<string, List<string>> keybindOverrides = new Dictionary<string, List<string>>();
+            Dictionary<string, List<string>> keybindActions = new Dictionary<string, List<string>>();
+            string keybindOverrideFilePath = Path.Combine(Application.streamingAssetsPath, Values.KeybindSettingsFileName + ".yaml");
+            if (!File.Exists(keybindOverrideFilePath))
+            {
+                keybindOverrideFilePath = Path.Combine(Application.streamingAssetsPath, Values.KeybindSettingsFileName + ".yml");
+            }
+
+            if (File.Exists(keybindOverrideFilePath))
+            {
+                using (FileStream stream = File.OpenRead(keybindOverrideFilePath))
+                {
+                    YamlStream yaml = new YamlStream();
+                    yaml.Load(new StreamReader(stream));
+                    var mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
+
+                    foreach (KeyValuePair<YamlNode, YamlNode> child in mapping.Children)
+                    {
+                        string nodeKey = (child.Key as YamlScalarNode).Value;
+                        YamlNode val = child.Value;
+                        if (!(val is YamlMappingNode valueNode))
+                        {
+                            continue;
+                        }
+
+                        if (nodeKey == "Override")
+                        {
+                            YamlExtractor.ExtractListsTo(keybindOverrides, valueNode, "");
+                        }
+                        else if (nodeKey == "Action")
+                        {
+                            YamlExtractor.ExtractListsTo(keybindActions, valueNode, "");
+                        }
+                    }
+                }
+            }
+
+            RegisterMethods(keybindOverrides);
+            RegisterCompositeActions(keybindActions);
+        }
+
         public void StartAction(EditorAction action)
         {
-            CancelOngoingKeybinds();
             ExecuteActionTask(action).Forget();
+        }
+
+        public void StartActionsInSequence(List<IAction> actions)
+        {
+            ExecuteActionListTask(actions).Forget();
         }
 
         public void StartAction(string fullPath)
@@ -60,24 +121,25 @@ namespace ArcCreate.Compose.Navigation
                 currentAction = actionsInProgress[actionsInProgress.Count - 1];
             }
 
-            if (action is EditorAction editorAction)
+            switch (action)
             {
-                bool whitelisted = true;
-                if (currentAction != null && !currentAction.Whitelist.Contains(editorAction.Scope.Type))
-                {
-                    whitelisted = false;
-                }
+                case EditorAction editorAction:
+                    bool whitelisted = true;
+                    if (currentAction != null && !currentAction.Whitelist.Contains(editorAction.Scope.Type))
+                    {
+                        whitelisted = false;
+                    }
 
-                return whitelisted && editorAction.CheckRequirement();
-            }
-            else if (action is SubAction subAction)
-            {
-                if (currentAction == null)
-                {
-                    return false;
-                }
+                    return whitelisted && editorAction.CheckRequirement();
+                case SubAction subAction:
+                    if (currentAction == null)
+                    {
+                        return false;
+                    }
 
-                return currentAction.SubActions.Contains(subAction);
+                    return currentAction.SubActions.Contains(subAction);
+                case CompositeAction compositeAction:
+                    return true;
             }
 
             return false;
@@ -94,27 +156,38 @@ namespace ArcCreate.Compose.Navigation
 
         private void Awake()
         {
-            RegisterMethods();
+            reloadHotkeysButton.onClick.AddListener(ReloadHotkeys);
+            ReloadHotkeys();
         }
 
-        private void RegisterMethods()
+        private void OnDestroy()
+        {
+            reloadHotkeysButton.onClick.RemoveListener(ReloadHotkeys);
+        }
+
+        private void RegisterMethods(Dictionary<string, List<string>> keybindOverrides)
         {
             IEnumerable<Type> types = Assembly.GetExecutingAssembly().GetTypes()
                 .Where(type => type.IsDefined(typeof(EditorScopeAttribute)));
 
-            keybinds.Clear();
             foreach (Type type in types)
             {
                 string scopeId = type.GetCustomAttribute<EditorScopeAttribute>().Id ?? type.Name;
 
                 object instance;
-                if (type.IsSubclassOf(typeof(Component)))
+                if (instances.TryGetValue(type, out object typeInstance))
+                {
+                    instance = typeInstance;
+                }
+                else if (type.IsSubclassOf(typeof(Component)))
                 {
                     instance = FindObjectOfType(type);
+                    instances.Add(type, instance);
                 }
                 else
                 {
                     instance = Activator.CreateInstance(type);
+                    instances.Add(type, instance);
                 }
 
                 if (instance == null)
@@ -142,9 +215,21 @@ namespace ArcCreate.Compose.Navigation
                         foreach (SubActionAttribute s in subActions)
                         {
                             SubAction subAction = new SubAction(s.Id, scopeId, actionId, s.ShouldDisplayOnContextMenu);
-                            foreach (string hotkey in s.DefaultHotkeys)
+                            IEnumerable<string> keybindStrings = s.DefaultHotkeys;
+                            if (keybindOverrides.TryGetValue(subAction.FullPath, out List<string> keybindOverride))
                             {
-                                if (KeybindUtils.TryParseKeybind(hotkey, subAction, out Keybind keybind, out string reason))
+                                keybindStrings = keybindOverride;
+                                Debug.Log(I18n.S("Compose.Navigation.KeybindOverride", subAction.FullPath));
+                            }
+
+                            foreach (string keybindString in keybindStrings)
+                            {
+                                if (string.IsNullOrEmpty(keybindString))
+                                {
+                                    continue;
+                                }
+
+                                if (KeybindUtils.TryParseKeybind(keybindString, subAction, out Keybind keybind, out string reason))
                                 {
                                     keybinds.Add(keybind);
                                 }
@@ -171,9 +256,21 @@ namespace ArcCreate.Compose.Navigation
                     action.Whitelist.Add(GetType());
 
                     // Resolve keybinds
-                    foreach (string hotkey in editorAction.DefaultHotkeys)
+                    IEnumerable<string> actionKeybindStrings = editorAction.DefaultHotkeys;
+                    if (keybindOverrides.TryGetValue(action.FullPath, out List<string> actionKeybindOverride))
                     {
-                        if (KeybindUtils.TryParseKeybind(hotkey, action, out Keybind keybind, out string reason))
+                        actionKeybindStrings = actionKeybindOverride;
+                        Debug.Log(I18n.S("Compose.Navigation.KeybindOverride", action.FullPath));
+                    }
+
+                    foreach (string keybindString in actionKeybindStrings)
+                    {
+                        if (string.IsNullOrEmpty(keybindString))
+                        {
+                            continue;
+                        }
+
+                        if (KeybindUtils.TryParseKeybind(keybindString, action, out Keybind keybind, out string reason))
                         {
                             keybinds.Add(keybind);
                         }
@@ -188,8 +285,63 @@ namespace ArcCreate.Compose.Navigation
             }
         }
 
+        private void RegisterCompositeActions(Dictionary<string, List<string>> keybindActions)
+        {
+            foreach (KeyValuePair<string, List<string>> pair in keybindActions)
+            {
+                string keybindString = pair.Key;
+                List<string> actionPaths = pair.Value;
+
+                List<IAction> actions = new List<IAction>();
+                bool valid = true;
+                foreach (string actionPath in actionPaths)
+                {
+                    bool found = false;
+                    foreach (IAction registeredAction in allActions)
+                    {
+                        if (registeredAction.FullPath == actionPath)
+                        {
+                            actions.Add(registeredAction);
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        Debug.LogWarning(I18n.S("Compose.Exception.Navigation.InvalidActionPath", actionPath));
+                        valid = false;
+                        break;
+                    }
+                }
+
+                if (valid)
+                {
+                    CompositeAction action = new CompositeAction(keybindString, actions);
+
+                    if (string.IsNullOrEmpty(keybindString))
+                    {
+                        continue;
+                    }
+
+                    if (KeybindUtils.TryParseKeybind(keybindString, action, out Keybind keybind, out string reason))
+                    {
+                        keybinds.Add(keybind);
+                    }
+                    else
+                    {
+                        Debug.LogWarning(reason);
+                    }
+                }
+            }
+        }
+
         private async UniTask ExecuteActionTask(EditorAction action)
         {
+            // Ensure all keybinds that can trigger will do so first before resetting the rest
+            await UniTask.WaitForEndOfFrame(this);
+            CancelOngoingKeybinds();
+
             actionsInProgress.Add(action);
 
             // This causes boxing but what else can you do
@@ -200,6 +352,26 @@ namespace ArcCreate.Compose.Navigation
             }
 
             actionsInProgress.Remove(action);
+        }
+
+        private async UniTask ExecuteActionListTask(List<IAction> actions)
+        {
+            foreach (IAction action in actions)
+            {
+                if (!ShouldExecute(action))
+                {
+                    return;
+                }
+
+                if (action is EditorAction editorAction)
+                {
+                    await ExecuteActionTask(editorAction);
+                }
+                else
+                {
+                    action.Execute();
+                }
+            }
         }
     }
 }
