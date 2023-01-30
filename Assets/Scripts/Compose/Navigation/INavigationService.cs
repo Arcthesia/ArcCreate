@@ -17,6 +17,12 @@ namespace ArcCreate.Compose.Navigation
         void StartAction(string path);
 
         /// <summary>
+        /// Starts a sequence of action, and make sure an action only starts after the previous has finished.
+        /// </summary>
+        /// <param name="actions">The actions to start in sequence.</param>
+        void StartActionsInSequence(List<IAction> actions);
+
+        /// <summary>
         /// Whether or not the action should be executed.
         /// </summary>
         /// <param name="action">The action to check.</param>

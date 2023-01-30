@@ -26,7 +26,7 @@ Additionally, no textures are included within the repository as of currently to 
 - [x] Project skin settings
 - [ ] Note editing
 - [x] Timing, camera editing
-- [ ] Custom hotkeys configuration
+- [x] Custom hotkeys configuration
 - [ ] FFmpeg rendering support
 - [ ] Lua macro support
 - [ ] Lua scenecontrol editing & compiling
