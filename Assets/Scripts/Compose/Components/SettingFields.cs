@@ -1,3 +1,4 @@
+using System;
 using ArcCreate.Gameplay;
 using ArcCreate.Utility.Parser;
 using TMPro;
@@ -11,17 +12,21 @@ namespace ArcCreate.Compose.Components
         [SerializeField] private TMP_InputField speedField;
         [SerializeField] private TMP_InputField densityField;
         [SerializeField] private TMP_InputField groupField;
+        [SerializeField] private TMP_Dropdown inputModeDropdown;
 
         private void Awake()
         {
             speedField.onEndEdit.AddListener(OnSpeedField);
             densityField.onEndEdit.AddListener(OnDensityField);
             groupField.onEndEdit.AddListener(OnGroupField);
+            inputModeDropdown.onValueChanged.AddListener(OnInputModeDropdown);
 
             Settings.DropRate.OnValueChanged.AddListener(OnSettingDropRate);
+            Settings.InputMode.OnValueChanged.AddListener(OnSettingInputMode);
             Values.EditingTimingGroup.OnValueChange += OnGroup;
 
             speedField.text = (Settings.DropRate.Value / Values.DropRateScalar).ToString();
+            inputModeDropdown.value = Settings.InputMode.Value;
         }
 
         private void OnDestroy()
@@ -29,9 +34,21 @@ namespace ArcCreate.Compose.Components
             speedField.onEndEdit.RemoveListener(OnSpeedField);
             densityField.onEndEdit.RemoveListener(OnDensityField);
             groupField.onEndEdit.RemoveListener(OnGroupField);
+            inputModeDropdown.onValueChanged.RemoveListener(OnInputModeDropdown);
 
             Settings.DropRate.OnValueChanged.RemoveListener(OnSettingDropRate);
+            Settings.InputMode.OnValueChanged.RemoveListener(OnSettingInputMode);
             Values.EditingTimingGroup.OnValueChange -= OnGroup;
+        }
+
+        private void OnInputModeDropdown(int mode)
+        {
+            Settings.InputMode.Value = mode;
+        }
+
+        private void OnSettingInputMode(int mode)
+        {
+            inputModeDropdown.SetValueWithoutNotify(mode);
         }
 
         private void OnSettingDropRate(int dropRate)

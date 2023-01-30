@@ -323,7 +323,8 @@ namespace ArcCreate.Gameplay.Particle
 
         private Vector2 ConvertToScreen(Vector3 world)
         {
-            return gameplayCamera.WorldToScreenPoint(world);
+            Vector2 viewport = gameplayCamera.WorldToViewportPoint(world);
+            return new Vector2(viewport.x * gameplayCamera.pixelWidth, viewport.y * gameplayCamera.pixelHeight);
         }
     }
 }

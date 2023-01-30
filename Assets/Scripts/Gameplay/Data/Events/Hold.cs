@@ -242,15 +242,18 @@ namespace ArcCreate.Gameplay.Data
                 PlayParticle(JudgementResult.Max);
             }
 
-            Services.InputFeedback.LaneFeedback(Lane);
             if (currentTiming <= EndTiming)
             {
+                Services.InputFeedback.LaneFeedback(Lane);
                 Services.Particle.PlayLongParticle(this, new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0));
             }
 
             highlightUntil = currentTiming + Values.HoldHighlightPersistDuration;
-            RequestHoldJudgement(currentTiming);
-            holdJudgementRequestSent = true;
+            if (currentTiming <= EndTiming + Values.HoldLostLateJudgeWindow)
+            {
+                RequestHoldJudgement(currentTiming);
+                holdJudgementRequestSent = true;
+            }
         }
     }
 }

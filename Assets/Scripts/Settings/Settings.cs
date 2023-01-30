@@ -2,7 +2,7 @@
 
 namespace ArcCreate
 {
-    public class Settings : MonoBehaviour
+    public static class Settings
     {
         public static readonly IntSetting GlobalAudioOffset = new IntSetting("GlobalAudioOffset", 0);
         public static readonly IntSetting Framerate = new IntSetting("Framerate", 60);
@@ -10,6 +10,7 @@ namespace ArcCreate
         public static readonly BoolSetting ShowFPSCounter = new BoolSetting("ShowFrameCounter", false);
         public static readonly BoolSetting AudioSync = new BoolSetting("AudioSync", false);
         public static readonly BoolSetting EditorAuto = new BoolSetting("Auto", true);
+        public static readonly IntSetting ViewportAspectRatioSetting = new IntSetting("ViewportAspectRatioSetting", 0);
         public static readonly IntSetting DropRate = new IntSetting("DropRate", 300);
         public static readonly FloatSetting CameraSensitivity = new FloatSetting("CameraSensitivity", 10);
         public static readonly IntSetting ChartSortMode = new IntSetting("ChartSortMode", 0);
@@ -45,22 +46,18 @@ namespace ArcCreate
                 Application.platform == RuntimePlatform.LinuxPlayer
                 || Application.platform == RuntimePlatform.LinuxEditor ? -0.2f : 0.2f);
 
-        private void Awake()
+        [RuntimeInitializeOnLoadMethod]
+        public static void OnInitialize()
         {
-            DontDestroyOnLoad(this);
             Framerate.OnValueChanged.AddListener((value) => Application.targetFrameRate = value);
             Application.targetFrameRate = Framerate.Value;
 
             VSync.OnValueChanged.AddListener((value) => QualitySettings.vSyncCount = value);
             QualitySettings.vSyncCount = VSync.Value;
+            Application.quitting += OnApplicationQuit;
         }
 
-        private void OnDestroy()
-        {
-            PlayerPrefs.Save();
-        }
-
-        private void OnApplicationQuit()
+        private static void OnApplicationQuit()
         {
             PlayerPrefs.Save();
         }

@@ -241,7 +241,6 @@ Compose:
     Timeline:
       Label:
         Offset: Offset
-        Speed: Speed
         TimingGroup: Group
         Density: Density
     EventsEditor:
@@ -264,9 +263,12 @@ Compose:
         Timing: Timing
         Camera: Camera
         Scenecontrol: Scene
-    Navigation:
+    Settings:
       Label:
         ReloadKeybinds: Reload keybinds
+        Speed: Speed
+        AspectRatio: Aspect Ratio
+        
 
 Gameplay:
   Exception:

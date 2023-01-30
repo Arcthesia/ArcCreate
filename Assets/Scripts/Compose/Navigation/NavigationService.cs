@@ -48,24 +48,28 @@ namespace ArcCreate.Compose.Navigation
                 {
                     YamlStream yaml = new YamlStream();
                     yaml.Load(new StreamReader(stream));
-                    var mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
 
-                    foreach (KeyValuePair<YamlNode, YamlNode> child in mapping.Children)
+                    if (yaml.Documents.Count >= 1)
                     {
-                        string nodeKey = (child.Key as YamlScalarNode).Value;
-                        YamlNode val = child.Value;
-                        if (!(val is YamlMappingNode valueNode))
-                        {
-                            continue;
-                        }
+                        var mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
 
-                        if (nodeKey == "Override")
+                        foreach (KeyValuePair<YamlNode, YamlNode> child in mapping.Children)
                         {
-                            YamlExtractor.ExtractListsTo(keybindOverrides, valueNode, "");
-                        }
-                        else if (nodeKey == "Action")
-                        {
-                            YamlExtractor.ExtractListsTo(keybindActions, valueNode, "");
+                            string nodeKey = (child.Key as YamlScalarNode).Value;
+                            YamlNode val = child.Value;
+                            if (!(val is YamlMappingNode valueNode))
+                            {
+                                continue;
+                            }
+
+                            if (nodeKey == "Override")
+                            {
+                                YamlExtractor.ExtractListsTo(keybindOverrides, valueNode, "");
+                            }
+                            else if (nodeKey == "Action")
+                            {
+                                YamlExtractor.ExtractListsTo(keybindActions, valueNode, "");
+                            }
                         }
                     }
                 }
