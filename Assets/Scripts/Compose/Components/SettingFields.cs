@@ -24,9 +24,11 @@ namespace ArcCreate.Compose.Components
             Settings.DropRate.OnValueChanged.AddListener(OnSettingDropRate);
             Settings.InputMode.OnValueChanged.AddListener(OnSettingInputMode);
             Values.EditingTimingGroup.OnValueChange += OnGroup;
+            Values.BeatlineDensity.OnValueChange += OnDensity;
 
             speedField.text = (Settings.DropRate.Value / Values.DropRateScalar).ToString();
             inputModeDropdown.value = Settings.InputMode.Value;
+            densityField.SetTextWithoutNotify(Values.BeatlineDensity.Value.ToString());
         }
 
         private void OnDestroy()
@@ -39,6 +41,12 @@ namespace ArcCreate.Compose.Components
             Settings.DropRate.OnValueChanged.RemoveListener(OnSettingDropRate);
             Settings.InputMode.OnValueChanged.RemoveListener(OnSettingInputMode);
             Values.EditingTimingGroup.OnValueChange -= OnGroup;
+            Values.BeatlineDensity.OnValueChange -= OnDensity;
+        }
+
+        private void OnDensity(float density)
+        {
+            densityField.SetTextWithoutNotify(Values.BeatlineDensity.Value.ToString());
         }
 
         private void OnInputModeDropdown(int mode)
@@ -74,8 +82,10 @@ namespace ArcCreate.Compose.Components
             // if there's ever a command interface then this will be moved there
             EasterEggs.TryTrigger(value);
 
-            // TODO: Implement density grid lol
-            densityField.text = "4";
+            if (Evaluator.TryFloat(value, out float density))
+            {
+                Values.BeatlineDensity.Value = density;
+            }
         }
 
         private void OnGroupField(string value)

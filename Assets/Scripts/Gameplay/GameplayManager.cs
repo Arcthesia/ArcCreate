@@ -120,6 +120,7 @@ namespace ArcCreate.Gameplay
             Services.Score.UpdateDisplay(currentTiming);
             Services.Camera.UpdateCamera(currentTiming);
             Services.Scenecontrol.UpdateScenecontrol(currentTiming);
+            gameplayData.NotifyUpdate(currentTiming);
         }
     }
 }

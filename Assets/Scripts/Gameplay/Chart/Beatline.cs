@@ -4,24 +4,28 @@ namespace ArcCreate.Gameplay.Chart
 {
     public class Beatline
     {
-        private Transform instance;
+        private BeatlineBehaviour instance;
         private readonly double floorPosition;
+        private readonly float thickness;
+        private readonly Color color;
 
-        public Beatline(double floorPosition)
+        public Beatline(double floorPosition, float thickness, Color color)
         {
             this.floorPosition = floorPosition;
+            this.color = color;
+            this.thickness = thickness;
         }
 
         public bool IsAssignedInstance => instance != null;
 
         public double FloorPosition => floorPosition;
 
-        public void AssignInstance(Transform transform)
+        public void AssignInstance(BeatlineBehaviour behaviour)
         {
-            instance = transform;
+            instance = behaviour;
         }
 
-        public Transform RevokeInstance()
+        public BeatlineBehaviour RevokeInstance()
         {
             var result = instance;
             instance = null;
@@ -33,12 +37,14 @@ namespace ArcCreate.Gameplay.Chart
             if (instance != null)
             {
                 float z = ArcFormula.FloorPositionToZ(FloorPosition - floorPosition);
-                instance.localPosition = new Vector3(0, 0, z);
-                instance.localScale = new Vector3(
-                    instance.localScale.x,
-                    ArcFormula.CalculateBeatlineSizeScalar(z),
+                instance.transform.localPosition = new Vector3(0, 0, z);
+                instance.transform.localScale = new Vector3(
+                    instance.transform.localScale.x,
+                    ArcFormula.CalculateBeatlineSizeScalar(thickness, z),
                     1);
             }
+
+            instance.SetColor(color);
         }
     }
 }

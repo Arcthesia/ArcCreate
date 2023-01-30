@@ -6,6 +6,16 @@ namespace ArcCreate
     {
         private T value;
 
+        public State()
+        {
+            value = default;
+        }
+
+        public State(T defaultValue)
+        {
+            value = defaultValue;
+        }
+
         public event Action<T> OnValueChange;
 
         public T Value

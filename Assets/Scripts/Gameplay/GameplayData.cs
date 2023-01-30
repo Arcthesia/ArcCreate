@@ -24,6 +24,8 @@ namespace ArcCreate.Gameplay
 
         public event Action OnChartEdit;
 
+        public event Action<int> OnGameplayUpdate;
+
 #pragma warning disable
         /// <summary>
         /// The background sprite.
@@ -193,6 +195,11 @@ namespace ArcCreate.Gameplay
         internal void NotifyChartEdit()
         {
             OnChartEdit?.Invoke();
+        }
+
+        internal void NotifyUpdate(int currentTiming)
+        {
+            OnGameplayUpdate?.Invoke(currentTiming);
         }
 
         private async UniTask StartLoadingAudio(string path)
