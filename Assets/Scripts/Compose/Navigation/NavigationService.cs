@@ -167,6 +167,12 @@ namespace ArcCreate.Compose.Navigation
         private void OnDestroy()
         {
             reloadHotkeysButton.onClick.RemoveListener(ReloadHotkeys);
+            foreach (var keybind in keybinds)
+            {
+                keybind.Destroy();
+            }
+
+            keybinds.Clear();
         }
 
         private void RegisterMethods(Dictionary<string, List<string>> keybindOverrides)

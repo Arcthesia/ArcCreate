@@ -37,7 +37,7 @@ namespace ArcCreate.Gameplay.Data
 
             int duration = EndTiming - Timing;
             bpm = Mathf.Abs(bpm);
-            int rawIncrement = (int)Mathf.Abs((bpm >= 255 ? 60_000f : 30_000f) / bpm);
+            int rawIncrement = (int)Mathf.Abs((bpm >= 255 ? 60_000f : 30_000f) / bpm / Values.TimingPointDensity);
             timeIncrement = Mathf.Max(1, rawIncrement);
 
             totalCombo = Mathf.Max(1, (duration / timeIncrement) - 1);
@@ -89,6 +89,7 @@ namespace ArcCreate.Gameplay.Data
 
         protected void ResetJudgeTimings()
         {
+            RecalculateJudgeTimings();
             currentJudgeTime = firstJudgeTime;
         }
     }

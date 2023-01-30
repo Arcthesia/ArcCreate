@@ -1,11 +1,9 @@
-using System;
 using ArcCreate.Compose.Popups;
 using ArcCreate.Gameplay;
 using ArcCreate.SceneTransition;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 namespace ArcCreate.Compose
 {
