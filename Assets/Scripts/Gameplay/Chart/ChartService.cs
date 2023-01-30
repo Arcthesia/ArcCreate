@@ -18,6 +18,7 @@ namespace ArcCreate.Gameplay.Chart
         [SerializeField] private GameObject arcTapPrefab;
         [SerializeField] private GameObject connectionLinePrefab;
         [SerializeField] private GameObject beatlinePrefab;
+        [SerializeField] private Color beatlineColor;
         [SerializeField] private GameObject timingGroupPrefab;
 
         [Header("Capacity")]
@@ -30,7 +31,7 @@ namespace ArcCreate.Gameplay.Chart
         [SerializeField] private int beatlineCapacity;
 
         private readonly List<TimingGroup> timingGroups = new List<TimingGroup>();
-        private readonly BeatlineDisplay beatlineDisplay = new BeatlineDisplay();
+        private BeatlineDisplay beatlineDisplay;
 
         public bool IsLoaded { get; private set; }
 
@@ -218,7 +219,7 @@ namespace ArcCreate.Gameplay.Chart
 
         public void ReloadBeatline()
         {
-            beatlineDisplay.LoadFromTimingList();
+            beatlineDisplay.LoadFromTimingList(0);
         }
 
         public void AddEvents(IEnumerable<ArcEvent> e)
@@ -384,12 +385,13 @@ namespace ArcCreate.Gameplay.Chart
             Pools.New<ArcTapBehaviour>(Values.ArcTapPoolName, arcTapPrefab, transform, arcTapCapacity);
             Pools.New<ArcSegment>(Values.ArcSegmentPoolName, arcSegmentPrefab, transform, arcSegmentCapacity);
             Pools.New<LineRenderer>(Values.ConnectonLinePoolName, connectionLinePrefab, transform, connectionLineCapacity);
-            Pools.New<Transform>(Values.BeatlinePoolName, beatlinePrefab, transform, beatlineCapacity);
+            var beatlinePool = Pools.New<BeatlineBehaviour>(Values.BeatlinePoolName, beatlinePrefab, transform, beatlineCapacity);
 
             Settings.GlobalAudioOffset.OnValueChanged.AddListener(OnGlobalOffsetChange);
             gameplayData.BaseBpm.OnValueChange += OnBaseBpm;
             gameplayData.TimingPointDensityFactor.OnValueChange += OnTimingPointDensityFactor;
             gameplayData.AudioOffset.OnValueChange += OnChartAudioOffset;
+            beatlineDisplay = new BeatlineDisplay(new GameplayBeatlineGenerator(beatlineColor), beatlinePool);
         }
 
         private void OnDestroy()
@@ -400,7 +402,7 @@ namespace ArcCreate.Gameplay.Chart
             Pools.Destroy<ArcTapBehaviour>(Values.ArcTapPoolName);
             Pools.Destroy<ArcSegment>(Values.ArcSegmentPoolName);
             Pools.Destroy<LineRenderer>(Values.ConnectonLinePoolName);
-            Pools.Destroy<Transform>(Values.BeatlinePoolName);
+            Pools.Destroy<BeatlineBehaviour>(Values.BeatlinePoolName);
 
             Settings.GlobalAudioOffset.OnValueChanged.RemoveListener(OnGlobalOffsetChange);
             gameplayData.BaseBpm.OnValueChange -= OnBaseBpm;

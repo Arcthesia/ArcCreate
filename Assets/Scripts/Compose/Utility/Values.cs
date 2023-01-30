@@ -3,6 +3,7 @@ namespace ArcCreate.Compose
     public static class Values
     {
         public const float DropRateScalar = 60;
+        public const float EditorBeatlineThickness = 30f;
 
         // Extensions
         public const string ProjectExtension = ".arcproj";
@@ -27,8 +28,11 @@ namespace ArcCreate.Compose
 
         // Pools
         public const string TickPoolName = "TickPool";
+        public const string BeatlinePoolName = "EditorBeatlinePool";
 
         public static State<int> EditingTimingGroup { get; } = new State<int>();
+
+        public static State<float> BeatlineDensity { get; } = new State<float>(4);
 
         public static State<bool> FullScreen { get; } = new State<bool>();
     }

@@ -51,6 +51,7 @@ namespace ArcCreate.Gameplay
         public const float TraceCapAlpha = 0.5f;
         public const float TraceAlpha = 0.4779405f;
         public const int HoldHighlightPersistDuration = 100;
+        public const int BeatlineThickness = 20;
 
         // Judgement
         public const int MaxScore = 10_000_000;

@@ -4,7 +4,7 @@ namespace ArcCreate.Compose.Navigation
     {
         public override bool CheckRequirement()
         {
-            return Services.Gameplay.IsLoaded;
+            return Services.Gameplay?.IsLoaded ?? false;
         }
     }
 }

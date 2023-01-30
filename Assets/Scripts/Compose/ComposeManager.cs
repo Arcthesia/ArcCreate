@@ -11,8 +11,6 @@ namespace ArcCreate.Compose
 {
     public class ComposeManager : SceneRepresentative
     {
-        [SerializeField] private RawImage gameplayView;
-
         public override void OnNoBootScene()
         {
             LoadGameplayScene();
