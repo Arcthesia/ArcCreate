@@ -1,0 +1,9 @@
+Override:
+  Project:
+    New:
+    Save:
+      
+Action:
+  ":wq":
+    - "Project.Save"
+    - "Project.New"

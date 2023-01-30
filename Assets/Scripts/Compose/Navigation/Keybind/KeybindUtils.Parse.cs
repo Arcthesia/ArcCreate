@@ -72,9 +72,11 @@ namespace ArcCreate.Compose.Navigation
                     return false;
                 }
 
+                bool isShift = IsShiftedKey.Contains(keystrokeString) || char.IsUpper(keystrokeString[0]);
+
                 keystroke = new Keystroke()
                 {
-                    Modifier1 = null,
+                    Modifier1 = isShift ? "Shift" : null,
                     Modifier2 = null,
                     ActuateOnRelease = false,
                     Key = k,
