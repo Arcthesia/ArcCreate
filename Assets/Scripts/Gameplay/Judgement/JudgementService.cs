@@ -130,6 +130,7 @@ namespace ArcCreate.Gameplay.Judgement
         private void OnInputModeChange(int modeNum)
         {
             InputMode inputMode = (InputMode)modeNum;
+
             switch (inputMode)
             {
                 case InputMode.Auto:

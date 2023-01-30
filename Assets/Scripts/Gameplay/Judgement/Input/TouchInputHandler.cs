@@ -8,18 +8,18 @@ namespace ArcCreate.Gameplay.Judgement.Input
 {
     public class TouchInputHandler : IInputHandler
     {
-        private readonly List<TouchInput> currentInputs = new List<TouchInput>(10);
+        protected List<TouchInput> CurrentInputs { get; } = new List<TouchInput>(10);
 
-        public void PollInput()
+        public virtual void PollInput()
         {
             var touches = Touch.activeTouches;
-            currentInputs.Clear();
+            CurrentInputs.Clear();
             for (int i = 0; i < touches.Count; i++)
             {
                 var touch = touches[i];
 
-                TouchInput input = new TouchInput(touch, GetCameraRay(touch));
-                currentInputs.Add(input);
+                TouchInput input = new TouchInput(touch, GetCameraRay(touch.screenPosition));
+                CurrentInputs.Add(input);
 
                 Services.InputFeedback.LaneFeedback(input.Lane);
                 Services.InputFeedback.FloatlineFeedback(input.VerticalPos.y);
@@ -31,9 +31,9 @@ namespace ArcCreate.Gameplay.Judgement.Input
             UnorderedList<LaneTapJudgementRequest> laneTapRequests,
             UnorderedList<ArcTapJudgementRequest> arcTapRequests)
         {
-            for (int inpIndex = 0; inpIndex < currentInputs.Count; inpIndex++)
+            for (int inpIndex = 0; inpIndex < CurrentInputs.Count; inpIndex++)
             {
-                TouchInput input = currentInputs[inpIndex];
+                TouchInput input = CurrentInputs[inpIndex];
                 if (!input.IsTap)
                 {
                     continue;
@@ -115,9 +115,9 @@ namespace ArcCreate.Gameplay.Judgement.Input
 
         public void HandleLaneHoldRequests(int currentTiming, UnorderedList<LaneHoldJudgementRequest> requests)
         {
-            for (int inpIndex = 0; inpIndex < currentInputs.Count; inpIndex++)
+            for (int inpIndex = 0; inpIndex < CurrentInputs.Count; inpIndex++)
             {
-                TouchInput input = currentInputs[inpIndex];
+                TouchInput input = CurrentInputs[inpIndex];
 
                 for (int i = requests.Count - 1; i >= 0; i--)
                 {
@@ -196,9 +196,9 @@ namespace ArcCreate.Gameplay.Judgement.Input
             }
 
             // Process finger state change
-            for (int inpIndex = 0; inpIndex < currentInputs.Count; inpIndex++)
+            for (int inpIndex = 0; inpIndex < CurrentInputs.Count; inpIndex++)
             {
-                TouchInput input = currentInputs[inpIndex];
+                TouchInput input = CurrentInputs[inpIndex];
 
                 for (int i = requests.Count - 1; i >= 0; i--)
                 {
@@ -227,9 +227,9 @@ namespace ArcCreate.Gameplay.Judgement.Input
             }
 
             // Process requests
-            for (int inpIndex = 0; inpIndex < currentInputs.Count; inpIndex++)
+            for (int inpIndex = 0; inpIndex < CurrentInputs.Count; inpIndex++)
             {
-                TouchInput input = currentInputs[inpIndex];
+                TouchInput input = CurrentInputs[inpIndex];
 
                 for (int i = requests.Count - 1; i >= 0; i--)
                 {
@@ -253,6 +253,11 @@ namespace ArcCreate.Gameplay.Judgement.Input
         public void ResetJudge()
         {
             ArcColorLogic.ResetAll();
+        }
+
+        protected Ray GetCameraRay(Vector2 screenPosition)
+        {
+            return Services.Camera.GameplayCamera.ScreenPointToRay(screenPosition);
         }
 
         private bool ArcCollide(TouchInput touch, Arc arc, int currentTiming)
@@ -301,11 +306,6 @@ namespace ArcCreate.Gameplay.Judgement.Input
             }
 
             return false;
-        }
-
-        private Ray GetCameraRay(Touch touch)
-        {
-            return Services.Camera.GameplayCamera.ScreenPointToRay(touch.screenPosition);
         }
     }
 }

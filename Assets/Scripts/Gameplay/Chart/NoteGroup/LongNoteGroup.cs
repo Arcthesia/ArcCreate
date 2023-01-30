@@ -103,10 +103,12 @@ namespace ArcCreate.Gameplay.Chart
             int judgeTo = timing + Values.HoldLostLateJudgeWindow;
             var notesInRange = timingTree[judgeFrom, judgeTo];
 
+            int i = 0;
             while (notesInRange.MoveNext())
             {
                 var note = notesInRange.Current;
                 note.UpdateJudgement(timing, groupProperties);
+                i++;
             }
         }
 

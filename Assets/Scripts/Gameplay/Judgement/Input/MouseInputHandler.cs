@@ -1,35 +1,42 @@
-using ArcCreate.Utility;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 
 namespace ArcCreate.Gameplay.Judgement.Input
 {
-    public class MouseInputHandler : IInputHandler
+    public class MouseInputHandler : TouchInputHandler
     {
-        public void PollInput()
+        public override void PollInput()
         {
-            throw new System.NotImplementedException();
-        }
+            Mouse mouse = Mouse.current;
+            Vector2 mousePosition = mouse.position.ReadValue();
+            CurrentInputs.Clear();
 
-        public void HandleTapRequests(
-            int currentTiming,
-            UnorderedList<LaneTapJudgementRequest> laneTapRequests,
-            UnorderedList<ArcTapJudgementRequest> arcTapRequests)
-        {
-            throw new System.NotImplementedException();
-        }
+            TouchInput input;
+            bool isPressed = mouse.leftButton.isPressed;
+            if (mouse.leftButton.wasPressedThisFrame)
+            {
+                input = new TouchInput(0, mousePosition, true, TouchPhase.Began, GetCameraRay(mousePosition));
+            }
+            else if (mouse.leftButton.wasReleasedThisFrame)
+            {
+                input = new TouchInput(0, mousePosition, false, TouchPhase.Ended, GetCameraRay(mousePosition));
+            }
+            else if (mouse.leftButton.isPressed)
+            {
+                input = new TouchInput(0, mousePosition, false, TouchPhase.Moved, GetCameraRay(mousePosition));
+            }
+            else
+            {
+                return;
+            }
 
-        public void HandleArcRequests(int currentTiming, UnorderedList<ArcJudgementRequest> requests)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void HandleLaneHoldRequests(int currentTiming, UnorderedList<LaneHoldJudgementRequest> requests)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void ResetJudge()
-        {
-            throw new System.NotImplementedException();
+            CurrentInputs.Add(input);
+            if (mouse.leftButton.isPressed)
+            {
+                Services.InputFeedback.LaneFeedback(input.Lane);
+                Services.InputFeedback.FloatlineFeedback(input.VerticalPos.y);
+            }
         }
     }
 }

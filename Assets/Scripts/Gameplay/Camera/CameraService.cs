@@ -107,9 +107,10 @@ namespace ArcCreate.Gameplay.GameplayCamera
                 skyInputLabel.localPosition.z);
 
             Vector3 prevPosition = gameplayCamera.transform.localPosition;
-
             Vector3 position = ResetPosition;
             Vector3 rotation = ResetRotation;
+            gameplayCamera.fieldOfView = Is16By9 ? 50 : 65;
+
             for (int i = 0; i < events.Count; i++)
             {
                 CameraEvent cam = events[i];
