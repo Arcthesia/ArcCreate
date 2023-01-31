@@ -219,7 +219,7 @@ namespace ArcCreate.Gameplay.Chart
 
         public void ReloadBeatline()
         {
-            beatlineDisplay.LoadFromTimingList(0);
+            beatlineDisplay.LoadFromTimingGroup(0);
         }
 
         public void AddEvents(IEnumerable<ArcEvent> e)

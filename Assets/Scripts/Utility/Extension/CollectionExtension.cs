@@ -144,6 +144,40 @@ namespace ArcCreate.Utility.Extension
             return low;
         }
 
+        /// <summary>
+        /// Search for smallest index within a sorted list, whose corresponding item is greater than the provided value.
+        /// Example: for the list [0, 0, 1, 2, 2, 3], searching for 2 will return the index 5.
+        /// If the search value is greater than any item in the list, the list's count value will be returned.
+        /// If the search value is smaller than any item in the list, -1 will be returned.
+        /// </summary>
+        /// <param name="list">The list to bisect.</param>
+        /// <param name="value">The value to search for.</param>
+        /// <typeparam name="T">Type of the list.</typeparam>
+        /// <returns>The index found.</returns>
+        public static int BisectRight<T>(this IList<T> list, T value)
+            where T : IComparable<T>
+        {
+            // Copied implementation from python lol
+            int low = 0;
+            int high = list.Count;
+            int mid;
+
+            while (low < high)
+            {
+                mid = (int)((low + high) / 2);
+                if (value.CompareTo(list[mid]) < 0)
+                {
+                    high = mid;
+                }
+                else
+                {
+                    low = mid + 1;
+                }
+            }
+
+            return low;
+        }
+
         public static void SetCapacity<T>(this HashSet<T> hs, int capacity)
         {
             HashSetDelegateHolder<T>.InitializeMethod.Invoke(hs, new object[] { capacity });

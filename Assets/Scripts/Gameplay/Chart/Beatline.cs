@@ -5,16 +5,20 @@ namespace ArcCreate.Gameplay.Chart
     public class Beatline
     {
         private BeatlineBehaviour instance;
+        private readonly int timing;
         private readonly double floorPosition;
         private readonly float thickness;
         private readonly Color color;
 
-        public Beatline(double floorPosition, float thickness, Color color)
+        public Beatline(int timing, double floorPosition, float thickness, Color color)
         {
+            this.timing = timing;
             this.floorPosition = floorPosition;
             this.color = color;
             this.thickness = thickness;
         }
+
+        public int Timing => timing;
 
         public bool IsAssignedInstance => instance != null;
 

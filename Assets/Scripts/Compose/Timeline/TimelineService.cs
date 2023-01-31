@@ -98,13 +98,24 @@ namespace ArcCreate.Compose.Timeline
 
         private void Update()
         {
-            if (IsPlaying && !isWaveformDraggingThisFrame)
+            if (Services.Gameplay == null)
             {
-                timingMarker.SetTiming(Services.Gameplay.Audio.AudioTiming);
+                return;
+            }
 
-                if (shouldFocusWaveformView)
+            if (!isWaveformDraggingThisFrame)
+            {
+                int currentTiming = Services.Gameplay.Audio.AudioTiming;
+                timingMarker.SetTiming(currentTiming);
+
+                if (IsPlaying && shouldFocusWaveformView)
                 {
                     waveformDisplay.FocusOnTiming(Services.Gameplay.Audio.AudioTiming / 1000f);
+                }
+
+                if (!IsPlaying)
+                {
+                    Services.Gameplay.Audio.SetResumeAt(Services.Gameplay.Audio.AudioTiming);
                 }
             }
 

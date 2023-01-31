@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using ArcCreate.Compose.Components;
 using ArcCreate.Gameplay;
@@ -36,6 +35,7 @@ namespace ArcCreate.Compose.Project
             syncBaseBpm.isOn = chart.SyncBaseBpm;
             chartConstant.text = chart.ChartConstant.ToString();
             difficultyName.text = chart.Difficulty ?? "";
+            chartOffset.text = gameplayData.AudioOffset.Value.ToString();
 
             chart.DifficultyColor.ConvertHexToColor(out Color c);
             difficultyColor.SetValue(c);
@@ -66,7 +66,7 @@ namespace ArcCreate.Compose.Project
             chartOffset.onEndEdit.AddListener(OnChartOffset);
 
             gameplayData.TimingPointDensityFactor.OnValueChange += OnGameplayDensityFactor;
-            timingPointDensityFactor.onEndEdit.AddListener(OnDesntiyFactor);
+            timingPointDensityFactor.onEndEdit.AddListener(OnDensityFactor);
 
             for (int i = 0; i < diffColorPresets.Count; i++)
             {
@@ -93,7 +93,7 @@ namespace ArcCreate.Compose.Project
             chartOffset.onEndEdit.RemoveListener(OnChartOffset);
 
             gameplayData.TimingPointDensityFactor.OnValueChange -= OnGameplayDensityFactor;
-            timingPointDensityFactor.onEndEdit.RemoveListener(OnDesntiyFactor);
+            timingPointDensityFactor.onEndEdit.RemoveListener(OnDensityFactor);
 
             for (int i = 0; i < diffColorPresets.Count; i++)
             {
@@ -120,7 +120,7 @@ namespace ArcCreate.Compose.Project
             timingPointDensityFactor.SetTextWithoutNotify(obj.ToString());
         }
 
-        private void OnDesntiyFactor(string value)
+        private void OnDensityFactor(string value)
         {
             if (Evaluator.TryInt(value, out int factor))
             {

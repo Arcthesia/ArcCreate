@@ -40,6 +40,7 @@ namespace ArcCreate.Compose.Grid
                 {
                     Color beatlineColor = ResolveColor(count, Values.BeatlineDensity.Value);
                     yield return new Beatline(
+                        Mathf.RoundToInt(timing),
                         tg.GetFloorPosition(Mathf.RoundToInt(timing)),
                         Values.EditorBeatlineThickness,
                         beatlineColor);
@@ -64,6 +65,7 @@ namespace ArcCreate.Compose.Grid
                     {
                         Color beatlineColor = ResolveColor(count, Values.BeatlineDensity.Value);
                         yield return new Beatline(
+                            Mathf.RoundToInt(timing),
                             tg.GetFloorPosition(Mathf.RoundToInt(timing)),
                             Values.EditorBeatlineThickness,
                             beatlineColor);

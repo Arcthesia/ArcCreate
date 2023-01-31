@@ -142,6 +142,9 @@ Compose:
         Name: Camera
         FreeCamera:
           Name: Start free camera
+      Grid:
+        Name: Grid
+        Toggle: Toggle grid
   UI:
     Common:
       Confirm: Confirm

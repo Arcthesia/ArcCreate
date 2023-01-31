@@ -2,5 +2,27 @@ namespace ArcCreate.Compose.Grid
 {
     public interface IGridService
     {
+        bool IsGridEnabled { get; set; }
+
+        /// <summary>
+        /// Snap a timing value to a timing point on the timing grid.
+        /// </summary>
+        /// <param name="sourceTiming">The base timing point.</param>
+        /// <returns>The closest timing point on the grid.</returns>
+        int SnapTimingToGrid(int sourceTiming);
+
+        /// <summary>
+        /// Move backward on the timing grid from a timing point.
+        /// </summary>
+        /// <param name="sourceTiming">The base timing point.</param>
+        /// <returns>The largest timing point on the grid that's smaller than the passed in value.</returns>
+        int MoveTimingBackward(int sourceTiming);
+
+        /// <summary>
+        /// Move forward on the timing grid from a timing point.
+        /// </summary>
+        /// <param name="sourceTiming">The base timing point.</param>
+        /// <returns>The smallest timing point on the grid that's larger than the passed in value.</returns>
+        int MoveTimingForward(int sourceTiming);
     }
 }
