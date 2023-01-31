@@ -16,12 +16,14 @@ namespace ArcCreate.Gameplay.Chart
             this.beatlinePool = beatlinePool;
         }
 
-        public void LoadFromTimingList(int tgNum)
+        public List<Beatline> LoadFromTimingGroup(int tgNum)
         {
             beatlinePool?.ReturnAll();
             TimingGroup tg = Services.Chart.GetTimingGroup(tgNum);
             List<Beatline> beatlines = new List<Beatline>(generator.Generate(tg));
             floorPositionSearch = new CachedBisect<Beatline, double>(beatlines, x => x.FloorPosition);
+
+            return beatlines;
         }
 
         public void UpdateBeatlines(double floorPosition)

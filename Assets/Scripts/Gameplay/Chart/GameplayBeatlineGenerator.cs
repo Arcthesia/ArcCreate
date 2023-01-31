@@ -33,6 +33,7 @@ namespace ArcCreate.Gameplay.Chart
                     for (float timing = 0; timing >= start; timing -= distanceBetweenTwoLine)
                     {
                         yield return new Beatline(
+                            Mathf.RoundToInt(timing),
                             tg.GetFloorPosition(Mathf.RoundToInt(timing)),
                             Values.BeatlineThickness,
                             beatlineColor);
@@ -58,6 +59,7 @@ namespace ArcCreate.Gameplay.Chart
                 for (float timing = currentTiming.Timing; timing < limit; timing += distanceBetweenTwoLine)
                 {
                     yield return new Beatline(
+                        Mathf.RoundToInt(timing),
                         tg.GetFloorPosition(Mathf.RoundToInt(timing)),
                         Values.BeatlineThickness,
                         beatlineColor);
@@ -79,6 +81,7 @@ namespace ArcCreate.Gameplay.Chart
                     for (float timing = lastTiming.Timing; timing < limit; timing += distanceBetweenTwoLine)
                     {
                         yield return new Beatline(
+                            Mathf.RoundToInt(timing),
                             tg.GetFloorPosition(Mathf.RoundToInt(timing)),
                             Values.BeatlineThickness,
                             beatlineColor);

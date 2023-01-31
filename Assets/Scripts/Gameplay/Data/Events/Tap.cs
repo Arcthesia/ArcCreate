@@ -52,6 +52,10 @@ namespace ArcCreate.Gameplay.Data
         public void ResetJudge()
         {
             judgementRequestSent = false;
+            if (instance != null)
+            {
+                instance.gameObject.SetActive(true);
+            }
         }
 
         public void Rebuild()

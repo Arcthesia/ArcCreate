@@ -44,7 +44,9 @@ namespace ArcCreate
             new FloatSetting(
                 "ScrollSensitivity.Timeline",
                 Application.platform == RuntimePlatform.LinuxPlayer
-                || Application.platform == RuntimePlatform.LinuxEditor ? -0.2f : 0.2f);
+                || Application.platform == RuntimePlatform.LinuxEditor ? -1f : 1f);
+
+        public static readonly IntSetting TimingScrollMaxMovement = new IntSetting("ScrollSensitivity.MaxTiming", 200);
 
         [RuntimeInitializeOnLoadMethod]
         public static void OnInitialize()
@@ -59,7 +61,10 @@ namespace ArcCreate
 
         private static void OnApplicationQuit()
         {
-            PlayerPrefs.Save();
+            if (!Application.isEditor)
+            {
+                PlayerPrefs.Save();
+            }
         }
     }
 }
