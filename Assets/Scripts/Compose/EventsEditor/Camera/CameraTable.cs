@@ -235,7 +235,7 @@ namespace ArcCreate.Compose.EventsEditor
             base.Awake();
             Values.EditingTimingGroup.OnValueChange += OnEdittingTimingGroup;
             gameplayData.OnChartFileLoad += OnChart;
-            gameplayData.OnChartEdit += OnChartEdit;
+            gameplayData.OnChartCameraEdit += OnChartEdit;
             addButton.onClick.AddListener(OnAddButton);
             removeButton.onClick.AddListener(OnRemoveButton);
             freeCameraButton.onClick.AddListener(OnFreeCameraButton);
@@ -247,7 +247,7 @@ namespace ArcCreate.Compose.EventsEditor
             base.OnDestroy();
             Values.EditingTimingGroup.OnValueChange -= OnEdittingTimingGroup;
             gameplayData.OnChartFileLoad -= OnChart;
-            gameplayData.OnChartEdit -= OnChartEdit;
+            gameplayData.OnChartCameraEdit -= OnChartEdit;
             addButton.onClick.RemoveListener(OnAddButton);
             removeButton.onClick.RemoveListener(OnRemoveButton);
             freeCameraButton.onClick.RemoveListener(OnFreeCameraButton);

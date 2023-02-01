@@ -238,11 +238,18 @@ namespace ArcCreate.Gameplay.Chart
             if (cameraEvents.Any())
             {
                 Services.Camera.Add(cameraEvents);
+                gameplayData.NotifyChartCameraEdit();
             }
 
             if (scEvents.Any())
             {
                 Services.Scenecontrol.Add(scEvents);
+                gameplayData.NotifyChartScenecontrolEdit();
+            }
+
+            if (e.Any(n => n is TimingEvent))
+            {
+                gameplayData.NotifyChartTimingEdit();
             }
 
             for (int i = 0; i < timingGroups.Count; i++)
@@ -262,11 +269,18 @@ namespace ArcCreate.Gameplay.Chart
             if (cameraEvents.Any())
             {
                 Services.Camera.Remove(cameraEvents);
+                gameplayData.NotifyChartCameraEdit();
             }
 
             if (scEvents.Any())
             {
                 Services.Scenecontrol.Remove(scEvents);
+                gameplayData.NotifyChartScenecontrolEdit();
+            }
+
+            if (e.Any(n => n is TimingEvent))
+            {
+                gameplayData.NotifyChartTimingEdit();
             }
 
             for (int i = 0; i < timingGroups.Count; i++)
@@ -286,11 +300,18 @@ namespace ArcCreate.Gameplay.Chart
             if (cameraEvents.Any())
             {
                 Services.Camera.Change(cameraEvents);
+                gameplayData.NotifyChartCameraEdit();
             }
 
             if (scEvents.Any())
             {
                 Services.Scenecontrol.Change(scEvents);
+                gameplayData.NotifyChartScenecontrolEdit();
+            }
+
+            if (e.Any(n => n is TimingEvent))
+            {
+                gameplayData.NotifyChartTimingEdit();
             }
 
             List<ArcEvent> tgChanged = e.Where(n => n.TimingGroupChanged).ToList();

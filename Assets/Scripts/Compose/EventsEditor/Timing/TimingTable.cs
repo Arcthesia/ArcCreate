@@ -53,7 +53,7 @@ namespace ArcCreate.Compose.EventsEditor
             base.Awake();
             Values.EditingTimingGroup.OnValueChange += OnEdittingTimingGroup;
             gameplayData.OnChartFileLoad += OnChart;
-            gameplayData.OnChartEdit += OnChartEdit;
+            gameplayData.OnChartTimingEdit += OnChartEdit;
             addButton.onClick.AddListener(OnAddButton);
             removeButton.onClick.AddListener(OnRemoveButton);
             marker.OnDragDebounced += OnMarker;
@@ -64,7 +64,7 @@ namespace ArcCreate.Compose.EventsEditor
             base.OnDestroy();
             Values.EditingTimingGroup.OnValueChange -= OnEdittingTimingGroup;
             gameplayData.OnChartFileLoad -= OnChart;
-            gameplayData.OnChartEdit -= OnChartEdit;
+            gameplayData.OnChartTimingEdit -= OnChartEdit;
             addButton.onClick.RemoveListener(OnAddButton);
             removeButton.onClick.RemoveListener(OnRemoveButton);
             marker.OnDragDebounced -= OnMarker;
