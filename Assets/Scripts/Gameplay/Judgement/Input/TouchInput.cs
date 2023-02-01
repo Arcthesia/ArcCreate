@@ -19,11 +19,6 @@ namespace ArcCreate.Gameplay.Judgement.Input
             IsTap = touch.began;
             Phase = touch.phase;
 
-            if (Phase == UnityEngine.InputSystem.TouchPhase.Ended)
-            {
-                UnityEngine.Debug.Log("ENDED");
-            }
-
             (int lane, float vx, float vy) = Projection.CastRayOntoPlayfield(cameraRay);
             VerticalPos = new Vector3(vx, vy);
             Lane = lane;

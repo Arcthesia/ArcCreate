@@ -68,7 +68,7 @@ namespace ArcCreate.Gameplay.Data
 
         public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)
         {
-            if (!judgementRequestSent)
+            if (!judgementRequestSent && currentTiming <= Timing)
             {
                 RequestJudgement();
                 judgementRequestSent = true;

@@ -8,8 +8,8 @@ namespace ArcCreate.Gameplay.Judgement
         /// <summary>
         /// Called when a judgement was processed by input handler.
         /// </summary>
-        /// <param name="offset">Offset of judgement from auto timing.
-        /// Positive is late, negative is early.</param>
-        void ProcessArcJudgement(int offset);
+        /// <param name="isExpired">Whether the judgement request was expired.</param>
+        /// <param name="isJudgement">Relayed from <see cref="ArcJudgementRequest.IsJudgement"/>.</param>
+        void ProcessArcJudgement(bool isExpired, bool isJudgement);
     }
 }
