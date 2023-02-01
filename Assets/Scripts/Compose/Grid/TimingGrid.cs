@@ -74,7 +74,7 @@ namespace ArcCreate.Compose.Grid
             Values.EditingTimingGroup.OnValueChange += OnEditingTimingGroupChanged;
             Values.BeatlineDensity.OnValueChange += OnBeatlineDensityChanged;
             gameplayData.OnChartFileLoad += OnChartChange;
-            gameplayData.OnChartEdit += OnChartChange;
+            gameplayData.OnChartTimingEdit += OnChartChange;
             gameplayData.OnGameplayUpdate += UpdateBeatlines;
         }
 
@@ -83,7 +83,7 @@ namespace ArcCreate.Compose.Grid
             Pools.Destroy<BeatlineBehaviour>(Values.BeatlinePoolName);
             Values.EditingTimingGroup.OnValueChange -= OnEditingTimingGroupChanged;
             gameplayData.OnChartFileLoad -= OnChartChange;
-            gameplayData.OnChartEdit -= OnChartChange;
+            gameplayData.OnChartTimingEdit -= OnChartChange;
         }
 
         private void UpdateBeatlines(int currentTiming)

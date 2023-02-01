@@ -88,14 +88,14 @@ namespace ArcCreate.Compose.EventsEditor
                 {
                     TimingEvent newValue = new TimingEvent()
                     {
-                        Timing = timing == 0 ? 1 : timing,
+                        Timing = Reference.Timing == 0 ? 0 : (timing == 0 ? 1 : timing),
                         Bpm = bpm,
                         Divisor = divisor,
                         TimingGroup = Reference.TimingGroup,
                     };
 
                     Services.History.AddCommand(new EventCommand(
-                        name: I18n.S("Compose.Notify.History.History.EditTiming"),
+                        name: I18n.S("Compose.Notify.History.EditTiming"),
                         update: new List<(ArcEvent instance, ArcEvent newValue)> { (Reference, newValue) }));
 
                     ((TimingTable)Table).Rebuild();

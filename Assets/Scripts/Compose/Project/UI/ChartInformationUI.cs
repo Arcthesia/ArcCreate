@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using ArcCreate.Compose.Components;
 using ArcCreate.Gameplay;
+using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Extension;
 using ArcCreate.Utility.Parser;
 using TMPro;
@@ -68,6 +70,9 @@ namespace ArcCreate.Compose.Project
             gameplayData.TimingPointDensityFactor.OnValueChange += OnGameplayDensityFactor;
             timingPointDensityFactor.onEndEdit.AddListener(OnDensityFactor);
 
+            gameplayData.OnChartTimingEdit += OnChartTimingEdit;
+            gameplayData.BaseBpm.OnValueChange += OnGameplayBaseBpm;
+
             for (int i = 0; i < diffColorPresets.Count; i++)
             {
                 Button btn = diffColorPresets[i];
@@ -94,6 +99,9 @@ namespace ArcCreate.Compose.Project
 
             gameplayData.TimingPointDensityFactor.OnValueChange -= OnGameplayDensityFactor;
             timingPointDensityFactor.onEndEdit.RemoveListener(OnDensityFactor);
+
+            gameplayData.OnChartTimingEdit -= OnChartTimingEdit;
+            gameplayData.BaseBpm.OnValueChange -= OnGameplayBaseBpm;
 
             for (int i = 0; i < diffColorPresets.Count; i++)
             {
@@ -170,6 +178,17 @@ namespace ArcCreate.Compose.Project
             gameplayData.Charter.Value = value;
         }
 
+        private void OnGameplayBaseBpm(float bpm)
+        {
+            Target.BaseBpm = bpm;
+            baseBpm.SetTextWithoutNotify(bpm.ToString());
+
+            if (Target.SyncBaseBpm)
+            {
+                MirrorBaseBpmToTimingList();
+            }
+        }
+
         private void OnBaseBpm(string value)
         {
             if (Evaluator.TryFloat(value, out float bpm))
@@ -187,6 +206,11 @@ namespace ArcCreate.Compose.Project
         private void OnSyncBaseBPM(bool value)
         {
             Target.SyncBaseBpm = value;
+
+            if (value)
+            {
+                MirrorBaseBpmToTimingList();
+            }
         }
 
         private void OnChartConstant(string value)
@@ -237,6 +261,29 @@ namespace ArcCreate.Compose.Project
             Color c = Services.Project.DefaultDifficultyColors[index];
             OnDifficultyColor(c);
             difficultyColor.SetValueWithoutNotify(c);
+        }
+
+        private void OnChartTimingEdit()
+        {
+            if (Target.SyncBaseBpm)
+            {
+                var baseGroup = Services.Gameplay.Chart.GetTimingGroup(0);
+                var baseTiming = baseGroup.Timings[0];
+                gameplayData.BaseBpm.Value = baseTiming.Bpm;
+            }
+        }
+
+        private void MirrorBaseBpmToTimingList()
+        {
+            float bpm = Target.BaseBpm;
+
+            var baseGroup = Services.Gameplay.Chart.GetTimingGroup(0);
+            TimingEvent baseTiming = baseGroup.Timings[0];
+
+            baseTiming.Bpm = bpm;
+            gameplayData.OnChartTimingEdit -= OnChartTimingEdit;
+            Services.Gameplay.Chart.UpdateEvents(new List<TimingEvent> { baseTiming });
+            gameplayData.OnChartTimingEdit += OnChartTimingEdit;
         }
     }
 }

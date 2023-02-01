@@ -22,6 +22,12 @@ namespace ArcCreate.Gameplay
 
         public event Action OnSkinValuesChange;
 
+        public event Action OnChartTimingEdit;
+
+        public event Action OnChartCameraEdit;
+
+        public event Action OnChartScenecontrolEdit;
+
         public event Action OnChartEdit;
 
         public event Action<int> OnGameplayUpdate;
@@ -190,6 +196,21 @@ namespace ArcCreate.Gameplay
             }
 
             OnSkinValuesChange?.Invoke();
+        }
+
+        internal void NotifyChartTimingEdit()
+        {
+            OnChartTimingEdit?.Invoke();
+        }
+
+        internal void NotifyChartCameraEdit()
+        {
+            OnChartCameraEdit?.Invoke();
+        }
+
+        internal void NotifyChartScenecontrolEdit()
+        {
+            OnChartScenecontrolEdit?.Invoke();
         }
 
         internal void NotifyChartEdit()

@@ -27,5 +27,10 @@ namespace ArcCreate
                 OnValueChange?.Invoke(value);
             }
         }
+
+        public void SetValueWithoutNotify(T value)
+        {
+            this.value = value;
+        }
     }
 }
