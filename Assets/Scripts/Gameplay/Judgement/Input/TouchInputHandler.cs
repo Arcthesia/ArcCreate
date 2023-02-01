@@ -123,12 +123,17 @@ namespace ArcCreate.Gameplay.Judgement.Input
                 {
                     LaneHoldJudgementRequest req = requests[i];
 
+                    if (currentTiming < req.StartAtTiming)
+                    {
+                        continue;
+                    }
+
                     Vector3 worldPosition = new Vector3(ArcFormula.LaneToWorldX(req.Lane), 0, 0);
                     Vector3 screenPosition = Services.Camera.GameplayCamera.WorldToScreenPoint(worldPosition);
 
                     if (LaneCollide(input, screenPosition, req.Lane))
                     {
-                        req.Receiver.ProcessLaneHoldJudgement(currentTiming - req.AutoAtTiming);
+                        req.Receiver.ProcessLaneHoldJudgement(currentTiming >= req.ExpireAtTiming, req.IsJudgement);
                         requests.RemoveAt(i);
                     }
                 }
@@ -148,7 +153,9 @@ namespace ArcCreate.Gameplay.Judgement.Input
                 for (int i = requests.Count - 1; i >= 0; i--)
                 {
                     ArcJudgementRequest req = requests[i];
-                    if (req.Arc.Color == color.Color)
+                    if (currentTiming >= req.StartAtTiming
+                     && currentTiming <= req.Arc.EndTiming
+                     && req.Arc.Color == color.Color)
                     {
                         arcOfColorExists = true;
                         break;
@@ -163,7 +170,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
             for (int i = requests.Count - 1; i >= 0; i--)
             {
                 ArcJudgementRequest req1 = requests[i];
-                if (currentTiming > req1.Arc.EndTiming)
+                if (currentTiming > req1.Arc.EndTiming || currentTiming < req1.StartAtTiming)
                 {
                     continue;
                 }
@@ -171,7 +178,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
                 for (int j = i - 1; j >= 0; j--)
                 {
                     ArcJudgementRequest req2 = requests[j];
-                    if (currentTiming > req2.Arc.EndTiming)
+                    if (req2.Arc.Color == req1.Arc.Color || currentTiming > req2.Arc.EndTiming || currentTiming < req2.StartAtTiming)
                     {
                         continue;
                     }
@@ -203,11 +210,17 @@ namespace ArcCreate.Gameplay.Judgement.Input
                 for (int i = requests.Count - 1; i >= 0; i--)
                 {
                     ArcJudgementRequest req = requests[i];
+
                     ArcColorLogic colorLogic = ArcColorLogic.Get(req.Arc.Color);
 
                     if (input.Phase == UnityEngine.InputSystem.TouchPhase.Ended)
                     {
                         colorLogic.FingerLifted(input.Id, req.Arc.TimeIncrement);
+                        continue;
+                    }
+
+                    if (currentTiming < req.StartAtTiming)
+                    {
                         continue;
                     }
 
@@ -234,6 +247,11 @@ namespace ArcCreate.Gameplay.Judgement.Input
                 for (int i = requests.Count - 1; i >= 0; i--)
                 {
                     ArcJudgementRequest req = requests[i];
+                    if (currentTiming < req.StartAtTiming)
+                    {
+                        continue;
+                    }
+
                     ArcColorLogic colorLogic = ArcColorLogic.Get(req.Arc.Color);
 
                     bool collide = ArcCollide(input, req.Arc, currentTiming);
@@ -241,7 +259,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
 
                     if (collide && acceptInput)
                     {
-                        req.Receiver.ProcessArcJudgement(currentTiming - req.AutoAtTiming);
+                        req.Receiver.ProcessArcJudgement(currentTiming >= req.ExpireAtTiming, req.IsJudgement);
                         requests.RemoveAt(i);
                     }
                 }

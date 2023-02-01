@@ -4,10 +4,6 @@ namespace ArcCreate.Gameplay.Data
 {
     public abstract class LongNote : Note
     {
-        private int timeIncrement;
-        private int firstJudgeTime;
-        private int finalJudgeTime;
-        private int currentJudgeTime;
         private int totalCombo;
 
         public int EndTiming { get; set; }
@@ -16,7 +12,11 @@ namespace ArcCreate.Gameplay.Data
 
         public override int TotalCombo => totalCombo;
 
-        public int TimeIncrement => timeIncrement;
+        public int TimeIncrement { get; private set; }
+
+        public int FirstJudgeTime { get; private set; }
+
+        public int FinalJudgeTime { get; private set; }
 
         /// <summary>
         /// Recalculate the judge timings value of this note.
@@ -28,28 +28,26 @@ namespace ArcCreate.Gameplay.Data
 
             if (bpm == 0)
             {
-                firstJudgeTime = int.MaxValue;
-                finalJudgeTime = int.MinValue;
-                currentJudgeTime = int.MaxValue;
-                timeIncrement = int.MaxValue;
+                FirstJudgeTime = int.MaxValue;
+                FinalJudgeTime = int.MinValue;
+                TimeIncrement = int.MaxValue;
                 return;
             }
 
             int duration = EndTiming - Timing;
             bpm = Mathf.Abs(bpm);
             int rawIncrement = (int)Mathf.Abs((bpm >= 255 ? 60_000f : 30_000f) / bpm / Values.TimingPointDensity);
-            timeIncrement = Mathf.Max(1, rawIncrement);
+            TimeIncrement = Mathf.Max(1, rawIncrement);
 
-            totalCombo = Mathf.Max(1, (duration / timeIncrement) - 1);
+            totalCombo = Mathf.Max(1, (duration / TimeIncrement) - 1);
 
-            firstJudgeTime = (totalCombo == 1) ? (Timing + (duration / 2)) : (Timing + timeIncrement);
-            finalJudgeTime = firstJudgeTime + ((totalCombo - 1) * timeIncrement);
-            currentJudgeTime = firstJudgeTime;
+            FirstJudgeTime = (totalCombo == 1) ? (Timing + (duration / 2)) : (Timing + TimeIncrement);
+            FinalJudgeTime = FirstJudgeTime + ((totalCombo - 1) * TimeIncrement);
         }
 
         public override int ComboAt(int timing)
         {
-            int combo = (timing - firstJudgeTime) / timeIncrement;
+            int combo = (timing - FirstJudgeTime) / TimeIncrement;
             return Mathf.Clamp(combo, 0, totalCombo);
         }
 
@@ -63,34 +61,9 @@ namespace ArcCreate.Gameplay.Data
         protected float EndZPos(double floorPosition)
             => ArcFormula.FloorPositionToZ(EndFloorPosition - floorPosition);
 
-        /// <summary>
-        /// Update the current judge state to the new timing value.
-        /// </summary>
-        /// <param name="timing">The timing value.</param>
-        /// <returns>Total judge points count that has elapsed.</returns>
-        protected int UpdateCurrentJudgePointTiming(int timing)
-        {
-            if (currentJudgeTime > finalJudgeTime)
-            {
-                return 0;
-            }
-
-            timing = Mathf.Min(timing, finalJudgeTime);
-
-            int count = (timing - currentJudgeTime) / timeIncrement;
-            if (count >= 0)
-            {
-                currentJudgeTime += timeIncrement * (count + 1);
-                return count + 1;
-            }
-
-            return 0;
-        }
-
         protected void ResetJudgeTimings()
         {
             RecalculateJudgeTimings();
-            currentJudgeTime = firstJudgeTime;
         }
     }
 }

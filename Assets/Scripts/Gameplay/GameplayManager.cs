@@ -54,7 +54,7 @@ namespace ArcCreate.Gameplay
         public override void OnNoBootScene()
         {
             // Use touch
-            Settings.InputMode.Value = (int)InputMode.Touch;
+            Settings.InputMode.Value = (int)InputMode.Mouse;
 
             // Load test chart
             string path = Path.Combine(Application.streamingAssetsPath, testPlayChartFileName);

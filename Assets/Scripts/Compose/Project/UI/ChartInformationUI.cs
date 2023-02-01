@@ -122,7 +122,7 @@ namespace ArcCreate.Compose.Project
 
         private void OnDensityFactor(string value)
         {
-            if (Evaluator.TryInt(value, out int factor))
+            if (Evaluator.TryFloat(value, out float factor))
             {
                 gameplayData.TimingPointDensityFactor.Value = factor;
             }

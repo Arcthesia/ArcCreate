@@ -80,7 +80,7 @@ namespace ArcCreate.Gameplay.Judgement
                 var req = laneHoldRequests[i];
                 if (currentTiming >= req.ExpireAtTiming)
                 {
-                    req.Receiver.ProcessLaneHoldJudgement(currentTiming - req.AutoAtTiming);
+                    req.Receiver.ProcessLaneHoldJudgement(true, req.IsJudgement);
                     laneHoldRequests.RemoveAt(i);
                 }
             }
@@ -90,7 +90,7 @@ namespace ArcCreate.Gameplay.Judgement
                 var req = arcRequests[i];
                 if (currentTiming >= req.ExpireAtTiming)
                 {
-                    req.Receiver.ProcessArcJudgement(currentTiming - req.AutoAtTiming);
+                    req.Receiver.ProcessArcJudgement(true, req.IsJudgement);
                     arcRequests.RemoveAt(i);
                 }
             }

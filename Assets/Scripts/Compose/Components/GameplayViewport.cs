@@ -14,7 +14,6 @@ namespace ArcCreate.Compose.Components
         [SerializeField] private AspectRatioFitter aspectRatioFitter;
         [SerializeField] private TMP_Dropdown aspectRatioDropdown;
         [SerializeField] private float[] aspectRatios;
-        [SerializeField] private bool isCursorHovering;
         private readonly Vector3[] corners = new Vector3[4];
 
         private void Update()

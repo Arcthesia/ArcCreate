@@ -7,5 +7,6 @@ namespace ArcCreate
         Touch,
         Controller,
         Mouse,
+        Idle,
     }
 }

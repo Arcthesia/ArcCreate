@@ -13276,7 +13276,7 @@ PrefabInstance:
     - target: {fileID: 3061022597843319718, guid: dd28de81c82f15ca4b19d66ca12d8b3c,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00004386902
+      value: -0.000104904175
       objectReference: {fileID: 0}
     - target: {fileID: 3061022598639186141, guid: dd28de81c82f15ca4b19d66ca12d8b3c,
         type: 3}
@@ -33851,7 +33851,6 @@ MonoBehaviour:
   - 2.2222223
   - 1.3333334
   - 1.5
-  isCursorHovering: 0
 --- !u!1 &1500360316
 GameObject:
   m_ObjectHideFlags: 0
@@ -35217,7 +35216,7 @@ PrefabInstance:
     - target: {fileID: 5857211232641198058, guid: 4cd3e44ebb6225a779912ab5c58f0554,
         type: 3}
       propertyPath: m_Name
-      value: TextIconButton
+      value: FullScreen
       objectReference: {fileID: 0}
     - target: {fileID: 5857211232641198059, guid: 4cd3e44ebb6225a779912ab5c58f0554,
         type: 3}
@@ -43247,7 +43246,7 @@ PrefabInstance:
     - target: {fileID: 3061022597840109885, guid: dd28de81c82f15ca4b19d66ca12d8b3c,
         type: 3}
       propertyPath: m_Options.m_Options.Array.size
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3061022597840109885, guid: dd28de81c82f15ca4b19d66ca12d8b3c,
         type: 3}
@@ -43273,6 +43272,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Options.m_Options.Array.data[4].m_Text
       value: Mouse
+      objectReference: {fileID: 0}
+    - target: {fileID: 3061022597840109885, guid: dd28de81c82f15ca4b19d66ca12d8b3c,
+        type: 3}
+      propertyPath: m_Options.m_Options.Array.data[5].m_Text
+      value: Idle
       objectReference: {fileID: 0}
     - target: {fileID: 3061022597840109887, guid: dd28de81c82f15ca4b19d66ca12d8b3c,
         type: 3}

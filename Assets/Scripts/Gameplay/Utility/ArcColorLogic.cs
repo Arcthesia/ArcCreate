@@ -168,7 +168,7 @@ namespace ArcCreate.Gameplay
         {
             if (IsFingerAssigned)
             {
-                if (assignedFingerMissedThisFrame)
+                if (!IsGraceActive && assignedFingerMissedThisFrame)
                 {
                     FlashRedArc();
                 }
