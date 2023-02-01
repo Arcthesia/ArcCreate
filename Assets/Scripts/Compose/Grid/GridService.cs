@@ -33,6 +33,8 @@ namespace ArcCreate.Compose.Grid
 
         public int SnapTimingToGrid(int sourceTiming) => timingGrid.SnapToTimingGrid(sourceTiming);
 
+        public int SnapTimingToGridIfGridIsEnabled(int sourceTiming) => IsGridEnabled ? SnapTimingToGrid(sourceTiming) : sourceTiming;
+
         private void Awake()
         {
             timingGrid.SetGridEnabled(false);

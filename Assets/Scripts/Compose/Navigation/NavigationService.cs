@@ -5,7 +5,9 @@ using System.Linq;
 using System.Reflection;
 using ArcCreate.Utilities;
 using Cysharp.Threading.Tasks;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.Utilities;
 using UnityEngine.UI;
 using YamlDotNet.RepresentationModel;
@@ -119,6 +121,14 @@ namespace ArcCreate.Compose.Navigation
 
         public bool ShouldExecute(IAction action)
         {
+            if (EventSystem.current.currentSelectedGameObject != null)
+            {
+                if (EventSystem.current.currentSelectedGameObject.GetComponent<TMP_InputField>() != null)
+                {
+                    return false;
+                }
+            }
+
             EditorAction currentAction = null;
             if (actionsInProgress.Count != 0)
             {

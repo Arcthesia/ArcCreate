@@ -5,6 +5,14 @@ namespace ArcCreate.Compose.Grid
         bool IsGridEnabled { get; set; }
 
         /// <summary>
+        /// Snap a timing value to a timing point on the timing grid if the grid is enabled,
+        /// or returns the passed in value as-is otherwise.
+        /// </summary>
+        /// <param name="sourceTiming">The base timing point.</param>
+        /// <returns>The closest timing point on the grid if grid is enabled, or <see cref="sourceTiming"/> otherwise.</returns>
+        int SnapTimingToGridIfGridIsEnabled(int sourceTiming);
+
+        /// <summary>
         /// Snap a timing value to a timing point on the timing grid.
         /// </summary>
         /// <param name="sourceTiming">The base timing point.</param>
