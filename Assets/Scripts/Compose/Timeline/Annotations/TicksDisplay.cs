@@ -22,7 +22,7 @@ namespace ArcCreate.Compose.Timeline
 
         private Pool<Tick> tickPool;
 
-        private void Update()
+        public void UpdateTicks()
         {
             tickPool.ReturnAll();
             if (TryDisplay(beatsTiming))
@@ -158,21 +158,27 @@ namespace ArcCreate.Compose.Timeline
                     }
                 }
             }
+
+            UpdateTicks();
         }
 
         private void Awake()
         {
             tickPool = Pools.New<Tick>(Values.TickPoolName, tickPrefab, tickParent, tickCapacity);
             gameplayData.AudioClip.OnValueChange += OnAudioLoad;
-            gameplayData.OnChartFileLoad += OnChartFileLoad;
-            Values.EditingTimingGroup.OnValueChange += OnEditingTimingGroup;
+            gameplayData.OnChartFileLoad += OnChartChange;
+            gameplayData.OnChartTimingEdit += OnChartChange;
+            gameplayData.AudioOffset.OnValueChange += OnChartChangeButCallbackHasAnInt;
+            Values.EditingTimingGroup.OnValueChange += OnChartChangeButCallbackHasAnInt;
         }
 
         private void OnDestroy()
         {
             gameplayData.AudioClip.OnValueChange -= OnAudioLoad;
-            gameplayData.OnChartFileLoad -= OnChartFileLoad;
-            Values.EditingTimingGroup.OnValueChange -= OnEditingTimingGroup;
+            gameplayData.OnChartFileLoad -= OnChartChange;
+            gameplayData.OnChartTimingEdit -= OnChartChange;
+            gameplayData.AudioOffset.OnValueChange -= OnChartChangeButCallbackHasAnInt;
+            Values.EditingTimingGroup.OnValueChange -= OnChartChangeButCallbackHasAnInt;
         }
 
         private void OnAudioLoad(AudioClip clip)
@@ -183,12 +189,12 @@ namespace ArcCreate.Compose.Timeline
             }
         }
 
-        private void OnChartFileLoad()
+        private void OnChartChange()
         {
             OnAudioLoad(gameplayData.AudioClip.Value);
         }
 
-        private void OnEditingTimingGroup(int group)
+        private void OnChartChangeButCallbackHasAnInt(int notEvenUsed)
         {
             OnAudioLoad(gameplayData.AudioClip.Value);
         }

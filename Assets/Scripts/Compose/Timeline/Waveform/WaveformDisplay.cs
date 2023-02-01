@@ -13,6 +13,7 @@ namespace ArcCreate.Compose.Timeline
         [SerializeField] private GameplayData gameplayData;
         [SerializeField] private RawImage image;
         [SerializeField] private RectTransform container;
+        [SerializeField] private TicksDisplay ticksDisplay;
         [SerializeField] private float minViewLength = 0.5f;
         [SerializeField] private float minScrollDist = 0.20f;
 
@@ -102,6 +103,8 @@ namespace ArcCreate.Compose.Timeline
                 viewToSecond = Mathf.Clamp(viewToSecond, viewFromSecond + viewSize, clip.length);
                 OnWaveformScroll?.Invoke();
             }
+
+            ticksDisplay.UpdateTicks();
 
             ApplyViewRangeToWaveform();
         }

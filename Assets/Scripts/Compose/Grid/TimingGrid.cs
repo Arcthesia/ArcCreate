@@ -46,7 +46,7 @@ namespace ArcCreate.Compose.Grid
             int indexLeft = timingList.BisectLeft(sourceTiming);
             int indexRight = timingList.BisectRight(sourceTiming);
 
-            indexLeft = Mathf.Clamp(indexRight, 0, timingList.Count);
+            indexLeft = Mathf.Clamp(indexLeft, 0, timingList.Count);
             indexRight = Mathf.Clamp(indexRight, 0, timingList.Count);
 
             int timingLeft = timingList[indexLeft];

@@ -45,11 +45,12 @@ namespace ArcCreate.Gameplay.Chart
         }
 
         /// <summary>
-        /// Reverses the z world position to the timing value.
+        /// Reverses the z world position to the timing value (relative to current chart timing).
         /// </summary>
         /// <param name="z">The z position.</param>
         /// <returns>The timing value corresponding to the value.</returns>
-        public int GetTimingFromZPosition(float z) => GetTimingFromFloorPosition(ArcFormula.ZToFloorPosition(z));
+        public int GetTimingFromZPosition(float z)
+            => GetTimingFromFloorPosition(ArcFormula.ZToFloorPosition(z) + GetFloorPosition(Services.Audio.ChartTiming));
 
         /// <summary>
         /// Get the timing value corresponding to a floor position value.

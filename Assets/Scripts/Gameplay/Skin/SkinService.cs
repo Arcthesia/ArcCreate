@@ -408,7 +408,7 @@ namespace ArcCreate.Gameplay.Skin
 
         private void ReloadNoteSkin(int inputMode)
         {
-            Services.Chart.ReloadSkin();
+            Services.Chart?.ReloadSkin();
         }
     }
 }
