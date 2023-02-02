@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Gameplay.Judgement;
+using ArcCreate.Gameplay.Skin;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -42,6 +44,11 @@ namespace ArcCreate.Gameplay.Particle
         [SerializeField] private float earlyLateToY;
         [SerializeField] private float longParticlePersistDuration;
 
+        private ExternalTexture pureMaterialTexture;
+        private ExternalTexture farMaterialTexture;
+        private ExternalTexture lostMaterialTexture;
+        private ExternalTexture longParticleTexture;
+
         private Pool<Particle> tapParticlePool;
         private Pool<Particle> textParticlePool;
         private Pool<Particle> longParticlePool;
@@ -57,6 +64,12 @@ namespace ArcCreate.Gameplay.Particle
             = new Dictionary<LongNote, ParticleSchedule>(10);
 
         private readonly List<LongNote> longParticlesToPrune = new List<LongNote>();
+
+        private Material PureMaterial { get; set; }
+
+        private Material FarMaterial { get; set; }
+
+        private Material LostMaterial { get; set; }
 
         public void UpdateParticles()
         {
@@ -145,20 +158,20 @@ namespace ArcCreate.Gameplay.Particle
 
         public void PlayTextParticle(Vector3 worldPosition, JudgementResult result)
         {
-            Material mat = pureMaterial;
+            Material mat = PureMaterial;
             worldPosition.y = worldPosition.y + Values.TextParticleYOffset;
 
             if (result.IsPure())
             {
-                mat = pureMaterial;
+                mat = PureMaterial;
             }
             else if (result.IsFar())
             {
-                mat = farMaterial;
+                mat = FarMaterial;
             }
             else
             {
-                mat = lostMaterial;
+                mat = LostMaterial;
             }
 
             Vector2 screenPos = ConvertToScreen(worldPosition);
@@ -245,6 +258,9 @@ namespace ArcCreate.Gameplay.Particle
         {
             tapParticlePrefab = Instantiate(tapParticlePrefab, transform);
             longNoteParticlePrefab = Instantiate(longNoteParticlePrefab, transform);
+            PureMaterial = Instantiate(pureMaterial);
+            FarMaterial = Instantiate(farMaterial);
+            LostMaterial = Instantiate(lostMaterial);
 
             tapParticlePool = Pools.New<Particle>(
                 Values.TapParticlePoolName,
@@ -263,6 +279,30 @@ namespace ArcCreate.Gameplay.Particle
                 longNoteParticlePrefab,
                 longNoteParticleParent,
                 longParticlePoolCount);
+
+            pureMaterialTexture = new ExternalTexture(PureMaterial.mainTexture, "Particles");
+            farMaterialTexture = new ExternalTexture(FarMaterial.mainTexture, "Particles");
+            lostMaterialTexture = new ExternalTexture(LostMaterial.mainTexture, "Particles");
+
+            var particlePrefabRenderer = longNoteParticlePrefab.GetComponent<ParticleSystemRenderer>();
+            longParticleTexture = new ExternalTexture(particlePrefabRenderer.material.mainTexture, "Particles");
+
+            LoadExternalParticleSkin().Forget();
+        }
+
+        private async UniTask LoadExternalParticleSkin()
+        {
+            await pureMaterialTexture.Load();
+            await farMaterialTexture.Load();
+            await lostMaterialTexture.Load();
+            await longParticleTexture.Load();
+
+            PureMaterial.mainTexture = pureMaterialTexture.Value;
+            FarMaterial.mainTexture = farMaterialTexture.Value;
+            LostMaterial.mainTexture = lostMaterialTexture.Value;
+
+            var particlePrefabRenderer = longNoteParticlePrefab.GetComponent<ParticleSystemRenderer>();
+            particlePrefabRenderer.material.mainTexture = longParticleTexture.Value;
         }
 
         private void OnDestroy()
@@ -270,6 +310,15 @@ namespace ArcCreate.Gameplay.Particle
             Pools.Destroy<Particle>(Values.TapParticlePoolName);
             Pools.Destroy<Particle>(Values.TextParticlePoolName);
             Pools.Destroy<Particle>(Values.LongParticlePoolName);
+
+            pureMaterialTexture.Unload();
+            farMaterialTexture.Unload();
+            lostMaterialTexture.Unload();
+            longParticleTexture.Unload();
+
+            Destroy(PureMaterial);
+            Destroy(FarMaterial);
+            Destroy(LostMaterial);
         }
 
         private Vector2 ConvertToScreen(Vector3 world)

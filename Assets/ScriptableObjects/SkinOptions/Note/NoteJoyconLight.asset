@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: NoteJoyconLight
   m_EditorClassIdentifier: 
   Name: light
-  ArcTapSfxSkin: {fileID: 2100000, guid: b4c28abdd82feb2419d58042a5c809f6, type: 2}
+  arcTapSfxSkin: {fileID: 2100000, guid: b4c28abdd82feb2419d58042a5c809f6, type: 2}
   ConnectionLineColor: {r: 0.47058824, g: 0.78431374, b: 0.8627451, a: 1}
   ArcTapMesh: {fileID: 2917635366719238280, guid: 47a8c4c421f6d5848b7369402970b18f,
     type: 3}
@@ -32,6 +32,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 561503315d819694983417f63d4bec61, type: 3}
   - {fileID: 21300000, guid: 02d5a25fdf1bfb04b996073d7b64c4b7, type: 3}
   - {fileID: 21300000, guid: b468296730b482849bc2339a905f431b, type: 3}
-  ArcTapSkinLeft: {fileID: 2100000, guid: 5f484037a6befdb4ebdc9933161f926f, type: 2}
-  ArcTapSkinMiddle: {fileID: 2100000, guid: 282f01baaa597654d95faf3873f8cb6d, type: 2}
-  ArcTapSkinRight: {fileID: 2100000, guid: 94084a746c1cc0943aa402b0a9750377, type: 2}
+  arcTapSkinLeft: {fileID: 2100000, guid: 5f484037a6befdb4ebdc9933161f926f, type: 2}
+  arcTapSkinMiddle: {fileID: 2100000, guid: 282f01baaa597654d95faf3873f8cb6d, type: 2}
+  arcTapSkinRight: {fileID: 2100000, guid: 94084a746c1cc0943aa402b0a9750377, type: 2}
