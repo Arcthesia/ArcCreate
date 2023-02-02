@@ -3,6 +3,7 @@
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
 #
 /[Ll]ibrary/
+/[Bb]uild/
 /[Tt]emp/
 /[Oo]bj/
 /[Ll]ogs/
