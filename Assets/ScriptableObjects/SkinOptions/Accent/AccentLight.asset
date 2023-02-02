@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AccentLight
   m_EditorClassIdentifier: 
   Name: light
-  CriticalLineSkin: {fileID: 21300000, guid: 32f12aa189b0ca14fa39b797e0416b4a, type: 3}
-  CriticalLineExtraSkin: {fileID: 21300000, guid: 1b506b660e588ca4398513e93eb3dc43,
+  criticalLineSkin: {fileID: 21300000, guid: 32f12aa189b0ca14fa39b797e0416b4a, type: 3}
+  criticalLineExtraSkin: {fileID: 21300000, guid: 1b506b660e588ca4398513e93eb3dc43,
     type: 3}
   ComboColor: {r: 0.47058824, g: 0.23529412, b: 0.47058824, a: 0.8}

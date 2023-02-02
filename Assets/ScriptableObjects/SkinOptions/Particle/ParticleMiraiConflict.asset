@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ParticleMiraiConflict
   m_EditorClassIdentifier: 
   Name: miraiconflict
-  ParticleSkin: {fileID: 2800000, guid: 4be09a7c9e7c14949b76ff998a388c6a, type: 3}
-  SfxParticleSkin: {fileID: 2800000, guid: 555fccd079dd6e946b0f63bed196bb41, type: 3}
+  particleSkin: {fileID: 2800000, guid: 4be09a7c9e7c14949b76ff998a388c6a, type: 3}
+  sfxParticleSkin: {fileID: 2800000, guid: 555fccd079dd6e946b0f63bed196bb41, type: 3}
   HoldEffectColorMin: {r: 0.29803923, g: 0.101960786, b: 0.29803923, a: 0}
   HoldEffectColorMax: {r: 0.5019608, g: 0.29803923, b: 0.5019608, a: 1}

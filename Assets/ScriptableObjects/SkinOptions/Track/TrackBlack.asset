@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: TrackBlack
   m_EditorClassIdentifier: 
   Name: black
-  TrackSkin: {fileID: 21300000, guid: cb5748689f1982847b3d35f14c6a2580, type: 3}
-  TrackExtraSkin: {fileID: 21300000, guid: 6aa88e5bb7cf15140bb296e4525cc41a, type: 3}
+  trackSkin: {fileID: 21300000, guid: cb5748689f1982847b3d35f14c6a2580, type: 3}
+  trackExtraSkin: {fileID: 21300000, guid: 6aa88e5bb7cf15140bb296e4525cc41a, type: 3}

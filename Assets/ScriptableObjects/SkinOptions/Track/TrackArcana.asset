@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: TrackArcana
   m_EditorClassIdentifier: 
   Name: arcana
-  TrackSkin: {fileID: 21300000, guid: 258defcf7c8b9124889ff82fa3cf0bbf, type: 3}
-  TrackExtraSkin: {fileID: 21300000, guid: 6aa88e5bb7cf15140bb296e4525cc41a, type: 3}
+  trackSkin: {fileID: 21300000, guid: 258defcf7c8b9124889ff82fa3cf0bbf, type: 3}
+  trackExtraSkin: {fileID: 21300000, guid: 6aa88e5bb7cf15140bb296e4525cc41a, type: 3}

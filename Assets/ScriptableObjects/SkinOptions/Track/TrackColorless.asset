@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: TrackColorless
   m_EditorClassIdentifier: 
   Name: colorless
-  TrackSkin: {fileID: 21300000, guid: 81b092dacae5c0349936bf7f2fd9feac, type: 3}
-  TrackExtraSkin: {fileID: 21300000, guid: f3b8da8b72bf3644b940d7222c1fc245, type: 3}
+  trackSkin: {fileID: 21300000, guid: 81b092dacae5c0349936bf7f2fd9feac, type: 3}
+  trackExtraSkin: {fileID: 21300000, guid: f3b8da8b72bf3644b940d7222c1fc245, type: 3}

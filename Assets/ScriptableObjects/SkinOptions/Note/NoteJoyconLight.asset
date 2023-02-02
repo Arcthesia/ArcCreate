@@ -19,15 +19,15 @@ MonoBehaviour:
     type: 3}
   ArcTapSfxMesh: {fileID: 89046849237724230, guid: 47a8c4c421f6d5848b7369402970b18f,
     type: 3}
-  TapSkinLeft: {fileID: 21300000, guid: 219258b69234d4941bc6364b7209bb23, type: 3}
-  TapSkinRight: {fileID: 21300000, guid: f8e30d4330eb6354abe9c3ddd16c40ce, type: 3}
-  HoldSkinLeft: {fileID: 21300000, guid: 6cb99a04d46a86e469c25cedef78a94a, type: 3}
-  HoldSkinRight: {fileID: 21300000, guid: cbd28f030a11ce1469085706768b5b48, type: 3}
-  HoldHighlightSkinLeft: {fileID: 21300000, guid: 536381d1d7d3c014189b2ea4440dee10,
+  tapSkinLeft: {fileID: 21300000, guid: 219258b69234d4941bc6364b7209bb23, type: 3}
+  tapSkinRight: {fileID: 21300000, guid: f8e30d4330eb6354abe9c3ddd16c40ce, type: 3}
+  holdSkinLeft: {fileID: 21300000, guid: 6cb99a04d46a86e469c25cedef78a94a, type: 3}
+  holdSkinRight: {fileID: 21300000, guid: cbd28f030a11ce1469085706768b5b48, type: 3}
+  holdHighlightSkinLeft: {fileID: 21300000, guid: 536381d1d7d3c014189b2ea4440dee10,
     type: 3}
-  HoldHighlightSkinRight: {fileID: 21300000, guid: 8afa3c4493055fe44a8fe2e279e86773,
+  holdHighlightSkinRight: {fileID: 21300000, guid: 8afa3c4493055fe44a8fe2e279e86773,
     type: 3}
-  ArcCapSprites:
+  arcCapSprites:
   - {fileID: 21300000, guid: 14ac3e60f5090924abe570ef877870c9, type: 3}
   - {fileID: 21300000, guid: 561503315d819694983417f63d4bec61, type: 3}
   - {fileID: 21300000, guid: 02d5a25fdf1bfb04b996073d7b64c4b7, type: 3}

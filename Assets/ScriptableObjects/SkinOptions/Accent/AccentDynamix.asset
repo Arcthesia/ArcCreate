@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AccentDynamix
   m_EditorClassIdentifier: 
   Name: dynamix
-  CriticalLineSkin: {fileID: 21300000, guid: 3ad5ec955f85b8f4fbed2547a6ce85c0, type: 3}
-  CriticalLineExtraSkin: {fileID: 21300000, guid: 1b506b660e588ca4398513e93eb3dc43,
+  criticalLineSkin: {fileID: 21300000, guid: 3ad5ec955f85b8f4fbed2547a6ce85c0, type: 3}
+  criticalLineExtraSkin: {fileID: 21300000, guid: 1b506b660e588ca4398513e93eb3dc43,
     type: 3}
   ComboColor: {r: 0.078431375, g: 0.54901963, b: 0.54901963, a: 0.8}

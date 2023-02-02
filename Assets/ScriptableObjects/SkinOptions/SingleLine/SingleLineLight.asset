@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: light
   Enable: 1
-  SingleLineSkin: {fileID: 21300000, guid: 0289896bf98f5324fa9b1917e0e8ecb7, type: 3}
+  singleLineSkin: {fileID: 21300000, guid: 0289896bf98f5324fa9b1917e0e8ecb7, type: 3}

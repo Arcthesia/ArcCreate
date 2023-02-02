@@ -21,5 +21,5 @@ MonoBehaviour:
     type: 2}
   DefaultAccentOption: {fileID: 11400000, guid: aa40234e61d2c7e41917eff6ce98b951,
     type: 2}
-  JacketShadowSkin: {fileID: 21300000, guid: 65956d8c8387acebbaceb5e4d2f61803, type: 3}
-  DefaultBackground: {fileID: 21300000, guid: f92423c6f3c16544e9637413403e5511, type: 3}
+  jacketShadowSkin: {fileID: 21300000, guid: 65956d8c8387acebbaceb5e4d2f61803, type: 3}
+  defaultBackground: {fileID: 21300000, guid: f92423c6f3c16544e9637413403e5511, type: 3}

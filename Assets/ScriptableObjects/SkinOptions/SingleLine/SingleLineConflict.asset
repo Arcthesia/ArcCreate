@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: conflict
   Enable: 1
-  SingleLineSkin: {fileID: 21300000, guid: 987e94312817980439f22586f2a80a46, type: 3}
+  singleLineSkin: {fileID: 21300000, guid: 987e94312817980439f22586f2a80a46, type: 3}

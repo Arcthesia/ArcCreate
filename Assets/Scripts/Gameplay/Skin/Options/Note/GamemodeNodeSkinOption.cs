@@ -15,30 +15,28 @@ namespace ArcCreate.Gameplay.Skin
         public Mesh ArcTapMesh;
         public Mesh ArcTapSfxMesh;
 
-        private Texture replacedArcTapSfxTexture;
+        public ExternalTexture ArcTapSfxTexture { get; private set; }
 
         public abstract (Mesh mesh, Material material) GetArcTapSkin(ArcTap note);
         public abstract (Sprite normal, Sprite highlight) GetHoldSkin(Hold note);
         public abstract Sprite GetTapSkin(Tap note);
         public abstract Sprite GetArcCapSprite(Arc arc);
 
+        internal virtual void RegisterExternalSkin()
+        {
+            ArcTapSfxTexture = new ExternalTexture(ArcTapSfxSkin.mainTexture, "SfxTap");
+        }
+
         internal virtual async UniTask LoadExternalSkin()
         {
-            var arctapsfx = await Importer.GetTexture(Path.Combine(Values.SkinFolderPath, "Note", ArcTapSfxSkin.mainTexture.name + ".png"));
-            if (arctapsfx != null)
-            {
-                replacedArcTapSfxTexture = ArcTapSfxSkin.mainTexture;
-                ArcTapSfxSkin.mainTexture = arctapsfx;
-            }
+            await ArcTapSfxTexture.Load();
+            ArcTapSfxSkin.mainTexture = ArcTapSfxTexture.Value;
         }
 
         internal virtual void UnloadExternalSkin()
         {
-            if (replacedArcTapSfxTexture != null)
-            {
-                Destroy(ArcTapSfxSkin.mainTexture);
-                ArcTapSfxSkin.mainTexture = replacedArcTapSfxTexture;
-            }
+            ArcTapSfxTexture.Unload();
+            ArcTapSfxSkin.mainTexture = ArcTapSfxTexture.Value;
         }
     }
 }
