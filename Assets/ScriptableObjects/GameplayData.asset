@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94cda80926ee35392898a97683c27fad, type: 3}
   m_Name: GameplayData
   m_EditorClassIdentifier: 
-  defaultJacket: {fileID: 21300000, guid: a971cf2da077b1c4ba78f60362e51a29, type: 3}
-  defaultBackground: {fileID: 21300000, guid: 60ec4d2a20505ed4983a1875e88ac3e7, type: 3}
+  defaultJacket: {fileID: 21300000, guid: 59b3f8a72c80ebbe0942ad10f3765d43, type: 3}

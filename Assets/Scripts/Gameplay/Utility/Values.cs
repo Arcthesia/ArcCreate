@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay
@@ -88,6 +89,7 @@ namespace ArcCreate.Gameplay
         public const string TextParticlePoolName = "textparticle";
         public const string TapParticlePoolName = "tapparticle";
         public const string LongParticlePoolName = "longparticle";
+        public static readonly string SkinFolderPath = Path.Combine(new DirectoryInfo(Application.dataPath).Parent.FullName, "Skin");
 
         // I sure hope no charter will make use of lane -2147483648
         public const int InvalidLane = int.MinValue;

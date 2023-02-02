@@ -5,9 +5,6 @@ Fast and powerful .aff editor made with Unity.
 # Getting started
 
 This project was made with Unity 2019.4.34f1. You can download the exact version from the [official Download Archive here](https://unity.com/releases/editor/archive).
-
-Additionally, no textures are included within the repository as of currently to avoid copyright infringement, so you'll need to use your own assets. This will change once we start designing our own assets.
-
 # Project status
 
 ### Gameplay
@@ -40,4 +37,16 @@ See:
 
 # License
 
-See [LICENSE](LICENSE.md)
+This project was licensed under GPL-3.0 license (see [LICENSE](LICENSE.md)).
+
+# Credits
+
+- `Assets/Plugins/ColorPicker`: https://github.com/mmaletin/UnityColorPicker
+- `Assets/Plugins/DOTween`: http://dotween.demigiant.com
+- `Assets/Plugins/DynamicPanels`: https://github.com/yasirkula/UnityDynamicPanels
+- `Assets/Plugins/MaterialIcons`: https://fonts.google.com/icons for the icons themselves and https://github.com/convalise/unity-material-icons/ for packaging them for Unity.
+- `Assets/Plugins/NativeFileSO`: https://github.com/keiwando/nativefileso
+- `Assets/Plugins/StandaloneFileBrowser`: https://github.com/gkngkc/UnityStandaloneFileBrowser
+- `Assets/Plugins/YamlDotNet`: https://github.com/aaubry/YamlDotNet
+- Other files under `Assets/Plugins/` are downloaded from NuGet
+- A large portion of files under `Assets/Textures/Gameplay` are taken from, or derived from https://github.com/yojohanshinwataikei/Arcade-plus
