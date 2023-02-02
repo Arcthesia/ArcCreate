@@ -38,8 +38,8 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: Build
-          path: build
+          name: Build-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
 
   buildForWindowsBasedPlatforms:
     name: Build for ${{ matrix.targetPlatform }}
@@ -75,8 +75,8 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: Build
-          path: build
+          name: Build-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
 
   buildForMacOSBasedPlatforms:
     name: Build for ${{ matrix.targetPlatform }}
@@ -112,5 +112,5 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: Build
-          path: build
+          name: Build-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}

@@ -1,0 +1,17 @@
+{
+    "name": "MaterialIcon.Editor",
+    "references": [
+        "GUID:4955ea543c7d37317adad658f64728fc"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
