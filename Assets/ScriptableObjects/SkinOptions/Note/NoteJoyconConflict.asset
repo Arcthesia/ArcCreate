@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: NoteJoyconConflict
   m_EditorClassIdentifier: 
   Name: conflict
-  ArcTapSfxSkin: {fileID: 2100000, guid: 77afea3bc80de7d47a58c76a029131f1, type: 2}
+  arcTapSfxSkin: {fileID: 2100000, guid: 77afea3bc80de7d47a58c76a029131f1, type: 2}
   ConnectionLineColor: {r: 0.6666667, g: 0.32941177, b: 0.627451, a: 1}
   ArcTapMesh: {fileID: 2917635366719238280, guid: 47a8c4c421f6d5848b7369402970b18f,
     type: 3}
@@ -32,6 +32,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 561503315d819694983417f63d4bec61, type: 3}
   - {fileID: 21300000, guid: 02d5a25fdf1bfb04b996073d7b64c4b7, type: 3}
   - {fileID: 21300000, guid: b468296730b482849bc2339a905f431b, type: 3}
-  ArcTapSkinLeft: {fileID: 2100000, guid: 83e3c3268c919be4e82635d0e7dfabbd, type: 2}
-  ArcTapSkinMiddle: {fileID: 2100000, guid: 54c98a925f8cc6e49a18a172b3aab755, type: 2}
-  ArcTapSkinRight: {fileID: 2100000, guid: 2da42446b55a8ef41b6d385ae05093d2, type: 2}
+  arcTapSkinLeft: {fileID: 2100000, guid: 83e3c3268c919be4e82635d0e7dfabbd, type: 2}
+  arcTapSkinMiddle: {fileID: 2100000, guid: 54c98a925f8cc6e49a18a172b3aab755, type: 2}
+  arcTapSkinRight: {fileID: 2100000, guid: 2da42446b55a8ef41b6d385ae05093d2, type: 2}

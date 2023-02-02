@@ -11,8 +11,10 @@ namespace ArcCreate.Gameplay.Skin
         [SerializeField] private Sprite tapSkin;
         [SerializeField] private Sprite holdSkin;
         [SerializeField] private Sprite holdHighlightSkin;
-        public Material ArcTapSkin;
+        [SerializeField] private Material arcTapSkin;
         [SerializeField] private Sprite arcCapSprite;
+
+        public Material ArcTapSkin { get; private set; }
 
         public ExternalSprite TapSkin { get; private set; }
         public ExternalSprite HoldSkin { get; private set; }
@@ -35,6 +37,8 @@ namespace ArcCreate.Gameplay.Skin
         internal override void RegisterExternalSkin()
         {
             base.RegisterExternalSkin();
+            ArcTapSkin = Instantiate(arcTapSkin);
+
             string subdir = System.IO.Path.Combine("Note", "Touch");
             TapSkin = new ExternalSprite(tapSkin, subdir);
             HoldSkin = new ExternalSprite(holdSkin, subdir);
@@ -64,7 +68,7 @@ namespace ArcCreate.Gameplay.Skin
             ArcCapSprite.Unload();
             ArcTapSkinTexture.Unload();
 
-            ArcTapSkin.mainTexture = ArcTapSkinTexture.Value;
+            Destroy(ArcTapSkin);
         }
     }
 }
