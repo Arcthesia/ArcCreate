@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: TrackNijuusei
   m_EditorClassIdentifier: 
   Name: nijuusei
-  TrackSkin: {fileID: 21300000, guid: 9a10e6e6328cdb84b9b9e014b0b98309, type: 3}
-  TrackExtraSkin: {fileID: 21300000, guid: 6aa88e5bb7cf15140bb296e4525cc41a, type: 3}
+  trackSkin: {fileID: 21300000, guid: 9a10e6e6328cdb84b9b9e014b0b98309, type: 3}
+  trackExtraSkin: {fileID: 21300000, guid: 6aa88e5bb7cf15140bb296e4525cc41a, type: 3}

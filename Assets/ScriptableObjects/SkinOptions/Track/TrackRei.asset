@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: TrackRei
   m_EditorClassIdentifier: 
   Name: rei
-  TrackSkin: {fileID: 21300000, guid: f0d9b2d69fc526d4db520950fdf8b3a6, type: 3}
-  TrackExtraSkin: {fileID: 21300000, guid: f3b8da8b72bf3644b940d7222c1fc245, type: 3}
+  trackSkin: {fileID: 21300000, guid: f0d9b2d69fc526d4db520950fdf8b3a6, type: 3}
+  trackExtraSkin: {fileID: 21300000, guid: f3b8da8b72bf3644b940d7222c1fc245, type: 3}

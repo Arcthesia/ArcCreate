@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: TrackConflict
   m_EditorClassIdentifier: 
   Name: conflict
-  TrackSkin: {fileID: 21300000, guid: 4df4b96b43aa4e146894f5b014d7a904, type: 3}
-  TrackExtraSkin: {fileID: 21300000, guid: 6aa88e5bb7cf15140bb296e4525cc41a, type: 3}
+  trackSkin: {fileID: 21300000, guid: 4df4b96b43aa4e146894f5b014d7a904, type: 3}
+  trackExtraSkin: {fileID: 21300000, guid: 6aa88e5bb7cf15140bb296e4525cc41a, type: 3}

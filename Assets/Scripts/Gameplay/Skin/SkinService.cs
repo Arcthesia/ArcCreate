@@ -72,7 +72,7 @@ namespace ArcCreate.Gameplay.Skin
                 alignmentOpt = alignmentOpt != null ? alignmentOpt : alignmentOptions[0];
                 currentAlignment = alignmentOpt;
 
-                jacketShadowSO.Value = alignmentOpt.JacketShadowSkin;
+                jacketShadowSO.Value = alignmentOpt.JacketShadowSkin.Value;
 
                 // A bit jank but yeah
                 NoteSkin = currentNoteOption;
@@ -108,7 +108,7 @@ namespace ArcCreate.Gameplay.Skin
                 ParticleSkinOption particleOpt = particleSkinOptions.FirstOrDefault(opt => opt.Name == value);
                 particleOpt = particleOpt != null ? particleOpt : currentAlignment.DefaultParticleOption;
 
-                Services.Particle.SetTapParticleSkin(particleOpt.ParticleSkin);
+                Services.Particle.SetTapParticleSkin(particleOpt.ParticleSkin.Value);
                 Services.Particle.SetLongParticleSkin(particleOpt.HoldEffectColorMin, particleOpt.HoldEffectColorMax);
                 gameplayData.NotifySkinValuesChange();
             }
@@ -123,11 +123,11 @@ namespace ArcCreate.Gameplay.Skin
                 TrackSkinOption trackOpt = trackSkinOptions.FirstOrDefault(opt => opt.Name == value);
                 trackOpt = trackOpt != null ? trackOpt : currentAlignment.DefaultTrackOption;
 
-                track.sprite = trackOpt.TrackSkin;
-                trackExtraEdgeL.sprite = trackOpt.TrackSkin;
-                trackExtraEdgeR.sprite = trackOpt.TrackSkin;
-                trackExtraL.sprite = trackOpt.TrackExtraSkin;
-                trackExtraR.sprite = trackOpt.TrackExtraSkin;
+                track.sprite = trackOpt.TrackSkin.Value;
+                trackExtraEdgeL.sprite = trackOpt.TrackSkin.Value;
+                trackExtraEdgeR.sprite = trackOpt.TrackSkin.Value;
+                trackExtraL.sprite = trackOpt.TrackExtraSkin.Value;
+                trackExtraR.sprite = trackOpt.TrackExtraSkin.Value;
                 gameplayData.NotifySkinValuesChange();
             }
         }
@@ -141,9 +141,9 @@ namespace ArcCreate.Gameplay.Skin
                 SingleLineOption lineOpt = singleLineOptions.FirstOrDefault(opt => opt.Name == value);
                 lineOpt = lineOpt != null ? lineOpt : currentAlignment.DefaultSingleLineOption;
 
-                singleLineL.sprite = lineOpt.SingleLineSkin;
+                singleLineL.sprite = lineOpt.SingleLineSkin.Value;
                 singleLineL.enabled = lineOpt.Enable;
-                singleLineR.sprite = lineOpt.SingleLineSkin;
+                singleLineR.sprite = lineOpt.SingleLineSkin.Value;
                 singleLineR.enabled = lineOpt.Enable;
                 gameplayData.NotifySkinValuesChange();
             }
@@ -160,7 +160,7 @@ namespace ArcCreate.Gameplay.Skin
 
                 foreach (var c in criticalLines)
                 {
-                    c.sprite = accentOpt.CriticalLineSkin;
+                    c.sprite = accentOpt.CriticalLineSkin.Value;
                 }
 
                 comboText.color = accentOpt.ComboColor;
@@ -184,7 +184,7 @@ namespace ArcCreate.Gameplay.Skin
 
         public Color UnknownArcLowColor => unknownArcLowColor;
 
-        public Sprite DefaultBackground => currentAlignment.DefaultBackground;
+        public Sprite DefaultBackground => currentAlignment.DefaultBackground.Value;
 
         public Sprite GetTapSkin(Tap note)
             => currentNoteSkin.GetTapSkin(note);
@@ -216,7 +216,7 @@ namespace ArcCreate.Gameplay.Skin
         {
             TrackSkinOption trackSkinOpt = trackSkinOptions.FirstOrDefault(opt => opt.Name == name);
             trackSkinOpt = trackSkinOpt != null ? trackSkinOpt : trackSkinOptions.First();
-            return (trackSkinOpt.TrackSkin, trackSkinOpt.TrackExtraSkin);
+            return (trackSkinOpt.TrackSkin.Value, trackSkinOpt.TrackExtraSkin.Value);
         }
 
         public void SetTraceColor(Color color, Color shadow)
@@ -287,38 +287,88 @@ namespace ArcCreate.Gameplay.Skin
             currentNoteSkin = currentAlignment.DefaultNoteOption;
             currentComboColor = currentAlignment.DefaultAccentOption.ComboColor;
 
+            RegisterExternalSkin();
+            LoadExternalSkin().Forget();
+            ResetTraceColors();
+            ResetArcColors();
+        }
+
+        private void RegisterExternalSkin()
+        {
             foreach (var opt in alignmentOptions)
             {
-                opt.LoadExternalSkin().Forget();
+                opt.RegisterExternalSkin();
             }
 
             foreach (var opt in noteSkinOptions)
             {
-                opt.LoadExternalSkin().Forget();
+                opt.RegisterExternalSkin();
             }
 
             foreach (var opt in particleSkinOptions)
             {
-                opt.LoadExternalSkin().Forget();
+                opt.RegisterExternalSkin();
             }
 
             foreach (var opt in trackSkinOptions)
             {
-                opt.LoadExternalSkin().Forget();
+                opt.RegisterExternalSkin();
             }
 
             foreach (var opt in accentOptions)
             {
-                opt.LoadExternalSkin().Forget();
+                opt.RegisterExternalSkin();
             }
 
             foreach (var opt in singleLineOptions)
             {
-                opt.LoadExternalSkin().Forget();
+                opt.RegisterExternalSkin();
+            }
+        }
+
+        private async UniTask LoadExternalSkin()
+        {
+            foreach (var opt in alignmentOptions)
+            {
+                await opt.LoadExternalSkin();
             }
 
-            ResetTraceColors();
-            ResetArcColors();
+            foreach (var opt in noteSkinOptions)
+            {
+                await opt.LoadExternalSkin();
+            }
+
+            foreach (var opt in particleSkinOptions)
+            {
+                await opt.LoadExternalSkin();
+            }
+
+            foreach (var opt in trackSkinOptions)
+            {
+                await opt.LoadExternalSkin();
+            }
+
+            foreach (var opt in accentOptions)
+            {
+                await opt.LoadExternalSkin();
+            }
+
+            foreach (var opt in singleLineOptions)
+            {
+                await opt.LoadExternalSkin();
+            }
+
+            ReapplySkin();
+        }
+
+        private void ReapplySkin()
+        {
+            AlignmentSkin = AlignmentSkin;
+            NoteSkin = NoteSkin;
+            ParticleSkin = ParticleSkin;
+            TrackSkin = TrackSkin;
+            SingleLineSkin = SingleLineSkin;
+            AccentSkin = AccentSkin;
         }
 
         private void OnDestroy()

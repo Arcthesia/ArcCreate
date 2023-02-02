@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: neo
   Enable: 1
-  SingleLineSkin: {fileID: 21300000, guid: 680a4ad28ed7a9b4c8da5137b54c293e, type: 3}
+  singleLineSkin: {fileID: 21300000, guid: 680a4ad28ed7a9b4c8da5137b54c293e, type: 3}

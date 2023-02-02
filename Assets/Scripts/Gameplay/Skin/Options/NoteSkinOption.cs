@@ -67,6 +67,12 @@ namespace ArcCreate.Gameplay.Skin
             }
         }
 
+        internal void RegisterExternalSkin()
+        {
+            TouchSkin.RegisterExternalSkin();
+            JoyconSkin.RegisterExternalSkin();
+        }
+
         internal async UniTask LoadExternalSkin()
         {
             await TouchSkin.LoadExternalSkin();
