@@ -14,7 +14,13 @@
         "GUID:a9c0250d4f2b1c444a5b1e3af5a698eb",
         "GUID:4955ea543c7d37317adad658f64728fc"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor",
+        "LinuxStandalone64",
+        "macOSStandalone",
+        "WindowsStandalone32",
+        "WindowsStandalone64"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
