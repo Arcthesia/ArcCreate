@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.SceneTransition;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -286,6 +287,36 @@ namespace ArcCreate.Gameplay.Skin
             currentNoteSkin = currentAlignment.DefaultNoteOption;
             currentComboColor = currentAlignment.DefaultAccentOption.ComboColor;
 
+            foreach (var opt in alignmentOptions)
+            {
+                opt.LoadExternalSkin().Forget();
+            }
+
+            foreach (var opt in noteSkinOptions)
+            {
+                opt.LoadExternalSkin().Forget();
+            }
+
+            foreach (var opt in particleSkinOptions)
+            {
+                opt.LoadExternalSkin().Forget();
+            }
+
+            foreach (var opt in trackSkinOptions)
+            {
+                opt.LoadExternalSkin().Forget();
+            }
+
+            foreach (var opt in accentOptions)
+            {
+                opt.LoadExternalSkin().Forget();
+            }
+
+            foreach (var opt in singleLineOptions)
+            {
+                opt.LoadExternalSkin().Forget();
+            }
+
             ResetTraceColors();
             ResetArcColors();
         }
@@ -293,6 +324,36 @@ namespace ArcCreate.Gameplay.Skin
         private void OnDestroy()
         {
             Settings.InputMode.OnValueChanged.RemoveListener(ReloadNoteSkin);
+
+            foreach (var opt in alignmentOptions)
+            {
+                opt.UnloadExternalSkin();
+            }
+
+            foreach (var opt in noteSkinOptions)
+            {
+                opt.UnloadExternalSkin();
+            }
+
+            foreach (var opt in particleSkinOptions)
+            {
+                opt.UnloadExternalSkin();
+            }
+
+            foreach (var opt in trackSkinOptions)
+            {
+                opt.UnloadExternalSkin();
+            }
+
+            foreach (var opt in accentOptions)
+            {
+                opt.UnloadExternalSkin();
+            }
+
+            foreach (var opt in singleLineOptions)
+            {
+                opt.UnloadExternalSkin();
+            }
         }
 
         private void ReloadNoteSkin(int inputMode)

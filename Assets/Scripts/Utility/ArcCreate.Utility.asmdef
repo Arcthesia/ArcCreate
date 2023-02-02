@@ -3,7 +3,8 @@
     "references": [
         "SFB.Runtime",
         "Unity.TextMeshPro",
-        "YamlDotNet"
+        "YamlDotNet",
+        "UniTask"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

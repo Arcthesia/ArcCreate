@@ -4136,7 +4136,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a971cf2da077b1c4ba78f60362e51a29, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 59b3f8a72c80ebbe0942ad10f3765d43, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5685,4 +5685,4 @@ MonoBehaviour:
   testAudio: {fileID: 8300000, guid: c277ac71a78e6c24e81cf0d7cb9a5fc3, type: 3}
   gameplayData: {fileID: 11400000, guid: ae19a07671eb9dc748d6346649a697b7, type: 2}
   gameplayCamera: {fileID: 613949612}
-  testPlayChartFileName: test_arc.aff
+  testPlayChartFileName: test_chart.aff
