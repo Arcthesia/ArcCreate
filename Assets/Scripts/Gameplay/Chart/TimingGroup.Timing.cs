@@ -50,7 +50,11 @@ namespace ArcCreate.Gameplay.Chart
         /// <param name="z">The z position.</param>
         /// <returns>The timing value corresponding to the value.</returns>
         public int GetTimingFromZPosition(float z)
-            => GetTimingFromFloorPosition(ArcFormula.ZToFloorPosition(z) + GetFloorPosition(Services.Audio.ChartTiming));
+        {
+            double fp = ArcFormula.ZToFloorPosition(z);
+            double currentFp = GetFloorPosition(Services.Audio.ChartTiming);
+            return GetTimingFromFloorPosition(fp + currentFp);
+        }
 
         /// <summary>
         /// Get the timing value corresponding to a floor position value.
@@ -73,8 +77,8 @@ namespace ArcCreate.Gameplay.Chart
                 TimingEvent next = timings[i + 1];
 
                 // Floor position sandwiched between two timing events
-                if ((curr.FloorPosition < fp && next.FloorPosition > fp)
-                 || (curr.FloorPosition > fp && next.FloorPosition < fp))
+                if ((curr.FloorPosition <= fp && next.FloorPosition > fp)
+                 || (curr.FloorPosition >= fp && next.FloorPosition < fp))
                 {
                     int val = (int)((Math.Round(fp - curr.FloorPosition) / curr.Bpm) + curr.Timing);
                     int diff = Mathf.Abs(val - timing);

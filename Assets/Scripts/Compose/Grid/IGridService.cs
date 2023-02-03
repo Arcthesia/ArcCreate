@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace ArcCreate.Compose.Grid
 {
     public interface IGridService
@@ -32,5 +34,20 @@ namespace ArcCreate.Compose.Grid
         /// <param name="sourceTiming">The base timing point.</param>
         /// <returns>The smallest timing point on the grid that's larger than the passed in value.</returns>
         int MoveTimingForward(int sourceTiming);
+
+        /// <summary>
+        /// Snap a point onto the vertical grid if the grid is enabled.
+        /// or returns the passed in value as-is otherwise.
+        /// </summary>
+        /// <param name="point">The base point to snap.</param>
+        /// <returns>The closest point on the vertical grid.</returns>
+        Vector2 SnapPointToGridIfEnabled(Vector2 point);
+
+        /// <summary>
+        /// Snap a point onto the vertical grid.
+        /// </summary>
+        /// <param name="point">The base point to snap.</param>
+        /// <returns>The closest point on the vertical grid.</returns>
+        Vector2 SnapPointToGrid(Vector2 point);
     }
 }

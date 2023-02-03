@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using ArcCreate.Gameplay;
 using ArcCreate.Gameplay.Chart;
@@ -14,6 +13,7 @@ namespace ArcCreate.Compose.Grid
         [SerializeField] private Transform beatlineParent;
         [SerializeField] private List<BeatlineColorSetting> beatlineColorSettings;
         [SerializeField] private Color beatlineFallbackColor;
+        [SerializeField] private MeshCollider laneCollider;
         private BeatlineDisplay beatlineDisplay;
         private TimingGroup tg = null;
         private readonly List<int> timingList = new List<int>();
@@ -43,18 +43,29 @@ namespace ArcCreate.Compose.Grid
 
         public int SnapToTimingGrid(int sourceTiming)
         {
-            int indexLeft = timingList.BisectLeft(sourceTiming);
+            int indexMid = timingList.BisectLeft(sourceTiming);
+            int indexLeft = indexMid - 1;
             int indexRight = timingList.BisectRight(sourceTiming);
 
             indexLeft = Mathf.Clamp(indexLeft, 0, timingList.Count);
+            indexMid = Mathf.Clamp(indexMid, 0, timingList.Count);
             indexRight = Mathf.Clamp(indexRight, 0, timingList.Count);
 
             int timingLeft = timingList[indexLeft];
+            int timingMid = timingList[indexMid];
             int timingRight = timingList[indexRight];
 
-            if (Mathf.Abs(sourceTiming - timingLeft) < Mathf.Abs(sourceTiming - timingRight))
+            int diffLeft = Mathf.Abs(sourceTiming - timingLeft);
+            int diffMid = Mathf.Abs(sourceTiming - timingMid);
+            int diffRight = Mathf.Abs(sourceTiming - timingRight);
+
+            if (diffLeft <= diffMid && diffLeft <= diffRight)
             {
                 return timingLeft;
+            }
+            else if (diffMid <= diffLeft && diffMid <= diffRight)
+            {
+                return timingMid;
             }
             else
             {
@@ -67,6 +78,20 @@ namespace ArcCreate.Compose.Grid
             gameObject.SetActive(value);
         }
 
+        public void LoadGridSettings(int laneFrom, int laneTo)
+        {
+            if (laneFrom > laneTo)
+            {
+                (laneFrom, laneTo) = (laneTo, laneFrom);
+            }
+
+            Destroy(laneCollider.sharedMesh);
+            float worldFrom = ArcFormula.LaneToWorldX(laneFrom) + (Gameplay.Values.LaneWidth / 2f);
+            float worldTo = ArcFormula.LaneToWorldX(laneTo) - (Gameplay.Values.LaneWidth / 2f);
+
+            laneCollider.sharedMesh = MeshBuilder.BuildQuadMeshLane(worldFrom, worldTo);
+        }
+
         public void Setup()
         {
             var pool = Pools.New<BeatlineBehaviour>(Values.BeatlinePoolName, beatlinePrefab, beatlineParent, 30);
@@ -76,6 +101,8 @@ namespace ArcCreate.Compose.Grid
             gameplayData.OnChartFileLoad += OnChartChange;
             gameplayData.OnChartTimingEdit += OnChartChange;
             gameplayData.OnGameplayUpdate += UpdateBeatlines;
+
+            laneCollider.sharedMesh = Instantiate(laneCollider.sharedMesh);
         }
 
         private void OnDestroy()
