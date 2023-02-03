@@ -1,7 +1,5 @@
-using System.IO;
 using ArcCreate.Compose.Components;
 using ArcCreate.Gameplay;
-using ArcCreate.Utility.Mp3Converter;
 using UnityEngine;
 
 namespace ArcCreate.Compose.Project
@@ -44,19 +42,6 @@ namespace ArcCreate.Compose.Project
             if (path == null)
             {
                 audioFile.SetPathWithoutNotify(Target.AudioPath);
-                return;
-            }
-
-            if (Path.GetExtension(path.FullPath) == ".mp3")
-            {
-                FilePath converted = FilePath.Local(
-                    directory: Path.GetDirectoryName(Services.Project.CurrentProject.Path),
-                    originalPath: Path.ChangeExtension(path.FullPath, ".wav"));
-
-                Mp3Converter.Mp3ToWav(path.FullPath, converted.FullPath);
-
-                Target.AudioPath = converted.ShortenedPath;
-                gameplayData.LoadAudio(converted.FullPath);
                 return;
             }
 
