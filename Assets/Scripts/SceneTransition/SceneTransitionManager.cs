@@ -105,7 +105,7 @@ namespace ArcCreate.SceneTransition
         /// <param name="rep">The representative of the loaded scene.</param>
         public void LoadSceneComplete(SceneRepresentative rep)
         {
-            onLoadSceneComplete.Invoke(rep);
+            onLoadSceneComplete?.Invoke(rep);
             onLoadSceneComplete = null;
         }
 
