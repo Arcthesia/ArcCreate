@@ -7,7 +7,8 @@ namespace ArcCreate.Utility.Parser
     /// </summary>
     public class Evaluator
     {
-        private static readonly CalculationEngine Engine = new CalculationEngine();
+        private static readonly CalculationEngine Engine =
+            new CalculationEngine(System.Globalization.CultureInfo.CurrentCulture, Jace.Execution.ExecutionMode.Interpreted);
 
         public static float Float(string str)
         {
