@@ -11,7 +11,6 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "NAudio.dll",
         "Jace.dll"
     ],
     "autoReferenced": true,
