@@ -63,6 +63,8 @@ Compose:
       Invalid project file: No chart is included within this project.
     InvalidGroupProperties: |-
       Invalid timing group properties. {Message}
+    InstructionLimit: |-
+      Lua script execution has been aborted: The instruction count limit of {0} was reached.
     Navigation:
       ParseKeybind: |-
         An exception occured while parsing the keybind: "{0}".

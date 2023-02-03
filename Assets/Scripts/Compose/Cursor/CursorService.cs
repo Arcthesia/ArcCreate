@@ -135,6 +135,29 @@ namespace ArcCreate.Compose.Cursor
             onClipboard?.Invoke(GUIUtility.systemCopyBuffer);
         }
 
+#if UNITY_EDITOR
+        [EditorAction("Test", false, "tv")]
+        [SubAction("Confirm", false, "<cr>", "<u-mouse1>")]
+        [SubAction("Cancel", false, "<esc>")]
+        [WhitelistScopes(typeof(CursorService), typeof(Grid.GridService))]
+        public async UniTask TestCursor(EditorAction action)
+        {
+            SubAction confirm = action.GetSubAction("Confirm");
+            SubAction cancel = action.GetSubAction("Cancel");
+            (bool timingSuccess, int timing) = await RequestTimingSelection(confirm, cancel);
+            if (!timingSuccess)
+            {
+                return;
+            }
+
+            (bool pointSuccess, Vector2 point) = await RequestVerticalSelection(confirm, cancel, timing);
+            if (pointSuccess)
+            {
+                print(point);
+            }
+        }
+#endif
+
         private void Update()
         {
             if (Services.Gameplay?.IsLoaded ?? false)
@@ -242,17 +265,19 @@ namespace ArcCreate.Compose.Cursor
             float minLane = -8.5f;
             float maxLane = 8.5f;
 
+            Vector2 snapped = Services.Grid.SnapPointToGridIfEnabled(hit.point);
+
             cursorVerticalX.DrawLine(
-                from: new Vector3(hit.point.x, 0, hit.point.z),
-                to: new Vector3(hit.point.x, Gameplay.Values.ArcY1, hit.point.z));
+                from: new Vector3(snapped.x, 0, 0),
+                to: new Vector3(snapped.x, Gameplay.Values.ArcY1, 0));
 
             cursorVerticalY.DrawLine(
-                from: new Vector3(minLane, hit.point.y, hit.point.z),
-                to: new Vector3(maxLane, hit.point.y, hit.point.z));
+                from: new Vector3(minLane, snapped.y, 0),
+                to: new Vector3(maxLane, snapped.y, 0));
 
             selectingVerticalPoint = new Vector2(
-                Gameplay.ArcFormula.WorldXToArc(hit.point.x),
-                Gameplay.ArcFormula.WorldYToArc(hit.point.y));
+                Gameplay.ArcFormula.WorldXToArc(snapped.x),
+                Gameplay.ArcFormula.WorldYToArc(snapped.y));
         }
 
         private void DisableVerticalCursor()

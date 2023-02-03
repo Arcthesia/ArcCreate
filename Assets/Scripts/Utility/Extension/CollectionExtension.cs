@@ -19,8 +19,8 @@ namespace ArcCreate.Utility.Extension
         }
 
         /// <summary>
-        /// Search for smallest index within a sorted list, whose corresponding item is greater than or equal to the provided value.
-        /// Example: for the list [0, 0, 1, 2, 2, 3], searching for 2 will return the index 3.
+        /// Search for smallest index within a sorted list, whose corresponding item is greater than or equal to the provided value.<br/>
+        /// Example: for the list [0, 0, 1, 2, 2, 3], searching for 2 will return the index 3.<br/>
         /// The returned index is guaranteed to be within the range of the list.
         /// </summary>
         /// <param name="list">The list to bisect.</param>
@@ -65,8 +65,8 @@ namespace ArcCreate.Utility.Extension
         }
 
         /// <summary>
-        /// Search for smallest index within a sorted list, whose corresponding item is greater than or equal to the provided value.
-        /// Example: for the list [0, 0, 1, 2, 2, 3], searching for 2 will return the index 3.
+        /// Search for smallest index within a sorted list, whose corresponding item is greater than or equal to the provided value.<br/>
+        /// Example: for the list [0, 0, 1, 2, 2, 3], searching for 2 will return the index 3.<br/>
         /// The returned index is guaranteed to be within the range of the list.
         /// </summary>
         /// <param name="list">The list to bisect.</param>
@@ -109,9 +109,9 @@ namespace ArcCreate.Utility.Extension
         }
 
         /// <summary>
-        /// Search for smallest index within a sorted list, whose corresponding item is greater than the provided value.
-        /// Example: for the list [0, 0, 1, 2, 2, 3], searching for 2 will return the index 5.
-        /// If the search value is greater than any item in the list, the list's count value will be returned.
+        /// Search for smallest index within a sorted list, whose corresponding item is greater than the provided value.<br/>
+        /// Example: for the list [0, 0, 1, 2, 2, 3], searching for 2 will return the index 5.<br/>
+        /// If the search value is greater than any item in the list, the list's count value will be returned.<br/>
         /// If the search value is smaller than any item in the list, -1 will be returned.
         /// </summary>
         /// <param name="list">The list to bisect.</param>
@@ -145,9 +145,9 @@ namespace ArcCreate.Utility.Extension
         }
 
         /// <summary>
-        /// Search for smallest index within a sorted list, whose corresponding item is greater than the provided value.
-        /// Example: for the list [0, 0, 1, 2, 2, 3], searching for 2 will return the index 5.
-        /// If the search value is greater than any item in the list, the list's count value will be returned.
+        /// Search for smallest index within a sorted list, whose corresponding item is greater than the provided value.<br/>
+        /// Example: for the list [0, 0, 1, 2, 2, 3], searching for 2 will return the index 5.<br/>
+        /// If the search value is greater than any item in the list, the list's count value will be returned.<br/>
         /// If the search value is smaller than any item in the list, -1 will be returned.
         /// </summary>
         /// <param name="list">The list to bisect.</param>
