@@ -1,4 +1,5 @@
 using System;
+using ArcCreate.Compose.Components;
 using ArcCreate.Compose.Navigation;
 using ArcCreate.Utility.Extension;
 using ArcCreate.Utility.Parser;
@@ -165,7 +166,8 @@ namespace ArcCreate.Compose.Cursor
                 Mouse mouse = Mouse.current;
                 Camera gameplayCamera = Services.Gameplay.Camera.GameplayCamera;
                 Vector2 mousePosition = mouse.position.ReadValue();
-                if (!RectTransformUtility.RectangleContainsScreenPoint(gameplayViewport, mousePosition, editorCamera))
+                if (Dialog.IsAnyOpen
+                || !RectTransformUtility.RectangleContainsScreenPoint(gameplayViewport, mousePosition, editorCamera))
                 {
                     return;
                 }

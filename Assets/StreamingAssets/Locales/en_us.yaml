@@ -137,6 +137,13 @@ Compose:
         The file itself will NOT be deleted and can be added back to the project later, but any metadata associated with it will be lost.
       Yes: Remove
       No: Cancel
+    UnsavedChanges:
+      Title: Unsaved changes
+      Content: |-
+        Your project has unsaved changes. Do you want save?
+      Yes: Save changes
+      No: Discard changes
+      Cancel: Cancel
   Navigation:
     KeybindOverride: Overriding keybind for action {0}
     Actions:

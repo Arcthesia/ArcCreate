@@ -120,6 +120,8 @@ namespace ArcCreate.Compose.Project
             if (Evaluator.TryInt(value, out int offset))
             {
                 gameplayData.AudioOffset.Value = offset;
+
+                Values.ProjectModified = true;
             }
         }
 
@@ -133,6 +135,8 @@ namespace ArcCreate.Compose.Project
             if (Evaluator.TryFloat(value, out float factor))
             {
                 gameplayData.TimingPointDensityFactor.Value = factor;
+
+                Values.ProjectModified = true;
             }
         }
 
@@ -140,12 +144,16 @@ namespace ArcCreate.Compose.Project
         {
             Target.Title = value;
             gameplayData.Title.Value = value;
+
+            Values.ProjectModified = true;
         }
 
         private void OnComposer(string value)
         {
             Target.Composer = value;
             gameplayData.Composer.Value = value;
+
+            Values.ProjectModified = true;
 
             if (Settings.EnableEasterEggs.Value)
             {
@@ -170,18 +178,24 @@ namespace ArcCreate.Compose.Project
         {
             Target.Illustrator = value;
             gameplayData.Illustrator.Value = value;
+
+            Values.ProjectModified = true;
         }
 
         private void OnCharter(string value)
         {
             Target.Charter = value;
             gameplayData.Charter.Value = value;
+
+            Values.ProjectModified = true;
         }
 
         private void OnGameplayBaseBpm(float bpm)
         {
             Target.BaseBpm = bpm;
             baseBpm.SetTextWithoutNotify(bpm.ToString());
+
+            Values.ProjectModified = true;
 
             if (Target.SyncBaseBpm)
             {
@@ -195,6 +209,8 @@ namespace ArcCreate.Compose.Project
             {
                 Target.BaseBpm = bpm;
                 gameplayData.BaseBpm.Value = bpm;
+
+                Values.ProjectModified = true;
             }
 
             if (Settings.EnableEasterEggs.Value && Target.BaseBpm >= 300)
@@ -207,6 +223,8 @@ namespace ArcCreate.Compose.Project
         {
             Target.SyncBaseBpm = value;
 
+            Values.ProjectModified = true;
+
             if (value)
             {
                 MirrorBaseBpmToTimingList();
@@ -218,6 +236,8 @@ namespace ArcCreate.Compose.Project
             if (Evaluator.TryFloat(value, out float cc))
             {
                 Target.ChartConstant = cc;
+
+                Values.ProjectModified = true;
             }
 
             if (Settings.EnableEasterEggs.Value)
@@ -238,12 +258,16 @@ namespace ArcCreate.Compose.Project
         {
             Target.Difficulty = value;
             gameplayData.DifficultyName.Value = value;
+
+            Values.ProjectModified = true;
         }
 
         private void OnDifficultyColor(Color color)
         {
             Target.DifficultyColor = color.ConvertToHexCode();
             gameplayData.DifficultyColor.Value = color;
+
+            Values.ProjectModified = true;
         }
 
         private void OnDiffColorPreset(Button button)
@@ -261,6 +285,8 @@ namespace ArcCreate.Compose.Project
             Color c = Services.Project.DefaultDifficultyColors[index];
             OnDifficultyColor(c);
             difficultyColor.SetValueWithoutNotify(c);
+
+            Values.ProjectModified = true;
         }
 
         private void OnChartTimingEdit()
@@ -270,6 +296,8 @@ namespace ArcCreate.Compose.Project
                 var baseGroup = Services.Gameplay.Chart.GetTimingGroup(0);
                 var baseTiming = baseGroup.Timings[0];
                 gameplayData.BaseBpm.Value = baseTiming.Bpm;
+
+                Values.ProjectModified = true;
             }
         }
 

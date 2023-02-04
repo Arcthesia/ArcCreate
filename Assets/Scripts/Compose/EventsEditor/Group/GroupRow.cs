@@ -132,6 +132,8 @@ namespace ArcCreate.Compose.EventsEditor
                 return;
             }
 
+            Values.ProjectModified = true;
+
             value = value.Trim();
             value = value.Replace("=", string.Empty);
             value = value.Replace(",", string.Empty);
@@ -159,6 +161,8 @@ namespace ArcCreate.Compose.EventsEditor
                     Name = Reference.GroupProperties.Name,
                 };
                 Reference.SetGroupProperties(new Gameplay.Data.GroupProperties(group));
+
+                Values.ProjectModified = true;
 
                 Debug.Log(I18n.S(
                     "Compose.Notify.History.EditGroup", new Dictionary<string, object>

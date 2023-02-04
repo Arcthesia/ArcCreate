@@ -25,7 +25,7 @@ namespace ArcCreate.Compose.Popups
         private void OnClick()
         {
             callback?.Invoke();
-            dialog.CloseSelf();
+            dialog.Close();
         }
     }
 }

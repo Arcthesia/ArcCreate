@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Project
 {
-    public class NewProjectDialog : MonoBehaviour
+    public class NewProjectDialog : Dialog
     {
         [SerializeField] private FileSelectField projectFileField;
         [SerializeField] private Button confirmButton;
@@ -23,16 +23,6 @@ namespace ArcCreate.Compose.Project
 
         private string StartingChartFile
             => startingChartFileField.text + startingChartFileExtension.options[startingChartFileExtension.value].text;
-
-        public void Open()
-        {
-            gameObject.SetActive(true);
-        }
-
-        public void Close()
-        {
-            gameObject.SetActive(false);
-        }
 
         private void OnConfirm()
         {
