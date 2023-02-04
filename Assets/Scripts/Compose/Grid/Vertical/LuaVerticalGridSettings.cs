@@ -8,9 +8,9 @@ using UnityEngine;
 namespace ArcCreate.Compose.Grid
 {
     [MoonSharpUserData]
-    public class LuaGridSettings : IGridSettings, IScriptSetup
+    public class LuaVerticalGridSettings : IVerticalGridSettings, IScriptSetup
     {
-        public LuaGridSettings(string settings, int instructionLimit = 3000)
+        public LuaVerticalGridSettings(string settings, int instructionLimit = 3000)
         {
             LuaRunner.RunScript(settings, this, instructionLimit);
         }

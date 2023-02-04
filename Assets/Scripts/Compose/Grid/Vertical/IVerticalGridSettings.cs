@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ArcCreate.Compose.Grid
 {
-    public interface IGridSettings
+    public interface IVerticalGridSettings
     {
         Rect ColliderArea { get; }
 
