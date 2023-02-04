@@ -18,8 +18,6 @@ namespace ArcCreate.Compose.History
         private readonly Stack<ICommand> undoStack = new Stack<ICommand>();
         private readonly Stack<ICommand> redoStack = new Stack<ICommand>();
 
-        public DateTime LastEdit { get; private set; }
-
         public int UndoCount => undoStack.Count;
 
         public int RedoCount => redoStack.Count;
@@ -88,7 +86,7 @@ namespace ArcCreate.Compose.History
             undoButton.interactable = undoStack.Count > 0;
             redoButton.interactable = redoStack.Count > 0;
 
-            LastEdit = DateTime.Now;
+            Values.ProjectModified = true;
         }
 
         private void Notify(string i18nKey, ICommand cmd)

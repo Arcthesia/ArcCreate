@@ -27,7 +27,7 @@ namespace ArcCreate.ChartFormat
             string[] split = def.Split(',');
             foreach (string optRaw in split)
             {
-                string opt = optRaw.ToLower();
+                string opt = optRaw.Trim().ToLower();
                 if (opt.Contains("="))
                 {
                     string[] tokens = opt.Split('=');

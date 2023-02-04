@@ -52,6 +52,8 @@ namespace ArcCreate.Compose.EventsEditor
             Values.EditingTimingGroup.Value = newTgNum;
             JumpTo(Data.Count);
 
+            Values.ProjectModified = true;
+
             Debug.Log(I18n.S(
                 "Compose.Notify.History.AddGroup", new Dictionary<string, object>
                 {
@@ -92,6 +94,8 @@ namespace ArcCreate.Compose.EventsEditor
             // Trigger OnEdittingTimingGroup
             Values.EditingTimingGroup.Value = Mathf.Min(Selected.GroupNumber, Services.Gameplay.Chart.TimingGroups.Count - 1);
             JumpTo(index - 1);
+
+            Values.ProjectModified = true;
 
             Debug.Log(I18n.S(
                 "Compose.Notify.History.RemoveGroup", new Dictionary<string, object>

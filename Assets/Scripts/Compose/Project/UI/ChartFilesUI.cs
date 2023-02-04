@@ -47,6 +47,8 @@ namespace ArcCreate.Compose.Project
 
             Target.AudioPath = path.ShortenedPath;
             gameplayData.LoadAudio(path.FullPath);
+
+            Values.ProjectModified = true;
         }
 
         private void OnJacket(FilePath path)
@@ -60,6 +62,8 @@ namespace ArcCreate.Compose.Project
 
             Target.JacketPath = path.ShortenedPath;
             gameplayData.LoadJacket(path.FullPath);
+
+            Values.ProjectModified = true;
         }
 
         private void OnBackground(FilePath path)
@@ -73,12 +77,16 @@ namespace ArcCreate.Compose.Project
 
             Target.BackgroundPath = path.ShortenedPath;
             gameplayData.LoadBackground(path.FullPath);
+
+            Values.ProjectModified = true;
         }
 
         private void OnVideo(FilePath path)
         {
             Target.VideoPath = path.ShortenedPath;
             gameplayData.VideoBackgroundUrl.Value = "file:///" + path.FullPath.Replace("\\", "/");
+
+            Values.ProjectModified = true;
         }
     }
 }

@@ -48,6 +48,8 @@ namespace ArcCreate.Compose.Project
             CreateSkinObjectIfNull();
             Target.Skin.Side = value;
             Services.Gameplay.Skin.AlignmentSkin = value;
+
+            Values.ProjectModified = true;
         }
 
         private void OnNote(string value)
@@ -55,6 +57,8 @@ namespace ArcCreate.Compose.Project
             CreateSkinObjectIfNull();
             Target.Skin.Note = value;
             Services.Gameplay.Skin.NoteSkin = value;
+
+            Values.ProjectModified = true;
         }
 
         private void OnParticle(string value)
@@ -62,6 +66,8 @@ namespace ArcCreate.Compose.Project
             CreateSkinObjectIfNull();
             Target.Skin.Particle = value;
             Services.Gameplay.Skin.ParticleSkin = value;
+
+            Values.ProjectModified = true;
         }
 
         private void OnAccent(string value)
@@ -69,6 +75,8 @@ namespace ArcCreate.Compose.Project
             CreateSkinObjectIfNull();
             Target.Skin.Accent = value;
             Services.Gameplay.Skin.AccentSkin = value;
+
+            Values.ProjectModified = true;
         }
 
         private void OnTrack(string value)
@@ -76,6 +84,8 @@ namespace ArcCreate.Compose.Project
             CreateSkinObjectIfNull();
             Target.Skin.Track = value;
             Services.Gameplay.Skin.TrackSkin = value;
+
+            Values.ProjectModified = true;
         }
 
         private void OnSingleLine(string value)
@@ -83,6 +93,8 @@ namespace ArcCreate.Compose.Project
             CreateSkinObjectIfNull();
             Target.Skin.SingleLine = value;
             Services.Gameplay.Skin.SingleLineSkin = value;
+
+            Values.ProjectModified = true;
         }
 
         private void CreateSkinObjectIfNull()

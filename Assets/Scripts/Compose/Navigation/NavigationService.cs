@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using ArcCreate.Compose.Components;
 using ArcCreate.Utilities;
 using Cysharp.Threading.Tasks;
 using TMPro;
@@ -135,6 +136,11 @@ namespace ArcCreate.Compose.Navigation
                 {
                     return false;
                 }
+            }
+
+            if (Dialog.IsAnyOpen)
+            {
+                return false;
             }
 
             EditorAction currentAction = null;

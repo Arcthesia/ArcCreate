@@ -39,5 +39,7 @@ namespace ArcCreate.Compose
         public static float LaneFromX { get; set; } = -8.5f;
 
         public static float LaneToX { get; set; } = 8.5f;
+
+        public static bool ProjectModified { get; set; } = false;
     }
 }

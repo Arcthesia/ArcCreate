@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using ArcCreate.ChartFormat;
 using ArcCreate.Compose.Navigation;
+using ArcCreate.Compose.Popups;
 using ArcCreate.Gameplay;
 using ArcCreate.Utility;
 using ArcCreate.Utility.Extension;
@@ -111,8 +112,8 @@ namespace ArcCreate.Compose.Project
 
             chartPicker.SetOptions(CurrentProject.Charts, CurrentChart);
             currentChartPath.text = CurrentChart.ChartPath;
-            OnChartLoad?.Invoke(CurrentChart);
 
+            LoadChart(CurrentChart);
             Debug.Log(
                 I18n.S("Compose.Notify.Project.CreateChart", new Dictionary<string, object>()
                 {
@@ -125,8 +126,8 @@ namespace ArcCreate.Compose.Project
             CurrentChart = chart;
             CurrentProject.LastOpenedChartPath = CurrentChart.ChartPath;
             currentChartPath.text = CurrentChart.ChartPath;
-            LoadChart(CurrentChart.ChartPath);
-            OnChartLoad?.Invoke(CurrentChart);
+            LoadChart(CurrentChart);
+            Services.Gameplay.Audio.AudioTiming = chart.LastWorkingTiming;
         }
 
         public void RemoveChart(ChartSettings chart)
@@ -147,13 +148,31 @@ namespace ArcCreate.Compose.Project
         }
 
         [EditorAction("New", false, "<c-n>")]
-        private void OnNewProjectPressed()
+        public void StartCreatingNewProject()
         {
-            newProjectDialog.Open();
+            OpenUnsavedChangesDialog(newProjectDialog.Open);
         }
 
         [EditorAction("Open", false, "<c-o>")]
-        private void OnOpenProjectPressed()
+        public void StartOpeningProject()
+        {
+            OpenUnsavedChangesDialog(OnOpenConfirmed);
+        }
+
+        [EditorAction("Save", false, "<c-s>")]
+        [RequireGameplayLoaded]
+        public void SaveProject()
+        {
+            if (CurrentProject == null)
+            {
+                return;
+            }
+
+            CurrentChart.LastWorkingTiming = Services.Gameplay.Audio.AudioTiming;
+            Serialize(CurrentProject);
+        }
+
+        private void OnOpenConfirmed()
         {
             string path = Shell.OpenFileDialog(
                 filterName: "ArcCreate Project",
@@ -170,18 +189,6 @@ namespace ArcCreate.Compose.Project
             OpenProject(path);
         }
 
-        [EditorAction("Save", false, "<c-s>")]
-        [RequireGameplayLoaded]
-        private void OnSaveProjectPressed()
-        {
-            if (CurrentProject == null)
-            {
-                return;
-            }
-
-            Serialize(CurrentProject);
-        }
-
         private void OpenProjectFolder()
         {
             if (CurrentProject == null)
@@ -194,9 +201,9 @@ namespace ArcCreate.Compose.Project
 
         private void Awake()
         {
-            newProjectButton.onClick.AddListener(OnNewProjectPressed);
-            openProjectButton.onClick.AddListener(OnOpenProjectPressed);
-            saveProjectButton.onClick.AddListener(OnSaveProjectPressed);
+            newProjectButton.onClick.AddListener(StartCreatingNewProject);
+            openProjectButton.onClick.AddListener(StartOpeningProject);
+            saveProjectButton.onClick.AddListener(SaveProject);
             openFolderButton.onClick.AddListener(OpenProjectFolder);
             toggleInteractiveCanvas.interactable = false;
             noProjectLoadedHint.SetActive(true);
@@ -204,9 +211,9 @@ namespace ArcCreate.Compose.Project
 
         private void OnDestroy()
         {
-            newProjectButton.onClick.RemoveListener(OnNewProjectPressed);
-            openProjectButton.onClick.RemoveListener(OnOpenProjectPressed);
-            saveProjectButton.onClick.RemoveListener(OnSaveProjectPressed);
+            newProjectButton.onClick.RemoveListener(StartCreatingNewProject);
+            openProjectButton.onClick.RemoveListener(StartOpeningProject);
+            saveProjectButton.onClick.RemoveListener(SaveProject);
             openFolderButton.onClick.RemoveListener(OpenProjectFolder);
         }
 
@@ -236,8 +243,7 @@ namespace ArcCreate.Compose.Project
             noProjectLoadedHint.SetActive(false);
 
             currentChartPath.text = CurrentChart.ChartPath;
-            LoadChart(CurrentChart.ChartPath);
-            OnChartLoad?.Invoke(CurrentChart);
+            LoadChart(CurrentChart);
 
             Debug.Log(
                 I18n.S("Compose.Notify.Project.OpenProject", new Dictionary<string, object>()
@@ -253,6 +259,8 @@ namespace ArcCreate.Compose.Project
                 .Build();
             string yaml = serializer.Serialize(projectSettings);
             File.WriteAllText(projectSettings.Path, yaml);
+
+            Values.ProjectModified = false;
 
             Debug.Log(
                 I18n.S("Compose.Notify.Project.SaveProject", new Dictionary<string, object>()
@@ -311,22 +319,90 @@ namespace ArcCreate.Compose.Project
             }
         }
 
-        private void LoadChart(string chartPath)
+        private void LoadChart(ChartSettings chart)
         {
             string dir = Path.GetDirectoryName(CurrentProject.Path);
-            string path = Path.Combine(dir, chartPath);
+            string path = Path.Combine(dir, chart.ChartPath);
+
+            if (!File.Exists(path))
+            {
+                var writer = ChartFileWriterFactory.GetWriterFromFilename(path);
+                using (FileStream fileStream = File.OpenWrite(path))
+                {
+                    writer.Write(
+                        new StreamWriter(fileStream),
+                        0,
+                        1,
+                        new List<(RawTimingGroup, IEnumerable<RawEvent>)>()
+                        {
+                            (new RawTimingGroup(), new List<RawEvent>()
+                                {
+                                    new RawTiming()
+                                    {
+                                        Timing = 0,
+                                        TimingGroup = 0,
+                                        Bpm = chart.BaseBpm,
+                                        Divisor = 4,
+                                    },
+                                }),
+                        });
+                }
+            }
+
             ChartReader reader = ChartReaderFactory.GetReader(new PhysicalFileAccess(), path);
 
-            // Maybe move this somewhere else later
-            Values.EditingTimingGroup.Value = 0;
             reader.Parse();
             gameplayData.LoadChart(reader);
+            OnChartLoad?.Invoke(chart);
 
             Debug.Log(
                 I18n.S("Compose.Notify.Project.OpenChart", new Dictionary<string, object>()
                 {
-                    { "Path", chartPath },
+                    { "Path", chart.ChartPath },
                 }));
+        }
+
+        private void OpenUnsavedChangesDialog(System.Action onConfirm)
+        {
+            if (Values.ProjectModified == false)
+            {
+                onConfirm.Invoke();
+                return;
+            }
+
+            Services.Popups.CreateTextDialog(
+                title: I18n.S("Compose.Dialog.UnsavedChanges.Title"),
+                content: I18n.S("Compose.Dialog.UnsavedChanges.Content"),
+                buttonSettings: new ButtonSetting[]
+                {
+                    new ButtonSetting
+                    {
+                        Text = I18n.S("Compose.Dialog.UnsavedChanges.Yes"),
+                        Callback = () =>
+                        {
+                            Services.Project.SaveProject();
+                            onConfirm.Invoke();
+                            Values.ProjectModified = false;
+                        },
+                        ButtonColor = ButtonColor.Highlight,
+                    },
+                    new ButtonSetting
+                    {
+                        Text = I18n.S("Compose.Dialog.UnsavedChanges.No"),
+                        Callback = () =>
+                        {
+                            onConfirm.Invoke();
+                            Values.ProjectModified = false;
+                        },
+                        ButtonColor = ButtonColor.Danger,
+                    },
+                    new ButtonSetting
+                    {
+                        Text = I18n.S("Compose.Dialog.UnsavedChanges.Cancel"),
+                        Callback = null,
+                        ButtonColor = ButtonColor.Default,
+                    },
+                });
         }
     }
 }

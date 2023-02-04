@@ -233,6 +233,8 @@ namespace ArcCreate.Compose.Project
             Target.Colors.Shadow = shadow.Value.ConvertToHexCode();
             Target.Colors.Arc = highColorStrings;
             Target.Colors.ArcLow = lowColorStrings;
+
+            Values.ProjectModified = true;
         }
 
         private void Update()

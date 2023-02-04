@@ -8,8 +8,6 @@ namespace ArcCreate.Compose.History
 
         int RedoCount { get; }
 
-        DateTime LastEdit { get; }
-
         void AddCommand(ICommand command);
 
         void Undo();

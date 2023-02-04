@@ -1,13 +1,12 @@
-using System.Collections;
+using ArcCreate.Compose.Components;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Popups
 {
     [RequireComponent(typeof(RectTransform))]
-    public class TextDialog : MonoBehaviour
+    public class TextDialog : Dialog
     {
         private RectTransform rect;
         [SerializeField] private TMP_Text titleText;
@@ -21,6 +20,7 @@ namespace ArcCreate.Compose.Popups
 
         public void Setup(string title, string content, ButtonSetting[] buttonSettings)
         {
+            Open();
             titleText.text = title;
             contentText.text = content;
 
@@ -35,8 +35,9 @@ namespace ArcCreate.Compose.Popups
             SetBoxHeightCoroutine().Forget();
         }
 
-        public void CloseSelf()
+        public override void Close()
         {
+            base.Close();
             Destroy(gameObject);
         }
 

@@ -198,9 +198,6 @@ namespace ArcCreate.Gameplay.Chart
         {
             Clear();
 
-            gameplayData.AudioOffset.Value = chart.AudioOffset;
-            gameplayData.TimingPointDensityFactor.Value = chart.TimingPointDensity;
-
             for (int j = 0; j < chart.TimingGroups.Count; j++)
             {
                 ChartTimingGroup tg = chart.TimingGroups[j];
@@ -212,6 +209,9 @@ namespace ArcCreate.Gameplay.Chart
 
             Services.Camera.Load(chart.Cameras);
             Services.Scenecontrol.Load(chart.SceneControls);
+
+            gameplayData.AudioOffset.Value = chart.AudioOffset;
+            gameplayData.TimingPointDensityFactor.Value = chart.TimingPointDensity;
 
             ReloadBeatline();
             ResetJudge();

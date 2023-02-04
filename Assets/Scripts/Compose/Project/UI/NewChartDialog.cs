@@ -1,10 +1,11 @@
+using ArcCreate.Compose.Components;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Project
 {
-    public class NewChartDialog : MonoBehaviour
+    public class NewChartDialog : Dialog
     {
         [SerializeField] private TMP_InputField chartNameField;
         [SerializeField] private TMP_Dropdown chartExtension;
@@ -12,16 +13,6 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private Button closeButton;
         [SerializeField] private GameObject warningObject;
         [SerializeField] private TMP_Text warningText;
-
-        public void Open()
-        {
-            gameObject.SetActive(true);
-        }
-
-        public void Close()
-        {
-            gameObject.SetActive(false);
-        }
 
         private void OnConfirm(string name)
         {

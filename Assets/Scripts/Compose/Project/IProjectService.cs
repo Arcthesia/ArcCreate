@@ -50,5 +50,10 @@ namespace ArcCreate.Compose.Project
         /// </summary>
         /// <param name="chart">The chart to remove.</param>
         void RemoveChart(ChartSettings chart);
+
+        /// <summary>
+        /// Save the current project.
+        /// </summary>
+        void SaveProject();
     }
 }
