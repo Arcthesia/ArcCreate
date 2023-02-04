@@ -5,6 +5,17 @@ namespace ArcCreate.Compose.Navigation
     public interface INavigationService
     {
         /// <summary>
+        /// Gets the path to the configuration file.
+        /// </summary>
+        /// <value>The file path. Does not guarantee that the file exists.</value>
+        string ConfigFilePath { get; }
+
+        /// <summary>
+        /// Reload hotkeys from configuration.
+        /// </summary>
+        void ReloadHotkeys();
+
+        /// <summary>
         /// Start an editor action.
         /// </summary>
         /// <param name="action">The editor action.</param>

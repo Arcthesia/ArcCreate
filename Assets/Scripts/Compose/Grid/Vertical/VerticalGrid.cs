@@ -59,6 +59,18 @@ namespace ArcCreate.Compose.Grid
             return VerticalGridHelper.SnapPoint(lines, cachedIntersections, point, snapTolerance);
         }
 
+        public void Setup()
+        {
+            DefaultLineColor = defaultLineColor;
+            DefaultPanelColor = defaultPanelColor;
+            linePool = Pools.New<LineRenderer>(linePrefab.name, linePrefab, gridParent, 10);
+
+            verticalCollider.sharedMesh = Instantiate(verticalCollider.sharedMesh);
+            verticalPanel.sharedMesh = verticalCollider.sharedMesh;
+
+            verticalPanelRenderer.sharedMaterial = Instantiate(verticalPanelRenderer.sharedMaterial);
+        }
+
         private void ResizeCollider(Rect area)
         {
             Destroy(verticalCollider.sharedMesh);
@@ -108,18 +120,6 @@ namespace ArcCreate.Compose.Grid
 
                 areaMeshes.Add(meshFilter);
             }
-        }
-
-        private void Awake()
-        {
-            DefaultLineColor = defaultLineColor;
-            DefaultPanelColor = defaultPanelColor;
-            linePool = Pools.New<LineRenderer>(linePrefab.name, linePrefab, gridParent, 10);
-
-            verticalCollider.sharedMesh = Instantiate(verticalCollider.sharedMesh);
-            verticalPanel.sharedMesh = verticalCollider.sharedMesh;
-
-            verticalPanelRenderer.sharedMaterial = Instantiate(verticalPanelRenderer.sharedMaterial);
         }
 
         private void Draw(Line def)

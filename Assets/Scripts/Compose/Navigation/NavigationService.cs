@@ -17,8 +17,6 @@ namespace ArcCreate.Compose.Navigation
     [EditorScope("Navigation")]
     public class NavigationService : MonoBehaviour, INavigationService
     {
-        [SerializeField] private Button reloadHotkeysButton;
-
         private readonly List<IAction> allActions = new List<IAction>();
         private readonly List<Keybind> keybinds = new List<Keybind>();
         private readonly Dictionary<Type, object> instances = new Dictionary<Type, object>();
@@ -26,6 +24,20 @@ namespace ArcCreate.Compose.Navigation
         // Last action in the list is considered top-priority, and only it will have sub-actions processed.
         // A stack was not used because lower-priority actions might exit early.
         private readonly List<EditorAction> actionsInProgress = new List<EditorAction>();
+
+        public string ConfigFilePath
+        {
+            get
+            {
+                string path = Path.Combine(Application.streamingAssetsPath, Values.KeybindSettingsFileName + ".yaml");
+                if (!File.Exists(path))
+                {
+                    path = Path.Combine(Application.streamingAssetsPath, Values.KeybindSettingsFileName + ".yml");
+                }
+
+                return path;
+            }
+        }
 
         public void ReloadHotkeys()
         {
@@ -38,15 +50,11 @@ namespace ArcCreate.Compose.Navigation
 
             Dictionary<string, List<string>> keybindOverrides = new Dictionary<string, List<string>>();
             Dictionary<string, List<string>> keybindActions = new Dictionary<string, List<string>>();
-            string keybindOverrideFilePath = Path.Combine(Application.streamingAssetsPath, Values.KeybindSettingsFileName + ".yaml");
-            if (!File.Exists(keybindOverrideFilePath))
-            {
-                keybindOverrideFilePath = Path.Combine(Application.streamingAssetsPath, Values.KeybindSettingsFileName + ".yml");
-            }
 
-            if (File.Exists(keybindOverrideFilePath))
+            string configPath = ConfigFilePath;
+            if (File.Exists(configPath))
             {
-                using (FileStream stream = File.OpenRead(keybindOverrideFilePath))
+                using (FileStream stream = File.OpenRead(configPath))
                 {
                     YamlStream yaml = new YamlStream();
                     yaml.Load(new StreamReader(stream));
@@ -170,13 +178,11 @@ namespace ArcCreate.Compose.Navigation
 
         private void Awake()
         {
-            reloadHotkeysButton.onClick.AddListener(ReloadHotkeys);
             ReloadHotkeys();
         }
 
         private void OnDestroy()
         {
-            reloadHotkeysButton.onClick.RemoveListener(ReloadHotkeys);
             foreach (var keybind in keybinds)
             {
                 keybind.Destroy();

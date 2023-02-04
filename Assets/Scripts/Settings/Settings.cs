@@ -8,18 +8,13 @@ namespace ArcCreate
         public static readonly IntSetting Framerate = new IntSetting("Framerate", 60);
         public static readonly IntSetting VSync = new IntSetting("VSync", 1);
         public static readonly BoolSetting ShowFPSCounter = new BoolSetting("ShowFrameCounter", false);
-        public static readonly BoolSetting AudioSync = new BoolSetting("AudioSync", false);
-        public static readonly BoolSetting EditorAuto = new BoolSetting("Auto", true);
         public static readonly IntSetting ViewportAspectRatioSetting = new IntSetting("ViewportAspectRatioSetting", 0);
         public static readonly IntSetting DropRate = new IntSetting("DropRate", 300);
         public static readonly FloatSetting CameraSensitivity = new FloatSetting("CameraSensitivity", 10);
         public static readonly IntSetting ChartSortMode = new IntSetting("ChartSortMode", 0);
-        public static readonly StringSetting X = new StringSetting("CustomGrid.X", "");
-        public static readonly StringSetting Y = new StringSetting("CustomGrid.Y", "");
         public static readonly IntSetting LaneFrom = new IntSetting("CustomGrid.LaneFrom", 1);
         public static readonly IntSetting LaneTo = new IntSetting("CustomGrid.LaneTo", 4);
         public static readonly BoolSetting ScalingGrid = new BoolSetting("CustomGrid.Scaling", true);
-        public static readonly IntSetting MaxBeatlineCount = new IntSetting("CustomGrid.MaxBeatlineCount", 1000);
         public static readonly FloatSetting FPS = new FloatSetting("RenderPreferences.FPS", 60);
         public static readonly IntSetting CRF = new IntSetting("RenderPreferences.CRF", 18);
         public static readonly FloatSetting DownscaleFactor = new FloatSetting("RenderPreferences.DownscaleFactor", 1.0f);
@@ -46,7 +41,8 @@ namespace ArcCreate
                 Application.platform == RuntimePlatform.LinuxPlayer
                 || Application.platform == RuntimePlatform.LinuxEditor ? -1f : 1f);
 
-        public static readonly IntSetting TimingScrollMaxMovement = new IntSetting("ScrollSensitivity.MaxTiming", 200);
+        public static readonly FloatSetting TrackScrollThreshold = new FloatSetting("ScrollSensitivity.TrackThreshold", 1);
+        public static readonly IntSetting TrackScrollMaxMovement = new IntSetting("ScrollSensitivity.MaxTiming", 200);
 
         [RuntimeInitializeOnLoadMethod]
         public static void OnInitialize()

@@ -45,6 +45,7 @@ namespace ArcCreate.Compose.Grid
         {
             IsGridEnabled = false;
             timingGrid.Setup();
+            verticalGrid.Setup();
 
             string testScript = @"
             grid.setCollider(-0.5, 1.5, 0, 1)
