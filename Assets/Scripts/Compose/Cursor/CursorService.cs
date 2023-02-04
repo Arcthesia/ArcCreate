@@ -211,7 +211,7 @@ namespace ArcCreate.Compose.Cursor
         {
             Mouse mouse = Mouse.current;
             float scrollY = mouse.scroll.ReadValue().y;
-            if (scrollY == 0)
+            if (scrollY == 0 || Mathf.Abs(scrollY) < Settings.TrackScrollThreshold.Value)
             {
                 return;
             }
@@ -220,7 +220,7 @@ namespace ArcCreate.Compose.Cursor
 
             int timing = Services.Gameplay.Audio.ChartTiming;
             int snap = scrollY > 0 ? Services.Grid.MoveTimingForward(timing) : Services.Grid.MoveTimingBackward(timing);
-            snap = Mathf.Clamp(snap, timing - Settings.TimingScrollMaxMovement.Value, timing + Settings.TimingScrollMaxMovement.Value);
+            snap = Mathf.Clamp(snap, timing - Settings.TrackScrollMaxMovement.Value, timing + Settings.TrackScrollMaxMovement.Value);
 
             Services.Gameplay.Audio.ChartTiming = snap;
         }

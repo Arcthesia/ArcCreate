@@ -270,10 +270,41 @@ Compose:
         Scenecontrol: Scene
     Settings:
       Label:
-        ReloadKeybinds: Reload keybinds
-        Speed: Speed
-        AspectRatio: Aspect Ratio
-        
+        Gameplay:
+          Name: Gameplay
+          Speed: Speed
+          AspectRatio: Aspect Ratio
+        Grid:
+          Name: Grid
+          Slot: Slot
+          UseDefault: Use default
+          FromLane: From lane
+          ToLane: To lane
+          ScaleGrid: Scale with sky input
+          Gridline: Define gridlines
+          Script: Lua script
+        AudioVolume:
+          Name: Audio volume
+          Music: Music
+          Effect: Effect
+          GlobalOffset: Global offset
+        Display:
+          Name: Display
+          Vsync: Vsync
+          Framerate: Framerate
+          ShowCounter: Show framerate
+        Input:
+          Name: Input
+          ReloadKeybinds: Reload keybinds
+        ScrollSensitivity:
+          Name: Scroll sensitivity
+          Vertical: Vertical
+          Horizontal: Horizontal
+          Timeline: Timeline
+        TrackScrolling:
+          Name: Track scrolling
+          Threshold: Threshold
+          MaxMovement: Max movement
 
 Gameplay:
   Exception:
