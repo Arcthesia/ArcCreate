@@ -89,6 +89,12 @@ namespace ArcCreate.Compose.Grid
             float worldFrom = ArcFormula.LaneToWorldX(laneFrom) + (Gameplay.Values.LaneWidth / 2f);
             float worldTo = ArcFormula.LaneToWorldX(laneTo) - (Gameplay.Values.LaneWidth / 2f);
 
+            Values.LaneFromX = worldFrom;
+            Values.LaneToX = worldTo;
+
+            beatlineParent.localPosition = new Vector3((worldTo + worldFrom) / 2, 0, 0);
+            beatlineParent.localScale = new Vector3(Mathf.Abs(worldTo - worldFrom) / (4 * Gameplay.Values.LaneWidth), 1, 1);
+
             laneCollider.sharedMesh = MeshBuilder.BuildQuadMeshLane(worldFrom, worldTo);
         }
 

@@ -147,6 +147,29 @@ Compose:
       Grid:
         Name: Grid
         Toggle: Toggle grid
+  Grid:
+    DefaultScript: |-
+      -- This is a lua script
+
+      -- Set the collider area with four values
+      -- (corner1.x, corner2.x, corner1.y, corner2.y)
+      grid.setCollider(-0.5, 1.5, -0.2, 1)
+
+      -- Set the grid's background color
+      grid.setPanelColor(rgba(255, 255, 255, 16))
+      
+      -- Draw lines with four values
+      -- (point1.x, point2.x, point1.y, point2.y)
+      grid.drawLine(-0.5, 1.5, -0.2, -0.2, defaultColor)
+
+      -- You can also use for loops
+      for x = -0.5, 1.5, 0.125 do
+        grid.drawLine(x, x, -0.2, 1, defaultColor)
+      end
+
+      for y = 0, 1, 0.25 do
+        grid.drawLine(-0.5, 1.5, y, y, defaultColor)
+      end
   UI:
     Common:
       Confirm: Confirm

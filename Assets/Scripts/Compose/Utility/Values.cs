@@ -35,5 +35,9 @@ namespace ArcCreate.Compose
         public static State<float> BeatlineDensity { get; } = new State<float>(4);
 
         public static State<bool> FullScreen { get; } = new State<bool>();
+
+        public static float LaneFromX { get; set; } = -8.5f;
+
+        public static float LaneToX { get; set; } = 8.5f;
     }
 }

@@ -230,18 +230,14 @@ namespace ArcCreate.Compose.Cursor
             cursorLaneTiming.gameObject.SetActive(true);
             cursorLaneX.gameObject.SetActive(true);
 
-            // TODO: Extend for 6k
-            float minLane = -8.5f;
-            float maxLane = 8.5f;
-
             var tg = Services.Gameplay.Chart.GetTimingGroup(Values.EditingTimingGroup.Value);
             selectingTiming = Services.Grid.SnapTimingToGridIfGridIsEnabled(tg.GetTimingFromZPosition(hit.point.z));
             double fp = tg.GetFloorPositionFromCurrent(selectingTiming);
             float z = Gameplay.ArcFormula.FloorPositionToZ(fp);
 
             cursorLaneTiming.DrawLine(
-                from: new Vector3(minLane, 0, z),
-                to: new Vector3(maxLane, 0, z));
+                from: new Vector3(Values.LaneFromX, 0, z),
+                to: new Vector3(Values.LaneToX, 0, z));
 
             cursorLaneX.DrawLine(
                 from: new Vector3(hit.point.x, 0, Gameplay.Values.TrackLengthBackward),
