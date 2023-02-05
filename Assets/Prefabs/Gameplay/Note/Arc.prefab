@@ -89,6 +89,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5093012755882785572}
   - component: {fileID: 4368225795270580020}
+  - component: {fileID: -6384347921489465877}
   m_Layer: 8
   m_Name: Arc
   m_TagString: Untagged
@@ -129,6 +130,21 @@ MonoBehaviour:
   heightIndicator: {fileID: 8398730131045572013}
   arcHeadRenderer: {fileID: 4789833293772184132}
   arcHeadMesh: {fileID: 4676238282609375568}
+  meshCollider: {fileID: -6384347921489465877}
+--- !u!64 &-6384347921489465877
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6493265056140967981}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!1 &8398730129832765838
 GameObject:
   m_ObjectHideFlags: 0

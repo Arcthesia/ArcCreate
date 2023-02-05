@@ -154,6 +154,12 @@ Compose:
       Grid:
         Name: Grid
         Toggle: Toggle grid
+      Display:
+        Name: Display
+        FullScreen: Toggle full screen
+      Selection:
+        Name: Selection
+        Clear: Clear selection
   Grid:
     DefaultScript: |-
       -- This is a lua script

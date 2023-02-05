@@ -1,10 +1,11 @@
+using ArcCreate.Compose.Navigation;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Components
 {
+    [EditorScope("Display")]
     public class FullScreenToggle : MonoBehaviour
     {
         [SerializeField] private Button fullScreenButton;
@@ -16,34 +17,29 @@ namespace ArcCreate.Compose.Components
         [SerializeField] private CanvasGroup toggleFullScreenHint;
         [SerializeField] private float hideHintDelay;
         [SerializeField] private float hideHintDuration;
-        private Keyboard keyboard;
+
+        [EditorAction("FullScreen", true, "<f11>")]
+        public void Toggle()
+        {
+            if (Values.FullScreen.Value)
+            {
+                ToDefault();
+            }
+            else
+            {
+                ToFullScreen();
+            }
+        }
 
         private void Awake()
         {
             fullScreenButton.onClick.AddListener(ToFullScreen);
-            keyboard = InputSystem.GetDevice<Keyboard>();
             fullScreenBackground.SetActive(false);
         }
 
         private void OnDestroy()
         {
             fullScreenButton.onClick.RemoveListener(ToFullScreen);
-        }
-
-        private void Update()
-        {
-            // TODO: TEMPORARY UNTIL A PROPER KEYBIND SYSTEM IS IMPLEMENTED
-            if (keyboard.f11Key.wasPressedThisFrame)
-            {
-                if (Values.FullScreen.Value)
-                {
-                    ToDefault();
-                }
-                else
-                {
-                    ToFullScreen();
-                }
-            }
         }
 
         private void ToFullScreen()

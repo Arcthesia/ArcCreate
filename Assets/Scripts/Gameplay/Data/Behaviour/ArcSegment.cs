@@ -9,6 +9,7 @@ namespace ArcCreate.Gameplay.Data
         private static readonly int FromShaderId = Shader.PropertyToID("_From");
         private static readonly int ShearShaderId = Shader.PropertyToID("_Shear");
         private static readonly int ColorShaderId = Shader.PropertyToID("_ColorTG");
+        private static readonly int SelectedShaderId = Shader.PropertyToID("_Selected");
         private static MaterialPropertyBlock mpb;
 
         private MeshRenderer meshRenderer;
@@ -50,6 +51,13 @@ namespace ArcCreate.Gameplay.Data
         public void SetMesh(Mesh mesh)
         {
             meshFilter.sharedMesh = mesh;
+        }
+
+        public void SetSelected(bool value)
+        {
+            meshRenderer.GetPropertyBlock(mpb);
+            mpb.SetInt(SelectedShaderId, value ? 1 : 0);
+            meshRenderer.SetPropertyBlock(mpb);
         }
 
         public void UpdatePosition(double floorPosition, Vector3 fallDirection, float parentZ)

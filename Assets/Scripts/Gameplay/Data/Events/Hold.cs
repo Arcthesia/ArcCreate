@@ -13,6 +13,7 @@ namespace ArcCreate.Gameplay.Data
         private bool holdJudgementRequestSent = false;
         private bool holdHighlightRequestSent = false;
         private int longParticleUntil = int.MinValue;
+        private bool isSelected;
 
         public int Lane { get; set; }
 
@@ -27,6 +28,19 @@ namespace ArcCreate.Gameplay.Data
                 if (instance != null)
                 {
                     instance.Highlight = value;
+                }
+            }
+        }
+
+        public override bool IsSelected
+        {
+            get => isSelected;
+            set
+            {
+                isSelected = value;
+                if (instance != null)
+                {
+                    instance.SetSelected(value);
                 }
             }
         }
@@ -53,6 +67,7 @@ namespace ArcCreate.Gameplay.Data
         {
             this.instance = instance;
             instance.SetData(this);
+            instance.SetSelected(isSelected);
             ReloadSkin();
         }
 

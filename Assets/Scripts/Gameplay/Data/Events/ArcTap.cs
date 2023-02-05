@@ -8,6 +8,7 @@ namespace ArcCreate.Gameplay.Data
     {
         private ArcTapBehaviour instance;
         private bool judgementRequestSent = false;
+        private bool isSelected;
 
         public HashSet<Tap> ConnectedTaps { get; } = new HashSet<Tap>();
 
@@ -20,6 +21,19 @@ namespace ArcCreate.Gameplay.Data
         public string Sfx => Arc.Sfx;
 
         public bool IsAssignedInstance => instance != null;
+
+        public override bool IsSelected
+        {
+            get => isSelected;
+            set
+            {
+                isSelected = value;
+                if (instance != null)
+                {
+                    instance.SetSelected(value);
+                }
+            }
+        }
 
         public override ArcEvent Clone()
         {
@@ -41,6 +55,7 @@ namespace ArcCreate.Gameplay.Data
         {
             this.instance = instance;
             instance.SetData(this);
+            instance.SetSelected(isSelected);
             ReloadSkin();
         }
 

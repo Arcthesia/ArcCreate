@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
+using ArcCreate.Gameplay.Utility;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
@@ -15,6 +16,8 @@ namespace ArcCreate.Gameplay.Data
         private float arcGroupAlpha = 1;
         private int longParticleUntil = int.MinValue;
         private Arc firstArcOfGroup;
+        private Mesh colliderMesh;
+        private bool isSelected;
 
         // Avoid infinite recursion
         private bool recursivelyCalled = false;
@@ -64,6 +67,19 @@ namespace ArcCreate.Gameplay.Data
             }
         }
 
+        public override bool IsSelected
+        {
+            get => isSelected;
+            set
+            {
+                isSelected = value;
+                if (instance != null)
+                {
+                    instance.SetSelected(value);
+                }
+            }
+        }
+
         public override ArcEvent Clone()
         {
             Arc arc = new Arc()
@@ -105,6 +121,9 @@ namespace ArcCreate.Gameplay.Data
         {
             this.instance = instance;
             instance.SetData(this);
+            instance.SetCollider(colliderMesh);
+            instance.SetSelected(isSelected);
+
             ReloadSkin();
             RebuildSegments();
         }
@@ -135,6 +154,7 @@ namespace ArcCreate.Gameplay.Data
 
             RecalculateJudgeTimings();
             RebuildSegments();
+            RebuildCollider();
         }
 
         public void ReloadSkin()
@@ -294,6 +314,12 @@ namespace ArcCreate.Gameplay.Data
             return ArcFormula.ArcYToWorld(ArcFormula.Y(YStart, YEnd, p, LineType));
         }
 
+        public void CleanColliderMesh()
+        {
+            UnityEngine.Object.Destroy(colliderMesh);
+            colliderMesh = null;
+        }
+
         private void RebuildSegments()
         {
             if (instance == null)
@@ -302,6 +328,24 @@ namespace ArcCreate.Gameplay.Data
             }
 
             instance.RebuildSegments();
+        }
+
+        private void RebuildCollider()
+        {
+            if (colliderMesh != null)
+            {
+                UnityEngine.Object.Destroy(colliderMesh);
+                colliderMesh = null;
+            }
+
+            if (Values.EnableColliderGeneration)
+            {
+                colliderMesh = ArcMeshGenerator.GenerateColliderMesh(this);
+                if (instance != null)
+                {
+                    instance.SetCollider(colliderMesh);
+                }
+            }
         }
 
         private void RequestJudgement(int currentTiming)

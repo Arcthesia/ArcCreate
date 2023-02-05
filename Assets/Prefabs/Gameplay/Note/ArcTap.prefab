@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4169165809120514}
   - component: {fileID: 5273678046141172365}
+  - component: {fileID: 8055554020826870724}
   m_Layer: 8
   m_Name: ArcTap
   m_TagString: Untagged
@@ -48,6 +49,19 @@ MonoBehaviour:
   shadowRenderer: {fileID: 212689380112176812}
   meshFilter: {fileID: 33995218629962512}
   meshRenderer: {fileID: 23347824082841986}
+--- !u!65 &8055554020826870724
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1024612122497654}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.25, y: 0.6, z: 1.2}
+  m_Center: {x: 0, y: -0.5, z: -0.6}
 --- !u!1 &1461538357372950
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,7 +154,6 @@ GameObject:
   - component: {fileID: 4375093844520338}
   - component: {fileID: 33995218629962512}
   - component: {fileID: 23347824082841986}
-  - component: {fileID: 64965817012413448}
   m_Layer: 8
   m_Name: Model
   m_TagString: ArcaeaNote
@@ -209,17 +222,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &64965817012413448
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1806244166516372}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}

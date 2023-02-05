@@ -6,7 +6,7 @@
 		_Color ("Color", Color) = (1,1,1,1)
 		_From ("From", Float) = 0
 		_To ("To",Float) = 1
-		_Highlight("Highlight", Int) = 0
+		_Selected("Selected", Int) = 0
 		_Shear("Shear", Vector) = (0,0,1,0)
 	}
 	SubShader
@@ -40,7 +40,7 @@
 				float3 worldpos : TEXCOORD1;
 			};
 			
-			int _Highlight;
+			int _Selected;
 			float _From,_To,_Alpha;
 			sampler2D _MainTex;
 			float4 _Color;
@@ -66,7 +66,7 @@
 				return o;
 			}
 
-			half4 Highlight(half4 c)
+			half4 Selected(half4 c)
 			{
 				fixed3 hsv = rgb2hsv(c.rgb);
 				hsv.r += 0.4f;
@@ -79,9 +79,9 @@
 			    if(i.uv.y > _To || i.uv.y < _From || i.worldpos.z > 100 || i.worldpos.z < -100) return 0;
 				i.uv.y = (i.uv.y - 1) * _To/(_To-_From) + 1;
 				half4 c = half4(tex2D(_MainTex,i.uv).rgb, 1); 
-				if(_Highlight == 1) 
+				if(_Selected == 1) 
 				{
-					c = Highlight(c);
+					c = Selected(c);
 				};
 				return c * i.color;
 			}

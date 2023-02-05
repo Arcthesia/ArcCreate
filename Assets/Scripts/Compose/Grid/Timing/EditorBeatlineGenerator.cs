@@ -25,6 +25,11 @@ namespace ArcCreate.Compose.Grid
                 TimingEvent currentTiming = timings[i];
                 int limit = timings[i + 1].Timing;
 
+                if (currentTiming.Bpm > Settings.GridBpmLimit.Value)
+                {
+                    continue;
+                }
+
                 float distanceBetweenTwoLine =
                     currentTiming.Bpm == 0 ?
                     float.MaxValue :
@@ -52,6 +57,11 @@ namespace ArcCreate.Compose.Grid
             {
                 TimingEvent lastTiming = timings[timings.Count - 1];
                 int limit = Services.Gameplay.Audio.AudioLength;
+
+                if (lastTiming.Bpm > Settings.GridBpmLimit.Value)
+                {
+                    yield break;
+                }
 
                 float distanceBetweenTwoLine =
                     lastTiming.Bpm == 0 ?

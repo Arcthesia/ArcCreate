@@ -38,8 +38,8 @@ namespace ArcCreate.Gameplay
         public const float MissedHoldAlphaScalar = 0.5f;
         public const float HoldLengthScalar = 1 / 3.79f;
         public const float ArcTapMiddleWorldXRange = 0.5f;
-        public const float ArcMeshOffsetNormal = 0.15f;
-        public const float ArcMeshOffsetTrace = 0.9f;
+        public const float TraceMeshOffset = 0.15f;
+        public const float ArcMeshOffset = 0.9f;
         public const float TraceAlphaScalar = 0.4779405f;
         public const float ShortTraceAlphaScalar = TraceAlphaScalar * 0.5f;
         public const float TextParticleYOffset = 1.5f;
@@ -113,5 +113,7 @@ namespace ArcCreate.Gameplay
         public static float LaneTo { get; set; } = 4;
 
         public static float LaneScreenHitbox { get; set; } = 1;
+
+        public static bool EnableColliderGeneration { get; set; } = false;
     }
 }

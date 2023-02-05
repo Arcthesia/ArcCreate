@@ -4,6 +4,7 @@ using ArcCreate.Compose.History;
 using ArcCreate.Compose.Navigation;
 using ArcCreate.Compose.Popups;
 using ArcCreate.Compose.Project;
+using ArcCreate.Compose.Selection;
 using ArcCreate.Compose.Timeline;
 using ArcCreate.Gameplay;
 using UnityEngine;
@@ -19,6 +20,7 @@ namespace ArcCreate.Compose
         [SerializeField] private NavigationService navigation;
         [SerializeField] private CursorService cursor;
         [SerializeField] private GridService grid;
+        [SerializeField] private SelectionService selection;
 
         public static IProjectService Project { get; private set; }
 
@@ -36,6 +38,8 @@ namespace ArcCreate.Compose
 
         public static IGridService Grid { get; set; }
 
+        public static ISelectionService Selection { get; set; }
+
         private void Awake()
         {
             Project = project;
@@ -45,6 +49,7 @@ namespace ArcCreate.Compose
             Navigation = navigation;
             Cursor = cursor;
             Grid = grid;
+            Selection = selection;
         }
     }
 }

@@ -15,6 +15,17 @@ namespace ArcCreate.Gameplay.Chart
             }
         }
 
+        public override void Clear()
+        {
+            for (int i = 0; i < Notes.Count; i++)
+            {
+                Arc arc = Notes[i];
+                arc.CleanColliderMesh();
+            }
+
+            base.Clear();
+        }
+
         protected override void OnAdd(Arc note)
         {
             ChainArcIntoGroups(note);

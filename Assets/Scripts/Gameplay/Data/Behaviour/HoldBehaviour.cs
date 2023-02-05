@@ -4,10 +4,11 @@ using UnityEngine;
 namespace ArcCreate.Gameplay.Data
 {
     [RequireComponent(typeof(SpriteRenderer))]
-    public class HoldBehaviour : MonoBehaviour
+    public class HoldBehaviour : NoteBehaviour
     {
         private static readonly int FromShaderId = Shader.PropertyToID("_From");
         private static readonly int ShearShaderId = Shader.PropertyToID("_Shear");
+        private static readonly int SelectedShaderId = Shader.PropertyToID("_Selected");
         private static MaterialPropertyBlock mpb;
         private static Quaternion baseLocalRotation;
         private static Vector3 baseLocalScale;
@@ -27,6 +28,8 @@ namespace ArcCreate.Gameplay.Data
                 spriteRenderer.sprite = highlight ? highlightSprite : normalSprite;
             }
         }
+
+        public override Note Note => Hold;
 
         public void SetData(Hold hold)
         {
@@ -54,6 +57,13 @@ namespace ArcCreate.Gameplay.Data
         public void SetColor(Color color)
         {
             spriteRenderer.color = color;
+        }
+
+        public void SetSelected(bool value)
+        {
+            spriteRenderer.GetPropertyBlock(mpb);
+            mpb.SetInt(SelectedShaderId, value ? 1 : 0);
+            spriteRenderer.SetPropertyBlock(mpb);
         }
 
         public void SetFallDirection(Vector3 dir)

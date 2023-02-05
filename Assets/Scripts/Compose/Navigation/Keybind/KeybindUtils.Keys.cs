@@ -225,6 +225,13 @@ namespace ArcCreate.Compose.Navigation
             "<", ">", "?",
         };
 
+        public static readonly HashSet<string> IsMouseKey = new HashSet<string>()
+        {
+            "<Mouse>/leftButton",
+            "<Mouse>/rightButton",
+            "<Mouse>/middleButton",
+        };
+
         public static readonly Dictionary<Key, string> ShiftKeys = new Dictionary<Key, string>()
         {
             { Key.Backquote, "~" },
