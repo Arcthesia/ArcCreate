@@ -14,7 +14,7 @@ namespace ArcCreate.Compose.Components
 
         private string value;
 
-        public event Action<string> OnValueChanged;
+        public Action<string> OnSelect { get; set; }
 
         public string Value
         {
@@ -27,7 +27,7 @@ namespace ArcCreate.Compose.Components
                     {
                         this.value = value;
                         SetHighlight(opt);
-                        OnValueChanged?.Invoke(opt.Value);
+                        OnSelect?.Invoke(opt.Value);
                         break;
                     }
                 }
@@ -51,7 +51,7 @@ namespace ArcCreate.Compose.Components
         {
             value = option.Value;
             SetHighlight(option);
-            OnValueChanged?.Invoke(option.Value);
+            OnSelect?.Invoke(option.Value);
         }
 
         public Option GetOptionByValue(string value)

@@ -25,22 +25,22 @@ namespace ArcCreate.Compose.Project
         private new void Start()
         {
             base.Start();
-            side.OnValueChanged += OnSide;
-            note.OnValueChanged += OnNote;
-            particle.OnValueChanged += OnParticle;
-            accent.OnValueChanged += OnAccent;
-            track.OnValueChanged += OnTrack;
-            singleLine.OnValueChanged += OnSingleLine;
+            side.OnSelect += OnSide;
+            note.OnSelect += OnNote;
+            particle.OnSelect += OnParticle;
+            accent.OnSelect += OnAccent;
+            track.OnSelect += OnTrack;
+            singleLine.OnSelect += OnSingleLine;
         }
 
         private void OnDestroy()
         {
-            side.OnValueChanged -= OnSide;
-            note.OnValueChanged -= OnNote;
-            particle.OnValueChanged -= OnParticle;
-            accent.OnValueChanged -= OnAccent;
-            track.OnValueChanged -= OnTrack;
-            singleLine.OnValueChanged -= OnSingleLine;
+            side.OnSelect -= OnSide;
+            note.OnSelect -= OnNote;
+            particle.OnSelect -= OnParticle;
+            accent.OnSelect -= OnAccent;
+            track.OnSelect -= OnTrack;
+            singleLine.OnSelect -= OnSingleLine;
         }
 
         private void OnSide(string value)

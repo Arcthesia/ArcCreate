@@ -149,6 +149,14 @@ namespace ArcCreate.Compose.Components
             Pools.Destroy<Row<T>>(rowPrefab.name);
         }
 
+        protected virtual void UpdateRowHighlight()
+        {
+            foreach (var row in rows)
+            {
+                row.Highlighted = (Selected != null) && ReferenceEquals(row.Reference, Selected);
+            }
+        }
+
         private void BuildList()
         {
             int count = data.Count;
@@ -211,14 +219,6 @@ namespace ArcCreate.Compose.Components
             else
             {
                 verticalScrollbar.value = (float)StartPos / extracount;
-            }
-        }
-
-        private void UpdateRowHighlight()
-        {
-            foreach (var row in rows)
-            {
-                row.Highlighted = (Selected != null) && ReferenceEquals(row.Reference, Selected);
             }
         }
 

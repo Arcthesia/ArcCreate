@@ -20,6 +20,11 @@ namespace ArcCreate.Compose.Components
         /// </summary>
         public event Action<(Color high, Color low)> OnValueChange;
 
+        /// <summary>
+        /// Event invoked after reset button is pressed;
+        /// </summary>
+        public event Action<ArcColorInputField> OnReset;
+
         public string Label
         {
             get => label.text;
@@ -75,6 +80,7 @@ namespace ArcCreate.Compose.Components
         {
             highColor.SetValue(DefaultColorHigh);
             lowColor.SetValue(DefaultColorLow);
+            OnReset?.Invoke(this);
         }
 
         private void OnChange(Color obj)

@@ -162,6 +162,23 @@ namespace ArcCreate.Compose.Project
             ApplyColorSettings();
         }
 
+        private void OnCustomFieldReset(ArcColorInputField field)
+        {
+            field.OnValueChange -= Schedule;
+            field.OnReset -= OnCustomFieldReset;
+            arcCustom.Remove(field);
+            Destroy(field.gameObject);
+
+            UpdateLayoutGroup();
+            ApplyColorSettings();
+
+            for (int i = 0; i < arcCustom.Count; i++)
+            {
+                ArcColorInputField colorField = arcCustom[i];
+                colorField.Label = I18n.S("Compose.UI.Project.Label.Custom", i + 3);
+            }
+        }
+
         private void NewArcColor(Color high, Color low)
         {
             GameObject go = Instantiate(colorInputFieldPrefab, arcParent);
@@ -169,11 +186,9 @@ namespace ArcCreate.Compose.Project
             comp.OnValueChange += Schedule;
             comp.DefaultColorHigh = Services.Gameplay.Skin.UnknownArcColor;
             comp.DefaultColorLow = Services.Gameplay.Skin.UnknownArcLowColor;
-            comp.Label = I18n.S("Compose.UI.Project.Label.Custom", new Dictionary<string, object>()
-            {
-                { "Id", arcCustom.Count + 3 },
-            });
+            comp.Label = I18n.S("Compose.UI.Project.Label.Custom", arcCustom.Count + 3);
             comp.SetValueWithoutNotify(high, low);
+            comp.OnReset += OnCustomFieldReset;
             arcCustom.Add(comp);
 
             UpdateLayoutGroup();
@@ -235,6 +250,7 @@ namespace ArcCreate.Compose.Project
             Target.Colors.ArcLow = lowColorStrings;
 
             Values.ProjectModified = true;
+            applyAfter = float.MaxValue;
         }
 
         private void Update()
