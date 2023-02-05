@@ -252,7 +252,7 @@ Compose:
         Blue: Blue (0)
         Red: Red (1)
         Green: Green (2)
-        Custom: Custom ({Id})
+        Custom: Custom ({0})
         AddArcColor: Add arc color
         NoProjectLoaded: |-
           No project loaded.
@@ -341,6 +341,29 @@ Compose:
           Name: Track scrolling
           Threshold: Threshold
           MaxMovement: Max movement
+    Toolbox:
+      Pallete:
+        Name: Pallete
+        Arc: Arc
+        Trace: Trace
+        Tap: Tap
+        Hold: Hold
+        Arctap: Sky
+        Easing: EMasing
+      Macros: Macros
+    Inspector:
+      Name: Inspector
+      Timing: Timing
+      StartTiming: Start
+      EndTiming: End
+      Lane: Lane
+      StartPos: From
+      EndPos: To
+      Sfx: Sfx
+      Group: Group
+      Actions:
+        SelectArc: Select parent arc
+        SelectArctap: Select sky notes
 
 Gameplay:
   Exception:

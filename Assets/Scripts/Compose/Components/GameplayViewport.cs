@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,6 +38,34 @@ namespace ArcCreate.Compose.Components
                 height / Screen.height);
 
             Services.Gameplay.SetCameraViewportRect(normalized);
+        }
+
+        private void OnEnable()
+        {
+            if (Services.Gameplay == null)
+            {
+                return;
+            }
+
+            Camera cam = Services.Gameplay.Camera.GameplayCamera;
+            if (cam != null)
+            {
+                cam.enabled = false;
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (Services.Gameplay == null)
+            {
+                return;
+            }
+
+            Camera cam = Services.Gameplay.Camera.GameplayCamera;
+            if (cam != null)
+            {
+                cam.enabled = false;
+            }
         }
 
         private void Awake()

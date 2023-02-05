@@ -29,7 +29,7 @@ namespace ArcCreate.Compose.Components
         }
 
         /// <summary>
-        /// Set the value without invoking <see cref="OnValueChange"/> event.
+        /// Set the value and invoke <see cref="OnValueChange"/> event.
         /// </summary>
         /// <param name="color">The color value.</param>
         public void SetValue(Color color)
@@ -40,7 +40,7 @@ namespace ArcCreate.Compose.Components
         }
 
         /// <summary>
-        /// Set the value and invoke <see cref="OnValueChange"/> event.
+        /// Set the value without invoking <see cref="OnValueChange"/> event.
         /// </summary>
         /// <param name="color">The color value.</param>
         public void SetValueWithoutNotify(Color color)
