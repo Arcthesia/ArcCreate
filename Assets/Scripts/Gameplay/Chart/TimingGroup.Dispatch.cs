@@ -314,6 +314,22 @@ namespace ArcCreate.Gameplay.Chart
             arcs.Clear();
         }
 
+        public void CleanArcColliders()
+        {
+            foreach (var note in arcs.Notes)
+            {
+                note.CleanColliderMesh();
+            }
+        }
+
+        public void BuildArcColliders()
+        {
+            foreach (var note in arcs.Notes)
+            {
+                note.Rebuild();
+            }
+        }
+
         /// <summary>
         /// Add a collection of events to this timing group.
         /// </summary>

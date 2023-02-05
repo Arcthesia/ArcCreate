@@ -13,7 +13,6 @@ namespace ArcCreate.Compose.Timeline
         [SerializeField] private GameObject tickPrefab;
         [SerializeField] private RectTransform tickParent;
         [SerializeField] private int tickCapacity;
-        [SerializeField] private float maxBpmToCalculate = 1000;
         [SerializeField] private float minDistBetweenTicks = 200;
 
         private readonly List<int> timingEventsTiming = new List<int>();
@@ -103,7 +102,7 @@ namespace ArcCreate.Compose.Timeline
 
                 timingEventsTiming.Add(curr.Timing);
 
-                if (Mathf.Approximately(curr.Bpm, 0) || curr.Bpm > maxBpmToCalculate)
+                if (Mathf.Approximately(curr.Bpm, 0) || curr.Bpm > Settings.GridBpmLimit.Value)
                 {
                     continue;
                 }
@@ -135,7 +134,7 @@ namespace ArcCreate.Compose.Timeline
                 TimingEvent curr = timings[timings.Count - 1];
 
                 timingEventsTiming.Add(curr.Timing);
-                if (!Mathf.Approximately(curr.Bpm, 0) && curr.Bpm <= maxBpmToCalculate)
+                if (!Mathf.Approximately(curr.Bpm, 0) && curr.Bpm <= Settings.GridBpmLimit.Value)
                 {
                     float beatLength = 60000f / Mathf.Abs(curr.Bpm);
                     float barLength = beatLength * curr.Divisor;

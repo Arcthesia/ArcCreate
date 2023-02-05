@@ -35,6 +35,31 @@ namespace ArcCreate.Gameplay.Chart
 
         public bool IsLoaded { get; private set; }
 
+        public bool EnableColliderGeneration
+        {
+            get => Values.EnableColliderGeneration;
+            set
+            {
+                Values.EnableColliderGeneration = value;
+                if (value)
+                {
+                    for (int i = 0; i < timingGroups.Count; i++)
+                    {
+                        TimingGroup tg = timingGroups[i];
+                        tg.BuildArcColliders();
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < timingGroups.Count; i++)
+                    {
+                        TimingGroup tg = timingGroups[i];
+                        tg.CleanArcColliders();
+                    }
+                }
+            }
+        }
+
         public List<TimingGroup> TimingGroups => timingGroups;
 
         public void ReloadSkin()
@@ -441,6 +466,7 @@ namespace ArcCreate.Gameplay.Chart
         {
             Values.BaseBpm = value;
             ResetJudge();
+            UpdateArcColliderMesh();
         }
 
         private void OnChartAudioOffset(int value)
@@ -452,6 +478,11 @@ namespace ArcCreate.Gameplay.Chart
         private void OnGlobalOffsetChange(int offset)
         {
             ResetJudge();
+        }
+
+        private void UpdateArcColliderMesh()
+        {
+            EnableColliderGeneration = EnableColliderGeneration;
         }
     }
 }

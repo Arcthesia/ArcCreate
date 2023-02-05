@@ -8,12 +8,26 @@ namespace ArcCreate.Gameplay.Data
     {
         private TapBehaviour instance;
         private bool judgementRequestSent = false;
+        private bool isSelected;
 
         public HashSet<ArcTap> ConnectedArcTaps { get; } = new HashSet<ArcTap>();
 
         public int Lane { get; set; }
 
         public bool IsAssignedInstance => instance != null;
+
+        public override bool IsSelected
+        {
+            get => isSelected;
+            set
+            {
+                isSelected = value;
+                if (instance != null)
+                {
+                    instance.SetSelected(value);
+                }
+            }
+        }
 
         public void AssignInstance(TapBehaviour instance)
         {
@@ -22,6 +36,7 @@ namespace ArcCreate.Gameplay.Data
             instance.SetConnectionLines(
                 ConnectedArcTaps,
                 new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0));
+            instance.SetSelected(isSelected);
             ReloadSkin();
         }
 

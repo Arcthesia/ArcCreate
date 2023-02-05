@@ -26,7 +26,7 @@ namespace ArcCreate.Gameplay.Chart
         /// <summary>
         /// Clear the note group.
         /// </summary>
-        public void Clear()
+        public virtual void Clear()
         {
             Pool.ReturnAll();
             notes.Clear();

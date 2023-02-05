@@ -12,6 +12,7 @@ namespace ArcCreate.Compose.Navigation
         public string Key;
         public bool ActuateOnRelease;
         public bool ActuateOnHold;
+        public bool IsMouse;
 
         public InputAction ToAction(string name)
         {

@@ -5,7 +5,7 @@
 		_MainTex ("Texture", 2D) = "white" {} 
 		_Color ("Color", Color) = (1,1,1,1)
 		_Alpha ("Alpha", Float) = 1
-		_Highlight("Highlight", Int) = 0
+		_Selected("Selected", Int) = 0
 	}
 	SubShader
 	{
@@ -37,12 +37,12 @@
 				float2 uv : TEXCOORD0;
 			};
 			
-			int _Highlight; 
+			int _Selected; 
 			float _Alpha;
 			sampler2D _MainTex;
 			float4 _Color;
 
-			half4 Highlight(half4 c)
+			half4 Selected(half4 c)
 			{
 				fixed3 hsv = rgb2hsv(c.rgb);
 				hsv.r += 0.4f;
@@ -62,9 +62,9 @@
 			{ 
 				half4 c = tex2D(_MainTex,i.uv);
 				c.a *= _Alpha;
-				if(_Highlight == 1) 
+				if(_Selected == 1) 
 				{
-					c = Highlight(c);
+					c = Selected(c);
 				}
 				return c * i.color;
 			}

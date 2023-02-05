@@ -2,6 +2,8 @@ namespace ArcCreate.Gameplay.Data
 {
     public abstract class Note : ArcEvent
     {
+        public abstract bool IsSelected { get; set; }
+
         public double FloorPosition { get; set; }
 
         public virtual int TotalCombo => 1;

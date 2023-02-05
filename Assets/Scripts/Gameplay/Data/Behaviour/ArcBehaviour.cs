@@ -4,10 +4,11 @@ using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
 {
-    public class ArcBehaviour : MonoBehaviour
+    public class ArcBehaviour : NoteBehaviour
     {
         // No matter what codebase I work in this will always be a nightmare
         private static readonly int ColorShaderId = Shader.PropertyToID("_ColorTG");
+        private static readonly int SelectedShaderId = Shader.PropertyToID("_Selected");
         private static Pool<ArcSegment> segmentPool;
         private static MaterialPropertyBlock mpb;
 
@@ -15,12 +16,15 @@ namespace ArcCreate.Gameplay.Data
         [SerializeField] private SpriteRenderer heightIndicator;
         [SerializeField] private MeshRenderer arcHeadRenderer;
         [SerializeField] private MeshFilter arcHeadMesh;
+        [SerializeField] private MeshCollider meshCollider;
         private Material normalMaterial;
         private Material highlightMaterial;
         private bool highlight;
         private readonly List<ArcSegment> segments = new List<ArcSegment>(32);
 
         public Arc Arc { get; private set; }
+
+        public override Note Note => Arc;
 
         public bool Highlight
         {
@@ -127,6 +131,28 @@ namespace ArcCreate.Gameplay.Data
             arcHeadRenderer.SetPropertyBlock(mpb);
         }
 
+        public void SetSelected(bool value)
+        {
+            for (int i = 0; i < segments.Count; i++)
+            {
+                ArcSegment segment = segments[i];
+                segment.SetSelected(value);
+            }
+
+            arcHeadRenderer.GetPropertyBlock(mpb);
+            mpb.SetInt(SelectedShaderId, value ? 1 : 0);
+            arcHeadRenderer.SetPropertyBlock(mpb);
+
+            heightIndicator.GetPropertyBlock(mpb);
+            mpb.SetInt(SelectedShaderId, value ? 1 : 0);
+            heightIndicator.SetPropertyBlock(mpb);
+        }
+
+        public void SetCollider(Mesh mesh)
+        {
+            meshCollider.sharedMesh = mesh;
+        }
+
         public void ClipTo(int currentTiming, double currentFloorPosition, int clipToTiming, double clipToFloorPosition)
         {
             for (int i = 0; i < segments.Count; i++)
@@ -187,7 +213,7 @@ namespace ArcCreate.Gameplay.Data
             transform.localScale = scale;
 
             Vector3 heightScale = heightIndicator.transform.localScale;
-            heightScale.y = -100 * (position.y - (Values.ArcMeshOffsetNormal / 2));
+            heightScale.y = -100 * (position.y - (Values.TraceMeshOffset / 2));
             heightIndicator.transform.localScale = heightScale;
         }
 

@@ -39,6 +39,7 @@ namespace ArcCreate.Compose
                     var gameplayControl = rep as IGameplayControl;
                     Services.Gameplay = gameplayControl ?? throw new System.Exception("Could not load gameplay scene");
                     gameplayControl.ShouldUpdateInputSystem = false;
+                    gameplayControl.Chart.EnableColliderGeneration = true;
                     Debug.Log(I18n.S("Compose.Notify.GameplayLoaded"));
                 }).Forget();
         }

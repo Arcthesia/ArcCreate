@@ -73,6 +73,7 @@ namespace ArcCreate.Compose.Navigation
                 }
 
                 bool isShift = IsShiftedKey.Contains(keystrokeString) || char.IsUpper(keystrokeString[0]);
+                bool isMouse = IsMouseKey.Contains(k);
 
                 keystroke = new Keystroke()
                 {
@@ -80,6 +81,7 @@ namespace ArcCreate.Compose.Navigation
                     Modifier2 = null,
                     ActuateOnRelease = false,
                     Key = k,
+                    IsMouse = isMouse,
                 };
 
                 reason = null;
@@ -101,9 +103,11 @@ namespace ArcCreate.Compose.Navigation
 
             if (TryGetKeyString(keyLower, out string keystring))
             {
+                bool isMouse = IsMouseKey.Contains(keystring);
                 keystroke = new Keystroke()
                 {
                     Key = keystring,
+                    IsMouse = isMouse,
                 };
             }
             else

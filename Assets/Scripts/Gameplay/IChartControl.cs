@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using ArcCreate.ChartFormat;
 using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.Data;
 
@@ -8,6 +7,8 @@ namespace ArcCreate.Gameplay
     public interface IChartControl
     {
         List<TimingGroup> TimingGroups { get; }
+
+        bool EnableColliderGeneration { get; set; }
 
         /// <summary>
         /// Add events to the currently playing chart.

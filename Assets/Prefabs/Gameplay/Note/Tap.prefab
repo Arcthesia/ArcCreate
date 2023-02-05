@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 628986283549222334}
   - component: {fileID: 628986283549222335}
   - component: {fileID: 5599496378596991385}
+  - component: {fileID: -280887602554816620}
   m_Layer: 8
   m_Name: Tap
   m_TagString: Untagged
@@ -94,3 +95,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a09934126329ada4c85c29b1e92e45c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &-280887602554816620
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 628986283549222332}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.4699998, y: 0.64, z: 0}
+  m_Center: {x: 0, y: 0.32, z: 0}

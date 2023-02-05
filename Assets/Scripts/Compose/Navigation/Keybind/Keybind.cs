@@ -100,6 +100,11 @@ namespace ArcCreate.Compose.Navigation
         {
             if (ReferenceEquals(obj.action, InputActions[index]))
             {
+                if (BlockMouseAndModifier(index))
+                {
+                    return;
+                }
+
                 index++;
                 if (index >= InputActions.Length)
                 {
@@ -120,6 +125,11 @@ namespace ArcCreate.Compose.Navigation
         {
             if (index == InputActions.Length - 1)
             {
+                if (BlockMouseAndModifier(index))
+                {
+                    return;
+                }
+
                 index = 0;
                 isFinalKeyHeld = true;
                 if (Services.Navigation.ShouldExecute(Action))
@@ -136,6 +146,16 @@ namespace ArcCreate.Compose.Navigation
         private void OnFinalKeystrokeUp(InputAction.CallbackContext obj)
         {
             isFinalKeyHeld = false;
+        }
+
+        private bool BlockMouseAndModifier(int index)
+        {
+            Keyboard keyboard = Keyboard.current;
+            Keystroke keystroke = Keystrokes[index];
+            return
+                keystroke.IsMouse &&
+                string.IsNullOrEmpty(keystroke.Modifier1) && string.IsNullOrEmpty(keystroke.Modifier2) &&
+                (keyboard.ctrlKey.isPressed || keyboard.shiftKey.isPressed || keyboard.altKey.isPressed);
         }
 
         private async UniTask StartRepeatedExecution()

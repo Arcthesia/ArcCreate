@@ -5,15 +5,21 @@ using UnityEngine;
 namespace ArcCreate.Gameplay.Data
 {
     [RequireComponent(typeof(SpriteRenderer))]
-    public class TapBehaviour : MonoBehaviour
+    public class TapBehaviour : NoteBehaviour
     {
         private static Pool<LineRenderer> connectionLinePool;
         private static Quaternion baseLocalRotation;
         private static Vector3 baseLocalScale;
+        private static MaterialPropertyBlock mpb;
+        private static readonly int SelectedShaderId = Shader.PropertyToID("_Selected");
+
         private SpriteRenderer spriteRenderer;
         private readonly List<LineRenderer> connectionLines = new List<LineRenderer>(2);
+        private bool isSelected;
 
         public Tap Tap { get; private set; }
+
+        public override Note Note => Tap;
 
         public void SetData(Tap tap)
         {
@@ -38,6 +44,13 @@ namespace ArcCreate.Gameplay.Data
         public void SetColor(Color color)
         {
             spriteRenderer.color = color;
+        }
+
+        public void SetSelected(bool value)
+        {
+            spriteRenderer.GetPropertyBlock(mpb);
+            mpb.SetInt(SelectedShaderId, value ? 1 : 0);
+            spriteRenderer.SetPropertyBlock(mpb);
         }
 
         public void SetConnectionLines(HashSet<ArcTap> arcTaps, Vector3 tapWorldPos)
@@ -66,6 +79,7 @@ namespace ArcCreate.Gameplay.Data
 
         private void Awake()
         {
+            mpb = new MaterialPropertyBlock();
             spriteRenderer = GetComponent<SpriteRenderer>();
             baseLocalRotation = transform.localRotation;
             baseLocalScale = transform.localScale;

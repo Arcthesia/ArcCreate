@@ -3,9 +3,10 @@ using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
 {
-    public class ArcTapBehaviour : MonoBehaviour
+    public class ArcTapBehaviour : NoteBehaviour
     {
         private static readonly int ColorShaderId = Shader.PropertyToID("_Color");
+        private static readonly int SelectedShaderId = Shader.PropertyToID("_Selected");
         private static MaterialPropertyBlock mpb;
         private static Quaternion baseLocalRotation;
         private static Vector3 baseLocalScale;
@@ -18,6 +19,8 @@ namespace ArcCreate.Gameplay.Data
 
         public ArcTap ArcTap { get; private set; }
 
+        public override Note Note => ArcTap;
+
         public void SetColor(Color color)
         {
             meshRenderer.GetPropertyBlock(mpb);
@@ -25,6 +28,13 @@ namespace ArcCreate.Gameplay.Data
             meshRenderer.SetPropertyBlock(mpb);
 
             shadowRenderer.color = baseShadowColor * color;
+        }
+
+        public void SetSelected(bool value)
+        {
+            meshRenderer.GetPropertyBlock(mpb);
+            mpb.SetInt(SelectedShaderId, value ? 1 : 0);
+            meshRenderer.SetPropertyBlock(mpb);
         }
 
         public void SetData(ArcTap arcTap)
