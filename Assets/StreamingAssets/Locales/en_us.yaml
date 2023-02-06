@@ -110,7 +110,7 @@ Compose:
       EditGroup: Edited timing group {Number}
       RemoveGroup: Removed timing group {Number}
     Project:
-      CreateProject: |-
+      NewProject: |-
         Created new project
         at: {Path}
       OpenProject: |-
@@ -202,7 +202,7 @@ Compose:
       Timeline: Timeline
       Project: Project
       Events: Events
-      LAN: LAN
+      Remote: Remote
       Export: Export
       Settings: Settings
     Top:
@@ -364,6 +364,31 @@ Compose:
       Actions:
         SelectArc: Select parent arc
         SelectArctap: Select sky notes
+
+Remote:
+  State:
+    Listening: Listening for broadcast...
+    Found: |-
+      Broadcast received from the following device(s).
+      Select a device to continue.
+  Description:
+    Idle: |-
+      No test play client has been connected.
+      Start broadcasting to discover clients. Make sure this device and test play client's device are on the same local network, and that the test play client is listening for incoming broadcast.
+    Broadcasting: |-
+      Broadcasting code: {0}.
+      Select the option with this code on the test play client to start the session.
+    Connected: |-
+      Connected to test play client at: {0}:{1}
+  Actions:
+    Broadcast:
+      Start broadcasting
+    AbortBroadcast:
+      Stop broadcast
+    BroadcastAgain:
+      Broadcast again
+    StopSession:
+      Stop session
 
 Gameplay:
   Exception:

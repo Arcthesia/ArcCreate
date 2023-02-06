@@ -48,12 +48,35 @@ namespace ArcCreate.SceneTransition
             StartCoroutine(EndOfFrame(OnSceneLoad));
             if (SceneTransitionManager.Instance == null)
             {
-                StartCoroutine(EndOfFrame(OnNoBootScene));
-                StartCoroutine(EndOfFrame(() => SceneManager.LoadSceneAsync(SceneNames.BootScene, LoadSceneMode.Additive)));
-                SceneTransitionManager.StartBootSceneDev(this);
+                bool bootSceneFound = false;
+                for (int i = 0; i < SceneManager.sceneCount; i++)
+                {
+                    Scene scene = SceneManager.GetSceneAt(i);
+                    if (scene.name == SceneNames.BootScene)
+                    {
+                        bootSceneFound = true;
+                    }
+                }
+
+                if (!bootSceneFound)
+                {
+                    StartCoroutine(EndOfFrame(OnNoBootScene));
+                    StartCoroutine(EndOfFrame(() => SceneManager.LoadSceneAsync(SceneNames.BootScene, LoadSceneMode.Additive)));
+                    SceneTransitionManager.StartBootSceneDev(this);
+                }
+                else
+                {
+                    StartCoroutine(EndOfFrame(NotifyManager));
+                }
+
                 return;
             }
 
+            NotifyManager();
+        }
+
+        private void NotifyManager()
+        {
             SceneTransitionManager.Instance.LoadSceneComplete(this);
             SceneTransitionManager.Instance.OnTransitionEnd += OnTransitionComplete;
         }
