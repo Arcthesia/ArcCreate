@@ -367,10 +367,16 @@ Compose:
 
 Remote:
   State:
-    Listening: Listening for broadcast...
+    Listening: |-
+      Listening for broadcast...
+      <size=20>
+      On your desktop ArcCreate client, open "Remote" tab and press "Start broadcasting" to begin.</size>
     Found: |-
       Broadcast received from the following device(s).
       Select a device to continue.
+    TargetDisconnected:
+      Compose: Target client disconnected. Stopping connection.
+      Gameplay: Target client disconnected. Do you want to start a new session?
   Description:
     Idle: |-
       No test play client has been connected.

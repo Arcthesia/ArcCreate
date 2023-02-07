@@ -13,22 +13,39 @@ namespace ArcCreate.Remote.Common
         private TcpClient targetClient;
         private Thread listenerThread;
 
-        private readonly int port;
+        private readonly int listenOnPort;
+        private readonly int sendToPort;
         private readonly IPAddress ip;
         private readonly IProtocol protocol;
+        private readonly MessagePackager packager;
 
-        public MessageChannel(IPAddress ip, int port, IProtocol protocol)
+        public MessageChannel(IPAddress ip, int listenOnPort, int sendToPort, IProtocol protocol)
         {
-            this.port = port;
+            this.listenOnPort = listenOnPort;
+            this.sendToPort = sendToPort;
             this.ip = ip;
             this.protocol = protocol;
+            packager = new MessagePackager();
         }
 
         public bool IsRunning { get; private set; }
 
         public IPAddress IPAddress => ip;
 
-        public int Port => port;
+        public int SendToPort => sendToPort;
+
+        public bool CheckConnection(byte[] data)
+        {
+            try
+            {
+                SendMessage(RemoteControl.CheckConnection, data);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
         public async UniTask Setup()
         {
@@ -66,7 +83,7 @@ namespace ArcCreate.Remote.Common
             IsRunning = true;
         }
 
-        public void SendMessage(byte[] msg)
+        public void SendMessage(RemoteControl control, byte[] msg)
         {
             try
             {
@@ -78,7 +95,19 @@ namespace ArcCreate.Remote.Common
                 NetworkStream stream = targetClient.GetStream();
                 if (stream.CanWrite)
                 {
-                    stream.Write(msg, 0, msg.Length);
+                    if (msg != null)
+                    {
+                        byte[] header = packager.CreateHeader(control, msg.Length);
+                        stream.Write(header, 0, header.Length);
+                        stream.Write(msg, 0, msg.Length);
+                    }
+                    else
+                    {
+                        byte[] header = packager.CreateHeader(control, 0);
+                        stream.Write(header, 0, header.Length);
+                    }
+
+                    stream.Flush();
                 }
                 else
                 {
@@ -95,6 +124,7 @@ namespace ArcCreate.Remote.Common
         {
             IsRunning = false;
             targetClient?.Close();
+            listener.Stop();
             listenerThread.Abort();
         }
 
@@ -102,7 +132,7 @@ namespace ArcCreate.Remote.Common
         {
             try
             {
-                targetClient = new TcpClient(ip.ToString(), port);
+                targetClient = new TcpClient(ip.ToString(), sendToPort);
                 exception = null;
                 return true;
             }
@@ -118,9 +148,9 @@ namespace ArcCreate.Remote.Common
         {
             try
             {
-                listener = new TcpListener(ip, port);
+                listener = new TcpListener(ip, listenOnPort);
                 listener.Start();
-                byte[] bytes = new byte[1024 * 1024 * 5]; // 5MB
+                byte[] buffer = new byte[1024 * 1024 * 5]; // 5MB
                 while (true)
                 {
                     using (TcpClient connectedClient = listener.AcceptTcpClient())
@@ -128,11 +158,13 @@ namespace ArcCreate.Remote.Common
                         using (NetworkStream stream = connectedClient.GetStream())
                         {
                             int length;
-                            while ((length = stream.Read(bytes, 0, bytes.Length)) != 0)
+                            while ((length = stream.Read(buffer, 0, buffer.Length)) != 0)
                             {
-                                var incomingData = new byte[length];
-                                Array.Copy(bytes, 0, incomingData, 0, length);
-                                protocol.Process(incomingData);
+                                packager.ProcessMessage(buffer, 0, length);
+                                if (packager.HasQueuedMessage(out RemoteControl control, out byte[] message))
+                                {
+                                    protocol.Process(control, message);
+                                }
                             }
                         }
                     }

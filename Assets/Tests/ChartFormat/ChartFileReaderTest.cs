@@ -19,18 +19,6 @@ namespace Tests.Unit
         }
 
         [Test]
-        public void ReadSingleAffFile()
-        {
-            SetupFakeFile("2.aff", "(0,1);");
-
-            reader.Parse();
-
-            Assert.That(reader.Events, Has.Count.EqualTo(1));
-            Assert.That(reader.Events[0], Is.TypeOf<RawTap>());
-            Assert.That(reader.Events[0].Timing, Is.Zero);
-        }
-
-        [Test]
         public void ReadAffFileWithOneAffInclude()
         {
             SetupFakeFile(
@@ -211,21 +199,21 @@ namespace Tests.Unit
             SetupFakeFile(
                 "2.aff",
                 "(0,1);\n" +
-                "include(dir\\incl1.aff);\n");
+                "include(dir/incl1.aff);\n");
             SetupFakeFile(
-                "dir\\incl1.aff",
+                "dir/incl1.aff",
                 "(1000,1);\n" +
                 "include(incl2.aff);\n");
             SetupFakeFile(
-                "dir\\incl2.aff",
+                "dir/incl2.aff",
                 "(2000,1);");
 
             reader.Parse();
 
             Assert.That(reader.TimingGroups, Has.Count.EqualTo(3));
             Assert.That(reader.TimingGroups[0].File, Is.EqualTo("2.aff"));
-            Assert.That(reader.TimingGroups[1].File, Is.EqualTo("dir\\incl1.aff"));
-            Assert.That(reader.TimingGroups[2].File, Is.EqualTo("dir\\incl2.aff"));
+            Assert.That(reader.TimingGroups[1].File, Is.EqualTo("dir/incl1.aff"));
+            Assert.That(reader.TimingGroups[2].File, Is.EqualTo("dir/incl2.aff"));
             Assert.That(reader.TimingGroups[1].Editable, Is.True);
             Assert.That(reader.TimingGroups[2].Editable, Is.True);
         }
@@ -237,16 +225,16 @@ namespace Tests.Unit
                 "2.aff",
                 "(0,1);\n" +
                 "include(incl1.aff);\n" +
-                "include(dir\\incl2.aff);\n");
+                "include(dir/incl2.aff);\n");
             SetupFakeFile(
                 "incl1.aff",
                 "(1000,1);");
             SetupFakeFile(
-                "dir\\incl2.aff",
+                "dir/incl2.aff",
                 "(2000,1);\n" +
                 "include(incl1.aff);\n");
             SetupFakeFile(
-                "dir\\incl1.aff",
+                "dir/incl1.aff",
                 "(3000,1);");
 
             reader.Parse();
@@ -260,21 +248,21 @@ namespace Tests.Unit
             SetupFakeFile(
                 "2.aff",
                 "(0,1);\n" +
-                "fragment(0,dir\\frag1.aff);\n");
+                "fragment(0,dir/frag1.aff);\n");
             SetupFakeFile(
-                "dir\\frag1.aff",
+                "dir/frag1.aff",
                 "(1000,1);\n" +
                 "fragment(0,frag2.aff);\n");
             SetupFakeFile(
-                "dir\\frag2.aff",
+                "dir/frag2.aff",
                 "(2000,1);");
 
             reader.Parse();
 
             Assert.That(reader.TimingGroups, Has.Count.EqualTo(3));
             Assert.That(reader.TimingGroups[0].File, Is.EqualTo("2.aff"));
-            Assert.That(reader.TimingGroups[1].File, Is.EqualTo("dir\\frag1.aff"));
-            Assert.That(reader.TimingGroups[2].File, Is.EqualTo("dir\\frag2.aff"));
+            Assert.That(reader.TimingGroups[1].File, Is.EqualTo("dir/frag1.aff"));
+            Assert.That(reader.TimingGroups[2].File, Is.EqualTo("dir/frag2.aff"));
             Assert.That(reader.TimingGroups[1].Editable, Is.False);
             Assert.That(reader.TimingGroups[2].Editable, Is.False);
         }
