@@ -9,11 +9,6 @@ namespace ArcCreate.Compose
 {
     public class ComposeManager : SceneRepresentative
     {
-        public override void OnNoBootScene()
-        {
-            LoadGameplayScene();
-        }
-
         public override void OnUnloadScene()
         {
             Application.logMessageReceived -= OnLog;
@@ -21,8 +16,8 @@ namespace ArcCreate.Compose
 
         protected override void OnSceneLoad()
         {
-            LoadGameplayScene();
             Application.logMessageReceived += OnLog;
+            LoadGameplayScene();
         }
 
         private void LoadGameplayScene()
@@ -37,11 +32,16 @@ namespace ArcCreate.Compose
                 rep =>
                 {
                     var gameplayControl = rep as IGameplayControl;
-                    Services.Gameplay = gameplayControl ?? throw new System.Exception("Could not load gameplay scene");
-                    gameplayControl.ShouldUpdateInputSystem = false;
-                    gameplayControl.Chart.EnableColliderGeneration = true;
-                    Debug.Log(I18n.S("Compose.Notify.GameplayLoaded"));
+                    UseGameplay(gameplayControl);
                 }).Forget();
+        }
+
+        private void UseGameplay(IGameplayControl gameplay)
+        {
+            Services.Gameplay = gameplay ?? throw new System.Exception("Could not load gameplay scene");
+            gameplay.ShouldUpdateInputSystem = false;
+            gameplay.Chart.EnableColliderGeneration = true;
+            Debug.Log(I18n.S("Compose.Notify.GameplayLoaded"));
         }
 
         private void Update()

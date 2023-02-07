@@ -387,19 +387,42 @@ Remote:
     Connected: |-
       Connected to test play client at: {0}:{1}
   Actions:
-    Broadcast:
-      Start broadcasting
-    AbortBroadcast:
-      Stop broadcast
-    BroadcastAgain:
-      Broadcast again
-    StopSession:
-      Stop session
+    Broadcast: Start broadcasting
+    AbortBroadcast: Stop broadcast
+    BroadcastAgain: Broadcast again
+    StopSession: Stop session
+    StartNewSession: Start new session
+  Control:
+    Name: Control
+    Sync:
+      All: Sync all data
+      Individual: Sync individually
+      Chart: Chart
+      Audio: Audio
+      Jacket: Jacket
+      Background: Background
+      VideoBackground: Video background
+      Information: Information
+      Settings: Offset and speed
+      Skin: Skin
+    StartTiming: Play from timing
+    EndTiming: Play to timing      
+    Loop: Loop playback
+    ShowLog: Show log
+  Window:
+    Name: Remote
+    SyncChart: Sync chart
 
 Gameplay:
   Exception:
     LoadAudio: |-
       An error occured while trying to load the audio file located at {Path}.
+      {Error}
+    Chart: |-
+      An error occured while trying to load the chart located at {Path}.
+      {Error}
+    Skin: |-
+      An error occured while trying to load the image located at {Path}.
       {Error}
   HUD:
     Play: Play
