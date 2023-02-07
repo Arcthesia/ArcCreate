@@ -422,9 +422,8 @@ namespace ArcCreate.ChartFormat
 
         private string SwitchFileName(string currentPath, string target)
         {
-            return Path.Combine(
-                Path.GetDirectoryName(currentPath),
-                target);
+            string dir = Path.GetDirectoryName(currentPath);
+            return Path.Combine(dir, target);
         }
     }
 }

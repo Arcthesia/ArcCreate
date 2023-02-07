@@ -2,6 +2,6 @@ namespace ArcCreate.Remote.Common
 {
     public interface IProtocol
     {
-        void Process(byte[] data);
+        void Process(RemoteControl control, byte[] message);
     }
 }

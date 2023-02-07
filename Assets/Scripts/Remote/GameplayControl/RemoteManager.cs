@@ -8,6 +8,7 @@ using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace ArcCreate.Remote.Gameplay
 {
@@ -16,36 +17,50 @@ namespace ArcCreate.Remote.Gameplay
         [SerializeField] private GameObject selectDevicePrefab;
         [SerializeField] private Transform selectDeviceParent;
         [SerializeField] private GameObject indicateListening;
+        [SerializeField] private Button startNewSessionButton;
         [SerializeField] private TMP_Text statusText;
         private readonly List<RemoteDeviceRow> rows = new List<RemoteDeviceRow>();
 
         private IGameplayControl gameplay;
-        private RemoteSessionGameplay remoteSession;
         private BroadcastReceiver broadcastReceiver;
         private MessageChannel channel;
         private readonly BroadcastSender broadcastSender = new BroadcastSender(Ports.Compose);
+        private double lastConnectionCheck = double.MaxValue;
+
+        public void Process(RemoteControl control, byte[] message)
+        {
+            print("Gameplay received: " + control + " " + System.Text.Encoding.ASCII.GetString(message));
+            switch (control)
+            {
+                case RemoteControl.Abort:
+                    OnTargetDisconnect().Forget();
+                    break;
+            }
+        }
 
         public void ConnectTo(IPAddress ipAddress, string code)
         {
             StartConnectionTo(ipAddress, code).Forget();
         }
 
-        public void Process(byte[] data)
-        {
-        }
-
-        public override void OnNoBootScene()
-        {
-            // LoadGameplayScene();
-        }
-
         public override void OnUnloadScene()
         {
+            startNewSessionButton.onClick.RemoveListener(OnStartNewSessionButton);
         }
 
         protected override void OnSceneLoad()
         {
+            startNewSessionButton.onClick.AddListener(OnStartNewSessionButton);
+            startNewSessionButton.gameObject.SetActive(false);
             StartListeningForBroadcast();
+
+            // LoadGameplayScene();
+        }
+
+        private void OnStartNewSessionButton()
+        {
+            StartListeningForBroadcast();
+            startNewSessionButton.gameObject.SetActive(false);
         }
 
         private void LoadGameplayScene()
@@ -75,6 +90,15 @@ namespace ArcCreate.Remote.Gameplay
             if (gameplay == null || !gameplay.IsLoaded)
             {
                 InputSystem.Update();
+            }
+
+            if (Time.realtimeSinceStartup > lastConnectionCheck + Constants.Timeout)
+            {
+                lastConnectionCheck = Time.realtimeSinceStartup;
+                if (channel != null && !channel.CheckConnection(System.Text.Encoding.ASCII.GetBytes("From Gameplay")))
+                {
+                    OnTargetDisconnect().Forget();
+                }
             }
         }
 
@@ -123,17 +147,34 @@ namespace ArcCreate.Remote.Gameplay
         {
             indicateListening.SetActive(false);
             broadcastSender.Broadcast(code);
-            channel = new MessageChannel(ipAddress, Ports.Compose, this);
+            channel = new MessageChannel(ipAddress, Ports.Gameplay, Ports.Compose, this);
             await channel.Setup();
             StopListeningForBroadcast();
+            lastConnectionCheck = Time.realtimeSinceStartup;
 
             Debug.Log($"Gameplay: Connected to {ipAddress}:{Ports.Compose} {code}");
         }
 
         private void StopSession()
         {
-            remoteSession?.Dispose();
+            lastConnectionCheck = double.MaxValue;
+            channel?.SendMessage(RemoteControl.Abort, System.Text.Encoding.ASCII.GetBytes("From Gameplay"));
+            channel?.Dispose();
+            channel = null;
             Debug.Log("Gameplay: Stopped session");
+        }
+
+        private async UniTask OnTargetDisconnect()
+        {
+            await UniTask.SwitchToMainThread();
+            lastConnectionCheck = double.MaxValue;
+            channel?.Dispose();
+            channel = null;
+            Debug.Log($"Gameplay: Target disconnected");
+
+            statusText.text = I18n.S("Remote.State.TargetDisconnected.Gameplay");
+            indicateListening.SetActive(true);
+            startNewSessionButton.gameObject.SetActive(true);
         }
 
         private void OnBroadcastReceived(IPAddress ipAddress, string message)
@@ -148,7 +189,7 @@ namespace ArcCreate.Remote.Gameplay
             {
                 if (row.IPAddress.Equals(ipAddress))
                 {
-                    if (message == Strings.Abort)
+                    if (message == Constants.Abort)
                     {
                         Destroy(row.gameObject);
                         rows.Remove(row);

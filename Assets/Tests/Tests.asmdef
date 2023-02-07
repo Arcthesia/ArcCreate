@@ -6,7 +6,8 @@
         "ArcCreate.ChartFormat",
         "ArcCreate.Gameplay",
         "ArcCreate.Utility",
-        "UniTask"
+        "UniTask",
+        "ArcCreate.Remote.Common"
     ],
     "includePlatforms": [
         "Editor"

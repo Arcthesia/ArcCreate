@@ -28,6 +28,7 @@ namespace ArcCreate.Compose.Remote
         private readonly BroadcastSender broadcastSender = new BroadcastSender(Ports.Gameplay);
         private BroadcastReceiver broadcastReceiver;
         private MessageChannel channel;
+        private double lastConnectionCheck = double.MaxValue;
 
         private enum RemoteState
         {
@@ -37,12 +38,23 @@ namespace ArcCreate.Compose.Remote
             Sending,
         }
 
-        public void Process(byte[] data)
+        public bool IsConnected { get; private set; }
+
+        public void Process(RemoteControl control, byte[] message)
         {
+            print("Compose received: " + control + " - " + System.Text.Encoding.ASCII.GetString(message));
+            switch (control)
+            {
+                case RemoteControl.Abort:
+                    OnTargetDisconnect().Forget();
+                    break;
+            }
         }
 
         private void SetState(RemoteState state)
         {
+            IsConnected = state == RemoteState.Connected;
+
             idleIndicator.SetActive(state == RemoteState.Idle);
             broadcastingIndicator.SetActive(state == RemoteState.Broadcasting);
             connectedIndicator.SetActive(state == RemoteState.Connected);
@@ -63,8 +75,20 @@ namespace ArcCreate.Compose.Remote
                     break;
                 case RemoteState.Connected:
                 case RemoteState.Sending:
-                    descriptionText.text = I18n.S("Remote.Description.Connected", channel.IPAddress, channel.Port);
+                    descriptionText.text = I18n.S("Remote.Description.Connected", channel.IPAddress, channel.SendToPort);
                     break;
+            }
+        }
+
+        private void Update()
+        {
+            if (Time.realtimeSinceStartup > lastConnectionCheck + Constants.Timeout)
+            {
+                lastConnectionCheck = Time.realtimeSinceStartup;
+                if (channel != null && !channel.CheckConnection(System.Text.Encoding.ASCII.GetBytes("From Compose")))
+                {
+                    OnTargetDisconnect().Forget();
+                }
             }
         }
 
@@ -112,8 +136,9 @@ namespace ArcCreate.Compose.Remote
         private async UniTask StartSession(IPAddress ipAddress)
         {
             DisposeAny();
-            channel = new MessageChannel(ipAddress, Ports.Gameplay, this);
+            channel = new MessageChannel(ipAddress, Ports.Compose, Ports.Gameplay, this);
             await channel.Setup();
+            lastConnectionCheck = Time.realtimeSinceStartup;
 
             SetState(RemoteState.Connected);
             Debug.Log($"Compose: Started session with {ipAddress}:{Ports.Gameplay} {code}");
@@ -121,10 +146,25 @@ namespace ArcCreate.Compose.Remote
 
         private void StopSession()
         {
+            channel?.SendMessage(RemoteControl.Abort, System.Text.Encoding.ASCII.GetBytes("From Compose"));
             DisposeAny();
             SetState(RemoteState.Idle);
-            broadcastSender.Broadcast(Strings.Abort);
+            broadcastSender.Broadcast(Constants.Abort);
+
+            lastConnectionCheck = double.MaxValue;
             Debug.Log($"Compose: Stopped session");
+        }
+
+        private async UniTask OnTargetDisconnect()
+        {
+            await UniTask.SwitchToMainThread();
+            DisposeAny();
+            SetState(RemoteState.Idle);
+            broadcastSender.Broadcast(Constants.Abort);
+
+            lastConnectionCheck = double.MaxValue;
+            Debug.Log($"Compose: Target disconnected");
+            Services.Popups.Notify(Popups.Severity.Info, I18n.S("Remote.State.TargetDisconnected.Compose"));
         }
 
         private string GenerateRandomMessage()
