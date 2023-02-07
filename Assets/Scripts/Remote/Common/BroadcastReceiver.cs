@@ -2,12 +2,15 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
+using UnityEngine;
 
 namespace ArcCreate.Remote.Common
 {
     public class BroadcastReceiver : IDisposable
     {
         private readonly UdpClient udpClient;
+        private readonly Thread thread;
         private readonly int port;
 
         public BroadcastReceiver(int port)
@@ -21,7 +24,11 @@ namespace ArcCreate.Remote.Common
             udpClient.ExclusiveAddressUse = false;
             udpClient.Client.Bind(endPoint);
 
-            udpClient.BeginReceive(Receive, new object());
+            thread = new Thread(Receive)
+            {
+                IsBackground = true,
+            };
+            thread.Start();
         }
 
         public delegate void OnBroadcastDelegate(IPAddress ipAddress, string message);
@@ -33,16 +40,30 @@ namespace ArcCreate.Remote.Common
         public void Dispose()
         {
             udpClient.Close();
-            IsRunning = true;
+            thread.Abort();
+            IsRunning = false;
         }
 
-        private void Receive(IAsyncResult ar)
+        private void Receive()
         {
             IPEndPoint ip = new IPEndPoint(IPAddress.Any, port);
-            byte[] bytes = udpClient.EndReceive(ar, ref ip);
-            string message = Encoding.ASCII.GetString(bytes);
-            OnBroadcastReceived?.Invoke(ip.Address, message);
-            udpClient.BeginReceive(Receive, new object());
+            while (true)
+            {
+                try
+                {
+                    byte[] bytes = udpClient.Receive(ref ip);
+                    string message = Encoding.ASCII.GetString(bytes);
+                    OnBroadcastReceived?.Invoke(ip.Address, message);
+                }
+                catch (ThreadAbortException)
+                {
+                    break;
+                }
+                catch (Exception e)
+                {
+                    Debug.Log("Error receiving " + e.Message);
+                }
+            }
         }
     }
 }

@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ArcCreate.Utilities;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Networking;
 
 /// <summary>
 /// Internationalization.
@@ -101,6 +103,12 @@ public static class I18n
         }
     }
 
+    public static async UniTask StartLoadingLocale()
+    {
+        string path = Path.Combine(LocaleDirectory, CurrentLocale) + ".yml";
+        await StartLoadingLocaleWithUnityWeb(path);
+    }
+
     /// <summary>
     /// List all locales available. Each locale is defined by a file in the streaming assets folder.
     /// </summary>
@@ -117,20 +125,43 @@ public static class I18n
 
     private static void LoadLocale()
     {
-        string path = Path.Combine(LocaleDirectory, CurrentLocale) + ".yaml";
-        if (!File.Exists(path))
+        if (Application.platform == RuntimePlatform.Android)
         {
-            path = Path.Combine(LocaleDirectory, CurrentLocale) + ".yml";
+            string path = Path.Combine(LocaleDirectory, CurrentLocale) + ".yml";
+            StartLoadingLocaleWithUnityWeb(path).Forget();
+        }
+        else
+        {
+            string path = Path.Combine(LocaleDirectory, CurrentLocale) + ".yml";
             if (!File.Exists(path))
             {
                 throw new FileNotFoundException(path);
             }
-        }
 
-        using (FileStream stream = File.OpenRead(path))
+            using (FileStream stream = File.OpenRead(path))
+            {
+                strings.Clear();
+                YamlExtractor.ExtractTo(strings, new StreamReader(stream));
+            }
+
+            OnLocaleChanged?.Invoke();
+        }
+    }
+
+    private static async UniTask StartLoadingLocaleWithUnityWeb(string path)
+    {
+        strings.Clear();
+        using (var req = UnityWebRequest.Get(path))
         {
-            strings.Clear();
-            YamlExtractor.ExtractTo(strings, new StreamReader(stream));
+            await req.SendWebRequest();
+            if (!string.IsNullOrEmpty(req.error))
+            {
+                Debug.LogWarning($"Couldn't load locale file at {path}");
+                return;
+            }
+
+            string data = req.downloadHandler.text;
+            YamlExtractor.ExtractTo(strings, new StringReader(data));
         }
 
         OnLocaleChanged?.Invoke();

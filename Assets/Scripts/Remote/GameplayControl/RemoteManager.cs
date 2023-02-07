@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using ArcCreate.Gameplay;
 using ArcCreate.Remote.Common;
 using ArcCreate.SceneTransition;
@@ -31,6 +32,7 @@ namespace ArcCreate.Remote.Gameplay
         private MessageChannel channel;
         private readonly BroadcastSender broadcastSender = new BroadcastSender(Ports.Compose);
         private double lastConnectionCheck = double.MaxValue;
+        private readonly CancellationTokenSource ctx = new CancellationTokenSource();
 
         public void Process(RemoteControl control, byte[] message)
         {
@@ -93,9 +95,9 @@ namespace ArcCreate.Remote.Gameplay
             gameplay.Chart.EnableColliderGeneration = false;
             remoteGameplayControl.SetGameplay(gameplay);
 
-            StartListeningForBroadcast();
-
             Debug.Log(I18n.S("Compose.Notify.GameplayLoaded"));
+
+            StartListeningForBroadcast();
         }
 
         private void Update()
@@ -136,6 +138,11 @@ namespace ArcCreate.Remote.Gameplay
 
             UpdateStatusText();
             Debug.Log($"Gameplay: Start listening on port {Ports.Gameplay}");
+
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                AcquireMulticastLockPeriodically(ctx.Token).Forget();
+            }
         }
 
         private void StopListeningForBroadcast()
@@ -152,17 +159,46 @@ namespace ArcCreate.Remote.Gameplay
                 Destroy(row.gameObject);
             }
 
+            ctx.Cancel();
             rows.Clear();
             Debug.Log($"Gameplay: Stopped listening");
+        }
+
+        // https://answers.unity.com/questions/250732/android-build-is-not-receiving-udp-broadcasts.html
+        private async UniTask AcquireMulticastLockPeriodically(CancellationToken ctx)
+        {
+            string lockTag = "remotePlay";
+            while (!ctx.IsCancellationRequested)
+            {
+                try
+                {
+                    using (AndroidJavaObject activity = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity"))
+                    {
+                        using (var wifiManager = activity.Call<AndroidJavaObject>("getSystemService", "wifi"))
+                        {
+                            AndroidJavaObject multicastLock = wifiManager.Call<AndroidJavaObject>("createMulticastLock", lockTag);
+                            multicastLock.Call("acquire");
+                            bool isHeld = multicastLock.Call<bool>("isHeld");
+                            Debug.Log(isHeld);
+                        }
+                    }
+                }
+                catch (Exception err)
+                {
+                    Debug.Log(err.ToString());
+                }
+
+                await UniTask.Delay(Constants.AcquireMulticastLockInterval, cancellationToken: ctx);
+            }
         }
 
         private async UniTask StartConnectionTo(IPAddress ipAddress, string code)
         {
             indicateListening.SetActive(false);
             broadcastSender.Broadcast(code);
+            StopListeningForBroadcast();
             channel = new MessageChannel(ipAddress, Ports.Gameplay, Ports.Compose, this);
             await channel.Setup();
-            StopListeningForBroadcast();
             remoteGameplayControl.SetTarget(ipAddress, Ports.HttpCompose, channel);
             lastConnectionCheck = Time.realtimeSinceStartup;
 

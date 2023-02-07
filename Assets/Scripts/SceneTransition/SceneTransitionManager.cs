@@ -137,6 +137,16 @@ namespace ArcCreate.SceneTransition
         private void Awake()
         {
             Instance = this;
+            LoadDefaultScene().Forget();
+        }
+
+        private async UniTask LoadDefaultScene()
+        {
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                await I18n.StartLoadingLocale();
+            }
+
             if (SceneManager.sceneCount == 1)
             {
                 SceneManager.LoadScene(SceneNames.DefaultScene, LoadSceneMode.Additive);

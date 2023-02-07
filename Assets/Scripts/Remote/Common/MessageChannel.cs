@@ -116,7 +116,7 @@ namespace ArcCreate.Remote.Common
             }
             catch (SocketException socketException)
             {
-                Debug.LogError("Socket exception: " + socketException);
+                Debug.LogError("Socket exception: " + listenOnPort + " " + socketException);
             }
         }
 
@@ -138,7 +138,7 @@ namespace ArcCreate.Remote.Common
             }
             catch (Exception e)
             {
-                Debug.LogError("On client connect exception " + e);
+                Debug.LogError("On client connect exception " + ip.ToString() + ":" + sendToPort + " " + e);
                 exception = e;
                 return false;
             }
@@ -148,7 +148,7 @@ namespace ArcCreate.Remote.Common
         {
             try
             {
-                listener = new TcpListener(ip, listenOnPort);
+                listener = new TcpListener(IPAddress.Any, listenOnPort);
                 listener.Start();
                 byte[] buffer = new byte[1024 * 1024 * 5]; // 5MB
                 while (true)
