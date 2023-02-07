@@ -3,7 +3,7 @@ name: Build
 on: [push, pull_request]
 
 jobs:
-  buildAndTestForLinuxBasedPlatforms:
+  buildForLinuxBasedPlatforms:
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
     strategy:
@@ -117,3 +117,26 @@ jobs:
         with:
           name: Build-${{ matrix.targetPlatform }}
           path: build/${{ matrix.targetPlatform }}
+  
+  sendDiscordWebhook:
+    runs-on: ubuntu-latest
+    needs: [buildForLinuxBasedPlatforms, buildForWindowsBasedPlatforms, buildForMacOSBasedPlatforms]
+    steps:
+      - uses: "hugoalh/send-discord-webhook-ghaction@v5.0.0"
+        with:
+          key: "${{secrets.DISCORD_WEBHOOK_KEY}}"
+          payload: |
+            {
+              "username": "Github",
+              "avatar_url": "https://i.imgur.com/XpJv9ci.png",
+              "embeds": [
+                {
+                  "author": {
+                    "name": "Github Action",
+                    "icon_url": "https://i.imgur.com/XpJv9ci.png"
+                  },
+                  "title": "Build action completed: ${{ github.event.head_commit.message }}",
+                  "description": "[Download build from here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})",
+                }
+              ]
+            }

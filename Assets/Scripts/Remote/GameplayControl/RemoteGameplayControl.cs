@@ -180,6 +180,9 @@ namespace ArcCreate.Remote.Gameplay
         private async UniTask RetrieveAudio(string ext)
         {
             await gameplayData.LoadAudioFromHttp(GetURI("audio"), ext);
+            await UniTask.SwitchToMainThread();
+            timingStart = 0;
+            timingEnd = Mathf.RoundToInt(gameplayData.AudioClip.Value.length * 1000);
         }
 
         private async UniTask RetrieveJacket(bool useDefault)

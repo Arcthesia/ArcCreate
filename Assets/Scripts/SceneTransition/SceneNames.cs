@@ -8,7 +8,7 @@
         public const string RemoteScene = "Remote";
 
 #if UNITY_EDITOR || UNITY_STANDALONE
-        public const string DefaultScene = RemoteScene;
+        public const string DefaultScene = ComposeScene;
 #else
         public const string DefaultScene = RemoteScene;
 #endif

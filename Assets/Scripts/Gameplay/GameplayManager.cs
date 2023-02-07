@@ -53,9 +53,6 @@ namespace ArcCreate.Gameplay
 
         public override void OnNoBootScene()
         {
-            // Use touch
-            Settings.InputMode.Value = (int)InputMode.Mouse;
-
             // Load test chart
             string path = Path.Combine(Application.streamingAssetsPath, testPlayChartFileName);
             if (Application.platform == RuntimePlatform.Android)
@@ -71,6 +68,11 @@ namespace ArcCreate.Gameplay
         protected override void OnSceneLoad()
         {
             Application.targetFrameRate = Screen.currentResolution.refreshRate;
+            if (Application.platform == RuntimePlatform.Android
+             || Application.platform == RuntimePlatform.IPhonePlayer)
+            {
+                Settings.InputMode.Value = (int)InputMode.Touch;
+            }
         }
 
         private async UniTask ImportTestChartAndroid(string path)

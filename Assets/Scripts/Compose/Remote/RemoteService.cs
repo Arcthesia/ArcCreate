@@ -181,6 +181,7 @@ namespace ArcCreate.Compose.Remote
 
         private async UniTask StartSession(IPAddress ipAddress)
         {
+            await UniTask.SwitchToMainThread();
             DisposeAny();
             channel = new MessageChannel(ipAddress, Ports.Compose, Ports.Gameplay, this);
             fileHoster = new FileHoster(Ports.HttpCompose, this);
