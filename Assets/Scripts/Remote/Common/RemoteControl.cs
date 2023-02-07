@@ -3,40 +3,43 @@ namespace ArcCreate.Remote.Common
     public enum RemoteControl
     {
         // Control bytes
-        Invalid = -2,
+        Invalid = -3,
+        ShowLog = -2,
         Abort = -1,
         CheckConnection = 0,
 
         // Playback
-        Timing = 1,
-        LoopStart = 2,
-        LoopEnd = 3,
-        Play = 4,
-        Pause = 5,
+        CurrentTiming = 1,
+        StartTiming = 2,
+        EndTiming = 3,
+        Loop = 4,
+        Play = 5,
+        Pause = 6,
 
         // Files
         Chart = 16,
         Audio = 17,
         JacketArt = 18,
         Background = 19,
+        VideoBackground = 20,
 
         // Info
         Title = 32,
         Composer = 33,
-        Difficulty = 34,
-        BaseBpm = 35,
-        Speed = 36,
-        GlobalOffset = 37,
+        DifficultyName = 34,
+        DifficultyColor = 35,
+        BaseBpm = 36,
+        Speed = 37,
+        GlobalOffset = 38,
 
         // Skin
         AlignmentSkin = 48,
-        AccentSkin = 52,
-        NoteSkin = 49,
-        ParticleSkin = 50,
-        SingleLineSkin = 51,
-        TrackSkin = 52,
+        AccentSkin = 49,
+        NoteSkin = 50,
+        ParticleSkin = 51,
+        SingleLineSkin = 52,
+        TrackSkin = 53,
 
-        // Settings
-        ShowLog = 64,
+        // TODO: Arc colors
     }
 }

@@ -35,6 +35,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
+          buildName: ArcCreate
 
       - uses: actions/upload-artifact@v2
         with:
@@ -72,6 +73,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
+          buildName: ArcCreate
 
       - uses: actions/upload-artifact@v2
         with:
@@ -109,6 +111,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
+          buildName: ArcCreate
 
       - uses: actions/upload-artifact@v2
         with:

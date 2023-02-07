@@ -25,7 +25,10 @@ namespace ArcCreate.Compose.Timeline
             EndTiming = endTiming;
             marker1.SetTiming(timing);
             marker2.SetTiming(endTiming);
-            Update();
+            if (gameObject.activeInHierarchy)
+            {
+                Update();
+            }
         }
 
         private void Awake()

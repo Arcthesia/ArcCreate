@@ -60,5 +60,20 @@ namespace ArcCreate.ChartFormat
                 writer.Write(stream, audioOffset, density, group);
             }
         }
+
+        /// <summary>
+        /// Start writing to a single file, ignoring include and fragment events.
+        /// </summary>
+        /// <param name="file">The target file name.</param>
+        /// <param name="audioOffset">The audio offset option.</param>
+        /// <param name="density">The timing point density factor option.</param>
+        /// <param name="groups">List of timing groups,
+        /// each being a RawTimingGroup property object, and an IEnumerable of events.</param>
+        public void WriteSingleFile(string file, int audioOffset, float density, IEnumerable<(RawTimingGroup properties, IEnumerable<RawEvent> events)> groups)
+        {
+            IChartFileWriter writer = ChartFileWriterFactory.GetWriterFromFilename(file);
+            StreamWriter stream = fileAccess.WriteFile(Path.Combine(directory, file));
+            writer.Write(stream, audioOffset, density, groups);
+        }
     }
 }

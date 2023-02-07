@@ -3,7 +3,6 @@ using ArcCreate.Utility.Parser;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Timeline
 {
@@ -41,7 +40,10 @@ namespace ArcCreate.Compose.Timeline
         {
             Timing = timing;
             SetFieldText(timing);
-            Update();
+            if (gameObject.activeInHierarchy)
+            {
+                UpdatePosition();
+            }
         }
 
         public void SetDragPosition(float x)
@@ -121,15 +123,7 @@ namespace ArcCreate.Compose.Timeline
 
         private void Update()
         {
-            int viewFrom = Services.Timeline.ViewFromTiming;
-            int viewTo = Services.Timeline.ViewToTiming;
-            float p = (float)(Timing - viewFrom) / (viewTo - viewFrom);
-
-            float parentWidth = parentRectTransform.rect.width / 2;
-            float x = Mathf.Lerp(-parentWidth, parentWidth, p);
-            rectTransform.anchoredPosition = new Vector2(x, rectTransform.anchoredPosition.y);
-            AlignNumberBackground();
-
+            UpdatePosition();
             if (!timingField.isFocused && queueTimingEdit)
             {
                 timingField.text = Timing.ToString();
@@ -141,6 +135,18 @@ namespace ArcCreate.Compose.Timeline
                 schedule = float.MaxValue;
                 OnDragDebounced?.Invoke(this, Timing);
             }
+        }
+
+        private void UpdatePosition()
+        {
+            int viewFrom = Services.Timeline.ViewFromTiming;
+            int viewTo = Services.Timeline.ViewToTiming;
+            float p = (float)(Timing - viewFrom) / (viewTo - viewFrom);
+
+            float parentWidth = parentRectTransform.rect.width / 2;
+            float x = Mathf.Lerp(-parentWidth, parentWidth, p);
+            rectTransform.anchoredPosition = new Vector2(x, rectTransform.anchoredPosition.y);
+            AlignNumberBackground();
         }
     }
 }

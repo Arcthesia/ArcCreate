@@ -105,6 +105,7 @@ namespace ArcCreate.Gameplay.Skin
         {
             if (external != null)
             {
+                UnityEngine.Object.Destroy(external.texture);
                 UnityEngine.Object.Destroy(external);
                 external = null;
             }

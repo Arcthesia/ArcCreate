@@ -87,9 +87,9 @@ namespace ArcCreate.Remote.Common
         {
             try
             {
-                if (targetClient == null)
+                if (targetClient == null || !targetClient.Connected)
                 {
-                    throw new Exception("No client to send message to");
+                    return;
                 }
 
                 NetworkStream stream = targetClient.GetStream();

@@ -69,7 +69,11 @@ namespace ArcCreate.Gameplay.Skin
 
         private void OnVideoBackground(string value)
         {
-            videoBackground.url = value;
+            if (!string.IsNullOrEmpty(value))
+            {
+                videoBackground.url = value;
+            }
+
             videoBackgroundRenderer.SetActive(string.IsNullOrEmpty(value));
         }
 

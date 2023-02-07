@@ -19,6 +19,11 @@ namespace ArcCreate.Remote.Gameplay
         [SerializeField] private GameObject indicateListening;
         [SerializeField] private Button startNewSessionButton;
         [SerializeField] private TMP_Text statusText;
+        [SerializeField] private TMP_Text logText;
+        [SerializeField] private Color warningColor;
+        [SerializeField] private Color errorColor;
+        [SerializeField] private Color normalColor;
+        [SerializeField] private RemoteGameplayControl remoteGameplayControl;
         private readonly List<RemoteDeviceRow> rows = new List<RemoteDeviceRow>();
 
         private IGameplayControl gameplay;
@@ -29,11 +34,13 @@ namespace ArcCreate.Remote.Gameplay
 
         public void Process(RemoteControl control, byte[] message)
         {
-            print("Gameplay received: " + control + " " + System.Text.Encoding.ASCII.GetString(message));
             switch (control)
             {
                 case RemoteControl.Abort:
                     OnTargetDisconnect().Forget();
+                    break;
+                default:
+                    remoteGameplayControl.HandleMessage(control, message).Forget();
                     break;
             }
         }
@@ -46,15 +53,15 @@ namespace ArcCreate.Remote.Gameplay
         public override void OnUnloadScene()
         {
             startNewSessionButton.onClick.RemoveListener(OnStartNewSessionButton);
+            Application.logMessageReceived -= DisplayLog;
         }
 
         protected override void OnSceneLoad()
         {
             startNewSessionButton.onClick.AddListener(OnStartNewSessionButton);
             startNewSessionButton.gameObject.SetActive(false);
-            StartListeningForBroadcast();
-
-            // LoadGameplayScene();
+            Application.logMessageReceived += DisplayLog;
+            LoadGameplayScene();
         }
 
         private void OnStartNewSessionButton()
@@ -76,13 +83,19 @@ namespace ArcCreate.Remote.Gameplay
                 {
                     var gameplayControl = rep as IGameplayControl;
                     gameplay = gameplayControl ?? throw new Exception("Could not load gameplay scene");
-                    gameplayControl.ShouldUpdateInputSystem = true;
-                    gameplayControl.Chart.EnableColliderGeneration = false;
-
-                    StartListeningForBroadcast();
-
-                    Debug.Log(I18n.S("Compose.Notify.GameplayLoaded"));
+                    UseGameplay(gameplayControl);
                 }).Forget();
+        }
+
+        private void UseGameplay(IGameplayControl gameplay)
+        {
+            gameplay.ShouldUpdateInputSystem = true;
+            gameplay.Chart.EnableColliderGeneration = false;
+            remoteGameplayControl.SetGameplay(gameplay);
+
+            StartListeningForBroadcast();
+
+            Debug.Log(I18n.S("Compose.Notify.GameplayLoaded"));
         }
 
         private void Update()
@@ -150,6 +163,7 @@ namespace ArcCreate.Remote.Gameplay
             channel = new MessageChannel(ipAddress, Ports.Gameplay, Ports.Compose, this);
             await channel.Setup();
             StopListeningForBroadcast();
+            remoteGameplayControl.SetTarget(ipAddress, Ports.HttpCompose, channel);
             lastConnectionCheck = Time.realtimeSinceStartup;
 
             Debug.Log($"Gameplay: Connected to {ipAddress}:{Ports.Compose} {code}");
@@ -206,6 +220,7 @@ namespace ArcCreate.Remote.Gameplay
                 }
             }
 
+            if (message != Constants.Abort)
             {
                 GameObject go = Instantiate(selectDevicePrefab, selectDeviceParent);
                 var row = go.GetComponent<RemoteDeviceRow>();
@@ -225,6 +240,24 @@ namespace ArcCreate.Remote.Gameplay
             }
 
             statusText.text = I18n.S("Remote.State.Listening");
+        }
+
+        private void DisplayLog(string condition, string stackTrace, LogType type)
+        {
+            logText.text = condition + "\n" + stackTrace;
+            switch (type)
+            {
+                case LogType.Warning:
+                    logText.color = warningColor;
+                    break;
+                case LogType.Error:
+                case LogType.Exception:
+                    logText.color = errorColor;
+                    break;
+                default:
+                    logText.color = normalColor;
+                    break;
+            }
         }
     }
 }
