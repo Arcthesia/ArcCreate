@@ -4,6 +4,7 @@ using System.IO;
 using ArcCreate.ChartFormat;
 using ArcCreate.Compose.Navigation;
 using ArcCreate.Compose.Popups;
+using ArcCreate.Data;
 using ArcCreate.Gameplay;
 using ArcCreate.Utility;
 using ArcCreate.Utility.Extension;

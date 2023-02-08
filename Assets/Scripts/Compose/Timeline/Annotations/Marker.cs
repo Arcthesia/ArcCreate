@@ -6,34 +6,37 @@ using UnityEngine.EventSystems;
 
 namespace ArcCreate.Compose.Timeline
 {
-    public class Marker : MonoBehaviour, IDragHandler
+    public class Marker : MonoBehaviour, IDragHandler, IEndDragHandler
     {
         [SerializeField] private TMP_InputField timingField;
         [SerializeField] private RectTransform numberBackground;
         [SerializeField] private float spacing;
-        [SerializeField] private float debounceSeconds = 0.5f;
 
-        private float schedule = float.MaxValue;
         private RectTransform rectTransform;
         private RectTransform parentRectTransform;
         private bool queueTimingEdit = false;
 
         public event Action<Marker, int> OnValueChanged;
 
-        public event Action<Marker, int> OnDragDebounced;
+        public event Action<Marker, int> OnEndEdit;
 
         public int Timing { get; private set; }
+
+        public bool IsDragging { get; private set; }
 
         public void OnDrag(PointerEventData eventData)
         {
             float parentWidth = parentRectTransform.rect.width / 2;
-
             RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRectTransform, eventData.position, eventData.enterEventCamera, out Vector2 local);
             local.x = Mathf.Clamp(local.x, -parentWidth, parentWidth);
-
             SetDragPosition(local.x);
+            IsDragging = true;
+        }
 
-            schedule = Time.realtimeSinceStartup + debounceSeconds;
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            OnEndEdit?.Invoke(this, Timing);
+            IsDragging = false;
         }
 
         public void SetTiming(int timing)
@@ -103,7 +106,7 @@ namespace ArcCreate.Compose.Timeline
                 int timing = Mathf.RoundToInt(num);
                 Timing = Mathf.Clamp(timing, 0, Services.Gameplay.Audio.AudioLength);
                 OnValueChanged?.Invoke(this, Timing);
-                OnDragDebounced?.Invoke(this, Timing);
+                OnEndEdit?.Invoke(this, Timing);
             }
 
             timingField.text = num.ToString();
@@ -128,12 +131,6 @@ namespace ArcCreate.Compose.Timeline
             {
                 timingField.text = Timing.ToString();
                 queueTimingEdit = false;
-            }
-
-            if (Time.realtimeSinceStartup >= schedule)
-            {
-                schedule = float.MaxValue;
-                OnDragDebounced?.Invoke(this, Timing);
             }
         }
 

@@ -118,16 +118,6 @@ namespace ArcCreate.Gameplay
             StartLoadingAudio(path).Forget();
         }
 
-        public async UniTask LoadAudioFromHttp(string uri, string ext)
-        {
-            if (AudioClip.Value != null)
-            {
-                Destroy(AudioClip.Value);
-            }
-
-            await StartLoadingAudioFromHttp(uri, ext);
-        }
-
         /// <summary>
         /// Load the background from specified file path.
         /// </summary>
@@ -153,37 +143,6 @@ namespace ArcCreate.Gameplay
             isUsingDefaultBackground = false;
         }
 
-        public async UniTask LoadBackgroundFromHttp(string uri)
-        {
-            if (Background.Value != null && !isUsingDefaultBackground)
-            {
-                Destroy(Background.Value.texture);
-                Destroy(Background.Value);
-            }
-
-            using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(uri))
-            {
-                await req.SendWebRequest();
-                if (!string.IsNullOrWhiteSpace(req.error))
-                {
-                    Background.Value = Services.Skin.DefaultBackground;
-                    isUsingDefaultBackground = true;
-
-                    Debug.LogWarning(I18n.S("Gameplay.Exception.Skin", new Dictionary<string, object>()
-                    {
-                        { "Path", uri },
-                        { "Error", req.error },
-                    }));
-                    return;
-                }
-
-                Texture2D t = DownloadHandlerTexture.GetContent(req);
-                Sprite sprite = Sprite.Create(t, new Rect(0, 0, t.width, t.height), new Vector2(0.5f, 0.5f));
-                Background.Value = sprite;
-                isUsingDefaultBackground = false;
-            }
-        }
-
         /// <summary>
         /// Load the jacket art from specified file path.
         /// </summary>
@@ -207,6 +166,53 @@ namespace ArcCreate.Gameplay
             Sprite sprite = Sprite.Create(t, new Rect(0, 0, t.width, t.height), new Vector2(0.5f, 0.5f));
             Jacket.Value = sprite;
             isUsingDefaultJacket = false;
+        }
+
+        /// <summary>
+        /// Set the chart file for this system.
+        /// </summary>
+        /// <param name="reader">The chart reader defining the chart.</param>
+        public void LoadChart(ChartReader reader)
+        {
+            Services.Chart.LoadChart(reader);
+            OnChartFileLoad?.Invoke();
+        }
+
+        public void SetDefaultJacket()
+        {
+            Jacket.Value = defaultJacket;
+            isUsingDefaultJacket = true;
+        }
+
+        public void SetDefaultBackground()
+        {
+            Background.Value = Services.Skin.DefaultBackground;
+            isUsingDefaultBackground = true;
+        }
+
+        public async UniTask LoadAudioFromHttp(string uri, string ext)
+        {
+            if (AudioClip.Value != null)
+            {
+                Destroy(AudioClip.Value);
+            }
+
+            using (UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(
+                uri,
+                ext == ".ogg" ? AudioType.OGGVORBIS : AudioType.WAV))
+            {
+                await req.SendWebRequest();
+                if (!string.IsNullOrWhiteSpace(req.error))
+                {
+                    throw new IOException(I18n.S("Gameplay.Exception.LoadAudio", new Dictionary<string, object>()
+                    {
+                        { "Path", uri },
+                        { "Error", req.error },
+                    }));
+                }
+
+                AudioClip.Value = DownloadHandlerAudioClip.GetContent(req);
+            }
         }
 
         public async UniTask LoadJacketFromHttp(string uri)
@@ -240,26 +246,55 @@ namespace ArcCreate.Gameplay
             }
         }
 
-        /// <summary>
-        /// Set the chart file for this system.
-        /// </summary>
-        /// <param name="reader">The chart reader defining the chart.</param>
-        public void LoadChart(ChartReader reader)
+        public async UniTask LoadBackgroundFromHttp(string uri)
         {
-            Services.Chart.LoadChart(reader);
-            OnChartFileLoad?.Invoke();
+            if (Background.Value != null && !isUsingDefaultBackground)
+            {
+                Destroy(Background.Value.texture);
+                Destroy(Background.Value);
+            }
+
+            using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(uri))
+            {
+                await req.SendWebRequest();
+                if (!string.IsNullOrWhiteSpace(req.error))
+                {
+                    Background.Value = Services.Skin.DefaultBackground;
+                    isUsingDefaultBackground = true;
+
+                    Debug.LogWarning(I18n.S("Gameplay.Exception.Skin", new Dictionary<string, object>()
+                    {
+                        { "Path", uri },
+                        { "Error", req.error },
+                    }));
+                    return;
+                }
+
+                Texture2D t = DownloadHandlerTexture.GetContent(req);
+                Sprite sprite = Sprite.Create(t, new Rect(0, 0, t.width, t.height), new Vector2(0.5f, 0.5f));
+                Background.Value = sprite;
+                isUsingDefaultBackground = false;
+            }
         }
 
-        public void SetDefaultJacket()
+        internal async UniTask StartLoadingAudio(string path)
         {
-            Jacket.Value = defaultJacket;
-            isUsingDefaultJacket = true;
-        }
+            using (UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(
+                Uri.EscapeUriString("file:///" + path.Replace("\\", "/")),
+                path.EndsWith("wav") ? AudioType.WAV : AudioType.OGGVORBIS))
+            {
+                await req.SendWebRequest();
+                if (!string.IsNullOrWhiteSpace(req.error))
+                {
+                    throw new IOException(I18n.S("Gameplay.Exception.LoadAudio", new Dictionary<string, object>()
+                    {
+                        { "Path", path },
+                        { "Error", req.error },
+                    }));
+                }
 
-        public void SetDefaultBackground()
-        {
-            Background.Value = Services.Skin.DefaultBackground;
-            isUsingDefaultBackground = true;
+                AudioClip.Value = DownloadHandlerAudioClip.GetContent(req);
+            }
         }
 
         internal void NotifySkinValuesChange()
@@ -295,46 +330,6 @@ namespace ArcCreate.Gameplay
         internal void NotifyUpdate(int currentTiming)
         {
             OnGameplayUpdate?.Invoke(currentTiming);
-        }
-
-        private async UniTask StartLoadingAudio(string path)
-        {
-            using (UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(
-                Uri.EscapeUriString("file:///" + path.Replace("\\", "/")),
-                path.EndsWith("wav") ? AudioType.WAV : AudioType.OGGVORBIS))
-            {
-                await req.SendWebRequest();
-                if (!string.IsNullOrWhiteSpace(req.error))
-                {
-                    throw new IOException(I18n.S("Gameplay.Exception.LoadAudio", new Dictionary<string, object>()
-                    {
-                        { "Path", path },
-                        { "Error", req.error },
-                    }));
-                }
-
-                AudioClip.Value = DownloadHandlerAudioClip.GetContent(req);
-            }
-        }
-
-        private async UniTask StartLoadingAudioFromHttp(string path, string ext)
-        {
-            using (UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(
-                path,
-                ext == ".ogg" ? AudioType.OGGVORBIS : AudioType.WAV))
-            {
-                await req.SendWebRequest();
-                if (!string.IsNullOrWhiteSpace(req.error))
-                {
-                    throw new IOException(I18n.S("Gameplay.Exception.LoadAudio", new Dictionary<string, object>()
-                    {
-                        { "Path", path },
-                        { "Error", req.error },
-                    }));
-                }
-
-                AudioClip.Value = DownloadHandlerAudioClip.GetContent(req);
-            }
         }
     }
 }

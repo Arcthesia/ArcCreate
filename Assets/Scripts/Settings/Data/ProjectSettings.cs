@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using YamlDotNet.Serialization;
 
-namespace ArcCreate.Compose.Project
+namespace ArcCreate.Data
 {
     public class ProjectSettings
     {

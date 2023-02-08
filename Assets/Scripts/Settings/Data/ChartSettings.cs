@@ -1,4 +1,4 @@
-namespace ArcCreate.Compose.Project
+namespace ArcCreate.Data
 {
     public class ChartSettings
     {

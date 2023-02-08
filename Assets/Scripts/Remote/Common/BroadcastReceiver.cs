@@ -40,6 +40,7 @@ namespace ArcCreate.Remote.Common
         public void Dispose()
         {
             udpClient.Close();
+            udpClient.Dispose();
             thread.Abort();
             IsRunning = false;
         }

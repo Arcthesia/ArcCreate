@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace ArcCreate.Compose.Project
+namespace ArcCreate.Data
 {
     public class ColorSettings
     {

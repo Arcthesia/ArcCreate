@@ -27,6 +27,13 @@ namespace ArcCreate.Compose
                 return;
             }
 
+            var gameplayManager = FindObjectOfType<GameplayManager>();
+            if (gameplayManager != null)
+            {
+                UseGameplay(gameplayManager);
+                return;
+            }
+
             SceneTransitionManager.Instance.LoadSceneAdditive(
                 SceneNames.GameplayScene,
                 rep =>

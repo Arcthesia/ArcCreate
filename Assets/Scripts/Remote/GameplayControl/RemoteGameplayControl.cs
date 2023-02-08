@@ -3,22 +3,27 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using ArcCreate.ChartFormat;
+using ArcCreate.Data;
 using ArcCreate.Gameplay;
 using ArcCreate.Remote.Common;
+using ArcCreate.Utility.Extension;
 using Cysharp.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace ArcCreate.Remote.Gameplay
 {
     public class RemoteGameplayControl : MonoBehaviour
     {
         [SerializeField] private GameplayData gameplayData;
-        [SerializeField] private Canvas logDisplay;
+        [SerializeField] private Canvas canvas;
+        [SerializeField] private GameObject logDisplay;
+        [SerializeField] private GameObject loadingIndicator;
+        [SerializeField] private TMP_Text loadingText;
         private IGameplayControl gameplay;
-        private int timingStart = int.MinValue;
-        private int timingEnd = int.MaxValue;
-        private bool isLooping = false;
         private IPAddress requestFileFromIP;
         private int requestFileFromPort;
         private MessageChannel channel;
@@ -30,7 +35,7 @@ namespace ArcCreate.Remote.Gameplay
         public void SetGameplay(IGameplayControl gameplay)
         {
             this.gameplay = gameplay;
-            logDisplay.worldCamera = gameplay.Camera.GameplayCamera;
+            canvas.worldCamera = gameplay.Camera.GameplayCamera;
         }
 
         public void SetTarget(IPAddress requestFileFromIP, int requestFileFromPort, MessageChannel channel)
@@ -45,113 +50,120 @@ namespace ArcCreate.Remote.Gameplay
         public async UniTask HandleMessage(RemoteControl control, byte[] data)
         {
             await UniTask.SwitchToMainThread();
-            switch (control)
-            {
-                case RemoteControl.CurrentTiming:
-                    gameplay.Audio.ChartTiming = GetInt(data);
-                    break;
-                case RemoteControl.StartTiming:
-                    timingStart = GetInt(data);
-                    AlignTimingRange();
-                    break;
-                case RemoteControl.EndTiming:
-                    timingEnd = GetInt(data);
-                    AlignTimingRange();
-                    break;
-                case RemoteControl.Loop:
-                    isLooping = GetBool(data);
-                    break;
-                case RemoteControl.Play:
-                    gameplay.Audio.ResumeWithDelay(200);
-                    break;
-                case RemoteControl.Pause:
-                    gameplay.Audio.Pause();
-                    break;
-                case RemoteControl.Chart:
-                case RemoteControl.Audio:
-                case RemoteControl.JacketArt:
-                case RemoteControl.Background:
-                    actionQueue.Enqueue((control, data));
-                    break;
-                case RemoteControl.VideoBackground:
-                    bool enabled = GetBool(data);
-                    gameplayData.VideoBackgroundUrl.Value = enabled ? GetURI("video") : null;
-                    break;
-                case RemoteControl.Title:
-                    gameplayData.Title.Value = GetStringUTF32(data);
-                    break;
-                case RemoteControl.Composer:
-                    gameplayData.Composer.Value = GetStringUTF32(data);
-                    break;
-                case RemoteControl.DifficultyName:
-                    gameplayData.DifficultyName.Value = GetStringUTF32(data);
-                    break;
-                case RemoteControl.DifficultyColor:
-                    gameplayData.DifficultyColor.Value = GetColor(data);
-                    break;
-                case RemoteControl.BaseBpm:
-                    gameplayData.BaseBpm.Value = GetFloat(data);
-                    break;
-                case RemoteControl.Speed:
-                    Settings.DropRate.Value = GetInt(data);
-                    break;
-                case RemoteControl.GlobalOffset:
-                    Settings.GlobalAudioOffset.Value = GetInt(data);
-                    break;
-                case RemoteControl.AlignmentSkin:
-                    gameplay.Skin.AlignmentSkin = GetStringASCII(data);
-                    break;
-                case RemoteControl.AccentSkin:
-                    gameplay.Skin.AccentSkin = GetStringASCII(data);
-                    break;
-                case RemoteControl.NoteSkin:
-                    gameplay.Skin.NoteSkin = GetStringASCII(data);
-                    break;
-                case RemoteControl.ParticleSkin:
-                    gameplay.Skin.ParticleSkin = GetStringASCII(data);
-                    break;
-                case RemoteControl.SingleLineSkin:
-                    gameplay.Skin.SingleLineSkin = GetStringASCII(data);
-                    break;
-                case RemoteControl.TrackSkin:
-                    gameplay.Skin.TrackSkin = GetStringASCII(data);
-                    break;
-                case RemoteControl.ShowLog:
-                    logDisplay.gameObject.SetActive(GetBool(data));
-                    break;
-            }
-
+            actionQueue.Enqueue((control, data));
             CheckQueue().Forget();
         }
 
         private async UniTask CheckQueue()
         {
-            if (!queueRunning && actionQueue.Count > 0)
+            if (!queueRunning)
             {
-                (RemoteControl control, byte[] data) = actionQueue.Dequeue();
                 queueRunning = true;
-                switch (control)
+                loadingIndicator.SetActive(actionQueue.Count > 0);
+
+                while (actionQueue.Count > 0)
                 {
-                    case RemoteControl.Chart:
-                        await RetrieveChart();
-                        break;
-                    case RemoteControl.Audio:
-                        string ext = GetStringASCII(data);
-                        await RetrieveAudio(ext);
-                        break;
-                    case RemoteControl.JacketArt:
-                        bool useDefaultJacket = GetBool(data);
-                        await RetrieveJacket(useDefaultJacket);
-                        break;
-                    case RemoteControl.Background:
-                        bool useDefaultBackground = GetBool(data);
-                        await RetrieveBackground(useDefaultBackground);
-                        break;
+                    (RemoteControl control, byte[] data) = actionQueue.Dequeue();
+                    loadingText.text = I18n.S("Remote.State.Receiving", control);
+                    switch (control)
+                    {
+                        case RemoteControl.CurrentTiming:
+                            gameplay.Audio.AudioTiming = GetInt(data);
+                            gameplay.Audio.SetResumeAt(gameplay.Audio.AudioTiming);
+                            Debug.Log($"Set timing to ({gameplay.Audio.AudioTiming})");
+                            break;
+                        case RemoteControl.Play:
+                            gameplay.Audio.PlayWithDelay(gameplay.Audio.AudioTiming, 200);
+                            Debug.Log($"Playing audio");
+                            break;
+                        case RemoteControl.Pause:
+                            gameplay.Audio.Pause();
+                            Debug.Log($"Pausing audio");
+                            break;
+
+                        case RemoteControl.ReloadAllFiles:
+                            Debug.Log($"Starting to reload all files");
+                            await RetrieveAllFiles(data);
+                            Debug.Log($"Reloading all files completed");
+                            break;
+
+                        case RemoteControl.Chart:
+                            Debug.Log($"Starting to reload chart file");
+                            await RetrieveChart();
+                            Debug.Log($"Reloading chart file completed");
+                            break;
+
+                        case RemoteControl.Audio:
+                            Debug.Log($"Starting to reload audio file");
+                            string ext = GetStringASCII(data);
+                            await RetrieveAudio(ext);
+                            Debug.Log($"Reloading audio file completed");
+                            break;
+
+                        case RemoteControl.JacketArt:
+                            Debug.Log($"Starting to reload jacket art image file");
+                            bool useDefaultJacket = GetBool(data);
+                            await RetrieveJacket(useDefaultJacket);
+                            Debug.Log($"Reloading jacket art image file completed");
+                            break;
+
+                        case RemoteControl.Background:
+                            Debug.Log($"Starting to reload background image file");
+                            bool useDefaultBackground = GetBool(data);
+                            await RetrieveBackground(useDefaultBackground);
+                            Debug.Log($"Reloading background image file completed");
+                            break;
+
+                        case RemoteControl.Metadata:
+                            Debug.Log($"Starting to reload chart metadata file");
+                            string chartPath = GetStringASCII(data);
+                            await RetrieveMetadata(chartPath);
+                            Debug.Log($"Reloading chart metadata completed");
+                            break;
+
+                        case RemoteControl.Speed:
+                            Settings.DropRate.Value = GetInt(data);
+                            Debug.Log($"Setting droprate to {Settings.DropRate.Value}");
+                            break;
+                        case RemoteControl.GlobalOffset:
+                            Settings.GlobalAudioOffset.Value = GetInt(data);
+                            Debug.Log($"Setting global offset to {Settings.GlobalAudioOffset.Value}");
+                            break;
+                        case RemoteControl.ShowLog:
+                            logDisplay.SetActive(GetBool(data));
+                            break;
+                    }
                 }
 
                 queueRunning = false;
-                await CheckQueue();
+                loadingIndicator.SetActive(actionQueue.Count > 0);
             }
+        }
+
+        private async UniTask RetrieveAllFiles(byte[] data)
+        {
+            string msg = GetStringASCII(data);
+            string[] split = msg.Split(',');
+            string ext = split[0];
+
+            if (!bool.TryParse(split[1], out bool useDefaultJacket))
+            {
+                useDefaultJacket = true;
+            }
+
+            if (!bool.TryParse(split[2], out bool useDefaultBackground))
+            {
+                useDefaultBackground = true;
+            }
+
+            string chartPath = split[3];
+
+            UniTask chartTask = RetrieveChart();
+            UniTask audioTask = RetrieveAudio(ext);
+            UniTask jacketTask = RetrieveJacket(useDefaultJacket);
+            UniTask bgTask = RetrieveBackground(useDefaultBackground);
+            UniTask metadataTask = RetrieveMetadata(chartPath);
+            await UniTask.WhenAll(chartTask, audioTask, jacketTask, bgTask, metadataTask);
         }
 
         private async UniTask RetrieveChart()
@@ -181,8 +193,7 @@ namespace ArcCreate.Remote.Gameplay
         {
             await gameplayData.LoadAudioFromHttp(GetURI("audio"), ext);
             await UniTask.SwitchToMainThread();
-            timingStart = 0;
-            timingEnd = Mathf.RoundToInt(gameplayData.AudioClip.Value.length * 1000);
+            gameplay.Audio.AudioTiming = Mathf.Clamp(gameplay.Audio.AudioTiming, 0, gameplay.Audio.AudioLength);
         }
 
         private async UniTask RetrieveJacket(bool useDefault)
@@ -209,6 +220,98 @@ namespace ArcCreate.Remote.Gameplay
             }
         }
 
+        private async UniTask RetrieveMetadata(string chartPath)
+        {
+            string uri = GetURI("metadata");
+            using (UnityWebRequest req = UnityWebRequest.Get(uri))
+            {
+                await req.SendWebRequest();
+                if (!string.IsNullOrWhiteSpace(req.error))
+                {
+                    Debug.LogWarning(I18n.S("Gameplay.Exception.Metadata", new Dictionary<string, object>()
+                    {
+                        { "Path", uri },
+                        { "Error", req.error },
+                    }));
+                    return;
+                }
+
+                string metadata = req.downloadHandler.text;
+                var deserializer = new DeserializerBuilder()
+                    .WithNamingConvention(new CamelCaseNamingConvention())
+                    .Build();
+                ProjectSettings projectSettings = deserializer.Deserialize<ProjectSettings>(metadata);
+
+                foreach (ChartSettings chartSettings in projectSettings.Charts)
+                {
+                    if (chartSettings.ChartPath == chartPath)
+                    {
+                        gameplayData.BaseBpm.Value = chartSettings.BaseBpm;
+                        gameplayData.Title.Value = chartSettings.Title;
+                        gameplayData.Composer.Value = chartSettings.Composer;
+                        gameplayData.DifficultyName.Value = chartSettings.Difficulty;
+
+                        if (gameplay != null)
+                        {
+                            gameplay.Skin.AlignmentSkin = chartSettings.Skin?.Side ?? string.Empty;
+                            gameplay.Skin.AccentSkin = chartSettings.Skin?.Accent ?? string.Empty;
+                            gameplay.Skin.NoteSkin = chartSettings.Skin?.Accent ?? string.Empty;
+                            gameplay.Skin.ParticleSkin = chartSettings.Skin?.Note ?? string.Empty;
+                            gameplay.Skin.SingleLineSkin = chartSettings.Skin?.SingleLine ?? string.Empty;
+                            gameplay.Skin.TrackSkin = chartSettings.Skin?.Track ?? string.Empty;
+
+                            List<string> arcColor = new List<string>();
+                            List<string> arcColorLow = new List<string>();
+                            List<Color> finalColor = new List<Color>();
+                            List<Color> finalColorLow = new List<Color>();
+
+                            List<Color> defaultArc = gameplay.Skin.DefaultArcColors;
+                            List<Color> defaultArcLow = gameplay.Skin.DefaultArcLowColors;
+                            Color trace = gameplay.Skin.DefaultTraceColor;
+                            Color shadow = gameplay.Skin.DefaultShadowColor;
+
+                            if (chartSettings.Colors != null)
+                            {
+                                arcColor = chartSettings.Colors.Arc;
+                                arcColorLow = chartSettings.Colors.ArcLow;
+                                chartSettings.Colors.Trace.ConvertHexToColor(out trace);
+                                chartSettings.Colors.Shadow.ConvertHexToColor(out shadow);
+                            }
+
+                            int definedColorCount = Mathf.Min(arcColor.Count, arcColorLow.Count);
+                            for (int i = 0; i < definedColorCount; i++)
+                            {
+                                arcColor[i].ConvertHexToColor(out Color high);
+                                arcColorLow[i].ConvertHexToColor(out Color low);
+                                finalColor.Add(high);
+                                finalColorLow.Add(low);
+                            }
+
+                            for (int i = definedColorCount; i < defaultArc.Count; i++)
+                            {
+                                finalColor[i] = defaultArc[i];
+                                finalColorLow[i] = defaultArcLow[i];
+                            }
+
+                            gameplay.Skin.SetTraceColor(trace, shadow);
+                            gameplay.Skin.SetArcColors(finalColor, finalColorLow, shadow);
+                        }
+                    }
+
+                    ColorUtility.TryParseHtmlString(chartSettings.DifficultyColor, out Color c);
+                    gameplayData.DifficultyColor.Value = c;
+
+                    bool enableVideoBackground = !string.IsNullOrEmpty(chartSettings.VideoPath);
+                    if (enableVideoBackground)
+                    {
+                        gameplayData.VideoBackgroundUrl.Value = enableVideoBackground ? GetURI("video") : null;
+                    }
+
+                    break;
+                }
+            }
+        }
+
         private string GetURI(string path)
         {
             return $"http://{requestFileFromIP}:{requestFileFromPort}/{path}";
@@ -224,27 +327,9 @@ namespace ArcCreate.Remote.Gameplay
             return BitConverter.ToInt32(bytes, 0);
         }
 
-        private float GetFloat(byte[] bytes)
-        {
-            return BitConverter.ToSingle(bytes, 0);
-        }
-
         private string GetStringASCII(byte[] bytes)
         {
             return Encoding.ASCII.GetString(bytes);
-        }
-
-        private string GetStringUTF32(byte[] bytes)
-        {
-            return Encoding.UTF32.GetString(bytes);
-        }
-
-        private Color GetColor(byte[] bytes)
-        {
-            string hex = GetStringASCII(bytes);
-            Color c = Color.white;
-            ColorUtility.TryParseHtmlString(hex, out c);
-            return c;
         }
 
         private void Update()
@@ -254,55 +339,14 @@ namespace ArcCreate.Remote.Gameplay
                 return;
             }
 
-            int currentTiming = gameplay.Audio.ChartTiming;
-            bool isPlaying = gameplay.Audio.IsPlaying;
-            if (currentTiming < timingStart)
-            {
-                gameplay.Audio.ChartTiming = timingStart;
-            }
-
-            if (currentTiming > timingEnd)
-            {
-                if (isLooping)
-                {
-                    if (isPlaying)
-                    {
-                        gameplay.Audio.Pause();
-                        gameplay.Audio.PlayWithDelay(timingStart, 200);
-                    }
-                    else
-                    {
-                        gameplay.Audio.ChartTiming = timingStart;
-                    }
-                }
-                else if (isPlaying)
-                {
-                    gameplay.Audio.Pause();
-                    gameplay.Audio.ChartTiming = timingEnd;
-                }
-                else
-                {
-                    gameplay.Audio.ChartTiming = timingEnd;
-                }
-            }
-
+            int currentTiming = gameplay.Audio.AudioTiming;
             if (Time.realtimeSinceStartup > lastSendTiming + Constants.SyncTimingInterval)
             {
-                GetBytes(gameplay.Audio.ChartTiming, sendTimingArray);
+                GetBytes(currentTiming, sendTimingArray);
                 channel?.SendMessage(RemoteControl.CurrentTiming, sendTimingArray);
 
+                CheckQueue().Forget();
                 lastSendTiming = Time.realtimeSinceStartup;
-            }
-        }
-
-        private void AlignTimingRange()
-        {
-            timingStart = Mathf.Min(timingStart, timingEnd - Constants.MinPlaybackRange);
-            timingStart = Mathf.Max(timingStart, 0);
-            timingEnd = Mathf.Max(timingEnd, timingStart + Constants.MinPlaybackRange);
-            if (gameplay != null)
-            {
-                timingEnd = Mathf.Min(timingEnd, gameplay.Audio.AudioLength);
             }
         }
 
