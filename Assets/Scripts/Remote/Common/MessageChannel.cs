@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -13,20 +14,22 @@ namespace ArcCreate.Remote.Common
         private TcpClient targetClient;
         private Thread listenerThread;
 
-        private readonly int listenOnPort;
-        private readonly int sendToPort;
-        private readonly IPAddress ip;
+        private int listenOnPort;
+        private int sendToPort;
+        private IPAddress ip;
         private readonly IProtocol protocol;
         private readonly MessagePackager packager;
+        private bool waitingForConnection = false;
+        private string code = string.Empty;
+        private Action<IPAddress> onConnected;
 
-        public MessageChannel(IPAddress ip, int listenOnPort, int sendToPort, IProtocol protocol)
+        public MessageChannel(IProtocol protocol)
         {
-            this.listenOnPort = listenOnPort;
-            this.sendToPort = sendToPort;
-            this.ip = ip;
             this.protocol = protocol;
             packager = new MessagePackager();
         }
+
+        public event Action OnError;
 
         public bool IsRunning { get; private set; }
 
@@ -34,21 +37,9 @@ namespace ArcCreate.Remote.Common
 
         public int SendToPort => sendToPort;
 
-        public bool CheckConnection(byte[] data)
+        public void SetupListener(int listenOnPort)
         {
-            try
-            {
-                SendMessage(RemoteControl.CheckConnection, data);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public async UniTask Setup()
-        {
+            this.listenOnPort = listenOnPort;
             if (IsRunning)
             {
                 throw new InvalidOperationException("Message channel is already running");
@@ -60,11 +51,15 @@ namespace ArcCreate.Remote.Common
             };
 
             listenerThread.Start();
+        }
 
-            int retry = 10;
+        public async UniTask SetupSender(IPAddress ip, int sendToPort, string code, int retries = 10)
+        {
+            this.ip = ip;
+            this.sendToPort = sendToPort;
 
             Exception e = null;
-            while (retry > 0)
+            while (retries > 0)
             {
                 await UniTask.Delay(1000);
                 if (TryConnectToTcpServer(out e))
@@ -72,15 +67,28 @@ namespace ArcCreate.Remote.Common
                     break;
                 }
 
-                retry -= 1;
+                retries -= 1;
             }
 
-            if (retry <= 0)
+            if (retries <= 0)
             {
                 throw new Exception($"Could not connect to socket: {e}");
             }
 
+            SendMessage(RemoteControl.StartConnection, Encoding.ASCII.GetBytes(code));
             IsRunning = true;
+        }
+
+        public void WaitForConnection(string code, Action<IPAddress> onConnected)
+        {
+            waitingForConnection = true;
+            this.code = code;
+            this.onConnected = onConnected;
+        }
+
+        public void UpdateCode(string code)
+        {
+            this.code = code;
         }
 
         public void SendMessage(RemoteControl control, byte[] msg)
@@ -124,6 +132,7 @@ namespace ArcCreate.Remote.Common
         {
             IsRunning = false;
             targetClient?.Close();
+            targetClient?.Dispose();
             listener.Stop();
             listenerThread.Abort();
         }
@@ -161,8 +170,14 @@ namespace ArcCreate.Remote.Common
                             while ((length = stream.Read(buffer, 0, buffer.Length)) != 0)
                             {
                                 packager.ProcessMessage(buffer, 0, length);
-                                if (packager.HasQueuedMessage(out RemoteControl control, out byte[] message))
+                                while (packager.HasQueuedMessage(out RemoteControl control, out byte[] message))
                                 {
+                                    if (control == RemoteControl.StartConnection && waitingForConnection && code == Encoding.ASCII.GetString(message))
+                                    {
+                                        ip = ((IPEndPoint)connectedClient.Client.RemoteEndPoint).Address;
+                                        onConnected?.Invoke(ip);
+                                    }
+
                                     protocol.Process(control, message);
                                 }
                             }
@@ -173,6 +188,7 @@ namespace ArcCreate.Remote.Common
             catch (SocketException socketException)
             {
                 Debug.LogError("Socket exception: " + socketException);
+                OnError?.Invoke();
             }
             catch (ThreadAbortException)
             {

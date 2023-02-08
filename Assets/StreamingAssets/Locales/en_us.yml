@@ -377,6 +377,8 @@ Remote:
     TargetDisconnected:
       Compose: Target client disconnected. Stopping connection.
       Gameplay: Target client disconnected. Do you want to start a new session?
+    Receiving:
+      Receiving data ({0})
   Description:
     Idle: |-
       No test play client has been connected.
@@ -395,16 +397,14 @@ Remote:
   Control:
     Name: Control
     Sync:
-      All: Sync all data
-      Individual: Sync individually
+      Name: Sync data
+      AllFiles: All files
       Chart: Chart
       Audio: Audio
       Jacket: Jacket
       Background: Background
-      VideoBackground: Video background
-      Information: Information
+      Metadata: Metadata
       Settings: Offset and speed
-      Skin: Skin
     StartTiming: Play from timing
     EndTiming: Play to timing      
     Loop: Loop playback
@@ -412,6 +412,7 @@ Remote:
   Window:
     Name: Remote
     SyncChart: Sync chart
+    SyncTiming: Sync timing
 
 Gameplay:
   Exception:

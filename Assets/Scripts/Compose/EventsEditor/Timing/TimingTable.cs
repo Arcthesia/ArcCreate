@@ -56,7 +56,7 @@ namespace ArcCreate.Compose.EventsEditor
             gameplayData.OnChartTimingEdit += OnChartEdit;
             addButton.onClick.AddListener(OnAddButton);
             removeButton.onClick.AddListener(OnRemoveButton);
-            marker.OnDragDebounced += OnMarker;
+            marker.OnEndEdit += OnMarker;
         }
 
         protected override void OnDestroy()
@@ -67,7 +67,7 @@ namespace ArcCreate.Compose.EventsEditor
             gameplayData.OnChartTimingEdit -= OnChartEdit;
             addButton.onClick.RemoveListener(OnAddButton);
             removeButton.onClick.RemoveListener(OnRemoveButton);
-            marker.OnDragDebounced -= OnMarker;
+            marker.OnEndEdit -= OnMarker;
         }
 
         private void OnChartEdit()

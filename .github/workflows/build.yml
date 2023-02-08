@@ -119,6 +119,7 @@ jobs:
           path: build/${{ matrix.targetPlatform }}
   
   sendDiscordWebhook:
+    name: Send Discord Webhook
     runs-on: ubuntu-latest
     needs: [buildForLinuxBasedPlatforms, buildForWindowsBasedPlatforms, buildForMacOSBasedPlatforms]
     steps:

@@ -1,6 +1,5 @@
 using ArcCreate.Compose.Components;
-using ArcCreate.Compose.Project;
-using ArcCreate.Utility.Extension;
+using ArcCreate.Data;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;

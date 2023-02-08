@@ -31,7 +31,6 @@ namespace ArcCreate.Remote.Gameplay
         private BroadcastReceiver broadcastReceiver;
         private MessageChannel channel;
         private readonly BroadcastSender broadcastSender = new BroadcastSender(Ports.Compose);
-        private double lastConnectionCheck = double.MaxValue;
         private readonly CancellationTokenSource ctx = new CancellationTokenSource();
 
         public void Process(RemoteControl control, byte[] message)
@@ -79,6 +78,13 @@ namespace ArcCreate.Remote.Gameplay
                 return;
             }
 
+            var gameplayManager = FindObjectOfType<GameplayManager>();
+            if (gameplayManager != null)
+            {
+                UseGameplay(gameplayManager);
+                return;
+            }
+
             SceneTransitionManager.Instance.LoadSceneAdditive(
                 SceneNames.GameplayScene,
                 rep =>
@@ -105,15 +111,6 @@ namespace ArcCreate.Remote.Gameplay
             if (gameplay == null || !gameplay.IsLoaded)
             {
                 InputSystem.Update();
-            }
-
-            if (Time.realtimeSinceStartup > lastConnectionCheck + Constants.Timeout)
-            {
-                lastConnectionCheck = Time.realtimeSinceStartup;
-                if (channel != null && !channel.CheckConnection(System.Text.Encoding.ASCII.GetBytes("From Gameplay")))
-                {
-                    OnTargetDisconnect().Forget();
-                }
             }
         }
 
@@ -168,27 +165,40 @@ namespace ArcCreate.Remote.Gameplay
         private async UniTask AcquireMulticastLockPeriodically(CancellationToken ctx)
         {
             string lockTag = "remotePlay";
-            while (!ctx.IsCancellationRequested)
+
+            try
             {
-                try
+                using (AndroidJavaObject activity = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity"))
                 {
-                    using (AndroidJavaObject activity = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity"))
+                    using (var wifiManager = activity.Call<AndroidJavaObject>("getSystemService", "wifi"))
                     {
-                        using (var wifiManager = activity.Call<AndroidJavaObject>("getSystemService", "wifi"))
+                        AndroidJavaObject multicastLock = wifiManager.Call<AndroidJavaObject>("createMulticastLock", lockTag);
+                        multicastLock.Call("acquire");
+
+                        while (!ctx.IsCancellationRequested)
                         {
-                            AndroidJavaObject multicastLock = wifiManager.Call<AndroidJavaObject>("createMulticastLock", lockTag);
-                            multicastLock.Call("acquire");
                             bool isHeld = multicastLock.Call<bool>("isHeld");
-                            Debug.Log(isHeld);
+                            if (!isHeld)
+                            {
+                                multicastLock.Call("acquire");
+                            }
+
+                            if (!multicastLock.Call<bool>("isHeld"))
+                            {
+                                Debug.LogError("Could not acquire multicast lock");
+                            }
+
+                            await UniTask.Delay(Constants.AcquireMulticastLockInterval, cancellationToken: ctx);
                         }
                     }
                 }
-                catch (Exception err)
-                {
-                    Debug.Log(err.ToString());
-                }
-
-                await UniTask.Delay(Constants.AcquireMulticastLockInterval, cancellationToken: ctx);
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            catch (Exception err)
+            {
+                Debug.LogError(err.ToString());
             }
         }
 
@@ -196,20 +206,23 @@ namespace ArcCreate.Remote.Gameplay
         {
             indicateListening.SetActive(false);
             broadcastSender.Broadcast(code);
-            StopListeningForBroadcast();
-            channel = new MessageChannel(ipAddress, Ports.Gameplay, Ports.Compose, this);
-            await channel.Setup();
+
+            channel = new MessageChannel(this);
+            channel.OnError += OnChannelError;
+            channel.SetupListener(Ports.Gameplay);
+            await channel.SetupSender(ipAddress, Ports.Compose, code);
+
             remoteGameplayControl.SetTarget(ipAddress, Ports.HttpCompose, channel);
-            lastConnectionCheck = Time.realtimeSinceStartup;
+            StopListeningForBroadcast();
 
             Debug.Log($"Gameplay: Connected to {ipAddress}:{Ports.Compose} {code}");
         }
 
         private void StopSession()
         {
-            lastConnectionCheck = double.MaxValue;
             channel?.SendMessage(RemoteControl.Abort, System.Text.Encoding.ASCII.GetBytes("From Gameplay"));
             channel?.Dispose();
+            channel.OnError -= OnChannelError;
             channel = null;
             Debug.Log("Gameplay: Stopped session");
         }
@@ -217,14 +230,20 @@ namespace ArcCreate.Remote.Gameplay
         private async UniTask OnTargetDisconnect()
         {
             await UniTask.SwitchToMainThread();
-            lastConnectionCheck = double.MaxValue;
             channel?.Dispose();
+            channel.OnError -= OnChannelError;
             channel = null;
             Debug.Log($"Gameplay: Target disconnected");
 
             statusText.text = I18n.S("Remote.State.TargetDisconnected.Gameplay");
             indicateListening.SetActive(true);
             startNewSessionButton.gameObject.SetActive(true);
+            gameplay.Audio.Pause();
+        }
+
+        private void OnChannelError()
+        {
+            OnTargetDisconnect().Forget();
         }
 
         private void OnBroadcastReceived(IPAddress ipAddress, string message)
@@ -280,7 +299,7 @@ namespace ArcCreate.Remote.Gameplay
 
         private void DisplayLog(string condition, string stackTrace, LogType type)
         {
-            logText.text = condition + "\n" + stackTrace;
+            logText.text = condition;
             switch (type)
             {
                 case LogType.Warning:

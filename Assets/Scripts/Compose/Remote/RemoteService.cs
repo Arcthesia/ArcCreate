@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Text;
 using ArcCreate.Compose.Timeline;
 using ArcCreate.Remote.Common;
 using Cysharp.Threading.Tasks;
@@ -32,10 +33,8 @@ namespace ArcCreate.Compose.Remote
 
         private string code = "------";
         private readonly BroadcastSender broadcastSender = new BroadcastSender(Ports.Gameplay);
-        private BroadcastReceiver broadcastReceiver;
         private MessageChannel channel;
         private FileHoster fileHoster;
-        private double lastConnectionCheck = double.MaxValue;
         private RemoteState state = RemoteState.Idle;
 
         private enum RemoteState
@@ -84,6 +83,10 @@ namespace ArcCreate.Compose.Remote
                     filePath = Services.Project.CurrentChart.VideoPath;
                     extension = Path.GetExtension(filePath);
                     return File.OpenRead(filePath);
+                case "metadata":
+                    filePath = Services.Project.CurrentProject.Path;
+                    extension = Path.GetExtension(filePath);
+                    break;
                 default:
                     throw new FileNotFoundException(path);
             }
@@ -126,18 +129,6 @@ namespace ArcCreate.Compose.Remote
             LayoutRebuilder.ForceRebuildLayoutImmediate(layout);
         }
 
-        private void Update()
-        {
-            if (Time.realtimeSinceStartup > lastConnectionCheck + Constants.Timeout)
-            {
-                lastConnectionCheck = Time.realtimeSinceStartup;
-                if (channel != null && !channel.CheckConnection(System.Text.Encoding.ASCII.GetBytes("From Compose")))
-                {
-                    OnTargetDisconnect().Forget();
-                }
-            }
-        }
-
         private void Awake()
         {
             startBroadcastButton.onClick.AddListener(StartBroadcast);
@@ -164,8 +155,10 @@ namespace ArcCreate.Compose.Remote
             DisposeAny();
             SetState(RemoteState.Broadcasting);
 
-            broadcastReceiver = new BroadcastReceiver(Ports.Compose);
-            broadcastReceiver.OnBroadcastReceived += OnBroadcastReceived;
+            channel = new MessageChannel(this);
+            channel.OnError += OnChannelError;
+            channel.SetupListener(Ports.Compose);
+            channel.WaitForConnection(code, OnClientConnect);
 
             Debug.Log($"Compose: Sent broadcast to port {Ports.Gameplay} {code}");
             Debug.Log($"Compose: Start listening on port {Ports.Compose}");
@@ -175,6 +168,7 @@ namespace ArcCreate.Compose.Remote
         {
             code = GenerateRandomMessage();
             broadcastSender.Broadcast(code);
+            channel.UpdateCode(code);
             Debug.Log($"Compose: Sent broadcast to port {Ports.Gameplay} {code}");
             SetState(RemoteState.Broadcasting);
         }
@@ -183,15 +177,15 @@ namespace ArcCreate.Compose.Remote
         {
             await UniTask.SwitchToMainThread();
             DisposeAny();
-            channel = new MessageChannel(ipAddress, Ports.Compose, Ports.Gameplay, this);
             fileHoster = new FileHoster(Ports.HttpCompose, this);
-            await channel.Setup();
+            await channel.SetupSender(ipAddress, Ports.Gameplay, code);
+            channel.SendMessage(RemoteControl.StartConnection, Encoding.ASCII.GetBytes(code));
+
             while (!fileHoster.IsRunning)
             {
                 await UniTask.NextFrame();
             }
 
-            lastConnectionCheck = Time.realtimeSinceStartup;
             remoteDataSender.SetTarget(channel);
 
             SetState(RemoteState.Connected);
@@ -204,7 +198,6 @@ namespace ArcCreate.Compose.Remote
             remoteDataSender.RemoveTarget();
             SetState(RemoteState.Idle);
 
-            lastConnectionCheck = double.MaxValue;
             Debug.Log($"Compose: Stopped session");
         }
 
@@ -223,9 +216,13 @@ namespace ArcCreate.Compose.Remote
             broadcastSender.Broadcast(Constants.Abort);
             remoteDataSender.RemoveTarget();
 
-            lastConnectionCheck = double.MaxValue;
             Debug.Log($"Compose: Target disconnected");
             Services.Popups.Notify(Popups.Severity.Info, I18n.S("Remote.State.TargetDisconnected.Compose"));
+        }
+
+        private void OnChannelError()
+        {
+            OnTargetDisconnect().Forget();
         }
 
         private string GenerateRandomMessage()
@@ -234,26 +231,17 @@ namespace ArcCreate.Compose.Remote
             return code.ToString("D6");
         }
 
-        private void OnBroadcastReceived(IPAddress ipAddress, string message)
+        private void OnClientConnect(IPAddress ipAddress)
         {
-            if (message == code)
-            {
-                StartSession(ipAddress).Forget();
-            }
+            StartSession(ipAddress).Forget();
         }
 
         private void DisposeAny()
         {
-            if (broadcastReceiver?.IsRunning ?? false)
-            {
-                broadcastReceiver.Dispose();
-                broadcastReceiver.OnBroadcastReceived -= OnBroadcastReceived;
-                broadcastReceiver = null;
-            }
-
             if (channel?.IsRunning ?? false)
             {
                 channel.Dispose();
+                channel.OnError -= OnChannelError;
                 channel = null;
             }
 
@@ -267,7 +255,10 @@ namespace ArcCreate.Compose.Remote
         private async UniTask SetRemoteMarkerTiming(int timing)
         {
             await UniTask.SwitchToMainThread();
-            remoteCurrentTiming.SetTiming(timing);
+            if (!remoteCurrentTiming.IsDragging)
+            {
+                remoteCurrentTiming.SetTiming(timing);
+            }
         }
     }
 }

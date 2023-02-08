@@ -35,8 +35,8 @@ namespace ArcCreate.Compose.Timeline
         {
             marker1.OnValueChanged += OnMarker;
             marker2.OnValueChanged += OnMarker;
-            marker1.OnDragDebounced += OnMarkerDebounced;
-            marker2.OnDragDebounced += OnMarkerDebounced;
+            marker1.OnEndEdit += OnMarkerDebounced;
+            marker2.OnEndEdit += OnMarkerDebounced;
 
             marker1Rect = marker1.GetComponent<RectTransform>();
             marker2Rect = marker2.GetComponent<RectTransform>();
@@ -46,8 +46,8 @@ namespace ArcCreate.Compose.Timeline
         {
             marker1.OnValueChanged -= OnMarker;
             marker2.OnValueChanged -= OnMarker;
-            marker1.OnDragDebounced -= OnMarkerDebounced;
-            marker2.OnDragDebounced -= OnMarkerDebounced;
+            marker1.OnEndEdit -= OnMarkerDebounced;
+            marker2.OnEndEdit -= OnMarkerDebounced;
         }
 
         private void OnMarker(Marker arg1, int arg2)
