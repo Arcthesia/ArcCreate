@@ -34,6 +34,8 @@ namespace ArcCreate.Data
 
         public ColorSettings Colors { get; set; }
 
+        public PoolSettings PoolSize { get; set; }
+
         public int LastWorkingTiming { get; set; }
 
         public ChartSettings Clone()

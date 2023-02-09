@@ -66,6 +66,7 @@ namespace ArcCreate.Gameplay
         public const float ArcHitboxY = 1.8f;
         public const float ArcTapHitboxX = 2.975f;
         public const float ArcTapHitboxY = 2.25f;
+        public const float MinLongNoteTimeIncrement = 0.1f;
 
         // Camera
         public const float CameraY = 9f;

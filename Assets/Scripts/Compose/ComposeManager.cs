@@ -9,6 +9,11 @@ namespace ArcCreate.Compose
 {
     public class ComposeManager : SceneRepresentative
     {
+        public override void OnNoBootScene()
+        {
+            LoadGameplayScene();
+        }
+
         public override void OnUnloadScene()
         {
             Application.logMessageReceived -= OnLog;
@@ -22,15 +27,15 @@ namespace ArcCreate.Compose
 
         private void LoadGameplayScene()
         {
-            if (SceneTransitionManager.Instance == null)
-            {
-                return;
-            }
-
             var gameplayManager = FindObjectOfType<GameplayManager>();
             if (gameplayManager != null)
             {
                 UseGameplay(gameplayManager);
+                return;
+            }
+
+            if (SceneTransitionManager.Instance == null)
+            {
                 return;
             }
 

@@ -16,12 +16,12 @@ namespace ArcCreate.Gameplay.Score
 
         private int currentCombo = 0;
         private int totalCombo = 1;
-        private float currentScoreFull = 0;
-        private float currentScorePartial = 0;
+        private double currentScoreFull = 0;
+        private double currentScorePartial = 0;
         private float comboRedmix = 0;
         private readonly UnorderedList<ScoreEvent> pendingScoreEvents = new UnorderedList<ScoreEvent>(20);
 
-        private int CurrentScoreTotal => Mathf.RoundToInt(currentScoreFull + currentScorePartial);
+        private int CurrentScoreTotal => (int)System.Math.Round(currentScoreFull + currentScorePartial);
 
         public void ProcessJudgement(JudgementResult result, int count = 1)
         {
@@ -39,10 +39,10 @@ namespace ArcCreate.Gameplay.Score
             comboRedmix = 0;
             currentCombo++;
 
-            float scorePerNote =
-                totalCombo != 0 ? (float)Values.MaxScore / totalCombo : 0;
+            double scorePerNote =
+                totalCombo != 0 ? (double)Values.MaxScore / totalCombo : 0;
 
-            float scoreToAdd = 0;
+            double scoreToAdd = 0;
             if (result.IsFar())
             {
                 scoreToAdd = scorePerNote * Values.FarPenaltyMultipler * count;
@@ -81,7 +81,12 @@ namespace ArcCreate.Gameplay.Score
                 }
                 else
                 {
-                    float partial = scoreEvent.Score * (currentTiming - scoreEvent.Timing) / (float)Values.ScoreModifyDelay;
+                    double partial = scoreEvent.Score * (currentTiming - scoreEvent.Timing) / (double)Values.ScoreModifyDelay;
+                    if (partial < 0)
+                    {
+                        partial = 0;
+                    }
+
                     currentScorePartial += partial;
                 }
             }
@@ -105,8 +110,8 @@ namespace ArcCreate.Gameplay.Score
             }
             else
             {
-                float scorePerNote = (float)Values.MaxScore / totalCombo;
-                currentScoreFull = scorePerNote * currentCombo;
+                double scorePerNote = (double)Values.MaxScore / totalCombo;
+                currentScoreFull = (scorePerNote + 1) * currentCombo;
             }
 
             SetScore(CurrentScoreTotal);

@@ -122,12 +122,13 @@ namespace ArcCreate.Gameplay.Chart
         /// <summary>
         /// Reset the judge of all notes of this timing group.
         /// </summary>
-        public void ResetJudge()
+        /// <param name="timing">The new timing to reset to.</param>
+        public void ResetJudgeTo(int timing)
         {
-            taps.ResetJudge();
-            holds.ResetJudge();
-            arcs.ResetJudge();
-            arcTaps.ResetJudge();
+            taps.ResetJudgeTo(timing);
+            holds.ResetJudgeTo(timing);
+            arcs.ResetJudgeTo(timing);
+            arcTaps.ResetJudgeTo(timing);
         }
 
         /// <summary>

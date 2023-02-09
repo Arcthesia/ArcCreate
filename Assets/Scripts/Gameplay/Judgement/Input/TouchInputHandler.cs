@@ -215,7 +215,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
 
                     if (input.Phase == UnityEngine.InputSystem.TouchPhase.Ended)
                     {
-                        colorLogic.FingerLifted(input.Id, req.Arc.TimeIncrement);
+                        colorLogic.FingerLifted(input.Id, (float)req.Arc.TimeIncrement);
                         continue;
                     }
 

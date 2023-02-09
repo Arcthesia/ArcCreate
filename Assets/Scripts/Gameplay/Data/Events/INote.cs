@@ -37,7 +37,8 @@ namespace ArcCreate.Gameplay.Data
         /// <summary>
         /// Reset the note's judgement state. Typically called after there's a change in the current timing.
         /// </summary>
-        void ResetJudge();
+        /// <param name="timing">The new timing to reset to.</param>
+        void ResetJudgeTo(int timing);
 
         /// <summary>
         /// Rebuild the note. Called after there's a change in the note's properties.

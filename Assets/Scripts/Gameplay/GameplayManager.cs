@@ -63,6 +63,8 @@ namespace ArcCreate.Gameplay
             {
                 ImportTestChart(path);
             }
+
+            Settings.InputMode.Value = (int)InputMode.Auto;
         }
 
         protected override void OnSceneLoad()

@@ -50,7 +50,7 @@ namespace ArcCreate.Compose.Components
             Camera cam = Services.Gameplay.Camera.GameplayCamera;
             if (cam != null)
             {
-                cam.enabled = false;
+                cam.enabled = true;
             }
         }
 

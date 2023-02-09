@@ -26,6 +26,7 @@ namespace ArcCreate.Compose.Popups
         [SerializeField] private TMP_Text mainText;
         [SerializeField] private TMP_Text fullText;
         [SerializeField] private float padding = 3;
+        [SerializeField] private float maxHeight = 400;
         [SerializeField] private RectTransform showOnHover;
         [SerializeField] private CanvasGroup canvasGroup;
 
@@ -95,7 +96,7 @@ namespace ArcCreate.Compose.Popups
             showOnHover.gameObject.SetActive(true);
             showOnHover.sizeDelta = new Vector2(
                 showOnHover.sizeDelta.x,
-                fullText.preferredHeight + (padding * 2));
+                Mathf.Min(fullText.preferredHeight + (padding * 2), maxHeight));
             showOnHover.gameObject.SetActive(false);
 
             canvasGroup.alpha = 1;

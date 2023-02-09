@@ -6,7 +6,7 @@ namespace ArcCreate.Gameplay.Data
 
         public double FloorPosition { get; set; }
 
-        public virtual int TotalCombo => 1;
+        public virtual int TotalCombo { get; protected set; } = 1;
 
         public virtual int ComboAt(int timing) => (timing >= Timing) ? 1 : 0;
 

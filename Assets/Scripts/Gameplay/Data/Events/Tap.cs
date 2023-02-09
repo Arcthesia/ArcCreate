@@ -64,9 +64,9 @@ namespace ArcCreate.Gameplay.Data
             Lane = e.Lane;
         }
 
-        public void ResetJudge()
+        public void ResetJudgeTo(int timing)
         {
-            judgementRequestSent = false;
+            judgementRequestSent = timing > Timing;
             if (instance != null)
             {
                 instance.gameObject.SetActive(true);

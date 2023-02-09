@@ -35,10 +35,8 @@ namespace ArcCreate.Gameplay.Particle
 
         [Header("Numbers")]
         [SerializeField] private int tapParticlePoolCount = 50;
-        [SerializeField] private int textParticlePoolCount = 50;
+        [SerializeField] private int textParticlePoolCount = 200;
         [SerializeField] private int longParticlePoolCount = 10;
-        [SerializeField] private float tapParticleLength = 0.3f;
-        [SerializeField] private float textParticleLength = 0.5f;
         [SerializeField] private float earlyLateLength = 0.5f;
         [SerializeField] private float earlyLateFromY;
         [SerializeField] private float earlyLateToY;
@@ -49,16 +47,10 @@ namespace ArcCreate.Gameplay.Particle
         private ExternalTexture lostMaterialTexture;
         private ExternalTexture longParticleTexture;
 
-        private Pool<Particle> tapParticlePool;
-        private Pool<Particle> textParticlePool;
+        private ParticlePool<Particle> tapParticlePool;
+        private ParticlePool<Particle> textParticlePool;
         private Pool<Particle> longParticlePool;
         private float lastEarlyLateRealTime = float.MinValue;
-
-        private readonly Queue<ParticleSchedule> playingTapParticleQueue
-            = new Queue<ParticleSchedule>();
-
-        private readonly Queue<ParticleSchedule> playingTextParticleQueue
-            = new Queue<ParticleSchedule>();
 
         private readonly Dictionary<LongNote, ParticleSchedule> playingLongParticles
             = new Dictionary<LongNote, ParticleSchedule>(10);
@@ -74,35 +66,6 @@ namespace ArcCreate.Gameplay.Particle
         public void UpdateParticles()
         {
             float currentRealTime = Time.time;
-            while (playingTapParticleQueue.Count > 0)
-            {
-                ParticleSchedule ps = playingTapParticleQueue.Peek();
-                if (currentRealTime >= ps.ExpireAt)
-                {
-                    ps.Particle.Stop();
-                    tapParticlePool.Return(ps.Particle);
-                    playingTapParticleQueue.Dequeue();
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            while (playingTextParticleQueue.Count > 0)
-            {
-                ParticleSchedule ps = playingTextParticleQueue.Peek();
-                if (currentRealTime >= ps.ExpireAt)
-                {
-                    ps.Particle.Stop();
-                    textParticlePool.Return(ps.Particle);
-                    playingTextParticleQueue.Dequeue();
-                }
-                else
-                {
-                    break;
-                }
-            }
 
             if (currentRealTime <= lastEarlyLateRealTime + earlyLateLength)
             {
@@ -148,12 +111,8 @@ namespace ArcCreate.Gameplay.Particle
             Vector2 screenPos = ConvertToScreen(worldPosition);
             Particle ps = tapParticlePool.Get();
             ps.transform.localPosition = screenPos;
+            ps.Stop();
             ps.Play();
-            playingTapParticleQueue.Enqueue(new ParticleSchedule()
-            {
-                ExpireAt = Time.time + tapParticleLength,
-                Particle = ps,
-            });
         }
 
         public void PlayTextParticle(Vector3 worldPosition, JudgementResult result)
@@ -177,14 +136,9 @@ namespace ArcCreate.Gameplay.Particle
             Vector2 screenPos = ConvertToScreen(worldPosition);
             Particle ps = textParticlePool.Get();
             ps.transform.localPosition = screenPos;
+            ps.Stop();
             ps.ApplyMaterial(mat);
             ps.Play();
-
-            playingTextParticleQueue.Enqueue(new ParticleSchedule()
-            {
-                ExpireAt = Time.time + textParticleLength,
-                Particle = ps,
-            });
 
             if (result.IsEarly())
             {
@@ -235,8 +189,8 @@ namespace ArcCreate.Gameplay.Particle
         {
             tapParticlePrefab.GetComponent<ParticleSystemRenderer>().material.mainTexture = particleTexture;
             Pools.Destroy<Particle>(Values.TapParticlePoolName);
-            tapParticlePool = Pools.New<Particle>(
-                Values.TapParticlePoolName,
+            tapParticlePool.Destroy();
+            tapParticlePool = new ParticlePool<Particle>(
                 tapParticlePrefab,
                 tapParticleParent,
                 tapParticlePoolCount);
@@ -252,6 +206,8 @@ namespace ArcCreate.Gameplay.Particle
                 longNoteParticlePrefab,
                 longNoteParticleParent,
                 longParticlePoolCount);
+
+            playingLongParticles.Clear();
         }
 
         private void Awake()
@@ -262,14 +218,12 @@ namespace ArcCreate.Gameplay.Particle
             FarMaterial = Instantiate(farMaterial);
             LostMaterial = Instantiate(lostMaterial);
 
-            tapParticlePool = Pools.New<Particle>(
-                Values.TapParticlePoolName,
+            tapParticlePool = new ParticlePool<Particle>(
                 tapParticlePrefab,
                 tapParticleParent,
                 tapParticlePoolCount);
 
-            textParticlePool = Pools.New<Particle>(
-                Values.TextParticlePoolName,
+            textParticlePool = new ParticlePool<Particle>(
                 textParticlePrefab,
                 textParticleParent,
                 textParticlePoolCount);
@@ -307,8 +261,8 @@ namespace ArcCreate.Gameplay.Particle
 
         private void OnDestroy()
         {
-            Pools.Destroy<Particle>(Values.TapParticlePoolName);
-            Pools.Destroy<Particle>(Values.TextParticlePoolName);
+            tapParticlePool.Destroy();
+            textParticlePool.Destroy();
             Pools.Destroy<Particle>(Values.LongParticlePoolName);
 
             pureMaterialTexture.Unload();

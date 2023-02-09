@@ -239,6 +239,7 @@ namespace ArcCreate.Compose.Components
         {
             if (Evaluator.TryFloat(value, out float speed))
             {
+                speed = Mathf.Max(speed, 0.1f);
                 Settings.DropRate.Value = Mathf.RoundToInt(speed * Values.DropRateScalar);
             }
 

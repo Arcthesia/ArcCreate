@@ -158,13 +158,13 @@ namespace ArcCreate.Gameplay.Data
             for (int i = 0; i < segments.Count; i++)
             {
                 ArcSegment segment = segments[i];
-                if (clipToTiming <= segment.Timing)
-                {
-                    segment.SetFrom(0);
-                }
-                else if (clipToTiming >= segment.EndTiming)
+                if (clipToTiming >= segment.EndTiming && currentTiming >= segment.EndTiming)
                 {
                     segment.SetFrom(1);
+                }
+                else if (clipToTiming <= segment.Timing)
+                {
+                    segment.SetFrom(0);
                 }
                 else
                 {

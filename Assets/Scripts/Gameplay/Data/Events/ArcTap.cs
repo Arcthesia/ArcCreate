@@ -66,9 +66,13 @@ namespace ArcCreate.Gameplay.Data
             return result;
         }
 
-        public void ResetJudge()
+        public void ResetJudgeTo(int timing)
         {
-            judgementRequestSent = false;
+            judgementRequestSent = timing > Timing;
+            if (instance != null)
+            {
+                instance.gameObject.SetActive(true);
+            }
         }
 
         public void Rebuild()

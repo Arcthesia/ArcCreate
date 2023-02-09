@@ -2,7 +2,7 @@ namespace ArcCreate.Compose
 {
     public static class Values
     {
-        public const float DropRateScalar = 60;
+        public const float DropRateScalar = 30;
         public const float EditorBeatlineThickness = 30f;
 
         // Extensions

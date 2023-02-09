@@ -115,12 +115,12 @@ public class Pool<T>
     {
         foreach (T obj in occupied)
         {
-            GameObject.Destroy(obj);
+            GameObject.Destroy(obj.gameObject);
         }
 
         foreach (T obj in available)
         {
-            GameObject.Destroy(obj);
+            GameObject.Destroy(obj.gameObject);
         }
 
         available = null;

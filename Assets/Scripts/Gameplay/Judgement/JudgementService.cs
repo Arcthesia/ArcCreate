@@ -15,6 +15,7 @@ namespace ArcCreate.Gameplay.Judgement
         private readonly UnorderedList<ArcJudgementRequest> arcRequests = new UnorderedList<ArcJudgementRequest>(32);
         private readonly UnorderedList<ArcTapJudgementRequest> arcTapRequests = new UnorderedList<ArcTapJudgementRequest>(32);
         private IInputHandler inputHandler;
+        private bool isAuto;
 
         public float SkyInputY => skyInput.position.y;
 
@@ -49,7 +50,10 @@ namespace ArcCreate.Gameplay.Judgement
 
         public void ProcessInput(int currentTiming)
         {
-            PruneExpiredRequests(currentTiming);
+            if (!isAuto)
+            {
+                PruneExpiredRequests(currentTiming);
+            }
 
             // Manually update input system to minimalize lag
             if (Values.ShouldUpdateInputSystem)
@@ -133,9 +137,11 @@ namespace ArcCreate.Gameplay.Judgement
             {
                 case InputMode.Auto:
                     inputHandler = new AutoInputHandler();
+                    isAuto = true;
                     break;
                 case InputMode.AutoController:
                     inputHandler = new AutoControllerInputHandler();
+                    isAuto = true;
                     break;
                 case InputMode.Controller:
                     inputHandler = new ControllerInputHandler();

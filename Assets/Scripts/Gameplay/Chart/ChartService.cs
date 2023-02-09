@@ -82,7 +82,7 @@ namespace ArcCreate.Gameplay.Chart
             for (int i = 0; i < timingGroups.Count; i++)
             {
                 TimingGroup tg = timingGroups[i];
-                tg.ResetJudge();
+                tg.ResetJudgeTo(timing);
                 if (isAuto)
                 {
                     currentCombo += tg.ComboAt(Services.Audio.ChartTiming);

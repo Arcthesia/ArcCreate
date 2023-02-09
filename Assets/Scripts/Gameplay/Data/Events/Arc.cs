@@ -9,7 +9,7 @@ namespace ArcCreate.Gameplay.Data
     {
         private ArcBehaviour instance;
         private bool highlight = false;
-        private bool judgementRequestSent = false;
+        private int numJudgementRequestsSent = 0;
         private bool highlightRequestSent = false;
         private bool hasBeenHitOnce = false;
         private int flashCount = 0;
@@ -18,6 +18,7 @@ namespace ArcCreate.Gameplay.Data
         private Arc firstArcOfGroup;
         private Mesh colliderMesh;
         private bool isSelected;
+        private bool spawnedParticleThisFrame = false;
 
         // Avoid infinite recursion
         private bool recursivelyCalled = false;
@@ -135,14 +136,20 @@ namespace ArcCreate.Gameplay.Data
             return result;
         }
 
-        public void ResetJudge()
+        public override int ComboAt(int timing)
         {
-            ResetJudgeTimings();
+            return IsTrace ? 0 : base.ComboAt(timing);
+        }
+
+        public void ResetJudgeTo(int timing)
+        {
+            RecalculateJudgeTimings();
             Highlight = false;
             longParticleUntil = int.MinValue;
-            judgementRequestSent = false;
+            numJudgementRequestsSent = ComboAt(timing);
             highlightRequestSent = false;
             arcGroupAlpha = 1;
+            hasBeenHitOnce = false;
         }
 
         public void Rebuild()
@@ -157,6 +164,42 @@ namespace ArcCreate.Gameplay.Data
             RebuildCollider();
         }
 
+        public override void RecalculateJudgeTimings()
+        {
+            TotalCombo = 0;
+            FirstJudgeTime = double.MaxValue;
+            TimeIncrement = double.MaxValue;
+
+            if (IsTrace || EndTiming == Timing)
+            {
+                return;
+            }
+
+            double bpm = TimingGroupInstance.GetBpm(Timing);
+
+            if (bpm == 0)
+            {
+                return;
+            }
+
+            int duration = EndTiming - Timing;
+            bpm = System.Math.Abs(bpm);
+            TimeIncrement = (bpm >= 255 ? 60_000 : 30_000) / bpm / Values.TimingPointDensity;
+
+            int count = (int)(duration / TimeIncrement);
+            int whatTheFuckDoesThisMean = (IsFirstArcOfGroup ? 0 : 1) ^ 1;
+            if (count <= whatTheFuckDoesThisMean)
+            {
+                TotalCombo = 1;
+                FirstJudgeTime = Timing + (duration / 2);
+            }
+            else
+            {
+                TotalCombo = count - whatTheFuckDoesThisMean;
+                FirstJudgeTime = Timing + (whatTheFuckDoesThisMean * TimeIncrement);
+            }
+        }
+
         public void ReloadSkin()
         {
             var (normal, highlight, arcCap, heightIndicatorColor) = Services.Skin.GetArcSkin(this);
@@ -165,10 +208,9 @@ namespace ArcCreate.Gameplay.Data
 
         public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)
         {
-            if (!IsTrace && currentTiming >= Timing && Timing < EndTiming && !judgementRequestSent)
+            if (!IsTrace && currentTiming >= Timing && Timing < EndTiming)
             {
-                RequestJudgement(currentTiming);
-                judgementRequestSent = true;
+                RequestJudgement();
             }
 
             if (!IsTrace && currentTiming >= Timing && Timing < EndTiming && !highlightRequestSent)
@@ -176,6 +218,8 @@ namespace ArcCreate.Gameplay.Data
                 RequestHighlight(currentTiming);
                 highlightRequestSent = true;
             }
+
+            spawnedParticleThisFrame = false;
         }
 
         public void UpdateInstance(int currentTiming, double currentFloorPosition, GroupProperties groupProperties)
@@ -240,7 +284,7 @@ namespace ArcCreate.Gameplay.Data
             if (currentTiming <= longParticleUntil && currentTiming >= Timing && currentTiming <= EndTiming)
             {
                 Services.Particle.PlayLongParticle(
-                    this,
+                    firstArcOfGroup,
                     new Vector3(WorldXAt(currentTiming), WorldYAt(currentTiming), 0));
             }
         }
@@ -264,19 +308,29 @@ namespace ArcCreate.Gameplay.Data
 
                 if (isJudgement)
                 {
+                    if (!spawnedParticleThisFrame)
+                    {
+                        Services.Particle.PlayTextParticle(currentPos, JudgementResult.LostLate);
+                        spawnedParticleThisFrame = true;
+                    }
+
                     Services.Score.ProcessJudgement(JudgementResult.LostLate);
-                    Services.Particle.PlayTextParticle(currentPos, JudgementResult.LostLate);
                 }
             }
-            else if (currentTiming <= EndTiming)
+            else if (currentTiming <= EndTiming + Values.HoldLostLateJudgeWindow)
             {
                 SetGroupHighlight(true, currentTiming + Values.HoldParticlePersistDuration);
                 hasBeenHitOnce = true;
 
                 if (isJudgement)
                 {
+                    if (!spawnedParticleThisFrame)
+                    {
+                        Services.Particle.PlayTextParticle(currentPos, JudgementResult.Max);
+                        spawnedParticleThisFrame = true;
+                    }
+
                     Services.Score.ProcessJudgement(JudgementResult.Max);
-                    Services.Particle.PlayTextParticle(currentPos, JudgementResult.Max);
                 }
             }
         }
@@ -348,25 +402,23 @@ namespace ArcCreate.Gameplay.Data
             }
         }
 
-        private void RequestJudgement(int currentTiming)
+        private void RequestJudgement()
         {
-            for (int t = FirstJudgeTime; t <= FinalJudgeTime; t += TimeIncrement)
+            for (int t = numJudgementRequestsSent; t < TotalCombo; t++)
             {
-                if (t < currentTiming)
-                {
-                    continue;
-                }
-
+                int timing = (int)System.Math.Round(FirstJudgeTime + (t * TimeIncrement));
                 Services.Judgement.Request(new ArcJudgementRequest()
                 {
-                    StartAtTiming = t - Values.FarJudgeWindow,
-                    ExpireAtTiming = t + Values.HoldLostLateJudgeWindow,
-                    AutoAtTiming = t,
+                    StartAtTiming = timing - Values.FarJudgeWindow,
+                    ExpireAtTiming = timing + Values.HoldLostLateJudgeWindow,
+                    AutoAtTiming = timing,
                     Arc = this,
                     IsJudgement = true,
                     Receiver = this,
                 });
             }
+
+            numJudgementRequestsSent = TotalCombo;
         }
 
         private void RequestHighlight(int timing)

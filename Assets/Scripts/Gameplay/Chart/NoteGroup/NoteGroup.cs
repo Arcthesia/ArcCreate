@@ -63,12 +63,13 @@ namespace ArcCreate.Gameplay.Chart
         /// <summary>
         /// Reset judgement of all notes of this group.
         /// </summary>
-        public virtual void ResetJudge()
+        /// <param name="timing">The new timing to reset to.</param>
+        public virtual void ResetJudgeTo(int timing)
         {
             for (int i = 0; i < notes.Count; i++)
             {
                 Note note = notes[i];
-                note.ResetJudge();
+                note.ResetJudgeTo(timing);
             }
         }
 

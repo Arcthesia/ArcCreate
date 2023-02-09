@@ -70,10 +70,8 @@ namespace ArcCreate.Gameplay.Audio
                     audioSource.Stop();
                     Play(audioTiming, 0);
                 }
-                else
-                {
-                    Services.Chart.ResetJudge();
-                }
+
+                Services.Chart.ResetJudge();
             }
         }
 

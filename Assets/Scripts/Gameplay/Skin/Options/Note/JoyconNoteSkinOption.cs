@@ -46,7 +46,7 @@ namespace ArcCreate.Gameplay.Skin
                 return (ArcTapMesh, ArcTapSkinMiddle);
             }
 
-            if (ArcFormula.WorldXToArc(note.WorldX) < 0.5f)
+            if (ArcFormula.WorldXToArc(note.WorldX) > 0f)
             {
                 return (ArcTapMesh, ArcTapSkinLeft);
             }
