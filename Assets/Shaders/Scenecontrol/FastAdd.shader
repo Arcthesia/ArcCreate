@@ -22,7 +22,8 @@ Shader "Sprites/FastAdd"
 
 		Cull Off
 		Lighting Off
-		ZWrite Off
+		ZWrite On
+		ZTest Always
 		Blend SrcAlpha DstAlpha
 
 		Pass

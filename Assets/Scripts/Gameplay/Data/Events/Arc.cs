@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using ArcCreate.Gameplay.Judgement;
 using ArcCreate.Gameplay.Utility;
 using UnityEngine;
@@ -15,7 +16,7 @@ namespace ArcCreate.Gameplay.Data
         private int flashCount = 0;
         private float arcGroupAlpha = 1;
         private int longParticleUntil = int.MinValue;
-        private Arc firstArcOfGroup;
+        private Arc firstArcOfBranch;
         private Mesh colliderMesh;
         private bool isSelected;
         private bool spawnedParticleThisFrame = false;
@@ -49,11 +50,31 @@ namespace ArcCreate.Gameplay.Data
 
         public float SegmentLength => ArcFormula.CalculateArcSegmentLength(EndTiming - Timing);
 
-        public bool IsFirstArcOfGroup => PreviousArcs.Count == 0;
-
         public bool ShouldDrawHeightIndicator => !IsTrace && (YStart != YEnd || IsFirstArcOfGroup);
 
         public float ArcCapSize => IsTrace ? Values.TraceCapSize : Values.ArcCapSize;
+
+        public bool IsFirstArcOfGroup => PreviousArcs.Count == 0;
+
+        public bool IsFirstArcOfBranch
+        {
+            get
+            {
+                if (PreviousArcs.Count == 0)
+                {
+                    return true;
+                }
+
+                Arc prev = PreviousArcs.First();
+                if (prev.NextArcs.Count == 1)
+                {
+                    return false;
+                }
+
+                Arc nextFirst = prev.NextArcs.First();
+                return nextFirst != this;
+            }
+        }
 
         public bool Highlight
         {
@@ -154,9 +175,9 @@ namespace ArcCreate.Gameplay.Data
 
         public void Rebuild()
         {
-            if (IsFirstArcOfGroup)
+            if (IsFirstArcOfBranch)
             {
-                SetGroupFirst(this);
+                SetBranchFirst(this);
             }
 
             RecalculateJudgeTimings();
@@ -202,8 +223,8 @@ namespace ArcCreate.Gameplay.Data
 
         public void ReloadSkin()
         {
-            var (normal, highlight, arcCap, heightIndicatorColor) = Services.Skin.GetArcSkin(this);
-            instance.SetSkin(normal, highlight, arcCap, heightIndicatorColor);
+            var (normal, highlight, shadow, arcCap, heightIndicatorColor) = Services.Skin.GetArcSkin(this);
+            instance.SetSkin(normal, highlight, shadow, arcCap, heightIndicatorColor);
         }
 
         public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)
@@ -255,7 +276,7 @@ namespace ArcCreate.Gameplay.Data
                 }
                 else
                 {
-                    if (currentTiming >= firstArcOfGroup.Timing)
+                    if (currentTiming >= firstArcOfBranch.Timing)
                     {
                         alpha = Values.MissedArcAlphaScalar;
                     }
@@ -272,7 +293,7 @@ namespace ArcCreate.Gameplay.Data
             color.a *= Mathf.Min(alpha, arcGroupAlpha);
             instance.SetColor(color);
 
-            if (hasBeenHitOnce || IsTrace)
+            if (hasBeenHitOnce || IsTrace || groupProperties.NoInput)
             {
                 instance.ClipTo(currentTiming, currentFloorPosition, currentTiming, currentFloorPosition);
             }
@@ -284,7 +305,7 @@ namespace ArcCreate.Gameplay.Data
             if (currentTiming <= longParticleUntil && currentTiming >= Timing && currentTiming <= EndTiming)
             {
                 Services.Particle.PlayLongParticle(
-                    firstArcOfGroup,
+                    firstArcOfBranch,
                     new Vector3(WorldXAt(currentTiming), WorldYAt(currentTiming), 0));
             }
         }
@@ -452,7 +473,7 @@ namespace ArcCreate.Gameplay.Data
             recursivelyCalled = false;
         }
 
-        private void SetGroupFirst(Arc arc)
+        private void SetBranchFirst(Arc arc)
         {
             if (recursivelyCalled)
             {
@@ -462,10 +483,10 @@ namespace ArcCreate.Gameplay.Data
             recursivelyCalled = true;
             foreach (Arc next in NextArcs)
             {
-                next.SetGroupFirst(arc);
+                next.SetBranchFirst(arc);
             }
 
-            firstArcOfGroup = arc;
+            firstArcOfBranch = arc;
             recursivelyCalled = false;
         }
     }

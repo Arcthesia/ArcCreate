@@ -198,6 +198,11 @@ namespace ArcCreate.Gameplay.Audio
         private void Play(int timing = 0, int delay = 0)
         {
             delay = Mathf.Max(delay, 0);
+            if (timing >= AudioLength - 1)
+            {
+                timing = 0;
+            }
+
             audioTiming = timing;
             Services.Chart.ResetJudge();
 

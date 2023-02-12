@@ -44,6 +44,7 @@ namespace ArcCreate.Gameplay.Skin
         [SerializeField] private Material baseArcMaterial;
         [SerializeField] private Material baseArcHighlightMaterial;
         [SerializeField] private Material traceMaterial;
+        [SerializeField] private Material shadowMaterial;
         private readonly List<Material> arcMaterials = new List<Material>();
         private readonly List<Material> arcHighlightMaterials = new List<Material>();
         private readonly List<Color> arcHeightIndicatorColors = new List<Color>();
@@ -195,21 +196,21 @@ namespace ArcCreate.Gameplay.Skin
         public (Mesh mesh, Material material) GetArcTapSkin(ArcTap note)
             => currentNoteSkin.GetArcTapSkin(note);
 
-        public (Material normal, Material highlight, Sprite arcCap, Color heightIndicatorColor) GetArcSkin(Arc note)
+        public (Material normal, Material highlight, Material shadow, Sprite arcCap, Color heightIndicatorColor) GetArcSkin(Arc note)
         {
             Sprite arcCap = currentNoteSkin.GetArcCapSprite(note);
 
             if (note.IsTrace)
             {
-                return (traceMaterial, traceMaterial, arcCap, Color.white);
+                return (traceMaterial, traceMaterial, shadowMaterial, arcCap, Color.white);
             }
 
             if (note.Color < 0 || note.Color >= arcMaterials.Count)
             {
-                return (arcMaterials[0], arcHighlightMaterials[0], arcCap, arcHeightIndicatorColors[0]);
+                return (arcMaterials[0], arcHighlightMaterials[0], shadowMaterial, arcCap, arcHeightIndicatorColors[0]);
             }
 
-            return (arcMaterials[note.Color], arcHighlightMaterials[note.Color], arcCap, arcHeightIndicatorColors[note.Color]);
+            return (arcMaterials[note.Color], arcHighlightMaterials[note.Color], shadowMaterial, arcCap, arcHeightIndicatorColors[note.Color]);
         }
 
         public (Sprite lane, Sprite extraLane) GetTrackSprite(string name)
@@ -219,13 +220,12 @@ namespace ArcCreate.Gameplay.Skin
             return (trackSkinOpt.TrackSkin.Value, trackSkinOpt.TrackExtraSkin.Value);
         }
 
-        public void SetTraceColor(Color color, Color shadow)
+        public void SetTraceColor(Color color)
         {
             traceMaterial.SetColor(highColorShaderId, color);
-            traceMaterial.SetColor(shadowColorShaderId, shadow);
         }
 
-        public void SetArcColors(List<Color> arcs, List<Color> arcLows, Color shadow)
+        public void SetArcColors(List<Color> arcs, List<Color> arcLows)
         {
             arcMaterials.ForEach(Destroy);
             arcHighlightMaterials.ForEach(Destroy);
@@ -239,14 +239,12 @@ namespace ArcCreate.Gameplay.Skin
                 Material mat = Instantiate(baseArcMaterial);
                 mat.SetColor(highColorShaderId, arcs[i]);
                 mat.SetColor(lowColorShaderId, arcLows[i]);
-                mat.SetColor(shadowColorShaderId, shadow);
                 mat.renderQueue = mat.renderQueue + max - i;
                 arcMaterials.Add(mat);
 
                 Material hmat = Instantiate(baseArcHighlightMaterial);
                 hmat.SetColor(highColorShaderId, arcs[i]);
                 hmat.SetColor(lowColorShaderId, arcLows[i]);
-                hmat.SetColor(shadowColorShaderId, shadow);
                 hmat.renderQueue = hmat.renderQueue + max - i;
                 arcHighlightMaterials.Add(hmat);
 
@@ -254,14 +252,24 @@ namespace ArcCreate.Gameplay.Skin
             }
         }
 
+        public void SetShadowColor(Color color)
+        {
+            shadowMaterial.SetColor(shadowColorShaderId, color);
+        }
+
         public void ResetTraceColors()
         {
-            SetTraceColor(defaultTraceColor, defaultShadowColor);
+            SetTraceColor(defaultTraceColor);
         }
 
         public void ResetArcColors()
         {
-            SetArcColors(defaultArcColors, defaultArcLowColors, defaultShadowColor);
+            SetArcColors(defaultArcColors, defaultArcLowColors);
+        }
+
+        public void ResetShadowColor()
+        {
+            SetShadowColor(defaultShadowColor);
         }
 
         public void ApplyRedArcValue(int color, float value)

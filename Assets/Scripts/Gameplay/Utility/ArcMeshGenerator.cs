@@ -5,6 +5,8 @@ namespace ArcCreate.Gameplay.Utility
 {
     public static class ArcMeshGenerator
     {
+        private static Mesh cachedTraceShadowMesh;
+        private static Mesh cachedArcShadowMesh;
         private static Mesh cachedTraceMesh;
         private static Mesh cachedArcMesh;
         private static Mesh cachedTraceHeadMesh;
@@ -29,6 +31,28 @@ namespace ArcCreate.Gameplay.Utility
                 }
 
                 return cachedArcMesh;
+            }
+        }
+
+        public static Mesh GetShadowMesh(Arc arc)
+        {
+            if (arc.IsTrace)
+            {
+                if (cachedTraceShadowMesh == null)
+                {
+                    cachedTraceShadowMesh = GenerateShadowMesh(Values.TraceMeshOffset);
+                }
+
+                return cachedTraceShadowMesh;
+            }
+            else
+            {
+                if (cachedArcShadowMesh == null)
+                {
+                    cachedArcShadowMesh = GenerateShadowMesh(Values.ArcMeshOffset);
+                }
+
+                return cachedArcShadowMesh;
             }
         }
 
@@ -89,8 +113,42 @@ namespace ArcCreate.Gameplay.Utility
                 {
                     0, 3, 2,
                     0, 2, 1,
-                    0, 5, 4,
-                    0, 4, 1,
+                    0, 1, 4,
+                    0, 4, 5,
+                },
+                bounds = new Bounds(Vector3.zero, Vector3.one * float.MaxValue),
+            };
+        }
+
+        public static Mesh GenerateShadowMesh(float offset)
+        {
+            float offsetHalf = offset / 2;
+
+            // 1---2
+            // |   |
+            // |   |
+            // 0---3
+            return new Mesh()
+            {
+                vertices = new Vector3[]
+                {
+                    // Body segment
+                    new Vector3(offset, 0, 0),
+                    new Vector3(offset, 0, 1),
+                    new Vector3(-offset, 0, 1),
+                    new Vector3(-offset, 0, 0),
+                },
+                uv = new Vector2[]
+                {
+                    new Vector2(0, 0),
+                    new Vector2(0, 1),
+                    new Vector2(1, 1),
+                    new Vector2(1, 0),
+                },
+                triangles = new int[]
+                {
+                    0, 1, 3,
+                    1, 2, 3,
                 },
                 bounds = new Bounds(Vector3.zero, Vector3.one * float.MaxValue),
             };

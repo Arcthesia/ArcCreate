@@ -11,6 +11,8 @@ namespace ArcCreate.Gameplay.Data
         private static readonly int ColorShaderId = Shader.PropertyToID("_ColorTG");
         private static readonly int SelectedShaderId = Shader.PropertyToID("_Selected");
         private static MaterialPropertyBlock mpb;
+        [SerializeField] private MeshRenderer shadowMeshRenderer;
+        [SerializeField] private MeshFilter shadowMeshFilter;
 
         private MeshRenderer meshRenderer;
         private MeshFilter meshFilter;
@@ -32,6 +34,10 @@ namespace ArcCreate.Gameplay.Data
             meshRenderer.GetPropertyBlock(mpb);
             mpb.SetColor(ColorShaderId, color);
             meshRenderer.SetPropertyBlock(mpb);
+
+            shadowMeshRenderer.GetPropertyBlock(mpb);
+            mpb.SetColor(ColorShaderId, color);
+            shadowMeshRenderer.SetPropertyBlock(mpb);
         }
 
         public void SetFrom(float from)
@@ -40,17 +46,23 @@ namespace ArcCreate.Gameplay.Data
             mpb.SetFloat(FromShaderId, from);
             meshRenderer.SetPropertyBlock(mpb);
 
+            shadowMeshRenderer.GetPropertyBlock(mpb);
+            mpb.SetFloat(FromShaderId, from);
+            shadowMeshRenderer.SetPropertyBlock(mpb);
+
             gameObject.SetActive(from < 1);
         }
 
-        public void SetMaterial(Material material)
+        public void SetMaterial(Material material, Material shadow)
         {
             meshRenderer.sharedMaterial = material;
+            shadowMeshRenderer.sharedMaterial = shadow;
         }
 
-        public void SetMesh(Mesh mesh)
+        public void SetMesh(Mesh mesh, Mesh shadow)
         {
             meshFilter.sharedMesh = mesh;
+            shadowMeshFilter.sharedMesh = shadow;
         }
 
         public void SetSelected(bool value)
@@ -77,6 +89,14 @@ namespace ArcCreate.Gameplay.Data
                 0));
             meshRenderer.SetPropertyBlock(mpb);
 
+            shadowMeshRenderer.GetPropertyBlock(mpb);
+            mpb.SetVector(ShearShaderId, new Vector4(
+                dir.x,
+                dir.y,
+                dir.z,
+                0));
+            shadowMeshRenderer.SetPropertyBlock(mpb);
+
             gameObject.SetActive(startZ >= -Values.TrackLengthForward && endZ <= Values.TrackLengthBackward);
         }
 
@@ -87,6 +107,8 @@ namespace ArcCreate.Gameplay.Data
             mpb = new MaterialPropertyBlock();
             meshRenderer.sortingLayerName = "Arc";
             meshRenderer.sortingOrder = 1;
+            shadowMeshRenderer.sortingLayerName = "Arc";
+            shadowMeshRenderer.sortingOrder = 0;
         }
     }
 }

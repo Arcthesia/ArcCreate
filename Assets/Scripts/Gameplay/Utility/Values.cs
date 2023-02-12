@@ -34,7 +34,7 @@ namespace ArcCreate.Gameplay
         public const float MaxArcAlpha = 0.8823592f;
         public const float FlashArcAlphaScalar = 0.85f;
         public const float FlashHoldAlphaScalar = 0.85f;
-        public const float MissedArcAlphaScalar = 0.65f;
+        public const float MissedArcAlphaScalar = 0.75f;
         public const float MissedHoldAlphaScalar = 0.5f;
         public const float HoldLengthScalar = 1 / 3.79f;
         public const float ArcTapMiddleWorldXRange = 0.5f;

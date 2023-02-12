@@ -22,7 +22,8 @@ Shader "Sprites/DefaultSC"
 
 		Cull Off
 		Lighting Off
-		ZWrite Off
+		ZWrite On
+		ZTest Always
 		Blend SrcAlpha OneMinusSrcAlpha
 
 		Pass

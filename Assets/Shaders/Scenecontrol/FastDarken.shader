@@ -22,7 +22,8 @@ Shader "Sprites/FastDarken"
 
 		Cull Off
 		Lighting Off
-		ZWrite Off
+		ZWrite On
+		ZTest Always
 		BlendOp Min
 		Blend One One
 

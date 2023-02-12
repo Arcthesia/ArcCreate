@@ -22,7 +22,8 @@ Shader "Sprites/FastScreen"
 
 		Cull Off
 		Lighting Off
-		ZWrite Off
+		ZWrite On
+		ZTest Always
 		Blend One OneMinusSrcColor
 
 		Pass

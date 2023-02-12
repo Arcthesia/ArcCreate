@@ -193,7 +193,7 @@ namespace ArcCreate.Gameplay.Data
             color.a *= alpha;
             instance.SetColor(color);
 
-            if (!locked)
+            if (!locked || groupProperties.NoInput)
             {
                 instance.SetFrom((float)((currentFloorPosition - FloorPosition) / (EndFloorPosition - FloorPosition)));
             }

@@ -68,16 +68,20 @@ namespace ArcCreate.Gameplay
         /// Sets the trace color.
         /// </summary>
         /// <param name="color">The trace body color.</param>
-        /// <param name="shadow">The trace shadow color.</param>
-        void SetTraceColor(Color color, Color shadow);
+        void SetTraceColor(Color color);
 
         /// <summary>
         /// Sets the arc color.
         /// </summary>
         /// <param name="arcs">The list of arc colors at y=1.</param>
         /// <param name="arcLows">The list of arc colors at y=0.</param>
-        /// <param name="shadow">The arc shadow color.</param>
-        void SetArcColors(List<Color> arcs, List<Color> arcLows, Color shadow);
+        void SetArcColors(List<Color> arcs, List<Color> arcLows);
+
+        /// <summary>
+        /// Sets the shadow color of traces and arcs.
+        /// </summary>
+        /// <param name="color">The shadow color.</param>
+        void SetShadowColor(Color color);
 
         /// <summary>
         /// Resets trace colors to default.

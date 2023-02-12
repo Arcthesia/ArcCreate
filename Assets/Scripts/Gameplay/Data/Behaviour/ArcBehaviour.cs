@@ -19,6 +19,7 @@ namespace ArcCreate.Gameplay.Data
         [SerializeField] private MeshCollider meshCollider;
         private Material normalMaterial;
         private Material highlightMaterial;
+        private Material shadowMaterial;
         private bool highlight;
         private readonly List<ArcSegment> segments = new List<ArcSegment>(32);
 
@@ -37,7 +38,7 @@ namespace ArcCreate.Gameplay.Data
                 for (int i = 0; i < segments.Count; i++)
                 {
                     ArcSegment segment = segments[i];
-                    segment.SetMaterial(m);
+                    segment.SetMaterial(m, shadowMaterial);
                 }
 
                 arcHeadRenderer.sharedMaterial = m;
@@ -90,9 +91,9 @@ namespace ArcCreate.Gameplay.Data
                     new Vector2(Arc.WorldXAt(cappedEndTiming), Arc.WorldYAt(cappedEndTiming));
                 newSegment.EndPosition = lastPosition - basePosition;
 
-                newSegment.SetMaterial(Material);
+                newSegment.SetMaterial(Material, shadowMaterial);
                 newSegment.SetFrom(0);
-                newSegment.SetMesh(ArcMeshGenerator.GetSegmentMesh(Arc));
+                newSegment.SetMesh(ArcMeshGenerator.GetSegmentMesh(Arc), ArcMeshGenerator.GetShadowMesh(Arc));
                 segments.Add(newSegment);
 
                 lastEndTiming = endTiming;
@@ -103,18 +104,19 @@ namespace ArcCreate.Gameplay.Data
             }
         }
 
-        public void SetSkin(Material normal, Material highlight, Sprite arcCapSprite, Color heightIndicatorColor)
+        public void SetSkin(Material normal, Material highlight, Material shadow, Sprite arcCapSprite, Color heightIndicatorColor)
         {
             arcCap.sprite = arcCapSprite;
             heightIndicator.color = heightIndicatorColor;
             normalMaterial = normal;
             highlightMaterial = highlight;
+            shadowMaterial = shadow;
             arcHeadRenderer.sharedMaterial = Material;
 
             for (int i = 0; i < segments.Count; i++)
             {
                 ArcSegment segment = segments[i];
-                segment.SetMaterial(Material);
+                segment.SetMaterial(Material, shadow);
             }
         }
 
