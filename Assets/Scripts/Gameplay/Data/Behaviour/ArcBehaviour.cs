@@ -104,12 +104,13 @@ namespace ArcCreate.Gameplay.Data
             }
         }
 
-        public void SetSkin(Material normal, Material highlight, Material shadow, Sprite arcCapSprite, Color heightIndicatorColor)
+        public void SetSkin(Material normal, Material highlight, Material shadow, Sprite arcCapSprite, Sprite heightIndicatorSprite, Color heightIndicatorColor)
         {
             arcCap.sprite = arcCapSprite;
             heightIndicator.color = heightIndicatorColor;
             normalMaterial = normal;
             highlightMaterial = highlight;
+            heightIndicator.sprite = heightIndicatorSprite;
             shadowMaterial = shadow;
             arcHeadRenderer.sharedMaterial = Material;
 

@@ -223,8 +223,8 @@ namespace ArcCreate.Gameplay.Data
 
         public void ReloadSkin()
         {
-            var (normal, highlight, shadow, arcCap, heightIndicatorColor) = Services.Skin.GetArcSkin(this);
-            instance.SetSkin(normal, highlight, shadow, arcCap, heightIndicatorColor);
+            var (normal, highlight, shadow, arcCap, heightIndicatorSprite, heightIndicatorColor) = Services.Skin.GetArcSkin(this);
+            instance.SetSkin(normal, highlight, shadow, arcCap, heightIndicatorSprite, heightIndicatorColor);
         }
 
         public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)

@@ -42,10 +42,11 @@ namespace ArcCreate.Gameplay.Data
             ArcTap = arcTap;
         }
 
-        public void SetSkin(Mesh mesh, Material mat)
+        public void SetSkin(Mesh mesh, Material mat, Sprite shadow)
         {
             meshFilter.sharedMesh = mesh;
             meshRenderer.sharedMaterial = mat;
+            shadowRenderer.sprite = shadow;
         }
 
         public void SetTransform(Vector3 pos, Quaternion rot, Vector3 scl)

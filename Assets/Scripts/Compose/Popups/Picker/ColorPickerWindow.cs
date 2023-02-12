@@ -3,6 +3,7 @@ using ArcCreate.Utility.Extension;
 using ArcCreate.Utility.Parser;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Popups
@@ -75,9 +76,12 @@ namespace ArcCreate.Compose.Popups
 
         private void OnPicker(Color color)
         {
-            color.a = Evaluator.Float(alphaField.text) / 255;
-            Color = color;
-            OnColorChanged?.Invoke(color);
+            if (Evaluator.TryFloat(alphaField.text, out float a))
+            {
+                color.a = a / 255;
+                Color = color;
+                OnColorChanged?.Invoke(color);
+            }
         }
 
         private void OnAlphaSlider(float val)
@@ -164,11 +168,14 @@ namespace ArcCreate.Compose.Popups
 
         private void OnHSVFieldChange(string val)
         {
-            Color rgb = ReadFromHSVField();
-            rgb.a = Evaluator.Float(alphaField.text) / 255;
-            SetRGBFields(rgb);
-            SetCommon(rgb);
-            OnColorChanged?.Invoke(rgb);
+            if (Evaluator.TryFloat(alphaField.text, out float a))
+            {
+                Color rgb = ReadFromHSVField();
+                rgb.a = a / 255;
+                SetRGBFields(rgb);
+                SetCommon(rgb);
+                OnColorChanged?.Invoke(rgb);
+            }
         }
 
         private void OnHSVFieldConfirm(string val)

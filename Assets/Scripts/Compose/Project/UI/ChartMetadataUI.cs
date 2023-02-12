@@ -1,23 +1,28 @@
 using ArcCreate.Data;
+using ArcCreate.Gameplay;
 using UnityEngine;
 
 namespace ArcCreate.Compose.Project
 {
     public abstract class ChartMetadataUI : MonoBehaviour
     {
+        [SerializeField] private GameplayData gameplayData;
+
         protected ChartSettings Target { get; private set; }
 
-        protected void Start()
-        {
-            Services.Project.OnChartLoad += OnChartLoad;
-        }
+        protected GameplayData GameplayData => gameplayData;
 
         protected abstract void ApplyChartSettings(ChartSettings chart);
 
-        private void OnChartLoad(ChartSettings chart)
+        protected void Start()
         {
-            Target = chart;
-            ApplyChartSettings(chart);
+            gameplayData.OnChartFileLoad += OnChartLoad;
+        }
+
+        private void OnChartLoad()
+        {
+            Target = Services.Project.CurrentChart;
+            ApplyChartSettings(Target);
         }
     }
 }

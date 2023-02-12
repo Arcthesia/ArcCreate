@@ -216,7 +216,7 @@ namespace ArcCreate.Gameplay.Chart
         {
             LoadChart(new ArcChart(reader));
             IsLoaded = true;
-            Services.Audio.ChartTiming = 0;
+            Services.Audio.AudioTiming = 0;
         }
 
         public void LoadChart(ArcChart chart)

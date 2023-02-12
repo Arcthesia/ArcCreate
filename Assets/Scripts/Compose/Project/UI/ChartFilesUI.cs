@@ -7,7 +7,6 @@ namespace ArcCreate.Compose.Project
 {
     public class ChartFilesUI : ChartMetadataUI
     {
-        [SerializeField] private GameplayData gameplayData;
         [SerializeField] private FileSelectField audioFile;
         [SerializeField] private ImageFileSelectField jacket;
         [SerializeField] private ImageFileSelectField background;
@@ -15,10 +14,19 @@ namespace ArcCreate.Compose.Project
 
         protected override void ApplyChartSettings(ChartSettings chart)
         {
-            audioFile.SetPath(chart.AudioPath);
-            jacket.SetPath(chart.JacketPath);
-            background.SetPath(chart.BackgroundPath);
-            video.SetPath(chart.VideoPath);
+            audioFile.SetPathWithoutNotify(chart.AudioPath);
+            jacket.SetPathWithoutNotify(chart.JacketPath);
+            background.SetPathWithoutNotify(chart.BackgroundPath);
+            video.SetPathWithoutNotify(chart.VideoPath);
+
+            GameplayData.LoadAudio(audioFile.CurrentPath.FullPath);
+            GameplayData.LoadJacket(jacket.CurrentPath.FullPath);
+            GameplayData.LoadBackground(background.CurrentPath.FullPath);
+
+            if (video.CurrentPath != null)
+            {
+                GameplayData.VideoBackgroundUrl.Value = "file:///" + video.CurrentPath.FullPath.Replace("\\", "/");
+            }
         }
 
         private new void Start()
@@ -47,7 +55,7 @@ namespace ArcCreate.Compose.Project
             }
 
             Target.AudioPath = path.ShortenedPath;
-            gameplayData.LoadAudio(path.FullPath);
+            GameplayData.LoadAudio(path.FullPath);
 
             Values.ProjectModified = true;
         }
@@ -57,12 +65,12 @@ namespace ArcCreate.Compose.Project
             if (path == null)
             {
                 Target.JacketPath = null;
-                gameplayData.SetDefaultJacket();
+                GameplayData.SetDefaultJacket();
                 return;
             }
 
             Target.JacketPath = path.ShortenedPath;
-            gameplayData.LoadJacket(path.FullPath);
+            GameplayData.LoadJacket(path.FullPath);
 
             Values.ProjectModified = true;
         }
@@ -72,12 +80,12 @@ namespace ArcCreate.Compose.Project
             if (path == null)
             {
                 Target.BackgroundPath = null;
-                gameplayData.SetDefaultBackground();
+                GameplayData.SetDefaultBackground();
                 return;
             }
 
             Target.BackgroundPath = path.ShortenedPath;
-            gameplayData.LoadBackground(path.FullPath);
+            GameplayData.LoadBackground(path.FullPath);
 
             Values.ProjectModified = true;
         }
@@ -85,7 +93,7 @@ namespace ArcCreate.Compose.Project
         private void OnVideo(FilePath path)
         {
             Target.VideoPath = path.ShortenedPath;
-            gameplayData.VideoBackgroundUrl.Value = "file:///" + path.FullPath.Replace("\\", "/");
+            GameplayData.VideoBackgroundUrl.Value = "file:///" + path.FullPath.Replace("\\", "/");
 
             Values.ProjectModified = true;
         }

@@ -2,11 +2,13 @@ using System;
 using ArcCreate.Compose.Components;
 using ArcCreate.Gameplay.Data;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Popups
 {
     public class ArcTypePickerWindow : MonoBehaviour
     {
+        [SerializeField] private Button closeButton;
         [SerializeField] private GameObject window;
         [SerializeField] private RectTransform canvasRect;
         [SerializeField] private float minDistanceFromBorder;
@@ -82,11 +84,13 @@ namespace ArcCreate.Compose.Popups
             rect = window.GetComponent<RectTransform>();
             rect.anchorMin = new Vector2(0.5f, 0.5f);
             rect.anchorMax = new Vector2(0.5f, 0.5f);
+            closeButton.onClick.AddListener(CloseWindow);
         }
 
         private void OnDestroy()
         {
             optionsPanel.OnSelect -= OnOptionsPanel;
+            closeButton.onClick.RemoveListener(CloseWindow);
         }
 
         private void OnOptionsPanel(string typeString)

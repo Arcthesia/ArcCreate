@@ -10,7 +10,7 @@ namespace ArcCreate.Data
 
         public float BaseBpm { get; set; }
 
-        public bool SyncBaseBpm { get; set; } = true;
+        public bool SyncBaseBpm { get; set; }
 
         public string BackgroundPath { get; set; }
 

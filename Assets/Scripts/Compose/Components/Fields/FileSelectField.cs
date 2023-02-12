@@ -23,6 +23,7 @@ namespace ArcCreate.Compose.Components
         [SerializeField] private bool isLocalFileSelector;
         [SerializeField] private string title;
         [SerializeField] private string initPathPrefKey;
+        [SerializeField] private bool modifyPref = true;
         [SerializeField] private string extensionFilterName;
         [SerializeField] private string[] acceptedExtensions;
         [SerializeField] private string defaultSaveFileName;
@@ -166,7 +167,10 @@ namespace ArcCreate.Compose.Components
                 isSaveFile ?
                 Shell.SaveFileDialog(extensionFilterName, acceptedExtensions, title, PlayerPrefs.GetString(initPathPrefKey, ""), defaultSaveFileName) :
                 Shell.OpenFileDialog(extensionFilterName, acceptedExtensions, title, PlayerPrefs.GetString(initPathPrefKey, ""));
-            PlayerPrefs.SetString(initPathPrefKey, Path.GetDirectoryName(path));
+            if (modifyPref)
+            {
+                PlayerPrefs.SetString(initPathPrefKey, Path.GetDirectoryName(path));
+            }
 
             if (string.IsNullOrEmpty(path))
             {

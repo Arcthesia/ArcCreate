@@ -41,11 +41,7 @@ namespace ArcCreate.ChartFormat
 
         private void ParseLines(string[] lines, string path)
         {
-            try
-            {
-                AudioOffset = Evaluator.Int(lines[0].Replace("AudioOffset:", ""));
-            }
-            catch (Exception)
+            if (!Evaluator.TryInt(lines[0].Replace("AudioOffset:", ""), out int offset))
             {
                 throw new ChartFormatException(
                     RawEventType.Unknown,
@@ -54,6 +50,8 @@ namespace ArcCreate.ChartFormat
                     1,
                     I18n.S("Format.Exception.AudioOffsetInvalid"));
             }
+
+            AudioOffset = offset;
 
             try
             {

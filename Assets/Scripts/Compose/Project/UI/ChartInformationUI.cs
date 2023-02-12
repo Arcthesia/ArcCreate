@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using ArcCreate.Compose.Components;
 using ArcCreate.Data;
@@ -14,7 +13,6 @@ namespace ArcCreate.Compose.Project
 {
     public class ChartInformationUI : ChartMetadataUI
     {
-        [SerializeField] private GameplayData gameplayData;
         [SerializeField] private TMP_InputField title;
         [SerializeField] private TMP_InputField composer;
         [SerializeField] private TMP_InputField illustrator;
@@ -38,18 +36,29 @@ namespace ArcCreate.Compose.Project
             syncBaseBpm.isOn = chart.SyncBaseBpm;
             chartConstant.text = chart.ChartConstant.ToString();
             difficultyName.text = chart.Difficulty ?? "";
-            chartOffset.text = gameplayData.AudioOffset.Value.ToString();
+            chartOffset.text = GameplayData.AudioOffset.Value.ToString();
 
             chart.DifficultyColor.ConvertHexToColor(out Color c);
             difficultyColor.SetValue(c);
 
-            gameplayData.Title.Value = chart.Title ?? "";
-            gameplayData.Composer.Value = chart.Composer ?? "";
-            gameplayData.Illustrator.Value = chart.Illustrator ?? "";
-            gameplayData.Charter.Value = chart.Charter ?? "";
-            gameplayData.BaseBpm.Value = chart.BaseBpm;
-            gameplayData.DifficultyName.Value = chart.Difficulty ?? "";
-            gameplayData.DifficultyColor.Value = c;
+            if (chart.SyncBaseBpm)
+            {
+                var baseGroup = Services.Gameplay.Chart.GetTimingGroup(0);
+                var baseTiming = baseGroup.Timings[0];
+                GameplayData.BaseBpm.Value = baseTiming.Bpm;
+                chart.BaseBpm = baseTiming.Bpm;
+            }
+            else
+            {
+                GameplayData.BaseBpm.Value = chart.BaseBpm;
+            }
+
+            GameplayData.Title.Value = chart.Title ?? "";
+            GameplayData.Composer.Value = chart.Composer ?? "";
+            GameplayData.Illustrator.Value = chart.Illustrator ?? "";
+            GameplayData.Charter.Value = chart.Charter ?? "";
+            GameplayData.DifficultyName.Value = chart.Difficulty ?? "";
+            GameplayData.DifficultyColor.Value = c;
         }
 
         private new void Start()
@@ -65,14 +74,14 @@ namespace ArcCreate.Compose.Project
             difficultyName.onEndEdit.AddListener(OnDifficultyName);
             difficultyColor.OnValueChange += OnDifficultyColor;
 
-            gameplayData.AudioOffset.OnValueChange += OnGameplayAudioOffset;
+            GameplayData.AudioOffset.OnValueChange += OnGameplayAudioOffset;
             chartOffset.onEndEdit.AddListener(OnChartOffset);
 
-            gameplayData.TimingPointDensityFactor.OnValueChange += OnGameplayDensityFactor;
+            GameplayData.TimingPointDensityFactor.OnValueChange += OnGameplayDensityFactor;
             timingPointDensityFactor.onEndEdit.AddListener(OnDensityFactor);
 
-            gameplayData.OnChartTimingEdit += OnChartTimingEdit;
-            gameplayData.BaseBpm.OnValueChange += OnGameplayBaseBpm;
+            GameplayData.OnChartTimingEdit += OnChartTimingEdit;
+            GameplayData.BaseBpm.OnValueChange += OnGameplayBaseBpm;
 
             for (int i = 0; i < diffColorPresets.Count; i++)
             {
@@ -91,18 +100,19 @@ namespace ArcCreate.Compose.Project
             illustrator.onEndEdit.RemoveListener(OnIllustrator);
             charter.onEndEdit.RemoveListener(OnCharter);
             baseBpm.onEndEdit.RemoveListener(OnBaseBpm);
+            syncBaseBpm.onValueChanged.RemoveListener(OnSyncBaseBPM);
             chartConstant.onEndEdit.RemoveListener(OnChartConstant);
             difficultyName.onEndEdit.RemoveListener(OnDifficultyName);
             difficultyColor.OnValueChange -= OnDifficultyColor;
 
-            gameplayData.AudioOffset.OnValueChange -= OnGameplayAudioOffset;
+            GameplayData.AudioOffset.OnValueChange -= OnGameplayAudioOffset;
             chartOffset.onEndEdit.RemoveListener(OnChartOffset);
 
-            gameplayData.TimingPointDensityFactor.OnValueChange -= OnGameplayDensityFactor;
+            GameplayData.TimingPointDensityFactor.OnValueChange -= OnGameplayDensityFactor;
             timingPointDensityFactor.onEndEdit.RemoveListener(OnDensityFactor);
 
-            gameplayData.OnChartTimingEdit -= OnChartTimingEdit;
-            gameplayData.BaseBpm.OnValueChange -= OnGameplayBaseBpm;
+            GameplayData.OnChartTimingEdit -= OnChartTimingEdit;
+            GameplayData.BaseBpm.OnValueChange -= OnGameplayBaseBpm;
 
             for (int i = 0; i < diffColorPresets.Count; i++)
             {
@@ -120,7 +130,7 @@ namespace ArcCreate.Compose.Project
         {
             if (Evaluator.TryInt(value, out int offset))
             {
-                gameplayData.AudioOffset.Value = offset;
+                GameplayData.AudioOffset.Value = offset;
 
                 Values.ProjectModified = true;
             }
@@ -135,7 +145,7 @@ namespace ArcCreate.Compose.Project
         {
             if (Evaluator.TryFloat(value, out float factor))
             {
-                gameplayData.TimingPointDensityFactor.Value = factor;
+                GameplayData.TimingPointDensityFactor.Value = factor;
 
                 Values.ProjectModified = true;
             }
@@ -144,7 +154,7 @@ namespace ArcCreate.Compose.Project
         private void OnTitle(string value)
         {
             Target.Title = value;
-            gameplayData.Title.Value = value;
+            GameplayData.Title.Value = value;
 
             Values.ProjectModified = true;
         }
@@ -152,7 +162,7 @@ namespace ArcCreate.Compose.Project
         private void OnComposer(string value)
         {
             Target.Composer = value;
-            gameplayData.Composer.Value = value;
+            GameplayData.Composer.Value = value;
 
             Values.ProjectModified = true;
 
@@ -178,7 +188,7 @@ namespace ArcCreate.Compose.Project
         private void OnIllustrator(string value)
         {
             Target.Illustrator = value;
-            gameplayData.Illustrator.Value = value;
+            GameplayData.Illustrator.Value = value;
 
             Values.ProjectModified = true;
         }
@@ -186,7 +196,7 @@ namespace ArcCreate.Compose.Project
         private void OnCharter(string value)
         {
             Target.Charter = value;
-            gameplayData.Charter.Value = value;
+            GameplayData.Charter.Value = value;
 
             Values.ProjectModified = true;
         }
@@ -209,7 +219,7 @@ namespace ArcCreate.Compose.Project
             if (Evaluator.TryFloat(value, out float bpm))
             {
                 Target.BaseBpm = bpm;
-                gameplayData.BaseBpm.Value = bpm;
+                GameplayData.BaseBpm.Value = bpm;
 
                 Values.ProjectModified = true;
             }
@@ -258,7 +268,7 @@ namespace ArcCreate.Compose.Project
         private void OnDifficultyName(string value)
         {
             Target.Difficulty = value;
-            gameplayData.DifficultyName.Value = value;
+            GameplayData.DifficultyName.Value = value;
 
             Values.ProjectModified = true;
         }
@@ -266,7 +276,7 @@ namespace ArcCreate.Compose.Project
         private void OnDifficultyColor(Color color)
         {
             Target.DifficultyColor = color.ConvertToHexCode();
-            gameplayData.DifficultyColor.Value = color;
+            GameplayData.DifficultyColor.Value = color;
 
             Values.ProjectModified = true;
         }
@@ -296,7 +306,7 @@ namespace ArcCreate.Compose.Project
             {
                 var baseGroup = Services.Gameplay.Chart.GetTimingGroup(0);
                 var baseTiming = baseGroup.Timings[0];
-                gameplayData.BaseBpm.Value = baseTiming.Bpm;
+                GameplayData.BaseBpm.Value = baseTiming.Bpm;
 
                 Values.ProjectModified = true;
             }
@@ -310,9 +320,9 @@ namespace ArcCreate.Compose.Project
             TimingEvent baseTiming = baseGroup.Timings[0];
 
             baseTiming.Bpm = bpm;
-            gameplayData.OnChartTimingEdit -= OnChartTimingEdit;
+            GameplayData.OnChartTimingEdit -= OnChartTimingEdit;
             Services.Gameplay.Chart.UpdateEvents(new List<TimingEvent> { baseTiming });
-            gameplayData.OnChartTimingEdit += OnChartTimingEdit;
+            GameplayData.OnChartTimingEdit += OnChartTimingEdit;
         }
     }
 }

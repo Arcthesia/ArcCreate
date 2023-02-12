@@ -203,7 +203,8 @@ namespace ArcCreate.Compose.Project
 
         private void ApplyColorSettings()
         {
-            Services.Gameplay.Skin.SetTraceColor(traceBody.Value, shadow.Value);
+            Services.Gameplay.Skin.SetTraceColor(traceBody.Value);
+            Services.Gameplay.Skin.SetShadowColor(shadow.Value);
 
             List<Color> highColors = new List<Color>()
             {
@@ -241,8 +242,9 @@ namespace ArcCreate.Compose.Project
                 lowColorStrings.Add(arc.Low.ConvertToHexCode());
             }
 
-            Services.Gameplay.Skin.SetTraceColor(traceBody.Value, shadow.Value);
-            Services.Gameplay.Skin.SetArcColors(highColors, lowColors, shadow.Value);
+            Services.Gameplay.Skin.SetTraceColor(traceBody.Value);
+            Services.Gameplay.Skin.SetArcColors(highColors, lowColors);
+            Services.Gameplay.Skin.SetShadowColor(shadow.Value);
 
             Target.Colors = Target.Colors ?? new ColorSettings();
             Target.Colors.Trace = traceBody.Value.ConvertToHexCode();

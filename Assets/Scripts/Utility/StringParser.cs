@@ -26,7 +26,11 @@
         public float ReadFloat(string ternimator = null)
         {
             int end = ternimator != null ? str.IndexOf(ternimator, pos) : (str.Length - 1);
-            float value = Evaluator.Float(str.Substring(pos, end - pos));
+            if (!Evaluator.TryFloat(str.Substring(pos, end - pos), out float value))
+            {
+                throw new System.ArgumentException(str.Substring(pos, end - pos));
+            }
+
             pos += end - pos + 1;
             return value;
         }
@@ -34,7 +38,11 @@
         public int ReadInt(string ternimator = null)
         {
             int end = ternimator != null ? str.IndexOf(ternimator, pos) : (str.Length - 1);
-            int value = Evaluator.Int(str.Substring(pos, end - pos));
+            if (!Evaluator.TryInt(str.Substring(pos, end - pos), out int value))
+            {
+                throw new System.ArgumentException(str.Substring(pos, end - pos));
+            }
+
             pos += end - pos + 1;
             return value;
         }

@@ -293,8 +293,9 @@ namespace ArcCreate.Remote.Gameplay
                                 finalColorLow[i] = defaultArcLow[i];
                             }
 
-                            gameplay.Skin.SetTraceColor(trace, shadow);
-                            gameplay.Skin.SetArcColors(finalColor, finalColorLow, shadow);
+                            gameplay.Skin.SetTraceColor(trace);
+                            gameplay.Skin.SetArcColors(finalColor, finalColorLow);
+                            gameplay.Skin.SetShadowColor(shadow);
                         }
                     }
 

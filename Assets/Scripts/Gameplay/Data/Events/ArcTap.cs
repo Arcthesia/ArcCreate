@@ -81,8 +81,8 @@ namespace ArcCreate.Gameplay.Data
 
         public void ReloadSkin()
         {
-            (Mesh mesh, Material mat) = Services.Skin.GetArcTapSkin(this);
-            instance.SetSkin(mesh, mat);
+            (Mesh mesh, Material mat, Sprite shadow) = Services.Skin.GetArcTapSkin(this);
+            instance.SetSkin(mesh, mat, shadow);
         }
 
         public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)

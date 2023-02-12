@@ -8,6 +8,7 @@ namespace ArcCreate.Compose.Components
     public class Window : MonoBehaviour
     {
         private RectTransform rect;
+        private RectTransform parent;
 
         [SerializeField] private Button toggleVisibilityButton;
         [SerializeField] private GameObject hideIndicator;
@@ -59,6 +60,7 @@ namespace ArcCreate.Compose.Components
         private void Awake()
         {
             rect = GetComponent<RectTransform>();
+            parent = transform.parent.GetComponent<RectTransform>();
             rect.anchorMin = new Vector2(0.5f, 0.5f);
             rect.anchorMax = new Vector2(0.5f, 0.5f);
             dragHandler.OnBeginDrag += OnBeginDrag;
@@ -99,8 +101,8 @@ namespace ArcCreate.Compose.Components
 
         private void AlignSelfToScreen(Vector2 position)
         {
-            float parentWidth = Screen.width;
-            float parentHeight = Screen.height;
+            float parentWidth = parent.rect.width;
+            float parentHeight = parent.rect.height;
             float rectWidth = rect.rect.width;
             float rectHeight = rect.rect.height;
             Vector2 pivot = rect.pivot;

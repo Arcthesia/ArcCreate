@@ -33,18 +33,29 @@ namespace ArcCreate.Compose.Project
                 return;
             }
 
-            Services.Project.CreateNewProject(new NewProjectInfo()
+            if (Evaluator.TryFloat(baseBPMField.text, out float bpm))
             {
-                ProjectFile = projectFileField.CurrentPath,
-                StartingChartPath = StartingChartFile,
-                BaseBPM = Evaluator.Float(baseBPMField.text),
-                AudioPath = audioFileField.CurrentPath,
-                JacketPath = jacketArtField.CurrentPath,
-                BackgroundPath = backgroundField.CurrentPath,
-            });
+                Services.Project.CreateNewProject(new NewProjectInfo()
+                {
+                    ProjectFile = projectFileField.CurrentPath,
+                    StartingChartPath = StartingChartFile,
+                    BaseBPM = bpm,
+                    AudioPath = audioFileField.CurrentPath,
+                    JacketPath = jacketArtField.CurrentPath,
+                    BackgroundPath = backgroundField.CurrentPath,
+                });
 
-            Close();
-            ClearFields();
+                Close();
+                ClearFields();
+            }
+            else
+            {
+                Services.Popups.Notify(
+                    Popups.Severity.Error,
+                    I18n.S(
+                        "Compose.Exception.InvalidBaseBPM",
+                        baseBPMField.text));
+            }
         }
 
         private void OnProjectFileSelect(FilePath path)

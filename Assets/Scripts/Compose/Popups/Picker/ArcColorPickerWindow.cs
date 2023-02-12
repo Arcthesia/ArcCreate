@@ -2,11 +2,13 @@ using System;
 using ArcCreate.Compose.Components;
 using ArcCreate.Utility.Extension;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Popups
 {
     public class ArcColorPickerWindow : Table<ColorSetting>
     {
+        [SerializeField] private Button closeButton;
         [SerializeField] private GameObject window;
         [SerializeField] private RectTransform canvasRect;
         [SerializeField] private float minDistanceFromBorder;
@@ -82,11 +84,13 @@ namespace ArcCreate.Compose.Popups
             rect = window.GetComponent<RectTransform>();
             rect.anchorMin = new Vector2(0.5f, 0.5f);
             rect.anchorMax = new Vector2(0.5f, 0.5f);
+            closeButton.onClick.AddListener(CloseWindow);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            closeButton.onClick.RemoveListener(CloseWindow);
         }
 
         protected override void UpdateRowHighlight()
@@ -105,23 +109,43 @@ namespace ArcCreate.Compose.Popups
         private void UpdateTable()
         {
             var chart = Services.Project.CurrentChart;
-            int colorCount = chart.Colors.Arc.Count;
-
-            Data.Clear();
-            for (int i = 0; i < colorCount; i++)
+            if (chart.Colors == null)
             {
-                chart.Colors.Arc[Mathf.Clamp(i, 0, chart.Colors.Arc.Count - 1)].ConvertHexToColor(out Color high);
-                chart.Colors.ArcLow[Mathf.Clamp(i, 0, chart.Colors.ArcLow.Count - 1)].ConvertHexToColor(out Color low);
+                int colorCount = Services.Gameplay.Skin.DefaultArcColors.Count;
 
-                Data.Add(new ColorSetting
+                Data.Clear();
+                for (int i = 0; i < colorCount; i++)
                 {
-                    Id = i,
-                    High = high,
-                    Low = low,
-                });
-            }
+                    Data.Add(new ColorSetting
+                    {
+                        Id = i,
+                        High = Services.Gameplay.Skin.DefaultArcColors[i],
+                        Low = Services.Gameplay.Skin.DefaultArcLowColors[i],
+                    });
+                }
 
-            SetData(Data);
+                SetData(Data);
+            }
+            else
+            {
+                int colorCount = Mathf.Min(chart.Colors.Arc.Count, chart.Colors.ArcLow.Count);
+
+                Data.Clear();
+                for (int i = 0; i < colorCount; i++)
+                {
+                    chart.Colors.Arc[Mathf.Clamp(i, 0, chart.Colors.Arc.Count - 1)].ConvertHexToColor(out Color high);
+                    chart.Colors.ArcLow[Mathf.Clamp(i, 0, chart.Colors.ArcLow.Count - 1)].ConvertHexToColor(out Color low);
+
+                    Data.Add(new ColorSetting
+                    {
+                        Id = i,
+                        High = high,
+                        Low = low,
+                    });
+                }
+
+                SetData(Data);
+            }
         }
     }
 }

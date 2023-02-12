@@ -71,12 +71,24 @@ namespace ArcCreate.Compose.Popups
             }
 
             var chart = Services.Project.CurrentChart;
-            chart.Colors.Arc[Mathf.Clamp(color, 0, chart.Colors.Arc.Count - 1)].ConvertHexToColor(out Color high);
-            chart.Colors.ArcLow[Mathf.Clamp(color, 0, chart.Colors.ArcLow.Count - 1)].ConvertHexToColor(out Color low);
-            gradient.m_color1 = high;
-            gradient.m_color2 = low;
-            gradient.enabled = false;
-            gradient.enabled = true;
+            if (chart.Colors == null)
+            {
+                Color high = Services.Gameplay.Skin.DefaultArcColors[Mathf.Clamp(color, 0, 2)];
+                Color low = Services.Gameplay.Skin.DefaultArcLowColors[Mathf.Clamp(color, 0, 2)];
+                gradient.m_color1 = high;
+                gradient.m_color2 = low;
+                gradient.enabled = false;
+                gradient.enabled = true;
+            }
+            else
+            {
+                chart.Colors.Arc[Mathf.Clamp(color, 0, chart.Colors.Arc.Count - 1)].ConvertHexToColor(out Color high);
+                chart.Colors.ArcLow[Mathf.Clamp(color, 0, chart.Colors.ArcLow.Count - 1)].ConvertHexToColor(out Color low);
+                gradient.m_color1 = high;
+                gradient.m_color2 = low;
+                gradient.enabled = false;
+                gradient.enabled = true;
+            }
 
             if (ReferenceEquals(window.Owner, this))
             {

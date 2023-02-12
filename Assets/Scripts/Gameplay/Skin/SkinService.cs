@@ -45,9 +45,15 @@ namespace ArcCreate.Gameplay.Skin
         [SerializeField] private Material baseArcHighlightMaterial;
         [SerializeField] private Material traceMaterial;
         [SerializeField] private Material shadowMaterial;
+        [SerializeField] private Sprite defaultHeightIndicator;
+        [SerializeField] private Sprite defaultArctapShadow;
         private readonly List<Material> arcMaterials = new List<Material>();
         private readonly List<Material> arcHighlightMaterials = new List<Material>();
         private readonly List<Color> arcHeightIndicatorColors = new List<Color>();
+        private ExternalTexture arcTexture;
+        private ExternalTexture arcTextureHighlight;
+        private ExternalSprite arctapShadowSprite;
+        private ExternalSprite heightIndicatorSprite;
 
         private AlignmentOption currentAlignment;
         private NoteSkinOption currentNoteSkin;
@@ -193,24 +199,27 @@ namespace ArcCreate.Gameplay.Skin
         public (Sprite normal, Sprite highlight) GetHoldSkin(Hold note)
             => currentNoteSkin.GetHoldSkin(note);
 
-        public (Mesh mesh, Material material) GetArcTapSkin(ArcTap note)
-            => currentNoteSkin.GetArcTapSkin(note);
+        public (Mesh mesh, Material material, Sprite shadow) GetArcTapSkin(ArcTap note)
+        {
+            (Mesh mesh, Material material) = currentNoteSkin.GetArcTapSkin(note);
+            return (mesh, material, arctapShadowSprite.Value);
+        }
 
-        public (Material normal, Material highlight, Material shadow, Sprite arcCap, Color heightIndicatorColor) GetArcSkin(Arc note)
+        public (Material normal, Material highlight, Material shadow, Sprite arcCap, Sprite heightIndicatorSprite, Color heightIndicatorColor) GetArcSkin(Arc note)
         {
             Sprite arcCap = currentNoteSkin.GetArcCapSprite(note);
 
             if (note.IsTrace)
             {
-                return (traceMaterial, traceMaterial, shadowMaterial, arcCap, Color.white);
+                return (traceMaterial, traceMaterial, shadowMaterial, arcCap, heightIndicatorSprite.Value, Color.white);
             }
 
             if (note.Color < 0 || note.Color >= arcMaterials.Count)
             {
-                return (arcMaterials[0], arcHighlightMaterials[0], shadowMaterial, arcCap, arcHeightIndicatorColors[0]);
+                return (arcMaterials[0], arcHighlightMaterials[0], shadowMaterial, arcCap, heightIndicatorSprite.Value, arcHeightIndicatorColors[0]);
             }
 
-            return (arcMaterials[note.Color], arcHighlightMaterials[note.Color], shadowMaterial, arcCap, arcHeightIndicatorColors[note.Color]);
+            return (arcMaterials[note.Color], arcHighlightMaterials[note.Color], shadowMaterial, arcCap, heightIndicatorSprite.Value, arcHeightIndicatorColors[note.Color]);
         }
 
         public (Sprite lane, Sprite extraLane) GetTrackSprite(string name)
@@ -291,6 +300,11 @@ namespace ArcCreate.Gameplay.Skin
             redValueShaderId = Shader.PropertyToID("_RedValue");
             Settings.InputMode.OnValueChanged.AddListener(ReloadNoteSkin);
 
+            baseArcMaterial = Instantiate(baseArcMaterial);
+            baseArcHighlightMaterial = Instantiate(baseArcHighlightMaterial);
+            traceMaterial = Instantiate(traceMaterial);
+            shadowMaterial = Instantiate(shadowMaterial);
+
             currentAlignment = alignmentOptions[0];
             currentNoteSkin = currentAlignment.DefaultNoteOption;
             currentComboColor = currentAlignment.DefaultAccentOption.ComboColor;
@@ -332,6 +346,11 @@ namespace ArcCreate.Gameplay.Skin
             {
                 opt.RegisterExternalSkin();
             }
+
+            arcTexture = new ExternalTexture(baseArcMaterial.mainTexture, "Note");
+            arcTextureHighlight = new ExternalTexture(baseArcHighlightMaterial.mainTexture, "Note");
+            arctapShadowSprite = new ExternalSprite(defaultArctapShadow, "Note");
+            heightIndicatorSprite = new ExternalSprite(defaultHeightIndicator, "Note");
         }
 
         private async UniTask LoadExternalSkin()
@@ -366,6 +385,25 @@ namespace ArcCreate.Gameplay.Skin
                 await opt.LoadExternalSkin();
             }
 
+            await arcTexture.Load();
+            await arcTextureHighlight.Load();
+            await arctapShadowSprite.Load();
+            await heightIndicatorSprite.Load();
+
+            traceMaterial.mainTexture = arcTexture.Value;
+            baseArcMaterial.mainTexture = arcTexture.Value;
+            baseArcHighlightMaterial.mainTexture = arcTextureHighlight.Value;
+
+            foreach (var mat in arcMaterials)
+            {
+                mat.mainTexture = arcTexture.Value;
+            }
+
+            foreach (var mat in arcHighlightMaterials)
+            {
+                mat.mainTexture = arcTextureHighlight.Value;
+            }
+
             ReapplySkin();
         }
 
@@ -382,6 +420,11 @@ namespace ArcCreate.Gameplay.Skin
         private void OnDestroy()
         {
             Settings.InputMode.OnValueChanged.RemoveListener(ReloadNoteSkin);
+
+            Destroy(baseArcMaterial);
+            Destroy(baseArcHighlightMaterial);
+            Destroy(traceMaterial);
+            Destroy(shadowMaterial);
 
             foreach (var opt in alignmentOptions)
             {
@@ -412,6 +455,11 @@ namespace ArcCreate.Gameplay.Skin
             {
                 opt.UnloadExternalSkin();
             }
+
+            arcTexture.Unload();
+            arcTextureHighlight.Unload();
+            arctapShadowSprite.Unload();
+            heightIndicatorSprite.Unload();
         }
 
         private void ReloadNoteSkin(int inputMode)

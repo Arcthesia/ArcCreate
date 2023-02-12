@@ -8,18 +8,25 @@ namespace ArcCreate.Utility
     {
         public static string OpenFolderDialog(string title = "", string initPath = "")
         {
-            string[] strs = StandaloneFileBrowser.OpenFolderPanel(title, initPath, false);
-            if (strs.Length > 0 && strs[0] != "")
+            try
             {
-                string str = strs[0];
-                if (str.StartsWith("file://"))
+                string[] strs = StandaloneFileBrowser.OpenFolderPanel(title, initPath, false);
+                if (strs.Length > 0 && strs[0] != "")
                 {
-                    str = UnityWebRequest.UnEscapeURL(str.Replace("file://", ""));
-                }
+                    string str = strs[0];
+                    if (str.StartsWith("file://"))
+                    {
+                        str = UnityWebRequest.UnEscapeURL(str.Replace("file://", ""));
+                    }
 
-                return str;
+                    return str;
+                }
+                else
+                {
+                    return null;
+                }
             }
-            else
+            catch
             {
                 return null;
             }
@@ -50,18 +57,25 @@ namespace ArcCreate.Utility
         public static string OpenFileDialog(ExtensionFilter filter, string title = "", string initPath = "")
         {
             ExtensionFilter[] filters = new ExtensionFilter[] { filter };
-            string[] strs = StandaloneFileBrowser.OpenFilePanel(title, initPath, filters, false);
-            if (strs.Length > 0 && strs[0] != "")
+            try
             {
-                string str = strs[0];
-                if (str.StartsWith("file://"))
+                string[] strs = StandaloneFileBrowser.OpenFilePanel(title, initPath, filters, false);
+                if (strs.Length > 0 && strs[0] != "")
                 {
-                    str = UnityWebRequest.UnEscapeURL(str.Replace("file://", ""));
-                }
+                    string str = strs[0];
+                    if (str.StartsWith("file://"))
+                    {
+                        str = UnityWebRequest.UnEscapeURL(str.Replace("file://", ""));
+                    }
 
-                return str;
+                    return str;
+                }
+                else
+                {
+                    return null;
+                }
             }
-            else
+            catch
             {
                 return null;
             }
@@ -88,17 +102,24 @@ namespace ArcCreate.Utility
         public static string SaveFileDialog(ExtensionFilter filter, string title = "", string initPath = "", string defaultName = "")
         {
             ExtensionFilter[] filters = new ExtensionFilter[] { filter };
-            string str = StandaloneFileBrowser.SaveFilePanel(title, initPath, defaultName, filters);
-            if (str != "")
+            try
             {
-                if (str.StartsWith("file://"))
+                string str = StandaloneFileBrowser.SaveFilePanel(title, initPath, defaultName, filters);
+                if (str != "")
                 {
-                    str = UnityWebRequest.UnEscapeURL(str.Replace("file://", ""));
-                }
+                    if (str.StartsWith("file://"))
+                    {
+                        str = UnityWebRequest.UnEscapeURL(str.Replace("file://", ""));
+                    }
 
-                return str;
+                    return str;
+                }
+                else
+                {
+                    return null;
+                }
             }
-            else
+            catch
             {
                 return null;
             }

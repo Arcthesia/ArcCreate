@@ -65,6 +65,8 @@ Compose:
       Invalid timing group properties. {Message}
     InstructionLimit: |-
       Lua script execution has been aborted: The instruction count limit of {0} was reached.
+    InvalidBaseBPM: |-
+      Invalid base bpm value: {0}
     Navigation:
       ParseKeybind: |-
         An exception occured while parsing the keybind: "{0}".

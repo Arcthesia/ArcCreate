@@ -38,6 +38,7 @@ namespace ArcCreate.Compose.Components
                 height / Screen.height);
 
             Services.Gameplay.SetCameraViewportRect(normalized);
+            Services.Gameplay.Camera.GameplayCamera.enabled = gameObject.activeInHierarchy;
         }
 
         private void OnEnable()

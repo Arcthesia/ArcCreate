@@ -294,6 +294,7 @@ namespace ArcCreate.Compose.Project
         {
             chart.Title = Values.DefaultTitle;
             chart.Composer = Values.DefaultComposer;
+            chart.SyncBaseBpm = true;
 
             switch (chart.ChartPath.Split('.')[0])
             {

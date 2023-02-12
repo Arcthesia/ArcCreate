@@ -70,7 +70,7 @@ namespace ArcCreate.Compose.Components
             {
                 fullPath = fullOriginal;
                 shortenedPath = fullOriginal.Substring(fullDirectory.Length);
-                shortenedPath = shortenedPath.TrimStart('/');
+                shortenedPath = shortenedPath.TrimStart('/', '\\');
                 shouldCopy = false;
             }
             else

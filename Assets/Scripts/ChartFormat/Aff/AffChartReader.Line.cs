@@ -292,7 +292,12 @@ namespace ArcCreate.ChartFormat
 
                         if (currentString.Length == 0)
                         {
-                            parameters.Add((object)Evaluator.Float(rawparam));
+                            if (!Evaluator.TryFloat(rawparam, out float val))
+                            {
+                                throw new ArgumentException(rawparam);
+                            }
+
+                            parameters.Add(val);
                         }
                         else if (isEnd)
                         {

@@ -29,8 +29,7 @@ namespace ArcCreate.Utility.Parser
             }
             catch
             {
-                value = 0;
-                return false;
+                return float.TryParse(str, out value);
             }
         }
 
@@ -43,8 +42,7 @@ namespace ArcCreate.Utility.Parser
             }
             catch
             {
-                value = 0;
-                return false;
+                return int.TryParse(str, out value);
             }
         }
     }
