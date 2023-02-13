@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ArcCreate.Gameplay;
 using ArcCreate.Gameplay.Chart;
@@ -105,6 +106,7 @@ namespace ArcCreate.Compose.Grid
             Values.EditingTimingGroup.OnValueChange += OnEditingTimingGroupChanged;
             Values.BeatlineDensity.OnValueChange += OnBeatlineDensityChanged;
             gameplayData.OnChartFileLoad += OnChartChange;
+            gameplayData.AudioClip.OnValueChange += OnAudioChange;
             gameplayData.OnChartTimingEdit += OnChartChange;
             gameplayData.OnGameplayUpdate += UpdateBeatlines;
 
@@ -116,7 +118,9 @@ namespace ArcCreate.Compose.Grid
             Pools.Destroy<BeatlineBehaviour>(Values.BeatlinePoolName);
             Values.EditingTimingGroup.OnValueChange -= OnEditingTimingGroupChanged;
             gameplayData.OnChartFileLoad -= OnChartChange;
+            gameplayData.AudioClip.OnValueChange += OnAudioChange;
             gameplayData.OnChartTimingEdit -= OnChartChange;
+            gameplayData.OnGameplayUpdate -= UpdateBeatlines;
         }
 
         private void UpdateBeatlines(int currentTiming)
@@ -128,9 +132,14 @@ namespace ArcCreate.Compose.Grid
             }
         }
 
+        private void OnAudioChange(AudioClip obj)
+        {
+            OnChartChange();
+        }
+
         private void OnChartChange()
         {
-            LoadBeatline(Values.EditingTimingGroup.Value);
+            LoadBeatline(Values.EditingTimingGroup.Value, gameplayData.AudioClip.Value);
             tg = Services.Gameplay.Chart.GetTimingGroup(Values.EditingTimingGroup.Value);
         }
 
@@ -138,7 +147,7 @@ namespace ArcCreate.Compose.Grid
         {
             if (Services.Gameplay?.IsLoaded ?? false)
             {
-                LoadBeatline(tgNum);
+                LoadBeatline(tgNum, gameplayData.AudioClip.Value);
                 tg = Services.Gameplay.Chart.GetTimingGroup(tgNum);
             }
         }
@@ -147,14 +156,20 @@ namespace ArcCreate.Compose.Grid
         {
             if (Services.Gameplay?.IsLoaded ?? false)
             {
-                LoadBeatline(Values.EditingTimingGroup.Value);
+                LoadBeatline(Values.EditingTimingGroup.Value, gameplayData.AudioClip.Value);
                 tg = Services.Gameplay.Chart.GetTimingGroup(Values.EditingTimingGroup.Value);
             }
         }
 
-        private void LoadBeatline(int tg)
+        private void LoadBeatline(int tg, AudioClip clip)
         {
-            var beatlines = beatlineDisplay.LoadFromTimingGroup(tg);
+            int length = 0;
+            if (clip != null)
+            {
+                length = Mathf.RoundToInt(clip.length * 1000);
+            }
+
+            var beatlines = beatlineDisplay.LoadFromTimingGroup(tg, length);
 
             timingList.Clear();
             foreach (var beatline in beatlines)

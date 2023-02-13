@@ -128,6 +128,7 @@ namespace ArcCreate.Gameplay
             {
                 Background.Value = Services.Skin.DefaultBackground;
                 isUsingDefaultBackground = true;
+                return;
             }
 
             if (Background.Value != null && !isUsingDefaultBackground)
@@ -153,6 +154,7 @@ namespace ArcCreate.Gameplay
             {
                 Jacket.Value = defaultJacket;
                 isUsingDefaultJacket = true;
+                return;
             }
 
             if (Jacket.Value != null && !isUsingDefaultJacket)

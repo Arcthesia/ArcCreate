@@ -110,5 +110,30 @@ namespace ArcCreate.Compose.Components
             };
             return filePath;
         }
+
+        public void RenameUntilNoOverwrite()
+        {
+            if (!File.Exists(FullPath))
+            {
+                return;
+            }
+
+            int i = 1;
+            while (File.Exists(AddNumberIdentifierToPath(FullPath, i)))
+            {
+                UnityEngine.Debug.Log(FullPath);
+                i += 1;
+            }
+
+            FullPath = AddNumberIdentifierToPath(FullPath, i);
+            ShortenedPath = AddNumberIdentifierToPath(ShortenedPath, i);
+        }
+
+        private string AddNumberIdentifierToPath(string path, int num)
+        {
+            return Path.Combine(
+                Path.GetDirectoryName(path),
+                $"{Path.GetFileNameWithoutExtension(path)} ({num}){Path.GetExtension(path)}");
+        }
     }
 }

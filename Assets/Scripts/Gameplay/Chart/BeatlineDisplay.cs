@@ -16,11 +16,11 @@ namespace ArcCreate.Gameplay.Chart
             this.beatlinePool = beatlinePool;
         }
 
-        public List<Beatline> LoadFromTimingGroup(int tgNum)
+        public List<Beatline> LoadFromTimingGroup(int tgNum, int audioLength)
         {
             beatlinePool?.ReturnAll();
             TimingGroup tg = Services.Chart.GetTimingGroup(tgNum);
-            List<Beatline> beatlines = new List<Beatline>(generator.Generate(tg));
+            List<Beatline> beatlines = new List<Beatline>(generator.Generate(tg, audioLength));
             floorPositionSearch = new CachedBisect<Beatline, double>(beatlines, x => x.FloorPosition);
 
             return beatlines;
@@ -28,6 +28,11 @@ namespace ArcCreate.Gameplay.Chart
 
         public void UpdateBeatlines(double floorPosition)
         {
+            if (floorPositionSearch.List.Count == 0)
+            {
+                return;
+            }
+
             double fpDistForward = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLengthForward));
             double fpDistBackward = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLengthBackward));
             double renderFrom = floorPosition - fpDistBackward;

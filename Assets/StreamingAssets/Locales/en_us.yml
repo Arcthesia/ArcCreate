@@ -108,9 +108,10 @@ Compose:
       AddCamera: Add camera event
       EditCamera: Edit camera event
       RemoveCamera: Remove camera event
-      AddGroup: Added timing group {Number}
-      EditGroup: Edited timing group {Number}
-      RemoveGroup: Removed timing group {Number}
+      AddGroup: Add timing group {Number}
+      EditGroup: Edit timing group {Number}
+      RemoveGroup: Remove timing group {Number}
+      EditValue: Edit selected notes' value
     Project:
       NewProject: |-
         Created new project
@@ -124,6 +125,8 @@ Compose:
       OpenChart: Opened chart file {Path}
       CreateChart: Created chart file {Path}
       RemoveChart: Removed chart file {Path} from project
+    Inspector:
+      InvalidParamameter: Invalid parameter
   Dialog:
     RemoveGroup:
       Title: Remove timing group
@@ -351,7 +354,7 @@ Compose:
         Tap: Tap
         Hold: Hold
         Arctap: Sky
-        Easing: EMasing
+        Easing: Easing
       Macros: Macros
     Inspector:
       Name: Inspector
@@ -363,6 +366,9 @@ Compose:
       EndPos: To
       Sfx: Sfx
       Group: Group
+      Mixed: Mixed
+      Arc: Arc
+      Trace: Trace
       Actions:
         SelectArc: Select parent arc
         SelectArctap: Select sky notes

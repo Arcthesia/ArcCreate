@@ -1,4 +1,6 @@
+using System.Threading;
 using ArcCreate.Utility.Parser;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -17,6 +19,8 @@ namespace ArcCreate.Compose.Components
         [SerializeField] private Button increaseButton;
         [SerializeField] private Button decreaseButton;
         [SerializeField] private float increment;
+        [SerializeField] private int debounceMs = 1000;
+        private CancellationTokenSource cts = new CancellationTokenSource();
 
         public void OnPointerEnter(PointerEventData eventData)
         {
@@ -37,7 +41,10 @@ namespace ArcCreate.Compose.Components
                 val += increment;
                 string str = val.ToString();
                 inputField.text = str;
-                inputField.onEndEdit.Invoke(str);
+                cts.Cancel();
+                cts.Dispose();
+                cts = new CancellationTokenSource();
+                StartNotifying(cts.Token, str).Forget();
             }
         }
 
@@ -48,6 +55,18 @@ namespace ArcCreate.Compose.Components
                 val -= increment;
                 string str = val.ToString();
                 inputField.text = str;
+                cts.Cancel();
+                cts.Dispose();
+                cts = new CancellationTokenSource();
+                StartNotifying(cts.Token, str).Forget();
+            }
+        }
+
+        private async UniTask StartNotifying(CancellationToken ct, string str)
+        {
+            bool isCancelled = await UniTask.Delay(debounceMs, cancellationToken: ct).SuppressCancellationThrow();
+            if (!isCancelled)
+            {
                 inputField.onEndEdit.Invoke(str);
             }
         }

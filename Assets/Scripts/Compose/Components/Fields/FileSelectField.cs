@@ -101,6 +101,7 @@ namespace ArcCreate.Compose.Components
                     FilePath newFilePath = FilePath.Local(CurrentProjectFolder, path);
                     if (newFilePath.ShouldCopy)
                     {
+                        newFilePath.RenameUntilNoOverwrite();
                         File.Copy(path, newFilePath.FullPath, true);
                     }
 
@@ -182,6 +183,7 @@ namespace ArcCreate.Compose.Components
                 CurrentPath = FilePath.Local(CurrentProjectFolder, path);
                 if (CurrentPath.ShouldCopy)
                 {
+                    CurrentPath.RenameUntilNoOverwrite();
                     File.Copy(path, CurrentPath.FullPath, true);
                 }
             }

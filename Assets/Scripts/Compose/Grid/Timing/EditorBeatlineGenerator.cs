@@ -17,7 +17,7 @@ namespace ArcCreate.Compose.Grid
             this.defaultColor = defaultColor;
         }
 
-        public IEnumerable<Beatline> Generate(TimingGroup tg)
+        public IEnumerable<Beatline> Generate(TimingGroup tg, int audioLength)
         {
             List<TimingEvent> timings = tg.Timings;
             for (int i = 0; i < timings.Count - 1; i++)
@@ -56,7 +56,7 @@ namespace ArcCreate.Compose.Grid
             // Last timing event extend until end of audio
             {
                 TimingEvent lastTiming = timings[timings.Count - 1];
-                int limit = Services.Gameplay.Audio.AudioLength;
+                int limit = audioLength;
 
                 if (lastTiming.Bpm > Settings.GridBpmLimit.Value)
                 {
@@ -66,12 +66,12 @@ namespace ArcCreate.Compose.Grid
                 float distanceBetweenTwoLine =
                     lastTiming.Bpm == 0 ?
                     float.MaxValue :
-                    60000f / Mathf.Abs(lastTiming.Bpm) * lastTiming.Divisor;
+                    60000f / Mathf.Abs(lastTiming.Bpm) / Values.BeatlineDensity.Value;
 
                 if (distanceBetweenTwoLine > 0)
                 {
                     int count = 0;
-                    for (float timing = lastTiming.Timing; timing < limit; timing += distanceBetweenTwoLine)
+                    for (float timing = lastTiming.Timing; timing <= limit; timing += distanceBetweenTwoLine)
                     {
                         Color beatlineColor = ResolveColor(count, Values.BeatlineDensity.Value);
                         yield return new Beatline(

@@ -289,7 +289,9 @@ namespace ArcCreate.Gameplay.Skin
             }
 
             Material mat = arcMaterials[color];
+            Material highMat = arcHighlightMaterials[color];
             mat.SetFloat(redValueShaderId, value);
+            highMat.SetFloat(redValueShaderId, value);
         }
 
         private void Awake()

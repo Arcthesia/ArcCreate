@@ -19,9 +19,9 @@ namespace ArcCreate.Compose.Project
             background.SetPathWithoutNotify(chart.BackgroundPath);
             video.SetPathWithoutNotify(chart.VideoPath);
 
-            GameplayData.LoadAudio(audioFile.CurrentPath.FullPath);
-            GameplayData.LoadJacket(jacket.CurrentPath.FullPath);
-            GameplayData.LoadBackground(background.CurrentPath.FullPath);
+            GameplayData.LoadAudio(audioFile.CurrentPath?.FullPath);
+            GameplayData.LoadJacket(jacket.CurrentPath?.FullPath);
+            GameplayData.LoadBackground(background.CurrentPath?.FullPath);
 
             if (video.CurrentPath != null)
             {

@@ -166,30 +166,24 @@ namespace ArcCreate.Gameplay.Chart
         {
             taps.Notes.ForEach(n =>
             {
-                n.FloorPosition = GetFloorPosition(n.Timing);
                 n.Rebuild();
             });
             taps.RebuildList();
 
             arcTaps.Notes.ForEach(n =>
             {
-                n.FloorPosition = GetFloorPosition(n.Timing);
                 n.Rebuild();
             });
             arcTaps.RebuildList();
 
             holds.Notes.ForEach(n =>
             {
-                n.FloorPosition = GetFloorPosition(n.Timing);
-                n.EndFloorPosition = GetFloorPosition(n.EndTiming);
                 n.Rebuild();
             });
             holds.RebuildList();
 
             arcs.Notes.ForEach(n =>
             {
-                n.FloorPosition = GetFloorPosition(n.Timing);
-                n.EndFloorPosition = GetFloorPosition(n.EndTiming);
                 n.Rebuild();
             });
             arcs.RebuildList();

@@ -57,11 +57,11 @@ TagManager:
   - name: Arc
     uniqueID: 1730389971
     locked: 0
-  - name: Effect
-    uniqueID: 2946787923
-    locked: 0
   - name: UI
     uniqueID: 242594563
+    locked: 0
+  - name: Effect
+    uniqueID: 2946787923
     locked: 0
   - name: EditorUI
     uniqueID: 53882665

@@ -2,6 +2,7 @@ using System;
 using ArcCreate.Compose.Components;
 using ArcCreate.Gameplay.Data;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Popups
@@ -35,6 +36,7 @@ namespace ArcCreate.Compose.Popups
         {
             window.SetActive(true);
             Owner = caller;
+            EventSystem.current.SetSelectedGameObject(gameObject);
 
             if (setType != null)
             {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.ChartFormat;
@@ -238,13 +239,23 @@ namespace ArcCreate.Gameplay.Chart
             gameplayData.AudioOffset.Value = chart.AudioOffset;
             gameplayData.TimingPointDensityFactor.Value = chart.TimingPointDensity;
 
-            ReloadBeatline();
             ResetJudge();
+        }
+
+        public void ReloadBeatline(int audioLength)
+        {
+            beatlineDisplay.LoadFromTimingGroup(0, audioLength);
         }
 
         public void ReloadBeatline()
         {
-            beatlineDisplay.LoadFromTimingGroup(0);
+            int length = 0;
+            if (gameplayData.AudioClip.Value != null)
+            {
+                length = Mathf.RoundToInt(gameplayData.AudioClip.Value.length * 1000);
+            }
+
+            ReloadBeatline(length);
         }
 
         public void AddEvents(IEnumerable<ArcEvent> e)
@@ -437,6 +448,7 @@ namespace ArcCreate.Gameplay.Chart
             gameplayData.BaseBpm.OnValueChange += OnBaseBpm;
             gameplayData.TimingPointDensityFactor.OnValueChange += OnTimingPointDensityFactor;
             gameplayData.AudioOffset.OnValueChange += OnChartAudioOffset;
+            gameplayData.AudioClip.OnValueChange += OnAudioClipChange;
             beatlineDisplay = new BeatlineDisplay(new GameplayBeatlineGenerator(beatlineColor), beatlinePool);
         }
 
@@ -454,6 +466,12 @@ namespace ArcCreate.Gameplay.Chart
             gameplayData.BaseBpm.OnValueChange -= OnBaseBpm;
             gameplayData.TimingPointDensityFactor.OnValueChange -= OnTimingPointDensityFactor;
             gameplayData.AudioOffset.OnValueChange -= OnChartAudioOffset;
+            gameplayData.AudioClip.OnValueChange -= OnAudioClipChange;
+        }
+
+        private void OnAudioClipChange(AudioClip obj)
+        {
+            ReloadBeatline(Mathf.RoundToInt(obj.length * 1000));
         }
 
         private void OnTimingPointDensityFactor(float value)

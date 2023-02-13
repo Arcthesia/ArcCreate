@@ -77,6 +77,7 @@ namespace ArcCreate.Gameplay.Data
 
         public void Rebuild()
         {
+            RecalculateFloorPosition();
         }
 
         public void ReloadSkin()

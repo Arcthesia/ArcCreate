@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using ArcCreate.Compose.Navigation;
 using ArcCreate.Gameplay.Data;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace ArcCreate.Compose.Selection
@@ -17,24 +18,34 @@ namespace ArcCreate.Compose.Selection
     public class SelectionService : MonoBehaviour, ISelectionService
     {
         [SerializeField] private LayerMask gameplayLayer;
+        [SerializeField] private GameObject inspectorWindow;
+        [SerializeField] private InspectorMenu inspectorMenu;
+
         private readonly HashSet<Note> selectedNotes = new HashSet<Note>();
         private float latestSelectedDistance = 0;
 
         private readonly RaycastHit[] hitResults = new RaycastHit[32];
 
-        [EditorAction("Single", false, "<mouse1>")]
+        [EditorAction("Single", false, "<u-mouse1>")]
         [RequireGameplayLoaded]
         public void SelectSingle()
         {
-            if (TryGetNoteUnderCursor(out Note note, SelectionMode.Deselected))
+            if (TryGetNoteUnderCursor(out Note note, SelectionMode.Any))
             {
                 ClearSelection();
                 AddNoteToSelection(note);
             }
             else
             {
+                if (EventSystem.current.currentSelectedGameObject != null)
+                {
+                    return;
+                }
+
                 ClearSelection();
             }
+
+            UpdateInspector();
         }
 
         [EditorAction("Add", false, "<s-h-mouse2>")]
@@ -45,6 +56,8 @@ namespace ArcCreate.Compose.Selection
             {
                 AddNoteToSelection(note);
             }
+
+            UpdateInspector();
         }
 
         [EditorAction("Remove", false, "<a-h-mouse2>")]
@@ -55,6 +68,8 @@ namespace ArcCreate.Compose.Selection
             {
                 RemoveNoteFromSelection(note);
             }
+
+            UpdateInspector();
         }
 
         [EditorAction("Toggle", false, "<c-mouse1>")]
@@ -72,6 +87,8 @@ namespace ArcCreate.Compose.Selection
                     AddNoteToSelection(note);
                 }
             }
+
+            UpdateInspector();
         }
 
         [EditorAction("Clear", true)]
@@ -85,6 +102,7 @@ namespace ArcCreate.Compose.Selection
             }
 
             selectedNotes.Clear();
+            UpdateInspector();
         }
 
         public void AddNoteToSelection(Note note)
@@ -115,8 +133,26 @@ namespace ArcCreate.Compose.Selection
             }
         }
 
+        public void SetSelection(IEnumerable<Note> notes)
+        {
+            foreach (var note in selectedNotes)
+            {
+                note.IsSelected = false;
+            }
+
+            selectedNotes.Clear();
+            AddNotesToSelection(notes);
+            UpdateInspector();
+        }
+
         private bool TryGetNoteUnderCursor(out Note note, SelectionMode selectionMode)
         {
+            if (EventSystem.current.currentSelectedGameObject != null)
+            {
+                note = null;
+                return false;
+            }
+
             Camera gameplayCamera = Services.Gameplay.Camera.GameplayCamera;
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             Ray ray = gameplayCamera.ScreenPointToRay(mousePosition);
@@ -174,6 +210,12 @@ namespace ArcCreate.Compose.Selection
 
             note = null;
             return false;
+        }
+
+        private void UpdateInspector()
+        {
+            inspectorWindow.SetActive(selectedNotes.Count > 0);
+            inspectorMenu.ApplySelection(selectedNotes);
         }
 
         private void Awake()

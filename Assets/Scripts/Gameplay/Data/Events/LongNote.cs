@@ -37,5 +37,11 @@ namespace ArcCreate.Gameplay.Data
 
         protected float EndZPos(double floorPosition)
             => ArcFormula.FloorPositionToZ(EndFloorPosition - floorPosition);
+
+        protected override void RecalculateFloorPosition()
+        {
+            base.RecalculateFloorPosition();
+            EndFloorPosition = TimingGroupInstance.GetFloorPosition(EndTiming);
+        }
     }
 }

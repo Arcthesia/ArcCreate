@@ -1,10 +1,11 @@
 using System;
+using ArcCreate.Compose.Popups;
 using ArcCreate.Utility.Extension;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace ArcCreate.Compose.Popups
+namespace ArcCreate.Compose.Components
 {
     public class ArcColorSelector : MonoBehaviour, IPointerDownHandler
     {
@@ -17,6 +18,10 @@ namespace ArcCreate.Compose.Popups
         public event Action<int> OnColorChanged;
 
         public int Value => value;
+
+        public Color PreviewColor { get; private set; }
+
+        public Color PreviewColorLow { get; private set; }
 
         /// <summary>
         /// Set the value without invoking <see cref="OnValueChange"/> event.
@@ -56,6 +61,9 @@ namespace ArcCreate.Compose.Popups
         {
             switch (color)
             {
+                case int.MinValue:
+                    text.text = I18n.S("Compose.UI.Inspector.Mixed");
+                    break;
                 case 0:
                     text.text = I18n.S("Compose.UI.Project.Label.Blue");
                     break;
@@ -70,6 +78,8 @@ namespace ArcCreate.Compose.Popups
                     break;
             }
 
+            gradient.gameObject.SetActive(color != int.MinValue);
+
             var chart = Services.Project.CurrentChart;
             if (chart.Colors == null)
             {
@@ -79,6 +89,9 @@ namespace ArcCreate.Compose.Popups
                 gradient.m_color2 = low;
                 gradient.enabled = false;
                 gradient.enabled = true;
+
+                PreviewColor = high;
+                PreviewColorLow = low;
             }
             else
             {
@@ -88,9 +101,12 @@ namespace ArcCreate.Compose.Popups
                 gradient.m_color2 = low;
                 gradient.enabled = false;
                 gradient.enabled = true;
+
+                PreviewColor = high;
+                PreviewColorLow = low;
             }
 
-            if (ReferenceEquals(window.Owner, this))
+            if (window != null && ReferenceEquals(window.Owner, this))
             {
                 window.SetColorWithoutNotify(color);
             }

@@ -2,6 +2,7 @@ using System;
 using ArcCreate.Compose.Components;
 using ArcCreate.Utility.Extension;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Popups
@@ -44,6 +45,7 @@ namespace ArcCreate.Compose.Popups
         {
             window.SetActive(true);
             Owner = caller;
+            EventSystem.current.SetSelectedGameObject(gameObject);
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPosition, null, out Vector2 position);
 

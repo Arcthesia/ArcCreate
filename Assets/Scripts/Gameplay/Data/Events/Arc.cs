@@ -144,10 +144,11 @@ namespace ArcCreate.Gameplay.Data
             this.instance = instance;
             instance.SetData(this);
             instance.SetCollider(colliderMesh);
-            instance.SetSelected(isSelected);
 
             ReloadSkin();
             RebuildSegments();
+
+            instance.SetSelected(isSelected);
         }
 
         public ArcBehaviour RevokeInstance()
@@ -165,12 +166,12 @@ namespace ArcCreate.Gameplay.Data
         public void ResetJudgeTo(int timing)
         {
             RecalculateJudgeTimings();
-            Highlight = false;
+            Highlight = Highlight && timing >= Timing && timing <= EndTiming;
             longParticleUntil = int.MinValue;
             numJudgementRequestsSent = ComboAt(timing);
             highlightRequestSent = false;
             arcGroupAlpha = 1;
-            hasBeenHitOnce = false;
+            hasBeenHitOnce = hasBeenHitOnce && timing >= Timing && timing <= EndTiming;
         }
 
         public void Rebuild()
@@ -180,9 +181,14 @@ namespace ArcCreate.Gameplay.Data
                 SetBranchFirst(this);
             }
 
+            RecalculateFloorPosition();
             RecalculateJudgeTimings();
-            RebuildSegments();
             RebuildCollider();
+
+            if (instance != null)
+            {
+                AssignInstance(instance);
+            }
         }
 
         public override void RecalculateJudgeTimings()

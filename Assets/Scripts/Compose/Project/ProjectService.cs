@@ -49,26 +49,39 @@ namespace ArcCreate.Compose.Project
                 Directory.CreateDirectory(dir);
             }
 
-            if (!File.Exists(info.AudioPath.FullPath))
-            {
-                throw new ComposeException(I18n.S("Compose.Exception.FileDoesNotExist", new Dictionary<string, object>
-                {
-                    { "Path", info.AudioPath.FullPath },
-                }));
-            }
-
             if (info.AudioPath.ShouldCopy)
             {
+                if (!File.Exists(info.AudioPath.OriginalPath))
+                {
+                    throw new ComposeException(I18n.S("Compose.Exception.FileDoesNotExist", new Dictionary<string, object>
+                    {
+                        { "Path", info.AudioPath.OriginalPath },
+                    }));
+                }
+
+                info.AudioPath.RenameUntilNoOverwrite();
                 File.Copy(info.AudioPath.OriginalPath, info.AudioPath.FullPath);
+            }
+            else
+            {
+                if (!File.Exists(info.AudioPath.FullPath))
+                {
+                    throw new ComposeException(I18n.S("Compose.Exception.FileDoesNotExist", new Dictionary<string, object>
+                    {
+                        { "Path", info.AudioPath.FullPath },
+                    }));
+                }
             }
 
             if (info.BackgroundPath?.ShouldCopy ?? false)
             {
+                info.BackgroundPath.RenameUntilNoOverwrite();
                 File.Copy(info.BackgroundPath.OriginalPath, info.BackgroundPath.FullPath);
             }
 
             if (info.JacketPath?.ShouldCopy ?? false)
             {
+                info.BackgroundPath.RenameUntilNoOverwrite();
                 File.Copy(info.JacketPath.OriginalPath, info.JacketPath.FullPath);
             }
 
@@ -356,6 +369,7 @@ namespace ArcCreate.Compose.Project
             reader.Parse();
             gameplayData.LoadChart(reader);
             OnChartLoad?.Invoke(chart);
+            Values.ProjectModified = false;
 
             Debug.Log(
                 I18n.S("Compose.Notify.Project.OpenChart", new Dictionary<string, object>()

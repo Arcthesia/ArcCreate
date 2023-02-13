@@ -57,9 +57,20 @@ namespace ArcCreate.Compose.Components
 
         private void SetPreview(ArcLineType type)
         {
-            text.text = type.ToString();
-            image.sprite = sprites[(int)type];
-            if (ReferenceEquals(window.Owner, this))
+            if (type == ArcLineType.Unknown)
+            {
+                image.sprite = null;
+                image.gameObject.SetActive(false);
+                text.text = I18n.S("Compose.UI.Inspector.Mixed");
+            }
+            else
+            {
+                image.sprite = sprites[(int)type];
+                image.gameObject.SetActive(true);
+                text.text = type.ToString();
+            }
+
+            if (window != null && ReferenceEquals(window.Owner, this))
             {
                 window.SetTypeWithoutNotify(type);
             }

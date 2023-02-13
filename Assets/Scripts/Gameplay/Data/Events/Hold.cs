@@ -122,6 +122,7 @@ namespace ArcCreate.Gameplay.Data
 
         public void Rebuild()
         {
+            RecalculateFloorPosition();
             RecalculateJudgeTimings();
         }
 

@@ -81,6 +81,8 @@ namespace ArcCreate.Gameplay.Data
                     ConnectedArcTaps,
                     new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0));
             }
+
+            RecalculateFloorPosition();
         }
 
         public void ReloadSkin()

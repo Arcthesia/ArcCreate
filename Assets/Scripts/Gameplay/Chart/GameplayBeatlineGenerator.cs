@@ -13,7 +13,7 @@ namespace ArcCreate.Gameplay.Chart
             this.beatlineColor = beatlineColor;
         }
 
-        public IEnumerable<Beatline> Generate(TimingGroup tg)
+        public IEnumerable<Beatline> Generate(TimingGroup tg, int audioLength)
         {
             List<TimingEvent> timings = tg.Timings;
 
@@ -69,7 +69,7 @@ namespace ArcCreate.Gameplay.Chart
             // Last timing event extend until end of audio
             {
                 TimingEvent lastTiming = timings[timings.Count - 1];
-                int limit = Services.Audio.AudioLength;
+                int limit = audioLength;
 
                 float distanceBetweenTwoLine =
                     lastTiming.Bpm == 0 ?
@@ -78,7 +78,7 @@ namespace ArcCreate.Gameplay.Chart
 
                 if (distanceBetweenTwoLine > 0)
                 {
-                    for (float timing = lastTiming.Timing; timing < limit; timing += distanceBetweenTwoLine)
+                    for (float timing = lastTiming.Timing; timing <= limit; timing += distanceBetweenTwoLine)
                     {
                         yield return new Beatline(
                             Mathf.RoundToInt(timing),

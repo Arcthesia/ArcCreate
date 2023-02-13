@@ -35,14 +35,15 @@ namespace ArcCreate.Compose.Project
 
             if (Evaluator.TryFloat(baseBPMField.text, out float bpm))
             {
+                string dir = Path.GetDirectoryName(projectFileField.CurrentPath.FullPath);
                 Services.Project.CreateNewProject(new NewProjectInfo()
                 {
                     ProjectFile = projectFileField.CurrentPath,
                     StartingChartPath = StartingChartFile,
                     BaseBPM = bpm,
-                    AudioPath = audioFileField.CurrentPath,
-                    JacketPath = jacketArtField.CurrentPath,
-                    BackgroundPath = backgroundField.CurrentPath,
+                    AudioPath = FilePath.Local(dir, audioFileField.CurrentPath.FullPath),
+                    JacketPath = jacketArtField.CurrentPath != null ? FilePath.Local(dir, jacketArtField.CurrentPath.FullPath) : null,
+                    BackgroundPath = backgroundField.CurrentPath != null ? FilePath.Local(dir, backgroundField.CurrentPath.FullPath) : null,
                 });
 
                 Close();
