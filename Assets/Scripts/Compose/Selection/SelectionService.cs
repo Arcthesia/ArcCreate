@@ -26,6 +26,8 @@ namespace ArcCreate.Compose.Selection
 
         private readonly RaycastHit[] hitResults = new RaycastHit[32];
 
+        public HashSet<Note> SelectedNotes => selectedNotes;
+
         [EditorAction("Single", false, "<u-mouse1>")]
         [RequireGameplayLoaded]
         public void SelectSingle()

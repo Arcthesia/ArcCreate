@@ -127,6 +127,11 @@ Compose:
       RemoveChart: Removed chart file {Path} from project
     Inspector:
       InvalidParamameter: Invalid parameter
+    Measurer:
+      CopyTiming: Copied cursor timing
+      CopyPosition: Copied arc's position
+      CopyX: Copied arc's x coordinate
+      CopyY: Copied arc's y coordinate
   Dialog:
     RemoveGroup:
       Title: Remove timing group
@@ -165,6 +170,10 @@ Compose:
       Selection:
         Name: Selection
         Clear: Clear selection
+      Measure:
+        Name: Measure
+        Start:
+          Name: Open measurer
   Grid:
     DefaultScript: |-
       -- This is a lua script

@@ -395,6 +395,28 @@ namespace ArcCreate.Gameplay.Data
             return ArcFormula.ArcYToWorld(ArcFormula.Y(YStart, YEnd, p, LineType));
         }
 
+        public float ArcXAt(int timing)
+        {
+            if (EndTiming == Timing)
+            {
+                return XStart;
+            }
+
+            float p = Mathf.Clamp((float)(timing - Timing) / (EndTiming - Timing), 0, 1);
+            return ArcFormula.X(XStart, XEnd, p, LineType);
+        }
+
+        public float ArcYAt(int timing)
+        {
+            if (EndTiming == Timing)
+            {
+                return YStart;
+            }
+
+            float p = Mathf.Clamp((float)(timing - Timing) / (EndTiming - Timing), 0, 1);
+            return ArcFormula.Y(YStart, YEnd, p, LineType);
+        }
+
         public void CleanColliderMesh()
         {
             UnityEngine.Object.Destroy(colliderMesh);
