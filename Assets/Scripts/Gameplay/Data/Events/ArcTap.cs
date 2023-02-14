@@ -41,6 +41,7 @@ namespace ArcCreate.Gameplay.Data
             {
                 Timing = Timing,
                 Arc = Arc,
+                TimingGroup = TimingGroup,
             };
         }
 

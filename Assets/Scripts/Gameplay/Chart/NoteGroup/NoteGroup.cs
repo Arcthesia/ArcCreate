@@ -121,6 +121,7 @@ namespace ArcCreate.Gameplay.Chart
             {
                 OnRemove(note);
                 this.notes.Remove(note);
+                RebuildList();
                 if (note.IsAssignedInstance)
                 {
                     Pool.Return(note.RevokeInstance());

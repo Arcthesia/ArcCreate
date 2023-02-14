@@ -36,7 +36,7 @@ namespace ArcCreate.Gameplay.Skin
 
         public override (Mesh mesh, Material material) GetArcTapSkin(ArcTap note)
         {
-            if (note.Sfx != "none")
+            if (note.Sfx != "none" && !string.IsNullOrEmpty(note.Sfx))
             {
                 return (ArcTapSfxMesh, ArcTapSfxSkin);
             }
@@ -46,7 +46,7 @@ namespace ArcCreate.Gameplay.Skin
                 return (ArcTapMesh, ArcTapSkinMiddle);
             }
 
-            if (ArcFormula.WorldXToArc(note.WorldX) > 0f)
+            if (note.WorldX > 0f)
             {
                 return (ArcTapMesh, ArcTapSkinLeft);
             }

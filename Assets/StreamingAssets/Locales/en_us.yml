@@ -67,6 +67,8 @@ Compose:
       Lua script execution has been aborted: The instruction count limit of {0} was reached.
     InvalidBaseBPM: |-
       Invalid base bpm value: {0}
+    CreateSkyNoteNoValidArc: |-
+      Can not create sky note here. Sky notes must be placed on traces.
     Navigation:
       ParseKeybind: |-
         An exception occured while parsing the keybind: "{0}".
@@ -113,6 +115,12 @@ Compose:
       RemoveGroup: Remove timing group {Number}
       EditValue: Edit selected note's value
       EditArc: Edit arc's values
+      CreateNote:
+        Tap: Create tap note
+        Hold: Create hold note
+        Arc: Create arc note
+        ArcTap: Create sky note
+        Trace: Create trace note
     Project:
       NewProject: |-
         Created new project

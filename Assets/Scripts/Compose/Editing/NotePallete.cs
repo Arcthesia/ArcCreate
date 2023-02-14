@@ -14,6 +14,7 @@ namespace ArcCreate.Compose.Editing
     [EditorScope("NotePallete")]
     public class NotePallete : MonoBehaviour
     {
+        [SerializeField] private NoteCreation noteCreation;
         [SerializeField] private Button tapButton;
         [SerializeField] private Button holdButton;
         [SerializeField] private Button arcButton;
@@ -33,7 +34,7 @@ namespace ArcCreate.Compose.Editing
 
         [EditorAction("Arc", false, "a")]
         [RequireGameplayLoaded]
-        [SubAction("Confirm", false, "<u-a>")]
+        [SubAction("ConfirmColor", false, "<u-a>")]
         [SubAction("Blue", false, "1")]
         [SubAction("Red", false, "2")]
         [SubAction("Green", false, "3")]
@@ -44,7 +45,7 @@ namespace ArcCreate.Compose.Editing
 
         [EditorAction("ArcAlt", false, "<a-a>")]
         [RequireGameplayLoaded]
-        [SubAction("Confirm", false, "<a-u-a>")]
+        [SubAction("ConfirmColor", false, "<a-u-a>")]
         [SubAction("Blue", false, "`")]
         [SubAction("Red", false, "1")]
         [SubAction("Green", false, "2")]
@@ -58,7 +59,7 @@ namespace ArcCreate.Compose.Editing
             SubAction blue = action.GetSubAction("Blue");
             SubAction red = action.GetSubAction("Red");
             SubAction green = action.GetSubAction("Green");
-            SubAction confirm = action.GetSubAction("Confirm");
+            SubAction confirmColor = action.GetSubAction("ConfirmColor");
 
             if (creatingArc)
             {
@@ -69,7 +70,7 @@ namespace ArcCreate.Compose.Editing
                 Values.CreateNoteMode.Value = CreateNoteMode.Trace;
             }
 
-            while (!confirm.WasExecuted)
+            while (!confirmColor.WasExecuted)
             {
                 if (blue.WasExecuted)
                 {
@@ -339,7 +340,6 @@ namespace ArcCreate.Compose.Editing
             Values.CreateArcColorMode.OnValueChange += UpdateArcColorVisual;
 
             UpdateModePalleteVisual(Values.CreateNoteMode.Value);
-            UpdateArcColorVisual(Values.CreateArcColorMode.Value);
             UpdateArcTypeVisual(Values.CreateArcTypeMode.Value);
         }
 
@@ -364,6 +364,7 @@ namespace ArcCreate.Compose.Editing
             arcButtonHighlight.SetActive(mode == CreateNoteMode.Arc);
             traceButtonHighlight.SetActive(mode == CreateNoteMode.Trace);
             arctapButtonHighlight.SetActive(mode == CreateNoteMode.ArcTap);
+            Services.Cursor.EnableLaneCursor = mode != CreateNoteMode.Idle;
         }
 
         private void UpdateArcTypeVisual(ArcLineType type)

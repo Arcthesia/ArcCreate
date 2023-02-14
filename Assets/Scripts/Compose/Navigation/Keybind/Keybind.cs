@@ -100,7 +100,7 @@ namespace ArcCreate.Compose.Navigation
         {
             if (ReferenceEquals(obj.action, InputActions[index]))
             {
-                if (BlockMouseAndModifier(index))
+                if (BlockUnwantedModifier(index))
                 {
                     return;
                 }
@@ -125,7 +125,7 @@ namespace ArcCreate.Compose.Navigation
         {
             if (index == InputActions.Length - 1)
             {
-                if (BlockMouseAndModifier(index))
+                if (BlockUnwantedModifier(index))
                 {
                     return;
                 }
@@ -148,12 +148,11 @@ namespace ArcCreate.Compose.Navigation
             isFinalKeyHeld = false;
         }
 
-        private bool BlockMouseAndModifier(int index)
+        private bool BlockUnwantedModifier(int index)
         {
             Keyboard keyboard = Keyboard.current;
             Keystroke keystroke = Keystrokes[index];
             return
-                keystroke.IsMouse &&
                 string.IsNullOrEmpty(keystroke.Modifier1) && string.IsNullOrEmpty(keystroke.Modifier2) &&
                 (keyboard.ctrlKey.isPressed || keyboard.shiftKey.isPressed || keyboard.altKey.isPressed);
         }

@@ -18,7 +18,7 @@ namespace ArcCreate.Gameplay
 
         public static float WorldXToArc(float x)
         {
-            return (x - Values.LaneWidth) / -Values.LaneWidth * 2;
+            return (x - Values.LaneWidth) / -Values.LaneWidth / 2;
         }
 
         public static float WorldYToArc(float y)

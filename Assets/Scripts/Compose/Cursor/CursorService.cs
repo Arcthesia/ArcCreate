@@ -31,6 +31,18 @@ namespace ArcCreate.Compose.Cursor
         private Action onTypedValueConfirm;
         private Action<string> onClipboard;
 
+        public bool EnableLaneCursor
+        {
+            get => isLaneCursorEnabled;
+            set => isLaneCursorEnabled = value;
+        }
+
+        public int CursorTiming => selectingTiming;
+
+        public int CursorLane => selectingLane;
+
+        public bool IsHittingLane => isHittingLane;
+
         public async UniTask<(bool wasSuccessful, int timing)> RequestTimingSelection(
             SubAction confirm,
             SubAction cancel,
@@ -276,6 +288,7 @@ namespace ArcCreate.Compose.Cursor
             selectingVerticalPoint = new Vector2(
                 Gameplay.ArcFormula.WorldXToArc(snapped.x),
                 Gameplay.ArcFormula.WorldYToArc(snapped.y));
+            Services.Popups.Notify(Popups.Severity.Info, $"{hit.point};{snapped}");
         }
 
         private void DisableVerticalCursor()

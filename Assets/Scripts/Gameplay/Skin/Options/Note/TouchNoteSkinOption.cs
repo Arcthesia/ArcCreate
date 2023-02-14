@@ -23,7 +23,7 @@ namespace ArcCreate.Gameplay.Skin
         public ExternalTexture ArcTapSkinTexture { get; private set; }
 
         public override (Mesh mesh, Material material) GetArcTapSkin(ArcTap note)
-            => note.Sfx == "none" ? (ArcTapMesh, ArcTapSkin) : (ArcTapSfxMesh, ArcTapSfxSkin);
+            => (note.Sfx == "none" || string.IsNullOrEmpty(note.Sfx)) ? (ArcTapMesh, ArcTapSkin) : (ArcTapSfxMesh, ArcTapSfxSkin);
 
         public override (Sprite normal, Sprite highlight) GetHoldSkin(Hold note)
             => (HoldSkin.Value, HoldHighlightSkin.Value);

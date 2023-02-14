@@ -7,6 +7,14 @@ namespace ArcCreate.Compose.Cursor
 {
     public interface ICursorService
     {
+        bool EnableLaneCursor { get; set; }
+
+        bool IsHittingLane { get; }
+
+        int CursorTiming { get; }
+
+        int CursorLane { get; }
+
         /// <summary>
         /// Request for a selection of a timing value.
         /// </summary>
