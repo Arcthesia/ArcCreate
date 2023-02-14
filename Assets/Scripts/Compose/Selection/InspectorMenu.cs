@@ -144,7 +144,7 @@ namespace ArcCreate.Compose.Selection
             }
 
             LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
-            rect.sizeDelta = new Vector2(rect.sizeDelta.x + 1, rect.sizeDelta.y + 1);
+            rect.sizeDelta = new Vector2(rect.sizeDelta.x, rect.sizeDelta.y + 1);
         }
 
         private bool ExtractCommonProperty<NoteType, T>(Func<NoteType, T> extractor, out T commonValue)

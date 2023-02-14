@@ -111,7 +111,8 @@ Compose:
       AddGroup: Add timing group {Number}
       EditGroup: Edit timing group {Number}
       RemoveGroup: Remove timing group {Number}
-      EditValue: Edit selected notes' value
+      EditValue: Edit selected note's value
+      EditArc: Edit arc's values
     Project:
       NewProject: |-
         Created new project

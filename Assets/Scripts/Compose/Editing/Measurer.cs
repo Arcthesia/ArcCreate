@@ -33,6 +33,7 @@ namespace ArcCreate.Compose.Editing
         private float currentY;
 
         [EditorAction("Start", true, "e")]
+        [RequireGameplayLoaded]
         [SubAction("CopyTiming", false, "t")]
         [SubAction("CopyPosition", false, "c")]
         [SubAction("CopyX", false, "x")]
@@ -40,7 +41,7 @@ namespace ArcCreate.Compose.Editing
         [SubAction("Confirm", false, "<mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
         [SubAction("Restart", false, "e")]
-        [SubAction("Close", false, "<u-mouse1>", "<esc>")]
+        [SubAction("Close", false, "<mouse1>", "<esc>")]
         [WhitelistScopes(typeof(CursorService), typeof(GridService), typeof(TimelineService))]
         public async UniTask OpenMeasurer(EditorAction editorAction)
         {

@@ -1,3 +1,5 @@
+using ArcCreate.Gameplay.Data;
+
 namespace ArcCreate.Compose
 {
     public static class Values
@@ -30,11 +32,18 @@ namespace ArcCreate.Compose
         public const string TickPoolName = "TickPool";
         public const string BeatlinePoolName = "EditorBeatlinePool";
 
+        // States
         public static State<int> EditingTimingGroup { get; } = new State<int>();
 
         public static State<float> BeatlineDensity { get; } = new State<float>(4);
 
         public static State<bool> FullScreen { get; } = new State<bool>();
+
+        public static State<CreateNoteMode> CreateNoteMode { get; } = new State<CreateNoteMode>(Compose.CreateNoteMode.Idle);
+
+        public static State<ArcLineType> CreateArcTypeMode { get; } = new State<ArcLineType>(ArcLineType.S);
+
+        public static State<int> CreateArcColorMode { get; } = new State<int>(0);
 
         public static float LaneFromX { get; set; } = -8.5f;
 
