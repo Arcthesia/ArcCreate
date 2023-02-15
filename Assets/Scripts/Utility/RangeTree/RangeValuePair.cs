@@ -8,17 +8,16 @@ namespace ArcCreate.Utility.RangeTree
     /// Represents a range of values.
     /// Both values must be of the same type and comparable.
     /// </summary>
-    /// <typeparam name="TKey">Type of the range.</typeparam>
-    /// <typeparam name="TValue">Type of the value.</typeparam>
-    public readonly struct RangeValuePair<TKey, TValue> : IEquatable<RangeValuePair<TKey, TValue>>
+    /// <typeparam name="T">Type of the value.</typeparam>
+    public readonly struct RangeValuePair<T> : IEquatable<RangeValuePair<T>>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="RangeValuePair{TKey, TValue}"/> struct.
+        /// Initializes a new instance of the <see cref="RangeValuePair{T}"/> struct.
         /// </summary>
         /// <param name="from">Lower end of the node's range.</param>
         /// <param name="to">Upper end of the node's range.</param>
         /// <param name="value">Value of the node.</param>
-        public RangeValuePair(TKey from, TKey to, TValue value)
+        public RangeValuePair(double from, double to, T value)
             : this()
         {
             From = from;
@@ -26,18 +25,18 @@ namespace ArcCreate.Utility.RangeTree
             Value = value;
         }
 
-        public TKey From { get; }
+        public double From { get; }
 
-        public TKey To { get; }
+        public double To { get; }
 
-        public TValue Value { get; }
+        public T Value { get; }
 
-        public static bool operator ==(RangeValuePair<TKey, TValue> left, RangeValuePair<TKey, TValue> right)
+        public static bool operator ==(RangeValuePair<T> left, RangeValuePair<T> right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(RangeValuePair<TKey, TValue> left, RangeValuePair<TKey, TValue> right)
+        public static bool operator !=(RangeValuePair<T> left, RangeValuePair<T> right)
         {
             return !(left == right);
         }
@@ -56,15 +55,8 @@ namespace ArcCreate.Utility.RangeTree
         public override int GetHashCode()
         {
             var hash = 23;
-            if (From != null)
-            {
-                hash = (hash * 37) + From.GetHashCode();
-            }
-
-            if (To != null)
-            {
-                hash = (hash * 37) + To.GetHashCode();
-            }
+            hash = (hash * 37) + From.GetHashCode();
+            hash = (hash * 37) + To.GetHashCode();
 
             if (Value != null)
             {
@@ -74,21 +66,21 @@ namespace ArcCreate.Utility.RangeTree
             return hash;
         }
 
-        public bool Equals(RangeValuePair<TKey, TValue> other)
+        public bool Equals(RangeValuePair<T> other)
         {
-            return EqualityComparer<TKey>.Default.Equals(From, other.From)
-                && EqualityComparer<TKey>.Default.Equals(To, other.To)
-                && EqualityComparer<TValue>.Default.Equals(Value, other.Value);
+            return EqualityComparer<double>.Default.Equals(From, other.From)
+                && EqualityComparer<double>.Default.Equals(To, other.To)
+                && EqualityComparer<T>.Default.Equals(Value, other.Value);
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is RangeValuePair<TKey, TValue>))
+            if (!(obj is RangeValuePair<T>))
             {
                 return false;
             }
 
-            return Equals((RangeValuePair<TKey, TValue>)obj);
+            return Equals((RangeValuePair<T>)obj);
         }
     }
 }

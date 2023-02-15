@@ -80,7 +80,7 @@ namespace ArcCreate.Gameplay.Chart
                 if ((curr.FloorPosition <= fp && next.FloorPosition > fp)
                  || (curr.FloorPosition >= fp && next.FloorPosition < fp))
                 {
-                    int val = (int)((Math.Round(fp - curr.FloorPosition) / curr.Bpm) + curr.Timing);
+                    int val = (int)(Math.Round((fp - curr.FloorPosition) / curr.Bpm) + curr.Timing);
                     int diff = Mathf.Abs(val - timing);
                     if (diff < closestDiff)
                     {
@@ -92,12 +92,16 @@ namespace ArcCreate.Gameplay.Chart
 
             TimingEvent last = timings[length - 1];
             {
-                int val = (int)Math.Round(((fp - last.FloorPosition) / last.Bpm) + last.Timing);
-                int diff = Mathf.Abs(val - timing);
-                if (diff < closestDiff)
+                if ((last.FloorPosition <= fp && last.Bpm > 0)
+                 || (last.FloorPosition >= fp && last.Bpm < 0))
                 {
-                    closestDiff = diff;
-                    closestMatch = val;
+                    int val = (int)Math.Round(((fp - last.FloorPosition) / last.Bpm) + last.Timing);
+                    int diff = Mathf.Abs(val - timing);
+                    if (diff < closestDiff)
+                    {
+                        closestDiff = diff;
+                        closestMatch = val;
+                    }
                 }
             }
 
@@ -111,7 +115,9 @@ namespace ArcCreate.Gameplay.Chart
         /// <returns>The floor position.</returns>
         public double GetFloorPositionFromCurrent(int timing)
         {
-            return GetFloorPosition(timing) - GetFloorPosition(Services.Audio.ChartTiming);
+            double fp = GetFloorPosition(timing);
+            double curfp = GetFloorPosition(Services.Audio.ChartTiming);
+            return fp - curfp;
         }
 
         private void AddTimings(IEnumerable<TimingEvent> timings)

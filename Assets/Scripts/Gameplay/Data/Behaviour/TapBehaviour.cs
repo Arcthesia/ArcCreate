@@ -15,7 +15,6 @@ namespace ArcCreate.Gameplay.Data
 
         private SpriteRenderer spriteRenderer;
         private readonly List<LineRenderer> connectionLines = new List<LineRenderer>(2);
-        private bool isSelected;
 
         public Tap Tap { get; private set; }
 

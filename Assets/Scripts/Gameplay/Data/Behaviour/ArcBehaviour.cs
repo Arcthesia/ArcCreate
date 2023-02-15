@@ -58,49 +58,53 @@ namespace ArcCreate.Gameplay.Data
 
         public void RebuildSegments()
         {
-            for (int i = 0; i < segments.Count; i++)
-            {
-                ArcSegment segment = segments[i];
-                segmentPool.Return(segment);
-            }
-
-            segments.Clear();
-
             int lastEndTiming = Arc.Timing;
             double lastEndFloorPosition = Arc.TimingGroupInstance.GetFloorPosition(Arc.Timing);
             Vector2 basePosition = new Vector2(ArcFormula.ArcXToWorld(Arc.XStart), ArcFormula.ArcYToWorld(Arc.YStart));
             Vector2 lastPosition = basePosition;
 
+            int i = 0;
             while (true)
             {
                 int timing = lastEndTiming;
                 int endTiming = timing + Mathf.RoundToInt(Arc.SegmentLength);
                 int cappedEndTiming = Mathf.Min(endTiming, Arc.EndTiming);
 
-                ArcSegment newSegment = segmentPool.Get(transform);
+                ArcSegment segment = i < segments.Count ? segments[i] : segmentPool.Get(transform);
+                if (i >= segments.Count)
+                {
+                    segments.Add(segment);
+                }
 
-                newSegment.Timing = timing;
-                newSegment.EndTiming = cappedEndTiming;
-                newSegment.FloorPosition = lastEndFloorPosition;
-                newSegment.StartPosition = lastPosition - basePosition;
+                i += 1;
+
+                segment.Timing = timing;
+                segment.EndTiming = cappedEndTiming;
+                segment.FloorPosition = lastEndFloorPosition;
+                segment.StartPosition = lastPosition - basePosition;
 
                 lastEndFloorPosition = Arc.TimingGroupInstance.GetFloorPosition(cappedEndTiming);
-                newSegment.EndFloorPosition = lastEndFloorPosition;
+                segment.EndFloorPosition = lastEndFloorPosition;
                 lastPosition = cappedEndTiming == Arc.EndTiming ?
                     new Vector2(ArcFormula.ArcXToWorld(Arc.XEnd), ArcFormula.ArcYToWorld(Arc.YEnd)) :
                     new Vector2(Arc.WorldXAt(cappedEndTiming), Arc.WorldYAt(cappedEndTiming));
-                newSegment.EndPosition = lastPosition - basePosition;
+                segment.EndPosition = lastPosition - basePosition;
 
-                newSegment.SetMaterial(Material, shadowMaterial);
-                newSegment.SetFrom(0);
-                newSegment.SetMesh(ArcMeshGenerator.GetSegmentMesh(Arc), ArcMeshGenerator.GetShadowMesh(Arc));
-                segments.Add(newSegment);
+                segment.SetMaterial(Material, shadowMaterial);
+                segment.SetFrom(0);
+                segment.SetMesh(ArcMeshGenerator.GetSegmentMesh(Arc), ArcMeshGenerator.GetShadowMesh(Arc));
 
                 lastEndTiming = endTiming;
                 if (endTiming >= Arc.EndTiming)
                 {
                     break;
                 }
+            }
+
+            for (int j = segments.Count - 1; j >= i; j--)
+            {
+                segmentPool.Return(segments[j]);
+                segments.RemoveAt(j);
             }
         }
 

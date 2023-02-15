@@ -10,6 +10,8 @@ namespace ArcCreate.Compose.History
 
         void AddCommand(ICommand command);
 
+        void AddCommandWithoutExecuting(ICommand command);
+
         void Undo();
 
         void Redo();

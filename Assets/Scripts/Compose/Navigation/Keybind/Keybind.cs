@@ -152,9 +152,23 @@ namespace ArcCreate.Compose.Navigation
         {
             Keyboard keyboard = Keyboard.current;
             Keystroke keystroke = Keystrokes[index];
-            return
-                string.IsNullOrEmpty(keystroke.Modifier1) && string.IsNullOrEmpty(keystroke.Modifier2) &&
-                (keyboard.ctrlKey.isPressed || keyboard.shiftKey.isPressed || keyboard.altKey.isPressed);
+
+            if (keyboard.ctrlKey.isPressed && keystroke.Modifier1 != "Ctrl" && keystroke.Modifier2 != "Ctrl")
+            {
+                return true;
+            }
+
+            if (keyboard.shiftKey.isPressed && keystroke.Modifier1 != "Shift" && keystroke.Modifier2 != "Shift")
+            {
+                return true;
+            }
+
+            if (keyboard.altKey.isPressed && keystroke.Modifier1 != "Alt" && keystroke.Modifier2 != "Alt")
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private async UniTask StartRepeatedExecution()

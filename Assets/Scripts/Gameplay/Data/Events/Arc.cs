@@ -188,6 +188,15 @@ namespace ArcCreate.Gameplay.Data
             if (instance != null)
             {
                 AssignInstance(instance);
+                instance.SetData(this);
+                instance.SetCollider(colliderMesh);
+                instance.SetSelected(isSelected);
+                ReloadSkin();
+
+                if (Values.EnableArcRebuildSegment)
+                {
+                    instance.RebuildSegments();
+                }
             }
         }
 

@@ -32,6 +32,15 @@ namespace ArcCreate.Compose.History
             Notify("Compose.Notify.History.Execute", command);
         }
 
+        public void AddCommandWithoutExecuting(ICommand command)
+        {
+            undoStack.Push(command);
+            redoStack.Clear();
+
+            OnCommand();
+            Notify("Compose.Notify.History.Execute", command);
+        }
+
         [EditorAction(null, false, "<c-y>", "<c-Z>")]
         [RequireRedoStack]
         public void Redo()

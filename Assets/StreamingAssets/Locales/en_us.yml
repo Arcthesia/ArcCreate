@@ -121,6 +121,14 @@ Compose:
         Arc: Create arc note
         ArcTap: Create sky note
         Trace: Create trace note
+      DeleteNotes: Delete notes
+      Cut: Cut notes
+      Paste: Paste notes
+    Clipboard:
+      Copy: Copied {0} notes
+      Cut: Cut {0} notes
+      NamedCopy: Copied {0} notes to named clipboard "{1}"
+      NamedCut: Cut {0} notes to named clipboard "{1}"
     Project:
       NewProject: |-
         Created new project

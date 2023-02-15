@@ -10,6 +10,8 @@ namespace ArcCreate.Gameplay
 
         bool EnableColliderGeneration { get; set; }
 
+        bool EnableArcRebuildSegment { get; set; }
+
         /// <summary>
         /// Add events to the currently playing chart.
         /// </summary>

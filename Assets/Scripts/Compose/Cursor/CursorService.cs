@@ -245,7 +245,8 @@ namespace ArcCreate.Compose.Cursor
             cursorLaneX.gameObject.SetActive(true);
 
             var tg = Services.Gameplay.Chart.GetTimingGroup(Values.EditingTimingGroup.Value);
-            selectingTiming = Services.Grid.SnapTimingToGridIfGridIsEnabled(tg.GetTimingFromZPosition(hit.point.z));
+            int timing = tg.GetTimingFromZPosition(hit.point.z);
+            selectingTiming = Services.Grid.SnapTimingToGridIfGridIsEnabled(timing);
             double fp = tg.GetFloorPositionFromCurrent(selectingTiming);
             float z = Gameplay.ArcFormula.FloorPositionToZ(fp);
 

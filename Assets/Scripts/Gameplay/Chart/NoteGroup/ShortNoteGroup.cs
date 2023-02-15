@@ -40,6 +40,12 @@ namespace ArcCreate.Gameplay.Chart
             floorPositionSearch = new CachedBisect<Note, double>(Notes, note => note.FloorPosition);
         }
 
+        public override void UpdateList()
+        {
+            timingSearch.Sort();
+            floorPositionSearch.Sort();
+        }
+
         public override IEnumerable<Note> FindByTiming(int timing)
         {
             // Avoid modifying the cache of search tree.

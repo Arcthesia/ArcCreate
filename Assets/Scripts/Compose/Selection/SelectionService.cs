@@ -39,7 +39,8 @@ namespace ArcCreate.Compose.Selection
             }
             else
             {
-                if (EventSystem.current.currentSelectedGameObject != null)
+                if (EventSystem.current.currentSelectedGameObject != null
+                 || (Values.CreateNoteMode.Value != CreateNoteMode.Idle && Services.Cursor.IsHittingLane))
                 {
                     return;
                 }
@@ -225,7 +226,7 @@ namespace ArcCreate.Compose.Selection
             RequireSelectionAttribute.Selection = selectedNotes;
         }
 
-        private class RequireSelectionAttribute : ContextRequirementAttribute
+        public class RequireSelectionAttribute : ContextRequirementAttribute
         {
             public static HashSet<Note> Selection { get; set; }
 

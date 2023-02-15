@@ -116,5 +116,7 @@ namespace ArcCreate.Gameplay
         public static float LaneScreenHitbox { get; set; } = 1;
 
         public static bool EnableColliderGeneration { get; set; } = false;
+
+        public static bool EnableArcRebuildSegment { get; set; } = false;
     }
 }

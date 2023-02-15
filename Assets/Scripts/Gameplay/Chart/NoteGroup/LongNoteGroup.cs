@@ -14,11 +14,11 @@ namespace ArcCreate.Gameplay.Chart
         where Note : ILongNote<Behaviour>
         where Behaviour : MonoBehaviour
     {
-        private readonly RangeTree<int, Note> timingTree = new RangeTree<int, Note>();
-        private readonly RangeTree<double, Note> floorPositionTree = new RangeTree<double, Note>();
+        private readonly RangeTree<Note> timingTree = new RangeTree<Note>();
+        private readonly RangeTree<Note> floorPositionTree = new RangeTree<Note>();
         private readonly List<Note> previousNotesInRange = new List<Note>();
 
-        protected RangeTree<int, Note> TimingTree => timingTree;
+        protected RangeTree<Note> TimingTree => timingTree;
 
         public override void Update(int timing, double floorPosition, GroupProperties groupProperties)
         {
@@ -53,11 +53,41 @@ namespace ArcCreate.Gameplay.Chart
             for (int i = 0; i < Notes.Count; i++)
             {
                 Note note = Notes[i];
-                timingTree.Add(note.Timing, note.EndTiming, note);
+                timingTree.AddSilent(note.Timing, note.EndTiming, note);
 
                 double fpStart = System.Math.Min(note.FloorPosition, note.EndFloorPosition);
                 double fpEnd = System.Math.Max(note.FloorPosition, note.EndFloorPosition);
-                floorPositionTree.Add(fpStart, fpEnd, note);
+                floorPositionTree.AddSilent(fpStart, fpEnd, note);
+            }
+
+            timingTree.Rebuild();
+            floorPositionTree.Rebuild();
+        }
+
+        public override void UpdateList()
+        {
+            for (int i = timingTree.Items.Count - 1; i >= 0; i--)
+            {
+                RangeValuePair<Note> pair = timingTree.Items[i];
+                Note note = pair.Value;
+                if (pair.From != note.Timing || pair.To != note.EndTiming)
+                {
+                    timingTree.RemoveAt(i);
+                    timingTree.Add(note.Timing, note.EndTiming, note);
+                }
+            }
+
+            for (int i = floorPositionTree.Items.Count - 1; i >= 0; i--)
+            {
+                RangeValuePair<Note> pair = floorPositionTree.Items[i];
+                Note note = pair.Value;
+                double fpStart = System.Math.Min(note.FloorPosition, note.EndFloorPosition);
+                double fpEnd = System.Math.Max(note.FloorPosition, note.EndFloorPosition);
+                if (pair.From != fpStart || pair.To != fpEnd)
+                {
+                    floorPositionTree.RemoveAt(i);
+                    floorPositionTree.Add(fpStart, fpEnd, note);
+                }
             }
         }
 

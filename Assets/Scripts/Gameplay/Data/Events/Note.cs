@@ -10,12 +10,12 @@ namespace ArcCreate.Gameplay.Data
 
         public virtual int ComboAt(int timing) => (timing >= Timing) ? 1 : 0;
 
-        protected float ZPos(double floorPosition)
-            => ArcFormula.FloorPositionToZ(FloorPosition - floorPosition);
-
-        protected virtual void RecalculateFloorPosition()
+        public virtual void RecalculateFloorPosition()
         {
             FloorPosition = TimingGroupInstance.GetFloorPosition(Timing);
         }
+
+        protected float ZPos(double floorPosition)
+            => ArcFormula.FloorPositionToZ(FloorPosition - floorPosition);
     }
 }

@@ -39,26 +39,13 @@ namespace ArcCreate.Gameplay.Chart
         public bool EnableColliderGeneration
         {
             get => Values.EnableColliderGeneration;
-            set
-            {
-                Values.EnableColliderGeneration = value;
-                if (value)
-                {
-                    for (int i = 0; i < timingGroups.Count; i++)
-                    {
-                        TimingGroup tg = timingGroups[i];
-                        tg.BuildArcColliders();
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < timingGroups.Count; i++)
-                    {
-                        TimingGroup tg = timingGroups[i];
-                        tg.CleanArcColliders();
-                    }
-                }
-            }
+            set => Values.EnableColliderGeneration = value;
+        }
+
+        public bool EnableArcRebuildSegment
+        {
+            get => Values.EnableArcRebuildSegment;
+            set => Values.EnableArcRebuildSegment = value;
         }
 
         public List<TimingGroup> TimingGroups => timingGroups;
@@ -500,7 +487,22 @@ namespace ArcCreate.Gameplay.Chart
 
         private void UpdateArcColliderMesh()
         {
-            EnableColliderGeneration = EnableColliderGeneration;
+            if (EnableColliderGeneration)
+            {
+                for (int i = 0; i < timingGroups.Count; i++)
+                {
+                    TimingGroup tg = timingGroups[i];
+                    tg.BuildArcColliders();
+                }
+            }
+            else
+            {
+                for (int i = 0; i < timingGroups.Count; i++)
+                {
+                    TimingGroup tg = timingGroups[i];
+                    tg.CleanArcColliders();
+                }
+            }
         }
     }
 }

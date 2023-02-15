@@ -3,32 +3,30 @@ using System.Collections.Generic;
 namespace ArcCreate.Utility.RangeTree
 {
     // Modified for zero allocation
-    public struct RangeTreeEnumerator<TKey, TValue>
+    public struct RangeTreeEnumerator<T>
     {
-        private static readonly Stack<RangeTreeNode<TKey, TValue>> Stack = new Stack<RangeTreeNode<TKey, TValue>>(32);
-        private readonly RangeTreeNode<TKey, TValue> root;
-        private readonly TKey from;
-        private readonly TKey to;
-        private readonly IComparer<TKey> comparer;
+        private static readonly Stack<RangeTreeNode<T>> Stack = new Stack<RangeTreeNode<T>>(32);
+        private readonly RangeTreeNode<T> root;
+        private readonly double from;
+        private readonly double to;
         private int index;
 
-        public RangeTreeEnumerator(RangeTreeNode<TKey, TValue> root, TKey from, TKey to, IComparer<TKey> comparer)
+        public RangeTreeEnumerator(RangeTreeNode<T> root, double from, double to)
         {
             Stack.Clear();
             Stack.Push(root);
             this.root = root;
             this.from = from;
             this.to = to;
-            this.comparer = comparer;
             index = -1;
         }
 
-        public TValue Current
+        public T Current
         {
             get
             {
-                RangeTreeNode<TKey, TValue> currentNode = Stack.Peek();
-                if (currentNode == null || currentNode.Items == null || index < 0 || index >= currentNode.Items.Length)
+                RangeTreeNode<T> currentNode = Stack.Peek();
+                if (currentNode == null || currentNode.Items == null || index < 0 || index >= currentNode.Items.Count)
                 {
                     throw new System.InvalidOperationException();
                 }
@@ -45,18 +43,18 @@ namespace ArcCreate.Utility.RangeTree
             }
 
             index++;
-            RangeTreeNode<TKey, TValue> node = Stack.Peek();
+            RangeTreeNode<T> node = Stack.Peek();
             while (true)
             {
-                if (node.Items == null || index >= node.Items.Length || comparer.Compare(node.Items[index].From, to) > 0)
+                if (node.Items == null || index >= node.Items.Count || node.Items[index].From > to)
                 {
                     Stack.Pop();
-                    if (node.LeftNode != null && comparer.Compare(from, node.Center) < 0)
+                    if (node.LeftNode != null && from < node.Center)
                     {
                         Stack.Push(node.LeftNode);
                     }
 
-                    if (node.RightNode != null && comparer.Compare(to, node.Center) > 0)
+                    if (node.RightNode != null && to > node.Center)
                     {
                         Stack.Push(node.RightNode);
                     }
@@ -70,7 +68,7 @@ namespace ArcCreate.Utility.RangeTree
                     index = 0;
                     continue;
                 }
-                else if (comparer.Compare(to, node.Items[index].From) >= 0 && comparer.Compare(from, node.Items[index].To) <= 0)
+                else if (to >= node.Items[index].From && from <= node.Items[index].To)
                 {
                     break;
                 }
@@ -78,7 +76,7 @@ namespace ArcCreate.Utility.RangeTree
                 index++;
             }
 
-            return Stack.Count > 0 || index < node.Items.Length;
+            return Stack.Count > 0 || index < node.Items.Count;
         }
 
         public void Reset()

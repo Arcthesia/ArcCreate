@@ -72,7 +72,10 @@ namespace ArcCreate.Compose.Editing
             };
 
             IEnumerable<ArcEvent> events = new ArcEvent[] { hold };
-            Services.Gameplay.Chart.AddEvents(events);
+            var command = new EventCommand(
+                I18n.S("Compose.Notify.History.CreateNote.Hold"),
+                add: events);
+            command.Execute();
 
             var (success, endTiming) = await Services.Cursor.RequestTimingSelection(
                 confirm,
@@ -84,13 +87,14 @@ namespace ArcCreate.Compose.Editing
                 },
                 constraint: t => t > hold.Timing);
 
-            Services.Gameplay.Chart.RemoveEvents(events);
             if (success)
             {
                 hold.EndTiming = endTiming;
-                Services.History.AddCommand(new EventCommand(
-                    I18n.S("Compose.Notify.History.CreateNote.Hold"),
-                    add: events));
+                Services.History.AddCommandWithoutExecuting(command);
+            }
+            else
+            {
+                command.Undo();
             }
         }
 
@@ -108,7 +112,10 @@ namespace ArcCreate.Compose.Editing
             };
 
             IEnumerable<ArcEvent> events = new ArcEvent[] { arc };
-            Services.Gameplay.Chart.AddEvents(events);
+            var command = new EventCommand(
+                I18n.S("Compose.Notify.History.CreateNote.Hold"),
+                add: events);
+            command.Execute();
 
             var (startPosSuccess, startPos) = await Services.Cursor.RequestVerticalSelection(
                 confirm,
@@ -125,7 +132,7 @@ namespace ArcCreate.Compose.Editing
 
             if (!startPosSuccess)
             {
-                Services.Gameplay.Chart.RemoveEvents(events);
+                command.Undo();
                 return;
             }
             else
@@ -146,7 +153,7 @@ namespace ArcCreate.Compose.Editing
 
             if (!endTimingSuccess)
             {
-                Services.Gameplay.Chart.RemoveEvents(events);
+                command.Undo();
                 return;
             }
             else
@@ -165,15 +172,16 @@ namespace ArcCreate.Compose.Editing
                     Services.Gameplay.Chart.UpdateEvents(events);
                 });
 
-            Services.Gameplay.Chart.RemoveEvents(events);
             if (endPosSuccess)
             {
                 arc.XEnd = endPos.x;
                 arc.YEnd = endPos.y;
 
-                Services.History.AddCommand(new EventCommand(
-                    I18n.S(isArc ? "Compose.Notify.History.CreateNote.Arc" : "Compose.Notify.History.CreateNote.Trace"),
-                    add: events));
+                Services.History.AddCommandWithoutExecuting(command);
+            }
+            else
+            {
+                command.Undo();
             }
         }
 
@@ -214,29 +222,33 @@ namespace ArcCreate.Compose.Editing
             };
 
             IEnumerable<ArcEvent> events = new ArcEvent[] { arctap };
+            var command = new EventCommand(
+                I18n.S("Compose.Notify.History.CreateNote.Hold"),
+                add: events);
             if (elligibleArcs.Count > 1)
             {
-                Services.Gameplay.Chart.AddEvents(events);
+                command.Execute();
+
                 var (success, pos) = await Services.Cursor.RequestVerticalSelection(
                     confirm,
                     cancel,
                     showGridAtTiming: timing,
                     update: p => arctap.Arc = GetClosestArc(timing, elligibleArcs, p));
 
-                Services.Gameplay.Chart.RemoveEvents(events);
                 if (success)
                 {
                     arctap.Arc = GetClosestArc(timing, elligibleArcs, pos);
+                    Services.History.AddCommandWithoutExecuting(command);
                 }
                 else
                 {
-                    return;
+                    command.Undo();
                 }
+
+                return;
             }
 
-            Services.History.AddCommand(new EventCommand(
-                I18n.S("Compose.Notify.History.CreateNote.ArcTap"),
-                add: events));
+            Services.History.AddCommand(command);
         }
 
         private Arc GetClosestArc(int timing, List<Arc> arcs, Vector2 arcPos)

@@ -49,15 +49,6 @@ namespace ArcCreate.Compose.Selection
         {
             this.selected = selected;
             Rebuild();
-
-            if (selected.Count > 0)
-            {
-                gameplayData.OnChartEdit += Rebuild;
-            }
-            else
-            {
-                gameplayData.OnChartEdit -= Rebuild;
-            }
         }
 
         private void Rebuild()

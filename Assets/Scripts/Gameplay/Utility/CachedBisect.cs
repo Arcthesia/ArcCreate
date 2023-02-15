@@ -56,6 +56,12 @@ namespace ArcCreate.Gameplay
             Reset();
         }
 
+        public void Sort()
+        {
+            list.Sort((a, b) => property(a).CompareTo(property(b)));
+            Reset();
+        }
+
         /// <summary>
         /// Bisect the list. See <see cref="CollectionExtension.BisectLeft{T, R}(IList{T}, R, Func{T, R})"/>.
         /// </summary>

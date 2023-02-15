@@ -46,6 +46,11 @@ namespace ArcCreate.Gameplay.Data
         void Rebuild();
 
         /// <summary>
+        /// Recalculate the note's floor position values.
+        /// </summary>
+        void RecalculateFloorPosition();
+
+        /// <summary>
         /// Reload the note's skin.
         /// </summary>
         void ReloadSkin();

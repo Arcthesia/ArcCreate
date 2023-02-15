@@ -35,13 +35,13 @@ namespace ArcCreate.Gameplay.Data
             EndTiming = e.EndTiming;
         }
 
-        protected float EndZPos(double floorPosition)
-            => ArcFormula.FloorPositionToZ(EndFloorPosition - floorPosition);
-
-        protected override void RecalculateFloorPosition()
+        public override void RecalculateFloorPosition()
         {
             base.RecalculateFloorPosition();
             EndFloorPosition = TimingGroupInstance.GetFloorPosition(EndTiming);
         }
+
+        protected float EndZPos(double floorPosition)
+            => ArcFormula.FloorPositionToZ(EndFloorPosition - floorPosition);
     }
 }

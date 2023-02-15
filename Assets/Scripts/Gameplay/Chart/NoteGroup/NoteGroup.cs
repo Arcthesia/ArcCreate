@@ -103,7 +103,13 @@ namespace ArcCreate.Gameplay.Chart
         public void Add(IEnumerable<Note> notes)
         {
             this.notes.AddRange(notes);
+            foreach (var note in notes)
+            {
+                note.RecalculateFloorPosition();
+            }
+
             RebuildList();
+
             foreach (var note in notes)
             {
                 OnAdd(note);
@@ -121,12 +127,13 @@ namespace ArcCreate.Gameplay.Chart
             {
                 OnRemove(note);
                 this.notes.Remove(note);
-                RebuildList();
                 if (note.IsAssignedInstance)
                 {
                     Pool.Return(note.RevokeInstance());
                 }
             }
+
+            RebuildList();
         }
 
         /// <summary>
@@ -135,7 +142,13 @@ namespace ArcCreate.Gameplay.Chart
         /// <param name="notes">The note collection.</param>
         public void Update(IEnumerable<Note> notes)
         {
-            RebuildList();
+            foreach (var note in notes)
+            {
+                note.RecalculateFloorPosition();
+            }
+
+            UpdateList();
+
             foreach (var note in notes)
             {
                 OnUpdate(note);
@@ -155,6 +168,11 @@ namespace ArcCreate.Gameplay.Chart
         /// Called every time there's a change to the note list.
         /// </summary>
         public abstract void RebuildList();
+
+        /// <summary>
+        /// Called every time there's a change to note's value but the list's size stays unchanged.
+        /// </summary>
+        public abstract void UpdateList();
 
         /// <summary>
         /// Find all notes of this group that match the queried timing.
