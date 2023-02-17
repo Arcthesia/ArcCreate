@@ -21,6 +21,9 @@ namespace ArcCreate.Compose.Timeline
 
         private Pool<Tick> tickPool;
 
+        /// <summary>
+        /// Update the ticks display. This operation is relatively expensive.
+        /// </summary>
         public void UpdateTicks()
         {
             tickPool.ReturnAll();

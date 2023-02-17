@@ -41,6 +41,8 @@ namespace ArcCreate.Gameplay.Chart
             foreach (Tap tap in connectedTaps)
             {
                 note.ConnectedTaps.Add(tap);
+                tap.ConnectedArcTaps.Add(note);
+                tap.Rebuild();
             }
         }
 

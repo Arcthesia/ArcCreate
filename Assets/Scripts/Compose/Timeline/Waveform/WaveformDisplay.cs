@@ -109,6 +109,10 @@ namespace ArcCreate.Compose.Timeline
             ApplyViewRangeToWaveform();
         }
 
+        /// <summary>
+        /// Centers the waveform display to the provided time.
+        /// </summary>
+        /// <param name="seconds">The time value in seconds.</param>
         public void FocusOnTiming(float seconds)
         {
             float viewDistance = viewToSecond - viewFromSecond;
@@ -120,6 +124,9 @@ namespace ArcCreate.Compose.Timeline
             ApplyViewRangeToWaveform();
         }
 
+        /// <summary>
+        /// Reconstruct the waveform.
+        /// </summary>
         public void GenerateWaveform()
         {
             viewFromSecond = 0;

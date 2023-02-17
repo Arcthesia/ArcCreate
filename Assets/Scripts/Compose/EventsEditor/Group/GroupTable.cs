@@ -55,7 +55,7 @@ namespace ArcCreate.Compose.EventsEditor
             Values.ProjectModified = true;
 
             Debug.Log(I18n.S(
-                "Compose.Notify.History.AddGroup", new Dictionary<string, object>
+                "Compose.Notify.GroupTable.AddGroup", new Dictionary<string, object>
                 {
                     { "Number", newTgNum },
                 }));
@@ -98,7 +98,7 @@ namespace ArcCreate.Compose.EventsEditor
             Values.ProjectModified = true;
 
             Debug.Log(I18n.S(
-                "Compose.Notify.History.RemoveGroup", new Dictionary<string, object>
+                "Compose.Notify.GroupTable.RemoveGroup", new Dictionary<string, object>
                 {
                     { "Number", num },
                 }));

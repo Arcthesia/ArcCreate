@@ -5,9 +5,8 @@ namespace ArcCreate.Compose.Navigation
     public interface INavigationService
     {
         /// <summary>
-        /// Gets the path to the configuration file.
+        /// Gets the path to the configuration file. Does not guarantee that the file exists.
         /// </summary>
-        /// <value>The file path. Does not guarantee that the file exists.</value>
         string ConfigFilePath { get; }
 
         /// <summary>

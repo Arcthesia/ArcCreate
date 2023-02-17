@@ -4,6 +4,9 @@ using ArcCreate.Gameplay.Data;
 
 namespace ArcCreate.Compose.History
 {
+    /// <summary>
+    /// Command for interacting with chart events.
+    /// </summary>
     public class EventCommand : ICommand
     {
         private readonly bool addAvailable;
@@ -13,6 +16,14 @@ namespace ArcCreate.Compose.History
         private readonly List<ArcEvent> remove;
         private readonly List<(ArcEvent instance, ArcEvent oldValue, ArcEvent newValue)> update;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EventCommand"/> class.
+        /// </summary>
+        /// <param name="name">The name of the command which will be displayed in log and notification.</param>
+        /// <param name="add">Notes to add.</param>
+        /// <param name="remove">Notes to remove.</param>
+        /// <param name="update">List of update instructions.</param>
+        /// <returns>A new <see cref="EventCommand"/> instance.</returns>
         public EventCommand(
             string name,
             IEnumerable<ArcEvent> add = null,

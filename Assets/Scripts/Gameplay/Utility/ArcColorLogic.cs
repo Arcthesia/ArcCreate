@@ -42,7 +42,6 @@ namespace ArcCreate.Gameplay
         /// <summary>
         /// Gets the currently assigned finger id to this color.
         /// </summary>
-        /// <value>The finger id.</value>
         public int AssignedFingerId
         {
             get => assignedFingerId;
@@ -56,7 +55,6 @@ namespace ArcCreate.Gameplay
         /// <summary>
         /// Gets the red arc value between 0 and 1.
         /// </summary>
-        /// <value>The red arc value.</value>
         public float RedArcValue => currentRedArcValue;
 
         private bool IsFingerAssigned { get; set; }

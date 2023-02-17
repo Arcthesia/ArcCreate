@@ -7,6 +7,9 @@ using UnityEngine.EventSystems;
 
 namespace ArcCreate.Compose.Components
 {
+    /// <summary>
+    /// Field for handling arc color index input. Summons a <see cref="ArcColorPickerWindow"/> for picking the arc color index.
+    /// </summary>
     public class ArcColorSelector : MonoBehaviour, IPointerDownHandler
     {
         [SerializeField] private UIGradient gradient;
@@ -19,8 +22,14 @@ namespace ArcCreate.Compose.Components
 
         public int Value => value;
 
+        /// <summary>
+        /// Gets the color for arc at y=1 corresponding to the current <see cref="Value"/>.
+        /// </summary>
         public Color PreviewColor { get; private set; }
 
+        /// <summary>
+        /// Gets the color for arc at y=0 corresponding to the current <see cref="Value"/>.
+        /// </summary>
         public Color PreviewColorLow { get; private set; }
 
         /// <summary>

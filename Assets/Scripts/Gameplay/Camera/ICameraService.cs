@@ -12,7 +12,6 @@ namespace ArcCreate.Gameplay.GameplayCamera
         /// <summary>
         /// Gets the list of all camera events.
         /// </summary>
-        /// <value>The list of camera events.</value>
         List<CameraEvent> Events { get; }
 
         /// <summary>

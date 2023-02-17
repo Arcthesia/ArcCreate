@@ -23,7 +23,6 @@ public static class I18n
     /// <summary>
     /// Gets the currently active locale.
     /// </summary>
-    /// <value>The currently active locale.</value>
     public static string CurrentLocale { get; private set; } = DefaultLocale;
 
     private static string LocaleDirectory => Path.Combine(Application.streamingAssetsPath, "Locales");

@@ -12,7 +12,6 @@ namespace ArcCreate.Gameplay.Data
         /// <summary>
         /// Gets or sets the note's timing.
         /// </summary>
-        /// <value>The note's timing.</value>
         public int Timing { get; set; }
 
         /// <summary>
@@ -20,7 +19,6 @@ namespace ArcCreate.Gameplay.Data
         /// Upon notifying manager classes of these changes with <see cref="IChartControl.UpdateEvents(System.Collections.Generic.IEnumerable{ArcEvent})"/>,
         /// the note will be moved to the correct timing group.
         /// </summary>
-        /// <value>The note's timing group.</value>
         public int TimingGroup
         {
             get => timingGroup;

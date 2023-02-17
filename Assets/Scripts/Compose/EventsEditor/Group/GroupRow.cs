@@ -13,6 +13,7 @@ namespace ArcCreate.Compose.EventsEditor
     public class GroupRow : Row<TimingGroup>, IPointerClickHandler
     {
         [SerializeField] private GameObject highlight;
+        [SerializeField] private GameObject clickBlocker;
         [SerializeField] private TMP_InputField nameField;
         [SerializeField] private TMP_InputField propertiesField;
         [SerializeField] private Toggle visibilityButton;
@@ -22,7 +23,11 @@ namespace ArcCreate.Compose.EventsEditor
         public override bool Highlighted
         {
             get => highlight.activeSelf;
-            set => highlight.SetActive(value);
+            set
+            {
+                highlight.SetActive(value);
+                clickBlocker.SetActive(!value);
+            }
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -99,7 +104,6 @@ namespace ArcCreate.Compose.EventsEditor
             visibilityButton.onValueChanged.AddListener(OnVisiblity);
 
             nameField.onSelect.AddListener(OnNameSelect);
-            propertiesField.onSelect.AddListener(OnPropertiesSelect);
         }
 
         private void OnDestroy()
@@ -108,21 +112,12 @@ namespace ArcCreate.Compose.EventsEditor
             propertiesField.onEndEdit.RemoveListener(OnProperties);
             visibilityButton.onValueChanged.AddListener(OnVisiblity);
 
-            nameField.onSelect.RemoveListener(OnPropertiesSelect);
-            propertiesField.onSelect.AddListener(OnPropertiesSelect);
+            nameField.onSelect.RemoveListener(OnNameSelect);
         }
 
         private void OnNameSelect(string arg)
         {
-            Table.Selected = Reference;
-            Values.EditingTimingGroup.Value = Reference.GroupNumber;
             nameField.text = Reference.GroupProperties.Name ?? string.Empty;
-        }
-
-        private void OnPropertiesSelect(string arg)
-        {
-            Table.Selected = Reference;
-            Values.EditingTimingGroup.Value = Reference.GroupNumber;
         }
 
         private void OnName(string value)
@@ -165,7 +160,7 @@ namespace ArcCreate.Compose.EventsEditor
                 Values.ProjectModified = true;
 
                 Debug.Log(I18n.S(
-                    "Compose.Notify.History.EditGroup", new Dictionary<string, object>
+                    "Compose.Notify.GroupTable.EditGroup", new Dictionary<string, object>
                     {
                         { "Number", Reference.GroupNumber },
                     }));

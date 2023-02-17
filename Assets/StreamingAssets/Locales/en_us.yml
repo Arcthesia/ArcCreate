@@ -118,9 +118,6 @@ Compose:
       AddCamera: Add camera event
       EditCamera: Edit camera event
       RemoveCamera: Remove camera event
-      AddGroup: Add timing group {Number}
-      EditGroup: Edit timing group {Number}
-      RemoveGroup: Remove timing group {Number}
       EditValue: Edit selected note's value
       EditArc: Edit arc's values
       CreateNote:
@@ -143,6 +140,10 @@ Compose:
       Cut: Cut {0} notes
       NamedCopy: Copied {0} notes to named clipboard "{1}"
       NamedCut: Cut {0} notes to named clipboard "{1}"
+    GroupTable:
+      AddGroup: Added timing group {Number}
+      EditGroup: Edited timing group {Number}
+      RemoveGroup: Removed timing group {Number}
     Project:
       NewProject: |-
         Created new project

@@ -376,11 +376,19 @@ namespace ArcCreate.Compose.Navigation
 
             actionsInProgress.Add(action);
 
-            // This causes boxing but what else can you do
-            object obj = action.Method.Invoke(action.Scope.Instance, action.ParamsToPass);
-            if (obj is UniTask task)
+            // Without try-catch the entire navigation system stops working when any exception is thrown
+            try
             {
-                await task;
+                // This causes boxing but what else can you do
+                object obj = action.Method.Invoke(action.Scope.Instance, action.ParamsToPass);
+                if (obj is UniTask task)
+                {
+                    await task;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
             }
 
             actionsInProgress.Remove(action);

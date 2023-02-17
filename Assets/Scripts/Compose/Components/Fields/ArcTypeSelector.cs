@@ -8,6 +8,9 @@ using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Components
 {
+    /// <summary>
+    /// Field for handling arc easing type input. Summons a <see cref="ArcTypePickerWindow"/> for picking the arc easing type.
+    /// </summary>
     public class ArcTypeSelector : MonoBehaviour, IPointerDownHandler
     {
         [SerializeField] private Image image;

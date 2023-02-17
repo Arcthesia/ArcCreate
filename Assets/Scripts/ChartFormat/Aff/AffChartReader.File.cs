@@ -27,7 +27,7 @@ namespace ArcCreate.ChartFormat
         }
 
         /// <summary>
-        /// Start parsing with the provided <see cref="FullPath"/> and <see cref="Filename"/>.
+        /// Start parsing with the provided <see cref="ChartReader.FullPath"/> and <see cref="ChartReader.Filename"/>.
         /// </summary>
         public override void Parse()
         {

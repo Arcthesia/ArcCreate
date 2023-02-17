@@ -1,10 +1,12 @@
-using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Components
 {
+    /// <summary>
+    /// Component for windows that can be collapsed and dragged around on the screen.
+    /// </summary>
     public class Window : MonoBehaviour
     {
         private RectTransform rect;
@@ -118,9 +120,6 @@ namespace ArcCreate.Compose.Components
                 (parentHeight / 2) - minDistanceFromBorderY - (rectHeight * (1 - pivot.y)));
 
             rect.anchoredPosition = new Vector2(x, y);
-
-            // pivot = 0 => y + rectHeight / 2
-            // pivot = 1 => y - rectHeight / 2
         }
     }
 }

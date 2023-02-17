@@ -12,7 +12,6 @@ namespace ArcCreate.Gameplay.Chart
         /// <summary>
         /// Gets a value indicating whether a chart has been loaded.
         /// </summary>
-        /// <value>The boolean value.</value>
         bool IsLoaded { get; }
 
         /// <summary>

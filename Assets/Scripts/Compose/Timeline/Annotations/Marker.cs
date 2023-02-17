@@ -6,6 +6,9 @@ using UnityEngine.EventSystems;
 
 namespace ArcCreate.Compose.Timeline
 {
+    /// <summary>
+    /// Component for markers displayed on the timeline.
+    /// </summary>
     public class Marker : MonoBehaviour, IDragHandler, IEndDragHandler
     {
         [SerializeField] private TMP_InputField timingField;
@@ -16,12 +19,24 @@ namespace ArcCreate.Compose.Timeline
         private RectTransform parentRectTransform;
         private bool queueTimingEdit = false;
 
+        /// <summary>
+        /// Invoked whenever the timing value of this marker changes.
+        /// </summary>
         public event Action<Marker, int> OnValueChanged;
 
+        /// <summary>
+        /// Invoked after user finishes dragging the marker, or after editing the timing input field.
+        /// </summary>
         public event Action<Marker, int> OnEndEdit;
 
+        /// <summary>
+        /// Gets the current timing value of this marker.
+        /// </summary>
         public int Timing { get; private set; }
 
+        /// <summary>
+        /// Gets a value indicating whether or not this dragger is being dragged.
+        /// </summary>
         public bool IsDragging { get; private set; }
 
         public void OnDrag(PointerEventData eventData)
@@ -39,6 +54,10 @@ namespace ArcCreate.Compose.Timeline
             IsDragging = false;
         }
 
+        /// <summary>
+        /// Set the marker's timing and update its position.
+        /// </summary>
+        /// <param name="timing">The timing value.</param>
         public void SetTiming(int timing)
         {
             Timing = timing;

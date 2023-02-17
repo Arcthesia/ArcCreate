@@ -6,6 +6,11 @@ namespace ArcCreate.Compose.Timeline
     {
         private const int AverageSampleCount = 32;
 
+        /// <summary>
+        /// Encode the audio clip's waveform into a texture which should be displayed with the Waveform shader.
+        /// </summary>
+        /// <param name="clip">The audio clip to encode.</param>
+        /// <returns>The encoded texture.</returns>
         public static Texture2D EncodeTexture(AudioClip clip)
         {
             int sampleCount = clip.samples * clip.channels;
@@ -25,6 +30,11 @@ namespace ArcCreate.Compose.Timeline
             clip.GetData(samples, 0);
 
             int sample = 0;
+
+            // Encode sample values into each pixel
+            // Each pixel is a RGBA value, which can hold 4 sample.
+            // Additionally max-smoothing over AverageSampleCount is performed,
+            //   which means one pixel encodes (4 * AverageSampleCount) audio sample.
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)

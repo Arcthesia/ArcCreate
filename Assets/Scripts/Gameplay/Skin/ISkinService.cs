@@ -11,13 +11,11 @@ namespace ArcCreate.Gameplay.Skin
         /// <summary>
         /// Gets the combo color of the current skin.
         /// </summary>
-        /// <value>The combo color.</value>
         Color ComboColor { get; }
 
         /// <summary>
         /// Gets the default background according to current skin value.
         /// </summary>
-        /// <value>The background sprite.</value>
         Sprite DefaultBackground { get; }
 
         /// <summary>

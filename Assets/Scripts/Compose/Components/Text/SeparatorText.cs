@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace ArcCreate.Compose.Components
 {
+    /// <summary>
+    /// Component for text in a separator object.
+    /// </summary>
     public class SeparatorText : I18nText
     {
         [SerializeField] private RectTransform divideLine;

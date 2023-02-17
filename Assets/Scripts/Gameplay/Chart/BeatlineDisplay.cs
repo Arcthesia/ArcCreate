@@ -18,7 +18,8 @@ namespace ArcCreate.Gameplay.Chart
 
         public List<Beatline> LoadFromTimingGroup(int tgNum, int audioLength)
         {
-            beatlinePool?.ReturnAll();
+            beatlinePool.ReturnAll();
+            previousBeatlinesInRange.Clear();
             TimingGroup tg = Services.Chart.GetTimingGroup(tgNum);
             List<Beatline> beatlines = new List<Beatline>(generator.Generate(tg, audioLength));
             floorPositionSearch = new CachedBisect<Beatline, double>(beatlines, x => x.FloorPosition);

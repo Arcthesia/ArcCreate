@@ -6,23 +6,40 @@ namespace ArcCreate.Gameplay
 {
     public interface ISkinControl
     {
+        /// <summary>
+        /// Gets the default trace color.
+        /// </summary>
         Color DefaultTraceColor { get; }
 
+        /// <summary>
+        /// Gets the default shadow color.
+        /// </summary>
         Color DefaultShadowColor { get; }
 
+        /// <summary>
+        /// Gets the default arc colors at y=1.
+        /// </summary>
         List<Color> DefaultArcColors { get; }
 
+        /// <summary>
+        /// Gets the default arc colors at y=0.
+        /// </summary>
         List<Color> DefaultArcLowColors { get; }
 
+        /// <summary>
+        /// Gets the arc colors at y=1 for arcs with undefined colors.
+        /// </summary>
         Color UnknownArcColor { get; }
 
+        /// <summary>
+        /// Gets the arc colors at y=0 for arcs with undefined colors.
+        /// </summary>
         Color UnknownArcLowColor { get; }
 
         /// <summary>
         /// Gets or sets the alignment skin option.
         /// If the name does not match any available option, a default option will be used.
         /// </summary>
-        /// <value>The name of the skin option.</value>
         string AlignmentSkin { get; set; }
 
         /// <summary>
@@ -30,7 +47,6 @@ namespace ArcCreate.Gameplay
         /// If the name does not match any available option,
         /// the option provided by current Alignment skin will be used.
         /// </summary>
-        /// <value>The name of the skin option.</value>
         string NoteSkin { get; set; }
 
         /// <summary>
@@ -38,7 +54,6 @@ namespace ArcCreate.Gameplay
         /// If the name does not match any available option,
         /// the option provided by current Alignment skin will be used.
         /// </summary>
-        /// <value>The name of the skin option.</value>
         string ParticleSkin { get; set; }
 
         /// <summary>
@@ -46,7 +61,6 @@ namespace ArcCreate.Gameplay
         /// If the name does not match any available option,
         /// the option provided by current Alignment skin will be used.
         /// </summary>
-        /// <value>The name of the skin option.</value>
         string TrackSkin { get; set; }
 
         /// <summary>
@@ -54,7 +68,6 @@ namespace ArcCreate.Gameplay
         /// If the name does not match any available option,
         /// the option provided by current Alignment skin will be used.
         /// </summary>
-        /// <value>The name of the skin option.</value>
         string SingleLineSkin { get; set; }
 
         /// <summary>
@@ -62,7 +75,6 @@ namespace ArcCreate.Gameplay
         /// If the name does not match any available option,
         /// the option provided by current Alignment skin will be used.
         /// </summary>
-        /// <value>The name of the skin option.</value>
         string AccentSkin { get; set; }
 
         /// <summary>

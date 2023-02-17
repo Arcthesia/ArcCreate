@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Components
 {
+    /// <summary>
+    /// Generic table component.
+    /// </summary>
+    /// <typeparam name="T">The type of the data each row of the table holds.</typeparam>
     [RequireComponent(typeof(RectTransform))]
     public abstract class Table<T> : MonoBehaviour, IScrollHandler
     {
@@ -42,6 +46,10 @@ namespace ArcCreate.Compose.Components
 
         protected int EndPos => StartPos + rows.Count;
 
+        /// <summary>
+        /// Set the data of the table.
+        /// </summary>
+        /// <param name="data">The data.</param>
         public void SetData(List<T> data)
         {
             this.data = data;
@@ -49,6 +57,10 @@ namespace ArcCreate.Compose.Components
             BuildList();
         }
 
+        /// <summary>
+        /// Make the specified row index visible.
+        /// </summary>
+        /// <param name="index">The row index.</param>
         public void JumpTo(int index)
         {
             while (index < StartPos && StartPos > 0)
@@ -66,6 +78,11 @@ namespace ArcCreate.Compose.Components
             BuildList();
         }
 
+        /// <summary>
+        /// Search for the index of a datum.
+        /// </summary>
+        /// <param name="datum">The datum to search for.</param>
+        /// <returns>The index found, or 0 if not found.</returns>
         public int IndexOf(T datum)
         {
             for (int i = 0; i < data.Count; i++)

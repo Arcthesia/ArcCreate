@@ -12,7 +12,6 @@ namespace ArcCreate.Gameplay
         /// which might cause audio lag. Consider <see cref="Pause"/> and <see cref="PlayWithDelay"/> if
         /// this becomes an issue.
         /// </summary>
-        /// <value>The audio timing.</value>
         int AudioTiming { get; set; }
 
         /// <summary>
@@ -22,19 +21,16 @@ namespace ArcCreate.Gameplay
         /// which might cause audio lag. Consider <see cref="Pause"/> and <see cref="PlayWithDelay"/> if
         /// this becomes an issue.
         /// </summary>
-        /// <value>The audio timing.</value>
         int ChartTiming { get; set; }
 
         /// <summary>
         /// Gets the length in ms of the currently playing audio clip.
         /// </summary>
-        /// <value>The length of the currently playing audio.</value>
         int AudioLength { get; }
 
         /// <summary>
         /// Gets a value indicating whether or not the audio is playing.
         /// </summary>
-        /// <value>Whether or not the audio is playing.</value>
         bool IsPlaying { get; }
 
         /// <summary>

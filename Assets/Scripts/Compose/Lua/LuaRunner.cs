@@ -9,6 +9,13 @@ namespace ArcCreate.Compose.Lua
     {
         private static bool hasRegisteredAssembly = false;
 
+        /// <summary>
+        /// Runs a string of lua script.
+        /// </summary>
+        /// <param name="script">The script to run.</param>
+        /// <param name="setup">The object to setup the script, for binding methods.</param>
+        /// <param name="limitInstructionCountTo">The instruction limit.</param>
+        /// <param name="scriptLoader">The script loader instance for loading script from file system.</param>
         public static void RunScript(string script, IScriptSetup setup, int limitInstructionCountTo = int.MaxValue, FileSystemScriptLoader scriptLoader = null)
         {
             Script scriptObject = new Script();

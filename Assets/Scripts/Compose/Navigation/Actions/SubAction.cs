@@ -17,7 +17,6 @@ namespace ArcCreate.Compose.Navigation
         /// Gets a value indicating whether or not this sub-action was executed.
         /// Reading this value will reset it to false.
         /// </summary>
-        /// <value>Whether or not this sub-action was executed.</value>
         public bool WasExecuted
         {
             get

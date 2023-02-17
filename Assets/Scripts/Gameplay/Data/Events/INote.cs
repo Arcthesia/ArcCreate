@@ -6,20 +6,25 @@ namespace ArcCreate.Gameplay.Data
     public interface INote<Behaviour> : IComparable<INote<Behaviour>>
         where Behaviour : MonoBehaviour
     {
+        /// <summary>
+        /// Gets the note's timing.
+        /// </summary>
         int Timing { get; }
 
+        /// <summary>
+        /// Gets the floor position value tied to the timing of this note.
+        /// Calculated with <see cref="Chart.TimingGroup.GetFloorPosition"/>.
+        /// </summary>
         double FloorPosition { get; }
 
         /// <summary>
         /// Gets a value indicating whether or not there's an instance assigned to this note.
         /// </summary>
-        /// <value>Whether or not there's an instance assigned to this note.</value>
         bool IsAssignedInstance { get; }
 
         /// <summary>
         /// Gets the total combo count of this note. Should be 1 for tap notes.
         /// </summary>
-        /// <value>The total combo count.</value>
         int TotalCombo { get; }
 
         /// <summary>

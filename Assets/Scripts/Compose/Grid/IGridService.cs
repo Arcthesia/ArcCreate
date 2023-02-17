@@ -4,6 +4,9 @@ namespace ArcCreate.Compose.Grid
 {
     public interface IGridService
     {
+        /// <summary>
+        /// Gets or sets a value indicating whether or not to enable the grid.
+        /// </summary>
         bool IsGridEnabled { get; set; }
 
         /// <summary>

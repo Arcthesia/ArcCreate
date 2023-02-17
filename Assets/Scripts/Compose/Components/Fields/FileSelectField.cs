@@ -36,13 +36,11 @@ namespace ArcCreate.Compose.Components
         /// <summary>
         /// Gets the currently selected file path.
         /// </summary>
-        /// <value>A file path instance.</value>
         public FilePath CurrentPath { get; private set; } = null;
 
         /// <summary>
         /// Gets a value indicating whether or not the current path exists on the file system.
         /// </summary>
-        /// <returns>The boolean value.</returns>
         public bool IsValidPath => File.Exists(CurrentPath.FullPath);
 
         private string CurrentProjectFolder => Path.GetDirectoryName(Services.Project.CurrentProject.Path);

@@ -66,10 +66,11 @@ namespace ArcCreate.Gameplay.Data
             {
                 Vector3 arcTapPos = new Vector3(arcTap.WorldX, arcTap.WorldY);
 
-                LineRenderer line = connectionLinePool.Get(transform, false);
+                LineRenderer line = connectionLinePool.Get(transform, true);
+                line.transform.localPosition = Vector3.zero;
+                line.transform.localScale = Vector3.one;
                 line.DrawLine(Vector3.zero, new Vector3(
                     (arcTapPos.x - tapWorldPos.x) / baseLocalScale.x,
-                    0,
                     arcTapPos.y - tapWorldPos.y));
 
                 connectionLines.Add(line);

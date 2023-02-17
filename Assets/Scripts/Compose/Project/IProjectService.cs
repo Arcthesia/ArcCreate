@@ -15,15 +15,16 @@ namespace ArcCreate.Compose.Project
         /// <summary>
         /// Gets the current project settings.
         /// </summary>
-        /// <value>The project settings.</value>
         ProjectSettings CurrentProject { get; }
 
         /// <summary>
         /// Gets the current chart settings.
         /// </summary>
-        /// <value>The chart settings.</value>
         ChartSettings CurrentChart { get; }
 
+        /// <summary>
+        /// Gets the default display colors for each difficulties.
+        /// </summary>
         List<Color> DefaultDifficultyColors { get; }
 
         /// <summary>

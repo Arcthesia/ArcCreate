@@ -8,7 +8,6 @@ namespace ArcCreate.Gameplay.Judgement
         /// <summary>
         /// Gets the world y coordinate of the sky input.
         /// </summary>
-        /// <value>The world y coordinate.</value>
         float SkyInputY { get; }
 
         /// <summary>

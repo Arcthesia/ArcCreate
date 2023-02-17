@@ -7,17 +7,36 @@ namespace ArcCreate.Compose.Cursor
 {
     public interface ICursorService
     {
+        /// <summary>
+        /// Gets or sets a value indicating whether or not to enable the lane cursor.
+        /// Lane cursor is automatically enabled when <see cref="RequestTimingSelection"/> is called.
+        /// </summary>
         bool EnableLaneCursor { get; set; }
 
+        /// <summary>
+        /// Gets a value indicating whether or not the cursor is hitting the lane.
+        /// </summary>
         bool IsHittingLane { get; }
 
+        /// <summary>
+        /// Gets the current cursor timing.
+        /// </summary>
         int CursorTiming { get; }
 
+        /// <summary>
+        /// Gets the current selected lane.
+        /// </summary>
         int CursorLane { get; }
 
-        bool IsCursorAboveViewport { get; }
-
+        /// <summary>
+        /// Gets the current cursor's world position.
+        /// </summary>
         Vector3 CursorWorldPosition { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the cursor is on top of gameplay viewport.
+        /// </summary>
+        bool IsCursorAboveViewport { get; }
 
         /// <summary>
         /// Request for a selection of a timing value.

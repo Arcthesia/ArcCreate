@@ -2,6 +2,9 @@ namespace ArcCreate.Gameplay.Data
 {
     public abstract class Note : ArcEvent
     {
+        /// <summary>
+        /// Gets or sets a value indicating whether or not the note is selected.
+        /// </summary>
         public abstract bool IsSelected { get; set; }
 
         public double FloorPosition { get; set; }

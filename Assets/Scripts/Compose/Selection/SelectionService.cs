@@ -165,6 +165,27 @@ namespace ArcCreate.Compose.Selection
             rangeSelectPreview.gameObject.SetActive(true);
         }
 
+        public bool TrySelectNoteBlockNoteCreation()
+        {
+            if (EventSystem.current.currentSelectedGameObject != null
+             || !Services.Cursor.IsCursorAboveViewport
+             || RangeSelected)
+            {
+                return false;
+            }
+
+            if (TryGetNoteUnderCursor(out Note note, SelectionMode.Any))
+            {
+                ClearSelection();
+                AddNoteToSelection(note);
+                UpdateInspector();
+                OnSelectionChange?.Invoke(selectedNotes);
+                return true;
+            }
+
+            return false;
+        }
+
         public void AddNoteToSelection(Note note)
         {
             selectedNotes.Add(note);

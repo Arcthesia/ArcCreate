@@ -7,6 +7,9 @@ using UnityEngine.Networking;
 
 namespace ArcCreate.Gameplay.Skin
 {
+    /// <summary>
+    /// Class for handling loading extenal skin as sprites.
+    /// </summary>
     public class ExternalSprite
     {
         private static readonly string[] Extensions = new string[] { ".jpg", ".png" };

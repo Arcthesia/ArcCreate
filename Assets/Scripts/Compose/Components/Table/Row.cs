@@ -1,8 +1,11 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace ArcCreate.Compose.Components
 {
+    /// <summary>
+    /// Generic row component.
+    /// </summary>
+    /// <typeparam name="T">The type of the data each row holds.</typeparam>
     [RequireComponent(typeof(RectTransform))]
     public abstract class Row<T> : MonoBehaviour
     {

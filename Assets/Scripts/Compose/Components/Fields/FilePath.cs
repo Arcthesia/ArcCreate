@@ -16,7 +16,6 @@ namespace ArcCreate.Compose.Components
         /// <summary>
         /// Gets the full path, meant to point to a file that exists.
         /// </summary>
-        /// <value>The full path.</value>
         public string FullPath { get; private set; }
 
         /// <summary>
@@ -25,27 +24,23 @@ namespace ArcCreate.Compose.Components
         /// Example: If the <see cref="FullPath"/> is "C:/Folder/File.ext", and <see cref="LocalToDirectory"/> is "C:/Folder",
         /// then this value will be "File.ext".
         /// </summary>
-        /// <value><The shortened path.</value>
         public string ShortenedPath { get; private set; }
 
         /// <summary>
         /// Gets the directory that this path is relative to.
         /// In the case that this path is global, this value will be null.
         /// </summary>
-        /// <value>The directory path.</value>
         public string LocalToDirectory { get; private set; }
 
         /// <summary>
         /// Gets original path this path was generated from.
         /// In the case that this path is global, this value will be the same as <see cref="FullPath"/>.
         /// </summary>
-        /// <value>The original path.</value>
         public string OriginalPath { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether or not the file should be copied to the new path.
         /// </summary>
-        /// <value>The boolean value.</value>
         public bool ShouldCopy { get; private set; }
 
         /// <summary>
@@ -111,6 +106,10 @@ namespace ArcCreate.Compose.Components
             return filePath;
         }
 
+        /// <summary>
+        /// Rename the file such that no file within the same directory will have the same name.
+        /// The format is "[path] (number)".
+        /// </summary>
         public void RenameUntilNoOverwrite()
         {
             if (!File.Exists(FullPath))

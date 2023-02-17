@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace ArcCreate.Compose.EventsEditor
 {
-    public class EventsEditorService : MonoBehaviour
+    public class EventsEditor : MonoBehaviour
     {
         [SerializeField] private Color highlightColor;
         [SerializeField] private Color normalColor;

@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace ArcCreate.Compose.Components
 {
+    /// <summary>
+    /// Component for resizing a rect transform to fit an icon and a text component.
+    /// </summary>
     public class IconText : I18nText
     {
         [SerializeField] private RectTransform parent;

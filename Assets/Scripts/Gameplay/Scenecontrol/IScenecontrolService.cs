@@ -8,7 +8,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
         /// <summary>
         /// Gets the list of all scenecontrol events.
         /// </summary>
-        /// <value>The list of scenecontrol events.</value>
         List<ScenecontrolEvent> Events { get; }
 
         /// <summary>
