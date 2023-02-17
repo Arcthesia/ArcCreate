@@ -50,7 +50,7 @@ namespace ArcCreate.Gameplay.Data
         public void SetData(Arc arc)
         {
             Arc = arc;
-            arcCap.color = new Color(1, 1, 1, 0);
+            arcCap.color = Color.clear;
             segmentPool = segmentPool ?? Pools.Get<ArcSegment>(Values.ArcSegmentPoolName);
             arcHeadMesh.sharedMesh = ArcMeshGenerator.GetHeadMesh(arc);
             arcHeadRenderer.sharedMaterial = Material;
@@ -191,22 +191,29 @@ namespace ArcCreate.Gameplay.Data
                 }
             }
 
-            if (currentTiming <= Arc.Timing && Arc.IsFirstArcOfGroup)
+            if (currentTiming <= Arc.Timing)
             {
-                float z = -transform.localPosition.z;
-                float approach = 1 - (Mathf.Abs(z) / Values.TrackLengthForward);
-                arcCap.transform.localPosition = new Vector3(0, 0, z);
-                arcCap.color = new Color(1, 1, 1, Arc.IsTrace ? 0 : approach);
-                if (!Arc.IsTrace)
+                if (Arc.IsFirstArcOfGroup)
                 {
-                    float size = Values.ArcCapSize + (Values.ArcCapSizeAdditionMax * (1 - approach));
-                    arcCap.transform.localScale = new Vector3(size, size, 1);
+                    float z = -transform.localPosition.z;
+                    float approach = 1 - (Mathf.Abs(z) / Values.TrackLengthForward);
+                    arcCap.transform.localPosition = new Vector3(0, 0, z);
+                    arcCap.color = new Color(1, 1, 1, Arc.IsTrace ? 0 : approach);
+                    if (!Arc.IsTrace)
+                    {
+                        float size = Values.ArcCapSize + (Values.ArcCapSizeAdditionMax * (1 - approach));
+                        arcCap.transform.localScale = new Vector3(size, size, 1);
+                    }
+                }
+                else
+                {
+                    arcCap.color = Color.clear;
                 }
             }
 
             if (currentTiming >= Arc.EndTiming)
             {
-                arcCap.color = new Color(1, 1, 1, 0);
+                arcCap.color = Color.clear;
             }
 
             heightIndicator.enabled = clipToTiming <= Arc.Timing && Arc.ShouldDrawHeightIndicator;

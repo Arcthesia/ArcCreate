@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ArcCreate.Gameplay.Data;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay
@@ -92,5 +93,46 @@ namespace ArcCreate.Gameplay
         /// Reset arc colors to default.
         /// </summary>
         void ResetArcColors();
+
+        /// <summary>
+        /// Get the skin for an arc note.
+        /// </summary>
+        /// <param name="note">The note to get the skin for.</param>
+        /// <returns>A tuple of:<br/>
+        /// normal: The default material.<br/>
+        /// highlight: The highlighted material.<br/>
+        /// shadow: The shadow material.<br/>
+        /// heightIndicatorSprite: The height indicator's sprite.<br/>
+        /// heightIndicatorColor: The color for its height indicato.<br/>
+        /// </returns>
+        (Material normal, Material highlight, Material shadow, Sprite arcCap, Sprite heightIndicatorSprite, Color heightIndicatorColor) GetArcSkin(Arc note);
+
+        /// <summary>
+        /// Get the skin for a tap note.
+        /// </summary>
+        /// <param name="note">The note to get the skin for.</param>
+        /// <returns>The correct tap note sprite.</returns>
+        Sprite GetTapSkin(Tap note);
+
+        /// <summary>
+        /// Get the skin for a hold note.
+        /// </summary>
+        /// <param name="note">The note to get the skin for.</param>
+        /// <returns>A tuple of:<br/>
+        /// normal: The normal sprite.<br/>
+        /// highlight: The highlighted sprite.<br/>
+        /// </returns>
+        (Sprite normal, Sprite highlight) GetHoldSkin(Hold note);
+
+        /// <summary>
+        /// Get the skin for a hold note.
+        /// </summary>
+        /// <param name="note">The note to get the skin for.</param>
+        /// <returns>A tuple of:<br/>
+        /// mesh: The note's mesh.<br/>
+        /// material: The note's material.
+        /// shadow: The shadow's sprite.
+        /// </returns>
+        (Mesh mesh, Material material, Sprite shadow) GetArcTapSkin(ArcTap note);
     }
 }

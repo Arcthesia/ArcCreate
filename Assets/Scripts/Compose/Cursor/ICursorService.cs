@@ -17,6 +17,8 @@ namespace ArcCreate.Compose.Cursor
 
         bool IsCursorAboveViewport { get; }
 
+        Vector3 CursorWorldPosition { get; }
+
         /// <summary>
         /// Request for a selection of a timing value.
         /// </summary>

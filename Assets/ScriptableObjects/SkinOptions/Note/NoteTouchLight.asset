@@ -15,9 +15,9 @@ MonoBehaviour:
   Name: light
   arcTapSfxSkin: {fileID: 2100000, guid: b4c28abdd82feb2419d58042a5c809f6, type: 2}
   ConnectionLineColor: {r: 0.47058824, g: 0.78431374, b: 0.8627451, a: 1}
-  ArcTapMesh: {fileID: 2917635366719238280, guid: 47a8c4c421f6d5848b7369402970b18f,
+  ArcTapMesh: {fileID: 2917635366719238280, guid: 75426e5c4799bc8b7b9ad04500a28cb5,
     type: 3}
-  ArcTapSfxMesh: {fileID: 89046849237724230, guid: 47a8c4c421f6d5848b7369402970b18f,
+  ArcTapSfxMesh: {fileID: 89046849237724230, guid: 75426e5c4799bc8b7b9ad04500a28cb5,
     type: 3}
   tapSkin: {fileID: 21300000, guid: e2e574235a007dd43b0310c02f4cabe0, type: 3}
   holdSkin: {fileID: 21300000, guid: fa0a2bc320e57c3449d94b6b22eea6b5, type: 3}

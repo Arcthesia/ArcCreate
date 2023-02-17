@@ -27,6 +27,7 @@ namespace ArcCreate.Compose.Cursor
         private int selectingTiming;
         private int selectingLane;
         private Vector2 selectingVerticalPoint;
+        private Vector3 cursorWorldPosition;
         private int showVerticalAtTiming;
         private Action onRemoveDigit;
         private Action onTypedValueConfirm;
@@ -45,6 +46,8 @@ namespace ArcCreate.Compose.Cursor
         public bool IsHittingLane => isHittingLane;
 
         public bool IsCursorAboveViewport => isCursorAboveViewport;
+
+        public Vector3 CursorWorldPosition => cursorWorldPosition;
 
         public async UniTask<(bool wasSuccessful, int timing)> RequestTimingSelection(
             SubAction confirm,
@@ -273,6 +276,8 @@ namespace ArcCreate.Compose.Cursor
                 to: new Vector3(hit.point.x, 0, -Gameplay.Values.TrackLengthForward));
 
             selectingLane = Gameplay.ArcFormula.WorldXToLane(hit.point.x);
+            cursorWorldPosition.z = z;
+            cursorWorldPosition.x = hit.point.x;
         }
 
         private void DisableLaneCursor()
@@ -303,7 +308,9 @@ namespace ArcCreate.Compose.Cursor
             selectingVerticalPoint = new Vector2(
                 Gameplay.ArcFormula.WorldXToArc(snapped.x),
                 Gameplay.ArcFormula.WorldYToArc(snapped.y));
-            Services.Popups.Notify(Popups.Severity.Info, $"{hit.point};{snapped}");
+            cursorWorldPosition.x = snapped.x;
+            cursorWorldPosition.y = snapped.y;
+            cursorWorldPosition.z = hit.point.z;
         }
 
         private void DisableVerticalCursor()
