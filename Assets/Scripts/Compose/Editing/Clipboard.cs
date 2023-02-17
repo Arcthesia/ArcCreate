@@ -8,26 +8,17 @@ using UnityEngine.InputSystem;
 
 namespace ArcCreate.Compose.Editing
 {
-    [EditorScope("NoteActions")]
-    public class NoteActions
+    [EditorScope("Clipboard")]
+    public class Clipboard
     {
         private HashSet<Note> defaultClipboard = null;
         private readonly Dictionary<string, HashSet<Note>> namedClipboards = new Dictionary<string, HashSet<Note>>();
-
-        [EditorAction("Delete", true, "d", "<del>")]
-        [SelectionService.RequireSelection]
-        public void Delete()
-        {
-            Services.History.AddCommand(new EventCommand(
-                name: I18n.S("Compose.Notify.History.DeleteNotes"),
-                remove: Services.Selection.SelectedNotes));
-        }
 
         [EditorAction("Copy", true, "<c-c>")]
         [SelectionService.RequireSelection]
         public void Copy()
         {
-            defaultClipboard = new HashSet<Note>(Services.Selection.SelectedNotes);
+            defaultClipboard = MakeClipboard(Services.Selection.SelectedNotes);
             RequireClipboardAttribute.ClipboardAvailable = true;
             Services.Popups.Notify(
                 Popups.Severity.Info,
@@ -38,7 +29,7 @@ namespace ArcCreate.Compose.Editing
         [SelectionService.RequireSelection]
         public void Cut()
         {
-            defaultClipboard = new HashSet<Note>(Services.Selection.SelectedNotes);
+            defaultClipboard = MakeClipboard(Services.Selection.SelectedNotes);
             RequireClipboardAttribute.ClipboardAvailable = true;
 
             Services.History.AddCommand(new EventCommand(
@@ -75,19 +66,19 @@ namespace ArcCreate.Compose.Editing
         public async UniTask NamedCopy()
         {
             string name = await GetKeyboardInput();
-            var notes = new HashSet<Note>(Services.Selection.SelectedNotes);
+            var clipboard = MakeClipboard(Services.Selection.SelectedNotes);
             if (!namedClipboards.ContainsKey(name))
             {
-                namedClipboards.Add(name, notes);
+                namedClipboards.Add(name, clipboard);
             }
             else
             {
-                namedClipboards[name] = notes;
+                namedClipboards[name] = clipboard;
             }
 
             Services.Popups.Notify(
                 Popups.Severity.Info,
-                I18n.S("Compose.Notify.Clipboard.NamedCopy", notes.Count, name));
+                I18n.S("Compose.Notify.Clipboard.NamedCopy", clipboard.Count, name));
         }
 
         [EditorAction("NamedCut", false, "<c-a-x>")]
@@ -95,14 +86,14 @@ namespace ArcCreate.Compose.Editing
         public async UniTask NamedCut()
         {
             string name = await GetKeyboardInput();
-            var notes = new HashSet<Note>(Services.Selection.SelectedNotes);
+            var clipboard = MakeClipboard(Services.Selection.SelectedNotes);
             if (!namedClipboards.ContainsKey(name))
             {
-                namedClipboards.Add(name, notes);
+                namedClipboards.Add(name, clipboard);
             }
             else
             {
-                namedClipboards[name] = notes;
+                namedClipboards[name] = clipboard;
             }
 
             Services.History.AddCommand(new EventCommand(
@@ -111,7 +102,7 @@ namespace ArcCreate.Compose.Editing
 
             Services.Popups.Notify(
                 Popups.Severity.Info,
-                I18n.S("Compose.Notify.Clipboard.NamedCut", notes.Count, name));
+                I18n.S("Compose.Notify.Clipboard.NamedCut", clipboard.Count, name));
         }
 
         [EditorAction("NamedPaste", false, "<c-a-v>")]
@@ -131,19 +122,13 @@ namespace ArcCreate.Compose.Editing
 
         private async UniTask StartPasting(HashSet<Note> notes, SubAction confirm, SubAction cancel)
         {
-            List<Note> newNotes = new List<Note>(notes.Count);
-            foreach (var note in notes)
-            {
-                newNotes.Add(note.Clone() as Note);
-            }
-
+            List<Note> newNotes = new List<Note>(MakePaste(notes));
             EventCommand command = new EventCommand(
                 name: I18n.S("Compose.Notify.History.Paste"),
                 add: newNotes);
 
             int minTiming = int.MaxValue;
             Note anchorNote = newNotes[0];
-            int arcCount = 0;
             for (int i = 0; i < newNotes.Count; i++)
             {
                 Note note = newNotes[i];
@@ -151,11 +136,6 @@ namespace ArcCreate.Compose.Editing
                 {
                     minTiming = note.Timing;
                     anchorNote = note;
-                }
-
-                if (note is Arc)
-                {
-                    arcCount += 1;
                 }
             }
 
@@ -178,6 +158,31 @@ namespace ArcCreate.Compose.Editing
                 Services.Gameplay.Chart.EnableArcRebuildSegment = true;
                 ApplyTimingToPastingNotes(timing, newNotes, anchorNote);
                 Services.Gameplay.Chart.UpdateEvents(newNotes);
+
+                List<Arc> extraArc = new List<Arc>();
+                foreach (var note in newNotes)
+                {
+                    if (note is ArcTap at && (at.Timing < at.Arc.Timing || at.Timing > at.Arc.EndTiming))
+                    {
+                        Arc newArc = at.Arc.Clone() as Arc;
+                        at.Arc = newArc;
+                        newArc.Timing = newArc.Timing - minTiming + timing;
+                        newArc.EndTiming = newArc.EndTiming - minTiming + timing;
+                        extraArc.Add(newArc);
+                    }
+                }
+
+                if (extraArc.Count > 0)
+                {
+                    command.Undo();
+                    newNotes.AddRange(extraArc);
+                    command = new EventCommand(
+                        name: I18n.S("Compose.Notify.History.Paste"),
+                        add: newNotes);
+
+                    command.Execute();
+                }
+
                 Services.History.AddCommandWithoutExecuting(command);
             }
             else
@@ -221,6 +226,58 @@ namespace ArcCreate.Compose.Editing
                     l.EndTiming = l.EndTiming - anchor + timing;
                 }
             }
+        }
+
+        private HashSet<Note> MakeClipboard(HashSet<Note> notes)
+        {
+            HashSet<Note> clipboard = new HashSet<Note>();
+            foreach (var note in notes)
+            {
+                if (note is ArcTap arcTap)
+                {
+                    if (!notes.Contains(arcTap.Arc))
+                    {
+                        clipboard.Add(arcTap.Clone() as Note);
+                    }
+                }
+                else
+                {
+                    clipboard.Add(note.Clone() as Note);
+                }
+            }
+
+            return clipboard;
+        }
+
+        private HashSet<Note> MakePaste(HashSet<Note> notes)
+        {
+            HashSet<Note> paste = new HashSet<Note>();
+            foreach (var note in notes)
+            {
+                if (note is Arc arc)
+                {
+                    Arc clone = arc.Clone() as Arc;
+                    foreach (var arctap in clone.ArcTaps)
+                    {
+                        paste.Add(arctap);
+                    }
+
+                    paste.Add(clone);
+                }
+                else if (note is ArcTap arcTap)
+                {
+                    if (!notes.Contains(arcTap.Arc))
+                    {
+                        paste.Add(arcTap.Clone() as Note);
+                    }
+                }
+                else
+                {
+                    paste.Add(note.Clone() as Note);
+                }
+            }
+
+            return paste;
         }
 
         private class RequireClipboardAttribute : ContextRequirementAttribute

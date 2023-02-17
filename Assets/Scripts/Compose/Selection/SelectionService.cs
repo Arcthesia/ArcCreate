@@ -1,6 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using ArcCreate.Compose.Navigation;
+using ArcCreate.Compose.Timeline;
 using ArcCreate.Gameplay.Data;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -20,18 +24,39 @@ namespace ArcCreate.Compose.Selection
         [SerializeField] private LayerMask gameplayLayer;
         [SerializeField] private GameObject inspectorWindow;
         [SerializeField] private InspectorMenu inspectorMenu;
+        [SerializeField] private MarkerRange rangeSelectPreview;
 
         private readonly HashSet<Note> selectedNotes = new HashSet<Note>();
         private float latestSelectedDistance = 0;
-
+        private bool rangeSelected;
         private readonly RaycastHit[] hitResults = new RaycastHit[32];
+
+        public event Action<HashSet<Note>> OnSelectionChange;
 
         public HashSet<Note> SelectedNotes => selectedNotes;
 
-        [EditorAction("Single", false, "<u-mouse1>")]
+        private bool RangeSelected
+        {
+            get
+            {
+                bool res = rangeSelected;
+                rangeSelected = false;
+                return res;
+            }
+        }
+
+        [EditorAction("Single", false, "<mouse1>")]
         [RequireGameplayLoaded]
         public void SelectSingle()
         {
+            if (EventSystem.current.currentSelectedGameObject != null
+             || !Services.Cursor.IsCursorAboveViewport
+             || (Values.CreateNoteMode.Value != CreateNoteMode.Idle && Services.Cursor.IsHittingLane)
+             || RangeSelected)
+            {
+                return;
+            }
+
             if (TryGetNoteUnderCursor(out Note note, SelectionMode.Any))
             {
                 ClearSelection();
@@ -39,16 +64,11 @@ namespace ArcCreate.Compose.Selection
             }
             else
             {
-                if (EventSystem.current.currentSelectedGameObject != null
-                 || (Values.CreateNoteMode.Value != CreateNoteMode.Idle && Services.Cursor.IsHittingLane))
-                {
-                    return;
-                }
-
                 ClearSelection();
             }
 
             UpdateInspector();
+            OnSelectionChange?.Invoke(selectedNotes);
         }
 
         [EditorAction("Add", false, "<s-h-mouse2>")]
@@ -61,6 +81,7 @@ namespace ArcCreate.Compose.Selection
             }
 
             UpdateInspector();
+            OnSelectionChange?.Invoke(selectedNotes);
         }
 
         [EditorAction("Remove", false, "<a-h-mouse2>")]
@@ -73,6 +94,7 @@ namespace ArcCreate.Compose.Selection
             }
 
             UpdateInspector();
+            OnSelectionChange?.Invoke(selectedNotes);
         }
 
         [EditorAction("Toggle", false, "<c-mouse1>")]
@@ -92,6 +114,7 @@ namespace ArcCreate.Compose.Selection
             }
 
             UpdateInspector();
+            OnSelectionChange?.Invoke(selectedNotes);
         }
 
         [EditorAction("Clear", true)]
@@ -105,7 +128,41 @@ namespace ArcCreate.Compose.Selection
             }
 
             selectedNotes.Clear();
+            rangeSelectPreview.gameObject.SetActive(false);
             UpdateInspector();
+            OnSelectionChange?.Invoke(selectedNotes);
+        }
+
+        [EditorAction("RangeSelect", true, "<c-r>")]
+        [RequireGameplayLoaded]
+        [SubAction("Confirm", false, "<mouse1>")]
+        [SubAction("Cancel", false, "<esc>")]
+        [WhitelistScopes(typeof(Grid.GridService), typeof(Timeline.TimelineService), typeof(History.HistoryService), typeof(Cursor.CursorService))]
+        public async UniTask RangeSelect(EditorAction action)
+        {
+            SubAction confirm = action.GetSubAction("Confirm");
+            SubAction cancel = action.GetSubAction("Confirm");
+            var (timing1Success, timing1) = await Services.Cursor.RequestTimingSelection(confirm, cancel);
+            if (!timing1Success)
+            {
+                return;
+            }
+
+            var (timing2Success, timing2) = await Services.Cursor.RequestTimingSelection(confirm, cancel);
+            if (!timing2Success)
+            {
+                return;
+            }
+
+            int from = Mathf.Min(timing1, timing2);
+            int to = Mathf.Max(timing1, timing2);
+
+            rangeSelectPreview.gameObject.SetActive(true);
+            rangeSelectPreview.SetTiming(from, to);
+
+            SelectNotesBetweenRange(from, to);
+            rangeSelected = true;
+            rangeSelectPreview.gameObject.SetActive(true);
         }
 
         public void AddNoteToSelection(Note note)
@@ -126,6 +183,10 @@ namespace ArcCreate.Compose.Selection
         {
             selectedNotes.Remove(note);
             note.IsSelected = false;
+            if (selectedNotes.Count == 0)
+            {
+                rangeSelectPreview.gameObject.SetActive(false);
+            }
         }
 
         public void RemoveNoteFromSelection(IEnumerable<Note> notes)
@@ -146,6 +207,7 @@ namespace ArcCreate.Compose.Selection
             selectedNotes.Clear();
             AddNotesToSelection(notes);
             UpdateInspector();
+            OnSelectionChange?.Invoke(selectedNotes);
         }
 
         private bool TryGetNoteUnderCursor(out Note note, SelectionMode selectionMode)
@@ -215,6 +277,35 @@ namespace ArcCreate.Compose.Selection
             return false;
         }
 
+        private void SelectNotesBetweenRange(int from, int to)
+        {
+            SetSelection(GetNotesBetweenRange(from, to));
+            rangeSelected = true;
+        }
+
+        private IEnumerable<Note> GetNotesBetweenRange(int from, int to)
+        {
+            foreach (var tap in Services.Gameplay.Chart.GetAll<Tap>().Where(t => from <= t.Timing && t.Timing <= to))
+            {
+                yield return tap;
+            }
+
+            foreach (var hold in Services.Gameplay.Chart.GetAll<Hold>().Where(t => from <= t.Timing && t.EndTiming <= to))
+            {
+                yield return hold;
+            }
+
+            foreach (var arc in Services.Gameplay.Chart.GetAll<Arc>().Where(t => from <= t.Timing && t.EndTiming <= to))
+            {
+                yield return arc;
+            }
+
+            foreach (var arctap in Services.Gameplay.Chart.GetAll<ArcTap>().Where(t => from <= t.Timing && t.Timing <= to))
+            {
+                yield return arctap;
+            }
+        }
+
         private void UpdateInspector()
         {
             inspectorWindow.SetActive(selectedNotes.Count > 0);
@@ -224,6 +315,12 @@ namespace ArcCreate.Compose.Selection
         private void Awake()
         {
             RequireSelectionAttribute.Selection = selectedNotes;
+            rangeSelectPreview.OnEndEdit += SelectNotesBetweenRange;
+        }
+
+        private void OnDestroy()
+        {
+            rangeSelectPreview.OnEndEdit -= SelectNotesBetweenRange;
         }
 
         public class RequireSelectionAttribute : ContextRequirementAttribute

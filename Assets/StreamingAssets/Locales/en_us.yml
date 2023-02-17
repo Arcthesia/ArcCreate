@@ -1,4 +1,5 @@
 Format:
+  # Exception messages while parsing chart files
   Exception:
     Message: |-
       An exception occured while reading the chart file {File}
@@ -44,6 +45,7 @@ Format:
       {StackTrace}
 
 Compose:
+  # Exception messages within the editor
   Exception:
     FileDoesNotExist: |-
       Trying to read file located at {Path} but it does not exist. The file might have been deleted.
@@ -84,6 +86,8 @@ Compose:
         Invalid keystroke: The keystroke "{0}" has too many modifiers (maximum is 2).
       InvalidActionPath: |-
         Invalid action path: The string "{0}" does not match any action.
+          
+  # Notification messages
   Notify:
     GameplayLoaded: Gameplay scene loaded successfully
     FreeCameraEditHelp: |-
@@ -97,6 +101,8 @@ Compose:
       O: Roll right
       Esc: Cancel
       Enter: Confirm
+    Mirror:
+      CannotMirror: Can not mirror any of the selected notes.
     History:
       Execute: |-
         Executed command: {Name}
@@ -104,6 +110,7 @@ Compose:
         Undo command: {Name}
       Redo: |-
         Redo command: {Name}
+      # {Name} above will be replaced with these entries
       AddTiming: Add timing event
       EditTiming: Edit timing event
       RemoveTiming: Remove timing event
@@ -124,6 +131,9 @@ Compose:
       DeleteNotes: Delete notes
       Cut: Cut notes
       Paste: Paste notes
+      Mirror:
+        Vertical: Mirror notes vertically
+        Horizontal: Mirror notes horizontally
     Clipboard:
       Copy: Copied {0} notes
       Cut: Cut {0} notes
@@ -149,6 +159,7 @@ Compose:
       CopyPosition: Copied arc's position
       CopyX: Copied arc's x coordinate
       CopyY: Copied arc's y coordinate
+  # Dialog boxes
   Dialog:
     RemoveGroup:
       Title: Remove timing group
@@ -173,6 +184,7 @@ Compose:
       Cancel: Cancel
   Navigation:
     KeybindOverride: Overriding keybind for action {0}
+    # Texts that appear on the context menu (right-click menu)
     Actions:
       Camera:
         Name: Camera
@@ -187,11 +199,33 @@ Compose:
       Selection:
         Name: Selection
         Clear: Clear selection
+        RangeSelect:
+          Name: Select notes between range
       Measure:
         Name: Measure
         Start:
           Name: Open measurer
+      Clipboard:
+        Name: Clipboard
+        Copy: Copy
+        Cut: Cut
+        Paste:
+          Name: Paste
+          Cancel: Cancel pasting
+        NamedPaste:
+          Name: Paste
+          Cancel: Cancel pasting
+        Clear: Clear clipboard
+      Delete:
+        Name: Delete
+        Execute: Delete notes
+      Mirror:
+        Name: Mirror
+        Horizontal: Mirror horizontally
+        HorizontalNoColorSwitch: Mirror horizontally (ignore color)
+        Vertical: Mirror vertically
   Grid:
+    # Please modify the comment lines only (lines beginning with '--')
     DefaultScript: |-
       -- This is a lua script
 
@@ -214,6 +248,7 @@ Compose:
       for y = 0, 1, 0.25 do
         grid.drawLine(-0.5, 1.5, y, y, defaultColor)
       end
+  # Texts that appear on the editor UI
   UI:
     Common:
       Confirm: Confirm
@@ -236,6 +271,7 @@ Compose:
       Remote: Remote
       Export: Export
       Settings: Settings
+    # Top bar of the UI
     Top:
       Label:
         New: New
@@ -245,6 +281,7 @@ Compose:
         FullScreen: Full Screen
         ToggleFullScreenHint: Press F11 to toggle full screen mode.
         Chart: Chart
+    # Project panel
     Project:
       Label:
         NewChart: New Chart
@@ -315,6 +352,7 @@ Compose:
         Offset: Offset
         TimingGroup: Group
         Density: Density
+    # Events editor panel
     EventsEditor:
       Label:
         Group: Group
@@ -335,6 +373,7 @@ Compose:
         Timing: Timing
         Camera: Camera
         Scenecontrol: Scene
+    # Editor settings panel
     Settings:
       Label:
         Gameplay:
@@ -372,6 +411,7 @@ Compose:
           Name: Track scrolling
           Threshold: Threshold
           MaxMovement: Max movement
+    # Toolbox panel
     Toolbox:
       Pallete:
         Name: Pallete
@@ -382,6 +422,7 @@ Compose:
         Arctap: Sky
         Easing: Easing
       Macros: Macros
+    # Inspector window
     Inspector:
       Name: Inspector
       Timing: Timing

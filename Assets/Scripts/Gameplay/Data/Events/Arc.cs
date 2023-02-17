@@ -119,7 +119,9 @@ namespace ArcCreate.Gameplay.Data
             };
             foreach (var arctap in ArcTaps)
             {
-                arc.ArcTaps.Add(arctap.Clone() as ArcTap);
+                var newArctap = arctap.Clone() as ArcTap;
+                newArctap.Arc = arc;
+                arc.ArcTaps.Add(newArctap);
             }
 
             return arc;

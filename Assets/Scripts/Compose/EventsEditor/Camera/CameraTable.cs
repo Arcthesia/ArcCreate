@@ -239,7 +239,7 @@ namespace ArcCreate.Compose.EventsEditor
             addButton.onClick.AddListener(OnAddButton);
             removeButton.onClick.AddListener(OnRemoveButton);
             freeCameraButton.onClick.AddListener(OnFreeCameraButton);
-            marker.OnDragDebounced += OnMarker;
+            marker.OnEndEdit += OnMarker;
         }
 
         protected override void OnDestroy()
@@ -251,7 +251,7 @@ namespace ArcCreate.Compose.EventsEditor
             addButton.onClick.RemoveListener(OnAddButton);
             removeButton.onClick.RemoveListener(OnRemoveButton);
             freeCameraButton.onClick.RemoveListener(OnFreeCameraButton);
-            marker.OnDragDebounced -= OnMarker;
+            marker.OnEndEdit -= OnMarker;
         }
 
         private void OnChartEdit()

@@ -13,7 +13,7 @@ namespace ArcCreate.Compose.Timeline
 
         public event Action<int, int> OnValueChanged;
 
-        public event Action<int, int> OnDragDebounced;
+        public event Action<int, int> OnEndEdit;
 
         public int Timing { get; private set; }
 
@@ -61,7 +61,7 @@ namespace ArcCreate.Compose.Timeline
         {
             UpdateTiming();
 
-            OnDragDebounced?.Invoke(Timing, EndTiming);
+            OnEndEdit?.Invoke(Timing, EndTiming);
         }
 
         private void UpdateTiming()

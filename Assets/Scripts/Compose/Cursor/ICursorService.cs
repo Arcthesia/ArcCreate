@@ -15,6 +15,8 @@ namespace ArcCreate.Compose.Cursor
 
         int CursorLane { get; }
 
+        bool IsCursorAboveViewport { get; }
+
         /// <summary>
         /// Request for a selection of a timing value.
         /// </summary>

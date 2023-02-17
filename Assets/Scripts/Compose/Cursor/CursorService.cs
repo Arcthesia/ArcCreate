@@ -20,6 +20,7 @@ namespace ArcCreate.Compose.Cursor
         [SerializeField] private LineRenderer cursorVerticalY;
         [SerializeField] private Camera editorCamera;
         [SerializeField] private RectTransform gameplayViewport;
+        private bool isCursorAboveViewport;
         private bool isLaneCursorEnabled;
         private bool isHittingLane;
         private bool isHittingVertical;
@@ -42,6 +43,8 @@ namespace ArcCreate.Compose.Cursor
         public int CursorLane => selectingLane;
 
         public bool IsHittingLane => isHittingLane;
+
+        public bool IsCursorAboveViewport => isCursorAboveViewport;
 
         public async UniTask<(bool wasSuccessful, int timing)> RequestTimingSelection(
             SubAction confirm,
@@ -178,8 +181,8 @@ namespace ArcCreate.Compose.Cursor
                 Mouse mouse = Mouse.current;
                 Camera gameplayCamera = Services.Gameplay.Camera.GameplayCamera;
                 Vector2 mousePosition = mouse.position.ReadValue();
-                if (Dialog.IsAnyOpen
-                || !RectTransformUtility.RectangleContainsScreenPoint(gameplayViewport, mousePosition, editorCamera))
+                isCursorAboveViewport = !Dialog.IsAnyOpen && RectTransformUtility.RectangleContainsScreenPoint(gameplayViewport, mousePosition, editorCamera);
+                if (!isCursorAboveViewport)
                 {
                     return;
                 }

@@ -14,7 +14,7 @@ namespace ArcCreate.Compose.Editing
         [SubAction("Confirm", false, "<u-mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
         [RequireGameplayLoaded]
-        [WhitelistScopes(typeof(Timeline.TimelineService), typeof(Grid.GridService))]
+        [WhitelistScopes(typeof(Timeline.TimelineService), typeof(Grid.GridService), typeof(Cursor.CursorService))]
         public async UniTask StartCreatingNote(EditorAction action)
         {
             if (!Services.Cursor.IsHittingLane)
@@ -238,6 +238,7 @@ namespace ArcCreate.Compose.Editing
                 if (success)
                 {
                     arctap.Arc = GetClosestArc(timing, elligibleArcs, pos);
+                    arctap.Arc.ArcTaps.Add(arctap);
                     Services.History.AddCommandWithoutExecuting(command);
                 }
                 else
@@ -248,6 +249,7 @@ namespace ArcCreate.Compose.Editing
                 return;
             }
 
+            elligibleArcs[0].ArcTaps.Add(arctap);
             Services.History.AddCommand(command);
         }
 
