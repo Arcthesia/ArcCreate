@@ -63,5 +63,10 @@ namespace ArcCreate.Compose.Cursor
             int showGridAtTiming,
             Action<Vector2> update = null,
             Func<Vector2, bool> constraint = null);
+
+        /// <summary>
+        /// Forces lane cursor to update even when <see cref="ICursorService.EnableLaneCursor"/> is false.
+        /// </summary>
+        void ForceUpdateLaneCursor();
     }
 }

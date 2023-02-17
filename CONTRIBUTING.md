@@ -13,11 +13,13 @@ My text editor of choice is [VSCode](https://code.visualstudio.com/) because my 
 
 #### Use the correct Unity version
 
-Do not upgrade or downgrade the project's version, and use the exact version of Unity as everyone else.
+Do not upgrade or downgrade the project's version, and use the exact version of Unity as everyone else. If you have a good reason to upgrade then open an issue and everyone can discuss on it.
 
 #### Follow code style guidelines
 
 This project has already been configured to work with StyleCop linter, and will highlight any style guidelines violations within your code (at least, I've only tested this on VSCode, but it should work similarly with Visual Studio). There's also codefixes available (`Ctrl+.` on VSCode) which is very handy for quickly reformatting to the style guidelines.
+
+Also, please avoid modifying .editorconfig to disable linting rules before consulting with me and other contributors first.
 
 #### Write XML documentation for public members
 
@@ -45,13 +47,15 @@ If you want to make any major changes to the application, such as addition of en
 
 #### Only optimize where necessary
 
-In other words, try to optimize on code paths that are run every single frame. It's also recommended that you profile the game before trying optimize, since you might waste a bunch of time at best, or make the problem worse at worst.
+In other words, try to optimize on code paths that are run every single frame. It's also recommended that you profile the game before trying optimize, since you might waste a bunch of time at best, or make the problem worse at worst. Unity's profiler is very capable and you should rely on it to know where to optimize.
 
 #### Avoid allocating memory at runtime
 
-Allocating memory will generate garbage, which needs to be cleaned up later. This is called garbage collection. This is one of the biggest cause of performance issue in C# programs. 
+Allocating memory will generate garbage, which needs to be cleaned up later. This is called garbage collection. This is one of the biggest cause of performance issue in C# programs.
 
 Worse, a small amount of allocation each frame will still cause issue. As we don't know when the garbage collector wil be run, it might try to clean up a bunch of garbage at once, which might cause lag spikes. This is extremely detrimental to a rhythm game like ArcCreate. It also doesn't help that Unity's garbage collector is one of the least optimized out there. Therefore you should minimize memory allocation as much as possible.
+
+Runtime allocation is acceptable if it's only contained to the Compose system (i.e. only happens on Desktop builds). You should still try to minimize allocation though.
 
 You can read [the official guide by Unity](https://docs.unity3d.com/Manual/performance-garbage-collection-best-practices.html), or [this article by Sebastiano Mandalà](https://www.sebaslab.com/zero-allocation-code-in-unity/), which goes in depth about how you'd achieve this.
 

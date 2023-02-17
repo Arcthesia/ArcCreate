@@ -388,7 +388,7 @@ namespace ArcCreate.Gameplay.Data
         {
             if (EndTiming == Timing)
             {
-                return ArcFormula.ArcXToWorld(XStart);
+                return ArcFormula.ArcXToWorld(timing <= Timing ? XStart : XEnd);
             }
 
             float p = Mathf.Clamp((float)(timing - Timing) / (EndTiming - Timing), 0, 1);
@@ -399,7 +399,7 @@ namespace ArcCreate.Gameplay.Data
         {
             if (EndTiming == Timing)
             {
-                return ArcFormula.ArcYToWorld(YStart);
+                return ArcFormula.ArcYToWorld(timing <= Timing ? YStart : YEnd);
             }
 
             float p = Mathf.Clamp((float)(timing - Timing) / (EndTiming - Timing), 0, 1);
@@ -410,7 +410,7 @@ namespace ArcCreate.Gameplay.Data
         {
             if (EndTiming == Timing)
             {
-                return XStart;
+                return timing <= Timing ? XStart : XEnd;
             }
 
             float p = Mathf.Clamp((float)(timing - Timing) / (EndTiming - Timing), 0, 1);
@@ -421,7 +421,7 @@ namespace ArcCreate.Gameplay.Data
         {
             if (EndTiming == Timing)
             {
-                return YStart;
+                return timing <= Timing ? YStart : YEnd;
             }
 
             float p = Mathf.Clamp((float)(timing - Timing) / (EndTiming - Timing), 0, 1);

@@ -57,7 +57,6 @@ namespace ArcCreate.Compose.Cursor
                 confirm: confirm,
                 cancel: cancel,
                 selector: () => selectingTiming,
-                collideCheck: () => isHittingLane,
                 isValidTypedChar: char.IsDigit,
                 convertTypedStringToValue: (s) =>
                 {
@@ -82,7 +81,6 @@ namespace ArcCreate.Compose.Cursor
                 confirm: confirm,
                 cancel: cancel,
                 selector: () => selectingLane,
-                collideCheck: () => isHittingLane,
                 isValidTypedChar: char.IsDigit,
                 convertTypedStringToValue: (s) =>
                 {
@@ -109,7 +107,6 @@ namespace ArcCreate.Compose.Cursor
                 confirm: confirm,
                 cancel: cancel,
                 selector: () => selectingVerticalPoint,
-                collideCheck: () => isHittingVertical,
                 isValidTypedChar: (c) => char.IsDigit(c) || c == ',',
                 convertTypedStringToValue: (s) =>
                 {
@@ -173,6 +170,20 @@ namespace ArcCreate.Compose.Cursor
             }
         }
 #endif
+
+        public void ForceUpdateLaneCursor()
+        {
+            Camera gameplayCamera = Services.Gameplay.Camera.GameplayCamera;
+            Mouse mouse = Mouse.current;
+            Vector2 mousePosition = mouse.position.ReadValue();
+            Ray ray = gameplayCamera.ScreenPointToRay(mousePosition);
+            bool isCursorHoveringOnTrack = laneCollider.Raycast(ray, out RaycastHit laneHit, 120);
+            isHittingLane = isLaneCursorEnabled && isCursorHoveringOnTrack;
+            if (isCursorHoveringOnTrack)
+            {
+                AlignLaneCursor(laneHit);
+            }
+        }
 
         private void Update()
         {
@@ -317,13 +328,13 @@ namespace ArcCreate.Compose.Cursor
             SubAction confirm,
             SubAction cancel,
             Func<T> selector,
-            Func<bool> collideCheck,
             Func<char, bool> isValidTypedChar,
             Func<string, (bool, T)> convertTypedStringToValue,
             Action<T> update = null,
             Func<T, bool> constraint = null)
         {
             T result = default;
+            bool resultSet = false;
 
             // Printing the value every time anyway, StringBuilder doesn't help
             string typedValue = "";
@@ -373,6 +384,7 @@ namespace ArcCreate.Compose.Cursor
                 if (valid)
                 {
                     result = selecting;
+                    resultSet = true;
                     update?.Invoke(result);
                 }
 
@@ -385,6 +397,7 @@ namespace ArcCreate.Compose.Cursor
                     {
                         wasSuccessful = true;
                         result = value;
+                        resultSet = true;
                         break;
                     }
                     else
@@ -394,9 +407,9 @@ namespace ArcCreate.Compose.Cursor
                     }
                 }
 
-                if (confirm.WasExecuted && collideCheck.Invoke() && valid)
+                if (confirm.WasExecuted)
                 {
-                    wasSuccessful = true;
+                    wasSuccessful = resultSet;
                     break;
                 }
 

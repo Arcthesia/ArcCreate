@@ -15,7 +15,7 @@ namespace ArcCreate.Gameplay.Data
             FloorPosition = TimingGroupInstance.GetFloorPosition(Timing);
         }
 
-        protected float ZPos(double floorPosition)
+        public float ZPos(double floorPosition)
             => ArcFormula.FloorPositionToZ(FloorPosition - floorPosition);
     }
 }
