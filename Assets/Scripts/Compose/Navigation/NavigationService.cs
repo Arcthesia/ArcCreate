@@ -10,6 +10,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.Utilities;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using YamlDotNet.RepresentationModel;
 
@@ -213,7 +214,7 @@ namespace ArcCreate.Compose.Navigation
                 }
                 else if (type.IsSubclassOf(typeof(Component)))
                 {
-                    instance = Resources.FindObjectsOfTypeAll(type)[0];
+                    instance = FindComponent(type);
                     instances.Add(type, instance);
                 }
                 else
@@ -412,6 +413,26 @@ namespace ArcCreate.Compose.Navigation
                     action.Execute();
                 }
             }
+        }
+
+        private object FindComponent(Type type)
+        {
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                var s = SceneManager.GetSceneAt(i);
+                var allGameObjects = s.GetRootGameObjects();
+                for (int j = 0; j < allGameObjects.Length; j++)
+                {
+                    var go = allGameObjects[j];
+                    object comp = go.GetComponentInChildren(type);
+                    if (comp != null)
+                    {
+                        return comp;
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }

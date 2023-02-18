@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ArcCreate.Compose.Components;
 using ArcCreate.Compose.History;
 using ArcCreate.Gameplay;
+using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Parser;
 using TMPro;
@@ -34,7 +36,7 @@ namespace ArcCreate.Compose.Selection
         [SerializeField] private ArcColorSelector arcColorField;
         [SerializeField] private Button arcOrTraceButton;
         [SerializeField] private TMP_InputField sfxField;
-        [SerializeField] private TMP_InputField groupField;
+        [SerializeField] private TimingGroupField groupField;
         [SerializeField] private Button selectArcButton;
         [SerializeField] private Button selectArcTapButton;
 
@@ -112,7 +114,17 @@ namespace ArcCreate.Compose.Selection
             arcTypeField.SetValueWithoutNotify(ExtractCommonProperty<Arc, int>(n => (int)n.LineType, out int lineTypeNum) ? (ArcLineType)lineTypeNum : ArcLineType.Unknown);
             arcColorField.SetValueWithoutNotify(ExtractCommonProperty<Arc, int>(n => n.Color, out int color) ? color : int.MinValue);
             sfxField.text = ExtractCommonProperty<Arc, string>(n => n.Sfx, out string sfx) ? sfx : Mixed;
-            groupField.text = ExtractCommonProperty<Note, int>(n => n.TimingGroup, out int group) ? group.ToString() : Mixed;
+
+            bool tg = ExtractCommonProperty<Note, int>(n => n.TimingGroup, out int group);
+            groupField.SetValueWithoutNotify(null);
+            if (tg)
+            {
+                TimingGroup timingGroup = Services.Gameplay.Chart.GetTimingGroup(group);
+                if (timingGroup.GroupProperties.Editable)
+                {
+                    groupField.SetValueWithoutNotify(timingGroup);
+                }
+            }
 
             bool areAllTraceOrAllArc = ExtractCommonProperty<Arc, bool>(n => n.IsTrace, out bool areAllTrace);
             if (areAllTraceOrAllArc && areAllTrace)
@@ -181,7 +193,7 @@ namespace ArcCreate.Compose.Selection
             arcColorField.OnColorChanged += OnArcColorField;
             arcOrTraceButton.onClick.AddListener(OnArcOrTraceButton);
             sfxField.onEndEdit.AddListener(OnSfxField);
-            groupField.onEndEdit.AddListener(OnGroupField);
+            groupField.OnValueChanged += OnGroupField;
             selectArcButton.onClick.AddListener(OnSelectArcButton);
             selectArcTapButton.onClick.AddListener(OnSelectArcTapButton);
         }
@@ -200,7 +212,7 @@ namespace ArcCreate.Compose.Selection
             arcColorField.OnColorChanged -= OnArcColorField;
             arcOrTraceButton.onClick.RemoveListener(OnArcOrTraceButton);
             sfxField.onEndEdit.RemoveListener(OnSfxField);
-            groupField.onEndEdit.RemoveListener(OnGroupField);
+            groupField.OnValueChanged -= OnGroupField;
             selectArcButton.onClick.RemoveListener(OnSelectArcButton);
             selectArcTapButton.onClick.RemoveListener(OnSelectArcTapButton);
         }
@@ -453,19 +465,16 @@ namespace ArcCreate.Compose.Selection
                 a => a.Sfx = value);
         }
 
-        private void OnGroupField(string value)
+        private void OnGroupField(TimingGroup tg)
         {
-            if (value == Mixed)
-            {
-                return;
-            }
-
-            if (Evaluator.TryInt(value, out int group))
+            if (tg.GroupProperties.Editable)
             {
                 ModifyNotes<Note>(
-                    ev => ev.TimingGroup != group,
-                    ev => ev.TimingGroup = group);
+                    ev => ev.TimingGroup != tg.GroupNumber,
+                    ev => ev.TimingGroup = tg.GroupNumber);
             }
+
+            groupField.SetValueWithoutNotify(selected.First().TimingGroupInstance);
         }
 
         private void ModifyNotes<T>(Func<T, bool> include, Action<T> modifier, Func<T, bool> requirement = null)

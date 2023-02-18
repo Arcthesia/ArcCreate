@@ -28,7 +28,14 @@ namespace ArcCreate.Gameplay.Chart
         /// </summary>
         public virtual void Clear()
         {
-            Pool.ReturnAll();
+            foreach (var note in notes)
+            {
+                if (note.IsAssignedInstance)
+                {
+                    Pool.Return(note.RevokeInstance());
+                }
+            }
+
             notes.Clear();
         }
 

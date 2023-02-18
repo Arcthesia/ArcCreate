@@ -15,7 +15,7 @@ namespace ArcCreate.Compose.Components
 
         [Header("Common")]
         [SerializeField] private TMP_InputField densityField;
-        [SerializeField] private TMP_InputField groupField;
+        [SerializeField] private TimingGroupField groupField;
         [SerializeField] private TMP_Dropdown inputModeDropdown;
 
         [Header("Gameplay")]
@@ -60,10 +60,8 @@ namespace ArcCreate.Compose.Components
             inputModeDropdown.onValueChanged.AddListener(OnInputModeDropdown);
             speedField.onEndEdit.AddListener(OnSpeedField);
             densityField.onEndEdit.AddListener(OnDensityField);
-            groupField.onEndEdit.AddListener(OnGroupField);
 
             Settings.InputMode.OnValueChanged.AddListener(OnSettingInputMode);
-            Values.EditingTimingGroup.OnValueChange += OnGroup;
             Values.BeatlineDensity.OnValueChange += OnDensity;
 
             musicAudioField.SetTextWithoutNotify(Settings.MusicAudio.Value.ToString());
@@ -80,7 +78,6 @@ namespace ArcCreate.Compose.Components
             inputModeDropdown.SetValueWithoutNotify(Settings.InputMode.Value);
             speedField.SetTextWithoutNotify((Settings.DropRate.Value / Values.DropRateScalar).ToString());
             densityField.SetTextWithoutNotify(Values.BeatlineDensity.Value.ToString());
-            groupField.SetTextWithoutNotify(Values.EditingTimingGroup.Value.ToString());
         }
 
         private void OnDestroy()
@@ -102,10 +99,8 @@ namespace ArcCreate.Compose.Components
             inputModeDropdown.onValueChanged.RemoveListener(OnInputModeDropdown);
             speedField.onEndEdit.RemoveListener(OnSpeedField);
             densityField.onEndEdit.RemoveListener(OnDensityField);
-            groupField.onEndEdit.RemoveListener(OnGroupField);
 
             Settings.InputMode.OnValueChanged.RemoveListener(OnSettingInputMode);
-            Values.EditingTimingGroup.OnValueChange -= OnGroup;
             Values.BeatlineDensity.OnValueChange -= OnDensity;
         }
 
@@ -265,22 +260,6 @@ namespace ArcCreate.Compose.Components
         private void OnDensity(float density)
         {
             densityField.SetTextWithoutNotify(Values.BeatlineDensity.Value.ToString());
-        }
-
-        private void OnGroupField(string value)
-        {
-            if (Evaluator.TryInt(value, out int group))
-            {
-                var tg = Services.Gameplay.Chart.GetTimingGroup(group);
-                Values.EditingTimingGroup.Value = tg.GroupNumber;
-            }
-
-            groupField.SetTextWithoutNotify(Values.EditingTimingGroup.Value.ToString());
-        }
-
-        private void OnGroup(int group)
-        {
-            groupField.SetTextWithoutNotify(group.ToString());
         }
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using ArcCreate.ChartFormat;
 using ArcCreate.Compose.Components;
@@ -15,6 +14,7 @@ namespace ArcCreate.Compose.EventsEditor
         [SerializeField] private GameObject highlight;
         [SerializeField] private GameObject clickBlocker;
         [SerializeField] private TMP_InputField nameField;
+        [SerializeField] private TMP_Text fileText;
         [SerializeField] private TMP_InputField propertiesField;
         [SerializeField] private Toggle visibilityButton;
 
@@ -43,6 +43,7 @@ namespace ArcCreate.Compose.EventsEditor
         {
             Reference = null;
             nameField.gameObject.SetActive(false);
+            fileText.gameObject.SetActive(false);
             propertiesField.gameObject.SetActive(false);
             visibilityButton.gameObject.SetActive(false);
             highlight.SetActive(false);
@@ -54,7 +55,7 @@ namespace ArcCreate.Compose.EventsEditor
             propertiesField.interactable = interactable;
             visibilityButton.interactable = interactable;
 
-            if (Reference != null && Reference.GroupNumber == 0)
+            if (Reference != null && (Reference.GroupNumber == 0 || !Reference.GroupProperties.Editable))
             {
                 nameField.interactable = false;
                 propertiesField.interactable = false;
@@ -71,6 +72,7 @@ namespace ArcCreate.Compose.EventsEditor
             Reference = datum;
             propertiesField.text = Reference.GroupProperties.ToRaw().ToStringWithoutName();
             nameField.gameObject.SetActive(true);
+            fileText.gameObject.SetActive(true);
             propertiesField.gameObject.SetActive(true);
             visibilityButton.gameObject.SetActive(true);
             visibilityButton.isOn = Reference.IsVisible;
@@ -95,6 +97,7 @@ namespace ArcCreate.Compose.EventsEditor
             }
 
             previousNameDisplay = nameField.text;
+            fileText.text = Reference.GroupProperties.FileName;
         }
 
         private void Awake()
@@ -110,7 +113,7 @@ namespace ArcCreate.Compose.EventsEditor
         {
             nameField.onEndEdit.RemoveListener(OnName);
             propertiesField.onEndEdit.RemoveListener(OnProperties);
-            visibilityButton.onValueChanged.AddListener(OnVisiblity);
+            visibilityButton.onValueChanged.RemoveListener(OnVisiblity);
 
             nameField.onSelect.RemoveListener(OnNameSelect);
         }
@@ -144,6 +147,7 @@ namespace ArcCreate.Compose.EventsEditor
             Reference.GroupProperties.Name = value;
             nameField.text = $"{Reference.GroupProperties.Name} ({Reference.GroupNumber})";
             previousNameDisplay = nameField.text;
+            (Table as GroupTable).UpdateEditingGroupField();
         }
 
         private void OnProperties(string value)

@@ -113,11 +113,6 @@ namespace ArcCreate.Gameplay.Data
                         break;
                 }
             }
-
-            if (reader.Events.Count != 0)
-            {
-                LastEventTiming = reader.Events.Last().Timing;
-            }
         }
 
         public int AudioOffset { get; private set; }
@@ -125,8 +120,6 @@ namespace ArcCreate.Gameplay.Data
         public float TimingPointDensity { get; private set; }
 
         public int TotalTimingGroups { get; private set; }
-
-        public int LastEventTiming { get; private set; } = 0;
 
         public List<ChartTimingGroup> TimingGroups { get; private set; }
 

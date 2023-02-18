@@ -200,9 +200,32 @@ namespace ArcCreate.ChartFormat
 
             foreach (ChartReader reference in references)
             {
+                int referenceBaseGroupCount = 0;
+                int removedBaseGroup = 0;
                 foreach (RawEvent e in reference.Events)
                 {
-                    e.TimingGroup += TimingGroups.Count;
+                    if (e.TimingGroup == 0)
+                    {
+                        referenceBaseGroupCount += 1;
+                    }
+                }
+
+                if (referenceBaseGroupCount <= 1)
+                {
+                    reference.TimingGroups.RemoveAt(0);
+                    removedBaseGroup = 1;
+                    for (int i = reference.Events.Count - 1; i >= 0; i--)
+                    {
+                        if (reference.Events[i].TimingGroup == 0)
+                        {
+                            reference.Events.RemoveAt(i);
+                        }
+                    }
+                }
+
+                foreach (RawEvent e in reference.Events)
+                {
+                    e.TimingGroup += TimingGroups.Count - removedBaseGroup;
                 }
 
                 Events.AddRange(reference.Events);
@@ -307,7 +330,11 @@ namespace ArcCreate.ChartFormat
 
             foreach (RawEvent e in extReader.Events)
             {
-                e.Timing += timing;
+                if (!(e is RawTiming && e.Timing == 0))
+                {
+                    e.Timing += timing;
+                }
+
                 if (e is RawHold)
                 {
                     (e as RawHold).EndTiming += timing;

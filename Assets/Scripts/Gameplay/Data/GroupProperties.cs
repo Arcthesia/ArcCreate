@@ -9,26 +9,34 @@ namespace ArcCreate.Gameplay.Data
         public GroupProperties()
         {
             Name = null;
+            FileName = null;
             SkinOverride = NoteSkinOverride.Default;
             FadingHolds = false;
             NoInput = false;
             NoClip = false;
             AngleX = 0;
             AngleY = 0;
+            Editable = true;
         }
 
         public GroupProperties(RawTimingGroup raw)
         {
             Name = raw.Name;
+            FileName = raw.File;
             SkinOverride = (NoteSkinOverride)(int)raw.Side;
             FadingHolds = raw.FadingHolds;
             NoInput = raw.NoInput;
             NoClip = raw.NoClip;
             AngleX = raw.AngleX;
             AngleY = raw.AngleY;
+            Editable = raw.Editable;
         }
 
         public string Name { get; set; }
+
+        public string FileName { get; set; }
+
+        public bool Editable { get; set; }
 
         public NoteSkinOverride SkinOverride { get; set; }
 
@@ -71,6 +79,7 @@ namespace ArcCreate.Gameplay.Data
             return new RawTimingGroup
             {
                 Name = Name,
+                File = FileName,
                 Side = (SideOverride)(int)SkinOverride,
                 FadingHolds = FadingHolds,
                 NoInput = NoInput,

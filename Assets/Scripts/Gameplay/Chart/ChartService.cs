@@ -357,7 +357,14 @@ namespace ArcCreate.Gameplay.Chart
                     else
                     {
                         GetTimingGroup(from).RemoveEvents(currentTgChange);
-                        GetTimingGroup(to).AddEvents(currentTgChange);
+                        TimingGroup target = GetTimingGroup(to);
+                        foreach (var note in currentTgChange)
+                        {
+                            note.TimingGroup = target.GroupNumber;
+                        }
+
+                        target.AddEvents(currentTgChange);
+
                         from = n.TimingGroupChangedFrom;
                         to = n.TimingGroup;
                         currentTgChange.Clear();
@@ -367,8 +374,17 @@ namespace ArcCreate.Gameplay.Chart
                     n.ResetTimingGroupChangedFrom();
                 }
 
-                GetTimingGroup(from).RemoveEvents(currentTgChange);
-                GetTimingGroup(to).AddEvents(currentTgChange);
+                {
+                    GetTimingGroup(from).RemoveEvents(currentTgChange);
+                    TimingGroup target = GetTimingGroup(to);
+                    foreach (var note in currentTgChange)
+                    {
+                        note.TimingGroup = target.GroupNumber;
+                        note.ResetTimingGroupChangedFrom();
+                    }
+
+                    target.AddEvents(currentTgChange);
+                }
             }
 
             List<ArcEvent> tgUnchanged = e.Where(n => !n.TimingGroupChanged).ToList();
@@ -394,6 +410,11 @@ namespace ArcCreate.Gameplay.Chart
                 TimingGroup newTg = new TimingGroup(timingGroups.Count);
                 newTg.Load(go.transform);
                 timingGroups.Add(newTg);
+                if (string.IsNullOrEmpty(newTg.GroupProperties.FileName))
+                {
+                    newTg.GroupProperties.FileName = timingGroups[0].GroupProperties.FileName;
+                }
+
                 return newTg;
             }
 

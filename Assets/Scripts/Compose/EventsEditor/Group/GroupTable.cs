@@ -13,6 +13,22 @@ namespace ArcCreate.Compose.EventsEditor
         [SerializeField] private GameplayData gameplayData;
         [SerializeField] private Button addButton;
         [SerializeField] private Button removeButton;
+        [SerializeField] private TimingGroupField editingTimingGroupField;
+
+        public override TimingGroup Selected
+        {
+            get => base.Selected;
+            set
+            {
+                base.Selected = value;
+                removeButton.interactable = Selected?.GroupProperties.Editable ?? false;
+            }
+        }
+
+        public void UpdateEditingGroupField()
+        {
+            editingTimingGroupField.SetValueWithoutNotify(Selected);
+        }
 
         protected override void Update()
         {
@@ -26,6 +42,7 @@ namespace ArcCreate.Compose.EventsEditor
             Values.EditingTimingGroup.OnValueChange += OnEdittingTimingGroup;
             addButton.onClick.AddListener(OnAddButton);
             removeButton.onClick.AddListener(OnRemoveButton);
+            editingTimingGroupField.OnValueChanged += OnEditingTimingGroupField;
         }
 
         protected override void OnDestroy()
@@ -35,12 +52,19 @@ namespace ArcCreate.Compose.EventsEditor
             Values.EditingTimingGroup.OnValueChange -= OnEdittingTimingGroup;
             addButton.onClick.RemoveListener(OnAddButton);
             removeButton.onClick.RemoveListener(OnRemoveButton);
+            editingTimingGroupField.OnValueChanged -= OnEditingTimingGroupField;
+        }
+
+        private void OnEditingTimingGroupField(TimingGroup obj)
+        {
+            Values.EditingTimingGroup.Value = obj.GroupNumber;
         }
 
         private void OnEdittingTimingGroup(int group)
         {
             Selected = Services.Gameplay.Chart.GetTimingGroup(group);
             SetData(Services.Gameplay.Chart.TimingGroups);
+            editingTimingGroupField.SetValueWithoutNotify(Selected);
         }
 
         private void OnAddButton()

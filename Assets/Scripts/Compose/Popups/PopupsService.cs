@@ -12,6 +12,7 @@ namespace ArcCreate.Compose.Popups
         [SerializeField] private ColorPickerWindow colorPickerWindow;
         [SerializeField] private ArcTypePickerWindow arcTypePickerWindow;
         [SerializeField] private ArcColorPickerWindow arcColorPickerWindow;
+        [SerializeField] private TimingGroupPicker timingGroupPickerWindow;
         [SerializeField] private AudioClip vineboom;
 
         public void CreateTextDialog(string title, string content, params ButtonSetting[] buttonSettings)
@@ -42,6 +43,12 @@ namespace ArcCreate.Compose.Popups
         {
             colorPickerWindow.OpenAt(screenPosition, defaultColor);
             return colorPickerWindow;
+        }
+
+        public TimingGroupPicker OpenTimingGroupPicker(Vector2 screenPosition, int? defaultTg, object caller)
+        {
+            timingGroupPickerWindow.OpenAt(screenPosition, defaultTg, caller);
+            return timingGroupPickerWindow;
         }
 
         public void PlayVineBoom()

@@ -32,6 +32,15 @@ namespace ArcCreate.Compose.Popups
         ArcColorPickerWindow OpenArcColorPicker(Vector2 screenPosition, int? defaultColor, object caller);
 
         /// <summary>
+        /// Open a timing group picker at the specified screen position.
+        /// </summary>
+        /// <param name="screenPosition">The screen position to open the picker at.</param>
+        /// <param name="defaultTimingGroup">The timing group to initialize the picker with.</param>
+        /// <param name="caller">The object that opened this window.</param>
+        /// <returns>An arc type picker instance.</returns>
+        TimingGroupPicker OpenTimingGroupPicker(Vector2 screenPosition, int? defaultTimingGroup, object caller);
+
+        /// <summary>
         /// Open a text dialog.
         /// </summary>
         /// <param name="title">The dialog's title.</param>

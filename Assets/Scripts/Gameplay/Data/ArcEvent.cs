@@ -24,7 +24,11 @@ namespace ArcCreate.Gameplay.Data
             get => timingGroup;
             set
             {
-                TimingGroupChangedFrom = timingGroup;
+                if (TimingGroupChangedFrom == int.MinValue)
+                {
+                    TimingGroupChangedFrom = timingGroup;
+                }
+
                 timingGroup = value;
             }
         }
@@ -43,7 +47,7 @@ namespace ArcCreate.Gameplay.Data
         /// Gets a value indicating whether this note's timing group property has been changed
         /// and it has not been moved to the correct timing group yet.
         /// </summary>
-        public bool TimingGroupChanged => TimingGroupChangedFrom == int.MinValue && TimingGroupChangedFrom != TimingGroup;
+        public bool TimingGroupChanged => TimingGroupChangedFrom != int.MinValue && TimingGroupChangedFrom != TimingGroup;
 
         public void ResetTimingGroupChangedFrom() => TimingGroupChangedFrom = int.MinValue;
 

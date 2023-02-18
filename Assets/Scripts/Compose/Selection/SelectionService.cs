@@ -188,6 +188,11 @@ namespace ArcCreate.Compose.Selection
 
         public void AddNoteToSelection(Note note)
         {
+            if (!note.TimingGroupInstance.GroupProperties.Editable)
+            {
+                return;
+            }
+
             selectedNotes.Add(note);
             note.IsSelected = true;
         }
@@ -269,6 +274,11 @@ namespace ArcCreate.Compose.Selection
                 if (hit.transform.TryGetComponent<NoteBehaviour>(out var behaviour))
                 {
                     note = behaviour.Note;
+                    if (!note.TimingGroupInstance.GroupProperties.Editable)
+                    {
+                        continue;
+                    }
+
                     switch (selectionMode)
                     {
                         case SelectionMode.Any:

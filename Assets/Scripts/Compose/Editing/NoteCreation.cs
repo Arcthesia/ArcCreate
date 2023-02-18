@@ -104,6 +104,7 @@ namespace ArcCreate.Compose.Editing
                 },
                 constraint: t => t > hold.Timing);
             previewHold.gameObject.SetActive(true);
+            Services.Cursor.EnableLaneCursor = true;
 
             if (success)
             {
@@ -191,6 +192,7 @@ namespace ArcCreate.Compose.Editing
                     Services.Gameplay.Chart.UpdateEvents(events);
                 });
             previewArc.gameObject.SetActive(true);
+            Services.Cursor.EnableLaneCursor = true;
 
             if (endPosSuccess)
             {

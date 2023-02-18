@@ -1,3 +1,4 @@
+using ArcCreate.Gameplay.Chart;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,6 +6,7 @@ namespace ArcCreate.Compose.EventsEditor
 {
     public class EventsEditor : MonoBehaviour
     {
+        [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private Color highlightColor;
         [SerializeField] private Color normalColor;
         [SerializeField] private Button showTimingButton;
@@ -22,8 +24,15 @@ namespace ArcCreate.Compose.EventsEditor
             showTimingButton.onClick.AddListener(OnShowTiming);
             showCameraButton.onClick.AddListener(OnShowCamera);
             showScenecontrolButton.onClick.AddListener(OnShowScenecontrol);
+            Values.EditingTimingGroup.OnValueChange += OnTimingGroup;
 
             OnShowTiming();
+        }
+
+        private void OnTimingGroup(int tg)
+        {
+            TimingGroup group = Services.Gameplay.Chart.GetTimingGroup(tg);
+            canvasGroup.interactable = group.GroupProperties.Editable;
         }
 
         private void OnDestroy()
@@ -31,6 +40,8 @@ namespace ArcCreate.Compose.EventsEditor
             showTimingButton.onClick.RemoveListener(OnShowTiming);
             showCameraButton.onClick.RemoveListener(OnShowCamera);
             showScenecontrolButton.onClick.RemoveListener(OnShowScenecontrol);
+
+            Values.EditingTimingGroup.OnValueChange -= OnTimingGroup;
         }
 
         private void OnShowTiming()

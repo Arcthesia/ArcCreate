@@ -124,6 +124,8 @@ namespace ArcCreate.Compose.Timeline
             newFrom = Mathf.Clamp(newFrom, 0, clip.length - viewDistance);
             viewFromSecond = newFrom;
             viewToSecond = viewFromSecond + viewDistance;
+            targetViewFromSecond = viewFromSecond;
+            targetViewToSecond = viewToSecond;
 
             ApplyViewRangeToWaveform();
         }
