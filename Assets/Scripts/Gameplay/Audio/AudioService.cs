@@ -206,7 +206,11 @@ namespace ArcCreate.Gameplay.Audio
             audioTiming = timing;
             Services.Chart.ResetJudge();
 
-            audioSource.time = timing / 1000f;
+            audioSource.time = Mathf.Max(0, timing) / 1000f;
+            if (timing < 0)
+            {
+                delay += -timing;
+            }
 
             dspStartPlayingTime = AudioSettings.dspTime + ((double)delay / 1000);
             startTime = timing;

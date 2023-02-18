@@ -213,7 +213,7 @@ namespace ArcCreate.Compose.Navigation
                 }
                 else if (type.IsSubclassOf(typeof(Component)))
                 {
-                    instance = FindObjectOfType(type);
+                    instance = Resources.FindObjectsOfTypeAll(type)[0];
                     instances.Add(type, instance);
                 }
                 else

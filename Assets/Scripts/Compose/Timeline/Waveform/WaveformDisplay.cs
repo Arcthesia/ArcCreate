@@ -1,5 +1,6 @@
 using System;
 using ArcCreate.Gameplay;
+using ArcCreateo.Compose.Components;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -14,11 +15,15 @@ namespace ArcCreate.Compose.Timeline
         [SerializeField] private RawImage image;
         [SerializeField] private RectTransform container;
         [SerializeField] private TicksDisplay ticksDisplay;
+        [SerializeField] private SliderRange slider;
         [SerializeField] private float minViewLength = 0.5f;
         [SerializeField] private float minScrollDist = 0.20f;
+        [SerializeField] private float scrollDelay = 0.1f;
 
         private float viewFromSecond;
         private float viewToSecond;
+        private float targetViewFromSecond;
+        private float targetViewToSecond;
         private float minViewLengthOfClip;
         [SerializeField] private AudioClip clip;
         private Keyboard keyboard;
@@ -60,48 +65,47 @@ namespace ArcCreate.Compose.Timeline
             float scrollDir = Mathf.Sign(scrollDelta.y);
             float scrollSensitivity = Settings.ScrollSensitivityTimeline.Value;
 
-            if (keyboard.shiftKey.isPressed)
+            int interation = keyboard.shiftKey.isPressed ? 5 : 1;
+            for (int i = 0; i < interation; i++)
             {
-                scrollDir *= 5;
-            }
-
-            if (keyboard.ctrlKey.isPressed)
-            {
-                float pivotSecond = Mathf.Lerp(viewFromSecond, viewToSecond, scrollPivot);
-                float oldViewSize = viewToSecond - viewFromSecond;
-                float viewSize = oldViewSize * (1 - (scrollDir * scrollSensitivity));
-                viewSize = Mathf.Max(viewSize, minViewLengthOfClip);
-
-                // x -----scrollPivot ------ pivotSecond -------- 1 - scrollPivot --------- y
-                // [<--------------------------viewSize------------------------------------>]
-                viewFromSecond = pivotSecond - (viewSize * scrollPivot);
-                viewToSecond = pivotSecond + (viewSize * (1 - scrollPivot));
-
-                viewFromSecond = Mathf.Clamp(viewFromSecond, 0, clip.length);
-                viewToSecond = Mathf.Clamp(viewToSecond, 0, clip.length);
-
-                if (viewFromSecond > viewToSecond)
+                if (keyboard.ctrlKey.isPressed)
                 {
-                    (viewFromSecond, viewToSecond) = (viewToSecond, viewFromSecond);
+                    float pivotSecond = Mathf.Lerp(targetViewFromSecond, targetViewToSecond, scrollPivot);
+                    float oldViewSize = targetViewToSecond - targetViewFromSecond;
+                    float viewSize = oldViewSize * (1 - (scrollDir * scrollSensitivity));
+                    viewSize = Mathf.Max(viewSize, minViewLengthOfClip);
+
+                    // x -----scrollPivot ------ pivotSecond -------- 1 - scrollPivot --------- y
+                    // [<--------------------------viewSize------------------------------------>]
+                    targetViewFromSecond = pivotSecond - (viewSize * scrollPivot);
+                    targetViewToSecond = pivotSecond + (viewSize * (1 - scrollPivot));
+
+                    targetViewFromSecond = Mathf.Clamp(targetViewFromSecond, 0, clip.length);
+                    targetViewToSecond = Mathf.Clamp(targetViewToSecond, 0, clip.length);
+
+                    if (targetViewFromSecond > targetViewToSecond)
+                    {
+                        (targetViewFromSecond, targetViewToSecond) = (targetViewToSecond, targetViewFromSecond);
+                    }
+
+                    OnWaveformZoom?.Invoke();
                 }
+                else
+                {
+                    float viewSize = targetViewToSecond - targetViewFromSecond;
+                    float offset = Mathf.Max(viewSize * Mathf.Abs(scrollSensitivity), minScrollDist);
+                    offset *= Mathf.Sign(scrollSensitivity);
 
-                OnWaveformZoom?.Invoke();
-            }
-            else
-            {
-                float viewSize = viewToSecond - viewFromSecond;
-                float offset = Mathf.Max(viewSize * Mathf.Abs(scrollSensitivity), minScrollDist);
-                offset *= Mathf.Sign(scrollSensitivity);
+                    targetViewFromSecond -= scrollDir * offset;
+                    targetViewToSecond -= scrollDir * offset;
 
-                viewFromSecond -= scrollDir * offset;
-                viewToSecond -= scrollDir * offset;
+                    targetViewToSecond = Mathf.Clamp(targetViewToSecond, 0, clip.length);
+                    targetViewFromSecond = Mathf.Clamp(targetViewFromSecond, 0, targetViewToSecond - viewSize);
 
-                viewToSecond = Mathf.Clamp(viewToSecond, 0, clip.length);
-                viewFromSecond = Mathf.Clamp(viewFromSecond, 0, viewToSecond - viewSize);
-
-                viewFromSecond = Mathf.Clamp(viewFromSecond, 0, clip.length);
-                viewToSecond = Mathf.Clamp(viewToSecond, viewFromSecond + viewSize, clip.length);
-                OnWaveformScroll?.Invoke();
+                    targetViewFromSecond = Mathf.Clamp(targetViewFromSecond, 0, clip.length);
+                    targetViewToSecond = Mathf.Clamp(targetViewToSecond, targetViewFromSecond + viewSize, clip.length);
+                    OnWaveformScroll?.Invoke();
+                }
             }
 
             ticksDisplay.UpdateTicks();
@@ -143,6 +147,29 @@ namespace ArcCreate.Compose.Timeline
         {
             image.material.SetInt(fromSampleShaderId, WaveformGenerator.SecondToSample(viewFromSecond, clip));
             image.material.SetInt(toSampleShaderId, WaveformGenerator.SecondToSample(viewToSecond, clip));
+            if (clip != null)
+            {
+                slider.SetValueWithoutNotify(viewFromSecond / clip.length, viewToSecond / clip.length);
+            }
+        }
+
+        private void OnSlider(float from, float to)
+        {
+            if (clip == null)
+            {
+                return;
+            }
+
+            viewFromSecond = from * clip.length;
+            viewToSecond = to * clip.length;
+
+            viewFromSecond = Mathf.Clamp(viewFromSecond, 0, viewToSecond - minViewLengthOfClip);
+            viewToSecond = Mathf.Clamp(viewToSecond, viewFromSecond + minViewLengthOfClip, clip.length);
+
+            targetViewFromSecond = viewFromSecond;
+            targetViewToSecond = viewToSecond;
+
+            ApplyViewRangeToWaveform();
         }
 
         private void Awake()
@@ -152,11 +179,20 @@ namespace ArcCreate.Compose.Timeline
             image.enabled = false;
             gameplayData.AudioClip.OnValueChange += OnClipLoad;
             keyboard = InputSystem.GetDevice<Keyboard>();
+            slider.OnValueChanged += OnSlider;
         }
 
         private void OnDestroy()
         {
             gameplayData.AudioClip.OnValueChange -= OnClipLoad;
+            slider.OnValueChanged -= OnSlider;
+        }
+
+        private void Update()
+        {
+            viewFromSecond += (targetViewFromSecond - viewFromSecond) * scrollDelay;
+            viewToSecond += (targetViewToSecond - viewToSecond) * scrollDelay;
+            ApplyViewRangeToWaveform();
         }
 
         private void OnClipLoad(AudioClip clip)
@@ -164,6 +200,8 @@ namespace ArcCreate.Compose.Timeline
             this.clip = clip;
             viewFromSecond = 0;
             viewToSecond = clip.length;
+            targetViewFromSecond = viewFromSecond;
+            targetViewToSecond = viewToSecond;
             minViewLengthOfClip = Mathf.Min(clip.length, minViewLength);
             GenerateWaveform();
         }
