@@ -111,6 +111,28 @@ namespace ArcCreate.Gameplay.Data
                                 Arguments = sc.Arguments,
                             });
                         break;
+
+                    case RawEventType.Include:
+                        var incl = e as RawInclude;
+                        TimingGroups[incl.TimingGroup].ReferenceEvents.Add(
+                            new IncludeEvent()
+                            {
+                                Timing = incl.Timing,
+                                TimingGroup = incl.TimingGroup,
+                                File = incl.File,
+                            });
+                        break;
+
+                    case RawEventType.Fragment:
+                        var frag = e as RawFragment;
+                        TimingGroups[frag.TimingGroup].ReferenceEvents.Add(
+                            new FragmentEvent()
+                            {
+                                Timing = frag.Timing,
+                                TimingGroup = frag.TimingGroup,
+                                File = frag.File,
+                            });
+                        break;
                 }
             }
         }

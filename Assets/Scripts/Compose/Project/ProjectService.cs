@@ -102,7 +102,7 @@ namespace ArcCreate.Compose.Project
             };
 
             AutofillChart(chart);
-            Serialize(projectSettings);
+            SerializeProject(projectSettings);
             OpenProject(projectSettings.Path);
 
             Debug.Log(
@@ -183,7 +183,8 @@ namespace ArcCreate.Compose.Project
             }
 
             CurrentChart.LastWorkingTiming = Services.Gameplay.Audio.AudioTiming;
-            Serialize(CurrentProject);
+            SerializeChart(CurrentProject);
+            SerializeProject(CurrentProject);
         }
 
         private void OnOpenConfirmed()
@@ -266,7 +267,7 @@ namespace ArcCreate.Compose.Project
                 }));
         }
 
-        private void Serialize(ProjectSettings projectSettings)
+        private void SerializeProject(ProjectSettings projectSettings)
         {
             var serializer = new SerializerBuilder()
                 .WithNamingConvention(new CamelCaseNamingConvention())
@@ -378,7 +379,17 @@ namespace ArcCreate.Compose.Project
                 }));
         }
 
-        private void OpenUnsavedChangesDialog(System.Action onConfirm)
+        private void SerializeChart(ProjectSettings projectSettings)
+        {
+            string dir = Path.GetDirectoryName(projectSettings.Path);
+            var chartData = new RawEventsBuilder().GetEvents();
+            new ChartSerializer(new PhysicalFileAccess(), dir).Write(
+                gameplayData.AudioOffset.Value,
+                gameplayData.TimingPointDensityFactor.Value,
+                chartData);
+        }
+
+        private void OpenUnsavedChangesDialog(Action onConfirm)
         {
             if (Values.ProjectModified == false)
             {

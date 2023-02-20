@@ -117,6 +117,7 @@ namespace ArcCreate.Gameplay.Data
                 IsTrace = IsTrace,
                 TimingGroup = TimingGroup,
             };
+
             foreach (var arctap in ArcTaps)
             {
                 var newArctap = arctap.Clone() as ArcTap;

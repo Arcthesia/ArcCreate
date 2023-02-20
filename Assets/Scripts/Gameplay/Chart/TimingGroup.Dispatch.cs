@@ -27,6 +27,8 @@ namespace ArcCreate.Gameplay.Chart
 
         public GroupProperties GroupProperties => groupProperties;
 
+        public List<ArcEvent> ReferenceEvents { get; private set; }
+
         // TODO: logic for scenecontrol to set visibility at the same time
         public bool IsVisible
         {
@@ -48,6 +50,7 @@ namespace ArcCreate.Gameplay.Chart
             holds = new HoldNoteGroup();
             arcs = new ArcNoteGroup();
             arcTaps = new ArcTapNoteGroup();
+            ReferenceEvents = tg.ReferenceEvents;
 
             taps.Load(tg.Taps, parent);
             holds.Load(tg.Holds, parent);

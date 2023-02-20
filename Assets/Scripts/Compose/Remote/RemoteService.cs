@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Net;
 using System.Text;
 using ArcCreate.Compose.Timeline;
@@ -11,7 +10,7 @@ using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Remote
 {
-    public class RemoteService : MonoBehaviour, IProtocol, IFileProvider
+    public class RemoteService : MonoBehaviour, IProtocol
     {
         [Header("Icons")]
         [SerializeField] private GameObject idleIndicator;
@@ -58,44 +57,6 @@ namespace ArcCreate.Compose.Remote
                     OnTargetDisconnect().Forget();
                     break;
             }
-        }
-
-        public Stream RespondToFileRequest(string path, out string extension)
-        {
-            string filePath = string.Empty;
-            switch (path)
-            {
-                case "audio":
-                    filePath = Services.Project.CurrentChart.AudioPath;
-                    break;
-                case "jacket":
-                    filePath = Services.Project.CurrentChart.JacketPath;
-                    break;
-                case "background":
-                    filePath = Services.Project.CurrentChart.BackgroundPath;
-                    break;
-                case "chart":
-                    // TODO: flatten the file
-                    filePath = Services.Project.CurrentChart.ChartPath;
-                    break;
-                case "video":
-                    // video backgrounds are absolute path
-                    filePath = Services.Project.CurrentChart.VideoPath;
-                    extension = Path.GetExtension(filePath);
-                    return File.OpenRead(filePath);
-                case "metadata":
-                    filePath = Services.Project.CurrentProject.Path;
-                    extension = Path.GetExtension(filePath);
-                    break;
-                default:
-                    throw new FileNotFoundException(path);
-            }
-
-            extension = Path.GetExtension(filePath);
-            string dir = Path.GetDirectoryName(Services.Project.CurrentProject.Path);
-            filePath = Path.Combine(dir, filePath);
-
-            return File.OpenRead(filePath);
         }
 
         private void SetState(RemoteState state)
@@ -177,7 +138,7 @@ namespace ArcCreate.Compose.Remote
         {
             await UniTask.SwitchToMainThread();
             DisposeAny();
-            fileHoster = new FileHoster(Ports.HttpCompose, this);
+            fileHoster = new FileHoster(Ports.HttpCompose, remoteDataSender);
             await channel.SetupSender(ipAddress, Ports.Gameplay, code);
             channel.SendMessage(RemoteControl.StartConnection, Encoding.ASCII.GetBytes(code));
 

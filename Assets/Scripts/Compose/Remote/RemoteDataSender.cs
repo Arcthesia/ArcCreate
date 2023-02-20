@@ -1,6 +1,9 @@
 using System;
+using System.IO;
 using System.Text;
+using ArcCreate.ChartFormat;
 using ArcCreate.Compose.Components;
+using ArcCreate.Compose.Project;
 using ArcCreate.Compose.Timeline;
 using ArcCreate.Gameplay;
 using ArcCreate.Remote.Common;
@@ -9,7 +12,7 @@ using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Remote
 {
-    public class RemoteDataSender : MonoBehaviour
+    public class RemoteDataSender : MonoBehaviour, IFileProvider
     {
         [SerializeField] private GameplayData gameplayData;
         [SerializeField] private Toggle showLogToggle;
@@ -32,6 +35,48 @@ namespace ArcCreate.Compose.Remote
         [SerializeField] private Button windowSyncChartButton;
         [SerializeField] private Button windowSendTimingToCurrentButton;
         private MessageChannel channel;
+
+        public Stream RespondToFileRequest(string path, out string extension)
+        {
+            string filePath = string.Empty;
+            string dir = Path.GetDirectoryName(Services.Project.CurrentProject.Path);
+            switch (path)
+            {
+                case "audio":
+                    filePath = Services.Project.CurrentChart.AudioPath;
+                    break;
+                case "jacket":
+                    filePath = Services.Project.CurrentChart.JacketPath;
+                    break;
+                case "background":
+                    filePath = Services.Project.CurrentChart.BackgroundPath;
+                    break;
+                case "chart":
+                    filePath = "remote.aff";
+                    new ChartSerializer(new PhysicalFileAccess(), dir).WriteSingleFile(
+                        filePath,
+                        gameplayData.AudioOffset.Value,
+                        gameplayData.TimingPointDensityFactor.Value,
+                        new RawEventsBuilder().GetEvents());
+                    break;
+                case "video":
+                    // video backgrounds are absolute path
+                    filePath = Services.Project.CurrentChart.VideoPath;
+                    extension = Path.GetExtension(filePath);
+                    return File.OpenRead(filePath);
+                case "metadata":
+                    filePath = Services.Project.CurrentProject.Path;
+                    extension = Path.GetExtension(filePath);
+                    break;
+                default:
+                    throw new FileNotFoundException(path);
+            }
+
+            extension = Path.GetExtension(filePath);
+            filePath = Path.Combine(dir, filePath);
+
+            return File.OpenRead(filePath);
+        }
 
         public void SetTarget(MessageChannel channel)
         {

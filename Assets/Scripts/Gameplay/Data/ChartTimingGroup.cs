@@ -16,5 +16,7 @@ namespace ArcCreate.Gameplay.Data
         public List<ArcTap> ArcTaps { get; set; } = new List<ArcTap>();
 
         public List<TimingEvent> Timings { get; set; } = new List<TimingEvent>();
+
+        public List<ArcEvent> ReferenceEvents { get; set; } = new List<ArcEvent>();
     }
 }
