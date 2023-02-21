@@ -60,7 +60,6 @@ namespace ArcCreate.Compose.Selection
             bool includeArctap = false;
             bool includeArc = false;
             bool includeTrace = false;
-            bool hasChildArctap = false;
 
             foreach (var note in selected)
             {
@@ -69,7 +68,6 @@ namespace ArcCreate.Compose.Selection
                 includeArctap = includeArctap || note is ArcTap;
                 includeArc = includeArc || (note is Arc a && !a.IsTrace);
                 includeTrace = includeTrace || (note is Arc t && t.IsTrace);
-                hasChildArctap = hasChildArctap || (note is Arc arc && arc.ArcTaps.Count > 0);
             }
 
             bool includeLong = includeArc || includeTrace || includeHold;
@@ -85,7 +83,7 @@ namespace ArcCreate.Compose.Selection
             sfxField.gameObject.SetActive(showArcSettings);
             groupField.gameObject.SetActive(true);
             selectArcButton.gameObject.SetActive(includeArctap);
-            selectArcTapButton.gameObject.SetActive(hasChildArctap);
+            selectArcTapButton.gameObject.SetActive(true);
 
             // help
             timingField.text = ExtractCommonProperty<Note, int>(n => n.Timing, out int timing) ? timing.ToString() : Mixed;
@@ -504,10 +502,8 @@ namespace ArcCreate.Compose.Selection
                     name: I18n.S("Compose.Notify.History.EditValue"),
                     update: batch));
             }
-            else
-            {
-                Rebuild();
-            }
+
+            Rebuild();
         }
 
         private void OnSelectArcButton()
@@ -531,7 +527,8 @@ namespace ArcCreate.Compose.Selection
             {
                 if (n is Arc a)
                 {
-                    foreach (var at in a.ArcTaps)
+                    var ats = Services.Gameplay.Chart.GetAll<ArcTap>().Where(at => at.Arc == a);
+                    foreach (var at in ats)
                     {
                         arctaps.Add(at);
                     }

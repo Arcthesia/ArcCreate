@@ -16,7 +16,7 @@ namespace ArcCreate.ChartFormat
 
         public StreamWriter WriteFile(string path)
         {
-            return new StreamWriter(File.OpenWrite(path));
+            return new StreamWriter(new FileStream(path, FileMode.Create));
         }
     }
 }

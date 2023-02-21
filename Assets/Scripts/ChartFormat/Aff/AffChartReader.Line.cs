@@ -156,7 +156,6 @@ namespace ArcCreate.ChartFormat
                 if (s.Current != ";")
                 {
                     arctap = new List<int>();
-                    istrace = true;
                     while (true)
                     {
                         s.Skip("[arctap(".Length);

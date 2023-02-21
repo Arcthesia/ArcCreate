@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using ArcCreate.Compose.History;
 using ArcCreate.Compose.Navigation;
 using ArcCreate.Compose.Selection;
@@ -240,6 +241,19 @@ namespace ArcCreate.Compose.Editing
                         clipboard.Add(arcTap.Clone() as Note);
                     }
                 }
+                else if (note is Arc arc)
+                {
+                    Arc clone = arc.Clone() as Arc;
+                    var arctaps = Services.Gameplay.Chart.GetAll<ArcTap>().Where(at => at.Arc == arc);
+                    foreach (var arctap in arctaps)
+                    {
+                        ArcTap cloneArctap = arctap.Clone() as ArcTap;
+                        cloneArctap.Arc = clone;
+                        clipboard.Add(cloneArctap);
+                    }
+
+                    clipboard.Add(clone);
+                }
                 else
                 {
                     clipboard.Add(note.Clone() as Note);
@@ -257,9 +271,12 @@ namespace ArcCreate.Compose.Editing
                 if (note is Arc arc)
                 {
                     Arc clone = arc.Clone() as Arc;
-                    foreach (var arctap in clone.ArcTaps)
+                    var arctaps = notes.Where(n => n is ArcTap at && at.Arc == arc);
+                    foreach (var arctap in arctaps)
                     {
-                        paste.Add(arctap);
+                        ArcTap cloneArctap = arctap.Clone() as ArcTap;
+                        cloneArctap.Arc = clone;
+                        paste.Add(cloneArctap);
                     }
 
                     paste.Add(clone);

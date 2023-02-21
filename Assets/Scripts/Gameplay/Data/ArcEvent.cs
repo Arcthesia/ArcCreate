@@ -7,7 +7,7 @@ namespace ArcCreate.Gameplay.Data
     /// </summary>
     public abstract class ArcEvent
     {
-        private int timingGroup;
+        private int timingGroup = int.MinValue;
 
         /// <summary>
         /// Gets or sets the note's timing.

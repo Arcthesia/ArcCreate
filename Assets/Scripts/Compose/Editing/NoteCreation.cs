@@ -243,8 +243,6 @@ namespace ArcCreate.Compose.Editing
                 Arc = elligibleArcs[0],
             };
 
-            elligibleArcs[0].ArcTaps.Add(arctap);
-
             IEnumerable<ArcEvent> events = new ArcEvent[] { arctap };
             var command = new EventCommand(
                 I18n.S("Compose.Notify.History.CreateNote.ArcTap"),
@@ -259,17 +257,13 @@ namespace ArcCreate.Compose.Editing
                     showGridAtTiming: timing,
                     update: p =>
                     {
-                        arctap.Arc.ArcTaps.Remove(arctap);
                         arctap.Arc = GetClosestArc(timing, elligibleArcs, p);
-                        arctap.Arc.ArcTaps.Add(arctap);
                         Services.Gameplay.Chart.UpdateEvents(events);
                     });
 
                 if (success)
                 {
-                    arctap.Arc.ArcTaps.Remove(arctap);
                     arctap.Arc = GetClosestArc(timing, elligibleArcs, pos);
-                    arctap.Arc.ArcTaps.Add(arctap);
                     Services.Gameplay.Chart.UpdateEvents(events);
                     Services.History.AddCommandWithoutExecuting(command);
                 }
@@ -281,7 +275,6 @@ namespace ArcCreate.Compose.Editing
                 return;
             }
 
-            elligibleArcs[0].ArcTaps.Add(arctap);
             Services.History.AddCommand(command);
         }
 

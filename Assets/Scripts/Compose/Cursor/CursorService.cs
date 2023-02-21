@@ -208,7 +208,7 @@ namespace ArcCreate.Compose.Cursor
                 isHittingVertical = verticalCollider.Raycast(ray, out RaycastHit verticalHit, 120);
                 isHittingLane = isLaneCursorEnabled && isCursorHoveringOnTrack;
 
-                if (isCursorHoveringOnTrack && !isVerticalActive)
+                if (isCursorHoveringOnTrack)
                 {
                     CheckScroll();
                 }

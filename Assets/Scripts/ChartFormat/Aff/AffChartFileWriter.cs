@@ -64,6 +64,7 @@ namespace ArcCreate.ChartFormat
             }
 
             stream.WriteLine("-");
+            stream.Flush();
         }
 
         private void WriteEvent(RawEvent affEvent, bool doesIndent = false)
@@ -159,16 +160,20 @@ namespace ArcCreate.ChartFormat
                     stream.WriteLine($"{indent}fragment({frag.Timing},{frag.File});");
                     break;
             }
+
+            stream.Flush();
         }
 
         private void WriteTimingGroupStart(RawTimingGroup properties)
         {
             stream.WriteLine("timinggroup(" + properties.ToString() + "){");
+            stream.Flush();
         }
 
         private void WriteTimingGroupEnd()
         {
             stream.WriteLine("};");
+            stream.Flush();
         }
     }
 }

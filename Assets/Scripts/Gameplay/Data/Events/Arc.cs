@@ -40,8 +40,6 @@ namespace ArcCreate.Gameplay.Data
 
         public ArcLineType LineType { get; set; }
 
-        public List<ArcTap> ArcTaps { get; set; } = new List<ArcTap>();
-
         public HashSet<Arc> NextArcs { get; } = new HashSet<Arc>();
 
         public HashSet<Arc> PreviousArcs { get; } = new HashSet<Arc>();
@@ -117,13 +115,6 @@ namespace ArcCreate.Gameplay.Data
                 IsTrace = IsTrace,
                 TimingGroup = TimingGroup,
             };
-
-            foreach (var arctap in ArcTaps)
-            {
-                var newArctap = arctap.Clone() as ArcTap;
-                newArctap.Arc = arc;
-                arc.ArcTaps.Add(newArctap);
-            }
 
             return arc;
         }

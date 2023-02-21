@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using ArcCreate.Compose.History;
 using ArcCreate.Compose.Navigation;
 using ArcCreate.Compose.Selection;
@@ -19,7 +20,9 @@ namespace ArcCreate.Compose.Editing
                 list.Add(note);
                 if (note is Arc arc)
                 {
-                    foreach (var arctap in arc.ArcTaps)
+                    var arctaps = Services.Gameplay.Chart.GetAll<ArcTap>()
+                        .Where(at => at.Arc == arc);
+                    foreach (var arctap in arctaps)
                     {
                         list.Add(arctap);
                     }

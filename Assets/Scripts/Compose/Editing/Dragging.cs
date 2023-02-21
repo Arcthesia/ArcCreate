@@ -400,9 +400,7 @@ namespace ArcCreate.Compose.Editing
                     for (int i = 0; i < dragArctap.Count; i++)
                     {
                         ArcTap arctap = dragArctap[i];
-                        arctap.Arc.ArcTaps.Remove(arctap);
                         arctap.Arc = closestArc;
-                        closestArc.ArcTaps.Add(arctap);
                     }
 
                     command.Execute();

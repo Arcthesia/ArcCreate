@@ -314,7 +314,7 @@ namespace ArcCreate.ChartFormat
             Events.Add(new RawFragment()
             {
                 Timing = timing,
-                Type = RawEventType.Include,
+                Type = RawEventType.Fragment,
                 TimingGroup = currentTimingGroup,
                 File = file,
             });

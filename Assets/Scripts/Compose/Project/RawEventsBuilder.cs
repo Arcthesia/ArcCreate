@@ -13,6 +13,11 @@ namespace ArcCreate.Compose.Project
             List<(RawTimingGroup groups, IEnumerable<RawEvent> events)> list = new List<(RawTimingGroup groups, IEnumerable<RawEvent> events)>();
             foreach (TimingGroup tg in Services.Gameplay.Chart.TimingGroups)
             {
+                if (!tg.GroupProperties.Editable)
+                {
+                    continue;
+                }
+
                 RawTimingGroup rawprop = tg.GroupProperties.ToRaw();
 
                 List<ArcEvent> events = new List<ArcEvent>();
@@ -20,7 +25,6 @@ namespace ArcCreate.Compose.Project
                 events.AddRange(tg.GetEventType<Tap>());
                 events.AddRange(tg.GetEventType<Hold>());
                 events.AddRange(tg.GetEventType<Arc>());
-                events.AddRange(tg.GetEventType<ArcTap>());
                 events.AddRange(tg.GetEventType<TimingEvent>());
                 events.AddRange(Services.Gameplay.Chart.GetAll<CameraEvent>().Where(cam => cam.TimingGroup == tg.GroupNumber));
                 events.AddRange(Services.Gameplay.Chart.GetAll<ScenecontrolEvent>().Where(sc => sc.TimingGroup == tg.GroupNumber));
@@ -39,6 +43,13 @@ namespace ArcCreate.Compose.Project
                             return ca.Duration.CompareTo(cb.Duration);
                         }
 
+                        if (a.Timing == b.Timing)
+                        {
+                            int atype = GetImportance(a);
+                            int btype = GetImportance(b);
+                            return atype.CompareTo(btype);
+                        }
+
                         return a.Timing.CompareTo(b.Timing);
                     });
 
@@ -50,6 +61,7 @@ namespace ArcCreate.Compose.Project
                             case TimingEvent timing:
                                 return new RawTiming
                                 {
+                                    Type = RawEventType.Timing,
                                     Timing = timing.Timing,
                                     TimingGroup = timing.TimingGroup,
                                     Bpm = timing.Bpm,
@@ -58,6 +70,7 @@ namespace ArcCreate.Compose.Project
                             case Tap tap:
                                 return new RawTap
                                 {
+                                    Type = RawEventType.Tap,
                                     Timing = tap.Timing,
                                     TimingGroup = tap.TimingGroup,
                                     Lane = tap.Lane,
@@ -65,14 +78,20 @@ namespace ArcCreate.Compose.Project
                             case Hold hold:
                                 return new RawHold
                                 {
+                                    Type = RawEventType.Hold,
                                     Timing = hold.Timing,
                                     EndTiming = hold.EndTiming,
                                     TimingGroup = hold.TimingGroup,
                                     Lane = hold.Lane,
                                 };
                             case Arc arc:
+                                var ats = Services.Gameplay.Chart
+                                    .GetAll<ArcTap>()
+                                    .Where(at => at.Arc == arc)
+                                    .Select(at => at.Timing);
                                 return new RawArc
                                 {
+                                    Type = RawEventType.Arc,
                                     Timing = arc.Timing,
                                     EndTiming = arc.EndTiming,
                                     TimingGroup = arc.TimingGroup,
@@ -84,11 +103,12 @@ namespace ArcCreate.Compose.Project
                                     YEnd = arc.YEnd,
                                     YStart = arc.YStart,
                                     Sfx = arc.Sfx,
-                                    ArcTaps = arc.ArcTaps.Select(a => a.Timing).ToList(),
+                                    ArcTaps = ats.ToList(),
                                 };
                             case CameraEvent cam:
                                 return new RawCamera
                                 {
+                                    Type = RawEventType.Camera,
                                     TimingGroup = cam.TimingGroup,
                                     Timing = cam.Timing,
                                     Move = cam.Move,
@@ -99,6 +119,7 @@ namespace ArcCreate.Compose.Project
                             case ScenecontrolEvent sc:
                                 return new RawSceneControl()
                                 {
+                                    Type = RawEventType.SceneControl,
                                     Timing = sc.Timing,
                                     TimingGroup = sc.TimingGroup,
                                     SceneControlTypeName = sc.Typename,
@@ -107,6 +128,7 @@ namespace ArcCreate.Compose.Project
                             case IncludeEvent incl:
                                 return new RawInclude()
                                 {
+                                    Type = RawEventType.Include,
                                     Timing = incl.Timing,
                                     TimingGroup = incl.TimingGroup,
                                     File = incl.File,
@@ -114,6 +136,7 @@ namespace ArcCreate.Compose.Project
                             case FragmentEvent frag:
                                 return new RawFragment()
                                 {
+                                    Type = RawEventType.Fragment,
                                     Timing = frag.Timing,
                                     TimingGroup = frag.TimingGroup,
                                     File = frag.File,
@@ -127,6 +150,31 @@ namespace ArcCreate.Compose.Project
             }
 
             return list;
+        }
+
+        private int GetImportance(ArcEvent a)
+        {
+            switch (a)
+            {
+                case TimingEvent time:
+                    return 0;
+                case IncludeEvent incl:
+                    return 1;
+                case FragmentEvent frag:
+                    return 2;
+                case Tap tap:
+                    return 3;
+                case Hold hold:
+                    return 4;
+                case Arc arc:
+                    return 5;
+                case CameraEvent cam:
+                    return 6;
+                case ScenecontrolEvent sc:
+                    return 7;
+                default:
+                    return 8;
+            }
         }
     }
 }

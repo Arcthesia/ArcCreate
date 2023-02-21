@@ -62,7 +62,7 @@ namespace ArcCreate.Compose.Project
             shadow.SetValueWithoutNotify(sdw);
 
             int count = Mathf.Min(chart.Colors.Arc.Count, chart.Colors.ArcLow.Count);
-            for (int i = 3; i < chart.Colors.Arc.Count; i++)
+            for (int i = 3; i < count; i++)
             {
                 chart.Colors.Arc[i].ConvertHexToColor(out Color high);
                 chart.Colors.ArcLow[i].ConvertHexToColor(out Color low);
@@ -101,6 +101,8 @@ namespace ArcCreate.Compose.Project
                 chart.Colors.ArcLow[2].ConvertHexToColor(out Color low);
                 arcGreen.SetValueWithoutNotify(high, low);
             }
+
+            ApplyColorSettings();
         }
 
         private new void Start()
