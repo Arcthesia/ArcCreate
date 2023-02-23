@@ -7,6 +7,12 @@ namespace ArcCreate.Gameplay.Render
     {
         bool IsLoaded { get; }
 
+        Mesh TapMesh { get; }
+
+        Mesh HoldMesh { get; }
+
+        Mesh ArcTapMesh { get; }
+
         void DrawArcSegment(int colorId, bool highlight, Matrix4x4 matrix, ArcRenderProperties properties);
 
         void DrawArcShadow(Matrix4x4 matrix, ShadowRenderProperties properties);

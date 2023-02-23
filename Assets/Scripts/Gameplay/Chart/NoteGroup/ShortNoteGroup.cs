@@ -14,6 +14,7 @@ namespace ArcCreate.Gameplay.Chart
     {
         private CachedBisect<Note, int> timingSearch;
         private CachedBisect<Note, double> floorPositionSearch;
+        private readonly List<Note> lastRenderingNotes = new List<Note>();
 
         public override int ComboAt(int timing)
         {
@@ -77,6 +78,8 @@ namespace ArcCreate.Gameplay.Chart
             }
         }
 
+        public override IEnumerable<Note> GetRenderingNotes() => lastRenderingNotes;
+
         private void UpdateJudgement(int timing, GroupProperties groupProperties)
         {
             if (groupProperties.NoInput)
@@ -111,6 +114,7 @@ namespace ArcCreate.Gameplay.Chart
             double renderTo = floorPosition + fpDistForward;
 
             int renderIndex = floorPositionSearch.Bisect(renderFrom);
+            lastRenderingNotes.Clear();
 
             // Update notes
             while (renderIndex < floorPositionSearch.List.Count)
@@ -122,6 +126,7 @@ namespace ArcCreate.Gameplay.Chart
                 }
 
                 note.UpdateRender(timing, floorPosition, groupProperties);
+                lastRenderingNotes.Add(note);
                 renderIndex++;
             }
         }

@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace ArcCreate.Gameplay.Data
 {
     public abstract class Note : ArcEvent
@@ -20,5 +22,9 @@ namespace ArcCreate.Gameplay.Data
 
         public float ZPos(double floorPosition)
             => ArcFormula.FloorPositionToZ(FloorPosition - floorPosition);
+
+        public abstract Mesh GetColliderMesh();
+
+        public abstract void GetColliderPosition(int timing, out Vector3 pos, out Vector3 scl);
     }
 }

@@ -5,9 +5,8 @@ public class InstancedRenderer<T>
 {
     public const int Population = 511;
 
-    private Material material;
+    private readonly Material material;
     private readonly Mesh mesh;
-    private readonly int propertyShaderId;
     private readonly Matrix4x4[] matrices = new Matrix4x4[Population];
     private readonly T[] properties = new T[Population];
     private readonly ComputeBuffer propertyBuffer;
@@ -18,15 +17,8 @@ public class InstancedRenderer<T>
     {
         this.material = material;
         this.mesh = mesh;
-        this.propertyShaderId = propertyShaderId;
 
         propertyBuffer = new ComputeBuffer(Population, propertySize);
-        material.SetBuffer(propertyShaderId, propertyBuffer);
-    }
-
-    public void SetMaterial(Material material)
-    {
-        this.material = material;
         material.SetBuffer(propertyShaderId, propertyBuffer);
     }
 

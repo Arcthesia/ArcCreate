@@ -90,6 +90,22 @@ namespace ArcCreate.Gameplay.Data
             (normalTexture, highlightTexture) = Services.Skin.GetHoldSkin(this);
         }
 
+        public override Mesh GetColliderMesh()
+        {
+            return Services.Render.HoldMesh;
+        }
+
+        public override void GetColliderPosition(int timing, out Vector3 pos, out Vector3 scl)
+        {
+            double fp = TimingGroupInstance.GetFloorPosition(timing);
+            float z = ZPos(fp);
+            float endZ = EndZPos(fp);
+            Vector3 basePos = new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
+            pos = (TimingGroupInstance.GroupProperties.FallDirection * z) + basePos;
+            scl = TimingGroupInstance.GroupProperties.ScaleIndividual;
+            scl.z *= z - endZ;
+        }
+
         public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)
         {
             if (currentTiming >= Timing - Values.LostJudgeWindow && locked && !tapJudgementRequestSent)

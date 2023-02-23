@@ -298,6 +298,33 @@ namespace ArcCreate.Gameplay.Chart
         }
 
         /// <summary>
+        /// Find all rendering notes.
+        /// </summary>
+        /// <returns>List of rendering notes.</returns>
+        public IEnumerable<Note> GetRenderingNotes()
+        {
+            foreach (var note in taps.GetRenderingNotes())
+            {
+                yield return note;
+            }
+
+            foreach (var note in holds.GetRenderingNotes())
+            {
+                yield return note;
+            }
+
+            foreach (var note in arcTaps.GetRenderingNotes())
+            {
+                yield return note;
+            }
+
+            foreach (var note in arcs.GetRenderingNotes())
+            {
+                yield return note;
+            }
+        }
+
+        /// <summary>
         /// Clear notes from this timing gruop and destroy all notes.
         /// </summary>
         public void Clear()

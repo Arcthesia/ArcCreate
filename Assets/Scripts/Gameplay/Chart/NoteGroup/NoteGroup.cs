@@ -99,6 +99,7 @@ namespace ArcCreate.Gameplay.Chart
             {
                 OnAdd(note);
                 note.Rebuild();
+                note.ReloadSkin();
             }
         }
 
@@ -134,6 +135,7 @@ namespace ArcCreate.Gameplay.Chart
             {
                 OnUpdate(note);
                 note.Rebuild();
+                note.ReloadSkin();
             }
         }
 
@@ -169,6 +171,12 @@ namespace ArcCreate.Gameplay.Chart
         /// <param name="to">The query timing upper range.</param>
         /// <returns>All notes with matching timing value.</returns>
         public abstract IEnumerable<Note> FindEventsWithinRange(int from, int to);
+
+        /// <summary>
+        /// Find all rendering notes.
+        /// </summary>
+        /// <returns>List of rendering notes.</returns>
+        public abstract IEnumerable<Note> GetRenderingNotes();
 
         /// <summary>
         /// Called after notes are loaded into the group.

@@ -54,6 +54,20 @@ namespace ArcCreate.Gameplay.Data
             return Timing.CompareTo(other.Timing);
         }
 
+        public override Mesh GetColliderMesh()
+        {
+            return Services.Render.TapMesh;
+        }
+
+        public override void GetColliderPosition(int timing, out Vector3 pos, out Vector3 scl)
+        {
+            float z = ZPos(TimingGroupInstance.GetFloorPosition(timing));
+            Vector3 basePos = new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
+            pos = (TimingGroupInstance.GroupProperties.FallDirection * z) + basePos;
+            scl = TimingGroupInstance.GroupProperties.ScaleIndividual;
+            scl.z *= ArcFormula.CalculateTapSizeScalar(z);
+        }
+
         public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)
         {
             if (!judgementRequestSent && currentTiming <= Timing)

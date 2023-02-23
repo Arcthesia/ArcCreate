@@ -62,5 +62,11 @@ namespace ArcCreate.Gameplay
         /// <returns>All notes of the specified type.</returns>
         IEnumerable<T> GetAll<T>()
             where T : ArcEvent;
+
+        /// <summary>
+        /// Get all notes being rendered. Calculation is done with z position only (no frustum culling).
+        /// </summary>
+        /// <returns>All notes that's rendered.</returns>
+        IEnumerable<Note> GetRenderingNotes();
     }
 }

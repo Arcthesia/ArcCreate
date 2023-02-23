@@ -21,7 +21,6 @@ namespace ArcCreate.Gameplay.Data
         private Mesh colliderMesh;
         private Texture arcCap;
         private Color heightIndicatorColor;
-        private float redArcValue;
         private readonly List<ArcSegmentData> segments = new List<ArcSegmentData>();
 
         // Avoid infinite recursion
@@ -129,19 +128,40 @@ namespace ArcCreate.Gameplay.Data
 
         public void ReloadSkin()
         {
-            (arcCap, heightIndicatorColor, redArcValue) = Services.Skin.GetArcSkin(this);
+            (arcCap, heightIndicatorColor) = Services.Skin.GetArcSkin(this);
+        }
+
+        public override Mesh GetColliderMesh()
+        {
+            if (colliderMesh == null)
+            {
+                colliderMesh = ArcMeshGenerator.GenerateColliderMesh(this);
+            }
+
+            return colliderMesh;
+        }
+
+        public override void GetColliderPosition(int timing, out Vector3 pos, out Vector3 scl)
+        {
+            double fp = TimingGroupInstance.GetFloorPosition(timing);
+            float z = ZPos(fp);
+            Vector3 basePos = new Vector3(ArcFormula.ArcXToWorld(XStart), ArcFormula.ArcYToWorld(YStart), 0);
+            pos = (TimingGroupInstance.GroupProperties.FallDirection * z) + basePos;
+            scl = TimingGroupInstance.GroupProperties.ScaleIndividual;
         }
 
         public void UpdateRender(int currentTiming, double currentFloorPosition, GroupProperties groupProperties)
         {
             float z = ZPos(currentFloorPosition);
 
-            Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(WorldXAt(Timing), WorldYAt(Timing), 0);
+            Vector3 basePos = new Vector3(ArcFormula.ArcXToWorld(XStart), ArcFormula.ArcYToWorld(YStart), 0);
+            Vector3 pos = (groupProperties.FallDirection * z) + basePos;
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
             Matrix4x4 matrix = Matrix4x4.TRS(pos, rot, scl);
 
             float alpha = 1;
+            float redArcValue = Services.Skin.GetRedArcValue(Color);
             if (!IsTrace)
             {
                 if (highlight)
@@ -351,7 +371,7 @@ namespace ArcCreate.Gameplay.Data
 
         private void RebuildSegments()
         {
-            if (Values.EnableArcRebuildSegment)
+            if (Values.EnableArcRebuildSegment || segments.Count == 0)
             {
                 int lastEndTiming = Timing;
                 double lastEndFloorPosition = TimingGroupInstance.GetFloorPosition(Timing);
@@ -398,6 +418,21 @@ namespace ArcCreate.Gameplay.Data
                 for (int j = segments.Count - 1; j >= i; j--)
                 {
                     segments.RemoveAt(j);
+                }
+            }
+            else if (segments.Count > 0)
+            {
+                // realign segment timing
+                int firstTiming = segments[0].Timing;
+                double firstFloorPos = segments[0].FloorPosition;
+                for (int i = 0; i < segments.Count; i++)
+                {
+                    ArcSegmentData segment = segments[i];
+                    segment.Timing = segment.Timing - firstTiming + Timing;
+                    segment.EndTiming = segment.EndTiming - firstTiming + Timing;
+                    segment.FloorPosition = segment.FloorPosition - firstFloorPos + FloorPosition;
+                    segment.EndFloorPosition = segment.EndFloorPosition - firstFloorPos + FloorPosition;
+                    segments[i] = segment;
                 }
             }
         }

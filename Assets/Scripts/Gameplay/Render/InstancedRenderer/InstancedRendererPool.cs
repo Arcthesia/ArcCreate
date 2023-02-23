@@ -25,23 +25,6 @@ namespace ArcCreate.Gameplay.Render
             CreateNewRenderer();
         }
 
-        public void SetMaterial(Material material)
-        {
-            for (int i = 0; i < materials.Count; i++)
-            {
-                Object.Destroy(materials[i]);
-                materials[i] = Object.Instantiate(material);
-            }
-
-            this.material = material;
-
-            for (int i = 0; i < renderers.Count; i++)
-            {
-                InstancedRenderer<T> renderer = renderers[i];
-                renderer.SetMaterial(material);
-            }
-        }
-
         public void RegisterInstance(Matrix4x4 matrix, T property)
         {
             bool accepted = renderers[index].RegisterInstance(matrix, property);

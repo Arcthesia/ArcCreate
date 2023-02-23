@@ -110,8 +110,15 @@ namespace ArcCreate.Gameplay
         /// Get the skin for an arc note.
         /// </summary>
         /// <param name="note">The note to get the skin for.</param>
-        /// <returns>Arccap texture, height indicator color and red arc value from 0-1.</returns>
-        (Texture arcCap, Color heightIndicatorColor, float redArcValue) GetArcSkin(Arc note);
+        /// <returns>Arccap texture, height indicator color.</returns>
+        (Texture arcCap, Color heightIndicatorColor) GetArcSkin(Arc note);
+
+        /// <summary>
+        /// Get the red arc value for an arc color id.
+        /// </summary>
+        /// <param name="color">The color id.</param>
+        /// <returns>The red arc value which is bounded from 0 to 1.</returns>
+        float GetRedArcValue(int color);
 
         /// <summary>
         /// Get the skin for a tap note.

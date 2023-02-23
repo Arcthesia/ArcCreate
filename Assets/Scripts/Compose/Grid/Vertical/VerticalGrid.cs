@@ -56,7 +56,10 @@ namespace ArcCreate.Compose.Grid
 
         public Vector2 SnapToVerticalGrid(Vector2 point)
         {
-            return VerticalGridHelper.SnapPoint(lines, cachedIntersections, point, snapTolerance);
+            Vector2 snap = VerticalGridHelper.SnapPoint(lines, cachedIntersections, point, snapTolerance);
+            snap.x = Mathf.Round(snap.x * 1000) / 1000;
+            snap.y = Mathf.Round(snap.y * 1000) / 1000;
+            return snap;
         }
 
         public void Setup()

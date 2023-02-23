@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ArcTapPreview
-  m_Shader: {fileID: 4800000, guid: 96383cd5f629252308ee88f95878dd6a, type: 3}
+  m_Name: ArcTapNotePreview
+  m_Shader: {fileID: 4800000, guid: f015af974f14898a697a7d30d94f3b50, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -57,30 +57,22 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BumpScale: 1
-    - _Cull: 1
+    - _Cull: 2
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _MaxTriSize: 25
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _OutlineHeight: 0.05
-    - _OutlineWidth: -10
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
-    - _WireSmoothness: 3
-    - _WireThickness: 100
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.3882353, g: 0.7176471, b: 0.81960785, a: 1}
-    - _Color: {r: 0, g: 0.123188436, b: 0.16037738, a: 0.2509804}
+    - _Color: {r: 0.50445, g: 0.86846167, b: 0.9811321, a: 0.49803922}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _OutlineColor: {r: 0.06412425, g: 0.09875488, b: 0.103773594, a: 1}
-    - _WireColor: {r: 1, g: 1, b: 1, a: 1}

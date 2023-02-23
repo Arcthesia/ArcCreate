@@ -12,7 +12,7 @@
 		Blend SrcAlpha OneMinusSrcAlpha
 		AlphaToMask Off
         Lighting Off
-		ZWrite On
+		ZWrite Off
 		ZTest Always
 		Cull Off
 		

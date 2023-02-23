@@ -51,6 +51,7 @@ namespace ArcCreate.Gameplay.Skin
         private readonly List<Material> arcHighlightMaterials = new List<Material>();
         private readonly List<Color> arcHeightIndicatorColors = new List<Color>();
         private readonly List<float> redArcValues = new List<float>();
+        private float unknownRedArcValue = 0;
         private ExternalTexture arcTexture;
         private ExternalTexture arcTextureHighlight;
         private ExternalTexture arctapShadowTexture;
@@ -172,6 +173,11 @@ namespace ArcCreate.Gameplay.Skin
 
                 comboText.color = accentOpt.ComboColor;
                 comboText.outlineColor = accentOpt.ComboColor;
+                Color outline = accentOpt.ComboColor;
+                outline.a = 0.5f;
+                comboText.gameObject.SetActive(false);
+                comboText.fontSharedMaterial.SetColor("_OutlineColor", outline);
+                comboText.gameObject.SetActive(true);
                 currentComboColor = accentOpt.ComboColor;
                 gameplayData.NotifySkinValuesChange();
             }
@@ -204,21 +210,31 @@ namespace ArcCreate.Gameplay.Skin
             return currentNoteSkin.GetArcTapSkin(note);
         }
 
-        public (Texture arcCap, Color heightIndicatorColor, float redArcValue) GetArcSkin(Arc note)
+        public (Texture arcCap, Color heightIndicatorColor) GetArcSkin(Arc note)
         {
             Texture arcCap = currentNoteSkin.GetArcCapSprite(note);
 
             if (note.IsTrace)
             {
-                return (arcCap, Color.clear, 0);
+                return (arcCap, Color.clear);
             }
 
             if (note.Color < 0 || note.Color >= arcHeightIndicatorColors.Count)
             {
-                return (arcCap, unknownArcColor, 0);
+                return (arcCap, unknownArcColor);
             }
 
-            return (arcCap, arcHeightIndicatorColors[note.Color], redArcValues[note.Color]);
+            return (arcCap, arcHeightIndicatorColors[note.Color]);
+        }
+
+        public float GetRedArcValue(int color)
+        {
+            if (color < 0 || color >= redArcValues.Count)
+            {
+                return unknownRedArcValue;
+            }
+
+            return redArcValues[color];
         }
 
         public (Sprite lane, Sprite extraLane) GetTrackSprite(string name)
@@ -249,13 +265,11 @@ namespace ArcCreate.Gameplay.Skin
                 Material mat = Instantiate(baseArcMaterial);
                 mat.SetColor(highColorShaderId, arcs[i]);
                 mat.SetColor(lowColorShaderId, arcLows[i]);
-                mat.renderQueue = mat.renderQueue + max - i;
                 arcMaterials.Add(mat);
 
                 Material hmat = Instantiate(baseArcHighlightMaterial);
                 hmat.SetColor(highColorShaderId, arcs[i]);
                 hmat.SetColor(lowColorShaderId, arcLows[i]);
-                hmat.renderQueue = hmat.renderQueue + max - i;
                 arcHighlightMaterials.Add(hmat);
 
                 arcHeightIndicatorColors.Add(arcs[i]);
@@ -290,7 +304,7 @@ namespace ArcCreate.Gameplay.Skin
         {
             if (color < 0 || color >= redArcValues.Count)
             {
-                return;
+                unknownRedArcValue = value;
             }
 
             redArcValues[color] = value;

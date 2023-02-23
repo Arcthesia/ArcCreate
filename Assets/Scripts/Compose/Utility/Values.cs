@@ -31,6 +31,7 @@ namespace ArcCreate.Compose
         // Pools
         public const string TickPoolName = "TickPool";
         public const string BeatlinePoolName = "EditorBeatlinePool";
+        public const string ColliderPoolName = "NoteColliderPool";
 
         // States
         public static State<int> EditingTimingGroup { get; } = new State<int>();

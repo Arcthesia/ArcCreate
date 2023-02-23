@@ -72,6 +72,12 @@ namespace ArcCreate.Gameplay.Render
 
         public bool IsLoaded { get; private set; }
 
+        public Mesh TapMesh => tapMesh;
+
+        public Mesh HoldMesh => holdMesh;
+
+        public Mesh ArcTapMesh => arctapMesh;
+
         public void DrawTap(Texture texture, Matrix4x4 matrix, NoteRenderProperties properties)
         {
             if (!tapDrawers.ContainsKey(texture))
@@ -259,69 +265,54 @@ namespace ArcCreate.Gameplay.Render
 
         public void SetTraceMaterial(Material material)
         {
-            if (traceSegmentDrawer == null)
-            {
-                traceSegmentDrawer = new InstancedRendererPool<ArcRenderProperties>(
-                    material,
-                    ArcMeshGenerator.GetSegmentMesh(true),
-                    Shader.PropertyToID("_Properties"),
-                    ArcRenderProperties.Size());
+            traceSegmentDrawer?.Dispose();
+            traceSegmentDrawer = new InstancedRendererPool<ArcRenderProperties>(
+                material,
+                ArcMeshGenerator.GetSegmentMesh(true),
+                Shader.PropertyToID("_Properties"),
+                ArcRenderProperties.Size());
 
-                traceHeadDrawer = new InstancedRendererPool<ArcRenderProperties>(
-                    material,
-                    ArcMeshGenerator.GetHeadMesh(true),
-                    Shader.PropertyToID("_Properties"),
-                    ArcRenderProperties.Size());
-            }
-            else
-            {
-                traceSegmentDrawer.SetMaterial(material);
-                traceHeadDrawer.SetMaterial(material);
-            }
+            traceHeadDrawer?.Dispose();
+            traceHeadDrawer = new InstancedRendererPool<ArcRenderProperties>(
+                material,
+                ArcMeshGenerator.GetHeadMesh(true),
+                Shader.PropertyToID("_Properties"),
+                ArcRenderProperties.Size());
 
             UpdateLoadedState();
         }
 
         public void SetShadowMaterial(Material material)
         {
-            if (arcShadowDrawer == null)
-            {
-                arcShadowDrawer = new InstancedRendererPool<ShadowRenderProperties>(
-                    material,
-                    ArcMeshGenerator.GetShadowMesh(false),
-                    Shader.PropertyToID("_Properties"),
-                    ShadowRenderProperties.Size());
-            }
-            else
-            {
-                arcShadowDrawer.SetMaterial(material);
-            }
+            arcShadowDrawer?.Dispose();
+            arcShadowDrawer = new InstancedRendererPool<ShadowRenderProperties>(
+                material,
+                ArcMeshGenerator.GetShadowMesh(false),
+                Shader.PropertyToID("_Properties"),
+                ShadowRenderProperties.Size());
 
-            if (traceShadowDrawer == null)
-            {
-                traceShadowDrawer = new InstancedRendererPool<ShadowRenderProperties>(
-                    material,
-                    ArcMeshGenerator.GetShadowMesh(true),
-                    Shader.PropertyToID("_Properties"),
-                    ShadowRenderProperties.Size());
-            }
-            else
-            {
-                traceShadowDrawer.SetMaterial(material);
-            }
+            traceShadowDrawer?.Dispose();
+            traceShadowDrawer = new InstancedRendererPool<ShadowRenderProperties>(
+                material,
+                ArcMeshGenerator.GetShadowMesh(true),
+                Shader.PropertyToID("_Properties"),
+                ShadowRenderProperties.Size());
 
             UpdateLoadedState();
         }
 
         public void SetArcMaterials(List<Material> normal, List<Material> highlight)
         {
-            for (int i = 0; i < Mathf.Min(normal.Count, arcSegmentDrawers.Count); i++)
+            for (int i = 0; i < arcSegmentDrawers.Count; i++)
             {
-                arcSegmentDrawers[i].SetMaterial(normal[i]);
-                arcHeadDrawers[i].SetMaterial(normal[i]);
+                arcSegmentDrawers[i].Dispose();
+                arcHeadDrawers[i].Dispose();
             }
 
-            for (int i = arcSegmentDrawers.Count; i < normal.Count; i++)
+            arcSegmentDrawers.Clear();
+            arcHeadDrawers.Clear();
+
+            for (int i = 0; i < normal.Count; i++)
             {
                 arcSegmentDrawers.Add(new InstancedRendererPool<ArcRenderProperties>(
                     normal[i],
@@ -336,13 +327,16 @@ namespace ArcCreate.Gameplay.Render
                     ArcRenderProperties.Size()));
             }
 
-            for (int i = 0; i < Mathf.Min(highlight.Count, arcSegmentHighlightDrawers.Count); i++)
+            for (int i = 0; i < arcSegmentHighlightDrawers.Count; i++)
             {
-                arcSegmentHighlightDrawers[i].SetMaterial(highlight[i]);
-                arcHeadHighlightDrawers[i].SetMaterial(highlight[i]);
+                arcSegmentHighlightDrawers[i].Dispose();
+                arcHeadHighlightDrawers[i].Dispose();
             }
 
-            for (int i = arcSegmentHighlightDrawers.Count; i < highlight.Count; i++)
+            arcSegmentHighlightDrawers.Clear();
+            arcHeadHighlightDrawers.Clear();
+
+            for (int i = 0; i < highlight.Count; i++)
             {
                 arcSegmentHighlightDrawers.Add(new InstancedRendererPool<ArcRenderProperties>(
                     highlight[i],

@@ -14,6 +14,7 @@ namespace ArcCreate.Gameplay.Chart
     {
         private readonly RangeTree<Note> timingTree = new RangeTree<Note>();
         private readonly RangeTree<Note> floorPositionTree = new RangeTree<Note>();
+        private readonly List<Note> lastRenderingNotes = new List<Note>();
 
         protected RangeTree<Note> TimingTree => timingTree;
 
@@ -119,6 +120,8 @@ namespace ArcCreate.Gameplay.Chart
             }
         }
 
+        public override IEnumerable<Note> GetRenderingNotes() => lastRenderingNotes;
+
         private void UpdateJudgement(int timing, GroupProperties groupProperties)
         {
             if (groupProperties.NoInput)
@@ -150,11 +153,13 @@ namespace ArcCreate.Gameplay.Chart
             double renderTo = floorPosition + fpDistForward;
 
             var notesInRange = floorPositionTree[renderFrom, renderTo];
+            lastRenderingNotes.Clear();
 
             // Update notes
             while (notesInRange.MoveNext())
             {
                 var note = notesInRange.Current;
+                lastRenderingNotes.Add(note);
                 note.UpdateRender(timing, floorPosition, groupProperties);
             }
         }

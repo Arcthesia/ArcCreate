@@ -25,6 +25,7 @@ namespace ArcCreate.Compose.Selection
         [SerializeField] private GameObject inspectorWindow;
         [SerializeField] private InspectorMenu inspectorMenu;
         [SerializeField] private MarkerRange rangeSelectPreview;
+        [SerializeField] private SelectMeshBuilder selectMeshBuilder;
 
         private readonly HashSet<Note> selectedNotes = new HashSet<Note>();
         private float latestSelectedDistance = 0;
@@ -47,8 +48,11 @@ namespace ArcCreate.Compose.Selection
 
         [EditorAction("Single", false, "<mouse1>")]
         [RequireGameplayLoaded]
-        public void SelectSingle()
+        public async UniTask SelectSingle()
         {
+            selectMeshBuilder.RefreshCollider();
+            await UniTask.NextFrame();
+
             if (EventSystem.current.currentSelectedGameObject != null
              || !Services.Cursor.IsCursorAboveViewport
              || (Values.CreateNoteMode.Value != CreateNoteMode.Idle && Services.Cursor.IsHittingLane)
@@ -73,8 +77,11 @@ namespace ArcCreate.Compose.Selection
 
         [EditorAction("Add", false, "<s-h-mouse2>")]
         [RequireGameplayLoaded]
-        public void AddToSelection()
+        public async UniTask AddToSelection()
         {
+            selectMeshBuilder.RefreshCollider();
+            await UniTask.NextFrame();
+
             if (TryGetNoteUnderCursor(out Note note, SelectionMode.Deselected))
             {
                 AddNoteToSelection(note);
@@ -86,8 +93,11 @@ namespace ArcCreate.Compose.Selection
 
         [EditorAction("Remove", false, "<a-h-mouse2>")]
         [RequireGameplayLoaded]
-        public void RemoveFromSelection()
+        public async UniTask RemoveFromSelection()
         {
+            selectMeshBuilder.RefreshCollider();
+            await UniTask.NextFrame();
+
             if (TryGetNoteUnderCursor(out Note note, SelectionMode.Selected))
             {
                 RemoveNoteFromSelection(note);
@@ -99,8 +109,11 @@ namespace ArcCreate.Compose.Selection
 
         [EditorAction("Toggle", false, "<c-mouse1>")]
         [RequireGameplayLoaded]
-        public void ToggleNoteSelection()
+        public async UniTask ToggleNoteSelection()
         {
+            selectMeshBuilder.RefreshCollider();
+            await UniTask.NextFrame();
+
             if (TryGetNoteUnderCursor(out Note note, SelectionMode.Any))
             {
                 if (selectedNotes.Contains(note))
@@ -271,37 +284,37 @@ namespace ArcCreate.Compose.Selection
                     continue;
                 }
 
-                // if (hit.transform.TryGetComponent<NoteBehaviour>(out var behaviour))
-                // {
-                //     note = behaviour.Note;
-                //     if (!note.TimingGroupInstance.GroupProperties.Editable)
-                //     {
-                //         continue;
-                //     }
+                if (hit.transform.TryGetComponent<NoteCollider>(out var collider))
+                {
+                    note = collider.Note;
+                    if (!note.TimingGroupInstance.GroupProperties.Editable)
+                    {
+                        continue;
+                    }
 
-                //     switch (selectionMode)
-                //     {
-                //         case SelectionMode.Any:
-                //             latestSelectedDistance = hit.distance;
-                //             return true;
-                //         case SelectionMode.Selected:
-                //             if (note.IsSelected)
-                //             {
-                //                 latestSelectedDistance = hit.distance;
-                //                 return true;
-                //             }
+                    switch (selectionMode)
+                    {
+                        case SelectionMode.Any:
+                            latestSelectedDistance = hit.distance;
+                            return true;
+                        case SelectionMode.Selected:
+                            if (note.IsSelected)
+                            {
+                                latestSelectedDistance = hit.distance;
+                                return true;
+                            }
 
-                //             break;
-                //         case SelectionMode.Deselected:
-                //             if (!note.IsSelected)
-                //             {
-                //                 latestSelectedDistance = hit.distance;
-                //                 return true;
-                //             }
+                            break;
+                        case SelectionMode.Deselected:
+                            if (!note.IsSelected)
+                            {
+                                latestSelectedDistance = hit.distance;
+                                return true;
+                            }
 
-                //             break;
-                //     }
-                // }
+                            break;
+                    }
+                }
             }
 
             note = null;

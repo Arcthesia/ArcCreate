@@ -56,6 +56,20 @@ namespace ArcCreate.Gameplay.Data
             isSfx = !string.IsNullOrEmpty(Sfx) && Sfx != "none";
         }
 
+        public override Mesh GetColliderMesh()
+        {
+            return Services.Render.ArcTapMesh;
+        }
+
+        public override void GetColliderPosition(int timing, out Vector3 pos, out Vector3 scl)
+        {
+            double fp = TimingGroupInstance.GetFloorPosition(timing);
+            float z = ZPos(fp);
+            Vector3 basePos = new Vector3(WorldX, WorldY, 0);
+            pos = (TimingGroupInstance.GroupProperties.FallDirection * z) + basePos;
+            scl = TimingGroupInstance.GroupProperties.ScaleIndividual;
+        }
+
         public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)
         {
             if (!judgementRequestSent && currentTiming <= Timing)

@@ -1130,8 +1130,6 @@ MonoBehaviour:
   beatlinePrefab: {fileID: 1588688469126100, guid: 3c7d56df91e17bd41aada8d68890939b,
     type: 3}
   beatlineColor: {r: 0.47058824, g: 0.47058824, b: 0.47058824, a: 0.27450982}
-  timingGroupPrefab: {fileID: 1307461155714892973, guid: 04203e75665f4694aa6fe23eff79d3b1,
-    type: 3}
   beatlineCapacity: 20
 --- !u!1 &371341941
 GameObject:

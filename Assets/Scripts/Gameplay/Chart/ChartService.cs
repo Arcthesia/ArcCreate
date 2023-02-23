@@ -170,6 +170,19 @@ namespace ArcCreate.Gameplay.Chart
             }
         }
 
+        public IEnumerable<Note> GetRenderingNotes()
+        {
+            for (int i = 0; i < timingGroups.Count; i++)
+            {
+                TimingGroup tg = timingGroups[i];
+                IEnumerable<Note> groupNotes = tg.GetRenderingNotes();
+                foreach (Note note in groupNotes)
+                {
+                    yield return note;
+                }
+            }
+        }
+
         public void Clear()
         {
             for (int i = 0; i < timingGroups.Count; i++)

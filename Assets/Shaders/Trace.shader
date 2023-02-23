@@ -13,7 +13,7 @@
 		AlphaToMask Off
         Cull Off
         Lighting Off
-		ZWrite On
+		ZWrite Off
 		ZTest Always
   
 		// Body pass

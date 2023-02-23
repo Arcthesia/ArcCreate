@@ -24,6 +24,12 @@ namespace ArcCreate.Gameplay.Data
             highlightRequestSent = false;
             arcGroupAlpha = 1;
             hasBeenHitOnce = hasBeenHitOnce && timing >= Timing && timing <= EndTiming;
+            for (int i = 0; i < segments.Count; i++)
+            {
+                ArcSegmentData segment = segments[i];
+                segment.From = 0;
+                segments[i] = segment;
+            }
         }
 
         public override void RecalculateJudgeTimings()

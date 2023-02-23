@@ -11,13 +11,11 @@ namespace ArcCreate.Compose.Editing
     [EditorScope("NoteCreation")]
     public class NoteCreation : MonoBehaviour
     {
-        [SerializeField] private Color previewNotesColor;
-
-        // These notes are just parameters to pass to SkinService to get the skin values
-        private readonly Tap getSkinTap = new Tap();
-        private readonly Hold getSkinHold = new Hold();
-        private readonly Arc getSkinArc = new Arc() { TimingGroup = -1 };
-        private readonly ArcTap getSkinArcTap = new ArcTap();
+        [SerializeField] private Transform previewTap;
+        [SerializeField] private Transform previewHold;
+        [SerializeField] private Transform previewArcTap;
+        [SerializeField] private Transform previewArc;
+        [SerializeField] private Transform previewTrace;
 
         private readonly HashSet<Arc> selectedArcs = new HashSet<Arc>();
 
@@ -89,6 +87,7 @@ namespace ArcCreate.Compose.Editing
                 add: events);
             command.Execute();
 
+            previewHold.gameObject.SetActive(false);
             var (success, endTiming) = await Services.Cursor.RequestTimingSelection(
                 confirm,
                 cancel,
@@ -98,6 +97,7 @@ namespace ArcCreate.Compose.Editing
                     Services.Gameplay.Chart.UpdateEvents(events);
                 },
                 constraint: t => t > hold.Timing);
+            previewHold.gameObject.SetActive(false);
             Services.Cursor.EnableLaneCursor = true;
 
             if (success)
@@ -130,6 +130,7 @@ namespace ArcCreate.Compose.Editing
                 add: events);
             command.Execute();
 
+            (isArc ? previewArc : previewTrace).gameObject.SetActive(false);
             var (startPosSuccess, startPos) = await Services.Cursor.RequestVerticalSelection(
                 confirm,
                 cancel,
@@ -184,6 +185,7 @@ namespace ArcCreate.Compose.Editing
                     arc.YEnd = position.y;
                     Services.Gameplay.Chart.UpdateEvents(events);
                 });
+            (isArc ? previewArc : previewTrace).gameObject.SetActive(false);
             Services.Cursor.EnableLaneCursor = true;
 
             if (endPosSuccess)
@@ -291,12 +293,23 @@ namespace ArcCreate.Compose.Editing
 
         private void Awake()
         {
+            Values.CreateNoteMode.OnValueChange += SwitchPreviewMode;
             Services.Selection.OnSelectionChange += OnSelectionChange;
         }
 
         private void OnDestroy()
         {
+            Values.CreateNoteMode.OnValueChange -= SwitchPreviewMode;
             Services.Selection.OnSelectionChange -= OnSelectionChange;
+        }
+
+        private void SwitchPreviewMode(CreateNoteMode mode)
+        {
+            previewTap.gameObject.SetActive(mode == CreateNoteMode.Tap);
+            previewHold.gameObject.SetActive(mode == CreateNoteMode.Hold);
+            previewArc.gameObject.SetActive(mode == CreateNoteMode.Arc);
+            previewArcTap.gameObject.SetActive(mode == CreateNoteMode.ArcTap);
+            previewTrace.gameObject.SetActive(mode == CreateNoteMode.Trace);
         }
 
         private void OnSelectionChange(HashSet<Note> selection)
@@ -308,6 +321,104 @@ namespace ArcCreate.Compose.Editing
                 {
                     selectedArcs.Add(a);
                 }
+            }
+        }
+
+        private void Update()
+        {
+            if (Values.CreateNoteMode.Value == CreateNoteMode.Idle)
+            {
+                return;
+            }
+
+            int cursorTiming = Services.Cursor.CursorTiming;
+            int cursorLane = Services.Cursor.CursorLane;
+            int tg = Values.EditingTimingGroup.Value;
+            Vector3 cursorPosition = Services.Cursor.CursorWorldPosition;
+            float z = cursorPosition.z;
+
+            GroupProperties groupProperties = Services.Gameplay.Chart.GetTimingGroup(tg).GroupProperties;
+            Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(ArcFormula.LaneToWorldX(cursorLane), 0, 0);
+            Quaternion rot = groupProperties.RotationIndividual;
+            Vector3 scl = groupProperties.ScaleIndividual;
+
+            switch (Values.CreateNoteMode.Value)
+            {
+                case CreateNoteMode.Tap:
+                    scl.y = ArcFormula.CalculateTapSizeScalar(z) * scl.y;
+                    previewTap.localPosition = pos;
+                    previewTap.localRotation = rot;
+                    previewTap.localScale = scl;
+                    break;
+                case CreateNoteMode.Hold:
+                    scl.y *= 10;
+                    previewHold.localPosition = pos;
+                    previewHold.localRotation = rot;
+                    previewHold.localScale = scl;
+                    break;
+                case CreateNoteMode.Arc:
+                    pos = (groupProperties.FallDirection * z) + new Vector3(cursorPosition.x, 1, 0);
+                    previewArc.localPosition = pos;
+                    break;
+                case CreateNoteMode.Trace:
+                    pos = (groupProperties.FallDirection * z) + new Vector3(cursorPosition.x, 1, 0);
+                    previewTrace.localPosition = pos;
+                    break;
+                case CreateNoteMode.ArcTap:
+                    Arc parentArc = null;
+                    bool found = false;
+                    foreach (var arc in selectedArcs)
+                    {
+                        if (arc.Timing <= cursorTiming && cursorTiming <= arc.EndTiming)
+                        {
+                            if (parentArc != null)
+                            {
+                                parentArc = null;
+                                break;
+                            }
+                            else
+                            {
+                                parentArc = arc;
+                                found = true;
+                            }
+                        }
+                    }
+
+                    if (!found && parentArc == null)
+                    {
+                        foreach (var arc in Services.Gameplay.Chart.GetAll<Arc>())
+                        {
+                            if (arc.IsTrace && arc.Timing <= cursorTiming && cursorTiming <= arc.EndTiming)
+                            {
+                                if (parentArc != null)
+                                {
+                                    parentArc = null;
+                                    break;
+                                }
+                                else
+                                {
+                                    parentArc = arc;
+                                }
+                            }
+                        }
+                    }
+
+                    if (parentArc != null)
+                    {
+                        previewArcTap.gameObject.SetActive(true);
+                        float worldX = parentArc.WorldXAt(cursorTiming);
+                        float worldY = parentArc.WorldYAt(cursorTiming);
+                        pos = (groupProperties.FallDirection * z) + new Vector3(worldX, worldY, 0);
+                        previewArcTap.localPosition = pos;
+                        previewArcTap.localRotation = rot;
+                        previewArcTap.localScale = scl;
+                    }
+                    else
+                    {
+                        previewArcTap.gameObject.SetActive(false);
+                    }
+
+                    break;
             }
         }
     }

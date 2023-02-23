@@ -93,7 +93,7 @@
 				}
 
 				c *= color * properties.color;  
-				c.a *= 0.7;
+				c.a *= 0.9;
 				return c;
 			}
 			ENDCG
@@ -175,7 +175,7 @@
 				}
 
 				c *= color * properties.color;  
-				c.a *= 0.5;
+				c.a *= 0.2;
 				return c;
 			}
 			ENDCG
