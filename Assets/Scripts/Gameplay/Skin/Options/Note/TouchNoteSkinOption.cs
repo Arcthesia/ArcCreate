@@ -8,43 +8,42 @@ namespace ArcCreate.Gameplay.Skin
     [CreateAssetMenu(fileName = "GamemodeNoteSkin", menuName = "Skin Option/NoteGamemode/Joycon")]
     public class TouchNoteSkinOption : GamemodeNoteSkinOption
     {
-        [SerializeField] private Sprite tapSkin;
-        [SerializeField] private Sprite holdSkin;
-        [SerializeField] private Sprite holdHighlightSkin;
-        [SerializeField] private Material arcTapSkin;
-        [SerializeField] private Sprite arcCapSprite;
+        [SerializeField] private Texture tapSkin;
+        [SerializeField] private Texture holdSkin;
+        [SerializeField] private Texture holdHighlightSkin;
+        [SerializeField] private Texture arcTapSkin;
+        [SerializeField] private Texture arcCapSprite;
 
-        public Material ArcTapSkin { get; private set; }
-
-        public ExternalSprite TapSkin { get; private set; }
-        public ExternalSprite HoldSkin { get; private set; }
-        public ExternalSprite HoldHighlightSkin { get; private set; }
-        public ExternalSprite ArcCapSprite { get; private set; }
+        public ExternalTexture TapSkin { get; private set; }
+        public ExternalTexture HoldSkin { get; private set; }
+        public ExternalTexture HoldHighlightSkin { get; private set; }
+        public ExternalTexture ArcCapSprite { get; private set; }
         public ExternalTexture ArcTapSkinTexture { get; private set; }
 
-        public override (Mesh mesh, Material material) GetArcTapSkin(ArcTap note)
-            => (note.Sfx == "none" || string.IsNullOrEmpty(note.Sfx)) ? (ArcTapMesh, ArcTapSkin) : (ArcTapSfxMesh, ArcTapSfxSkin);
+        public override Texture GetArcTapSkin(ArcTap note)
+            => (note.Sfx == "none" || string.IsNullOrEmpty(note.Sfx)) ?
+               ArcTapSkinTexture.Value :
+               ArcTapSfxTexture.Value;
 
-        public override (Sprite normal, Sprite highlight) GetHoldSkin(Hold note)
+        public override (Texture normal, Texture highlight) GetHoldSkin(Hold note)
             => (HoldSkin.Value, HoldHighlightSkin.Value);
 
-        public override Sprite GetTapSkin(Tap note)
-            => TapSkin.Value;
+        public override (Texture texture, Color connectionLineColor) GetTapSkin(Tap note)
+            => (TapSkin.Value, ConnectionLineColor);
 
-        public override Sprite GetArcCapSprite(Arc arc)
+        public override Texture GetArcCapSprite(Arc arc)
             => ArcCapSprite.Value;
 
         internal override void RegisterExternalSkin()
         {
             base.RegisterExternalSkin();
-            ArcTapSkin = Instantiate(arcTapSkin);
 
             string subdir = System.IO.Path.Combine("Note", "Touch");
-            TapSkin = new ExternalSprite(tapSkin, subdir);
-            HoldSkin = new ExternalSprite(holdSkin, subdir);
-            HoldHighlightSkin = new ExternalSprite(holdHighlightSkin, subdir);
-            ArcCapSprite = new ExternalSprite(arcCapSprite, subdir);
-            ArcTapSkinTexture = new ExternalTexture(ArcTapSkin.mainTexture, subdir);
+            TapSkin = new ExternalTexture(tapSkin, subdir);
+            HoldSkin = new ExternalTexture(holdSkin, subdir);
+            HoldHighlightSkin = new ExternalTexture(holdHighlightSkin, subdir);
+            ArcCapSprite = new ExternalTexture(arcCapSprite, subdir);
+            ArcTapSkinTexture = new ExternalTexture(arcTapSkin, subdir);
         }
 
         internal override async UniTask LoadExternalSkin()
@@ -55,8 +54,6 @@ namespace ArcCreate.Gameplay.Skin
             await HoldHighlightSkin.Load();
             await ArcCapSprite.Load();
             await ArcTapSkinTexture.Load();
-
-            ArcTapSkin.mainTexture = ArcTapSkinTexture.Value;
         }
 
         internal override void UnloadExternalSkin()
@@ -67,8 +64,6 @@ namespace ArcCreate.Gameplay.Skin
             HoldHighlightSkin.Unload();
             ArcCapSprite.Unload();
             ArcTapSkinTexture.Unload();
-
-            Destroy(ArcTapSkin);
         }
     }
 }

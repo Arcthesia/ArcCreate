@@ -78,6 +78,19 @@ namespace ArcCreate.Utility.RangeTree
                 }
             }
 
+            // Band-aid fix for stack-overflow bug
+            if (Items.Count == 0)
+            {
+                for (int i = 0; i < items.Count; i++)
+                {
+                    RangeValuePair<T> o = items[i];
+                    Items.Add(o);
+                }
+
+                Items.Sort(this);
+                return;
+            }
+
             // sort the items, this way the query is faster later on
             Items.Sort(this);
             if (left.Count > 0)

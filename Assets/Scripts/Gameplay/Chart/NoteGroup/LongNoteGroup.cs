@@ -9,14 +9,11 @@ namespace ArcCreate.Gameplay.Chart
     /// Base class for arcs and holds note groups.
     /// </summary>
     /// <typeparam name="Note">The note type.</typeparam>
-    /// <typeparam name="Behaviour">The MonoBehaviour component type corresponding to the note type.</typeparam>
-    public abstract class LongNoteGroup<Note, Behaviour> : NoteGroup<Note, Behaviour>
-        where Note : ILongNote<Behaviour>
-        where Behaviour : MonoBehaviour
+    public abstract class LongNoteGroup<Note> : NoteGroup<Note>
+        where Note : ILongNote
     {
         private readonly RangeTree<Note> timingTree = new RangeTree<Note>();
         private readonly RangeTree<Note> floorPositionTree = new RangeTree<Note>();
-        private readonly List<Note> previousNotesInRange = new List<Note>();
 
         protected RangeTree<Note> TimingTree => timingTree;
 
@@ -154,29 +151,11 @@ namespace ArcCreate.Gameplay.Chart
 
             var notesInRange = floorPositionTree[renderFrom, renderTo];
 
-            // Disable old notes
-            for (int i = 0; i < previousNotesInRange.Count; i++)
-            {
-                Note note = previousNotesInRange[i];
-                if (note.EndFloorPosition < renderFrom || note.FloorPosition > renderTo)
-                {
-                    Pool.Return(note.RevokeInstance());
-                }
-            }
-
-            previousNotesInRange.Clear();
-
             // Update notes
             while (notesInRange.MoveNext())
             {
                 var note = notesInRange.Current;
-                if (!note.IsAssignedInstance)
-                {
-                    note.AssignInstance(Pool.Get(ParentTransform));
-                }
-
-                note.UpdateInstance(timing, floorPosition, groupProperties);
-                previousNotesInRange.Add(note);
+                note.UpdateRender(timing, floorPosition, groupProperties);
             }
         }
     }

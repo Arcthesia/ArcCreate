@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6896460699168774307}
   - component: {fileID: 6896460699168774309}
   - component: {fileID: 6896460699168774306}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 6896460699178825723}
   - component: {fileID: 6896460699178825720}
   - component: {fileID: 6896460699178825721}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: TextButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}

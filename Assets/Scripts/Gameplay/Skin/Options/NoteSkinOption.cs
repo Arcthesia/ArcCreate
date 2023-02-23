@@ -15,7 +15,7 @@ namespace ArcCreate.Gameplay.Skin
 
         private InputMode CurrentMode => (InputMode)Settings.InputMode.Value;
 
-        public Sprite GetTapSkin(Tap note)
+        public (Texture texture, Color connectionLineColor) GetTapSkin(Tap note)
         {
             if (CurrentMode == InputMode.Controller
              || CurrentMode == InputMode.AutoController)
@@ -28,7 +28,7 @@ namespace ArcCreate.Gameplay.Skin
             }
         }
 
-        public (Sprite normal, Sprite highlight) GetHoldSkin(Hold note)
+        public (Texture normal, Texture highlight) GetHoldSkin(Hold note)
         {
             if (CurrentMode == InputMode.Controller
              || CurrentMode == InputMode.AutoController)
@@ -41,7 +41,7 @@ namespace ArcCreate.Gameplay.Skin
             }
         }
 
-        public (Mesh mesh, Material material) GetArcTapSkin(ArcTap note)
+        public Texture GetArcTapSkin(ArcTap note)
         {
             if (CurrentMode == InputMode.Controller
              || CurrentMode == InputMode.AutoController)
@@ -54,7 +54,7 @@ namespace ArcCreate.Gameplay.Skin
             }
         }
 
-        public Sprite GetArcCapSprite(Arc arc)
+        public Texture GetArcCapSprite(Arc arc)
         {
             if (CurrentMode == InputMode.Controller
              || CurrentMode == InputMode.AutoController)

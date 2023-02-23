@@ -8,6 +8,8 @@ namespace ArcCreate.Gameplay.GameplayCamera
     public class CameraService : MonoBehaviour, ICameraService, ICameraControl
     {
         [SerializeField] private Camera gameplayCamera;
+        [SerializeField] private Camera arcCamera;
+        [SerializeField] private Camera uiCamera;
         [SerializeField] private Transform skyInputLabel;
         private float currentTilt;
         private float currentArcPos;
@@ -109,7 +111,10 @@ namespace ArcCreate.Gameplay.GameplayCamera
             Vector3 prevPosition = gameplayCamera.transform.localPosition;
             Vector3 position = ResetPosition;
             Vector3 rotation = ResetRotation;
-            gameplayCamera.fieldOfView = Is16By9 ? 50 : 65;
+            float fov = Is16By9 ? 50 : 65;
+            gameplayCamera.fieldOfView = fov;
+            arcCamera.fieldOfView = fov;
+            uiCamera.fieldOfView = fov;
 
             for (int i = 0; i < events.Count; i++)
             {

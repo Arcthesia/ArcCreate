@@ -1,10 +1,8 @@
 using System;
-using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
 {
-    public interface INote<Behaviour> : IComparable<INote<Behaviour>>
-        where Behaviour : MonoBehaviour
+    public interface INote : IComparable<INote>
     {
         /// <summary>
         /// Gets the note's timing.
@@ -18,26 +16,9 @@ namespace ArcCreate.Gameplay.Data
         double FloorPosition { get; }
 
         /// <summary>
-        /// Gets a value indicating whether or not there's an instance assigned to this note.
-        /// </summary>
-        bool IsAssignedInstance { get; }
-
-        /// <summary>
         /// Gets the total combo count of this note. Should be 1 for tap notes.
         /// </summary>
         int TotalCombo { get; }
-
-        /// <summary>
-        /// Assign a MonoBehaviour instance from the pool to this note.
-        /// </summary>
-        /// <param name="instance">The instance.</param>
-        void AssignInstance(Behaviour instance);
-
-        /// <summary>
-        /// Remove the instance from this note to return it to the pool.
-        /// </summary>
-        /// <returns>The instance that was just removed.</returns>
-        Behaviour RevokeInstance();
 
         /// <summary>
         /// Reset the note's judgement state. Typically called after there's a change in the current timing.
@@ -81,6 +62,6 @@ namespace ArcCreate.Gameplay.Data
         /// <param name="currentTiming">The timing to update to.</param>
         /// <param name="currentFloorPosition">The floor position corresponding to the timing value.</param>
         /// <param name="groupProperties">The properties object of the notes' timing group.</param>
-        void UpdateInstance(int currentTiming, double currentFloorPosition, GroupProperties groupProperties);
+        void UpdateRender(int currentTiming, double currentFloorPosition, GroupProperties groupProperties);
     }
 }

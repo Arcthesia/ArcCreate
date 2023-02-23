@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6418235184630294717}
   - component: {fileID: 6418235184630294716}
   - component: {fileID: 7091801577338673340}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: TextParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4796,7 +4796,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1348179373
-  m_SortingLayer: 6
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 0

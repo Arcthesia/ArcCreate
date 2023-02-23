@@ -10,24 +10,8 @@ namespace ArcCreate.Gameplay.Chart
     {
         [SerializeField] private GameplayData gameplayData;
 
-        [Header("Prefabs")]
-        [SerializeField] private GameObject tapPrefab;
-        [SerializeField] private GameObject holdPrefab;
-        [SerializeField] private GameObject arcPrefab;
-        [SerializeField] private GameObject arcSegmentPrefab;
-        [SerializeField] private GameObject arcTapPrefab;
-        [SerializeField] private GameObject connectionLinePrefab;
         [SerializeField] private GameObject beatlinePrefab;
         [SerializeField] private Color beatlineColor;
-        [SerializeField] private GameObject timingGroupPrefab;
-
-        [Header("Capacity")]
-        [SerializeField] private int tapCapacity;
-        [SerializeField] private int holdCapacity;
-        [SerializeField] private int arcCapacity;
-        [SerializeField] private int arcSegmentCapacity;
-        [SerializeField] private int arcTapCapacity;
-        [SerializeField] private int connectionLineCapacity;
         [SerializeField] private int beatlineCapacity;
 
         private readonly List<TimingGroup> timingGroups = new List<TimingGroup>();
@@ -213,10 +197,9 @@ namespace ArcCreate.Gameplay.Chart
             for (int j = 0; j < chart.TimingGroups.Count; j++)
             {
                 ChartTimingGroup tg = chart.TimingGroups[j];
-                GameObject go = Instantiate(timingGroupPrefab, transform);
                 TimingGroup newTg = new TimingGroup(j);
                 timingGroups.Add(newTg);
-                newTg.Load(tg, go.transform);
+                newTg.Load(tg);
             }
 
             Services.Camera.Load(chart.Cameras);
@@ -406,9 +389,8 @@ namespace ArcCreate.Gameplay.Chart
 
             if (tg >= timingGroups.Count)
             {
-                GameObject go = Instantiate(timingGroupPrefab, transform);
                 TimingGroup newTg = new TimingGroup(timingGroups.Count);
-                newTg.Load(go.transform);
+                newTg.Load();
                 timingGroups.Add(newTg);
                 if (string.IsNullOrEmpty(newTg.GroupProperties.FileName))
                 {
@@ -443,12 +425,6 @@ namespace ArcCreate.Gameplay.Chart
 
         private void Awake()
         {
-            Pools.New<TapBehaviour>(Values.TapPoolName, tapPrefab, transform, tapCapacity);
-            Pools.New<HoldBehaviour>(Values.HoldPoolName, holdPrefab, transform, holdCapacity);
-            Pools.New<ArcBehaviour>(Values.ArcPoolName, arcPrefab, transform, arcCapacity);
-            Pools.New<ArcTapBehaviour>(Values.ArcTapPoolName, arcTapPrefab, transform, arcTapCapacity);
-            Pools.New<ArcSegment>(Values.ArcSegmentPoolName, arcSegmentPrefab, transform, arcSegmentCapacity);
-            Pools.New<LineRenderer>(Values.ConnectonLinePoolName, connectionLinePrefab, transform, connectionLineCapacity);
             var beatlinePool = Pools.New<BeatlineBehaviour>(Values.BeatlinePoolName, beatlinePrefab, transform, beatlineCapacity);
 
             Settings.GlobalAudioOffset.OnValueChanged.AddListener(OnGlobalOffsetChange);
@@ -461,12 +437,6 @@ namespace ArcCreate.Gameplay.Chart
 
         private void OnDestroy()
         {
-            Pools.Destroy<TapBehaviour>(Values.TapPoolName);
-            Pools.Destroy<HoldBehaviour>(Values.HoldPoolName);
-            Pools.Destroy<ArcBehaviour>(Values.ArcPoolName);
-            Pools.Destroy<ArcTapBehaviour>(Values.ArcTapPoolName);
-            Pools.Destroy<ArcSegment>(Values.ArcSegmentPoolName);
-            Pools.Destroy<LineRenderer>(Values.ConnectonLinePoolName);
             Pools.Destroy<BeatlineBehaviour>(Values.BeatlinePoolName);
 
             Settings.GlobalAudioOffset.OnValueChanged.RemoveListener(OnGlobalOffsetChange);

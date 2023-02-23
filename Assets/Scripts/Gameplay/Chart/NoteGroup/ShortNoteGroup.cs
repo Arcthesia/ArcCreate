@@ -9,14 +9,11 @@ namespace ArcCreate.Gameplay.Chart
     /// Base class for taps and arc taps note groups.
     /// </summary>
     /// <typeparam name="Note">The note type.</typeparam>
-    /// <typeparam name="Behaviour">The MonoBehaviour component type corresponding to the note type.</typeparam>
-    public abstract class ShortNoteGroup<Note, Behaviour> : NoteGroup<Note, Behaviour>
-        where Note : INote<Behaviour>
-        where Behaviour : MonoBehaviour
+    public abstract class ShortNoteGroup<Note> : NoteGroup<Note>
+        where Note : INote
     {
         private CachedBisect<Note, int> timingSearch;
         private CachedBisect<Note, double> floorPositionSearch;
-        private readonly List<Note> previousNotesInRange = new List<Note>();
 
         public override int ComboAt(int timing)
         {
@@ -115,19 +112,6 @@ namespace ArcCreate.Gameplay.Chart
 
             int renderIndex = floorPositionSearch.Bisect(renderFrom);
 
-            // Disable old notes
-            for (int i = 0; i < previousNotesInRange.Count; i++)
-            {
-                Note note = previousNotesInRange[i];
-
-                if (note.FloorPosition < renderFrom || note.FloorPosition > renderTo)
-                {
-                    Pool.Return(note.RevokeInstance());
-                }
-            }
-
-            previousNotesInRange.Clear();
-
             // Update notes
             while (renderIndex < floorPositionSearch.List.Count)
             {
@@ -137,14 +121,8 @@ namespace ArcCreate.Gameplay.Chart
                     break;
                 }
 
-                if (!note.IsAssignedInstance)
-                {
-                    note.AssignInstance(Pool.Get(ParentTransform));
-                }
-
-                note.UpdateInstance(timing, floorPosition, groupProperties);
+                note.UpdateRender(timing, floorPosition, groupProperties);
                 renderIndex++;
-                previousNotesInRange.Add(note);
             }
         }
     }

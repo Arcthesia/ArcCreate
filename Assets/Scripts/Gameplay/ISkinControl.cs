@@ -110,41 +110,31 @@ namespace ArcCreate.Gameplay
         /// Get the skin for an arc note.
         /// </summary>
         /// <param name="note">The note to get the skin for.</param>
-        /// <returns>A tuple of:<br/>
-        /// normal: The default material.<br/>
-        /// highlight: The highlighted material.<br/>
-        /// shadow: The shadow material.<br/>
-        /// heightIndicatorSprite: The height indicator's sprite.<br/>
-        /// heightIndicatorColor: The color for its height indicato.<br/>
-        /// </returns>
-        (Material normal, Material highlight, Material shadow, Sprite arcCap, Sprite heightIndicatorSprite, Color heightIndicatorColor) GetArcSkin(Arc note);
+        /// <returns>Arccap texture, height indicator color and red arc value from 0-1.</returns>
+        (Texture arcCap, Color heightIndicatorColor, float redArcValue) GetArcSkin(Arc note);
 
         /// <summary>
         /// Get the skin for a tap note.
         /// </summary>
         /// <param name="note">The note to get the skin for.</param>
-        /// <returns>The correct tap note sprite.</returns>
-        Sprite GetTapSkin(Tap note);
+        /// <returns>The tap note's texture and connection line color.</returns>
+        (Texture texture, Color connectionLineColor) GetTapSkin(Tap note);
 
         /// <summary>
         /// Get the skin for a hold note.
         /// </summary>
         /// <param name="note">The note to get the skin for.</param>
         /// <returns>A tuple of:<br/>
-        /// normal: The normal sprite.<br/>
-        /// highlight: The highlighted sprite.<br/>
+        /// normal: The normal texture.<br/>
+        /// highlight: The highlighted texture.<br/>
         /// </returns>
-        (Sprite normal, Sprite highlight) GetHoldSkin(Hold note);
+        (Texture normal, Texture highlight) GetHoldSkin(Hold note);
 
         /// <summary>
         /// Get the skin for a hold note.
         /// </summary>
         /// <param name="note">The note to get the skin for.</param>
-        /// <returns>A tuple of:<br/>
-        /// mesh: The note's mesh.<br/>
-        /// material: The note's material.
-        /// shadow: The shadow's sprite.
-        /// </returns>
-        (Mesh mesh, Material material, Sprite shadow) GetArcTapSkin(ArcTap note);
+        /// <returns>The arctap's texture.</returns>
+        Texture GetArcTapSkin(ArcTap note);
     }
 }

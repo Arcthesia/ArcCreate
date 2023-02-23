@@ -4,14 +4,8 @@
 	{
 		_MainTex ("Texture", 2D) = "white" {}
 		_Color ("Color", Color) = (1,1,1,1)
-		_ShadowColor ("ShadowColor", Color) = (1,1,1,1)
 		_LowColor ("LowColor", Color) = (1,1,1,1)
 		_RedColor ("RedColor", Color) = (1,1,1,1)
-		_From ("From", Float) = 0
-		_Selected ("Selected", Int) = 0
-		_ColorTG ("ColorTG", Color) = (1,1,1,1)
-		_RedValue ("RedValue", Float) = 0
-		_Shear("Shear", Vector) = (0,0,1,0)
 	}
 	SubShader
 	{
@@ -29,6 +23,7 @@
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
+			#pragma multi_compile_instancing
 
 			#include "UnityCG.cginc"
 			#include "ColorSpace.cginc"
@@ -36,8 +31,8 @@
 			struct appdata
 			{
 				float4 vertex : POSITION;
-				float4 color    : COLOR;
 				float2 uv : TEXCOORD0;
+				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
 			struct v2f
@@ -45,33 +40,33 @@
 				float4 vertex : SV_POSITION; 
 				float2 uv : TEXCOORD0;
 				float3 worldpos : TEXCOORD1;
+				uint instanceID : BLENDINDICES0;
 			};
-			 
+
+			struct Properties
+			{
+				float from;
+				float4 color;
+				float redValue;
+				int selected;
+			};
+			
 			int _Selected;
-			float _From;
-			float _RedValue;
 			float4 _RedColor;
-			float4 _Color, _LowColor, _ColorTG;
-			float4 _Shear;
+			float4 _Color, _LowColor;
             float4 _MainTex_ST;
 			sampler2D _MainTex;
+			
+			StructuredBuffer<Properties> _Properties;
 
-			v2f vert (appdata v)
+			v2f vert (appdata v, uint instanceID : SV_InstanceID)
 			{
+				UNITY_SETUP_INSTANCE_ID(v);
 				v2f o;
-				float x = _Shear.x;
-				float y = _Shear.y;
-				float z = _Shear.z;
-				float4x4 transformMatrix = float4x4(
-                    1,0,x,0,
-                    0,1,y,0,
-                    0,0,z,0,
-                    0,0,0,1);
-				float4 vertex = mul(transformMatrix, v.vertex);
-
-				o.worldpos = mul(unity_ObjectToWorld, vertex);
-				o.vertex = UnityObjectToClipPos(vertex);
+				o.worldpos = mul(unity_ObjectToWorld, v.vertex);
+				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+				o.instanceID = instanceID;
 				return o;
 			}
 			
@@ -85,18 +80,19 @@
 
 			half4 frag (v2f i) : SV_Target
 			{
-			    if(i.uv.y < _From || i.worldpos.z > 100 || i.worldpos.z < -100) return 0;
-				float4 c = tex2D(_MainTex,i.uv); 
+				Properties properties = _Properties[i.instanceID];
+			    if(i.uv.y < properties.from || i.worldpos.z > 50 || i.worldpos.z < -100) return 0;
+				float4 c = tex2D(_MainTex, i.uv); 
 				
 				float4 inColor = lerp(_LowColor, _Color, clamp((i.worldpos.y - 1) / 4.5f, 0, 1));
-				float4 color = lerp(inColor, _RedColor, _RedValue);
+				float4 color = lerp(inColor, _RedColor, properties.redValue);
 
-				if(_Selected == 1) 
+				if(properties.selected == 1) 
 				{
 					color = Highlight(color);
 				}
 
-				c *= color * _ColorTG;  
+				c *= color * properties.color;  
 				c.a *= 0.7;
 				return c;
 			}
@@ -109,6 +105,7 @@
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
+			#pragma multi_compile_instancing
 
 			#include "UnityCG.cginc"
 			#include "ColorSpace.cginc"
@@ -116,8 +113,8 @@
 			struct appdata
 			{
 				float4 vertex : POSITION;
-				float4 color    : COLOR;
 				float2 uv : TEXCOORD0;
+				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
 			struct v2f
@@ -125,33 +122,33 @@
 				float4 vertex : SV_POSITION; 
 				float2 uv : TEXCOORD0;
 				float3 worldpos : TEXCOORD1;
+				uint instanceID : BLENDINDICES0;
 			};
 			 
+			struct Properties
+			{
+				float from;
+				float4 color;
+				float redValue;
+				int selected;
+			};
+			
 			int _Selected;
-			float _From;
-			float _RedValue;
 			float4 _RedColor;
-			float4 _Color, _LowColor, _ColorTG;
-			float4 _Shear;
+			float4 _Color, _LowColor;
             float4 _MainTex_ST;
 			sampler2D _MainTex;
+			
+			StructuredBuffer<Properties> _Properties;
 
-			v2f vert (appdata v)
+			v2f vert (appdata v, uint instanceID : SV_InstanceID)
 			{
+				UNITY_SETUP_INSTANCE_ID(v);
 				v2f o;
-				float x = _Shear.x;
-				float y = _Shear.y;
-				float z = _Shear.z;
-				float4x4 transformMatrix = float4x4(
-                    1,0,x,0,
-                    0,1,y,0,
-                    0,0,z,0,
-                    0,0,0,1);
-				float4 vertex = mul(transformMatrix, v.vertex);
-
-				o.worldpos = mul(unity_ObjectToWorld, vertex);
-				o.vertex = UnityObjectToClipPos(vertex);
+				o.worldpos = mul(unity_ObjectToWorld, v.vertex);
+				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+				o.instanceID = instanceID;
 				return o;
 			}
 			
@@ -165,18 +162,19 @@
 
 			half4 frag (v2f i) : SV_Target
 			{
-			    if(i.uv.y < _From || i.worldpos.z > 100 || i.worldpos.z < -100) return 0;
-				float4 c = tex2D(_MainTex,i.uv); 
+				Properties properties = _Properties[i.instanceID];
+			    if(i.uv.y < properties.from || i.worldpos.z > 50 || i.worldpos.z < -100) discard;
+				float4 c = tex2D(_MainTex, i.uv); 
 				
 				float4 inColor = lerp(_LowColor, _Color, clamp((i.worldpos.y - 1) / 4.5f, 0, 1));
-				float4 color = lerp(inColor, _RedColor, _RedValue);
+				float4 color = lerp(inColor, _RedColor, properties.redValue);
 
-				if(_Selected == 1) 
+				if(properties.selected == 1) 
 				{
 					color = Highlight(color);
 				}
 
-				c *= color * _ColorTG;  
+				c *= color * properties.color;  
 				c.a *= 0.5;
 				return c;
 			}

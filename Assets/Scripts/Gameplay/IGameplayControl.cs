@@ -43,5 +43,11 @@ namespace ArcCreate.Gameplay
         /// </summary>
         /// <param name="rect">The rect boundary, normalized.</param>
         void SetCameraViewportRect(Rect rect);
+
+        /// <summary>
+        /// Set whether or not to enable the cameras rendering this scene.
+        /// </summary>
+        /// <param name="enable">Whether or not to enable the cameras.</param>
+        void SetCameraEnabled(bool enable);
     }
 }

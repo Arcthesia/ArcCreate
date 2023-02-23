@@ -13,25 +13,21 @@ MonoBehaviour:
   m_Name: NoteJoyconConflict
   m_EditorClassIdentifier: 
   Name: conflict
-  arcTapSfxSkin: {fileID: 2100000, guid: 77afea3bc80de7d47a58c76a029131f1, type: 2}
+  arcTapSfxSkin: {fileID: 2800000, guid: fada9ff30303f6b49a6d1bcd253d0404, type: 3}
   ConnectionLineColor: {r: 0.6666667, g: 0.32941177, b: 0.627451, a: 1}
-  ArcTapMesh: {fileID: 2917635366719238280, guid: 75426e5c4799bc8b7b9ad04500a28cb5,
+  tapSkinLeft: {fileID: 2800000, guid: 1cfebde1cc775c646b6189f2a4721372, type: 3}
+  tapSkinRight: {fileID: 2800000, guid: 740f7bdf747286449881696dacbdfd89, type: 3}
+  holdSkinLeft: {fileID: 2800000, guid: 9d8e4d608ec922f4ab8348db59f8ddbd, type: 3}
+  holdSkinRight: {fileID: 2800000, guid: 2729a0ed778f48247aa201d086cbf851, type: 3}
+  holdHighlightSkinLeft: {fileID: 2800000, guid: 138fecbc93104f9439804f8cfd22ff01,
     type: 3}
-  ArcTapSfxMesh: {fileID: 89046849237724230, guid: 75426e5c4799bc8b7b9ad04500a28cb5,
-    type: 3}
-  tapSkinLeft: {fileID: 21300000, guid: 1cfebde1cc775c646b6189f2a4721372, type: 3}
-  tapSkinRight: {fileID: 21300000, guid: 740f7bdf747286449881696dacbdfd89, type: 3}
-  holdSkinLeft: {fileID: 21300000, guid: 9d8e4d608ec922f4ab8348db59f8ddbd, type: 3}
-  holdSkinRight: {fileID: 21300000, guid: 2729a0ed778f48247aa201d086cbf851, type: 3}
-  holdHighlightSkinLeft: {fileID: 21300000, guid: 138fecbc93104f9439804f8cfd22ff01,
-    type: 3}
-  holdHighlightSkinRight: {fileID: 21300000, guid: dba902fd619ada44685f212e444e9ecd,
+  holdHighlightSkinRight: {fileID: 2800000, guid: dba902fd619ada44685f212e444e9ecd,
     type: 3}
   arcCapSprites:
-  - {fileID: 21300000, guid: 14ac3e60f5090924abe570ef877870c9, type: 3}
-  - {fileID: 21300000, guid: 561503315d819694983417f63d4bec61, type: 3}
-  - {fileID: 21300000, guid: 02d5a25fdf1bfb04b996073d7b64c4b7, type: 3}
-  - {fileID: 21300000, guid: b468296730b482849bc2339a905f431b, type: 3}
-  arcTapSkinLeft: {fileID: 2100000, guid: 83e3c3268c919be4e82635d0e7dfabbd, type: 2}
-  arcTapSkinMiddle: {fileID: 2100000, guid: 54c98a925f8cc6e49a18a172b3aab755, type: 2}
-  arcTapSkinRight: {fileID: 2100000, guid: 2da42446b55a8ef41b6d385ae05093d2, type: 2}
+  - {fileID: 2800000, guid: 14ac3e60f5090924abe570ef877870c9, type: 3}
+  - {fileID: 2800000, guid: 561503315d819694983417f63d4bec61, type: 3}
+  - {fileID: 2800000, guid: 02d5a25fdf1bfb04b996073d7b64c4b7, type: 3}
+  - {fileID: 2800000, guid: b468296730b482849bc2339a905f431b, type: 3}
+  arcTapSkinLeft: {fileID: 2800000, guid: c6b1178a5351817469ba50aca35d6965, type: 3}
+  arcTapSkinMiddle: {fileID: 2800000, guid: 436be5e86be4a464d8a686697e3cf920, type: 3}
+  arcTapSkinRight: {fileID: 2800000, guid: 096e43cf04400c942903605b397a1dc8, type: 3}

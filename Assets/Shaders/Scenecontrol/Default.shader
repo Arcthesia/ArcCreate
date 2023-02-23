@@ -1,5 +1,4 @@
-﻿
-Shader "Sprites/DefaultSC"
+﻿Shader "Sprites/DefaultSC"
 {
 	Properties
 	{

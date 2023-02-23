@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4037024155725402233}
   - component: {fileID: 4037024155725402234}
   - component: {fileID: 4037024155725402235}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: SelectButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: 4133007989042612166}
   - component: {fileID: 2736164175061922497}
   - component: {fileID: 7433432241409028777}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: SelectedIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -203,7 +203,7 @@ GameObject:
   - component: {fileID: 8472761654923955682}
   - component: {fileID: 8472761654923955692}
   - component: {fileID: 8472761654923955683}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -337,7 +337,7 @@ GameObject:
   - component: {fileID: 8472761656373003625}
   - component: {fileID: 8041331962658892488}
   - component: {fileID: 4737462203815852156}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: ChartRow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -403,10 +403,20 @@ PrefabInstance:
       propertyPath: m_Text
       value: "\uE15B"
       objectReference: {fileID: 0}
+    - target: {fileID: 6258816204915290026, guid: b478ebaa3ae36f1fe9dc18ef70e70acc,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 6258816205848568548, guid: b478ebaa3ae36f1fe9dc18ef70e70acc,
         type: 3}
       propertyPath: m_Name
       value: RemoveButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 6258816205848568548, guid: b478ebaa3ae36f1fe9dc18ef70e70acc,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 6258816205848568549, guid: b478ebaa3ae36f1fe9dc18ef70e70acc,
         type: 3}

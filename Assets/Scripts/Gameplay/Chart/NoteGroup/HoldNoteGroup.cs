@@ -2,10 +2,8 @@ using ArcCreate.Gameplay.Data;
 
 namespace ArcCreate.Gameplay.Chart
 {
-    public class HoldNoteGroup : LongNoteGroup<Hold, HoldBehaviour>
+    public class HoldNoteGroup : LongNoteGroup<Hold>
     {
-        public override string PoolName => "hold";
-
         public override void SetupNotes()
         {
         }

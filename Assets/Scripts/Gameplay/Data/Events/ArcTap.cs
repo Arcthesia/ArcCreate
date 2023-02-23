@@ -1,14 +1,16 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
+using ArcCreate.Gameplay.Render;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
 {
-    public class ArcTap : Note, INote<ArcTapBehaviour>, IArcTapJudgementReceiver
+    public class ArcTap : Note, INote, IArcTapJudgementReceiver
     {
-        private ArcTapBehaviour instance;
         private bool judgementRequestSent = false;
-        private bool isSelected;
+        private bool isHit = false;
+        private bool isSfx;
+        private Texture texture;
 
         public HashSet<Tap> ConnectedTaps { get; } = new HashSet<Tap>();
 
@@ -19,21 +21,6 @@ namespace ArcCreate.Gameplay.Data
         public float WorldY => Arc.WorldYAt(Timing);
 
         public string Sfx => Arc.Sfx;
-
-        public bool IsAssignedInstance => instance != null;
-
-        public override bool IsSelected
-        {
-            get => isSelected;
-            set
-            {
-                isSelected = value;
-                if (instance != null)
-                {
-                    instance.SetSelected(value);
-                }
-            }
-        }
 
         public override ArcEvent Clone()
         {
@@ -52,28 +39,10 @@ namespace ArcCreate.Gameplay.Data
             Arc = e.Arc;
         }
 
-        public void AssignInstance(ArcTapBehaviour instance)
-        {
-            this.instance = instance;
-            instance.SetData(this);
-            instance.SetSelected(isSelected);
-            ReloadSkin();
-        }
-
-        public ArcTapBehaviour RevokeInstance()
-        {
-            var result = instance;
-            instance = null;
-            return result;
-        }
-
         public void ResetJudgeTo(int timing)
         {
             judgementRequestSent = timing > Timing;
-            if (instance != null)
-            {
-                instance.gameObject.SetActive(true);
-            }
+            isHit = timing > Timing;
         }
 
         public void Rebuild()
@@ -83,8 +52,8 @@ namespace ArcCreate.Gameplay.Data
 
         public void ReloadSkin()
         {
-            (Mesh mesh, Material mat, Sprite shadow) = Services.Skin.GetArcTapSkin(this);
-            instance.SetSkin(mesh, mat, shadow);
+            texture = Services.Skin.GetArcTapSkin(this);
+            isSfx = !string.IsNullOrEmpty(Sfx) && Sfx != "none";
         }
 
         public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)
@@ -96,9 +65,9 @@ namespace ArcCreate.Gameplay.Data
             }
         }
 
-        public void UpdateInstance(int currentTiming, double currentFloorPosition, GroupProperties groupProperties)
+        public void UpdateRender(int currentTiming, double currentFloorPosition, GroupProperties groupProperties)
         {
-            if (instance == null)
+            if (isHit)
             {
                 return;
             }
@@ -107,15 +76,29 @@ namespace ArcCreate.Gameplay.Data
             Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(WorldX, WorldY, 0);
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
-            instance.SetTransform(pos, rot, scl);
+            Matrix4x4 matrix = Matrix4x4.TRS(pos, rot, scl);
+            Matrix4x4 shadowMatrix = matrix * Matrix4x4.Translate(new Vector3(0, -pos.y, 0));
 
             float alpha = ArcFormula.CalculateFadeOutAlpha(z);
             Color color = groupProperties.Color;
             color.a *= alpha;
-            instance.SetColor(color);
+
+            NoteRenderProperties tapProperties = new NoteRenderProperties
+            {
+                Color = color,
+                Selected = IsSelected ? 1 : 0,
+            };
+
+            SpriteRenderProperties shadowProperties = new SpriteRenderProperties
+            {
+                Color = color,
+            };
+
+            Services.Render.DrawArcTap(isSfx, texture, matrix, tapProperties);
+            Services.Render.DrawArcTapShadow(shadowMatrix, shadowProperties);
         }
 
-        public int CompareTo(INote<ArcTapBehaviour> other)
+        public int CompareTo(INote other)
         {
             return Timing.CompareTo(other.Timing);
         }
@@ -126,10 +109,7 @@ namespace ArcCreate.Gameplay.Data
             Services.Particle.PlayTapParticle(new Vector3(WorldX, WorldY), result);
             Services.Particle.PlayTextParticle(new Vector3(WorldX, WorldY), result);
             Services.Score.ProcessJudgement(result);
-            if (instance != null)
-            {
-                instance.gameObject.SetActive(false);
-            }
+            isHit = true;
         }
 
         private void RequestJudgement()

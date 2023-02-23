@@ -25,6 +25,7 @@ namespace ArcCreate.Compose.Editing
         }
 
         [EditorAction("Vertical", true, "<a-m>")]
+        [SelectionService.RequireSelection]
         public void MirrorVertical()
         {
             HashSet<Note> selected = Services.Selection.SelectedNotes;

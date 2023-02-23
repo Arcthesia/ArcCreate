@@ -38,7 +38,7 @@ namespace ArcCreate.Compose.Components
                 height / Screen.height);
 
             Services.Gameplay.SetCameraViewportRect(normalized);
-            Services.Gameplay.Camera.GameplayCamera.enabled = gameObject.activeInHierarchy;
+            Services.Gameplay.SetCameraEnabled(gameObject.activeInHierarchy);
         }
 
         private void OnEnable()
@@ -48,11 +48,7 @@ namespace ArcCreate.Compose.Components
                 return;
             }
 
-            Camera cam = Services.Gameplay.Camera.GameplayCamera;
-            if (cam != null)
-            {
-                cam.enabled = true;
-            }
+            Services.Gameplay.SetCameraEnabled(true);
         }
 
         private void OnDisable()
@@ -62,11 +58,7 @@ namespace ArcCreate.Compose.Components
                 return;
             }
 
-            Camera cam = Services.Gameplay.Camera.GameplayCamera;
-            if (cam != null)
-            {
-                cam.enabled = false;
-            }
+            Services.Gameplay.SetCameraEnabled(false);
         }
 
         private void Awake()

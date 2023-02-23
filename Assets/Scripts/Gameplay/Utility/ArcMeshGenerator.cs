@@ -12,9 +12,9 @@ namespace ArcCreate.Gameplay.Utility
         private static Mesh cachedTraceHeadMesh;
         private static Mesh cachedArcHeadMesh;
 
-        public static Mesh GetSegmentMesh(Arc arc)
+        public static Mesh GetSegmentMesh(bool isTrace)
         {
-            if (arc.IsTrace)
+            if (isTrace)
             {
                 if (cachedTraceMesh == null)
                 {
@@ -34,9 +34,9 @@ namespace ArcCreate.Gameplay.Utility
             }
         }
 
-        public static Mesh GetShadowMesh(Arc arc)
+        public static Mesh GetShadowMesh(bool isTrace)
         {
-            if (arc.IsTrace)
+            if (isTrace)
             {
                 if (cachedTraceShadowMesh == null)
                 {
@@ -56,9 +56,9 @@ namespace ArcCreate.Gameplay.Utility
             }
         }
 
-        public static Mesh GetHeadMesh(Arc arc)
+        public static Mesh GetHeadMesh(bool isTrace)
         {
-            if (arc.IsTrace)
+            if (isTrace)
             {
                 if (cachedTraceHeadMesh == null)
                 {

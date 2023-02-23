@@ -1,9 +1,6 @@
-using UnityEngine;
-
 namespace ArcCreate.Gameplay.Data
 {
-    public interface ILongNote<Behaviour> : INote<Behaviour>
-        where Behaviour : MonoBehaviour
+    public interface ILongNote : INote
     {
         /// <summary>
         /// Gets the note's end timing.

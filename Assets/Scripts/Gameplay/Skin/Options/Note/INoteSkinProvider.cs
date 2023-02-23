@@ -5,12 +5,12 @@ namespace ArcCreate.Gameplay.Skin
 {
     public interface INoteSkinProvider
     {
-        Sprite GetTapSkin(Tap note);
+        (Texture texture, Color connectionLineColor) GetTapSkin(Tap note);
 
-        (Sprite normal, Sprite highlight) GetHoldSkin(Hold note);
+        (Texture normal, Texture highlight) GetHoldSkin(Hold note);
 
-        (Mesh mesh, Material material) GetArcTapSkin(ArcTap note);
+        Texture GetArcTapSkin(ArcTap note);
 
-        Sprite GetArcCapSprite(Arc arc);
+        Texture GetArcCapSprite(Arc arc);
     }
 }

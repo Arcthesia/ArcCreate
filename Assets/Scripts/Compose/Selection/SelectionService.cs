@@ -271,37 +271,37 @@ namespace ArcCreate.Compose.Selection
                     continue;
                 }
 
-                if (hit.transform.TryGetComponent<NoteBehaviour>(out var behaviour))
-                {
-                    note = behaviour.Note;
-                    if (!note.TimingGroupInstance.GroupProperties.Editable)
-                    {
-                        continue;
-                    }
+                // if (hit.transform.TryGetComponent<NoteBehaviour>(out var behaviour))
+                // {
+                //     note = behaviour.Note;
+                //     if (!note.TimingGroupInstance.GroupProperties.Editable)
+                //     {
+                //         continue;
+                //     }
 
-                    switch (selectionMode)
-                    {
-                        case SelectionMode.Any:
-                            latestSelectedDistance = hit.distance;
-                            return true;
-                        case SelectionMode.Selected:
-                            if (note.IsSelected)
-                            {
-                                latestSelectedDistance = hit.distance;
-                                return true;
-                            }
+                //     switch (selectionMode)
+                //     {
+                //         case SelectionMode.Any:
+                //             latestSelectedDistance = hit.distance;
+                //             return true;
+                //         case SelectionMode.Selected:
+                //             if (note.IsSelected)
+                //             {
+                //                 latestSelectedDistance = hit.distance;
+                //                 return true;
+                //             }
 
-                            break;
-                        case SelectionMode.Deselected:
-                            if (!note.IsSelected)
-                            {
-                                latestSelectedDistance = hit.distance;
-                                return true;
-                            }
+                //             break;
+                //         case SelectionMode.Deselected:
+                //             if (!note.IsSelected)
+                //             {
+                //                 latestSelectedDistance = hit.distance;
+                //                 return true;
+                //             }
 
-                            break;
-                    }
-                }
+                //             break;
+                //     }
+                // }
             }
 
             note = null;

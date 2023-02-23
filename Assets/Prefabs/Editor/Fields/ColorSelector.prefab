@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7277160540500152988}
   - component: {fileID: 7277160540500152986}
   - component: {fileID: 7277160540500152989}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 7277160540563550882}
   - component: {fileID: 7277160540563550885}
   - component: {fileID: 7277160540563550883}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Option
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -236,7 +236,7 @@ GameObject:
   - component: {fileID: 7277160540580355373}
   - component: {fileID: 7277160540580355371}
   - component: {fileID: 7277160540580355370}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -312,7 +312,7 @@ GameObject:
   - component: {fileID: 7277160540869746340}
   - component: {fileID: 7277160540869746341}
   - component: {fileID: 5027564780583889160}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: ColorSelector
   m_TagString: Untagged
   m_Icon: {fileID: 0}

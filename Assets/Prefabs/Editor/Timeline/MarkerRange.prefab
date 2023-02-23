@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7703522192707709297}
   - component: {fileID: 640404204086432784}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: MarkerRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -65,7 +65,7 @@ GameObject:
   - component: {fileID: 7703522194009588177}
   - component: {fileID: 7703522194009588207}
   - component: {fileID: 7703522194009588176}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}

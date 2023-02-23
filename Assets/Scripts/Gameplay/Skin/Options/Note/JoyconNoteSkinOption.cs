@@ -8,59 +8,55 @@ namespace ArcCreate.Gameplay.Skin
     [CreateAssetMenu(fileName = "GamemodeNoteSkin", menuName = "Skin Option/NoteGamemode/Joycon")]
     public class JoyconNoteSkinOption : GamemodeNoteSkinOption
     {
-        [SerializeField] private Sprite tapSkinLeft;
-        [SerializeField] private Sprite tapSkinRight;
-        [SerializeField] private Sprite holdSkinLeft;
-        [SerializeField] private Sprite holdSkinRight;
-        [SerializeField] private Sprite holdHighlightSkinLeft;
-        [SerializeField] private Sprite holdHighlightSkinRight;
-        [SerializeField] private Sprite[] arcCapSprites;
-        [SerializeField] private Material arcTapSkinLeft;
-        [SerializeField] private Material arcTapSkinMiddle;
-        [SerializeField] private Material arcTapSkinRight;
+        [SerializeField] private Texture tapSkinLeft;
+        [SerializeField] private Texture tapSkinRight;
+        [SerializeField] private Texture holdSkinLeft;
+        [SerializeField] private Texture holdSkinRight;
+        [SerializeField] private Texture holdHighlightSkinLeft;
+        [SerializeField] private Texture holdHighlightSkinRight;
+        [SerializeField] private Texture[] arcCapSprites;
+        [SerializeField] private Texture arcTapSkinLeft;
+        [SerializeField] private Texture arcTapSkinMiddle;
+        [SerializeField] private Texture arcTapSkinRight;
 
-        public Material ArcTapSkinLeft { get; private set; }
-        public Material ArcTapSkinMiddle { get; private set; }
-        public Material ArcTapSkinRight { get; private set; }
-
-        public ExternalSprite TapSkinLeft { get; private set; }
-        public ExternalSprite TapSkinRight { get; private set; }
-        public ExternalSprite HoldSkinLeft { get; private set; }
-        public ExternalSprite HoldSkinRight { get; private set; }
-        public ExternalSprite HoldHighlightSkinLeft { get; private set; }
-        public ExternalSprite HoldHighlightSkinRight { get; private set; }
-        public ExternalSprite[] ArcCapSprites { get; private set; }
+        public ExternalTexture TapSkinLeft { get; private set; }
+        public ExternalTexture TapSkinRight { get; private set; }
+        public ExternalTexture HoldSkinLeft { get; private set; }
+        public ExternalTexture HoldSkinRight { get; private set; }
+        public ExternalTexture HoldHighlightSkinLeft { get; private set; }
+        public ExternalTexture HoldHighlightSkinRight { get; private set; }
+        public ExternalTexture[] ArcCapSprites { get; private set; }
         public ExternalTexture ArcTapSkinLeftTexture { get; private set; }
         public ExternalTexture ArcTapSkinMiddleTexture { get; private set; }
         public ExternalTexture ArcTapSkinRightTexture { get; private set; }
 
-        public override (Mesh mesh, Material material) GetArcTapSkin(ArcTap note)
+        public override Texture GetArcTapSkin(ArcTap note)
         {
             if (note.Sfx != "none" && !string.IsNullOrEmpty(note.Sfx))
             {
-                return (ArcTapSfxMesh, ArcTapSfxSkin);
+                return ArcTapSfxTexture.Value;
             }
 
             if (Mathf.Abs(note.WorldX) <= Values.ArcTapMiddleWorldXRange)
             {
-                return (ArcTapMesh, ArcTapSkinMiddle);
+                return ArcTapSkinMiddleTexture.Value;
             }
 
             if (note.WorldX > 0f)
             {
-                return (ArcTapMesh, ArcTapSkinLeft);
+                return ArcTapSkinLeftTexture.Value;
             }
 
-            return (ArcTapMesh, ArcTapSkinRight);
+            return ArcTapSkinRightTexture.Value;
         }
 
-        public override (Sprite normal, Sprite highlight) GetHoldSkin(Hold note)
+        public override (Texture normal, Texture highlight) GetHoldSkin(Hold note)
             => (note.Lane <= 2) ? (HoldSkinLeft.Value, HoldHighlightSkinLeft.Value) : (HoldSkinRight.Value, HoldHighlightSkinRight.Value);
 
-        public override Sprite GetTapSkin(Tap note)
-            => (note.Lane <= 2) ? TapSkinLeft.Value : TapSkinRight.Value;
+        public override (Texture texture, Color connectionLineColor) GetTapSkin(Tap note)
+            => ((note.Lane <= 2) ? TapSkinLeft.Value : TapSkinRight.Value, ConnectionLineColor);
 
-        public override Sprite GetArcCapSprite(Arc arc)
+        public override Texture GetArcCapSprite(Arc arc)
         {
             if (arc.Color < 0 || arc.Color > ArcCapSprites.Length)
             {
@@ -72,26 +68,23 @@ namespace ArcCreate.Gameplay.Skin
         internal override void RegisterExternalSkin()
         {
             base.RegisterExternalSkin();
-            ArcTapSkinLeft = Instantiate(arcTapSkinLeft);
-            ArcTapSkinRight = Instantiate(arcTapSkinRight);
-            ArcTapSkinMiddle = Instantiate(arcTapSkinMiddle);
 
             string subdir = System.IO.Path.Combine("Note", "Joycon");
-            TapSkinLeft = new ExternalSprite(tapSkinLeft, subdir);
-            TapSkinRight = new ExternalSprite(tapSkinRight, subdir);
-            HoldSkinLeft = new ExternalSprite(holdSkinLeft, subdir);
-            HoldSkinRight = new ExternalSprite(holdSkinRight, subdir);
-            HoldHighlightSkinLeft = new ExternalSprite(holdHighlightSkinLeft, subdir);
-            HoldHighlightSkinRight = new ExternalSprite(holdHighlightSkinRight, subdir);
-            ArcCapSprites = new ExternalSprite[arcCapSprites.Length];
+            TapSkinLeft = new ExternalTexture(tapSkinLeft, subdir);
+            TapSkinRight = new ExternalTexture(tapSkinRight, subdir);
+            HoldSkinLeft = new ExternalTexture(holdSkinLeft, subdir);
+            HoldSkinRight = new ExternalTexture(holdSkinRight, subdir);
+            HoldHighlightSkinLeft = new ExternalTexture(holdHighlightSkinLeft, subdir);
+            HoldHighlightSkinRight = new ExternalTexture(holdHighlightSkinRight, subdir);
+            ArcCapSprites = new ExternalTexture[arcCapSprites.Length];
             for (int i = 0; i < ArcCapSprites.Length; i++)
             {
-                ArcCapSprites[i] = new ExternalSprite(arcCapSprites[i], subdir);
+                ArcCapSprites[i] = new ExternalTexture(arcCapSprites[i], subdir);
             }
 
-            ArcTapSkinLeftTexture = new ExternalTexture(ArcTapSkinLeft.mainTexture, subdir);
-            ArcTapSkinMiddleTexture = new ExternalTexture(ArcTapSkinMiddle.mainTexture, subdir);
-            ArcTapSkinRightTexture = new ExternalTexture(ArcTapSkinRight.mainTexture, subdir);
+            ArcTapSkinLeftTexture = new ExternalTexture(arcTapSkinLeft, subdir);
+            ArcTapSkinMiddleTexture = new ExternalTexture(arcTapSkinMiddle, subdir);
+            ArcTapSkinRightTexture = new ExternalTexture(arcTapSkinRight, subdir);
         }
 
         internal override async UniTask LoadExternalSkin()
@@ -112,10 +105,6 @@ namespace ArcCreate.Gameplay.Skin
             await ArcTapSkinLeftTexture.Load();
             await ArcTapSkinMiddleTexture.Load();
             await ArcTapSkinRightTexture.Load();
-
-            ArcTapSkinLeft.mainTexture = ArcTapSkinLeftTexture.Value;
-            ArcTapSkinRight.mainTexture = ArcTapSkinRightTexture.Value;
-            ArcTapSkinMiddle.mainTexture = ArcTapSkinMiddleTexture.Value;
         }
 
         internal override void UnloadExternalSkin()
@@ -136,10 +125,6 @@ namespace ArcCreate.Gameplay.Skin
             ArcTapSkinLeftTexture.Unload();
             ArcTapSkinMiddleTexture.Unload();
             ArcTapSkinRightTexture.Unload();
-
-            Destroy(ArcTapSkinLeft);
-            Destroy(ArcTapSkinRight);
-            Destroy(ArcTapSkinMiddle);
         }
     }
 }

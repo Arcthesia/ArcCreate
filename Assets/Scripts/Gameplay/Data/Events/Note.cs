@@ -5,7 +5,7 @@ namespace ArcCreate.Gameplay.Data
         /// <summary>
         /// Gets or sets a value indicating whether or not the note is selected.
         /// </summary>
-        public abstract bool IsSelected { get; set; }
+        public bool IsSelected { get; set; }
 
         public double FloorPosition { get; set; }
 

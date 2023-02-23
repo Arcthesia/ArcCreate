@@ -11,10 +11,6 @@ namespace ArcCreate.Compose.Editing
     [EditorScope("NoteCreation")]
     public class NoteCreation : MonoBehaviour
     {
-        [SerializeField] private ArcTapBehaviour previewArcTap;
-        [SerializeField] private TapBehaviour previewTap;
-        [SerializeField] private HoldBehaviour previewHold;
-        [SerializeField] private ArcBehaviour previewArc;
         [SerializeField] private Color previewNotesColor;
 
         // These notes are just parameters to pass to SkinService to get the skin values
@@ -93,7 +89,6 @@ namespace ArcCreate.Compose.Editing
                 add: events);
             command.Execute();
 
-            previewHold.gameObject.SetActive(false);
             var (success, endTiming) = await Services.Cursor.RequestTimingSelection(
                 confirm,
                 cancel,
@@ -103,7 +98,6 @@ namespace ArcCreate.Compose.Editing
                     Services.Gameplay.Chart.UpdateEvents(events);
                 },
                 constraint: t => t > hold.Timing);
-            previewHold.gameObject.SetActive(true);
             Services.Cursor.EnableLaneCursor = true;
 
             if (success)
@@ -136,7 +130,6 @@ namespace ArcCreate.Compose.Editing
                 add: events);
             command.Execute();
 
-            previewArc.gameObject.SetActive(false);
             var (startPosSuccess, startPos) = await Services.Cursor.RequestVerticalSelection(
                 confirm,
                 cancel,
@@ -191,7 +184,6 @@ namespace ArcCreate.Compose.Editing
                     arc.YEnd = position.y;
                     Services.Gameplay.Chart.UpdateEvents(events);
                 });
-            previewArc.gameObject.SetActive(true);
             Services.Cursor.EnableLaneCursor = true;
 
             if (endPosSuccess)
@@ -299,13 +291,11 @@ namespace ArcCreate.Compose.Editing
 
         private void Awake()
         {
-            Values.CreateNoteMode.OnValueChange += SwitchPreviewMode;
             Services.Selection.OnSelectionChange += OnSelectionChange;
         }
 
         private void OnDestroy()
         {
-            Values.CreateNoteMode.OnValueChange -= SwitchPreviewMode;
             Services.Selection.OnSelectionChange -= OnSelectionChange;
         }
 
@@ -318,140 +308,6 @@ namespace ArcCreate.Compose.Editing
                 {
                     selectedArcs.Add(a);
                 }
-            }
-        }
-
-        private void SwitchPreviewMode(CreateNoteMode mode)
-        {
-            previewTap.gameObject.SetActive(mode == CreateNoteMode.Tap);
-            previewHold.gameObject.SetActive(mode == CreateNoteMode.Hold);
-            previewArc.gameObject.SetActive(mode == CreateNoteMode.Arc);
-            previewArcTap.gameObject.SetActive(mode == CreateNoteMode.ArcTap);
-        }
-
-        private void Update()
-        {
-            if (Values.CreateNoteMode.Value == CreateNoteMode.Idle)
-            {
-                return;
-            }
-
-            int cursorTiming = Services.Cursor.CursorTiming;
-            int cursorLane = Services.Cursor.CursorLane;
-            int tg = Values.EditingTimingGroup.Value;
-            Vector3 cursorPosition = Services.Cursor.CursorWorldPosition;
-            float z = cursorPosition.z;
-
-            GroupProperties groupProperties = Services.Gameplay.Chart.GetTimingGroup(tg).GroupProperties;
-            Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(ArcFormula.LaneToWorldX(cursorLane), 0, 0);
-            Quaternion rot = groupProperties.RotationIndividual;
-            Vector3 scl = groupProperties.ScaleIndividual;
-
-            switch (Values.CreateNoteMode.Value)
-            {
-                case CreateNoteMode.Tap:
-                    if (getSkinTap.Lane != cursorLane || getSkinTap.TimingGroup != tg)
-                    {
-                        getSkinTap.Lane = cursorLane;
-                        getSkinTap.TimingGroup = tg;
-                        Sprite tapSprite = Services.Gameplay.Skin.GetTapSkin(getSkinTap);
-                        previewTap.SetSprite(tapSprite);
-                        previewTap.SetColor(previewNotesColor);
-                    }
-
-                    scl.y = ArcFormula.CalculateTapSizeScalar(z) * scl.y;
-                    previewTap.SetTransform(pos, rot, scl);
-                    break;
-                case CreateNoteMode.Hold:
-                    if (getSkinHold.Lane != cursorLane || getSkinHold.TimingGroup != tg)
-                    {
-                        getSkinHold.Lane = cursorLane;
-                        getSkinHold.TimingGroup = tg;
-                        (Sprite normal, Sprite highlight) = Services.Gameplay.Skin.GetHoldSkin(getSkinHold);
-                        previewHold.SetSprite(normal, highlight);
-                        previewHold.SetColor(previewNotesColor);
-                    }
-
-                    scl.y *= 10;
-                    previewHold.SetTransform(pos, rot, scl);
-                    previewHold.SetFallDirection(groupProperties.FallDirection);
-                    break;
-                case CreateNoteMode.Arc:
-                case CreateNoteMode.Trace:
-                    if (getSkinArc.Color != Values.CreateArcColorMode.Value
-                     || (getSkinArc.IsTrace && Values.CreateNoteMode.Value == CreateNoteMode.Arc)
-                     || (!getSkinArc.IsTrace && Values.CreateNoteMode.Value == CreateNoteMode.Trace)
-                     || getSkinArc.TimingGroup != tg)
-                    {
-                        getSkinArc.Color = Values.CreateArcColorMode.Value;
-                        getSkinArc.IsTrace = Values.CreateNoteMode.Value == CreateNoteMode.Trace;
-                        getSkinArc.TimingGroup = tg;
-                        var (normal, highlight, shadow, arcCap, heightIndicatorSprite, heightIndicatorColor) = Services.Gameplay.Skin.GetArcSkin(getSkinArc);
-                        previewArc.SetSkin(normal, highlight, shadow, arcCap, heightIndicatorSprite, heightIndicatorColor);
-                        previewArc.SetColor(previewNotesColor);
-                        previewArc.SetData(getSkinArc);
-                    }
-
-                    pos = (groupProperties.FallDirection * z) + new Vector3(cursorPosition.x, 1, 0);
-                    previewArc.transform.position = pos;
-                    break;
-                case CreateNoteMode.ArcTap:
-                    getSkinArcTap.Arc = null;
-                    bool found = false;
-                    foreach (var arc in selectedArcs)
-                    {
-                        if (arc.Timing <= cursorTiming && cursorTiming <= arc.EndTiming)
-                        {
-                            if (getSkinArcTap.Arc != null)
-                            {
-                                getSkinArcTap.Arc = null;
-                                break;
-                            }
-                            else
-                            {
-                                getSkinArcTap.Arc = arc;
-                                found = true;
-                            }
-                        }
-                    }
-
-                    if (!found && getSkinArcTap.Arc == null)
-                    {
-                        foreach (var arc in Services.Gameplay.Chart.GetAll<Arc>())
-                        {
-                            if (arc.IsTrace && arc.Timing <= cursorTiming && cursorTiming <= arc.EndTiming)
-                            {
-                                if (getSkinArcTap.Arc != null)
-                                {
-                                    getSkinArcTap.Arc = null;
-                                    break;
-                                }
-                                else
-                                {
-                                    getSkinArcTap.Arc = arc;
-                                }
-                            }
-                        }
-                    }
-
-                    if (getSkinArcTap.Arc != null)
-                    {
-                        previewArcTap.gameObject.SetActive(true);
-                        (Mesh mesh, Material material, Sprite shadow) = Services.Gameplay.Skin.GetArcTapSkin(getSkinArcTap);
-                        previewArcTap.SetSkin(mesh, material, shadow);
-
-                        float worldX = getSkinArcTap.Arc.WorldXAt(cursorTiming);
-                        float worldY = getSkinArcTap.Arc.WorldYAt(cursorTiming);
-                        pos = (groupProperties.FallDirection * z) + new Vector3(worldX, worldY, 0);
-                        previewArcTap.SetTransform(pos, rot, scl);
-                        previewArcTap.SetColor(previewNotesColor);
-                    }
-                    else
-                    {
-                        previewArcTap.gameObject.SetActive(false);
-                    }
-
-                    break;
             }
         }
     }

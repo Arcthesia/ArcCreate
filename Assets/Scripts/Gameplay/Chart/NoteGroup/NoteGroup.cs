@@ -8,34 +8,18 @@ namespace ArcCreate.Gameplay.Chart
     /// Handler for a group of notes of the same type, and belonging to the same timing group.
     /// </summary>
     /// <typeparam name="Note">The note type.</typeparam>
-    /// <typeparam name="Behaviour">The MonoBehaviour component type corresponding to the note type.</typeparam>
-    public abstract class NoteGroup<Note, Behaviour>
-        where Note : INote<Behaviour>
-        where Behaviour : MonoBehaviour
+    public abstract class NoteGroup<Note>
+        where Note : INote
     {
         private List<Note> notes = new List<Note>();
 
         public List<Note> Notes => notes;
-
-        public abstract string PoolName { get; }
-
-        protected Transform ParentTransform { get; private set; }
-
-        protected Pool<Behaviour> Pool { get; private set; }
 
         /// <summary>
         /// Clear the note group.
         /// </summary>
         public virtual void Clear()
         {
-            foreach (var note in notes)
-            {
-                if (note.IsAssignedInstance)
-                {
-                    Pool.Return(note.RevokeInstance());
-                }
-            }
-
             notes.Clear();
         }
 
@@ -43,11 +27,8 @@ namespace ArcCreate.Gameplay.Chart
         /// Load notes into this note group.
         /// </summary>
         /// <param name="notes">The notes to load.</param>
-        /// <param name="parent">The parent transform of the notes.</param>
-        public void Load(List<Note> notes, Transform parent)
+        public void Load(List<Note> notes)
         {
-            Pool = Pools.Get<Behaviour>(PoolName);
-            ParentTransform = parent;
             this.notes = notes;
             RebuildList();
         }
@@ -60,10 +41,7 @@ namespace ArcCreate.Gameplay.Chart
             for (int i = 0; i < notes.Count; i++)
             {
                 Note note = notes[i];
-                if (note.IsAssignedInstance)
-                {
-                    note.ReloadSkin();
-                }
+                note.ReloadSkin();
             }
         }
 
@@ -134,10 +112,6 @@ namespace ArcCreate.Gameplay.Chart
             {
                 OnRemove(note);
                 this.notes.Remove(note);
-                if (note.IsAssignedInstance)
-                {
-                    Pool.Return(note.RevokeInstance());
-                }
             }
 
             RebuildList();

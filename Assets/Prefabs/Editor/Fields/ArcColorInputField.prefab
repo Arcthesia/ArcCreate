@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3272447328399512365}
   - component: {fileID: 3272447328399512362}
   - component: {fileID: 7695581960490337011}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: ArcColorInputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76,7 +76,7 @@ GameObject:
   - component: {fileID: 3272447328697507331}
   - component: {fileID: 3272447328697507329}
   - component: {fileID: 3272447328697507330}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -210,7 +210,7 @@ GameObject:
   - component: {fileID: 4397024787994477433}
   - component: {fileID: 4397024787994477435}
   - component: {fileID: 4397024787994477434}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: TypeIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -289,7 +289,7 @@ GameObject:
   - component: {fileID: 4397024788401719662}
   - component: {fileID: 4397024788401719661}
   - component: {fileID: 4397024788401719660}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Low
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -381,7 +381,7 @@ GameObject:
   - component: {fileID: 4397024788812355105}
   - component: {fileID: 4397024788812355107}
   - component: {fileID: 4397024788812355106}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: ColorWithAlpha
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -454,7 +454,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4397024789262783467}
   - component: {fileID: 4397024789262783380}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Text Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -505,7 +505,7 @@ GameObject:
   - component: {fileID: 4397024789587745316}
   - component: {fileID: 4397024789587745318}
   - component: {fileID: 4397024789587745317}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Color
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -579,7 +579,7 @@ GameObject:
   - component: {fileID: 4397024789634215696}
   - component: {fileID: 4397024789634215698}
   - component: {fileID: 4397024789634215697}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Alpha
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -654,7 +654,7 @@ GameObject:
   - component: {fileID: 4397024789664324268}
   - component: {fileID: 4397024789664324270}
   - component: {fileID: 4397024789664324269}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: ColorArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -725,7 +725,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4878887633594621902}
   - component: {fileID: 4878887633594621901}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Text Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -777,7 +777,7 @@ GameObject:
   - component: {fileID: 4878887634156948766}
   - component: {fileID: 4878887634156948741}
   - component: {fileID: 4878887634156948740}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: High
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -869,7 +869,7 @@ GameObject:
   - component: {fileID: 8794571087839478981}
   - component: {fileID: 8794571087839478983}
   - component: {fileID: 8794571087839478980}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Alpha
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -944,7 +944,7 @@ GameObject:
   - component: {fileID: 8794571088033001367}
   - component: {fileID: 8794571088033001361}
   - component: {fileID: 8794571088033001366}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: TypeIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1022,7 +1022,7 @@ GameObject:
   - component: {fileID: 8794571088994851605}
   - component: {fileID: 2217962959779132895}
   - component: {fileID: 5404909061528719503}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: ColorArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1094,7 +1094,7 @@ GameObject:
   - component: {fileID: 8794571089133128781}
   - component: {fileID: 8794571089133128783}
   - component: {fileID: 8794571089133128780}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: ColorWithAlpha
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1168,7 +1168,7 @@ GameObject:
   - component: {fileID: 8794571089415319753}
   - component: {fileID: 8794571089415319755}
   - component: {fileID: 8794571089415319752}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Color
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1248,10 +1248,20 @@ PrefabInstance:
       propertyPath: m_FontData.m_FontSize
       value: 18
       objectReference: {fileID: 0}
+    - target: {fileID: 6258816204915290026, guid: b478ebaa3ae36f1fe9dc18ef70e70acc,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 6258816205848568548, guid: b478ebaa3ae36f1fe9dc18ef70e70acc,
         type: 3}
       propertyPath: m_Name
       value: IconButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 6258816205848568548, guid: b478ebaa3ae36f1fe9dc18ef70e70acc,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 6258816205848568549, guid: b478ebaa3ae36f1fe9dc18ef70e70acc,
         type: 3}

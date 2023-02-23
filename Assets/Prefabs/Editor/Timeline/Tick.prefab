@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2513574431447764233}
   - component: {fileID: 4368490194119839020}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Tick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,7 +62,7 @@ GameObject:
   - component: {fileID: 2513574431458315121}
   - component: {fileID: 2513574431458315123}
   - component: {fileID: 2513574431458315122}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 2513574432213064263}
   - component: {fileID: 2513574432213064257}
   - component: {fileID: 2513574432213064256}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

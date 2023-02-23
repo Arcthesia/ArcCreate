@@ -1,51 +1,20 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
+using ArcCreate.Gameplay.Render;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
 {
-    public class Tap : Note, INote<TapBehaviour>, ILaneTapJudgementReceiver
+    public class Tap : Note, INote, ILaneTapJudgementReceiver
     {
-        private TapBehaviour instance;
         private bool judgementRequestSent = false;
-        private bool isSelected;
+        private bool isHit = false;
+        private Texture texture;
+        private Color connectionLineColor;
 
         public HashSet<ArcTap> ConnectedArcTaps { get; } = new HashSet<ArcTap>();
 
         public int Lane { get; set; }
-
-        public bool IsAssignedInstance => instance != null;
-
-        public override bool IsSelected
-        {
-            get => isSelected;
-            set
-            {
-                isSelected = value;
-                if (instance != null)
-                {
-                    instance.SetSelected(value);
-                }
-            }
-        }
-
-        public void AssignInstance(TapBehaviour instance)
-        {
-            this.instance = instance;
-            instance.SetData(this);
-            instance.SetConnectionLines(
-                ConnectedArcTaps,
-                new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0));
-            instance.SetSelected(isSelected);
-            ReloadSkin();
-        }
-
-        public TapBehaviour RevokeInstance()
-        {
-            var result = instance;
-            instance = null;
-            return result;
-        }
 
         public override ArcEvent Clone()
         {
@@ -67,33 +36,20 @@ namespace ArcCreate.Gameplay.Data
         public void ResetJudgeTo(int timing)
         {
             judgementRequestSent = timing > Timing;
-            if (instance != null)
-            {
-                instance.gameObject.SetActive(true);
-            }
+            isHit = timing > Timing;
         }
 
         public void Rebuild()
         {
-            if (instance != null)
-            {
-                instance.SetConnectionLines(
-                    ConnectedArcTaps,
-                    new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0));
-            }
-
             RecalculateFloorPosition();
         }
 
         public void ReloadSkin()
         {
-            if (instance != null)
-            {
-                instance.SetSprite(Services.Skin.GetTapSkin(this));
-            }
+            (texture, connectionLineColor) = Services.Skin.GetTapSkin(this);
         }
 
-        public int CompareTo(INote<TapBehaviour> other)
+        public int CompareTo(INote other)
         {
             return Timing.CompareTo(other.Timing);
         }
@@ -107,24 +63,50 @@ namespace ArcCreate.Gameplay.Data
             }
         }
 
-        public void UpdateInstance(int currentTiming, double currentFloorPosition, GroupProperties groupProperties)
+        public void UpdateRender(int currentTiming, double currentFloorPosition, GroupProperties groupProperties)
         {
-            if (instance == null)
+            if (isHit)
             {
                 return;
             }
 
             float z = ZPos(currentFloorPosition);
-            Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
+            Vector3 basePos = new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
+            Vector3 pos = (groupProperties.FallDirection * z) + basePos;
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
-            scl.y = ArcFormula.CalculateTapSizeScalar(z) * scl.y;
-            instance.SetTransform(pos, rot, scl);
+            scl.z *= ArcFormula.CalculateTapSizeScalar(z);
+            Matrix4x4 matrix = Matrix4x4.TRS(pos, rot, scl);
 
             float alpha = ArcFormula.CalculateFadeOutAlpha(z);
             Color color = groupProperties.Color;
+            Color connectionColor = connectionLineColor;
             color.a *= alpha;
-            instance.SetColor(color);
+            connectionColor.a *= alpha;
+            NoteRenderProperties tapProperties = new NoteRenderProperties
+            {
+                Color = color,
+                Selected = IsSelected ? 1 : 0,
+            };
+
+            SpriteRenderProperties connectionProperties = new SpriteRenderProperties
+            {
+                Color = connectionColor,
+            };
+
+            Services.Render.DrawTap(texture, matrix, tapProperties);
+
+            foreach (var arctap in ConnectedArcTaps)
+            {
+                Vector3 arctapPos = new Vector3(arctap.WorldX, arctap.WorldY, 0);
+                Vector3 direction = arctapPos - basePos;
+
+                Matrix4x4 lineMatrix = matrix * Matrix4x4.TRS(
+                    pos: Vector3.zero,
+                    q: Quaternion.LookRotation(direction, Vector3.up),
+                    s: new Vector3(1, 1, direction.magnitude));
+                Services.Render.DrawConnectionLine(lineMatrix, connectionProperties);
+            }
         }
 
         public void ProcessLaneTapJudgement(int offset)
@@ -133,10 +115,7 @@ namespace ArcCreate.Gameplay.Data
             Services.Particle.PlayTapParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0), result);
             Services.Particle.PlayTextParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0), result);
             Services.Score.ProcessJudgement(result);
-            if (instance != null)
-            {
-                instance.gameObject.SetActive(false);
-            }
+            isHit = true;
 
             if (!result.IsLost())
             {

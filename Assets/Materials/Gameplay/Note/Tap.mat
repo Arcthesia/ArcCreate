@@ -11,9 +11,9 @@ Material:
   m_Shader: {fileID: 4800000, guid: 3f1339da3104bee458b3b718863d91ad, type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3001
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -69,6 +69,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _Selected: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

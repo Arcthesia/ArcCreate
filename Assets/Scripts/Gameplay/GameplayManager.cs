@@ -23,6 +23,8 @@ namespace ArcCreate.Gameplay
         [SerializeField] private AudioClip testAudio;
         [SerializeField] private GameplayData gameplayData;
         [SerializeField] private Camera gameplayCamera;
+        [SerializeField] private Camera arcCamera;
+        [SerializeField] private Camera uiCamera;
         [SerializeField] private string testPlayChartFileName = "test_chart.aff";
 
         public bool ShouldUpdateInputSystem
@@ -44,6 +46,15 @@ namespace ArcCreate.Gameplay
         public void SetCameraViewportRect(Rect rect)
         {
             gameplayCamera.rect = rect;
+            arcCamera.rect = rect;
+            uiCamera.rect = rect;
+        }
+
+        public void SetCameraEnabled(bool enable)
+        {
+            gameplayCamera.enabled = enable;
+            arcCamera.enabled = enable;
+            uiCamera.enabled = enable;
         }
 
         public override void OnUnloadScene()
@@ -109,7 +120,7 @@ namespace ArcCreate.Gameplay
 
         private void Update()
         {
-            if (!Services.Chart.IsLoaded)
+            if (!Services.Chart.IsLoaded || !Services.Render.IsLoaded)
             {
                 return;
             }
@@ -124,6 +135,7 @@ namespace ArcCreate.Gameplay
             Services.Score.UpdateDisplay(currentTiming);
             Services.Camera.UpdateCamera(currentTiming);
             Services.Scenecontrol.UpdateScenecontrol(currentTiming);
+            Services.Render.UpdateRenderers();
             gameplayData.NotifyUpdate(currentTiming);
         }
     }

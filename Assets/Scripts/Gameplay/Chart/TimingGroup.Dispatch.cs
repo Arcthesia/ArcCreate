@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.ChartFormat;
 using ArcCreate.Gameplay.Data;
-using UnityEngine;
 
 namespace ArcCreate.Gameplay.Chart
 {
@@ -16,7 +15,6 @@ namespace ArcCreate.Gameplay.Chart
         private ArcNoteGroup arcs;
         private ArcTapNoteGroup arcTaps;
         private GroupProperties groupProperties;
-        private Transform parent;
 
         public TimingGroup(int tg)
         {
@@ -30,20 +28,14 @@ namespace ArcCreate.Gameplay.Chart
         public List<ArcEvent> ReferenceEvents { get; private set; }
 
         // TODO: logic for scenecontrol to set visibility at the same time
-        public bool IsVisible
-        {
-            get => parent.gameObject.activeSelf;
-            set => parent.gameObject.SetActive(value);
-        }
+        public bool IsVisible { get; set; }
 
         /// <summary>
         /// Load a timing group data representation into this instance.
         /// </summary>
         /// <param name="tg">The timing group data.</param>
-        /// <param name="parent">The parent transform for all notes of this timing group.</param>
-        public void Load(ChartTimingGroup tg, Transform parent)
+        public void Load(ChartTimingGroup tg)
         {
-            this.parent = parent;
             groupProperties = new GroupProperties(tg.Properties);
 
             taps = new TapNoteGroup();
@@ -52,10 +44,10 @@ namespace ArcCreate.Gameplay.Chart
             arcTaps = new ArcTapNoteGroup();
             ReferenceEvents = tg.ReferenceEvents;
 
-            taps.Load(tg.Taps, parent);
-            holds.Load(tg.Holds, parent);
-            arcs.Load(tg.Arcs, parent);
-            arcTaps.Load(tg.ArcTaps, parent);
+            taps.Load(tg.Taps);
+            holds.Load(tg.Holds);
+            arcs.Load(tg.Arcs);
+            arcTaps.Load(tg.ArcTaps);
             timings = tg.Timings;
             taps.SetupNotes();
             holds.SetupNotes();
@@ -68,14 +60,13 @@ namespace ArcCreate.Gameplay.Chart
         /// Load an empty timing group.
         /// </summary>
         /// <param name="parent">The parent transform for all notes of this timing group.</param>
-        public void Load(Transform parent)
+        public void Load()
         {
             taps = new TapNoteGroup();
             holds = new HoldNoteGroup();
             arcs = new ArcNoteGroup();
             arcTaps = new ArcTapNoteGroup();
 
-            this.parent = parent;
             groupProperties = new GroupProperties();
             timings = new List<TimingEvent>
             {
@@ -87,10 +78,10 @@ namespace ArcCreate.Gameplay.Chart
                     Divisor = 4f,
                 },
             };
-            taps.Load(new List<Tap>(), parent);
-            holds.Load(new List<Hold>(), parent);
-            arcs.Load(new List<Arc>(), parent);
-            arcTaps.Load(new List<ArcTap>(), parent);
+            taps.Load(new List<Tap>());
+            holds.Load(new List<Hold>());
+            arcs.Load(new List<Arc>());
+            arcTaps.Load(new List<ArcTap>());
         }
 
         public void SetGroupProperties(GroupProperties prop)
@@ -311,7 +302,6 @@ namespace ArcCreate.Gameplay.Chart
         /// </summary>
         public void Clear()
         {
-            Object.Destroy(parent.gameObject);
             taps.Clear();
             holds.Clear();
             arcTaps.Clear();

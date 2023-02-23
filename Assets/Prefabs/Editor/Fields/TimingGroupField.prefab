@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9170054147776473523}
   - component: {fileID: 9170054147776473525}
   - component: {fileID: 9170054147776473522}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -144,7 +144,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9170054148714784012}
   - component: {fileID: 9170054148714784015}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Text Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -197,7 +197,7 @@ GameObject:
   - component: {fileID: 9170054149343115228}
   - component: {fileID: 9170054149343115229}
   - component: {fileID: 9170054149343115225}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: TimingGroupField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -287,7 +287,7 @@ GameObject:
   - component: {fileID: 9170054149514754807}
   - component: {fileID: 9170054149514754804}
   - component: {fileID: 918038393644043678}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}

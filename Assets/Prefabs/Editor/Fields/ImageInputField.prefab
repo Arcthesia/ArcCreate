@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3654094320427980041}
   - component: {fileID: 3654094320427980043}
   - component: {fileID: 3654094320427980042}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: InvalidIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 3654094320492408864}
   - component: {fileID: 3654094320492408866}
   - component: {fileID: 3654094320492408865}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: TypeIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -168,7 +168,7 @@ GameObject:
   - component: {fileID: 3654094321410945120}
   - component: {fileID: 3654094321410945151}
   - component: {fileID: 3654094321410945150}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: ClearButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -288,7 +288,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4181741233564374597}
   - component: {fileID: 4181741233564374598}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Text Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -343,7 +343,7 @@ GameObject:
   - component: {fileID: 4181741234193810580}
   - component: {fileID: 4181741234193810579}
   - component: {fileID: 4181741234193810576}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: ImageInputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -477,6 +477,7 @@ MonoBehaviour:
   isLocalFileSelector: 0
   title: Select Image
   initPathPrefKey: 
+  modifyPref: 1
   extensionFilterName: Image
   acceptedExtensions:
   - jpg
@@ -495,7 +496,7 @@ GameObject:
   - component: {fileID: 4181741234364402108}
   - component: {fileID: 4181741234364402110}
   - component: {fileID: 4181741234364402109}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -629,7 +630,7 @@ GameObject:
   - component: {fileID: 4181741235043097338}
   - component: {fileID: 4181741235043097340}
   - component: {fileID: 4181741235043097339}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -765,7 +766,7 @@ GameObject:
   - component: {fileID: 4181741235174274206}
   - component: {fileID: 4181741235174274205}
   - component: {fileID: 7975087758128351491}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Placeholder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -934,7 +935,7 @@ GameObject:
   - component: {fileID: 4813327153240940817}
   - component: {fileID: 4813327153240940818}
   - component: {fileID: 2463646054333492843}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1080,7 +1081,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4813327153892980599}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: PreviewArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1119,7 +1120,7 @@ GameObject:
   - component: {fileID: 4813327153962040125}
   - component: {fileID: 4813327153962040115}
   - component: {fileID: 4813327153962040124}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1195,7 +1196,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4813327153962819745}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Hint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1234,7 +1235,7 @@ GameObject:
   - component: {fileID: 4813327154180286685}
   - component: {fileID: 4813327154180286675}
   - component: {fileID: 4813327154180286684}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: PreviewImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}

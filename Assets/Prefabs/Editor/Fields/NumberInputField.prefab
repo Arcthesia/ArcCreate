@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4227966455107421379}
   - component: {fileID: 4227966455107421378}
   - component: {fileID: 4227966455107421388}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Decrease
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 4227966455252578854}
   - component: {fileID: 4227966455252578853}
   - component: {fileID: 4227966455252578855}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Increase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -255,7 +255,7 @@ GameObject:
   - component: {fileID: 8358422143163343904}
   - component: {fileID: 8358422143163343910}
   - component: {fileID: 8358422143163343905}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -390,7 +390,7 @@ GameObject:
   - component: {fileID: 8358422144110037573}
   - component: {fileID: 8358422144110037572}
   - component: {fileID: 8358422144110037575}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Placeholder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -543,7 +543,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8358422144646850719}
   - component: {fileID: 8358422144646850716}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Text Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -596,7 +596,7 @@ GameObject:
   - component: {fileID: 8358422144937277286}
   - component: {fileID: 8358422144937277284}
   - component: {fileID: 8358422144937277287}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -732,7 +732,7 @@ GameObject:
   - component: {fileID: 8358422145107475022}
   - component: {fileID: 8358422145107475017}
   - component: {fileID: 8358422145107475028}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: NumberInputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -911,3 +911,4 @@ MonoBehaviour:
   increaseButton: {fileID: 4227966455252578855}
   decreaseButton: {fileID: 4227966455107421388}
   increment: 5
+  debounceMs: 1000

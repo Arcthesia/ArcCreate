@@ -1,12 +1,9 @@
-using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
 
 namespace ArcCreate.Gameplay.Chart
 {
-    public class ArcNoteGroup : LongNoteGroup<Arc, ArcBehaviour>
+    public class ArcNoteGroup : LongNoteGroup<Arc>
     {
-        public override string PoolName => Values.ArcPoolName;
-
         public override void SetupNotes()
         {
             for (int i = 0; i < Notes.Count; i++)

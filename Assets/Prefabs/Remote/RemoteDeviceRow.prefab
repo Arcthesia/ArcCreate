@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3794688809735548805}
   - component: {fileID: 3794688809735548804}
   - component: {fileID: 3794688809735548900}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: RemoteDeviceRow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 3794688809744236766}
   - component: {fileID: 3794688809744236760}
   - component: {fileID: 3794688809744236767}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: IPText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -282,7 +282,7 @@ GameObject:
   - component: {fileID: 7718139697703271719}
   - component: {fileID: 7718139697703271713}
   - component: {fileID: 7718139697703271712}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -360,7 +360,7 @@ GameObject:
   - component: {fileID: 7718139698632040173}
   - component: {fileID: 7718139698632040175}
   - component: {fileID: 7718139698632040174}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: MessageText
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -117,6 +117,6 @@ namespace ArcCreate.Gameplay
 
         public static bool EnableColliderGeneration { get; set; } = false;
 
-        public static bool EnableArcRebuildSegment { get; set; } = false;
+        public static bool EnableArcRebuildSegment { get; set; } = true;
     }
 }

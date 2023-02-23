@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5149573785705738305}
   - component: {fileID: 5149573785705738307}
   - component: {fileID: 5149573785705738304}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: EndKnob
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,7 +84,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5149573785926853720}
   - component: {fileID: 5149573785926853723}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: SliderRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 5149573786275130040}
   - component: {fileID: 5149573786275130042}
   - component: {fileID: 5149573786275130043}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: StartKnob
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -213,7 +213,7 @@ GameObject:
   - component: {fileID: 5149573786670276405}
   - component: {fileID: 5149573786670276407}
   - component: {fileID: 5149573786670276404}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -287,7 +287,7 @@ GameObject:
   - component: {fileID: 5149573786719398414}
   - component: {fileID: 5149573786719398408}
   - component: {fileID: 5149573786719398409}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: DragHandle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -359,7 +359,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5149573787410464061}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}

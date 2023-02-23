@@ -13,14 +13,10 @@ MonoBehaviour:
   m_Name: NoteTouchLight
   m_EditorClassIdentifier: 
   Name: light
-  arcTapSfxSkin: {fileID: 2100000, guid: b4c28abdd82feb2419d58042a5c809f6, type: 2}
+  arcTapSfxSkin: {fileID: 2800000, guid: 042d8e9fedad3bc47a1c7d6490434dad, type: 3}
   ConnectionLineColor: {r: 0.47058824, g: 0.78431374, b: 0.8627451, a: 1}
-  ArcTapMesh: {fileID: 2917635366719238280, guid: 75426e5c4799bc8b7b9ad04500a28cb5,
-    type: 3}
-  ArcTapSfxMesh: {fileID: 89046849237724230, guid: 75426e5c4799bc8b7b9ad04500a28cb5,
-    type: 3}
-  tapSkin: {fileID: 21300000, guid: e2e574235a007dd43b0310c02f4cabe0, type: 3}
-  holdSkin: {fileID: 21300000, guid: fa0a2bc320e57c3449d94b6b22eea6b5, type: 3}
-  holdHighlightSkin: {fileID: 21300000, guid: 0ad54e43fd3e27546ad3a22495f859c5, type: 3}
-  arcTapSkin: {fileID: 2100000, guid: b8b11a541f4411040bbe6d4e85e4b102, type: 2}
-  arcCapSprite: {fileID: 21300000, guid: 6f7323c1674871d41a1cc25fbcf709a5, type: 3}
+  tapSkin: {fileID: 2800000, guid: e2e574235a007dd43b0310c02f4cabe0, type: 3}
+  holdSkin: {fileID: 2800000, guid: fa0a2bc320e57c3449d94b6b22eea6b5, type: 3}
+  holdHighlightSkin: {fileID: 2800000, guid: 0ad54e43fd3e27546ad3a22495f859c5, type: 3}
+  arcTapSkin: {fileID: 2800000, guid: 1df9ac0812ecd614da1b7e3f090466c6, type: 3}
+  arcCapSprite: {fileID: 2800000, guid: 6f7323c1674871d41a1cc25fbcf709a5, type: 3}

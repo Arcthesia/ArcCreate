@@ -1,50 +1,24 @@
 using ArcCreate.Gameplay.Judgement;
+using ArcCreate.Gameplay.Render;
+using ArcCreate.Utility;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
 {
-    public class Hold : LongNote, ILongNote<HoldBehaviour>, ILaneTapJudgementReceiver, ILaneHoldJudgementReceiver
+    public class Hold : LongNote, ILongNote, ILaneTapJudgementReceiver, ILaneHoldJudgementReceiver
     {
-        private HoldBehaviour instance;
         private int flashCount;
         private bool highlight = false;
         private bool locked = true;
         private bool tapJudgementRequestSent = false;
         private bool holdHighlightRequestSent = false;
         private int longParticleUntil = int.MinValue;
-        private bool isSelected;
         private int numHoldJudgementRequestsSent = 0;
         private bool spawnedParticleThisFrame = false;
+        private Texture normalTexture;
+        private Texture highlightTexture;
 
         public int Lane { get; set; }
-
-        public bool IsAssignedInstance => instance != null;
-
-        public bool Highlight
-        {
-            get => highlight;
-            set
-            {
-                highlight = value;
-                if (instance != null)
-                {
-                    instance.Highlight = value;
-                }
-            }
-        }
-
-        public override bool IsSelected
-        {
-            get => isSelected;
-            set
-            {
-                isSelected = value;
-                if (instance != null)
-                {
-                    instance.SetSelected(value);
-                }
-            }
-        }
 
         public override ArcEvent Clone()
         {
@@ -64,26 +38,11 @@ namespace ArcCreate.Gameplay.Data
             Lane = e.Lane;
         }
 
-        public void AssignInstance(HoldBehaviour instance)
-        {
-            this.instance = instance;
-            instance.SetData(this);
-            instance.SetSelected(isSelected);
-            ReloadSkin();
-        }
-
-        public HoldBehaviour RevokeInstance()
-        {
-            var result = instance;
-            instance = null;
-            return result;
-        }
-
         public void ResetJudgeTo(int timing)
         {
             RecalculateJudgeTimings();
             locked = true;
-            Highlight = false;
+            highlight = false;
             longParticleUntil = int.MinValue;
             tapJudgementRequestSent = false;
             numHoldJudgementRequestsSent = ComboAt(timing);
@@ -128,8 +87,7 @@ namespace ArcCreate.Gameplay.Data
 
         public void ReloadSkin()
         {
-            var (normal, highlight) = Services.Skin.GetHoldSkin(this);
-            instance.SetSprite(normal, highlight);
+            (normalTexture, highlightTexture) = Services.Skin.GetHoldSkin(this);
         }
 
         public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)
@@ -154,25 +112,18 @@ namespace ArcCreate.Gameplay.Data
             spawnedParticleThisFrame = false;
         }
 
-        public void UpdateInstance(int currentTiming, double currentFloorPosition, GroupProperties groupProperties)
+        public void UpdateRender(int currentTiming, double currentFloorPosition, GroupProperties groupProperties)
         {
-            if (instance == null)
-            {
-                return;
-            }
-
             float z = ZPos(currentFloorPosition);
             float endZ = EndZPos(currentFloorPosition);
             Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
-            scl.y *= z - endZ;
-            instance.SetTransform(pos, rot, scl);
-            instance.SetFallDirection(groupProperties.FallDirection);
+            Matrix4x4 matrix = Matrix4x4.TRS(pos, rot, scl) * MatrixUtility.Shear(groupProperties.FallDirection * (z - endZ));
 
+            Texture texture = highlight ? highlightTexture : normalTexture;
             float alpha = 1;
-
-            if (Highlight)
+            if (highlight)
             {
                 flashCount = (flashCount + 1) % Values.HoldFlashCycle;
                 if (flashCount == 0)
@@ -189,19 +140,23 @@ namespace ArcCreate.Gameplay.Data
             }
 
             alpha *= Values.MaxHoldAlpha;
-
             Color color = groupProperties.Color;
             color.a *= alpha;
-            instance.SetColor(color);
 
+            float from = 0;
             if (!locked || groupProperties.NoInput)
             {
-                instance.SetFrom((float)((currentFloorPosition - FloorPosition) / (EndFloorPosition - FloorPosition)));
+                from = (float)((currentFloorPosition - FloorPosition) / (EndFloorPosition - FloorPosition));
             }
-            else
+
+            LongNoteRenderProperties properties = new LongNoteRenderProperties
             {
-                instance.SetFrom(0);
-            }
+                From = from,
+                Color = color,
+                Selected = IsSelected ? 1 : 0,
+            };
+
+            Services.Render.DrawHold(texture, matrix, properties);
 
             if (currentTiming <= longParticleUntil && currentTiming <= EndTiming)
             {
@@ -209,7 +164,7 @@ namespace ArcCreate.Gameplay.Data
             }
         }
 
-        public int CompareTo(INote<HoldBehaviour> other)
+        public int CompareTo(INote other)
         {
             LongNote note = other as LongNote;
             if (note.Timing == Timing)
@@ -232,7 +187,7 @@ namespace ArcCreate.Gameplay.Data
             tapJudgementRequestSent = false;
 
             longParticleUntil = currentTiming + Values.HoldParticlePersistDuration;
-            Highlight = true;
+            highlight = true;
             Services.InputFeedback.LaneFeedback(Lane);
             Services.Particle.PlayLongParticle(this, new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0));
 
@@ -254,7 +209,7 @@ namespace ArcCreate.Gameplay.Data
             if (locked || isExpired)
             {
                 longParticleUntil = int.MinValue;
-                Highlight = false;
+                highlight = false;
                 if (isJudgement)
                 {
                     Services.Score.ProcessJudgement(JudgementResult.LostLate);
@@ -268,7 +223,7 @@ namespace ArcCreate.Gameplay.Data
             else
             {
                 longParticleUntil = currentTiming + Values.HoldParticlePersistDuration;
-                Highlight = true;
+                highlight = true;
                 if (isJudgement)
                 {
                     Services.Score.ProcessJudgement(JudgementResult.Max);

@@ -3,10 +3,8 @@ using ArcCreate.Gameplay.Data;
 
 namespace ArcCreate.Gameplay.Chart
 {
-    public class TapNoteGroup : ShortNoteGroup<Tap, TapBehaviour>
+    public class TapNoteGroup : ShortNoteGroup<Tap>
     {
-        public override string PoolName => Values.TapPoolName;
-
         public override void SetupNotes()
         {
             for (int i = 0; i < Notes.Count; i++)
