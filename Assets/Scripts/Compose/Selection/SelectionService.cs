@@ -292,6 +292,16 @@ namespace ArcCreate.Compose.Selection
                         continue;
                     }
 
+                    if (note is Arc arc)
+                    {
+                        int timing = Services.Gameplay.Audio.ChartTiming;
+                        float arcStartZ = arc.ZPos(arc.TimingGroupInstance.GetFloorPosition(timing));
+                        if (hit.point.z * arcStartZ > 0 && arc.Timing < timing)
+                        {
+                            continue;
+                        }
+                    }
+
                     switch (selectionMode)
                     {
                         case SelectionMode.Any:

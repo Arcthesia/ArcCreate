@@ -44,7 +44,7 @@ MeshCollider:
   m_Enabled: 1
   serializedVersion: 4
   m_Convex: 0
-  m_CookingOptions: 30
+  m_CookingOptions: 0
   m_Mesh: {fileID: 0}
 --- !u!114 &1435657967835132182
 MonoBehaviour:
