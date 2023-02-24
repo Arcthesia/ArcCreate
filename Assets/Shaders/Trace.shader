@@ -44,7 +44,6 @@
 			
 			struct Properties
 			{
-				float from;
 				float4 color;
 				float redValue;
 				int selected;
@@ -79,7 +78,7 @@
 			half4 frag (v2f i) : SV_Target
 			{
 				Properties properties = _Properties[i.instanceID];
-			    if(i.uv.y < properties.from || i.worldpos.z > 50 || i.worldpos.z < -100) discard;
+			    if(i.worldpos.z > 50 || i.worldpos.z < -100) discard;
 				float4 c = tex2D(_MainTex,i.uv); 
 				
 				float4 inColor = _Color;

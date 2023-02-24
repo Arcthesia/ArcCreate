@@ -61,6 +61,7 @@ namespace ArcCreate.Remote.Gameplay
         {
             startNewSessionButton.onClick.AddListener(OnStartNewSessionButton);
             startNewSessionButton.gameObject.SetActive(false);
+            selectDeviceParent.gameObject.SetActive(true);
             Application.logMessageReceived += DisplayLog;
             LoadGameplayScene();
         }
@@ -69,6 +70,7 @@ namespace ArcCreate.Remote.Gameplay
         {
             StartListeningForBroadcast();
             startNewSessionButton.gameObject.SetActive(false);
+            selectDeviceParent.gameObject.SetActive(true);
         }
 
         private void LoadGameplayScene()
@@ -238,6 +240,7 @@ namespace ArcCreate.Remote.Gameplay
             statusText.text = I18n.S("Remote.State.TargetDisconnected.Gameplay");
             indicateListening.SetActive(true);
             startNewSessionButton.gameObject.SetActive(true);
+            selectDeviceParent.gameObject.SetActive(false);
             gameplay.Audio.Pause();
         }
 

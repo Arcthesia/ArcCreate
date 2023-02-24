@@ -213,6 +213,7 @@ namespace ArcCreate.Gameplay.Data
                 currentFloorPosition,
                 clipToTiming,
                 clipToFloorPosition,
+                groupProperties.FallDirection,
                 z);
 
             for (int i = 0; i < segments.Count; i++)
@@ -230,7 +231,6 @@ namespace ArcCreate.Gameplay.Data
 
                 ArcRenderProperties properties = new ArcRenderProperties
                 {
-                    From = segment.From,
                     Color = color,
                     RedValue = redArcValue,
                     Selected = IsSelected ? 1 : 0,
@@ -271,7 +271,6 @@ namespace ArcCreate.Gameplay.Data
             {
                 ArcRenderProperties properties = new ArcRenderProperties
                 {
-                    From = 0,
                     Color = color,
                     RedValue = redArcValue,
                     Selected = IsSelected ? 1 : 0,
@@ -442,7 +441,8 @@ namespace ArcCreate.Gameplay.Data
             double currentFloorPosition,
             int clipToTiming,
             double clipToFloorPosition,
-            float baseZ)
+            Vector3 fallDirection,
+            float z)
         {
             for (int i = 0; i < segments.Count; i++)
             {
@@ -466,8 +466,7 @@ namespace ArcCreate.Gameplay.Data
                 if (currentTiming >= segment.Timing && currentTiming < segment.EndTiming)
                 {
                     float p = (float)((currentFloorPosition - segment.FloorPosition) / (segment.EndFloorPosition - segment.FloorPosition));
-                    Vector3 capPos = segment.StartPosition + (p * (segment.EndPosition - segment.StartPosition));
-                    capPos.z = -baseZ;
+                    Vector3 capPos = segment.StartPosition + (p * (segment.EndPosition - segment.StartPosition)) - (fallDirection * z);
                     Vector3 scale = new Vector3(ArcCapSize, ArcCapSize, 1);
                     Vector4 color = new Vector4(1, 1, 1, IsTrace ? Values.TraceCapAlpha : Values.ArcCapAlpha);
                     return (true, Matrix4x4.TRS(capPos, Quaternion.identity, scale), color);
@@ -478,9 +477,8 @@ namespace ArcCreate.Gameplay.Data
             {
                 if (IsFirstArcOfGroup && !IsTrace)
                 {
-                    float z = -baseZ;
                     float approach = 1 - (Mathf.Abs(z) / Values.TrackLengthForward);
-                    Vector3 capPos = new Vector3(0, 0, z);
+                    Vector3 capPos = -(fallDirection * z);
                     Vector4 color = new Color(1, 1, 1, IsTrace ? 0 : approach);
                     Vector3 scale = Vector3.one;
                     float size = Values.ArcCapSize + (Values.ArcCapSizeAdditionMax * (1 - approach));

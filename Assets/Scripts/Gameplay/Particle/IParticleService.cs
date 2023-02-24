@@ -47,6 +47,8 @@ namespace ArcCreate.Gameplay.Particle
         /// </summary>
         /// <param name="colorMin">The min color of the color range.</param>
         /// <param name="colorMax">The max color of the color range.</param>
-        void SetLongParticleSkin(Color colorMin, Color colorMax);
+        /// <param name="fromGradient">The first color-over-time gradient.</param>
+        /// <param name="toGradient">The second color-over-time gradient.</param>
+        void SetLongParticleSkin(Color colorMin, Color colorMax, Gradient fromGradient, Gradient toGradient);
     }
 }

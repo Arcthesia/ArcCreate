@@ -10,7 +10,7 @@
 		ZWrite On
 		ZTest Always
 		Cull Off
-		Blend SrcAlpha One
+		Blend DstAlpha One
 
 		Pass
 		{
@@ -42,14 +42,13 @@
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = v.uv;
 				o.color = v.color;
-				o.color.a += 0.5;
 				return o;
 			}
 			
 			half4 frag (v2f i) : SV_Target
 			{
 				float4 c = tex2D(_MainTex,i.uv) * i.color;
-				c.rgb *= c.a;
+				c.rgb *= c.a * 0.2;
 				return c;
 			}
 			ENDCG

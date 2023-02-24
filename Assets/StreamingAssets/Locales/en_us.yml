@@ -381,6 +381,10 @@ Compose:
     # Editor settings panel
     Settings:
       Label:
+        Locale:
+          Name: Localization
+          Language: Language
+          Reload: Reload locales
         Gameplay:
           Name: Gameplay
           Speed: Speed

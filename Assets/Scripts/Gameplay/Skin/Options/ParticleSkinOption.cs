@@ -12,6 +12,8 @@ namespace ArcCreate.Gameplay.Skin
         [SerializeField] private Texture sfxParticleSkin;
         public Color HoldEffectColorMin;
         public Color HoldEffectColorMax;
+        public Gradient HoldEffectFromGradient;
+        public Gradient HoldEffectToGradient;
 
         public ExternalTexture ParticleSkin { get; private set; }
 

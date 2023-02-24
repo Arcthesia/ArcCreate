@@ -25,7 +25,7 @@ public static class I18n
     /// </summary>
     public static string CurrentLocale { get; private set; } = DefaultLocale;
 
-    private static string LocaleDirectory => Path.Combine(Application.streamingAssetsPath, "Locales");
+    public static string LocaleDirectory => Path.Combine(Application.streamingAssetsPath, "Locales");
 
     /// <summary>
     /// Gets the translated string from a key.

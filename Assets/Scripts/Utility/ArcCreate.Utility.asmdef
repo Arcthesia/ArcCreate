@@ -4,7 +4,8 @@
         "SFB.Runtime",
         "Unity.TextMeshPro",
         "UniTask",
-        "YamlDotNet"
+        "YamlDotNet",
+        "ArcCreate.Settings"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

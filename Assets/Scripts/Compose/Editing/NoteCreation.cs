@@ -351,7 +351,7 @@ namespace ArcCreate.Compose.Editing
                     previewTap.localScale = scl;
                     break;
                 case CreateNoteMode.Hold:
-                    scl.y *= 10;
+                    scl.z *= 10;
                     previewHold.localPosition = pos;
                     previewHold.localRotation = rot;
                     previewHold.localScale = scl;

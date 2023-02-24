@@ -117,7 +117,11 @@ namespace ArcCreate.Gameplay.Skin
                 particleOpt = particleOpt != null ? particleOpt : currentAlignment.DefaultParticleOption;
 
                 Services.Particle.SetTapParticleSkin(particleOpt.ParticleSkin.Value);
-                Services.Particle.SetLongParticleSkin(particleOpt.HoldEffectColorMin, particleOpt.HoldEffectColorMax);
+                Services.Particle.SetLongParticleSkin(
+                    particleOpt.HoldEffectColorMin,
+                    particleOpt.HoldEffectColorMax,
+                    particleOpt.HoldEffectFromGradient,
+                    particleOpt.HoldEffectToGradient);
                 gameplayData.NotifySkinValuesChange();
             }
         }

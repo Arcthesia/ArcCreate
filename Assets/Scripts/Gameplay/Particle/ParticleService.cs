@@ -196,10 +196,15 @@ namespace ArcCreate.Gameplay.Particle
                 tapParticlePoolCount);
         }
 
-        public void SetLongParticleSkin(Color colorMin, Color colorMax)
+        public void SetLongParticleSkin(Color colorMin, Color colorMax, Gradient fromGradient, Gradient toGradient)
         {
-            var module = longNoteParticlePrefab.GetComponent<ParticleSystem>().main;
+            ParticleSystem pts = longNoteParticlePrefab.GetComponent<ParticleSystem>();
+            ParticleSystem.MainModule module = pts.main;
+            ParticleSystem.ColorOverLifetimeModule colorModule = pts.colorOverLifetime;
+
             module.startColor = new ParticleSystem.MinMaxGradient(colorMin, colorMax);
+            colorModule.color = new ParticleSystem.MinMaxGradient(fromGradient, toGradient);
+
             Pools.Destroy<Particle>(Values.LongParticlePoolName);
             longParticlePool = Pools.New<Particle>(
                 Values.LongParticlePoolName,

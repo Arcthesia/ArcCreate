@@ -31,6 +31,7 @@ namespace ArcCreate.Gameplay.Data
             float endZ = ArcFormula.FloorPositionToZ(EndFloorPosition - floorPosition);
             Vector3 startPos = StartPosition + ((startZ - baseZ) * fallDirection);
             Vector3 endPos = EndPosition + ((endZ - baseZ) * fallDirection);
+            startPos = ((endPos - startPos) * From) + startPos;
             Vector3 dir = endPos - startPos;
 
             Matrix4x4 bodyMatrix = new Matrix4x4(

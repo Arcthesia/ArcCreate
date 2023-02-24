@@ -15,12 +15,19 @@ namespace ArcCreate.Compose.Project
 
         protected override void ApplyChartSettings(ChartSettings chart)
         {
-            side.Value = chart.Skin?.Side;
-            note.Value = chart.Skin?.Note;
-            particle.Value = chart.Skin?.Particle;
-            accent.Value = chart.Skin?.Accent;
-            track.Value = chart.Skin?.Track;
-            singleLine.Value = chart.Skin?.SingleLine;
+            side.SetValueWithoutNotify(chart.Skin?.Side);
+            note.SetValueWithoutNotify(chart.Skin?.Note);
+            particle.SetValueWithoutNotify(chart.Skin?.Particle);
+            accent.SetValueWithoutNotify(chart.Skin?.Accent);
+            track.SetValueWithoutNotify(chart.Skin?.Track);
+            singleLine.SetValueWithoutNotify(chart.Skin?.SingleLine);
+
+            Services.Gameplay.Skin.AlignmentSkin = chart.Skin?.Side;
+            Services.Gameplay.Skin.NoteSkin = chart.Skin?.Note;
+            Services.Gameplay.Skin.ParticleSkin = chart.Skin?.Particle;
+            Services.Gameplay.Skin.AccentSkin = chart.Skin?.Accent;
+            Services.Gameplay.Skin.TrackSkin = chart.Skin?.Track;
+            Services.Gameplay.Skin.SingleLineSkin = chart.Skin?.SingleLine;
         }
 
         private new void Start()
