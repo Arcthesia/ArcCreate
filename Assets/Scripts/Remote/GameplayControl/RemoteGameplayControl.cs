@@ -255,8 +255,8 @@ namespace ArcCreate.Remote.Gameplay
                         {
                             gameplay.Skin.AlignmentSkin = chartSettings.Skin?.Side ?? string.Empty;
                             gameplay.Skin.AccentSkin = chartSettings.Skin?.Accent ?? string.Empty;
-                            gameplay.Skin.NoteSkin = chartSettings.Skin?.Accent ?? string.Empty;
-                            gameplay.Skin.ParticleSkin = chartSettings.Skin?.Note ?? string.Empty;
+                            gameplay.Skin.NoteSkin = chartSettings.Skin?.Note ?? string.Empty;
+                            gameplay.Skin.ParticleSkin = chartSettings.Skin?.Particle ?? string.Empty;
                             gameplay.Skin.SingleLineSkin = chartSettings.Skin?.SingleLine ?? string.Empty;
                             gameplay.Skin.TrackSkin = chartSettings.Skin?.Track ?? string.Empty;
 
@@ -289,26 +289,26 @@ namespace ArcCreate.Remote.Gameplay
 
                             for (int i = definedColorCount; i < defaultArc.Count; i++)
                             {
-                                finalColor[i] = defaultArc[i];
-                                finalColorLow[i] = defaultArcLow[i];
+                                finalColor.Add(defaultArc[i]);
+                                finalColorLow.Add(defaultArcLow[i]);
                             }
 
                             gameplay.Skin.SetTraceColor(trace);
                             gameplay.Skin.SetArcColors(finalColor, finalColorLow);
                             gameplay.Skin.SetShadowColor(shadow);
                         }
+
+                        ColorUtility.TryParseHtmlString(chartSettings.DifficultyColor, out Color c);
+                        gameplayData.DifficultyColor.Value = c;
+
+                        bool enableVideoBackground = !string.IsNullOrEmpty(chartSettings.VideoPath);
+                        if (enableVideoBackground)
+                        {
+                            gameplayData.VideoBackgroundUrl.Value = enableVideoBackground ? GetURI("video") : null;
+                        }
+
+                        break;
                     }
-
-                    ColorUtility.TryParseHtmlString(chartSettings.DifficultyColor, out Color c);
-                    gameplayData.DifficultyColor.Value = c;
-
-                    bool enableVideoBackground = !string.IsNullOrEmpty(chartSettings.VideoPath);
-                    if (enableVideoBackground)
-                    {
-                        gameplayData.VideoBackgroundUrl.Value = enableVideoBackground ? GetURI("video") : null;
-                    }
-
-                    break;
                 }
             }
         }

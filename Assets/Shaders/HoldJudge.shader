@@ -10,7 +10,7 @@
 		ZWrite On
 		ZTest Always
 		Cull Off
-		Blend DstAlpha One
+		Blend One One
 
 		Pass
 		{
@@ -48,7 +48,8 @@
 			half4 frag (v2f i) : SV_Target
 			{
 				float4 c = tex2D(_MainTex,i.uv) * i.color;
-				c.rgb *= c.a * 0.2;
+				c.a = c.a * c.a * c.a * c.a * 10;
+				c.rgb *= c.a;
 				return c;
 			}
 			ENDCG

@@ -236,9 +236,8 @@ namespace ArcCreate.Gameplay.Data
                     Selected = IsSelected ? 1 : 0,
                 };
 
-                ShadowRenderProperties shadowProperties = new ShadowRenderProperties
+                SpriteRenderProperties shadowProperties = new SpriteRenderProperties
                 {
-                    From = segment.From,
                     Color = color,
                 };
 

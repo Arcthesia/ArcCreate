@@ -55,10 +55,10 @@ namespace ArcCreate.Gameplay.Render
         private readonly Dictionary<Texture, InstancedRendererPool<SpriteRenderProperties>> arcCapDrawers
             = new Dictionary<Texture, InstancedRendererPool<SpriteRenderProperties>>();
 
-        private InstancedRendererPool<ShadowRenderProperties> arcShadowDrawer;
+        private InstancedRendererPool<SpriteRenderProperties> arcShadowDrawer;
         private InstancedRendererPool<ArcRenderProperties> traceSegmentDrawer;
         private InstancedRendererPool<ArcRenderProperties> traceHeadDrawer;
-        private InstancedRendererPool<ShadowRenderProperties> traceShadowDrawer;
+        private InstancedRendererPool<SpriteRenderProperties> traceShadowDrawer;
         private InstancedRendererPool<SpriteRenderProperties> heightIndicatorDrawer;
 
         // Arctap
@@ -136,12 +136,12 @@ namespace ArcCreate.Gameplay.Render
             traceSegmentDrawer.RegisterInstance(matrix, properties);
         }
 
-        public void DrawArcShadow(Matrix4x4 matrix, ShadowRenderProperties properties)
+        public void DrawArcShadow(Matrix4x4 matrix, SpriteRenderProperties properties)
         {
             arcShadowDrawer.RegisterInstance(matrix, properties);
         }
 
-        public void DrawTraceShadow(Matrix4x4 matrix, ShadowRenderProperties properties)
+        public void DrawTraceShadow(Matrix4x4 matrix, SpriteRenderProperties properties)
         {
             traceShadowDrawer.RegisterInstance(matrix, properties);
         }
@@ -285,18 +285,18 @@ namespace ArcCreate.Gameplay.Render
         public void SetShadowMaterial(Material material)
         {
             arcShadowDrawer?.Dispose();
-            arcShadowDrawer = new InstancedRendererPool<ShadowRenderProperties>(
+            arcShadowDrawer = new InstancedRendererPool<SpriteRenderProperties>(
                 material,
                 ArcMeshGenerator.GetShadowMesh(false),
                 Shader.PropertyToID("_Properties"),
-                ShadowRenderProperties.Size());
+                SpriteRenderProperties.Size());
 
             traceShadowDrawer?.Dispose();
-            traceShadowDrawer = new InstancedRendererPool<ShadowRenderProperties>(
+            traceShadowDrawer = new InstancedRendererPool<SpriteRenderProperties>(
                 material,
                 ArcMeshGenerator.GetShadowMesh(true),
                 Shader.PropertyToID("_Properties"),
-                ShadowRenderProperties.Size());
+                SpriteRenderProperties.Size());
 
             UpdateLoadedState();
         }

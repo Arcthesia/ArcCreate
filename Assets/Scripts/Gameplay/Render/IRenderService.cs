@@ -15,11 +15,11 @@ namespace ArcCreate.Gameplay.Render
 
         void DrawArcSegment(int colorId, bool highlight, Matrix4x4 matrix, ArcRenderProperties properties);
 
-        void DrawArcShadow(Matrix4x4 matrix, ShadowRenderProperties properties);
+        void DrawArcShadow(Matrix4x4 matrix, SpriteRenderProperties properties);
 
         void DrawTraceSegment(Matrix4x4 matrix, ArcRenderProperties properties);
 
-        void DrawTraceShadow(Matrix4x4 matrix, ShadowRenderProperties properties);
+        void DrawTraceShadow(Matrix4x4 matrix, SpriteRenderProperties properties);
 
         void DrawArcHead(int colorId, bool highlight, Matrix4x4 matrix, ArcRenderProperties properties);
 
