@@ -22,7 +22,7 @@
 	SubShader
 	{
 		Tags { "Queue" = "Transparent"  "RenderType"="Transparent" "CanUseSpriteAtlas"="true"  }
-		ZWrite On
+		ZWrite Off
 		ZTest Always
 		Cull Off
 		Blend SrcAlpha OneMinusSrcAlpha

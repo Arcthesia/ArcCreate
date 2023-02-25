@@ -1,5 +1,7 @@
 # ArcCreate
 
+![Logo](Assets/Textures/LogoFull.png?raw=true "Title")
+
 Fast and powerful .aff editor made with Unity.
 
 # Getting started
@@ -21,13 +23,13 @@ This project was made with Unity 2019.4.34f1. You can download the exact version
 ### Editor (Desktop only)
 - [x] Project metadata management
 - [x] Project skin settings
-- [ ] Note editing
+- [x] Note editing
 - [x] Timing, camera editing
 - [x] Custom hotkeys configuration
 - [ ] FFmpeg rendering support
 - [ ] Lua macro support
 - [ ] Lua scenecontrol editing & compiling
-- [ ] LAN communication between desktop and mobile
+- [x] LAN communication between desktop and mobile
 
 # Contributing
 

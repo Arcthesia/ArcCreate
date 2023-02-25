@@ -1,0 +1,16 @@
+<size=33><b>Programming</b></size>
+0thElement
+floofer++
+recharge-sp
+
+<size=33><b>Visual Design</b></size>
+Alaiskai
+0thElement
+yojohanshinwataikei
+
+<size=33><b>Localization</b></size>
+-
+
+<size=33><b>Quality Assurance</b></size>
+ZydeKun
+and everyone at the Arcthesia community!

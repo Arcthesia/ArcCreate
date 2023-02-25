@@ -86,6 +86,11 @@ namespace ArcCreate.Gameplay.Data
                 return;
             }
 
+            if (texture == null)
+            {
+                ReloadSkin();
+            }
+
             float z = ZPos(currentFloorPosition);
             Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(WorldX, WorldY, 0);
             Quaternion rot = groupProperties.RotationIndividual;

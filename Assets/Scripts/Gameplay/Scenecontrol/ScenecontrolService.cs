@@ -10,8 +10,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
         private List<ScenecontrolEvent> events = new List<ScenecontrolEvent>();
 
         [SerializeField] private SpriteRenderer trackSpriteRenderer;
+        [SerializeField] private SpriteRenderer singleLineLeftRenderer;
+        [SerializeField] private SpriteRenderer singleLineRightRenderer;
         [SerializeField] private SpriteRenderer skyInputLineSpriteRenderer;
         private float trackOffset = 0;
+        private float singleLineOffset = 0;
         private float count = 0;
         private int loopSwitch = 1;
         private readonly int offsetShaderId = Shader.PropertyToID("_Offset");
@@ -97,7 +100,10 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
             float speed = Services.Audio.IsPlaying ? bpm / Values.BaseBpm : 0;
             trackOffset += Time.deltaTime * speed * 6;
+            singleLineOffset += (speed >= 0) ? (Time.deltaTime * speed * 6) : (Time.deltaTime * 0.6f);
             trackSpriteRenderer.sharedMaterial.SetFloat(offsetShaderId, trackOffset);
+            singleLineLeftRenderer.sharedMaterial.SetFloat(offsetShaderId, singleLineOffset);
+            singleLineRightRenderer.sharedMaterial.SetFloat(offsetShaderId, singleLineOffset);
         }
 
         private void RebuildList()

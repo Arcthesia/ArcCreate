@@ -84,6 +84,11 @@ namespace ArcCreate.Gameplay.Data
                 return;
             }
 
+            if (texture == null)
+            {
+                ReloadSkin();
+            }
+
             float z = ZPos(currentFloorPosition);
             Vector3 basePos = new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
             Vector3 pos = (groupProperties.FallDirection * z) + basePos;

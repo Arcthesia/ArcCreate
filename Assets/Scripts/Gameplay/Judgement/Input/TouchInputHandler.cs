@@ -304,7 +304,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
         private bool ArcTapCollide(Vector3 screenPosition1, Vector3 screenPosition2)
         {
             float dx = Mathf.Abs(screenPosition1.x - screenPosition2.x);
-            float dy = Mathf.Abs(screenPosition1.x - screenPosition2.y);
+            float dy = Mathf.Abs(screenPosition1.y - screenPosition2.y);
 
             return dx <= Values.LaneScreenHitbox * Values.ArcTapHitboxX / Values.LaneWidth
                 && dy <= Values.LaneScreenHitbox * Values.ArcTapHitboxY / Values.LaneWidth;

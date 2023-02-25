@@ -8,19 +8,19 @@ Next, you'll need the locale code for your language. Head over to the [list of l
 
 This code will be used to identify the file name you'll need to modify/create. Namely, you'll need to head to the locale folder in `/Assets/StreamingAssets/Locales/`. You can either work on translation directly on the GitHub webpage, in which case head over to [this link](/Assets/StreamingAssets/Locales/), or you can clone the repository to your local device, and make changes necessary there. I will assume you know what you're doing if you went with the second method and will only explain the first method.
 
-Now either create a new file named `(your language code).yaml`, or open the file if it exists already.
+Now either create a new file named `(your language code).yml`, or open the file if it exists already.
 
 #### Modifying an existing translation
 
 If the file already exists, then someone else has already started working on the translation, and you can contribute by editing this further. Open the file, then click on the edit button (with a pencil as the icon) on the top right. You're now ready to start making changes.
 
-> Note: For every new build, missing entries in all locale files are filled in with the default english text from [en-us.yaml](/Assets/StreamingAssets/Locales/). Feel free to update the translation by filling these in whenever a new build is released.
+> Note: For every new build, missing entries in all locale files are filled in with the default english text from [en_us.yml](/Assets/StreamingAssets/Locales/). Feel free to update the translation by filling these in whenever a new build is released.
 
 #### Creating a new translation
 
 If the file doesn't exist yet, you need to create it yourself.
 
-First, head over to the default locale file [en-us.yaml](/Assets/StreamingAssets/Locales/), and copy all of its content. Then click on `Add File > Create new file`, name the file with the correct name mentioned above, and paste everything you just copied into this file. You're now ready to start translating.
+First, head over to the default locale file [en_us.yml](/Assets/StreamingAssets/Locales/), and copy all of its content. Then click on `Add File > Create new file`, name the file with the correct name mentioned above, and paste everything you just copied into this file. You're now ready to start translating.
 
 #### Submitting changes
 
@@ -45,9 +45,9 @@ Unfortunately there is no easy way to test on Android and iOS. You will need to 
 
 ###### YAML Format
 
-The locale file uses the `.yaml` file format, which is a configuration file format designed to be human-readable and easily editable.
+The locale file uses the `.yml` file format, which is a configuration file format designed to be human-readable and easily editable.
 
-You'll want to make sure your locale file follow the specification of `.yaml`. If you just mimic the default locale file things should be fine, but you can paste the file content into [an online YAML editor like this one](https://codebeautify.org/yaml-editor-online) to make sure there's no syntax error.
+You'll want to make sure your locale file follow the specification of `.yml`. If you just mimic the default locale file things should be fine, but you can paste the file content into [an online YAML editor like this one](https://codebeautify.org/yaml-editor-online) to make sure there's no syntax error.
 
 ###### Text content
 

@@ -14,7 +14,7 @@ Shader "Custom/BlendModes/VividLight"
 		Tags { "Queue" = "Transparent" }
 		Cull Off
 		Lighting Off
-		ZWrite On
+		ZWrite Off
 		ZTest Always
 
 		GrabPass

@@ -48,7 +48,7 @@
 			half4 frag (v2f i) : SV_Target
 			{
 				float4 c = tex2D(_MainTex,i.uv) * i.color;
-				c.a = c.a * c.a * c.a * c.a * 10;
+				c.a = c.a * c.a * c.a * c.a * c.a * 45;
 				c.rgb *= c.a;
 				return c;
 			}

@@ -41,6 +41,10 @@ namespace ArcCreate.Compose.Components
         [SerializeField] private TMP_InputField trackThresholdField;
         [SerializeField] private TMP_InputField trackMaxTimingField;
 
+        [Header("Credits")]
+        [SerializeField] private Button openCreditsButton;
+        [SerializeField] private Dialog creditsDialog;
+
         private void Awake()
         {
             aspectRatioDropdown.onValueChanged.AddListener(OnAspectRatioDropdown);
@@ -60,6 +64,7 @@ namespace ArcCreate.Compose.Components
             inputModeDropdown.onValueChanged.AddListener(OnInputModeDropdown);
             speedField.onEndEdit.AddListener(OnSpeedField);
             densityField.onEndEdit.AddListener(OnDensityField);
+            openCreditsButton.onClick.AddListener(creditsDialog.Open);
 
             Settings.InputMode.OnValueChanged.AddListener(OnSettingInputMode);
             Values.BeatlineDensity.OnValueChange += OnDensity;
@@ -99,6 +104,7 @@ namespace ArcCreate.Compose.Components
             inputModeDropdown.onValueChanged.RemoveListener(OnInputModeDropdown);
             speedField.onEndEdit.RemoveListener(OnSpeedField);
             densityField.onEndEdit.RemoveListener(OnDensityField);
+            openCreditsButton.onClick.RemoveListener(creditsDialog.Open);
 
             Settings.InputMode.OnValueChanged.RemoveListener(OnSettingInputMode);
             Values.BeatlineDensity.OnValueChange -= OnDensity;

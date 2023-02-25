@@ -130,6 +130,11 @@ namespace ArcCreate.Gameplay.Data
 
         public void UpdateRender(int currentTiming, double currentFloorPosition, GroupProperties groupProperties)
         {
+            if (normalTexture == null || highlightTexture == null)
+            {
+                ReloadSkin();
+            }
+
             float z = ZPos(currentFloorPosition);
             float endZ = EndZPos(currentFloorPosition);
             Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);

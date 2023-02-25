@@ -22,7 +22,7 @@ Shader "Sprites/FastMultiply"
 
 		Cull Off
 		Lighting Off
-		ZWrite On
+		ZWrite Off
 		ZTest Always
 		Blend DstColor OneMinusSrcAlpha
 

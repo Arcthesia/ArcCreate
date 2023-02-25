@@ -14,7 +14,7 @@ Shader "Custom/BlendModes/Difference"
 		Tags { "Queue" = "Transparent" }
 		Cull Off
 		Lighting Off
-		ZWrite On
+		ZWrite Off
 		ZTest Always
 
 		GrabPass

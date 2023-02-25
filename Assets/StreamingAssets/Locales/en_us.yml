@@ -31,7 +31,7 @@ Format:
     BaseBPMZero: |-
       Base BPM can not be zero.
     DurationNegative: |-
-      Duration of an this event type can not be negative.
+      Duration of this event type can not be negative.
     DurationZero: |-
       Duration of this event type can not be zero.
     ArcTapOutOfRange: |-
@@ -183,7 +183,7 @@ Compose:
     UnsavedChanges:
       Title: Unsaved changes
       Content: |-
-        Your project has unsaved changes. Do you want save?
+        Your project has unsaved changes. Do you want to save?
       Yes: Save changes
       No: Discard changes
       Cancel: Cancel
@@ -420,6 +420,9 @@ Compose:
           Name: Track scrolling
           Threshold: Threshold
           MaxMovement: Max movement
+        Credits:
+          Name: Credits
+          View: See credits
     # Toolbox panel
     Toolbox:
       Pallete:
