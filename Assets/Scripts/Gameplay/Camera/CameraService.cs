@@ -26,6 +26,28 @@ namespace ArcCreate.Gameplay.GameplayCamera
 
         public Vector3 EditorCameraRotation { get; set; }
 
+        public bool IsOrthographic
+        {
+            get => gameplayCamera.orthographic;
+            set
+            {
+                gameplayCamera.orthographic = value;
+                arcCamera.orthographic = value;
+                uiCamera.orthographic = value;
+            }
+        }
+
+        public float OrthographicSize
+        {
+            get => gameplayCamera.orthographicSize;
+            set
+            {
+                gameplayCamera.orthographicSize = value;
+                arcCamera.orthographicSize = value;
+                uiCamera.orthographicSize = value;
+            }
+        }
+
         private bool Is16By9
             => 1.77777779f - (1f * gameplayCamera.pixelWidth / gameplayCamera.pixelHeight) < 0.1f;
 

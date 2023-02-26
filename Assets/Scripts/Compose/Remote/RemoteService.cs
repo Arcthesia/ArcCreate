@@ -96,6 +96,7 @@ namespace ArcCreate.Compose.Remote
             abortBroadcastButton.onClick.AddListener(StopSession);
             broadcastAgainButton.onClick.AddListener(BroadcastAgain);
             stopSessionButton.onClick.AddListener(StopSession);
+            I18n.OnLocaleChanged += OnLocaleChanged;
             SetState(RemoteState.Idle);
         }
 
@@ -105,7 +106,13 @@ namespace ArcCreate.Compose.Remote
             abortBroadcastButton.onClick.RemoveListener(StopSession);
             broadcastAgainButton.onClick.RemoveListener(BroadcastAgain);
             stopSessionButton.onClick.RemoveListener(StopSession);
+            I18n.OnLocaleChanged -= OnLocaleChanged;
             Dispose();
+        }
+
+        private void OnLocaleChanged()
+        {
+            SetState(state);
         }
 
         private void StartBroadcast()

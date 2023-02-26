@@ -24,6 +24,8 @@ namespace ArcCreate.Gameplay.Judgement.Input
                 Services.InputFeedback.LaneFeedback(input.Lane);
                 Services.InputFeedback.FloatlineFeedback(input.VerticalPos.y);
             }
+
+            Services.Judgement.Debug.SetTouchState(CurrentInputs);
         }
 
         public void HandleTapRequests(
@@ -165,6 +167,35 @@ namespace ArcCreate.Gameplay.Judgement.Input
                 color.ExistsArcWithinRange(arcOfColorExists);
             }
 
+            // Process finger lifting
+            for (int inpIndex = 0; inpIndex < CurrentInputs.Count; inpIndex++)
+            {
+                TouchInput input = CurrentInputs[inpIndex];
+                if (input.Phase == UnityEngine.InputSystem.TouchPhase.Ended)
+                {
+                    for (int c = 0; c <= ArcColorLogic.MaxColor; c++)
+                    {
+                        ArcColorLogic colorLogic = ArcColorLogic.Get(c);
+                        bool set = false;
+
+                        for (int i = requests.Count - 1; i >= 0; i--)
+                        {
+                            ArcJudgementRequest req = requests[i];
+                            if (currentTiming <= req.StartAtTiming)
+                            {
+                                colorLogic.FingerLifted(input.Id, (float)req.Arc.TimeIncrement);
+                                set = true;
+                            }
+                        }
+
+                        if (!set)
+                        {
+                            colorLogic.FingerLifted(input.Id, 0);
+                        }
+                    }
+                }
+            }
+
             // Detect grace period
             bool graceActive = false;
             for (int i = requests.Count - 1; i >= 0; i--)
@@ -202,22 +233,20 @@ namespace ArcCreate.Gameplay.Judgement.Input
                 }
             }
 
-            // Process finger state change
+            // Process finger hitting
             for (int inpIndex = 0; inpIndex < CurrentInputs.Count; inpIndex++)
             {
                 TouchInput input = CurrentInputs[inpIndex];
 
+                if (input.Phase == UnityEngine.InputSystem.TouchPhase.Ended)
+                {
+                    continue;
+                }
+
                 for (int i = requests.Count - 1; i >= 0; i--)
                 {
                     ArcJudgementRequest req = requests[i];
-
                     ArcColorLogic colorLogic = ArcColorLogic.Get(req.Arc.Color);
-
-                    if (input.Phase == UnityEngine.InputSystem.TouchPhase.Ended)
-                    {
-                        colorLogic.FingerLifted(input.Id, (float)req.Arc.TimeIncrement);
-                        continue;
-                    }
 
                     if (currentTiming < req.StartAtTiming)
                     {
@@ -230,16 +259,16 @@ namespace ArcCreate.Gameplay.Judgement.Input
                         Vector3 worldPosition = new Vector3(req.Arc.WorldXAt(currentTiming), req.Arc.WorldYAt(currentTiming), 0);
                         Vector3 screenPosition = Services.Camera.GameplayCamera.WorldToScreenPoint(worldPosition);
                         float distance = (screenPosition - input.ScreenPos).sqrMagnitude;
-                        colorLogic.FingerHit(input.Id, distance);
+                        colorLogic.FingerHit(input.Id, distance, (float)req.Arc.TimeIncrement);
                     }
                     else
                     {
-                        colorLogic.FingerMiss(input.Id);
+                        colorLogic.FingerMiss(input.Id, (float)req.Arc.TimeIncrement);
                     }
                 }
             }
 
-            // Process requests
+            // Reply to requests
             for (int inpIndex = 0; inpIndex < CurrentInputs.Count; inpIndex++)
             {
                 TouchInput input = CurrentInputs[inpIndex];
@@ -297,8 +326,8 @@ namespace ArcCreate.Gameplay.Judgement.Input
             float dx = Mathf.Abs(screenPosition1.x - screenPosition2.x);
             float dy = Mathf.Abs(screenPosition1.y - screenPosition2.y);
 
-            return dx <= Values.LaneScreenHitbox * Values.ArcHitboxX / Values.LaneWidth
-                && dy <= Values.LaneScreenHitbox * Values.ArcHitboxY / Values.LaneWidth;
+            return dx <= Values.LaneScreenHitbox * 2 * Values.ArcHitboxX / Values.LaneWidth
+                && dy <= Values.LaneScreenHitbox * 2 * Values.ArcHitboxY / Values.LaneWidth;
         }
 
         private bool ArcTapCollide(Vector3 screenPosition1, Vector3 screenPosition2)
@@ -306,8 +335,10 @@ namespace ArcCreate.Gameplay.Judgement.Input
             float dx = Mathf.Abs(screenPosition1.x - screenPosition2.x);
             float dy = Mathf.Abs(screenPosition1.y - screenPosition2.y);
 
-            return dx <= Values.LaneScreenHitbox * Values.ArcTapHitboxX / Values.LaneWidth
-                && dy <= Values.LaneScreenHitbox * Values.ArcTapHitboxY / Values.LaneWidth;
+            float lscr = Values.LaneScreenHitbox;
+
+            return dx <= Values.LaneScreenHitbox * 2 * Values.ArcTapHitboxX / Values.LaneWidth
+                && dy <= Values.LaneScreenHitbox * 2 * Values.ArcTapHitboxY / Values.LaneWidth;
         }
 
         private bool LaneCollide(TouchInput input, Vector3 screenPosition, int lane)

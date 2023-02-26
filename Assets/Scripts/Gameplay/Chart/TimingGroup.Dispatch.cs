@@ -28,7 +28,7 @@ namespace ArcCreate.Gameplay.Chart
         public List<ArcEvent> ReferenceEvents { get; private set; }
 
         // TODO: logic for scenecontrol to set visibility at the same time
-        public bool IsVisible { get; set; }
+        public bool IsVisible { get; set; } = true;
 
         /// <summary>
         /// Load a timing group data representation into this instance.
@@ -95,6 +95,11 @@ namespace ArcCreate.Gameplay.Chart
         /// <param name="timing">The timing to update the group to.</param>
         public void UpdateGroup(int timing)
         {
+            if (!IsVisible)
+            {
+                return;
+            }
+
             double floorPosition = GetFloorPosition(timing);
             taps.Update(timing, floorPosition, groupProperties);
             holds.Update(timing, floorPosition, groupProperties);

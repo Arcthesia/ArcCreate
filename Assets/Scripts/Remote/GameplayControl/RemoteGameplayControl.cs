@@ -132,6 +132,9 @@ namespace ArcCreate.Remote.Gameplay
                         case RemoteControl.ShowLog:
                             logDisplay.SetActive(GetBool(data));
                             break;
+                        case RemoteControl.ShowDebug:
+                            gameplay?.SetEnableArcDebug(GetBool(data));
+                            break;
                     }
                 }
 

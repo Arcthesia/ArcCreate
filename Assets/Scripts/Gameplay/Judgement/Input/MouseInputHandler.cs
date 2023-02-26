@@ -37,6 +37,8 @@ namespace ArcCreate.Gameplay.Judgement.Input
                 Services.InputFeedback.LaneFeedback(input.Lane);
                 Services.InputFeedback.FloatlineFeedback(input.VerticalPos.y);
             }
+
+            Services.Judgement.Debug.SetTouchState(CurrentInputs);
         }
     }
 }

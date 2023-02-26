@@ -113,10 +113,16 @@ namespace ArcCreate.Gameplay
 
         public static float LaneTo { get; set; } = 4;
 
-        public static float LaneScreenHitbox { get; set; } = 1;
-
         public static bool EnableColliderGeneration { get; set; } = false;
 
         public static bool EnableArcRebuildSegment { get; set; } = true;
+
+        public static float LaneScreenHitboxBase { get; set; } = 1;
+
+        public static float ScreenSizeBase { get; set; } = 1;
+
+        public static float ScreenSize { get; set; } = 1;
+
+        public static float LaneScreenHitbox => LaneScreenHitboxBase * ScreenSize / ScreenSizeBase;
     }
 }

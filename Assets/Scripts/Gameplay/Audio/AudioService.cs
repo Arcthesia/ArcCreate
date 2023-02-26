@@ -22,6 +22,11 @@ namespace ArcCreate.Gameplay.Audio
         private double dspStartPlayingTime = 0;
 
         /// <summary>
+        /// Dsp timing at the last frame.
+        /// </summary>
+        private double lastDspTiming = 0;
+
+        /// <summary>
         /// Whether to let the timing stay unchanged until the audio start playing, or to increate it linearly.
         /// </summary>
         private bool stationaryBeforeStart;
@@ -108,18 +113,19 @@ namespace ArcCreate.Gameplay.Audio
             }
 
             int timePassedSinceAudioStart = Mathf.RoundToInt((float)((dspTime - dspStartPlayingTime) * 1000));
-            int newTiming = timePassedSinceAudioStart + startTime - FullOffset;
+            int newDspTiming = timePassedSinceAudioStart + startTime - FullOffset;
 
-            if (audioTiming != newTiming && dspTime >= dspStartPlayingTime)
+            if (lastDspTiming == newDspTiming && dspTime >= dspStartPlayingTime)
             {
                 audioTiming += Mathf.RoundToInt(Time.deltaTime * 1000);
             }
             else
             {
-                audioTiming = newTiming;
+                audioTiming = newDspTiming;
             }
 
             timingSlider.value = (float)audioTiming / AudioLength;
+            lastDspTiming = newDspTiming;
         }
 
         public void Pause()

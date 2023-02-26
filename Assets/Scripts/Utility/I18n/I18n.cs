@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ArcCreate.Utilities;
+using ArcCreate.Utility;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -13,8 +14,10 @@ using UnityEngine.Networking;
 /// </summary>
 public static class I18n
 {
+    public const string DefaultLocale = "en_us";
     private const string MissingLocale = "Missing locale: ({0}){1}";
-    private const string DefaultLocale = "en_us";
+
+    private static Dictionary<string, string> defaultStrings = new Dictionary<string, string>();
 
     private static Dictionary<string, string> strings = new Dictionary<string, string>();
 
@@ -36,12 +39,23 @@ public static class I18n
     {
         if (strings.Count == 0)
         {
-            LoadLocale();
+            if (CurrentLocale != DefaultLocale)
+            {
+                string defaultPath = Path.Combine(LocaleDirectory, DefaultLocale) + ".yml";
+                LoadLocale(defaultPath, defaultStrings, false);
+            }
+
+            string path = Path.Combine(LocaleDirectory, CurrentLocale) + ".yml";
+            LoadLocale(path, strings);
         }
 
         if (strings.ContainsKey(key))
         {
             return strings[key];
+        }
+        else if (defaultStrings.ContainsKey(key))
+        {
+            return defaultStrings[key];
         }
         else
         {
@@ -86,9 +100,17 @@ public static class I18n
         var previousStrings = new Dictionary<string, string>(strings);
 
         CurrentLocale = locale;
+
         try
         {
-            LoadLocale();
+            if (CurrentLocale != DefaultLocale)
+            {
+                string defaultPath = Path.Combine(LocaleDirectory, DefaultLocale) + ".yml";
+                LoadLocale(defaultPath, defaultStrings, false);
+            }
+
+            string path = Path.Combine(LocaleDirectory, CurrentLocale) + ".yml";
+            LoadLocale(path, strings);
         }
         catch (Exception ex)
         {
@@ -105,7 +127,13 @@ public static class I18n
     public static async UniTask StartLoadingLocale()
     {
         string path = Path.Combine(LocaleDirectory, CurrentLocale) + ".yml";
-        await StartLoadingLocaleWithUnityWeb(path);
+        if (CurrentLocale != DefaultLocale)
+        {
+            string defaultPath = Path.Combine(LocaleDirectory, DefaultLocale) + ".yml";
+            await StartLoadingLocaleWithUnityWeb(defaultPath, defaultStrings, false);
+        }
+
+        await StartLoadingLocaleWithUnityWeb(path, strings);
     }
 
     /// <summary>
@@ -122,16 +150,48 @@ public static class I18n
             .ToArray();
     }
 
-    private static void LoadLocale()
+    public static async UniTask ReportMissingEntries()
+    {
+        string path = Path.Combine(LocaleDirectory, "report.txt");
+        Debug.Log($"Checking for missing localization entries of locale {CurrentLocale}");
+        await UniTask.NextFrame();
+
+        using (var stream = File.OpenWrite(path))
+        {
+            StreamWriter writer = new StreamWriter(stream);
+            await writer.WriteLineAsync($"Report missing localization entries for locale {CurrentLocale}");
+            await writer.WriteLineAsync("-----");
+
+            int count = 0;
+            foreach (var pair in defaultStrings)
+            {
+                if (!strings.ContainsKey(pair.Key))
+                {
+                    await writer.WriteLineAsync($"- Missing entry: \"{pair.Key}\" with content: \"{pair.Value}\"");
+                    count++;
+                }
+
+                await UniTask.NextFrame();
+            }
+
+            await writer.WriteLineAsync("-----");
+            await writer.WriteLineAsync($"Found {count} missing entries.");
+            writer.Flush();
+            writer.Close();
+        }
+
+        Debug.Log($"Check complete. Report file was created at {path}");
+        Shell.OpenExplorer(path);
+    }
+
+    private static void LoadLocale(string path, Dictionary<string, string> target, bool invoke = true)
     {
         if (Application.platform == RuntimePlatform.Android)
         {
-            string path = Path.Combine(LocaleDirectory, CurrentLocale) + ".yml";
-            StartLoadingLocaleWithUnityWeb(path).Forget();
+            StartLoadingLocaleWithUnityWeb(path, target).Forget();
         }
         else
         {
-            string path = Path.Combine(LocaleDirectory, CurrentLocale) + ".yml";
             if (!File.Exists(path))
             {
                 throw new FileNotFoundException(path);
@@ -139,17 +199,20 @@ public static class I18n
 
             using (FileStream stream = File.OpenRead(path))
             {
-                strings.Clear();
-                YamlExtractor.ExtractTo(strings, new StreamReader(stream));
+                target.Clear();
+                YamlExtractor.ExtractTo(target, new StreamReader(stream));
             }
 
-            OnLocaleChanged?.Invoke();
+            if (invoke)
+            {
+                OnLocaleChanged?.Invoke();
+            }
         }
     }
 
-    private static async UniTask StartLoadingLocaleWithUnityWeb(string path)
+    private static async UniTask StartLoadingLocaleWithUnityWeb(string path, Dictionary<string, string> target, bool invoke = true)
     {
-        strings.Clear();
+        target.Clear();
         using (var req = UnityWebRequest.Get(path))
         {
             await req.SendWebRequest();
@@ -160,9 +223,12 @@ public static class I18n
             }
 
             string data = req.downloadHandler.text;
-            YamlExtractor.ExtractTo(strings, new StringReader(data));
+            YamlExtractor.ExtractTo(target, new StringReader(data));
         }
 
-        OnLocaleChanged?.Invoke();
+        if (invoke)
+        {
+            OnLocaleChanged?.Invoke();
+        }
     }
 }

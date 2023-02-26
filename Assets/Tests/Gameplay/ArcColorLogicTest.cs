@@ -34,7 +34,7 @@ namespace Tests.Unit
         public void HittingArcFirstTimeAssignsFingerToArcColor()
         {
             ArcColorLogic.NewFrame(0);
-            colorBlue.FingerHit(0, 0);
+            colorBlue.FingerHit(0, 0, ArcJudgeInterval);
 
             Assert.That(colorBlue.AssignedFingerId, Is.Zero);
         }
@@ -44,9 +44,9 @@ namespace Tests.Unit
         {
             ArcColorLogic.NewFrame(0);
 
-            colorBlue.FingerHit(0, 0);
-            colorBlue.FingerMiss(0);
-            colorBlue.FingerMiss(1);
+            colorBlue.FingerHit(0, 0, ArcJudgeInterval);
+            colorBlue.FingerMiss(0, ArcJudgeInterval);
+            colorBlue.FingerMiss(1, ArcJudgeInterval);
 
             Assert.That(colorBlue.AssignedFingerId, Is.Zero);
         }
@@ -56,11 +56,11 @@ namespace Tests.Unit
         {
             ArcColorLogic.NewFrame(0);
 
-            colorBlue.FingerHit(0, 1f);
-            colorBlue.FingerHit(1, 0.5f);
-            colorBlue.FingerHit(2, 2f);
-            colorBlue.FingerHit(3, 0);
-            colorBlue.FingerMiss(4);
+            colorBlue.FingerHit(0, 1f, ArcJudgeInterval);
+            colorBlue.FingerHit(1, 0.5f, ArcJudgeInterval);
+            colorBlue.FingerHit(2, 2f, ArcJudgeInterval);
+            colorBlue.FingerHit(3, 0, ArcJudgeInterval);
+            colorBlue.FingerMiss(4, ArcJudgeInterval);
 
             Assert.That(colorBlue.AssignedFingerId, Is.EqualTo(3));
         }
@@ -76,7 +76,7 @@ namespace Tests.Unit
         {
             ArcColorLogic.NewFrame(0);
 
-            colorBlue.FingerHit(0, 0);
+            colorBlue.FingerHit(0, 0, ArcJudgeInterval);
 
             Assert.That(colorBlue.ShouldAcceptInput(0), Is.True);
             Assert.That(colorBlue.ShouldAcceptInput(1), Is.False);
@@ -86,11 +86,11 @@ namespace Tests.Unit
         public void ArcColorFlashesRedIfOnlyUnassignedFingerCollides()
         {
             ArcColorLogic.NewFrame(0);
-            colorBlue.FingerHit(0, 0);
+            colorBlue.FingerHit(0, 0, ArcJudgeInterval);
 
             ArcColorLogic.NewFrame(1000);
-            colorBlue.FingerHit(1, 0);
-            colorBlue.FingerMiss(0);
+            colorBlue.FingerHit(1, 0, ArcJudgeInterval);
+            colorBlue.FingerMiss(0, ArcJudgeInterval);
 
             Assert.That(colorBlue.RedArcValue, Is.EqualTo(1));
             ArcColorLogic.NewFrame(1000 + (Values.ArcRedFlashCycle / 2));
@@ -103,11 +103,11 @@ namespace Tests.Unit
         public void ArcColorDoesNotFlashRedIfAssignedFingerStillCollides()
         {
             ArcColorLogic.NewFrame(0);
-            colorBlue.FingerHit(0, 0);
+            colorBlue.FingerHit(0, 0, ArcJudgeInterval);
 
             ArcColorLogic.NewFrame(1000);
-            colorBlue.FingerHit(1, 0);
-            colorBlue.FingerHit(0, 0);
+            colorBlue.FingerHit(1, 0, ArcJudgeInterval);
+            colorBlue.FingerHit(0, 0, ArcJudgeInterval);
 
             Assert.That(colorBlue.RedArcValue, Is.Zero);
         }
@@ -116,9 +116,9 @@ namespace Tests.Unit
         public void UnassignedArcColorStaysRedIfFingerAlreadyAssignedToAnotherColorHits()
         {
             ArcColorLogic.NewFrame(0);
-            colorRed.FingerHit(0, 0);
+            colorRed.FingerHit(0, 0, ArcJudgeInterval);
 
-            colorBlue.FingerHit(0, 0);
+            colorBlue.FingerHit(0, 0, ArcJudgeInterval);
 
             Assert.That(colorBlue.RedArcValue, Is.EqualTo(1));
             ArcColorLogic.NewFrame(Values.HoldHighlightPersistDuration / 2);
@@ -131,12 +131,12 @@ namespace Tests.Unit
         public void UnassignedArcColorStopBeingRedAfterdAfterAFreeFingerHits()
         {
             ArcColorLogic.NewFrame(0);
-            colorRed.FingerHit(0, 0);
-            colorBlue.FingerHit(0, 10);
+            colorRed.FingerHit(0, 0, ArcJudgeInterval);
+            colorBlue.FingerHit(0, 10, ArcJudgeInterval);
             Assert.That(colorBlue.RedArcValue, Is.EqualTo(1));
 
             ArcColorLogic.NewFrame(1000);
-            colorBlue.FingerHit(1, 0);
+            colorBlue.FingerHit(1, 0, ArcJudgeInterval);
 
             Assert.That(colorBlue.RedArcValue, Is.EqualTo(0));
             Assert.That(colorBlue.AssignedFingerId, Is.EqualTo(1));
@@ -150,7 +150,7 @@ namespace Tests.Unit
         public void LiftingFingerLocksArcColorForSetDuration()
         {
             ArcColorLogic.NewFrame(0);
-            colorBlue.FingerHit(0, 0);
+            colorBlue.FingerHit(0, 0, ArcJudgeInterval);
 
             ArcColorLogic.NewFrame(1000);
             colorBlue.ExistsArcWithinRange(true);
@@ -168,12 +168,12 @@ namespace Tests.Unit
         public void LockedArcFlashedRedOnAnyFingerHit(int hittingFinger)
         {
             ArcColorLogic.NewFrame(0);
-            colorBlue.FingerHit(0, 0);
+            colorBlue.FingerHit(0, 0, ArcJudgeInterval);
 
             ArcColorLogic.NewFrame(1000);
             colorBlue.ExistsArcWithinRange(true);
             colorBlue.FingerLifted(0, ArcJudgeInterval);
-            colorBlue.FingerHit(hittingFinger, 0);
+            colorBlue.FingerHit(hittingFinger, 0, ArcJudgeInterval);
 
             Assert.That(colorBlue.RedArcValue, Is.EqualTo(1));
             ArcColorLogic.NewFrame(1000 + (arcLockDuration / 2));
@@ -185,16 +185,16 @@ namespace Tests.Unit
         public void LockedArcReassignToClosestHittingFingerAfterLockDurationEnds()
         {
             ArcColorLogic.NewFrame(0);
-            colorBlue.FingerHit(0, 0);
+            colorBlue.FingerHit(0, 0, ArcJudgeInterval);
             ArcColorLogic.NewFrame(1000);
             colorBlue.ExistsArcWithinRange(true);
             colorBlue.FingerLifted(0, ArcJudgeInterval);
 
             ArcColorLogic.NewFrame(1000 + arcLockDuration + 1);
             colorBlue.ExistsArcWithinRange(true);
-            colorBlue.FingerHit(0, 50);
-            colorBlue.FingerHit(1, 0);
-            colorBlue.FingerMiss(2);
+            colorBlue.FingerHit(0, 50, ArcJudgeInterval);
+            colorBlue.FingerHit(1, 0, ArcJudgeInterval);
+            colorBlue.FingerMiss(2, ArcJudgeInterval);
 
             Assert.That(colorBlue.ShouldAcceptInput(0), Is.False);
             Assert.That(colorBlue.ShouldAcceptInput(1), Is.True);
@@ -205,14 +205,14 @@ namespace Tests.Unit
         public void OnNoArcInRangeUnlockArcColor()
         {
             ArcColorLogic.NewFrame(0);
-            colorBlue.FingerHit(0, 0);
+            colorBlue.FingerHit(0, 0, ArcJudgeInterval);
             ArcColorLogic.NewFrame(1000);
             colorBlue.ExistsArcWithinRange(true);
             colorBlue.FingerLifted(0, ArcJudgeInterval);
 
             ArcColorLogic.NewFrame(1000 + (arcLockDuration / 2));
             colorBlue.ExistsArcWithinRange(false);
-            colorBlue.FingerHit(1, 0);
+            colorBlue.FingerHit(1, 0, ArcJudgeInterval);
 
             Assert.That(colorBlue.ShouldAcceptInput(0), Is.False);
             Assert.That(colorBlue.ShouldAcceptInput(1), Is.True);
@@ -223,7 +223,7 @@ namespace Tests.Unit
         {
             ArcColorLogic.NewFrame(0);
             colorBlue.ExistsArcWithinRange(true);
-            colorBlue.FingerHit(0, 0);
+            colorBlue.FingerHit(0, 0, ArcJudgeInterval);
 
             ArcColorLogic.NewFrame(1000);
             colorBlue.ExistsArcWithinRange(false);
@@ -231,7 +231,7 @@ namespace Tests.Unit
 
             ArcColorLogic.NewFrame(1000 + (arcLockDuration / 2));
             colorBlue.ExistsArcWithinRange(true);
-            colorBlue.FingerHit(1, 0);
+            colorBlue.FingerHit(1, 0, ArcJudgeInterval);
 
             Assert.That(colorBlue.ShouldAcceptInput(0), Is.False);
             Assert.That(colorBlue.ShouldAcceptInput(1), Is.True);
@@ -256,7 +256,7 @@ namespace Tests.Unit
         public void LockedArcDoesNotAcceptInputDuringGracePeriod()
         {
             ArcColorLogic.NewFrame(0);
-            colorBlue.FingerHit(0, 0);
+            colorBlue.FingerHit(0, 0, ArcJudgeInterval);
             ArcColorLogic.NewFrame(1000);
             colorBlue.ExistsArcWithinRange(true);
             colorBlue.FingerLifted(0, ArcJudgeInterval);
@@ -273,9 +273,9 @@ namespace Tests.Unit
             colorBlue.StartGracePeriod();
 
             ArcColorLogic.NewFrame(0 + Values.ArcGraceDuration + 1);
-            colorBlue.FingerHit(0, 50);
-            colorBlue.FingerHit(1, 0);
-            colorBlue.FingerMiss(2);
+            colorBlue.FingerHit(0, 50, ArcJudgeInterval);
+            colorBlue.FingerHit(1, 0, ArcJudgeInterval);
+            colorBlue.FingerMiss(2, ArcJudgeInterval);
 
             Assert.That(colorBlue.ShouldAcceptInput(0), Is.False);
             Assert.That(colorBlue.ShouldAcceptInput(1), Is.True);

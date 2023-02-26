@@ -16,6 +16,7 @@ namespace ArcCreate.Compose.Remote
     {
         [SerializeField] private GameplayData gameplayData;
         [SerializeField] private Toggle showLogToggle;
+        [SerializeField] private Toggle showDebugToggle;
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private Marker remoteCurrentTiming;
 
@@ -103,6 +104,7 @@ namespace ArcCreate.Compose.Remote
         {
             remoteCurrentTiming.OnEndEdit += SendTiming;
             showLogToggle.onValueChanged.AddListener(SendShowLog);
+            showDebugToggle.onValueChanged.AddListener(SendShowDebug);
 
             syncAllButton.onClick.AddListener(SendAll);
             syncChartButton.onClick.AddListener(SendChart);
@@ -122,6 +124,7 @@ namespace ArcCreate.Compose.Remote
         {
             remoteCurrentTiming.OnEndEdit -= SendTiming;
             showLogToggle.onValueChanged.RemoveListener(SendShowLog);
+            showDebugToggle.onValueChanged.RemoveListener(SendShowDebug);
 
             syncAllButton.onClick.RemoveListener(SendAll);
             syncChartButton.onClick.RemoveListener(SendChart);
@@ -198,6 +201,11 @@ namespace ArcCreate.Compose.Remote
         private void SendShowLog(bool val)
         {
             channel?.SendMessage(RemoteControl.ShowLog, FromBool(val));
+        }
+
+        private void SendShowDebug(bool val)
+        {
+            channel?.SendMessage(RemoteControl.ShowDebug, FromBool(val));
         }
 
         private void SendAll()

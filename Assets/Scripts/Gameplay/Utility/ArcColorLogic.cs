@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace ArcCreate.Gameplay
 {
@@ -7,7 +8,7 @@ namespace ArcCreate.Gameplay
     /// </summary>
     public class ArcColorLogic
     {
-        private const int UnassignedFingerId = int.MinValue;
+        public const int UnassignedFingerId = int.MinValue;
 
         // In an attempt to contain all the logic into a single class,
         // expect the innerworkings of this to be very messy...
@@ -22,10 +23,8 @@ namespace ArcCreate.Gameplay
         private bool isAssigningThisFrame = false;
         private int lockUntil = int.MinValue;
         private int graceUntil = int.MinValue;
-        private int redValueConstantUntil = int.MinValue;
-
         private float currentRedArcValue = 0;
-        private bool isRedValueFlashing = false;
+        private float redArcDuration = 1;
 
         private ArcColorLogic(int color)
         {
@@ -79,7 +78,7 @@ namespace ArcCreate.Gameplay
 
             while (color >= Instances.Count)
             {
-                Instances.Add(new ArcColorLogic(color));
+                Instances.Add(new ArcColorLogic(Instances.Count));
             }
 
             return Instances[color];
@@ -137,6 +136,8 @@ namespace ArcCreate.Gameplay
         public void StartGracePeriod()
         {
             graceUntil = frameTiming + Values.ArcGraceDuration;
+            UnlockInput();
+            ResetAssignedFinger();
         }
 
         /// <summary>
@@ -162,13 +163,14 @@ namespace ArcCreate.Gameplay
         /// </summary>
         /// <param name="fingerId">The finger id.</param>
         /// <param name="distance">The distance between the finger and an arc of this color.</param>
-        public void FingerHit(int fingerId, float distance)
+        /// <param name="arcJudgeInterval">The judgement interval of an arc of this color.</param>
+        public void FingerHit(int fingerId, float distance, float arcJudgeInterval)
         {
             if (IsFingerAssigned)
             {
                 if (!IsGraceActive && assignedFingerMissedThisFrame)
                 {
-                    FlashRedArc();
+                    FlashRedArc(arcJudgeInterval);
                 }
                 else
                 {
@@ -185,7 +187,7 @@ namespace ArcCreate.Gameplay
 
             if (IsInputLocked)
             {
-                FlashRedArc();
+                FlashRedArc(arcJudgeInterval);
             }
 
             if (!IsFingerAssigned || isAssigningThisFrame)
@@ -194,37 +196,39 @@ namespace ArcCreate.Gameplay
                 {
                     ConstantRedArc();
                 }
-                else
+                else if (!IsInputLocked && !IsGraceActive)
                 {
-                    if (!IsInputLocked)
+                    if (distance < minDistanceThisFrame)
                     {
-                        if (distance < minDistanceThisFrame)
-                        {
-                            minDistanceThisFrame = distance;
-                            AssignedFingerId = fingerId;
-                            ResetRedArcValue();
-                        }
-
-                        isAssigningThisFrame = true;
+                        minDistanceThisFrame = distance;
+                        AssignedFingerId = fingerId;
+                        ResetRedArcValue();
                     }
+
+                    isAssigningThisFrame = true;
                 }
             }
+
+            Services.Judgement.Debug.ShowFingerHit(Color, fingerId);
         }
 
         /// <summary>
         /// Notify that a finger has not hit an arc of this color.
         /// </summary>
         /// <param name="fingerId">The finger id.</param>
-        public void FingerMiss(int fingerId)
+        /// <param name="arcJudgeInterval">The judgement interval of an arc of this color.</param>
+        public void FingerMiss(int fingerId, float arcJudgeInterval)
         {
             if (fingerId == AssignedFingerId)
             {
                 assignedFingerMissedThisFrame = true;
                 if (wrongFingerHitThisFrame)
                 {
-                    FlashRedArc();
+                    FlashRedArc(arcJudgeInterval);
                 }
             }
+
+            Services.Judgement.Debug.ShowFingerMiss(Color, fingerId);
         }
 
         /// <summary>
@@ -240,6 +244,7 @@ namespace ArcCreate.Gameplay
                 ResetRedArcValue();
             }
 
+            Services.Judgement.Debug.ShowExistsArc(Color, exists);
             existsArcWithinRangeThisFrame = exists;
         }
 
@@ -278,10 +283,11 @@ namespace ArcCreate.Gameplay
             existsArcWithinRangeThisFrame = false;
             isAssigningThisFrame = false;
 
-            if (!isRedValueFlashing && frameTiming >= redValueConstantUntil && currentRedArcValue == 1)
-            {
-                ResetRedArcValue();
-            }
+            float lockVal = lockUntil == int.MinValue ? 0 : (float)(lockUntil - frameTiming) / Values.ArcLockDuration;
+            float graceVal = graceUntil == int.MinValue ? 0 : (float)(graceUntil - frameTiming) / Values.ArcGraceDuration;
+            Services.Judgement.Debug.ShowInputLock(Color, Mathf.Clamp(lockVal, 0, 1));
+            Services.Judgement.Debug.ShowGrace(Mathf.Clamp(graceVal, 0, 1));
+            Services.Judgement.Debug.ShowAssignedFinger(Color, AssignedFingerId);
         }
 
         private void ResetAssignedFinger()
@@ -314,7 +320,7 @@ namespace ArcCreate.Gameplay
             return false;
         }
 
-        private void FlashRedArc()
+        private void FlashRedArc(float arcJudgeInterval)
         {
             if (currentRedArcValue > 0)
             {
@@ -322,33 +328,26 @@ namespace ArcCreate.Gameplay
             }
 
             currentRedArcValue = 1;
-            isRedValueFlashing = true;
+            redArcDuration = ArcFormula.CalculateArcLockDuration(arcJudgeInterval);
         }
 
         private void ConstantRedArc()
         {
             currentRedArcValue = 1;
-            redValueConstantUntil = frameTiming + Values.HoldHighlightPersistDuration;
-            isRedValueFlashing = false;
         }
 
         private void ResetRedArcValue()
         {
             currentRedArcValue = 0;
-            isRedValueFlashing = false;
-            redValueConstantUntil = int.MinValue;
         }
 
         private void UpdateRedArcValue(float deltaTime)
         {
-            if (isRedValueFlashing)
+            float deltaValue = deltaTime / redArcDuration;
+            currentRedArcValue -= deltaValue;
+            if (currentRedArcValue < 0)
             {
-                float deltaValue = deltaTime / Values.ArcRedFlashCycle;
-                currentRedArcValue -= deltaValue;
-                if (currentRedArcValue < 0)
-                {
-                    currentRedArcValue = 1;
-                }
+                ResetRedArcValue();
             }
         }
     }

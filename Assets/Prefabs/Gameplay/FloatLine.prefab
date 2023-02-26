@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2347380090884239929}
   - component: {fileID: 1204022851757767813}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: FloatLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -75,13 +75,13 @@ LineRenderer:
   - {x: 10.85, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.15
+    widthMultiplier: 0.1
     widthCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.026882172
-        value: 0.91780853
+        time: 0
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -93,9 +93,9 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 0.08235294}
-      key1: {r: 1, g: 1, b: 1, a: 0.08235294}
-      key2: {r: 0, g: 0, b: 0, a: 0.2901961}
+      key0: {r: 1, g: 1, b: 1, a: 0.39215687}
+      key1: {r: 1, g: 1, b: 1, a: 0.39215687}
+      key2: {r: 0, g: 0, b: 0, a: 0.3137255}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
@@ -111,7 +111,7 @@ LineRenderer:
       ctime7: 0
       atime0: 0
       atime1: 65535
-      atime2: 9638
+      atime2: 65535
       atime3: 0
       atime4: 0
       atime5: 0

@@ -88,7 +88,7 @@ namespace ArcCreate.Gameplay.Data
         {
             int currentTiming = Services.Audio.ChartTiming;
 
-            if (!isJudgement)
+            if (!isJudgement && currentTiming <= EndTiming)
             {
                 RequestHighlight(currentTiming);
             }

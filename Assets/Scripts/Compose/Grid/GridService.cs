@@ -46,7 +46,14 @@ namespace ArcCreate.Compose.Grid
 
         public Vector2 SnapPointToGrid(Vector2 point) => verticalGrid.SnapToVerticalGrid(point);
 
-        [EditorAction("Toggle", false, "g")]
+        [EditorAction("Toggle", true)]
+        [RequireGameplayLoaded]
+        public void SetSlot()
+        {
+            IsGridEnabled = !IsGridEnabled;
+        }
+
+        [EditorAction("ToggleSlot", false, "g")]
         [SubAction("Confirm", false, "<u-g>")]
         [SubAction("Slot1", false, "1")]
         [SubAction("Slot2", false, "2")]

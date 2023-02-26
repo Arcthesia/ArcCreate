@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +12,7 @@ namespace ArcCreate.Utility
         [SerializeField] private TMP_Dropdown dropdown;
         [SerializeField] private Button reloadButton;
         [SerializeField] private Button openFolderButton;
+        [SerializeField] private Button reportMissingButton;
         private string[] options;
 
         private void Awake()
@@ -25,6 +28,11 @@ namespace ArcCreate.Utility
             if (openFolderButton != null)
             {
                 openFolderButton.onClick.AddListener(OpenFolder);
+            }
+
+            if (reportMissingButton != null)
+            {
+                reportMissingButton.onClick.AddListener(ReportMissing);
             }
 
             Reload();
@@ -44,6 +52,16 @@ namespace ArcCreate.Utility
             {
                 openFolderButton.onClick.RemoveListener(OpenFolder);
             }
+
+            if (reportMissingButton != null)
+            {
+                reportMissingButton.onClick.RemoveListener(ReportMissing);
+            }
+        }
+
+        private void ReportMissing()
+        {
+            I18n.ReportMissingEntries().Forget();
         }
 
         private void OnDropdown(int opt)
@@ -54,6 +72,10 @@ namespace ArcCreate.Utility
         private void OnSettings(string locale)
         {
             I18n.SetLocale(locale);
+            if (reportMissingButton != null)
+            {
+                reportMissingButton.interactable = I18n.CurrentLocale != I18n.DefaultLocale;
+            }
         }
 
         private void Reload()

@@ -49,5 +49,11 @@ namespace ArcCreate.Gameplay
         /// </summary>
         /// <param name="enable">Whether or not to enable the cameras.</param>
         void SetCameraEnabled(bool enable);
+
+        /// <summary>
+        /// Sets whether or not to display arc debug information.
+        /// </summary>
+        /// <param name="enable">Whether or not to display arc debug.</param>
+        void SetEnableArcDebug(bool enable);
     }
 }

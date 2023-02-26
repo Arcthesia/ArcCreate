@@ -251,7 +251,8 @@ namespace ArcCreate.Compose.Selection
 
         private bool TryGetNoteUnderCursor(out Note note, SelectionMode selectionMode)
         {
-            if (EventSystem.current.currentSelectedGameObject != null)
+            if (EventSystem.current.currentSelectedGameObject != null
+             || (Settings.InputMode.Value != (int)InputMode.Auto && Settings.InputMode.Value != (int)InputMode.AutoController))
             {
                 note = null;
                 return false;

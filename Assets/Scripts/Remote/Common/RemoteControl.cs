@@ -4,6 +4,7 @@ namespace ArcCreate.Remote.Common
     {
         // Control bytes
         Invalid = short.MinValue,
+        ShowDebug = -3,
         ShowLog = -2,
         Abort = -1,
         StartConnection = 0,

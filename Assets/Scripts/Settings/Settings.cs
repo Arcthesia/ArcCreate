@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Globalization;
+using UnityEditor;
 using UnityEngine;
 
 namespace ArcCreate
@@ -64,6 +65,8 @@ namespace ArcCreate
             VSync.OnValueChanged.AddListener((value) => QualitySettings.vSyncCount = value);
             QualitySettings.vSyncCount = VSync.Value;
             Application.quitting += OnApplicationQuit;
+
+            CultureInfo.CurrentCulture = new CultureInfo("en");
         }
 
         private static void OnApplicationQuit()

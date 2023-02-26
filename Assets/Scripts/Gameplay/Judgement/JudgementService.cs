@@ -10,6 +10,8 @@ namespace ArcCreate.Gameplay.Judgement
     {
         [SerializeField] private Camera gameplayCamera;
         [SerializeField] private Transform skyInput;
+        [SerializeField] private JudgementDebug debug;
+        [SerializeField] private GameObject hud;
         private readonly UnorderedList<LaneTapJudgementRequest> laneTapRequests = new UnorderedList<LaneTapJudgementRequest>(32);
         private readonly UnorderedList<LaneHoldJudgementRequest> laneHoldRequests = new UnorderedList<LaneHoldJudgementRequest>(32);
         private readonly UnorderedList<ArcJudgementRequest> arcRequests = new UnorderedList<ArcJudgementRequest>(32);
@@ -18,6 +20,23 @@ namespace ArcCreate.Gameplay.Judgement
         private bool isAuto;
 
         public float SkyInputY => skyInput.position.y;
+
+        public IJudgementDebug Debug { get; private set; } = new NoOpJudgementDebug();
+
+        public void SetDebugDisplayMode(bool display)
+        {
+            if (display)
+            {
+                Debug = debug;
+            }
+            else
+            {
+                Debug = new NoOpJudgementDebug();
+            }
+
+            debug.gameObject.SetActive(display);
+            hud.SetActive(!display);
+        }
 
         public void Request(LaneTapJudgementRequest request)
         {
@@ -117,10 +136,13 @@ namespace ArcCreate.Gameplay.Judgement
             InputSystem.pollingFrequency = 240;
             EnhancedTouchSupport.Enable();
 
-            Values.LaneScreenHitbox =
+            Values.LaneScreenHitboxBase =
                 (gameplayCamera.WorldToScreenPoint(Vector3.zero).x
                - gameplayCamera.WorldToScreenPoint(new Vector3(Values.LaneWidth, 0, 0)).x)
                / 2;
+
+            Values.ScreenSizeBase = gameplayCamera.pixelWidth;
+            Values.ScreenSize = gameplayCamera.pixelWidth;
         }
 
         private void OnDestroy()
@@ -145,15 +167,19 @@ namespace ArcCreate.Gameplay.Judgement
                     break;
                 case InputMode.Controller:
                     inputHandler = new ControllerInputHandler();
+                    isAuto = false;
                     break;
                 case InputMode.Mouse:
                     inputHandler = new MouseInputHandler();
+                    isAuto = false;
                     break;
                 case InputMode.Touch:
                     inputHandler = new TouchInputHandler();
+                    isAuto = false;
                     break;
                 default:
                     inputHandler = new IdleInputHandler();
+                    isAuto = false;
                     break;
             }
         }

@@ -385,6 +385,7 @@ Compose:
           Name: Localization
           Language: Language
           Reload: Reload locales
+          CheckMissing: Check missing entries
         Gameplay:
           Name: Gameplay
           Speed: Speed
@@ -496,6 +497,7 @@ Remote:
     EndTiming: Play to timing      
     Loop: Loop playback
     ShowLog: Show log
+    ShowDebug: Show debug information
   Window:
     Name: Remote
     SyncChart: Sync chart

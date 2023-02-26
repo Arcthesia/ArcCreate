@@ -49,6 +49,24 @@ The locale file uses the `.yml` file format, which is a configuration file forma
 
 You'll want to make sure your locale file follow the specification of `.yml`. If you just mimic the default locale file things should be fine, but you can paste the file content into [an online YAML editor like this one](https://codebeautify.org/yaml-editor-online) to make sure there's no syntax error.
 
+###### Common YAML syntax error
+
+Using VSCode, or the YAML editor mentioned above, or any other text editor that can syntax highlight YAML format will make it harder to encounter issues with editing YAML file.
+
+The following is a few common syntax error that you might encounter, and how to fix it.
+
+1. Beginning a string with `{`, or `}` is not allowed (placing thema anywhere else is okay). Enclose the sentence with a double quote `"`, or a single quote `'` if your sentence already include a double quote.
+
+   *Example:*
+   - Bad: `Key: {0} this is a sentence` (begins with `{`)
+   - Good: `Key: "{0} this is a sentence"` (enclosed properly with `"`)
+   - Best: `Key: '{0} this is a sentence'` (`'` always work, use it so you don't confuse yourself)
+
+   *Example:*
+   - Bad: `Key: {0} this sentence uses "quote"` (begins with `{`)
+   - Bad: `Key: "{0} this sentence uses "quote""` (YAML doesn't understand nested `""`)
+   - Good: `Key: '{0} this sentence uses "quote"'`
+
 ###### Text content
 
 1. Sometime you'll see text content in the form of `{argument}`. These will be replaced when displayed within the application.
@@ -57,8 +75,13 @@ You'll want to make sure your locale file follow the specification of `.yml`. If
 
    You can reorder these brackets around, but do not modify its content. An unrecognized argument will be replaced with `"???"` when displayed.
 
+
 2. You can use Unity Rich Text syntax within your text content. Refer to [Unity's documentation here](https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/manual/RichText.html).
+
    An example of a good way to use this would be using the `<size>` tag to scale down texts that would otherwise be too long.
+
+   *Example:*
+   - `This text is very long` -> `<size=10>This text is very long</size>`
 
 #### Translation credits
 

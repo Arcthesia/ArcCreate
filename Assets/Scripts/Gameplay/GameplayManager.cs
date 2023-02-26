@@ -48,6 +48,7 @@ namespace ArcCreate.Gameplay
             gameplayCamera.rect = rect;
             arcCamera.rect = rect;
             uiCamera.rect = rect;
+            Values.ScreenSize = gameplayCamera.pixelWidth;
         }
 
         public void SetCameraEnabled(bool enable)
@@ -55,6 +56,11 @@ namespace ArcCreate.Gameplay
             gameplayCamera.enabled = enable;
             arcCamera.enabled = enable;
             uiCamera.enabled = enable;
+        }
+
+        public void SetEnableArcDebug(bool enable)
+        {
+            Services.Judgement.SetDebugDisplayMode(enable);
         }
 
         public override void OnUnloadScene()
@@ -75,7 +81,8 @@ namespace ArcCreate.Gameplay
                 ImportTestChart(path);
             }
 
-            Settings.InputMode.Value = (int)InputMode.Auto;
+            Settings.InputMode.Value = (int)InputMode.Mouse;
+            Services.Judgement.SetDebugDisplayMode(true);
         }
 
         protected override void OnSceneLoad()

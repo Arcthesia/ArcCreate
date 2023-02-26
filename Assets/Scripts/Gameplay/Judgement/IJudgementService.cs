@@ -11,6 +11,17 @@ namespace ArcCreate.Gameplay.Judgement
         float SkyInputY { get; }
 
         /// <summary>
+        /// Gets the judgement debug display.
+        /// </summary>
+        IJudgementDebug Debug { get; }
+
+        /// <summary>
+        /// Sets whether or not to enable debug display (and disable hud).
+        /// </summary>
+        /// <param name="display">Whether or not to enable debug display.</param>
+        void SetDebugDisplayMode(bool display);
+
+        /// <summary>
         /// Add a judgement request to be processed later.
         /// </summary>
         /// <param name="request">The request details.</param>

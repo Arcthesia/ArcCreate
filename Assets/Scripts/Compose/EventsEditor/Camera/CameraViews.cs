@@ -29,13 +29,13 @@ namespace ArcCreate.Compose.EventsEditor
                 Services.Gameplay.Camera.IsEditorCamera = true;
                 Services.Gameplay.Camera.EditorCameraPosition = views[index].Position;
                 Services.Gameplay.Camera.EditorCameraRotation = views[index].Rotation;
-                Services.Gameplay.Camera.GameplayCamera.orthographic = views[index].Orthographic;
-                Services.Gameplay.Camera.GameplayCamera.orthographicSize = views[index].OrthographicSize;
+                Services.Gameplay.Camera.IsOrthographic = views[index].Orthographic;
+                Services.Gameplay.Camera.OrthographicSize = views[index].OrthographicSize;
             }
             else
             {
                 Services.Gameplay.Camera.IsEditorCamera = false;
-                Services.Gameplay.Camera.GameplayCamera.orthographic = false;
+                Services.Gameplay.Camera.IsOrthographic = false;
             }
 
             currentViewText.Text.text = I18n.S(views[index].Name);

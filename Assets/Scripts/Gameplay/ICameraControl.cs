@@ -10,6 +10,16 @@ namespace ArcCreate.Gameplay
         bool IsEditorCamera { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether or not to display in orthographic view.
+        /// </summary>
+        bool IsOrthographic { get; set; }
+
+        /// <summary>
+        /// Gets or sets the camera's orthographic view size.
+        /// </summary>
+        float OrthographicSize { get; set; }
+
+        /// <summary>
         /// Gets or sets the custom camera position.
         /// </summary>
         Vector3 EditorCameraPosition { get; set; }
