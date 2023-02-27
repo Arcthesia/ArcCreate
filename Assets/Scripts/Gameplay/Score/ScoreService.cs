@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
 using ArcCreate.Utility;
 using ArcCreate.Utility.Extension;
@@ -20,11 +21,14 @@ namespace ArcCreate.Gameplay.Score
         private double currentScorePartial = 0;
         private float comboRedmix = 0;
         private readonly UnorderedList<ScoreEvent> pendingScoreEvents = new UnorderedList<ScoreEvent>(20);
+        private readonly List<JudgementResult> resultReceivedThisFrame = new List<JudgementResult>(20);
 
         private int CurrentScoreTotal => (int)System.Math.Round(currentScoreFull + currentScorePartial);
 
-        public void ProcessJudgement(JudgementResult result, int count = 1)
+        public void ProcessJudgement(JudgementResult result)
         {
+            resultReceivedThisFrame.Add(result);
+
             if (result.IsLost())
             {
                 currentCombo = 0;
@@ -45,15 +49,15 @@ namespace ArcCreate.Gameplay.Score
             double scoreToAdd = 0;
             if (result.IsFar())
             {
-                scoreToAdd = scorePerNote * Values.FarPenaltyMultipler * count;
+                scoreToAdd = scorePerNote * Values.FarPenaltyMultipler;
             }
             else if (result.IsMax())
             {
-                scoreToAdd = (scorePerNote + 1) * count;
+                scoreToAdd = scorePerNote + 1;
             }
             else
             {
-                scoreToAdd = scorePerNote * count;
+                scoreToAdd = scorePerNote;
             }
 
             pendingScoreEvents.Add(new ScoreEvent()
@@ -92,6 +96,8 @@ namespace ArcCreate.Gameplay.Score
             }
 
             SetScore(CurrentScoreTotal);
+
+            resultReceivedThisFrame.Clear();
         }
 
         public void ResetScoreTo(int currentCombo, int totalCombo)
@@ -116,6 +122,8 @@ namespace ArcCreate.Gameplay.Score
 
             SetScore(CurrentScoreTotal);
         }
+
+        public List<JudgementResult> GetJudgementsThisFrame() => resultReceivedThisFrame;
 
         private void SetScore(int score)
         {

@@ -17,7 +17,7 @@ public static class I18n
     public const string DefaultLocale = "en_us";
     private const string MissingLocale = "Missing locale: ({0}){1}";
 
-    private static Dictionary<string, string> defaultStrings = new Dictionary<string, string>();
+    private static readonly Dictionary<string, string> DefaultStrings = new Dictionary<string, string>();
 
     private static Dictionary<string, string> strings = new Dictionary<string, string>();
 
@@ -42,7 +42,7 @@ public static class I18n
             if (CurrentLocale != DefaultLocale)
             {
                 string defaultPath = Path.Combine(LocaleDirectory, DefaultLocale) + ".yml";
-                LoadLocale(defaultPath, defaultStrings, false);
+                LoadLocale(defaultPath, DefaultStrings, false);
             }
 
             string path = Path.Combine(LocaleDirectory, CurrentLocale) + ".yml";
@@ -53,9 +53,9 @@ public static class I18n
         {
             return strings[key];
         }
-        else if (defaultStrings.ContainsKey(key))
+        else if (DefaultStrings.ContainsKey(key))
         {
-            return defaultStrings[key];
+            return DefaultStrings[key];
         }
         else
         {
@@ -106,7 +106,7 @@ public static class I18n
             if (CurrentLocale != DefaultLocale)
             {
                 string defaultPath = Path.Combine(LocaleDirectory, DefaultLocale) + ".yml";
-                LoadLocale(defaultPath, defaultStrings, false);
+                LoadLocale(defaultPath, DefaultStrings, false);
             }
 
             string path = Path.Combine(LocaleDirectory, CurrentLocale) + ".yml";
@@ -130,7 +130,7 @@ public static class I18n
         if (CurrentLocale != DefaultLocale)
         {
             string defaultPath = Path.Combine(LocaleDirectory, DefaultLocale) + ".yml";
-            await StartLoadingLocaleWithUnityWeb(defaultPath, defaultStrings, false);
+            await StartLoadingLocaleWithUnityWeb(defaultPath, DefaultStrings, false);
         }
 
         await StartLoadingLocaleWithUnityWeb(path, strings);
@@ -163,7 +163,7 @@ public static class I18n
             await writer.WriteLineAsync("-----");
 
             int count = 0;
-            foreach (var pair in defaultStrings)
+            foreach (var pair in DefaultStrings)
             {
                 if (!strings.ContainsKey(pair.Key))
                 {

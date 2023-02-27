@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
 
 namespace ArcCreate.Gameplay.Score
@@ -8,11 +9,16 @@ namespace ArcCreate.Gameplay.Score
     public interface IScoreService
     {
         /// <summary>
+        /// Gets a list of judgement results that was sent to this service in a frame.
+        /// </summary>
+        /// <returns>List of judgement results.</returns>
+        List<JudgementResult> GetJudgementsThisFrame();
+
+        /// <summary>
         /// Process one or multiple judgement events.
         /// </summary>
         /// <param name="result">The result of the judgement.</param>
-        /// <param name="count">The number of events.</param>
-        void ProcessJudgement(JudgementResult result, int count = 1);
+        void ProcessJudgement(JudgementResult result);
 
         /// <summary>
         /// Set the score and combo counter to the state with the specified combo counts. Used for auto mode.

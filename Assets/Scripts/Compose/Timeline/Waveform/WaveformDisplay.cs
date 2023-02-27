@@ -108,8 +108,6 @@ namespace ArcCreate.Compose.Timeline
                 }
             }
 
-            ticksDisplay.UpdateTicks();
-
             ApplyViewRangeToWaveform();
         }
 
@@ -153,6 +151,8 @@ namespace ArcCreate.Compose.Timeline
             {
                 slider.SetValueWithoutNotify(viewFromSecond / clip.length, viewToSecond / clip.length);
             }
+
+            ticksDisplay.UpdateTicks();
         }
 
         private void OnSlider(float from, float to)

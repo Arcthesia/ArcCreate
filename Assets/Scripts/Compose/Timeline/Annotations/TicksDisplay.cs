@@ -20,13 +20,13 @@ namespace ArcCreate.Compose.Timeline
         private readonly List<int> barsTiming = new List<int>();
 
         private Pool<Tick> tickPool;
+        private readonly List<Tick> activeTicks = new List<Tick>();
 
         /// <summary>
         /// Update the ticks display. This operation is relatively expensive.
         /// </summary>
         public void UpdateTicks()
         {
-            tickPool.ReturnAll();
             if (TryDisplay(beatsTiming))
             {
                 return;
@@ -78,12 +78,31 @@ namespace ArcCreate.Compose.Timeline
             }
 
             i = indexFrom;
+            int tickIndex = 0;
             while (i < timings.Count && timings[i] + offset <= viewToTiming)
             {
                 float pos = (float)(timings[i] + offset - viewFromTiming) / (viewToTiming - viewFromTiming) * width;
-                Tick tick = tickPool.Get();
+
+                Tick tick;
+                if (tickIndex >= activeTicks.Count)
+                {
+                    tick = tickPool.Get();
+                    activeTicks.Add(tick);
+                }
+                else
+                {
+                    tick = activeTicks[tickIndex];
+                }
+
                 tick.SetTick(pos, timings[i]);
                 i += skip;
+                tickIndex += 1;
+            }
+
+            for (int j = activeTicks.Count - 1; j >= tickIndex; j--)
+            {
+                tickPool.Return(activeTicks[j]);
+                activeTicks.RemoveAt(j);
             }
 
             return true;

@@ -6,7 +6,7 @@ namespace ArcCreate.Gameplay.Render
     public class InstancedRendererPool<T>
         where T : struct
     {
-        private Material material;
+        private readonly Material material;
         private readonly Mesh mesh;
         private readonly int propertyShaderId;
         private readonly int propertySize;

@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using TMPro;
@@ -103,6 +102,10 @@ namespace ArcCreate.Utility
             else
             {
                 I18n.SetLocale(Settings.Locale.Value);
+                if (reportMissingButton != null)
+                {
+                    reportMissingButton.interactable = I18n.CurrentLocale != I18n.DefaultLocale;
+                }
             }
         }
 
