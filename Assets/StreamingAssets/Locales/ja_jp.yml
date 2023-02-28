@@ -208,26 +208,26 @@ Compose:
   # Dialog boxes
   Dialog:
     RemoveGroup:
-      Title: Remove timing group
+      Title: タイミンググループを削除
       Content: |-
-        Are you sure you want to remove this timing group and all of its content? (no undo)
-      Yes: Remove
-      No: Cancel
+        このタイミンググループを削除してもよろしいですか？
+        タイミンググループとその内容は削除され、*元に戻せません*。
+      Yes: 削除
+      No: キャンセル
     RemoveChart:
-      Title: Remove chart file
+      Title: 譜面を削除
       Content: |-
-        Are you sure you want to remove this chart file from the project?
-
-        The file itself will NOT be deleted and can be added back to the project later, but any metadata associated with it will be lost.
-      Yes: Remove
-      No: Cancel
+        この譜面をプロジェクトから取り除いてもよろしいですか？
+        譜面ファイル自体は削除*されず*、後でプロジェクトに追加し直すことができますが、譜面に関連付けられたメタデータは失われます。
+      Yes: 削除
+      No: キャンセル
     UnsavedChanges:
-      Title: Unsaved changes
+      Title: 保存されていないプロジェクト
       Content: |-
-        Your project has unsaved changes. Do you want to save?
-      Yes: Save changes
-      No: Discard changes
-      Cancel: Cancel
+        プロジェクトにまだ保存されていない変更があります。プロジェクトを保存しますか？
+      Yes: 保存
+      No: 変更を破棄
+      Cancel: キャンセル
   Navigation:
     KeybindOverride: アクション"{0}"のキーバインドがオーバーライドされました。
     # Texts that appear on the context menu (right-click menu)
@@ -273,24 +273,27 @@ Compose:
   Grid:
     # Please modify the comment lines only (lines beginning with '--')
     DefaultScript: |-
-      -- This is a lua script
+      -- グリッドはLuaで定義できます
+      -- 座標はアーク座標です
 
-      -- Set the collider area with four values
-      -- (corner1.x, corner2.x, corner1.y, corner2.y)
+      -- グリッドの当たり判定の範囲
+      -- (左, 右, 下, 上)
       grid.setCollider(-0.5, 1.5, -0.2, 1)
 
-      -- Set the grid's background color
+      -- 背景色を設定
       grid.setPanelColor(rgba(255, 255, 255, 16))
-      
-      -- Draw lines with four values
+
+      -- y=-0.2にガイドラインを描画
       -- (point1.x, point2.x, point1.y, point2.y)
       grid.drawLine(-0.5, 1.5, -0.2, -0.2, defaultColor)
 
-      -- You can also use for loops
+      -- forループも使えます
+      -- x=-0.5から1.5まで、0.125刻みで縦線を描画
       for x = -0.5, 1.5, 0.125 do
         grid.drawLine(x, x, -0.2, 1, defaultColor)
       end
 
+      -- x=0から1まで、0.25刻みで横線を描画
       for y = 0, 1, 0.25 do
         grid.drawLine(-0.5, 1.5, y, y, defaultColor)
       end
@@ -547,13 +550,16 @@ Remote:
 Gameplay:
   Exception:
     LoadAudio: |-
-      An error occured while trying to load the audio file located at {Path}.
+      音声ファイルの読み込み中にエラーが発生しました。
+      ファイル: "{Path}"
       {Error}
     Chart: |-
-      An error occured while trying to load the chart located at {Path}.
+      譜面ファイルの読み込み中にエラーが発生しました。
+      ファイル: "{Path}"
       {Error}
     Skin: |-
-      An error occured while trying to load the image located at {Path}.
+      画像ファイルの読み込み中にエラーが発生しました。
+      ファイル: "{Path}"
       {Error}
   HUD:
     Play: Play
