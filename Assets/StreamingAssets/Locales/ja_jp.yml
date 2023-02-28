@@ -130,81 +130,81 @@ Compose:
           
   # Notification messages
   Notify:
-    GameplayLoaded: Gameplay scene loaded successfully
+    GameplayLoaded: ゲーム画面を読み込みました
     FreeCameraEditHelp: |-
-      Starting free camera (hover for more info)
+      フリーカメラモード (マウスオーバーで詳細)
       
-      WASD: Move forward/left/backward/right
-      Space: Move upward
-      Shift: Move downward
-      IJKL: Rotate up/left/down/right
-      U: Roll left
-      O: Roll right
-      Esc: Cancel
-      Enter: Confirm
+      WASD: 移動 前/左/後/右
+      Space: 上昇
+      Shift: 下降
+      IJKL: 回転 上/左/下/右
+      U: 左回転
+      O: 右回転
+      Esc: キャンセル
+      Enter: 確定
     Actions:
-      CannotMirror: Can not mirror any of the selected notes.
-      NoDragRange: Can not drag selected notes timing. Try dragging the notes separately.
+      CannotMirror: 選択中のノーツをミラーできませんでした。
+      NoDragRange: 選択中のノーツのタイミングをドラッグできませんでした。個別にドラッグしてみてください。
     History:
       Execute: |-
-        Executed command: {Name}
+        アクションを実行: {Name}
       Undo: |-
-        Undo command: {Name}
+        元に戻す: {Name}
       Redo: |-
-        Redo command: {Name}
+        やり直す: {Name}
       # {Name} above will be replaced with these entries
-      AddTiming: Add timing event
-      EditTiming: Edit timing event
-      RemoveTiming: Remove timing event
-      AddCamera: Add camera event
-      EditCamera: Edit camera event
-      RemoveCamera: Remove camera event
-      EditValue: Edit selected note's value
-      EditArc: Edit arc's values
+      AddTiming: Timingイベントを追加
+      EditTiming: Timingイベントを編集
+      RemoveTiming: Timingイベントを削除
+      AddCamera: Cameraイベントを追加
+      EditCamera: Cameraイベントを編集
+      RemoveCamera: Cameraイベントを削除
+      EditValue: ノーツのプロパティを編集
+      EditArc: アークのプロパティを編集
       CreateNote:
-        Tap: Create tap note
-        Hold: Create hold note
-        Arc: Create arc note
-        ArcTap: Create sky note
-        Trace: Create trace note
-      DeleteNotes: Delete notes
-      Cut: Cut notes
-      Paste: Paste notes
+        Tap: タップノーツを作成
+        Hold: ホールドノーツを作成
+        Arc: アークノーツを作成
+        ArcTap: スカイノーツを作成
+        Trace: トレースノーツを作成
+      DeleteNotes: ノーツを削除
+      Cut: ノーツを切り取り
+      Paste: ノーツを貼り付け
       Mirror:
-        Vertical: Mirror notes vertically
-        Horizontal: Mirror notes horizontally
+        Vertical: ノーツを上下に反転
+        Horizontal: ノーツを左右に反転
       Drag:
-        Timing: Drag notes timing
-        Position: Drag notes position
+        Timing: ノーツのタイミングをドラッグ
+        Position: ノーツの座標をドラッグ
     Clipboard:
-      Copy: Copied {0} notes
-      Cut: Cut {0} notes
-      NamedCopy: Copied {0} notes to named clipboard "{1}"
-      NamedCut: Cut {0} notes to named clipboard "{1}"
+      Copy: {0}ノーツをコピー
+      Cut: {0}ノーツを切り取り
+      NamedCopy: {0}ノーツをコピーしてクリップボード"{1}"にホールド
+      NamedCut: {0}ノーツを切り取ってクリップボード"{1}"にホールド
     GroupTable:
-      AddGroup: Added timing group {Number}
-      EditGroup: Edited timing group {Number}
-      RemoveGroup: Removed timing group {Number}
+      AddGroup: Timing Group#{Number}を追加 
+      EditGroup: Timing Group#{Number}を編集
+      RemoveGroup: Timing Group#{Number}を削除
     Project:
       NewProject: |-
-        Created new project
-        at: {Path}
+        新しいプロジェクトを作成しました: "{Path}"
       OpenProject: |-
-        Opened project
-        at: {Path}
+        プロジェクトを開きました: "{Path}"
       SaveProject: |-
-        Saved project
-        at: {Path}
-      OpenChart: Opened chart file {Path}
-      CreateChart: Created chart file {Path}
-      RemoveChart: Removed chart file {Path} from project
+        プロジェクトを保存しました: "{Path}"
+      OpenChart: |-
+        譜面ファイルを開きました: "{Path}"
+      CreateChart: |-
+        譜面ファイルを作成しました: "{Path}"
+      RemoveChart: |-
+        譜面ファイルをプロジェクトから削除しました: "{Path}"
     Inspector:
-      InvalidParamameter: Invalid parameter
+      InvalidParamameter: 無効なパラメーター
     Measurer:
-      CopyTiming: Copied cursor timing
-      CopyPosition: Copied arc's position
-      CopyX: Copied arc's x coordinate
-      CopyY: Copied arc's y coordinate
+      CopyTiming: タイミングをコピーしました
+      CopyPosition: アークの座標をコピーしました
+      CopyX: アークのX座標をコピーしました
+      CopyY: アークのY座標をコピーしました
   # Dialog boxes
   Dialog:
     RemoveGroup:
