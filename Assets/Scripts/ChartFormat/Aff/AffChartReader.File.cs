@@ -190,11 +190,11 @@ namespace ArcCreate.ChartFormat
                 }
                 catch (ChartFormatException ex)
                 {
-                    throw new ChartFormatException(type, path, line, i + 1, ex.Message);
+                    throw new ChartFormatException(type, line, path, i + 1, ex.Message);
                 }
                 catch (Exception)
                 {
-                    throw new ChartFormatException(type, path, line, i + 1);
+                    throw new ChartFormatException(type, line, path, i + 1);
                 }
             }
 
