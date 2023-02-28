@@ -1,0 +1,554 @@
+# この言語ファイルは、以下のバージョンの`en_us.yml`をもとに翻訳しました。
+# [f0ff48d] Gameplay: Improve judgement
+# https://github.com/0thElement/ArcCreate/commit/f0ff48d190644f720cabd16de81a0d3eecdcbc77
+
+# ほんやくノート
+# - カッコは「()」(半角)
+# - コロンは「: 」(半角に半角スペース)
+# - 引用は「"~"」(半角)か「「~」」などで
+# - もし英単語を入れるならキャメルケースで
+# - 作業を後回しにしたメッセージは先頭に"(?)"をつけておきます。
+#
+# - Tap/Hold/Arc/Sky/Traceはそのままでノートは付けない
+# - Note(s)はノーツ
+# - イベントでない方のTimingはタイミングと訳す
+# - Timingイベント/Cameraイベント/SceneControlイベント
+# - TimingGroupはそのままで
+#
+# - exception: エラー
+# - chart: 譜面
+# - audio offset: 音源オフセット
+# - timing point density factor: 判定密度係数
+# - base bpm: 基準BPM
+# - duration: 長さ
+# - arc color: ArcのColorID
+# - invalid ~: 〜が正しくありません あるいは 無効な〜です
+# - gameplay; ゲーム あるいは ゲーム画面
+
+Format:
+  # Exception messages while parsing chart files
+  Exception:
+    Message: |-
+      譜面ファイルを読み込み中にエラーが発生しました。
+      ファイル: "{File}" {LineNumber}行目
+      イベントタイプ: {EventType}
+      処理中の行: "{Content}"
+      {Reason}
+    MessageUnknownReason: |-
+      譜面ファイルを読み込み中に不明なエラーが発生しました。
+      ファイル: "{File}" {LineNumber}行目
+      イベントタイプ: {EventType}
+      処理中の行: "{Content}"
+    ArcColorNegative: |-
+      ArcのColorIDは負の値にできません。
+    AudioOffsetInvalid: |-
+      音源オフセットの定義が正しくありません。
+    TimingPointDensityFactorInvalid: |-
+      判定密度係数の定義が正しくありません。
+    BaseTimingInvalid: |-
+      無効な基準Timingイベント。譜面ファイルは0msのTimingイベントで始めてください。
+    IncludeReferencedMultipleTimes: |-
+      すでにインクルードされている譜面ファイルをもう一度インクルードしたりフラグメントとして参照したりすることはできません。
+    IncludeAReferencedFragment: |-
+      すでにフラグメントとして参照されている譜面ファイルをインクルードすることはできません。
+    TimingGroupPairInvalid: |-
+      TimingGroupの対応する閉じカッコが見つかりません。TimingGroupの定義は"};"で適切に囲んでください。
+    DivisorNegative: |-
+      Timingイベントの小節線プロパティは負の値にできません。
+    BaseBPMZero: |-
+      基準BPMは0にできません。
+    DurationNegative: |-
+      このイベントの長さは負の値にできません。
+    DurationZero: |-
+      このイベントの長さは0にできません。
+    ArcTapOutOfRange: |-
+      Skyが属しているArcの継続時間外にあります。
+    TimingGroupPropertiesInvalid: |-
+      TimingGroupのプロパティが正しくありません。
+    SymbolError: |-
+      構文エラー: {Exception}
+      スタックトレース:
+      {StackTrace}
+
+Compose:
+  # Exception messages within the editor
+  Exception:
+    FileDoesNotExist: |-
+      ファイルの読み込みに失敗しました。削除や移動によって存在しないファイルです。
+      ファイル: "{Path}"
+    LoadImage: |-
+      画像ファイルの読み込みに失敗しました。
+      ファイル: "{Path}"
+      {Error}
+    LoadProject: |-
+      プロジェクトファイルの読み込み中にエラーが発生しました。
+      ファイル: "{Path}"
+      データが正しく保存されなかった可能性があります。
+      手動で修正してみるか、ファイルを削除して新しいプロジェクトを作成できます。
+      {Error}
+    ChartFileAlreadyExists: |-
+      譜面はすでにプロジェクトに含まれています。
+    InvalidChartFile: |-
+      無効な譜面ファイルの名前です。
+    NoChartIncluded: |-
+      無効なプロジェクトファイル: プロジェクトには譜面が含まれていません。
+    InvalidGroupProperties: |-
+      無効なTimingGroupのプロパティ: {Message}
+    InstructionLimit: |-
+      Luaスクリプト強制終了: 命令数が設定されている上限{0}に達しました。
+    InvalidBaseBPM: |-
+      無効な基準BPM: {0}
+    CreateSkyNoteNoValidArc: |-
+      ここにSkyを作ることはできません。SkyはArcやTraceの上に配置する必要があります。
+    Navigation:
+      ParseKeybind: |-
+        キーバインドを読み込み中にエラーが発生しました。キーストロークを解析できません: "{0}"
+      ParseWhitespace: |-
+        無効なキーストローク: キーストロークは空白にできません。
+      InvalidKeystroke: |-
+        無効なキーストローク: 文字列"{0}"は有効なキーストローク形式ではありません。
+      InvalidKey: |-
+        無効なキー: 文字列"{0}"をキーに変換できません。不明なキー名です。
+      InvalidModifier: |-
+        無効な修飾キー: 文字列"{0}"を修飾キーに変換できません。不明な修飾キー名です。
+      TooManyModifiers: |-
+        無効なキーストローク: キーストロークに使える修飾キーは2つまでに制限されています: "{0}"
+      InvalidActionPath: |-
+        無効なアクションパス: 文字列"{0}"をアクションに変換できません。不明なアクションパスです。
+          
+  # Notification messages
+  Notify:
+    GameplayLoaded: ゲーム画面を読み込みました
+    FreeCameraEditHelp: |-
+      フリーカメラモード (マウスオーバーで詳細)
+      
+      WASD: 移動 前/左/後/右
+      Space: 上昇
+      Shift: 下降
+      IJKL: 回転 上/左/下/右
+      U: 左回転
+      O: 右回転
+      Esc: キャンセル
+      Enter: 確定
+    Actions:
+      CannotMirror: 選択中のノーツをミラーできませんでした。
+      NoDragRange: 選択中のノーツのタイミングをドラッグできませんでした。個別にドラッグしてみてください。
+    History:
+      Execute: |-
+        アクションを実行: {Name}
+      Undo: |-
+        元に戻す: {Name}
+      Redo: |-
+        やり直す: {Name}
+      # {Name} above will be replaced with these entries
+      AddTiming: Timingイベントを追加
+      EditTiming: Timingイベントを編集
+      RemoveTiming: Timingイベントを削除
+      AddCamera: Cameraイベントを追加
+      EditCamera: Cameraイベントを編集
+      RemoveCamera: Cameraイベントを削除
+      EditValue: ノーツのプロパティを編集
+      EditArc: Arcのプロパティを編集
+      CreateNote:
+        Tap: Tapを作成
+        Hold: Holdを作成
+        Arc: Arcを作成
+        ArcTap: Skyを作成
+        Trace: Traceを作成
+      DeleteNotes: ノーツを削除
+      Cut: ノーツを切り取り
+      Paste: ノーツを貼り付け
+      Mirror:
+        Vertical: ノーツを上下に反転
+        Horizontal: ノーツを左右に反転
+      Drag:
+        Timing: ノーツのタイミングをドラッグ
+        Position: ノーツの座標をドラッグ
+    Clipboard:
+      Copy: '{0}ノーツをコピー'
+      Cut: '{0}ノーツを切り取り'
+      NamedCopy: '{0}ノーツをコピーしてクリップボード"{1}"にホールド'
+      NamedCut: '{0}ノーツを切り取ってクリップボード"{1}"にホールド'
+    GroupTable:
+      AddGroup: TimingGroup#{Number}を追加 
+      EditGroup: TimingGroup#{Number}を編集
+      RemoveGroup: TimingGroup#{Number}を削除
+    Project:
+      NewProject: |-
+        新しいプロジェクトを作成しました: "{Path}"
+      OpenProject: |-
+        プロジェクトを開きました: "{Path}"
+      SaveProject: |-
+        プロジェクトを保存しました: "{Path}"
+      OpenChart: |-
+        譜面ファイルを開きました: "{Path}"
+      CreateChart: |-
+        譜面ファイルを作成しました: "{Path}"
+      RemoveChart: |-
+        譜面ファイルをプロジェクトから削除しました: "{Path}"
+    Inspector:
+      InvalidParamameter: 無効なパラメーター
+    Measurer:
+      CopyTiming: タイミングをコピーしました
+      CopyPosition: Arcの座標をコピーしました
+      CopyX: ArcのX座標をコピーしました
+      CopyY: ArcのY座標をコピーしました
+  # Dialog boxes
+  Dialog:
+    RemoveGroup:
+      Title: TimingGroupを削除
+      Content: |-
+        このTimingGroupを削除してもよろしいですか？
+        TimingGroupとその内容は削除され、*元に戻せません*。
+      Yes: 削除
+      No: キャンセル
+    RemoveChart:
+      Title: 譜面を削除
+      Content: |-
+        この譜面をプロジェクトから取り除いてもよろしいですか？
+        譜面ファイル自体は削除*されず*、後でプロジェクトに追加し直すことができますが、譜面に関連付けられたメタデータは失われます。
+      Yes: 削除
+      No: キャンセル
+    UnsavedChanges:
+      Title: 保存されていないプロジェクト
+      Content: |-
+        プロジェクトにまだ保存されていない変更があります。プロジェクトを保存しますか？
+      Yes: 保存
+      No: 変更を破棄
+      Cancel: キャンセル
+  Navigation:
+    KeybindOverride: アクション"{0}"のキーバインドがオーバーライドされました。
+    # Texts that appear on the context menu (right-click menu)
+    Actions:
+      Camera:
+        Name: カメラ
+        FreeCamera:
+          Name: フリーカメラを開始
+      Grid:
+        Name: グリッド
+        Toggle: グリッドを表示/隠す
+      Display:
+        Name: ディスプレイ
+        FullScreen: フルスクリーン/解除
+      Selection:
+        Name: 選択
+        Clear: 選択解除
+        RangeSelect:
+          Name: 範囲選択
+      Measure:
+        Name: 定規
+        Start:
+          Name: 測定ツールを開く
+      Clipboard:
+        Name: クリップボード
+        Copy: コピー
+        Cut: 切り取り
+        Paste:
+          Name: 貼り付け
+          Cancel: キャンセル
+        NamedPaste:
+          Name: 貼り付け
+          Cancel: キャンセル
+        Clear: クリップボードをクリア
+      Delete:
+        Name: 削除
+        Execute: ノーツを削除
+      Mirror:
+        Name: ミラー
+        Horizontal: 左右を反転
+        HorizontalNoColorSwitch: 左右を反転 (アークの色を除く)
+        Vertical: 上下を反転
+  Grid:
+    # Please modify the comment lines only (lines beginning with '--')
+    DefaultScript: |-
+      -- グリッドはLuaで定義できます
+
+      -- グリッドの当たり判定の範囲
+      -- (左, 右, 下, 上)
+      grid.setCollider(-0.5, 1.5, -0.2, 1)
+
+      -- 背景色を設定
+      grid.setPanelColor(rgba(255, 255, 255, 16))
+
+      -- y=-0.2にガイドラインを描画
+      -- (point1.x, point2.x, point1.y, point2.y)
+      grid.drawLine(-0.5, 1.5, -0.2, -0.2, defaultColor)
+
+      -- forループも使えます
+      -- x=-0.5から1.5まで、0.125刻みで縦線を描画
+      for x = -0.5, 1.5, 0.125 do
+        grid.drawLine(x, x, -0.2, 1, defaultColor)
+      end
+
+      -- x=0から1まで、0.25刻みで横線を描画
+      for y = 0, 1, 0.25 do
+        grid.drawLine(-0.5, 1.5, y, y, defaultColor)
+      end
+  # Texts that appear on the editor UI
+  UI:
+    Common:
+      Confirm: 確認
+      Cancel: キャンセル
+      Close: 閉じる
+      NotRequired: (任意)
+      Extension: 拡張子 # (?) 用途不明
+    Placeholder:
+      Text: テキストを入力…
+      File: ファイルを選択…
+      Image: 画像を選択…
+      Property: プロパティ…
+      ImagePrompt: クリックして選択
+    PanelNames: # 翻訳しない
+      Toolbox: Toolbox
+      Gameplay: Gameplay
+      Timeline: Timeline
+      Project: Project
+      Events: Events
+      Remote: Remote
+      Export: Export
+      Settings: Settings
+    # Top bar of the UI
+    Top:
+      Label:
+        New: 新規
+        Open: 開く
+        Save: 保存
+        InputMode: 入力モード
+        FullScreen: フルスクリーン
+        ToggleFullScreenHint: F11でフルスクリーンモードを開始/解除
+        Chart: 譜面 # (?) 用途不明
+    # Project panel
+    Project:
+      Label:
+        NewChart: 新規譜面
+        NewProject: 新規プロジェクト
+        ProjectFile: プロジェクトファイル
+        ChartFile: 譜面ファイル
+        Information: 情報
+        Title: 曲名
+        Composer: 作曲
+        Illustrator: イラスト
+        Charter: 譜面制作
+        BPM: BPM
+        BaseBPM: 基準BPM
+        SyncBaseBPM: 同期 # (?) 機能不明
+        ChartOffset: 譜面オフセット
+        TimingPointDensityFactor: 判定密度
+        ChartConstant: 譜面定数
+        DifficultyName: 難易度
+        DifficultyColor: 背景色
+        Files: 関連ファイル
+        Audio: 音声
+        JacketArt: ジャケット
+        Background: 背景画像
+        Video: 背景動画
+        Skin: スキン設定
+        Side: 光サイド/対立サイド
+        Note: ノーツデザイン
+        Particle: パーティクル
+        Accent: 判定線/コンボ
+        Track: Track # 翻訳しない
+        SingleLine: Single Line # 翻訳しない
+        Colors: Arc/Trace
+        TraceBody: Trace
+        Shadow: 影
+        ArcColors: Arc
+        Blue: Blue (0)
+        Red: Red (1)
+        Green: Green (2)
+        Custom: Custom ({0})
+        AddArcColor: 追加
+        NoProjectLoaded: |-
+          プロジェクトがロードされていません。
+          新しく作成するか、既存のプロジェクトを開いてください。
+      Options: # 翻訳しない
+        Inherit: （既定）
+        Light: Light
+        Conflict: Conflict
+        Colorless: Colorless
+        MiraiLight: Mirai Light
+        MiraiConflict: Mirai Conflict
+        Dynamix: Dynamix
+        Black: Black
+        Nijuusei: Nijuusei
+        Rei: Rei
+        DarkVs: DarkVs
+        Tempest: Tempest
+        Finale: Finale
+        Pentiment: Pentiment
+        Arcana: Arcana
+        None: （なし）
+        Neo: Neo
+        Past: Past
+        Present: Present
+        Future: Future
+        Beyond: Beyond
+    Timeline:
+      Label: # 翻訳しない
+        Offset: Offset # (?) 用途不明
+        TimingGroup: Group
+        Density: Density
+    # Events editor panel
+    EventsEditor:
+      Label: # 翻訳しない
+        Group: Group
+        Events: Events
+      Actions:
+        AddGroup: 追加
+        DeleteGroup: 削除
+        AddEvent: 追加
+        DeleteEvent: 削除
+        FreeCamera: フリー
+      CameraView:
+        Default: '視点: デフォルト'
+        Stationary: '視点: 固定'
+        ZoomedOut: '視点: ズームアウト'
+        BirdsEye1: '視点: 俯瞰 (上から下)'
+        BirdsEye2: '視点: 俯瞰 (左から右)'
+      Mode: # これは翻訳しない
+        Timing: Timing
+        Camera: Camera
+        Scenecontrol: Scene
+    # Editor settings panel
+    Settings:
+      Label:
+        Locale:
+          Name: ローカライズ
+          Language: 言語
+          Reload: ロケールを再読み込み
+          CheckMissing: エントリの欠落を検査
+        Gameplay:
+          Name: ゲーム画面
+          Speed: 譜面速度
+          AspectRatio: アスペクト比
+        Grid:
+          Name: グリッド
+          Slot: スロット
+          UseDefault: デフォルト # (?) 機能不明
+          FromLane: レーン (左端)
+          ToLane: レーン (右端)
+          ScaleGrid: SkyInputに従って拡大
+          Gridline: グリッドを定義
+          Script: Luaスクリプト # (?) 用途不明
+        AudioVolume:
+          Name: 音量
+          Music: 曲
+          Effect: SE
+          GlobalOffset: Global Offset # (?) 機能不明
+        Display:
+          Name: 画面
+          Vsync: VSync
+          Framerate: FPS
+          ShowCounter: FPSを表示
+        Input:
+          Name: 入力
+          ReloadKeybinds: キーバインドを再読み込み
+        ScrollSensitivity:
+          Name: スクロール感度
+          Vertical: 垂直
+          Horizontal: 水平
+          Timeline: タイムライン 
+        TrackScrolling:
+          Name: Track
+          Threshold: 閾値
+          MaxMovement: 最大
+        Credits:
+          Name: クレジット
+          View: クレジットを確認
+    # Toolbox panel
+    Toolbox:
+      Pallete: # 翻訳しない
+        Name: パレット
+        Arc: Arc
+        Trace: Trace
+        Tap: Tap
+        Hold: Hold
+        Arctap: Sky
+        Easing: Easing
+      Macros: マクロ
+    # Inspector window
+    Inspector: # 翻訳しない
+      Name: Inspector
+      Timing: Timing
+      StartTiming: Start
+      EndTiming: End
+      Lane: Lane
+      StartPos: From
+      EndPos: To
+      Sfx: Sfx
+      Group: Group
+      Mixed: Mixed
+      Arc: Arc
+      Trace: Trace
+      Actions:
+        SelectArc: Arcを選択
+        SelectArctap: Skyを選択
+
+Remote:
+  State:
+    Listening: |-
+      ブロードキャストを待機中……
+      <size=20>
+      PCのArcCreateから"Remote"タブを開いて「ブロードキャストを開始」ボタンを押してください。</size>
+    Found: |-
+      以下のデバイスからブロードキャストを受信しました。
+      リストからデバイスを選んでください。
+    TargetDisconnected:
+      Compose: クライアントが切断されました。接続を終了します。
+      Gameplay: クライアントが切断されました。新しいセッションを開始しますか？
+    Receiving:
+      データを受信({0})
+  Description:
+    Idle: |-
+      テストクライアントが接続されていません。ブロードキャストを開始し、クライアントを検索してください。
+      このデバイスとテストプレイに使うデバイスが同じローカルネットワーク内にあり、クライアントがブロードキャストを待機中であることを確認してください。
+    Broadcasting: |-
+      ブロードキャストを送信中……
+      クライアントから、コード: "{0}"が表示されているデバイスを選択して、セッションを開始します。
+    Connected: |-
+      クライアントと接続しました。接続先: {0}:{1}
+  Actions:
+    Broadcast: ブロードキャストを開始
+    AbortBroadcast: 停止
+    BroadcastAgain: 再送信
+    StopSession: セッションを終了
+    StartNewSession: 新しいセッションを開始
+  Control:
+    Name: Control
+    Sync:
+      Name: データを同期
+      AllFiles: 全て
+      Chart: 譜面
+      Audio: 音声
+      Jacket: ジャケット
+      Background: 背景
+      Metadata: メタデータ
+      Settings: プレイ設定
+    StartTiming: 開始タイミング
+    EndTiming: 終了タイミング
+    Loop: ループ再生
+    ShowLog: ログを表示
+    ShowDebug: デバッグ情報を表示
+  Window:
+    Name: Remote
+    SyncChart: 譜面を同期
+    SyncTiming: タイミングを同期
+
+Gameplay:
+  Exception:
+    LoadAudio: |-
+      音声ファイルの読み込み中にエラーが発生しました。
+      ファイル: "{Path}"
+      {Error}
+    Chart: |-
+      譜面ファイルの読み込み中にエラーが発生しました。
+      ファイル: "{Path}"
+      {Error}
+    Skin: |-
+      画像ファイルの読み込み中にエラーが発生しました。
+      ファイル: "{Path}"
+      {Error}
+  HUD: # (?) 用途不明
+    Play: プレイ
+    Retry: リトライ
+    Return: 戻る
