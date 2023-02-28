@@ -28,6 +28,7 @@
 # - chart file: 譜面ファイル
 # - audio offset: 音源オフセット(Audio Offset)
 # - timing point density factor: 判定密度係数(Timing Point Density Factor)
+# - base timing: 基準Timingイベンt
 # - base bpm: 基準BPM(Base BPM)
 # - duration: 継続時間
 # - arc color: アーク色
@@ -39,14 +40,14 @@ Format:
   # Exception messages while parsing chart files
   Exception:
     Message: |-
-      (?)譜面ファイルを読み込み中にエラーが発生しました。ファイル: "{File}" {LineNumber}行目
-      While parsing event of type: {EventType}
-      With the following: "{Content}".
+      譜面ファイルを読み込み中にエラーが発生しました。ファイル: "{File}" {LineNumber}行目
+      処理中のイベントタイプ: {EventType}
+      処理中の行: "{Content}"
       {Reason}
     MessageUnknownReason: |-
-      (?)譜面ファイルを読み込み中に不明なエラーが発生しました。ファイル: "{File}" {LineNumber}行目
-      While parsing event of type: {EventType}
-      With the followng "{Content}".
+      譜面ファイルを読み込み中に不明なエラーが発生しました。ファイル: "{File}" {LineNumber}行目
+      処理中のイベントタイプ: {EventType}
+      処理中の行: "{Content}"
     ArcColorNegative: |-
       アーク色IDは負の値にできません。
     AudioOffsetInvalid: |-
@@ -54,11 +55,11 @@ Format:
     TimingPointDensityFactorInvalid: |-
       判定密度係数(Timing Point Density Factor)の定義が正しくありません。
     BaseTimingInvalid: |-
-      (?)Invalid base timing definition. 譜面ファイルは0msのTimingイベントで始めてください。
+      無効な基準Timingイベント。譜面ファイルは0msのTimingイベントで始めてください。
     IncludeReferencedMultipleTimes: |-
-      (?)A chart file was already included but is being referenced again.
+      すでにインクルードされている譜面ファイルをもう一度インクルードしたりフラグメントとして参照したりすることはできません。
     IncludeAReferencedFragment: |-
-      (?)A chart file was already referenced as a fragment but is being included again.
+      すでにフラグメントとして参照されている譜面ファイルをインクルードすることはできません。
     TimingGroupPairInvalid: |-
       タイミンググループの対応する閉じカッコが見つかりません。タイミンググループの定義は"};"で適切に囲んでください。
     DivisorNegative: |-
@@ -98,28 +99,29 @@ Compose:
     NoChartIncluded: |-
       無効なプロジェクトファイル: プロジェクトには譜面が含まれていません。
     InvalidGroupProperties: |-
-      無効なタイミンググループのプロパティ。{Message}
+      無効なタイミンググループのプロパティ: {Message}
     InstructionLimit: |-
       (?)Lua script execution has been aborted: The instruction count limit of {0} was reached.
     InvalidBaseBPM: |-
       無効な基準BPM(Base BPM): {0}
     CreateSkyNoteNoValidArc: |-
-      (?)ここにスカイノーツを作ることはできません。スカイノーツはトレースノーツの上に配置する必要があります。
+      ここにスカイノーツを作ることはできません。スカイノーツはトレースノーツの上に配置する必要があります。
     Navigation:
       ParseKeybind: |-
-        キーバインドを読み込み中にエラーが発生しました。キーバインドを解析できません: "{0}"
+        キーバインドを読み込み中にエラーが発生しました。キーストロークを解析できません: "{0}"
+      # "invalid keybind"より"invalid keystroke"の方が適切?
       ParseWhitespace: |-
-        (?)Invalid keybind: a keystroke can not be a whitespace.
+        無効なキーストローク: キーストロークはスペース(" ")にはできません。
       InvalidKeystroke: |-
-        (?)Invalid keystroke: The keystroke "{0}" does not follow the correct format.
+        無効なキーストローク: 文字列"{0}"は有効なキーストローク形式ではありません。
       InvalidKey: |-
-        (?)Invalid key: The string "{0}" does not match any key.
+        無効なキー: 文字列"{0}"をキーに変換できません。不明なキー名です。
       InvalidModifier: |-
-        (?)Invalid modifier: The string "{0}" does not match any modifier key.
+        無効な修飾キー: 文字列"{0}"を修飾キーに変換できません。不明な修飾キー名です。
       TooManyModifiers: |-
-        (?)Invalid keystroke: The keystroke "{0}" has too many modifiers (maximum is 2).
+        無効なキーストローク: キーストロークに使える修飾キーは2つまでに制限されています: "{0}"
       InvalidActionPath: |-
-        (?)Invalid action path: The string "{0}" does not match any action.
+        無効なアクションパス: 文字列"{0}"をアクションに変換できません。不明なアクションパスです。
           
   # Notification messages
   Notify:
