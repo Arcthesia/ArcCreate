@@ -1,47 +1,68 @@
+# この言語ファイルは、以下のバージョンの`en_us.yml`をもとに翻訳しました。
+# [f0ff48d] Gameplay: Improve judgement
+# https://github.com/0thElement/ArcCreate/commit/f0ff48d190644f720cabd16de81a0d3eecdcbc77
+
+# ほんやくノート
+# - 句読点は「、。」(全角)
+# - カッコは「()」(半角)
+# - コロンは「: 」(半角に半角スペース)
+# - 引用は「"~"」(半角)か「「~」」などで
+# - もし英単語を入れるなら、それぞれの単語の頭文字を大文字にして。
+# - 作業を後回しにしたメッセージは先頭に"(?)"をつけておきます。
+# 
+# - timing: タイミング
+# - ~ event: ~イベント # Arc/Timing/Hold/Tapなど。
+# - timing group: タイミンググループ
+# - exception: エラー
+# - chart file: 譜面ファイル
+# - audio offset: 音源オフセット(Audio Offset)
+# - timing point density factor: 判定密度係数(Timing Point Density Factor)
+# - base bpm: 基準BPM(Base BPM)
+# - duration: 継続時間
+# - arc color: アーク色
+# - invalid ~: 〜が正しくありません
+
 Format:
   # Exception messages while parsing chart files
   Exception:
     Message: |-
-      An exception occured while reading the chart file {File}
-      At: line {LineNumber}
+      (?)譜面ファイルを読み込み中にエラーが発生しました。ファイル: "{File}" {LineNumber}行目
       While parsing event of type: {EventType}
       With the following: "{Content}".
       {Reason}
     MessageUnknownReason: |-
-      An unknown error occurred while reading the chart file {File}
-      At: line {LineNumber}
+      (?)譜面ファイルを読み込み中に不明なエラーが発生しました。ファイル: "{File}" {LineNumber}行目
       While parsing event of type: {EventType}
       With the followng "{Content}".
     ArcColorNegative: |-
-      Arc color id can not be negative.
+      アーク色IDは負の値にできません。
     AudioOffsetInvalid: |-
-      Invalid audio offset definition.
+      音源オフセット(Audio Offset)の定義が正しくありません。
     TimingPointDensityFactorInvalid: |-
-      Invalid timing point density factor definition.
+      判定密度係数(Timing Point Density Factor)の定義が正しくありません。
     BaseTimingInvalid: |-
-      Invalid base timing definition. Ensure your chart file starts with a timing event at 0ms.
+      (?)Invalid base timing definition. 譜面ファイルは0msのTimingイベントで始めてください。
     IncludeReferencedMultipleTimes: |-
-      A chart file was already included but is being referenced again.
+      (?)A chart file was already included but is being referenced again.
     IncludeAReferencedFragment: |-
-      A chart file was already referenced as a fragment but is being included again.
+      (?)A chart file was already referenced as a fragment but is being included again.
     TimingGroupPairInvalid: |-
-      Invalid timing group symbol pairing. Make sure to enclose timing group definitions properly with "};".
+      タイミンググループの対応する閉じカッコが見つかりません。タイミンググループの定義は"};"で適切に囲んでください。
     DivisorNegative: |-
-      Divisor property of timing event can not be negative.
+      Timingイベントの小節線プロパティは負の値にできません。
     BaseBPMZero: |-
-      Base BPM can not be zero.
+      基準BPM(Base BPM)は0にできません。
     DurationNegative: |-
-      Duration of this event type can not be negative.
+      このイベントの継続時間は負の値にできません。
     DurationZero: |-
-      Duration of this event type can not be zero.
+      このイベントの継続時間は0にできません。
     ArcTapOutOfRange: |-
-      ArcTap is outside the timing range of its parent Arc.
+      ArcTapが属しているArcの継続時間外にあります。
     TimingGroupPropertiesInvalid: |-
-      Invalid timing group properties definition.
+      タイミンググループのプロパティが正しくありません。
     SymbolError: |-
-      Possibly wrong syntax.
-      Exception: {Exception}
-      Stack trace:
+      構文エラー: {Exception}
+      スタックトレース:
       {StackTrace}
 
 Compose:
