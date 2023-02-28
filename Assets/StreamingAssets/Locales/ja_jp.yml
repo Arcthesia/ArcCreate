@@ -9,18 +9,31 @@
 # - 引用は「"~"」(半角)か「「~」」などで
 # - もし英単語を入れるなら、それぞれの単語の頭文字を大文字にして。
 # - 作業を後回しにしたメッセージは先頭に"(?)"をつけておきます。
-# 
+#
+# 決めること
+# - ArcTapはSkyNoteと呼ぶ？
+# - Void? Trace?
+# - Arc/TraceかSolid Arc/Void Arcか？
+# - Timingはどう訳すべき？
+# - TimingGroupは？
+# - ~ eventはどうする？ Arc/アーク/アークノーツ
+# - ノーツ? ノート?
+# - ホールド? ロング?
+#
 # - timing: タイミング
 # - ~ event: ~イベント # Arc/Timing/Hold/Tapなど。
 # - timing group: タイミンググループ
 # - exception: エラー
+# - chart: 譜面
 # - chart file: 譜面ファイル
 # - audio offset: 音源オフセット(Audio Offset)
 # - timing point density factor: 判定密度係数(Timing Point Density Factor)
 # - base bpm: 基準BPM(Base BPM)
 # - duration: 継続時間
 # - arc color: アーク色
-# - invalid ~: 〜が正しくありません
+# - invalid ~: 〜が正しくありません あるいは 無効な〜です
+# - (?)instruction: 命令?
+# - (?)keystroke: ?
 
 Format:
   # Exception messages while parsing chart files
@@ -69,44 +82,44 @@ Compose:
   # Exception messages within the editor
   Exception:
     FileDoesNotExist: |-
-      Trying to read file located at {Path} but it does not exist. The file might have been deleted.
+      ファイルの読み込みに失敗しました。削除や移動によって存在しないファイルです。ファイル: "{Path}"
     LoadImage: |-
-      An error occured while trying to load the image located at {Path}.
+      画像ファイルの読み込みに失敗しました。ファイル: "{Path}"
       {Error}
     LoadProject: |-
-      An error occured while trying to load the project file located at {Path}.
-      The file could have been saved incorrectly.
-      You can try modifying it manually, or you can delete the file and create a new project.
+      プロジェクトファイルの読み込み中にエラーが発生しました。ファイル: "{Path}"
+      データが正しく保存されなかった可能性があります。
+      手動で修正してみるか、ファイルを削除して新しいプロジェクトを作成できます。
       {Error}
     ChartFileAlreadyExists: |-
-      Chart is already included in the project
+      譜面はすでにプロジェクトに含まれています。
     InvalidChartFile: |-
-      The provided chart file name is invalid
+      無効な譜面ファイルの名前です。
     NoChartIncluded: |-
-      Invalid project file: No chart is included within this project.
+      無効なプロジェクトファイル: プロジェクトには譜面が含まれていません。
     InvalidGroupProperties: |-
-      Invalid timing group properties. {Message}
+      無効なタイミンググループのプロパティ。{Message}
     InstructionLimit: |-
-      Lua script execution has been aborted: The instruction count limit of {0} was reached.
+      (?)Lua script execution has been aborted: The instruction count limit of {0} was reached.
     InvalidBaseBPM: |-
-      Invalid base bpm value: {0}
+      無効な基準BPM(Base BPM): {0}
     CreateSkyNoteNoValidArc: |-
-      Can not create sky note here. Sky notes must be placed on traces.
+      (?)ここにスカイノーツを作ることはできません。スカイノーツはトレースノーツの上に配置する必要があります。
     Navigation:
       ParseKeybind: |-
-        An exception occured while parsing the keybind: "{0}".
+        キーバインドを読み込み中にエラーが発生しました。キーバインドを解析できません: "{0}"
       ParseWhitespace: |-
-        Invalid keybind: a keystroke can not be a whitespace.
+        (?)Invalid keybind: a keystroke can not be a whitespace.
       InvalidKeystroke: |-
-        Invalid keystroke: The keystroke "{0}" does not follow the correct format.
+        (?)Invalid keystroke: The keystroke "{0}" does not follow the correct format.
       InvalidKey: |-
-        Invalid key: The string "{0}" does not match any key.
+        (?)Invalid key: The string "{0}" does not match any key.
       InvalidModifier: |-
-        Invalid modifier: The string "{0}" does not match any modifier key.
+        (?)Invalid modifier: The string "{0}" does not match any modifier key.
       TooManyModifiers: |-
-        Invalid keystroke: The keystroke "{0}" has too many modifiers (maximum is 2).
+        (?)Invalid keystroke: The keystroke "{0}" has too many modifiers (maximum is 2).
       InvalidActionPath: |-
-        Invalid action path: The string "{0}" does not match any action.
+        (?)Invalid action path: The string "{0}" does not match any action.
           
   # Notification messages
   Notify:
