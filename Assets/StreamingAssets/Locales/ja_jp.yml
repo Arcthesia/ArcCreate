@@ -40,16 +40,18 @@ Format:
   # Exception messages while parsing chart files
   Exception:
     Message: |-
-      譜面ファイルを読み込み中にエラーが発生しました。ファイル: "{File}" {LineNumber}行目
-      処理中のイベントタイプ: {EventType}
+      譜面ファイルを読み込み中にエラーが発生しました。
+      ファイル: "{File}" {LineNumber}行目
+      イベントタイプ: {EventType}
       処理中の行: "{Content}"
       {Reason}
     MessageUnknownReason: |-
-      譜面ファイルを読み込み中に不明なエラーが発生しました。ファイル: "{File}" {LineNumber}行目
-      処理中のイベントタイプ: {EventType}
+      譜面ファイルを読み込み中に不明なエラーが発生しました。
+      ファイル: "{File}" {LineNumber}行目
+      イベントタイプ: {EventType}
       処理中の行: "{Content}"
     ArcColorNegative: |-
-      アーク色IDは負の値にできません。
+      アークの色IDは負の値にできません。
     AudioOffsetInvalid: |-
       音源オフセット(Audio Offset)の定義が正しくありません。
     TimingPointDensityFactorInvalid: |-
@@ -83,12 +85,15 @@ Compose:
   # Exception messages within the editor
   Exception:
     FileDoesNotExist: |-
-      ファイルの読み込みに失敗しました。削除や移動によって存在しないファイルです。ファイル: "{Path}"
+      ファイルの読み込みに失敗しました。削除や移動によって存在しないファイルです。
+      ファイル: "{Path}"
     LoadImage: |-
-      画像ファイルの読み込みに失敗しました。ファイル: "{Path}"
+      画像ファイルの読み込みに失敗しました。
+      ファイル: "{Path}"
       {Error}
     LoadProject: |-
-      プロジェクトファイルの読み込み中にエラーが発生しました。ファイル: "{Path}"
+      プロジェクトファイルの読み込み中にエラーが発生しました。
+      ファイル: "{Path}"
       データが正しく保存されなかった可能性があります。
       手動で修正してみるか、ファイルを削除して新しいプロジェクトを作成できます。
       {Error}
@@ -101,7 +106,7 @@ Compose:
     InvalidGroupProperties: |-
       無効なタイミンググループのプロパティ: {Message}
     InstructionLimit: |-
-      (?)Lua script execution has been aborted: The instruction count limit of {0} was reached.
+      Luaスクリプト強制終了: 命令数が設定されている上限{0}に達しました。
     InvalidBaseBPM: |-
       無効な基準BPM(Base BPM): {0}
     CreateSkyNoteNoValidArc: |-
@@ -224,47 +229,47 @@ Compose:
       No: Discard changes
       Cancel: Cancel
   Navigation:
-    KeybindOverride: Overriding keybind for action {0}
+    KeybindOverride: アクション"{0}"のキーバインドがオーバーライドされました。
     # Texts that appear on the context menu (right-click menu)
     Actions:
       Camera:
-        Name: Camera
+        Name: カメラ
         FreeCamera:
-          Name: Start free camera
+          Name: フリーカメラを開始
       Grid:
-        Name: Grid
-        Toggle: Toggle grid
+        Name: グリッド
+        Toggle: グリッドを表示/隠す
       Display:
-        Name: Display
-        FullScreen: Toggle full screen
+        Name: ディスプレイ
+        FullScreen: フルスクリーン/解除
       Selection:
-        Name: Selection
-        Clear: Clear selection
+        Name: 選択
+        Clear: 選択解除
         RangeSelect:
-          Name: Select notes between range
+          Name: 範囲選択
       Measure:
-        Name: Measure
+        Name: 定規
         Start:
-          Name: Open measurer
+          Name: 定規ツールを開く
       Clipboard:
-        Name: Clipboard
-        Copy: Copy
-        Cut: Cut
+        Name: クリップボード
+        Copy: コピー
+        Cut: 切り取り
         Paste:
-          Name: Paste
-          Cancel: Cancel pasting
+          Name: 貼り付け
+          Cancel: キャンセル
         NamedPaste:
-          Name: Paste
-          Cancel: Cancel pasting
-        Clear: Clear clipboard
+          Name: 貼り付け
+          Cancel: キャンセル
+        Clear: クリップボードをクリア
       Delete:
-        Name: Delete
-        Execute: Delete notes
+        Name: Sakuzyo
+        Execute: ノーツを削除
       Mirror:
-        Name: Mirror
-        Horizontal: Mirror horizontally
-        HorizontalNoColorSwitch: Mirror horizontally (ignore color)
-        Vertical: Mirror vertically
+        Name: ミラー
+        Horizontal: 左右を反転
+        HorizontalNoColorSwitch: 左右を反転 (アークの色を除く)
+        Vertical: 上下を反転
   Grid:
     # Please modify the comment lines only (lines beginning with '--')
     DefaultScript: |-
