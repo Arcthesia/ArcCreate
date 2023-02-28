@@ -1,0 +1,520 @@
+Format:
+  # Exception messages while parsing chart files
+  Exception:
+    Message: |-
+      An exception occured while reading the chart file {File}
+      At: line {LineNumber}
+      While parsing event of type: {EventType}
+      With the following: "{Content}".
+      {Reason}
+    MessageUnknownReason: |-
+      An unknown error occurred while reading the chart file {File}
+      At: line {LineNumber}
+      While parsing event of type: {EventType}
+      With the followng "{Content}".
+    ArcColorNegative: |-
+      Arc color id can not be negative.
+    AudioOffsetInvalid: |-
+      Invalid audio offset definition.
+    TimingPointDensityFactorInvalid: |-
+      Invalid timing point density factor definition.
+    BaseTimingInvalid: |-
+      Invalid base timing definition. Ensure your chart file starts with a timing event at 0ms.
+    IncludeReferencedMultipleTimes: |-
+      A chart file was already included but is being referenced again.
+    IncludeAReferencedFragment: |-
+      A chart file was already referenced as a fragment but is being included again.
+    TimingGroupPairInvalid: |-
+      Invalid timing group symbol pairing. Make sure to enclose timing group definitions properly with "};".
+    DivisorNegative: |-
+      Divisor property of timing event can not be negative.
+    BaseBPMZero: |-
+      Base BPM can not be zero.
+    DurationNegative: |-
+      Duration of this event type can not be negative.
+    DurationZero: |-
+      Duration of this event type can not be zero.
+    ArcTapOutOfRange: |-
+      ArcTap is outside the timing range of its parent Arc.
+    TimingGroupPropertiesInvalid: |-
+      Invalid timing group properties definition.
+    SymbolError: |-
+      Possibly wrong syntax.
+      Exception: {Exception}
+      Stack trace:
+      {StackTrace}
+
+Compose:
+  # Exception messages within the editor
+  Exception:
+    FileDoesNotExist: |-
+      Trying to read file located at {Path} but it does not exist. The file might have been deleted.
+    LoadImage: |-
+      An error occured while trying to load the image located at {Path}.
+      {Error}
+    LoadProject: |-
+      An error occured while trying to load the project file located at {Path}.
+      The file could have been saved incorrectly.
+      You can try modifying it manually, or you can delete the file and create a new project.
+      {Error}
+    ChartFileAlreadyExists: |-
+      Chart is already included in the project
+    InvalidChartFile: |-
+      The provided chart file name is invalid
+    NoChartIncluded: |-
+      Invalid project file: No chart is included within this project.
+    InvalidGroupProperties: |-
+      Invalid timing group properties. {Message}
+    InstructionLimit: |-
+      Lua script execution has been aborted: The instruction count limit of {0} was reached.
+    InvalidBaseBPM: |-
+      Invalid base bpm value: {0}
+    CreateSkyNoteNoValidArc: |-
+      Can not create sky note here. Sky notes must be placed on traces.
+    Navigation:
+      ParseKeybind: |-
+        An exception occured while parsing the keybind: "{0}".
+      ParseWhitespace: |-
+        Invalid keybind: a keystroke can not be a whitespace.
+      InvalidKeystroke: |-
+        Invalid keystroke: The keystroke "{0}" does not follow the correct format.
+      InvalidKey: |-
+        Invalid key: The string "{0}" does not match any key.
+      InvalidModifier: |-
+        Invalid modifier: The string "{0}" does not match any modifier key.
+      TooManyModifiers: |-
+        Invalid keystroke: The keystroke "{0}" has too many modifiers (maximum is 2).
+      InvalidActionPath: |-
+        Invalid action path: The string "{0}" does not match any action.
+          
+  # Notification messages
+  Notify:
+    GameplayLoaded: Gameplay scene loaded successfully
+    FreeCameraEditHelp: |-
+      Starting free camera (hover for more info)
+      
+      WASD: Move forward/left/backward/right
+      Space: Move upward
+      Shift: Move downward
+      IJKL: Rotate up/left/down/right
+      U: Roll left
+      O: Roll right
+      Esc: Cancel
+      Enter: Confirm
+    Actions:
+      CannotMirror: Can not mirror any of the selected notes.
+      NoDragRange: Can not drag selected notes timing. Try dragging the notes separately.
+    History:
+      Execute: |-
+        Executed command: {Name}
+      Undo: |-
+        Undo command: {Name}
+      Redo: |-
+        Redo command: {Name}
+      # {Name} above will be replaced with these entries
+      AddTiming: Add timing event
+      EditTiming: Edit timing event
+      RemoveTiming: Remove timing event
+      AddCamera: Add camera event
+      EditCamera: Edit camera event
+      RemoveCamera: Remove camera event
+      EditValue: Edit selected note's value
+      EditArc: Edit arc's values
+      CreateNote:
+        Tap: Create tap note
+        Hold: Create hold note
+        Arc: Create arc note
+        ArcTap: Create sky note
+        Trace: Create trace note
+      DeleteNotes: Delete notes
+      Cut: Cut notes
+      Paste: Paste notes
+      Mirror:
+        Vertical: Mirror notes vertically
+        Horizontal: Mirror notes horizontally
+      Drag:
+        Timing: Drag notes timing
+        Position: Drag notes position
+    Clipboard:
+      Copy: Copied {0} notes
+      Cut: Cut {0} notes
+      NamedCopy: Copied {0} notes to named clipboard "{1}"
+      NamedCut: Cut {0} notes to named clipboard "{1}"
+    GroupTable:
+      AddGroup: Added timing group {Number}
+      EditGroup: Edited timing group {Number}
+      RemoveGroup: Removed timing group {Number}
+    Project:
+      NewProject: |-
+        Created new project
+        at: {Path}
+      OpenProject: |-
+        Opened project
+        at: {Path}
+      SaveProject: |-
+        Saved project
+        at: {Path}
+      OpenChart: Opened chart file {Path}
+      CreateChart: Created chart file {Path}
+      RemoveChart: Removed chart file {Path} from project
+    Inspector:
+      InvalidParamameter: Invalid parameter
+    Measurer:
+      CopyTiming: Copied cursor timing
+      CopyPosition: Copied arc's position
+      CopyX: Copied arc's x coordinate
+      CopyY: Copied arc's y coordinate
+  # Dialog boxes
+  Dialog:
+    RemoveGroup:
+      Title: Remove timing group
+      Content: |-
+        Are you sure you want to remove this timing group and all of its content? (no undo)
+      Yes: Remove
+      No: Cancel
+    RemoveChart:
+      Title: Remove chart file
+      Content: |-
+        Are you sure you want to remove this chart file from the project?
+
+        The file itself will NOT be deleted and can be added back to the project later, but any metadata associated with it will be lost.
+      Yes: Remove
+      No: Cancel
+    UnsavedChanges:
+      Title: Unsaved changes
+      Content: |-
+        Your project has unsaved changes. Do you want to save?
+      Yes: Save changes
+      No: Discard changes
+      Cancel: Cancel
+  Navigation:
+    KeybindOverride: Overriding keybind for action {0}
+    # Texts that appear on the context menu (right-click menu)
+    Actions:
+      Camera:
+        Name: Camera
+        FreeCamera:
+          Name: Start free camera
+      Grid:
+        Name: Grid
+        Toggle: Toggle grid
+      Display:
+        Name: Display
+        FullScreen: Toggle full screen
+      Selection:
+        Name: Selection
+        Clear: Clear selection
+        RangeSelect:
+          Name: Select notes between range
+      Measure:
+        Name: Measure
+        Start:
+          Name: Open measurer
+      Clipboard:
+        Name: Clipboard
+        Copy: Copy
+        Cut: Cut
+        Paste:
+          Name: Paste
+          Cancel: Cancel pasting
+        NamedPaste:
+          Name: Paste
+          Cancel: Cancel pasting
+        Clear: Clear clipboard
+      Delete:
+        Name: Delete
+        Execute: Delete notes
+      Mirror:
+        Name: Mirror
+        Horizontal: Mirror horizontally
+        HorizontalNoColorSwitch: Mirror horizontally (ignore color)
+        Vertical: Mirror vertically
+  Grid:
+    # Please modify the comment lines only (lines beginning with '--')
+    DefaultScript: |-
+      -- This is a lua script
+
+      -- Set the collider area with four values
+      -- (corner1.x, corner2.x, corner1.y, corner2.y)
+      grid.setCollider(-0.5, 1.5, -0.2, 1)
+
+      -- Set the grid's background color
+      grid.setPanelColor(rgba(255, 255, 255, 16))
+      
+      -- Draw lines with four values
+      -- (point1.x, point2.x, point1.y, point2.y)
+      grid.drawLine(-0.5, 1.5, -0.2, -0.2, defaultColor)
+
+      -- You can also use for loops
+      for x = -0.5, 1.5, 0.125 do
+        grid.drawLine(x, x, -0.2, 1, defaultColor)
+      end
+
+      for y = 0, 1, 0.25 do
+        grid.drawLine(-0.5, 1.5, y, y, defaultColor)
+      end
+  # Texts that appear on the editor UI
+  UI:
+    Common:
+      Confirm: Confirm
+      Cancel: Cancel
+      Close: Close
+      NotRequired: (not required)
+      Extension: Extension
+    Placeholder:
+      Text: Empty...
+      File: No file selected...
+      Image: No image selected...
+      Property: No property...
+      ImagePrompt: Click to select image
+    PanelNames:
+      Toolbox: Toolbox
+      Gameplay: Gameplay
+      Timeline: Timeline
+      Project: Project
+      Events: Events
+      Remote: Remote
+      Export: Export
+      Settings: Settings
+    # Top bar of the UI
+    Top:
+      Label:
+        New: New
+        Open: Open
+        Save: Save
+        InputMode: Input Mode
+        FullScreen: Full Screen
+        ToggleFullScreenHint: Press F11 to toggle full screen mode.
+        Chart: Chart
+    # Project panel
+    Project:
+      Label:
+        NewChart: New Chart
+        NewProject: New Project
+        ProjectFile: Project File
+        ChartFile: Chart file
+        Information: Information
+        Title: Title
+        Composer: Composer
+        Illustrator: Illustrator
+        Charter: Charter
+        BPM: BPM
+        BaseBPM: Base BPM
+        SyncBaseBPM: Sync
+        ChartOffset: Chart Offset
+        TimingPointDensityFactor: Judge Density
+        ChartConstant: Chart Constant
+        DifficultyName: Difficulty Name
+        DifficultyColor: Difficulty Color
+        Files: Files
+        Audio: Audio
+        JacketArt: Jacket Art
+        Background: Background
+        Video: Video
+        Skin: Skin
+        Side: Side
+        Note: Note
+        Particle: Particle
+        Accent: Accent
+        Track: Track
+        SingleLine: Single Line
+        Colors: Colors
+        TraceBody: Trace Body
+        Shadow: Shadow
+        ArcColors: Arc Colors
+        Blue: Blue (0)
+        Red: Red (1)
+        Green: Green (2)
+        Custom: Custom ({0})
+        AddArcColor: Add arc color
+        NoProjectLoaded: |-
+          No project loaded.
+          Create or open a new project
+      Options:
+        Inherit: Inherit
+        Light: Light
+        Conflict: Conflict
+        Colorless: Colorless
+        MiraiLight: Mirai Light
+        MiraiConflict: Mirai Conflict
+        Dynamix: Dynamix
+        Black: Black
+        Nijuusei: Nijuusei
+        Rei: Rei
+        DarkVs: DarkVs
+        Tempest: Tempest
+        Finale: Finale
+        Pentiment: Pentiment
+        Arcana: Arcana
+        None: None
+        Neo: Neo
+        Past: Past
+        Present: Present
+        Future: Future
+        Beyond: Beyond
+    Timeline:
+      Label:
+        Offset: Offset
+        TimingGroup: Group
+        Density: Density
+    # Events editor panel
+    EventsEditor:
+      Label:
+        Group: Group
+        Events: Events
+      Actions:
+        AddGroup: Add group
+        DeleteGroup: Delete group
+        AddEvent: Add event
+        DeleteEvent: Delete event
+        FreeCamera: Free camera
+      CameraView:
+        Default: Default view
+        Stationary: Stationary view
+        ZoomedOut: Zoomed out view
+        BirdsEye1: Bird's-eye view 1
+        BirdsEye2: Bird's-eye view 2
+      Mode:
+        Timing: Timing
+        Camera: Camera
+        Scenecontrol: Scene
+    # Editor settings panel
+    Settings:
+      Label:
+        Locale:
+          Name: Localization
+          Language: Language
+          Reload: Reload locales
+          CheckMissing: Check missing entries
+        Gameplay:
+          Name: Gameplay
+          Speed: Speed
+          AspectRatio: Aspect Ratio
+        Grid:
+          Name: Grid
+          Slot: Slot
+          UseDefault: Use default
+          FromLane: From lane
+          ToLane: To lane
+          ScaleGrid: Scale with sky input
+          Gridline: Define gridlines
+          Script: Lua script
+        AudioVolume:
+          Name: Audio volume
+          Music: Music
+          Effect: Effect
+          GlobalOffset: Global offset
+        Display:
+          Name: Display
+          Vsync: Vsync
+          Framerate: Framerate
+          ShowCounter: Show framerate
+        Input:
+          Name: Input
+          ReloadKeybinds: Reload keybinds
+        ScrollSensitivity:
+          Name: Scroll sensitivity
+          Vertical: Vertical
+          Horizontal: Horizontal
+          Timeline: Timeline
+        TrackScrolling:
+          Name: Track scrolling
+          Threshold: Threshold
+          MaxMovement: Max movement
+        Credits:
+          Name: Credits
+          View: See credits
+    # Toolbox panel
+    Toolbox:
+      Pallete:
+        Name: Pallete
+        Arc: Arc
+        Trace: Trace
+        Tap: Tap
+        Hold: Hold
+        Arctap: Sky
+        Easing: Easing
+      Macros: Macros
+    # Inspector window
+    Inspector:
+      Name: Inspector
+      Timing: Timing
+      StartTiming: Start
+      EndTiming: End
+      Lane: Lane
+      StartPos: From
+      EndPos: To
+      Sfx: Sfx
+      Group: Group
+      Mixed: Mixed
+      Arc: Arc
+      Trace: Trace
+      Actions:
+        SelectArc: Select parent arc
+        SelectArctap: Select sky notes
+
+Remote:
+  State:
+    Listening: |-
+      Listening for broadcast...
+      <size=20>
+      On your desktop ArcCreate client, open "Remote" tab and press "Start broadcasting" to begin.</size>
+    Found: |-
+      Broadcast received from the following device(s).
+      Select a device to continue.
+    TargetDisconnected:
+      Compose: Target client disconnected. Stopping connection.
+      Gameplay: Target client disconnected. Do you want to start a new session?
+    Receiving:
+      Receiving data ({0})
+  Description:
+    Idle: |-
+      No test play client has been connected.
+      Start broadcasting to discover clients. Make sure this device and test play client's device are on the same local network, and that the test play client is listening for incoming broadcast.
+    Broadcasting: |-
+      Broadcasting code: {0}.
+      Select the option with this code on the test play client to start the session.
+    Connected: |-
+      Connected to test play client at: {0}:{1}
+  Actions:
+    Broadcast: Start broadcasting
+    AbortBroadcast: Stop broadcast
+    BroadcastAgain: Broadcast again
+    StopSession: Stop session
+    StartNewSession: Start new session
+  Control:
+    Name: Control
+    Sync:
+      Name: Sync data
+      AllFiles: All files
+      Chart: Chart
+      Audio: Audio
+      Jacket: Jacket
+      Background: Background
+      Metadata: Metadata
+      Settings: Offset and speed
+    StartTiming: Play from timing
+    EndTiming: Play to timing      
+    Loop: Loop playback
+    ShowLog: Show log
+    ShowDebug: Show debug information
+  Window:
+    Name: Remote
+    SyncChart: Sync chart
+    SyncTiming: Sync timing
+
+Gameplay:
+  Exception:
+    LoadAudio: |-
+      An error occured while trying to load the audio file located at {Path}.
+      {Error}
+    Chart: |-
+      An error occured while trying to load the chart located at {Path}.
+      {Error}
+    Skin: |-
+      An error occured while trying to load the image located at {Path}.
+      {Error}
+  HUD:
+    Play: Play
+    Retry: Retry
+    Return: Return
