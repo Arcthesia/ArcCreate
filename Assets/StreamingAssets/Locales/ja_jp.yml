@@ -252,7 +252,7 @@ Compose:
       Measure:
         Name: 定規
         Start:
-          Name: 定規ツールを開く
+          Name: 測定ツールを開く
       Clipboard:
         Name: クリップボード
         Copy: コピー
@@ -502,52 +502,52 @@ Compose:
 Remote:
   State:
     Listening: |-
-      Listening for broadcast...
+      ブロードキャストを待機中……
       <size=20>
-      On your desktop ArcCreate client, open "Remote" tab and press "Start broadcasting" to begin.</size>
+      PCのArcCreateから"Remote"タブを開いて「ブロードキャストを開始」ボタンを押してください。</size>
     Found: |-
-      Broadcast received from the following device(s).
-      Select a device to continue.
+      以下のデバイスからブロードキャストを受信しました。
+      リストからデバイスを選んでください。
     TargetDisconnected:
-      Compose: Target client disconnected. Stopping connection.
-      Gameplay: Target client disconnected. Do you want to start a new session?
+      Compose: クライアントが切断されました。接続を終了します。
+      Gameplay: クライアントが切断されました。新しいセッションを開始しますか？
     Receiving:
-      Receiving data ({0})
+      データを受信({0})
   Description:
     Idle: |-
-      No test play client has been connected.
-      Start broadcasting to discover clients. Make sure this device and test play client's device are on the same local network, and that the test play client is listening for incoming broadcast.
+      テストクライアントが接続されていません。ブロードキャストを開始し、クライアントを検索してください。
+      このデバイスとテストプレイに使うデバイスが同じローカルネットワーク内にあり、クライアントがブロードキャストを待機中であることを確認してください。
     Broadcasting: |-
-      Broadcasting code: {0}.
-      Select the option with this code on the test play client to start the session.
+      ブロードキャストを送信中……
+      クライアントから、コード: "{0}"が表示されているデバイスを選択して、セッションを開始します。
     Connected: |-
-      Connected to test play client at: {0}:{1}
+      クライアントと接続しました。接続先: {0}:{1}
   Actions:
-    Broadcast: Start broadcasting
-    AbortBroadcast: Stop broadcast
-    BroadcastAgain: Broadcast again
-    StopSession: Stop session
-    StartNewSession: Start new session
+    Broadcast: ブロードキャストを開始
+    AbortBroadcast: 停止
+    BroadcastAgain: 再送信
+    StopSession: セッションを終了
+    StartNewSession: 新しいセッションを開始
   Control:
     Name: Control
     Sync:
-      Name: Sync data
-      AllFiles: All files
-      Chart: Chart
-      Audio: Audio
-      Jacket: Jacket
-      Background: Background
-      Metadata: Metadata
-      Settings: Offset and speed
-    StartTiming: Play from timing
-    EndTiming: Play to timing      
-    Loop: Loop playback
-    ShowLog: Show log
-    ShowDebug: Show debug information
+      Name: データを同期
+      AllFiles: 全て
+      Chart: 譜面
+      Audio: 音声
+      Jacket: ジャケット
+      Background: 背景
+      Metadata: メタデータ
+      Settings: プレイ設定
+    StartTiming: 開始タイミング
+    EndTiming: 終了タイミング
+    Loop: ループ再生
+    ShowLog: ログを表示
+    ShowDebug: デバッグ情報を表示
   Window:
     Name: Remote
-    SyncChart: Sync chart
-    SyncTiming: Sync timing
+    SyncChart: 譜面を同期
+    SyncTiming: タイミングを同期
 
 Gameplay:
   Exception:
@@ -563,7 +563,7 @@ Gameplay:
       画像ファイルの読み込み中にエラーが発生しました。
       ファイル: "{Path}"
       {Error}
-  HUD:
-    Play: Play
-    Retry: Retry
-    Return: Return
+  HUD: # (?) なにこれ
+    Play: プレイ
+    Retry: リトライ
+    Return: 戻る
