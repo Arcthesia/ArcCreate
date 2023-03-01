@@ -31,10 +31,12 @@
 # - base timing: 基準Timingイベンt
 # - base bpm: 基準BPM(Base BPM)
 # - duration: 継続時間
-# - arc color: アーク色
+# - (?)arc color: アーク色?
+# - (?)custom color: カスタムカラー?
 # - invalid ~: 〜が正しくありません あるいは 無効な〜です
-# - (?)instruction: 命令?
-# - (?)keystroke: ?
+# - instruction: 命令
+# - keystroke: キーストローク
+# - (?) gameplay; ゲーム? ゲーム画面? ゲームプレイ?
 
 Format:
   # Exception messages while parsing chart files
@@ -177,10 +179,10 @@ Compose:
         Timing: ノーツのタイミングをドラッグ
         Position: ノーツの座標をドラッグ
     Clipboard:
-      Copy: {0}ノーツをコピー
-      Cut: {0}ノーツを切り取り
-      NamedCopy: {0}ノーツをコピーしてクリップボード"{1}"にホールド
-      NamedCut: {0}ノーツを切り取ってクリップボード"{1}"にホールド
+      Copy: '{0}ノーツをコピー'
+      Cut: '{0}ノーツを切り取り'
+      NamedCopy: '{0}ノーツをコピーしてクリップボード"{1}"にホールド'
+      NamedCut: '{0}ノーツを切り取ってクリップボード"{1}"にホールド'
     GroupTable:
       AddGroup: Timing Group#{Number}を追加 
       EditGroup: Timing Group#{Number}を編集
@@ -300,18 +302,18 @@ Compose:
   # Texts that appear on the editor UI
   UI:
     Common:
-      Confirm: Confirm
-      Cancel: Cancel
-      Close: Close
-      NotRequired: (not required)
-      Extension: Extension
+      Confirm: 確認
+      Cancel: キャンセル
+      Close: 閉じる
+      NotRequired: (任意)
+      Extension: (?)Extension
     Placeholder:
-      Text: Empty...
-      File: No file selected...
-      Image: No image selected...
-      Property: No property...
-      ImagePrompt: Click to select image
-    PanelNames:
+      Text: テキストを入力…
+      File: ファイルを選択…
+      Image: 画像を選択…
+      Property: プロパティ…
+      ImagePrompt: クリックして選択
+    PanelNames: # (?) 保留。翻訳するとスペースがない
       Toolbox: Toolbox
       Gameplay: Gameplay
       Timeline: Timeline
@@ -323,59 +325,59 @@ Compose:
     # Top bar of the UI
     Top:
       Label:
-        New: New
-        Open: Open
-        Save: Save
-        InputMode: Input Mode
-        FullScreen: Full Screen
-        ToggleFullScreenHint: Press F11 to toggle full screen mode.
-        Chart: Chart
+        New: 新規
+        Open: 開く
+        Save: 保存
+        InputMode: (?)Input Mode
+        FullScreen: フルスクリーン
+        ToggleFullScreenHint: F11でフルスクリーンモードを開始/解除
+        Chart: (?)譜面
     # Project panel
     Project:
       Label:
-        NewChart: New Chart
-        NewProject: New Project
-        ProjectFile: Project File
-        ChartFile: Chart file
-        Information: Information
-        Title: Title
-        Composer: Composer
-        Illustrator: Illustrator
-        Charter: Charter
+        NewChart: 新規譜面
+        NewProject: 新規プロジェクト
+        ProjectFile: プロジェクトファイル
+        ChartFile: 譜面ファイル
+        Information: 情報
+        Title: 曲名
+        Composer: 作曲
+        Illustrator: イラスト
+        Charter: 譜面制作
         BPM: BPM
-        BaseBPM: Base BPM
-        SyncBaseBPM: Sync
-        ChartOffset: Chart Offset
-        TimingPointDensityFactor: Judge Density
-        ChartConstant: Chart Constant
-        DifficultyName: Difficulty Name
-        DifficultyColor: Difficulty Color
-        Files: Files
-        Audio: Audio
-        JacketArt: Jacket Art
-        Background: Background
-        Video: Video
-        Skin: Skin
-        Side: Side
-        Note: Note
-        Particle: Particle
-        Accent: Accent
-        Track: Track
-        SingleLine: Single Line
-        Colors: Colors
-        TraceBody: Trace Body
-        Shadow: Shadow
-        ArcColors: Arc Colors
-        Blue: Blue (0)
-        Red: Red (1)
-        Green: Green (2)
-        Custom: Custom ({0})
-        AddArcColor: Add arc color
+        BaseBPM: 基準BPM
+        SyncBaseBPM: 同期
+        ChartOffset: 譜面オフセット
+        TimingPointDensityFactor: 判定密度
+        ChartConstant: 譜面定数
+        DifficultyName: 難易度
+        DifficultyColor: 背景色
+        Files: 関連ファイル
+        Audio: 音声
+        JacketArt: ジャケット
+        Background: 背景画像
+        Video: 背景動画
+        Skin: スキン設定
+        Side: 光サイド/対立サイド
+        Note: ノーツ
+        Particle: パーティクル
+        Accent: 判定線/コンボ
+        Track: (?)Track
+        SingleLine: (?)Single Line
+        Colors: 色設定
+        TraceBody: トレース
+        Shadow: 影
+        ArcColors: アーク
+        Blue: 青 (0)
+        Red: 赤 (1)
+        Green: 緑 (2)
+        Custom: カスタム ({0})
+        AddArcColor: カスタム色を追加
         NoProjectLoaded: |-
-          No project loaded.
-          Create or open a new project
-      Options:
-        Inherit: Inherit
+          プロジェクトがロードされていません。
+          新しく作成するか、既存のプロジェクトを開いてください。
+      Options: # これは翻訳しない
+        Inherit: （既定）
         Light: Light
         Conflict: Conflict
         Colorless: Colorless
@@ -390,35 +392,35 @@ Compose:
         Finale: Finale
         Pentiment: Pentiment
         Arcana: Arcana
-        None: None
+        None: （なし）
         Neo: Neo
         Past: Past
         Present: Present
         Future: Future
         Beyond: Beyond
     Timeline:
-      Label:
-        Offset: Offset
+      Label: # (?) あとまわし
+        Offset: (?)Offset
         TimingGroup: Group
         Density: Density
     # Events editor panel
     EventsEditor:
-      Label:
+      Label: # (?) あとまわし
         Group: Group
         Events: Events
       Actions:
-        AddGroup: Add group
-        DeleteGroup: Delete group
-        AddEvent: Add event
-        DeleteEvent: Delete event
-        FreeCamera: Free camera
+        AddGroup: 追加
+        DeleteGroup: 削除
+        AddEvent: 追加
+        DeleteEvent: 削除
+        FreeCamera: フリーカメラ
       CameraView:
-        Default: Default view
-        Stationary: Stationary view
-        ZoomedOut: Zoomed out view
-        BirdsEye1: Bird's-eye view 1
-        BirdsEye2: Bird's-eye view 2
-      Mode:
+        Default: '視点: デフォルト'
+        Stationary: '視点: 固定'
+        ZoomedOut: '視点: ズームアウト'
+        BirdsEye1: '視点: 俯瞰 (上から下)'
+        BirdsEye2: '視点: 俯瞰 (左から右)'
+      Mode: # これは翻訳しない
         Timing: Timing
         Camera: Camera
         Scenecontrol: Scene
@@ -426,61 +428,61 @@ Compose:
     Settings:
       Label:
         Locale:
-          Name: Localization
-          Language: Language
-          Reload: Reload locales
-          CheckMissing: Check missing entries
+          Name: ローカライズ設定
+          Language: 言語
+          Reload: ロケールを再読み込み
+          CheckMissing: エントリの欠落を検査
         Gameplay:
-          Name: Gameplay
-          Speed: Speed
-          AspectRatio: Aspect Ratio
+          Name: ゲーム画面
+          Speed: 譜面速度
+          AspectRatio: アスペクト比
         Grid:
-          Name: Grid
-          Slot: Slot
-          UseDefault: Use default
-          FromLane: From lane
-          ToLane: To lane
-          ScaleGrid: Scale with sky input
-          Gridline: Define gridlines
-          Script: Lua script
+          Name: グリッド
+          Slot: スロット
+          UseDefault: デフォルトを使用
+          FromLane: レーン (左端)
+          ToLane: レーン (右端)
+          ScaleGrid: Sky Inputに従って拡大
+          Gridline: (?)グリッドラインを定義
+          Script: (?)Luaスクリプト
         AudioVolume:
-          Name: Audio volume
-          Music: Music
-          Effect: Effect
-          GlobalOffset: Global offset
+          Name: 音量
+          Music: 音楽
+          Effect: エフェクト
+          GlobalOffset: (?)Global offset
         Display:
-          Name: Display
-          Vsync: Vsync
-          Framerate: Framerate
-          ShowCounter: Show framerate
+          Name: 画面
+          Vsync: VSync
+          Framerate: FPS
+          ShowCounter: FPSを表示
         Input:
-          Name: Input
-          ReloadKeybinds: Reload keybinds
+          Name: 入力
+          ReloadKeybinds: キーバインドを再読み込み
         ScrollSensitivity:
-          Name: Scroll sensitivity
-          Vertical: Vertical
-          Horizontal: Horizontal
-          Timeline: Timeline
-        TrackScrolling:
+          Name: スクロール感度
+          Vertical: 垂直
+          Horizontal: 水平
+          Timeline: タイムライン
+        TrackScrolling: # (?) わからない
           Name: Track scrolling
           Threshold: Threshold
           MaxMovement: Max movement
         Credits:
-          Name: Credits
-          View: See credits
+          Name: クレジット
+          View: クレジットを確認
     # Toolbox panel
     Toolbox:
-      Pallete:
-        Name: Pallete
+      Pallete: # (?) これは翻訳しない?
+        Name: パレット
         Arc: Arc
         Trace: Trace
         Tap: Tap
         Hold: Hold
         Arctap: Sky
         Easing: Easing
-      Macros: Macros
+      Macros: マクロ
     # Inspector window
-    Inspector:
+    Inspector: # (?) これは？
       Name: Inspector
       Timing: Timing
       StartTiming: Start
@@ -494,8 +496,8 @@ Compose:
       Arc: Arc
       Trace: Trace
       Actions:
-        SelectArc: Select parent arc
-        SelectArctap: Select sky notes
+        SelectArc: 親のアークノーツを選択
+        SelectArctap: スカイノーツを選択
 
 Remote:
   State:
