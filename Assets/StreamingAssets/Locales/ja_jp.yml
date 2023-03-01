@@ -3,40 +3,27 @@
 # https://github.com/0thElement/ArcCreate/commit/f0ff48d190644f720cabd16de81a0d3eecdcbc77
 
 # ほんやくノート
-# - 句読点は「、。」(全角)
 # - カッコは「()」(半角)
 # - コロンは「: 」(半角に半角スペース)
 # - 引用は「"~"」(半角)か「「~」」などで
-# - もし英単語を入れるなら、それぞれの単語の頭文字を大文字にして。
+# - もし英単語を入れるならキャメルケースで
 # - 作業を後回しにしたメッセージは先頭に"(?)"をつけておきます。
 #
-# 決めること
-# - ArcTapはSkyNoteと呼ぶ？
-# - Void? Trace?
-# - Arc/TraceかSolid Arc/Void Arcか？
-# - Timingはどう訳すべき？
-# - TimingGroupは？
-# - ~ eventはどうする？ Arc/アーク/アークノーツ
-# - ノーツ? ノート?
-# - ホールド? ロング?
+# - Tap/Hold/Arc/Sky/Traceはそのままでノートは付けない
+# - Note(s)はノーツ
+# - イベントでない方のTimingはタイミングと訳す
+# - Timingイベント/Cameraイベント/SceneControlイベント
+# - TimingGroupはそのままで
 #
-# - timing: タイミング
-# - ~ event: ~イベント # Arc/Timing/Hold/Tapなど。
-# - timing group: タイミンググループ
 # - exception: エラー
 # - chart: 譜面
-# - chart file: 譜面ファイル
-# - audio offset: 音源オフセット(Audio Offset)
-# - timing point density factor: 判定密度係数(Timing Point Density Factor)
-# - base timing: 基準Timingイベンt
-# - base bpm: 基準BPM(Base BPM)
-# - duration: 継続時間
-# - (?)arc color: アーク色?
-# - (?)custom color: カスタムカラー?
+# - audio offset: 音源オフセット
+# - timing point density factor: 判定密度係数
+# - base bpm: 基準BPM
+# - duration: 長さ
+# - arc color: ArcのColorID
 # - invalid ~: 〜が正しくありません あるいは 無効な〜です
-# - instruction: 命令
-# - keystroke: キーストローク
-# - (?) gameplay; ゲーム? ゲーム画面? ゲームプレイ?
+# - gameplay; ゲーム あるいは ゲーム画面
 
 Format:
   # Exception messages while parsing chart files
@@ -53,11 +40,11 @@ Format:
       イベントタイプ: {EventType}
       処理中の行: "{Content}"
     ArcColorNegative: |-
-      アークの色IDは負の値にできません。
+      ArcのColorIDは負の値にできません。
     AudioOffsetInvalid: |-
-      音源オフセット(Audio Offset)の定義が正しくありません。
+      音源オフセットの定義が正しくありません。
     TimingPointDensityFactorInvalid: |-
-      判定密度係数(Timing Point Density Factor)の定義が正しくありません。
+      判定密度係数の定義が正しくありません。
     BaseTimingInvalid: |-
       無効な基準Timingイベント。譜面ファイルは0msのTimingイベントで始めてください。
     IncludeReferencedMultipleTimes: |-
@@ -65,19 +52,19 @@ Format:
     IncludeAReferencedFragment: |-
       すでにフラグメントとして参照されている譜面ファイルをインクルードすることはできません。
     TimingGroupPairInvalid: |-
-      タイミンググループの対応する閉じカッコが見つかりません。タイミンググループの定義は"};"で適切に囲んでください。
+      TimingGroupの対応する閉じカッコが見つかりません。TimingGroupの定義は"};"で適切に囲んでください。
     DivisorNegative: |-
       Timingイベントの小節線プロパティは負の値にできません。
     BaseBPMZero: |-
-      基準BPM(Base BPM)は0にできません。
+      基準BPMは0にできません。
     DurationNegative: |-
-      このイベントの継続時間は負の値にできません。
+      このイベントの長さは負の値にできません。
     DurationZero: |-
-      このイベントの継続時間は0にできません。
+      このイベントの長さは0にできません。
     ArcTapOutOfRange: |-
-      ArcTapが属しているArcの継続時間外にあります。
+      Skyが属しているArcの継続時間外にあります。
     TimingGroupPropertiesInvalid: |-
-      タイミンググループのプロパティが正しくありません。
+      TimingGroupのプロパティが正しくありません。
     SymbolError: |-
       構文エラー: {Exception}
       スタックトレース:
@@ -106,19 +93,18 @@ Compose:
     NoChartIncluded: |-
       無効なプロジェクトファイル: プロジェクトには譜面が含まれていません。
     InvalidGroupProperties: |-
-      無効なタイミンググループのプロパティ: {Message}
+      無効なTimingGroupのプロパティ: {Message}
     InstructionLimit: |-
       Luaスクリプト強制終了: 命令数が設定されている上限{0}に達しました。
     InvalidBaseBPM: |-
-      無効な基準BPM(Base BPM): {0}
+      無効な基準BPM: {0}
     CreateSkyNoteNoValidArc: |-
-      ここにスカイノーツを作ることはできません。スカイノーツはトレースノーツの上に配置する必要があります。
+      ここにSkyを作ることはできません。SkyはArcやTraceの上に配置する必要があります。
     Navigation:
       ParseKeybind: |-
         キーバインドを読み込み中にエラーが発生しました。キーストロークを解析できません: "{0}"
-      # "invalid keybind"より"invalid keystroke"の方が適切?
       ParseWhitespace: |-
-        無効なキーストローク: キーストロークはスペース(" ")にはできません。
+        無効なキーストローク: キーストロークは空白にできません。
       InvalidKeystroke: |-
         無効なキーストローク: 文字列"{0}"は有効なキーストローク形式ではありません。
       InvalidKey: |-
@@ -162,13 +148,13 @@ Compose:
       EditCamera: Cameraイベントを編集
       RemoveCamera: Cameraイベントを削除
       EditValue: ノーツのプロパティを編集
-      EditArc: アークのプロパティを編集
+      EditArc: Arcのプロパティを編集
       CreateNote:
-        Tap: タップノーツを作成
-        Hold: ホールドノーツを作成
-        Arc: アークノーツを作成
-        ArcTap: スカイノーツを作成
-        Trace: トレースノーツを作成
+        Tap: Tapを作成
+        Hold: Holdを作成
+        Arc: Arcを作成
+        ArcTap: Skyを作成
+        Trace: Traceを作成
       DeleteNotes: ノーツを削除
       Cut: ノーツを切り取り
       Paste: ノーツを貼り付け
@@ -184,9 +170,9 @@ Compose:
       NamedCopy: '{0}ノーツをコピーしてクリップボード"{1}"にホールド'
       NamedCut: '{0}ノーツを切り取ってクリップボード"{1}"にホールド'
     GroupTable:
-      AddGroup: Timing Group#{Number}を追加 
-      EditGroup: Timing Group#{Number}を編集
-      RemoveGroup: Timing Group#{Number}を削除
+      AddGroup: TimingGroup#{Number}を追加 
+      EditGroup: TimingGroup#{Number}を編集
+      RemoveGroup: TimingGroup#{Number}を削除
     Project:
       NewProject: |-
         新しいプロジェクトを作成しました: "{Path}"
@@ -204,16 +190,16 @@ Compose:
       InvalidParamameter: 無効なパラメーター
     Measurer:
       CopyTiming: タイミングをコピーしました
-      CopyPosition: アークの座標をコピーしました
-      CopyX: アークのX座標をコピーしました
-      CopyY: アークのY座標をコピーしました
+      CopyPosition: Arcの座標をコピーしました
+      CopyX: ArcのX座標をコピーしました
+      CopyY: ArcのY座標をコピーしました
   # Dialog boxes
   Dialog:
     RemoveGroup:
-      Title: タイミンググループを削除
+      Title: TimingGroupを削除
       Content: |-
-        このタイミンググループを削除してもよろしいですか？
-        タイミンググループとその内容は削除され、*元に戻せません*。
+        このTimingGroupを削除してもよろしいですか？
+        TimingGroupとその内容は削除され、*元に戻せません*。
       Yes: 削除
       No: キャンセル
     RemoveChart:
@@ -265,7 +251,7 @@ Compose:
           Cancel: キャンセル
         Clear: クリップボードをクリア
       Delete:
-        Name: Sakuzyo
+        Name: 削除
         Execute: ノーツを削除
       Mirror:
         Name: ミラー
@@ -276,7 +262,6 @@ Compose:
     # Please modify the comment lines only (lines beginning with '--')
     DefaultScript: |-
       -- グリッドはLuaで定義できます
-      -- 座標はアーク座標です
 
       -- グリッドの当たり判定の範囲
       -- (左, 右, 下, 上)
@@ -306,14 +291,14 @@ Compose:
       Cancel: キャンセル
       Close: 閉じる
       NotRequired: (任意)
-      Extension: (?)Extension
+      Extension: 拡張子 # (?) 用途不明
     Placeholder:
       Text: テキストを入力…
       File: ファイルを選択…
       Image: 画像を選択…
       Property: プロパティ…
       ImagePrompt: クリックして選択
-    PanelNames: # (?) 保留。翻訳するとスペースがない
+    PanelNames: # 翻訳しない
       Toolbox: Toolbox
       Gameplay: Gameplay
       Timeline: Timeline
@@ -328,10 +313,10 @@ Compose:
         New: 新規
         Open: 開く
         Save: 保存
-        InputMode: (?)Input Mode
+        InputMode: 入力モード
         FullScreen: フルスクリーン
         ToggleFullScreenHint: F11でフルスクリーンモードを開始/解除
-        Chart: (?)譜面
+        Chart: 譜面 # (?) 用途不明
     # Project panel
     Project:
       Label:
@@ -346,7 +331,7 @@ Compose:
         Charter: 譜面制作
         BPM: BPM
         BaseBPM: 基準BPM
-        SyncBaseBPM: 同期
+        SyncBaseBPM: 同期 # (?) 機能不明
         ChartOffset: 譜面オフセット
         TimingPointDensityFactor: 判定密度
         ChartConstant: 譜面定数
@@ -359,24 +344,24 @@ Compose:
         Video: 背景動画
         Skin: スキン設定
         Side: 光サイド/対立サイド
-        Note: ノーツ
+        Note: ノーツデザイン
         Particle: パーティクル
         Accent: 判定線/コンボ
-        Track: (?)Track
-        SingleLine: (?)Single Line
-        Colors: 色設定
-        TraceBody: トレース
+        Track: Track # 翻訳しない
+        SingleLine: Single Line # 翻訳しない
+        Colors: Arc/Trace
+        TraceBody: Trace
         Shadow: 影
-        ArcColors: アーク
-        Blue: 青 (0)
-        Red: 赤 (1)
-        Green: 緑 (2)
-        Custom: カスタム ({0})
-        AddArcColor: カスタム色を追加
+        ArcColors: Arc
+        Blue: Blue (0)
+        Red: Red (1)
+        Green: Green (2)
+        Custom: Custom ({0})
+        AddArcColor: 追加
         NoProjectLoaded: |-
           プロジェクトがロードされていません。
           新しく作成するか、既存のプロジェクトを開いてください。
-      Options: # これは翻訳しない
+      Options: # 翻訳しない
         Inherit: （既定）
         Light: Light
         Conflict: Conflict
@@ -399,13 +384,13 @@ Compose:
         Future: Future
         Beyond: Beyond
     Timeline:
-      Label: # (?) あとまわし
-        Offset: (?)Offset
+      Label: # 翻訳しない
+        Offset: Offset # (?) 用途不明
         TimingGroup: Group
         Density: Density
     # Events editor panel
     EventsEditor:
-      Label: # (?) あとまわし
+      Label: # 翻訳しない
         Group: Group
         Events: Events
       Actions:
@@ -413,7 +398,7 @@ Compose:
         DeleteGroup: 削除
         AddEvent: 追加
         DeleteEvent: 削除
-        FreeCamera: フリーカメラ
+        FreeCamera: フリー
       CameraView:
         Default: '視点: デフォルト'
         Stationary: '視点: 固定'
@@ -428,7 +413,7 @@ Compose:
     Settings:
       Label:
         Locale:
-          Name: ローカライズ設定
+          Name: ローカライズ
           Language: 言語
           Reload: ロケールを再読み込み
           CheckMissing: エントリの欠落を検査
@@ -439,17 +424,17 @@ Compose:
         Grid:
           Name: グリッド
           Slot: スロット
-          UseDefault: デフォルトを使用
+          UseDefault: デフォルト # (?) 機能不明
           FromLane: レーン (左端)
           ToLane: レーン (右端)
-          ScaleGrid: Sky Inputに従って拡大
-          Gridline: (?)グリッドラインを定義
-          Script: (?)Luaスクリプト
+          ScaleGrid: SkyInputに従って拡大
+          Gridline: グリッドを定義
+          Script: Luaスクリプト # (?) 用途不明
         AudioVolume:
           Name: 音量
-          Music: 音楽
-          Effect: エフェクト
-          GlobalOffset: (?)Global offset
+          Music: 曲
+          Effect: SE
+          GlobalOffset: Global Offset # (?) 機能不明
         Display:
           Name: 画面
           Vsync: VSync
@@ -462,17 +447,17 @@ Compose:
           Name: スクロール感度
           Vertical: 垂直
           Horizontal: 水平
-          Timeline: タイムライン
-        TrackScrolling: # (?) わからない
-          Name: Track scrolling
-          Threshold: Threshold
-          MaxMovement: Max movement
+          Timeline: タイムライン 
+        TrackScrolling:
+          Name: Track
+          Threshold: 閾値
+          MaxMovement: 最大
         Credits:
           Name: クレジット
           View: クレジットを確認
     # Toolbox panel
     Toolbox:
-      Pallete: # (?) これは翻訳しない?
+      Pallete: # 翻訳しない
         Name: パレット
         Arc: Arc
         Trace: Trace
@@ -482,7 +467,7 @@ Compose:
         Easing: Easing
       Macros: マクロ
     # Inspector window
-    Inspector: # (?) これは？
+    Inspector: # 翻訳しない
       Name: Inspector
       Timing: Timing
       StartTiming: Start
@@ -496,8 +481,8 @@ Compose:
       Arc: Arc
       Trace: Trace
       Actions:
-        SelectArc: 親のアークノーツを選択
-        SelectArctap: スカイノーツを選択
+        SelectArc: Arcを選択
+        SelectArctap: Skyを選択
 
 Remote:
   State:
@@ -563,7 +548,7 @@ Gameplay:
       画像ファイルの読み込み中にエラーが発生しました。
       ファイル: "{Path}"
       {Error}
-  HUD: # (?) なにこれ
+  HUD: # (?) 用途不明
     Play: プレイ
     Retry: リトライ
     Return: 戻る
