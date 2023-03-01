@@ -9,7 +9,8 @@ Alaiskai
 yojohanshinwataikei
 
 <size=33><b>Localization</b></size>
--
+Japanese: rassvet2
+Spanish: Alaiskai
 
 <size=33><b>Quality Assurance</b></size>
 ZydeKun

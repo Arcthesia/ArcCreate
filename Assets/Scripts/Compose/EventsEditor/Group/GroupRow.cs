@@ -158,6 +158,7 @@ namespace ArcCreate.Compose.EventsEditor
                 RawTimingGroup group = new RawTimingGroup(value)
                 {
                     Name = Reference.GroupProperties.Name,
+                    File = Reference.GroupProperties.FileName,
                 };
                 Reference.SetGroupProperties(new Gameplay.Data.GroupProperties(group));
 

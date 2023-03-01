@@ -28,7 +28,10 @@ namespace ArcCreate.Compose.Project
                 events.AddRange(tg.GetEventType<TimingEvent>());
                 events.AddRange(Services.Gameplay.Chart.GetAll<CameraEvent>().Where(cam => cam.TimingGroup == tg.GroupNumber));
                 events.AddRange(Services.Gameplay.Chart.GetAll<ScenecontrolEvent>().Where(sc => sc.TimingGroup == tg.GroupNumber));
-                events.AddRange(tg.ReferenceEvents);
+                if (tg.ReferenceEvents != null)
+                {
+                    events.AddRange(tg.ReferenceEvents);
+                }
 
                 events.Sort(
                     (a, b) =>

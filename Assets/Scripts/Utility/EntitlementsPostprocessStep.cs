@@ -1,10 +1,11 @@
 // SPDX-FileCopyrightText: © 2021 Chris Marc Dailey (nitz)
 // SPDX-License-Identifier: MIT
 
-using System.IO;
 using UnityEditor;
 using UnityEditor.Callbacks;
+#if UNITY_IOS
 using UnityEditor.iOS.Xcode;
+#endif
 using UnityEngine;
 
 public class EntitlementsPostprocessStep : MonoBehaviour

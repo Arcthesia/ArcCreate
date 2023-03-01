@@ -135,7 +135,7 @@ namespace ArcCreate.Gameplay.Audio
             if (returnOnPause)
             {
                 lastPausedTiming = onPauseReturnTo;
-                audioTiming = onPauseReturnTo;
+                AudioTiming = onPauseReturnTo;
             }
         }
 

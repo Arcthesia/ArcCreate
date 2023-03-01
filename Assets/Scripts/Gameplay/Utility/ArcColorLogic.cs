@@ -89,6 +89,11 @@ namespace ArcCreate.Gameplay
         /// </summary>
         public static void ResetAll()
         {
+            for (int i = 0; i < Instances.Count; i++)
+            {
+                Services.Skin.ApplyRedArcValue(i, 0);
+            }
+
             Instances.Clear();
         }
 

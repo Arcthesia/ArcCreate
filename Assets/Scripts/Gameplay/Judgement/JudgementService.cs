@@ -154,6 +154,7 @@ namespace ArcCreate.Gameplay.Judgement
         private void OnInputModeChange(int modeNum)
         {
             InputMode inputMode = (InputMode)modeNum;
+            inputHandler?.ResetJudge();
 
             switch (inputMode)
             {
