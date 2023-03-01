@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Extension;
+using TMPro;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Scenecontrol
@@ -8,18 +9,21 @@ namespace ArcCreate.Gameplay.Scenecontrol
     public class ScenecontrolService : MonoBehaviour, IScenecontrolService
     {
         private List<ScenecontrolEvent> events = new List<ScenecontrolEvent>();
-
-        [SerializeField] private SpriteRenderer trackSpriteRenderer;
-        [SerializeField] private SpriteRenderer singleLineLeftRenderer;
-        [SerializeField] private SpriteRenderer singleLineRightRenderer;
-        [SerializeField] private SpriteRenderer skyInputLineSpriteRenderer;
-        private float trackOffset = 0;
-        private float singleLineOffset = 0;
+        [SerializeField] private TMP_FontAsset defaultFont;
+        [SerializeField] private Scene scene;
         private float count = 0;
         private int loopSwitch = 1;
-        private readonly int offsetShaderId = Shader.PropertyToID("_Offset");
+        private readonly List<Controller> controllers = new List<Controller>();
 
         public List<ScenecontrolEvent> Events => events;
+
+        public TMP_FontAsset DefaultFont => defaultFont;
+
+        public float CurrentSpeed { get; private set; }
+
+        public float CurrentGlow { get; private set; }
+
+        public string SceneControlFolder => "";
 
         public void Load(List<ScenecontrolEvent> cameras)
         {
@@ -30,6 +34,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public void Clear()
         {
             events.Clear();
+            CleanControllers();
         }
 
         public void Add(IEnumerable<ScenecontrolEvent> events)
@@ -77,7 +82,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public void UpdateScenecontrol(int currentTiming)
         {
-            // TEMPORARY BEFORE A PROPER SCENECONTROL SYSTEM IS IMPLEMENTED
             float bpm = Services.Chart.GetTimingGroup(0).GetBpm(currentTiming);
             float beatDuration = (bpm != 0) ? 60.0f / bpm : Mathf.Infinity;
 
@@ -95,25 +99,36 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 loopSwitch *= -1;
             }
 
-            float currentAlpha = Mathf.Lerp(0.75f, 1.0f, count / beatDuration);
-            skyInputLineSpriteRenderer.color = new Color(1, 1, 1, currentAlpha);
+            CurrentSpeed = Services.Audio.IsPlaying ? bpm / Values.BaseBpm : 0;
+            CurrentGlow = count / beatDuration;
 
-            float speed = Services.Audio.IsPlaying ? bpm / Values.BaseBpm : 0;
-            trackOffset += Time.deltaTime * speed * 6;
-            singleLineOffset += (speed >= 0) ? (Time.deltaTime * speed * 6) : (Time.deltaTime * 0.6f);
-            trackSpriteRenderer.sharedMaterial.SetFloat(offsetShaderId, trackOffset);
-            singleLineLeftRenderer.sharedMaterial.SetFloat(offsetShaderId, singleLineOffset);
-            singleLineRightRenderer.sharedMaterial.SetFloat(offsetShaderId, singleLineOffset);
+            foreach (Controller c in controllers)
+            {
+                c.UpdateController(currentTiming);
+            }
+        }
+
+        public void RemoveController(Controller controller)
+        {
+            controllers.Remove(controller);
+        }
+
+        public void AddController(Controller controller)
+        {
+            controllers.Add(controller);
+        }
+
+        public void CleanControllers()
+        {
+            foreach (var c in controllers)
+            {
+                c.CleanController();
+            }
         }
 
         private void RebuildList()
         {
             events.Sort((a, b) => a.Timing.CompareTo(b.Timing));
-        }
-
-        private void Awake()
-        {
-            trackSpriteRenderer.sharedMaterial = Instantiate(trackSpriteRenderer.sharedMaterial);
         }
     }
 }

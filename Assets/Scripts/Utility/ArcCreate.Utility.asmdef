@@ -12,7 +12,8 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "Jace.dll"
+        "Jace.dll",
+        "MoonSharp.Interpreter.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

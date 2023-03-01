@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using ArcCreate.Compose.Lua;
 using ArcCreate.Gameplay;
+using ArcCreate.Utilities.Lua;
 using MoonSharp.Interpreter;
 using UnityEngine;
 
@@ -12,7 +12,14 @@ namespace ArcCreate.Compose.Grid
     {
         public LuaVerticalGridSettings(string settings, int instructionLimit = 3000)
         {
-            LuaRunner.RunScript(settings, this, instructionLimit);
+            try
+            {
+                LuaRunner.RunScript(settings, this, instructionLimit);
+            }
+            catch (InstructionLimitReachedException e)
+            {
+                throw new ComposeException(e.Message);
+            }
         }
 
         [MoonSharpHidden]
@@ -35,6 +42,9 @@ namespace ArcCreate.Compose.Grid
             script.Globals["grid"] = this;
             script.Globals["Grid"] = this;
             script.Globals["defaultColor"] = new RGBA(VerticalGrid.DefaultLineColor);
+            script.Globals["notify"] = (Action<object>)((value) => Services.Popups.Notify(Popups.Severity.Info, value.ToString()));
+            script.Globals["notifyWarning"] = (Action<object>)((value) => Services.Popups.Notify(Popups.Severity.Warning, value.ToString()));
+            script.Globals["notifyError"] = (Action<object>)((value) => Services.Popups.Notify(Popups.Severity.Error, value.ToString()));
         }
 
         public void SetCollider(float xFrom, float xTo, float yFrom, float yTo)
@@ -68,7 +78,7 @@ namespace ArcCreate.Compose.Grid
 
         public void SetPanelColor(HSVA hsva)
         {
-            PanelColor = Convert.HSVAToRGBA(hsva).ToColor();
+            PanelColor = Utilities.Lua.Convert.HSVAToRGBA(hsva).ToColor();
         }
 
         public void DrawLine(float xFrom, float xTo, float yFrom, float yTo)
@@ -108,7 +118,7 @@ namespace ArcCreate.Compose.Grid
 
         public void DrawLine(float xFrom, float xTo, float yFrom, float yTo, HSVA color)
         {
-            DrawLine(xFrom, xTo, yFrom, yTo, Lua.Convert.HSVAToRGBA(color));
+            DrawLine(xFrom, xTo, yFrom, yTo, Utilities.Lua.Convert.HSVAToRGBA(color));
         }
 
         public void DrawLine(XY from, XY to, string color)
@@ -163,7 +173,7 @@ namespace ArcCreate.Compose.Grid
 
         public void DrawLineDecorative(float xFrom, float xTo, float yFrom, float yTo, HSVA color)
         {
-            DrawLineDecorative(xFrom, xTo, yFrom, yTo, Lua.Convert.HSVAToRGBA(color));
+            DrawLineDecorative(xFrom, xTo, yFrom, yTo, Utilities.Lua.Convert.HSVAToRGBA(color));
         }
 
         public void DrawLineDecorative(XY from, XY to, string color)
@@ -213,7 +223,7 @@ namespace ArcCreate.Compose.Grid
 
         public void DrawArea(HSVA hsva, params XY[] points)
         {
-            DrawArea(Convert.HSVAToRGBA(hsva), points);
+            DrawArea(Utilities.Lua.Convert.HSVAToRGBA(hsva), points);
         }
 
         public void DrawArea(string colorHex, params XY[] points)

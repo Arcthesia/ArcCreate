@@ -16,6 +16,11 @@ namespace ArcCreate.Gameplay.GameplayCamera
         private bool isReset;
         private List<CameraEvent> events = new List<CameraEvent>();
 
+        private float fieldOfViewExternal;
+        private float tiltFactorExternal;
+        private Vector3 translationExternal;
+        private Quaternion rotationExternal;
+
         public Camera GameplayCamera => gameplayCamera;
 
         public List<CameraEvent> Events => events;
@@ -116,6 +121,18 @@ namespace ArcCreate.Gameplay.GameplayCamera
             currentArcPos += arcWorldX;
         }
 
+        public void SetPropertiesExternal(float fieldOfView, float tiltFactor)
+        {
+            fieldOfViewExternal = fieldOfView;
+            tiltFactorExternal = tiltFactor;
+        }
+
+        public void SetTransformExternal(Vector3 translation, Quaternion rotation)
+        {
+            translationExternal = translation;
+            rotationExternal = rotation;
+        }
+
         public void UpdateCamera(int currentTiming)
         {
             if (IsEditorCamera)
@@ -131,9 +148,9 @@ namespace ArcCreate.Gameplay.GameplayCamera
                 skyInputLabel.localPosition.z);
 
             Vector3 prevPosition = gameplayCamera.transform.localPosition;
-            Vector3 position = ResetPosition;
+            Vector3 position = ResetPosition + translationExternal;
             Vector3 rotation = ResetRotation;
-            float fov = Is16By9 ? 50 : 65;
+            float fov = Is16By9 ? 50 : 65 + fieldOfViewExternal;
             gameplayCamera.fieldOfView = fov;
             arcCamera.fieldOfView = fov;
             uiCamera.fieldOfView = fov;
@@ -166,7 +183,7 @@ namespace ArcCreate.Gameplay.GameplayCamera
             else
             {
                 gameplayCamera.transform.localPosition = position;
-                gameplayCamera.transform.localRotation = Quaternion.Euler(0f, 0f, rotation.z) * Quaternion.Euler(rotation.x, rotation.y, 0f);
+                gameplayCamera.transform.localRotation = Quaternion.Euler(0f, 0f, rotation.z) * Quaternion.Euler(rotation.x, rotation.y, 0f) * rotationExternal;
             }
 
             UpdateCameraTilt();
@@ -192,6 +209,7 @@ namespace ArcCreate.Gameplay.GameplayCamera
                 currentTilt = pos;
             }
 
+            currentTilt *= tiltFactorExternal;
             gameplayCamera.transform.LookAt(
                 gameplayCamera.transform.localPosition - ResetPosition + new Vector3(0, -5.5f, -20),
                 new Vector3(currentTilt, 1 - currentTilt, 0));

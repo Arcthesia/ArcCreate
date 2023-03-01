@@ -8,6 +8,10 @@ namespace ArcCreate.Gameplay.Score
     /// </summary>
     public interface IScoreService
     {
+        int CurrentScore { get; }
+
+        int CurrentCombo { get; }
+
         /// <summary>
         /// Gets a list of judgement results that was sent to this service in a frame.
         /// </summary>

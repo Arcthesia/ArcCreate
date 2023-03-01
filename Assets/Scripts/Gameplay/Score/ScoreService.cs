@@ -23,6 +23,10 @@ namespace ArcCreate.Gameplay.Score
         private readonly UnorderedList<ScoreEvent> pendingScoreEvents = new UnorderedList<ScoreEvent>(20);
         private readonly List<JudgementResult> resultReceivedThisFrame = new List<JudgementResult>(20);
 
+        public int CurrentScore => CurrentScoreTotal;
+
+        public int CurrentCombo => currentCombo;
+
         private int CurrentScoreTotal => (int)System.Math.Round(currentScoreFull + currentScorePartial);
 
         public void ProcessJudgement(JudgementResult result)

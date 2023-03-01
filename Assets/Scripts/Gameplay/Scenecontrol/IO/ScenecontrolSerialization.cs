@@ -5,11 +5,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
 {
     public class ScenecontrolSerialization
     {
-        private readonly List<SerializableUnit> channels = new List<SerializableUnit>();
+        private readonly List<ISerializableUnit> channels = new List<ISerializableUnit>();
         private readonly List<SerializedUnit> serializedChannels = new List<SerializedUnit>();
-        private readonly Dictionary<SerializableUnit, int> channelIdLookup = new Dictionary<SerializableUnit, int>();
+        private readonly Dictionary<ISerializableUnit, int> channelIdLookup = new Dictionary<ISerializableUnit, int>();
 
-        public int AddUnitAndGetId(SerializableUnit channel)
+        public int AddUnitAndGetId(ISerializableUnit channel)
         {
             if (channelIdLookup.TryGetValue(channel, out int id))
             {
@@ -29,7 +29,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return id;
         }
 
-        public string GetTypeFromUnit(SerializableUnit unit)
+        public string GetTypeFromUnit(ISerializableUnit unit)
         {
             switch (unit)
             {
@@ -48,18 +48,28 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     return "channel.cos";
                 case ExpChannel:
                     return "channel.exp";
+                case InverseChannel:
+                    return "channel.inverse";
                 case MaxChannel:
                     return "channel.max";
                 case MinChannel:
                     return "channel.min";
+                case NegateChannel:
+                    return "channel.negate";
                 case NoiseChannel:
                     return "channel.noise";
+                case ProductChannel:
+                    return "channel.product";
                 case RandomChannel:
                     return "channel.random";
                 case SawChannel:
                     return "channel.saw";
                 case SineChannel:
                     return "channel.sine";
+                case SumChannel:
+                    return "channel.sum";
+
+                // Trigger channels
                 case AccumulatingTriggerChannel:
                     return "channel.trigger.accumulate";
                 case LoopingTriggerChannel:
@@ -69,13 +79,52 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 case SettingTriggerChannel:
                     return "channel.trigger.set";
 
+                // String channels
+                case KeyStringChannel:
+                    return "channel.string.key";
+                case KeyTextChannel:
+                    return "channel.text.key";
+                case ConcatTextChannel:
+                    return "channel.text.concat";
+
+                // Contexts
+                case DropRateChannel:
+                    return "channel.context.droprate";
+                case GlobalOffsetChannel:
+                    return "channel.context.globaloffset";
+                case CurrentScoreChannel:
+                    return "channel.context.currentscore";
+                case CurrentComboChannel:
+                    return "channel.context.currentcombo";
+                case CurrentTimingChannel:
+                    return "channel.context.currenttiming";
+                case ScreenWidthChannel:
+                    return "channel.context.screenwidth";
+                case ScreenHeightChannel:
+                    return "channel.context.screenheight";
+                case ScreenIs16By9Channel:
+                    return "channel.context.is16by9";
+                case BPMChannel:
+                    return "channel.context.bpm";
+                case DivisorChannel:
+                    return "channel.context.divisor";
+                case FloorPositionChannel:
+                    return "channel.context.floorposition";
+
                 // Triggers
                 case JudgementTrigger:
                     return "trigger.judgement";
                 case ObserveTrigger:
                     return "trigger.observe";
                 default:
-                    throw new Exception($"Could not get type of object: {unit.GetType().Name}");
+                    Controller controller = unit as Controller;
+                    string name = controller == null ? null : controller.SerializedType;
+                    if (string.IsNullOrEmpty(name))
+                    {
+                        throw new Exception($"Could not get type of object: {unit.GetType().Name}");
+                    }
+
+                    return name;
             }
         }
     }

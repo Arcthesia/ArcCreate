@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
+using TMPro;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
@@ -9,6 +10,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
         /// Gets the list of all scenecontrol events.
         /// </summary>
         List<ScenecontrolEvent> Events { get; }
+
+        TMP_FontAsset DefaultFont { get; }
+
+        string SceneControlFolder { get; }
+
+        float CurrentSpeed { get; }
+
+        float CurrentGlow { get; }
+
+        GameplayData GameplayData { get; }
 
         /// <summary>
         /// Load a list of scenecontrol events.
@@ -59,5 +70,9 @@ namespace ArcCreate.Gameplay.Scenecontrol
         /// Clear all events.
         /// </summary>
         void Clear();
+
+        void RemoveController(Controller controller);
+
+        void AddController(Controller controller);
     }
 }

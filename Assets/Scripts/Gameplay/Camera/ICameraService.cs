@@ -69,5 +69,9 @@ namespace ArcCreate.Gameplay.GameplayCamera
         /// Clear all events.
         /// </summary>
         void Clear();
+
+        void SetPropertiesExternal(float fieldOfView, float tiltFactor);
+
+        void SetTransformExternal(Vector3 translation, Quaternion rotation);
     }
 }
