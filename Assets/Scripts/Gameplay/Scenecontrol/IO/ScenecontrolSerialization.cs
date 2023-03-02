@@ -5,22 +5,24 @@ namespace ArcCreate.Gameplay.Scenecontrol
 {
     public class ScenecontrolSerialization
     {
-        private readonly List<ISerializableUnit> channels = new List<ISerializableUnit>();
-        private readonly List<SerializedUnit> serializedChannels = new List<SerializedUnit>();
-        private readonly Dictionary<ISerializableUnit, int> channelIdLookup = new Dictionary<ISerializableUnit, int>();
+        private readonly List<ISerializableUnit> units = new List<ISerializableUnit>();
+        private readonly List<SerializedUnit> serializedUnits = new List<SerializedUnit>();
+        private readonly Dictionary<ISerializableUnit, int> idLookup = new Dictionary<ISerializableUnit, int>();
+
+        public List<SerializedUnit> Result => serializedUnits;
 
         public int AddUnitAndGetId(ISerializableUnit channel)
         {
-            if (channelIdLookup.TryGetValue(channel, out int id))
+            if (idLookup.TryGetValue(channel, out int id))
             {
                 return id;
             }
 
-            channels.Add(channel);
-            id = channels.Count - 1;
-            channelIdLookup.Add(channel, id);
+            units.Add(channel);
+            id = units.Count - 1;
+            idLookup.Add(channel, id);
 
-            serializedChannels.Add(new SerializedUnit
+            serializedUnits.Add(new SerializedUnit
             {
                 Type = GetTypeFromUnit(channel),
                 Properties = channel.SerializeProperties(this),
@@ -34,87 +36,89 @@ namespace ArcCreate.Gameplay.Scenecontrol
             switch (unit)
             {
                 // Channels
-                case KeyChannel:
+                case KeyChannel key:
                     return "channel.key";
-                case FFTChannel:
+                case FFTChannel fft:
                     return "channel.fft";
-                case ClampChannel:
+                case ClampChannel clamp:
                     return "channel.clamp";
-                case ConditionalChannel:
+                case ConditionalChannel condition:
                     return "channel.condition";
-                case ConstantChannel:
+                case ConstantChannel constant:
                     return "channel.const";
-                case CosChannel:
+                case CosChannel cos:
                     return "channel.cos";
-                case ExpChannel:
+                case ExpChannel exp:
                     return "channel.exp";
-                case InverseChannel:
+                case InverseChannel inverse:
                     return "channel.inverse";
-                case MaxChannel:
+                case MaxChannel max:
                     return "channel.max";
-                case MinChannel:
+                case MinChannel min:
                     return "channel.min";
-                case NegateChannel:
+                case NegateChannel negate:
                     return "channel.negate";
-                case NoiseChannel:
+                case NoiseChannel noise:
                     return "channel.noise";
-                case ProductChannel:
+                case ProductChannel product:
                     return "channel.product";
-                case RandomChannel:
+                case RandomChannel random:
                     return "channel.random";
-                case SawChannel:
+                case SawChannel saw:
                     return "channel.saw";
-                case SineChannel:
+                case SineChannel sine:
                     return "channel.sine";
-                case SumChannel:
+                case SumChannel sum:
                     return "channel.sum";
 
                 // Trigger channels
-                case AccumulatingTriggerChannel:
+                case AccumulatingTriggerChannel accum:
                     return "channel.trigger.accumulate";
-                case LoopingTriggerChannel:
+                case LoopingTriggerChannel loop:
                     return "channel.trigger.loop";
-                case StackingTriggerChannel:
+                case StackingTriggerChannel stack:
                     return "channel.trigger.stack";
-                case SettingTriggerChannel:
+                case SettingTriggerChannel setting:
                     return "channel.trigger.set";
 
                 // String channels
-                case KeyStringChannel:
+                case KeyStringChannel keystring:
                     return "channel.string.key";
-                case KeyTextChannel:
+                case KeyTextChannel keytext:
                     return "channel.text.key";
-                case ConcatTextChannel:
+                case ConcatTextChannel concat:
                     return "channel.text.concat";
+                case ValueToTextChannel valuetext:
+                    return "channel.text.value";
 
                 // Contexts
-                case DropRateChannel:
+                case DropRateChannel droprate:
                     return "channel.context.droprate";
-                case GlobalOffsetChannel:
+                case GlobalOffsetChannel goffset:
                     return "channel.context.globaloffset";
-                case CurrentScoreChannel:
+                case CurrentScoreChannel score:
                     return "channel.context.currentscore";
-                case CurrentComboChannel:
+                case CurrentComboChannel combo:
                     return "channel.context.currentcombo";
-                case CurrentTimingChannel:
+                case CurrentTimingChannel timing:
                     return "channel.context.currenttiming";
-                case ScreenWidthChannel:
+                case ScreenWidthChannel swidth:
                     return "channel.context.screenwidth";
-                case ScreenHeightChannel:
+                case ScreenHeightChannel sheight:
                     return "channel.context.screenheight";
-                case ScreenIs16By9Channel:
+                case ScreenIs16By9Channel is16by9:
                     return "channel.context.is16by9";
-                case BPMChannel:
+                case BPMChannel bpm:
                     return "channel.context.bpm";
-                case DivisorChannel:
+                case DivisorChannel divisor:
                     return "channel.context.divisor";
-                case FloorPositionChannel:
+                case FloorPositionChannel fp:
                     return "channel.context.floorposition";
 
                 // Triggers
-                case JudgementTrigger:
+                case JudgementTrigger tjudgement:
                     return "trigger.judgement";
-                case ObserveTrigger:
+                case ObserveTrigger tobserve:
                     return "trigger.observe";
                 default:
                     Controller controller = unit as Controller;

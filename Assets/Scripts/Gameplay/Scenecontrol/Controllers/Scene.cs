@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using ArcCreate.Utility.Parser;
 using MoonSharp.Interpreter;
@@ -10,27 +11,216 @@ namespace ArcCreate.Gameplay.Scenecontrol
     {
 #pragma warning disable
         [Header("Internal")]
-        public CameraController GameplayCamera;
-        public TextController Combo;
-        public TextController Score;
-        public ImageController Jacket;
-        public TitleController Title;
-        public ComposerController Composer;
-        public DifficultyController DifficultyText;
-        public ImageController DifficultyBackground;
-        public CanvasController HUD;
+        [SerializeField] private CameraController gameplayCamera;
+        public CameraController GameplayCamera
+        {
+            get
+            {
+                ReferencedControllers.Add(gameplayCamera);
+                return gameplayCamera;
+            }
+        }
+        [SerializeField] private TextController combo;
+        public TextController Combo
+        {
+            get
+            {
+                ReferencedControllers.Add(combo);
+                return combo;
+            }
+        }
+        [SerializeField] private TextController score;
+        public TextController Score
+        {
+            get
+            {
+                ReferencedControllers.Add(score);
+                return score;
+            }
+        }
+        [SerializeField] private ImageController jacket;
+        public ImageController Jacket
+        {
+            get
+            {
+                ReferencedControllers.Add(jacket);
+                return jacket;
+            }
+        }
+        [SerializeField] private TitleController title;
+        public TitleController Title
+        {
+            get
+            {
+                ReferencedControllers.Add(title);
+                return title;
+            }
+        }
+        [SerializeField] private ComposerController composer;
+        public ComposerController Composer
+        {
+            get
+            {
+                ReferencedControllers.Add(composer);
+                return composer;
+            }
+        }
+        [SerializeField] private DifficultyController difficultyText;
+        public DifficultyController DifficultyText
+        {
+            get
+            {
+                ReferencedControllers.Add(difficultyText);
+                return difficultyText;
+            }
+        }
+        [SerializeField] private ImageController difficultyBackground;
+        public ImageController DifficultyBackground
+        {
+            get
+            {
+                ReferencedControllers.Add(difficultyBackground);
+                return difficultyBackground;
+            }
+        }
+        [SerializeField] private CanvasController hUD;
+        public CanvasController HUD
+        {
+            get
+            {
+                ReferencedControllers.Add(hUD);
+                return hUD;
+            }
+        }
         public CanvasController hud => HUD;
-        public InfoPanelController InfoPanel;
-        public ImageController PauseButton;
-        public ImageController Background;
-        public SpriteController VideoBackground;
-        public TrackController Track;
-        public SingleLineController SingleLineL;
-        public SingleLineController SingleLineR;
-        public GlowingSpriteController SkyInputLine;
-        public GlowingSpriteController SkyInputLabel;
-        public BeatlinesController Beatlines;
-        public SpriteController Darken;
+        [SerializeField] private InfoPanelController infoPanel;
+        public InfoPanelController InfoPanel
+        {
+            get
+            {
+                ReferencedControllers.Add(infoPanel);
+                return infoPanel;
+            }
+        }
+        [SerializeField] private ImageController pauseButton;
+        public ImageController PauseButton
+        {
+            get
+            {
+                ReferencedControllers.Add(pauseButton);
+                return pauseButton;
+            }
+        }
+        [SerializeField] private ImageController background;
+        public ImageController Background
+        {
+            get
+            {
+                ReferencedControllers.Add(background);
+                return background;
+            }
+        }
+        [SerializeField] private SpriteController videoBackground;
+        public SpriteController VideoBackground
+        {
+            get
+            {
+                ReferencedControllers.Add(videoBackground);
+                return videoBackground;
+            }
+        }
+        [SerializeField] private TrackController track;
+        public TrackController Track
+        {
+            get
+            {
+                ReferencedControllers.Add(track);
+                return track;
+            }
+        }
+        [SerializeField] private SingleLineController singleLineL;
+        public SingleLineController SingleLineL
+        {
+            get
+            {
+                ReferencedControllers.Add(singleLineL);
+                return singleLineL;
+            }
+        }
+        [SerializeField] private SingleLineController singleLineR;
+        public SingleLineController SingleLineR
+        {
+            get
+            {
+                ReferencedControllers.Add(singleLineR);
+                return singleLineR;
+            }
+        }
+        [SerializeField] private GlowingSpriteController skyInputLine;
+        public GlowingSpriteController SkyInputLine
+        {
+            get
+            {
+                ReferencedControllers.Add(skyInputLine);
+                return skyInputLine;
+            }
+        }
+        [SerializeField] private GlowingSpriteController skyInputLabel;
+        public GlowingSpriteController SkyInputLabel
+        {
+            get
+            {
+                ReferencedControllers.Add(skyInputLabel);
+                return skyInputLabel;
+            }
+        }
+        [SerializeField] private BeatlinesController beatlines;
+        public BeatlinesController Beatlines
+        {
+            get
+            {
+                ReferencedControllers.Add(beatlines);
+                return beatlines;
+            }
+        }
+        [SerializeField] private SpriteController darken;
+        public SpriteController Darken
+        {
+            get
+            {
+                ReferencedControllers.Add(darken);
+                return darken;
+            }
+        }
+        [SerializeField] private CanvasController worldCanvas;
+        public CanvasController WorldCanvas
+        {
+            get
+            {
+                ReferencedControllers.Add(worldCanvas);
+                return worldCanvas;
+            }
+        }
+        [SerializeField] private CanvasController screenCanvas;
+        public CanvasController ScreenCanvas
+        {
+            get
+            {
+                ReferencedControllers.Add(screenCanvas);
+                return screenCanvas;
+            }
+        }
+        [SerializeField] private CanvasController cameraCanvas;
+        public CanvasController CameraCanvas
+        {
+            get
+            {
+                ReferencedControllers.Add(cameraCanvas);
+                return cameraCanvas;
+            }
+        }
+
+        public Transform CanvasParent;
 
         [Header("Prefab")]
         public GameObject ImagePrefab;
@@ -38,12 +228,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public GameObject SpritePrefab;
         public GameObject TextPrefab;
         public GameObject GroupPrefab;
-
-        [Header("Canvases")]
-        public CanvasController WorldCanvas;
-        public CanvasController ScreenCanvas;
-        public CanvasController CameraCanvas;
-        public Transform CanvasParent;
 
         [Header("Materials")]
         public Material DefaultMaterial;
@@ -70,7 +254,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public Material VividLightMaterial;
         public Material MeshMaterial;
 
-        [MoonSharpHidden] public Controller[] DisabledByDefault;
+        private List<Controller> ReferencedControllers => Services.Scenecontrol.ReferencedControllers;
 #pragma warning restore
 
         public Material GetMaterial(string material, bool newMaterialInstance)
@@ -98,6 +282,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
             c.Start();
             c.SerializedType = $"image.{imgPath},{material}";
+            ReferencedControllers.Add(c);
             return c;
         }
 
@@ -113,6 +298,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
             c.Start();
             c.SerializedType = $"sprite.{imgPath},{material}";
+            ReferencedControllers.Add(c);
             return c;
         }
 
@@ -136,6 +322,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
             c.Start();
             c.SerializedType = $"canvas.{worldSpace}";
+            ReferencedControllers.Add(c);
             return c;
         }
 
@@ -185,6 +372,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
 
             c.SerializedType = $"text.{font},{fontSize},{lineSpacing},{alignment}";
+            ReferencedControllers.Add(c);
             return c;
         }
 
@@ -193,10 +381,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
             try
             {
                 var group = Services.Chart.GetTimingGroup(tg);
-                NoteGroupController contr = Instantiate(GroupPrefab, transform).GetComponent<NoteGroupController>();
-                contr.TimingGroup = group;
-                contr.SerializedType = $"tg.{group.GroupNumber}";
-                return contr;
+                NoteGroupController c = Instantiate(GroupPrefab, transform).GetComponent<NoteGroupController>();
+                c.TimingGroup = group;
+                c.SerializedType = $"tg.{group.GroupNumber}";
+                ReferencedControllers.Add(c);
+                return c;
             }
             catch
             {

@@ -19,7 +19,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         float CurrentGlow { get; }
 
-        GameplayData GameplayData { get; }
+        List<Controller> ReferencedControllers { get; }
 
         /// <summary>
         /// Load a list of scenecontrol events.
@@ -70,9 +70,5 @@ namespace ArcCreate.Gameplay.Scenecontrol
         /// Clear all events.
         /// </summary>
         void Clear();
-
-        void RemoveController(Controller controller);
-
-        void AddController(Controller controller);
     }
 }

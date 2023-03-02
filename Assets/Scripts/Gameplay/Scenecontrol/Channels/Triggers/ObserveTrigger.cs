@@ -10,8 +10,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
         private ValueChannel above;
         private ValueChannel below;
 
-        private float lastDiffToAbove = float.MinValue;
-        private float lastDiffToBelow = float.MaxValue;
+        private float lastDiffToAbove = float.MaxValue;
+        private float lastDiffToBelow = float.MinValue;
 
         public ObserveTrigger()
         {
@@ -20,6 +20,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public ObserveTrigger(ValueChannel target)
         {
             this.target = target;
+            above = new ConstantChannel(float.MaxValue);
+            below = new ConstantChannel(float.MinValue);
         }
 
         public ObserveTrigger GoAbove(ValueChannel above)

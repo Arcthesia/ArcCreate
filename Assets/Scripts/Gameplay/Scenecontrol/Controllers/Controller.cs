@@ -45,7 +45,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
             defaultActive = gameObject.activeSelf;
             SetupDefault();
             Reset();
-            Services.Scenecontrol.AddController(this);
         }
 
         public Controller[] GetChildren()
@@ -411,7 +410,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             {
                 ILayerController c = this as ILayerController;
                 c.UpdateLayer(c.DefaultLayer, c.DefaultSort, c.DefaultAlpha);
-                c.Layer = StringChannel.Constant(c.DefaultLayer);
+                c.Layer = StringChannelBuilder.Constant(c.DefaultLayer);
                 c.Sort = new ConstantChannel(c.DefaultSort);
                 c.Alpha = new ConstantChannel(c.DefaultAlpha * 255f);
             }
@@ -422,8 +421,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 c.UpdateProperties(c.DefaultFontSize, c.DefaultLineSpacing, c.DefaultFont);
                 c.FontSize = new ConstantChannel(c.DefaultFontSize);
                 c.LineSpacing = new ConstantChannel(c.DefaultLineSpacing);
-                c.Text = TextChannel.Constant(c.DefaultText);
-                c.Font = StringChannel.Constant(c.DefaultFont);
+                c.Text = TextChannelBuilder.Constant(c.DefaultText);
+                c.Font = StringChannelBuilder.Constant(c.DefaultFont);
 
                 char[] arr = c.DefaultText.ToCharArray();
                 c.UpdateText(arr, 0, arr.Length);
@@ -713,11 +712,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
         protected virtual void SetActive(bool active)
         {
             gameObject.SetActive(active);
-        }
-
-        private void OnDestroy()
-        {
-            Services.Scenecontrol.RemoveController(this);
         }
     }
 }

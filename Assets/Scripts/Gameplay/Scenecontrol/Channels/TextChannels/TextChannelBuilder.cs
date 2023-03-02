@@ -17,5 +17,10 @@ namespace ArcCreate.Gameplay.Scenecontrol
             channel.AddKey(int.MinValue, value);
             return channel;
         }
+
+        public static TextChannel FromValue(ValueChannel channel, int maxLength = 10, int precision = 0)
+        {
+            return new ValueToTextChannel(channel, maxLength, precision);
+        }
     }
 }

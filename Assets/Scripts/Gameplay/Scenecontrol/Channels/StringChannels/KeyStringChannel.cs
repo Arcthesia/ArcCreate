@@ -37,7 +37,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return keys[index].Value;
         }
 
-        public StringChannel AddKey(int timing, string value)
+        public KeyStringChannel AddKey(int timing, string value)
         {
             int overrideIndex = 0;
             if (keys.Count > 0 && keys[GetKeyIndex(timing)].Timing == timing)
@@ -56,7 +56,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return this;
         }
 
-        public StringChannel RemoveKeyAtTiming(int timing)
+        public KeyStringChannel RemoveKeyAtTiming(int timing)
         {
             int index = GetKeyIndex(timing);
             if (keys[index].Timing == timing)
@@ -67,7 +67,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return this;
         }
 
-        public StringChannel RemoveKeyAtIndex(int index)
+        public KeyStringChannel RemoveKeyAtIndex(int index)
         {
             index -= 1;
             if (index >= 0 && index < keys.Count)
@@ -115,7 +115,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         private int GetKeyIndex(int timing)
         {
-            return keys.BisectLeft(timing, (key) => key.Timing);
+            return keys.BinarySearchNearest(timing, (key) => key.Timing);
         }
     }
 }

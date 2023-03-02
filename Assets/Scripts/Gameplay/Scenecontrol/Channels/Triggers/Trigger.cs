@@ -42,7 +42,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public abstract List<object> SerializeProperties(ScenecontrolSerialization serialization);
 
-        protected void Dispatch(int timing)
+        protected virtual void Dispatch(int timing)
         {
             channel.Dispatch(new TriggerValueDispatchEvent
             {

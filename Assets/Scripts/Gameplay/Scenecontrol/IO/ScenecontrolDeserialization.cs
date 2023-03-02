@@ -6,17 +6,25 @@ namespace ArcCreate.Gameplay.Scenecontrol
     public class ScenecontrolDeserialization
     {
         private readonly Scene scene;
-        private readonly List<SerializedUnit> serializedChannels;
+        private readonly List<SerializedUnit> serializedUnits;
+        private readonly List<ISerializableUnit> deserialized = new List<ISerializableUnit>();
 
-        public ScenecontrolDeserialization(Scene scene, List<SerializedUnit> serializedChannels)
+        public ScenecontrolDeserialization(Scene scene, List<SerializedUnit> serializedUnits)
         {
-            this.serializedChannels = serializedChannels;
+            this.serializedUnits = serializedUnits;
             this.scene = scene;
+            for (int i = 0; i < serializedUnits.Count; i++)
+            {
+                SerializedUnit unit = serializedUnits[i];
+                deserialized[i] = GetUnitFromId(i);
+            }
         }
+
+        public List<ISerializableUnit> Result => deserialized;
 
         public ISerializableUnit GetUnitFromId(int id)
         {
-            SerializedUnit serializedChannel = serializedChannels[id];
+            SerializedUnit serializedChannel = serializedUnits[id];
 
             ISerializableUnit result = GetUnitFromType(serializedChannel.Type);
             result.DeserializeProperties(serializedChannel.Properties, this);
@@ -80,6 +88,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     return new KeyTextChannel();
                 case "channel.text.concat":
                     return new ConcatTextChannel();
+                case "channel.text.value":
+                    return new ValueToTextChannel();
 
                 // Contexts
                 case "channel.context.droprate":

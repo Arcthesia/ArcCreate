@@ -19,6 +19,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public FFTChannel()
         {
+            source = Services.Audio.AudioSource;
         }
 
         public FFTChannel(int freqBandMin, int freqBandMax, float min, float max, float smoothness, float scalar)

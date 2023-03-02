@@ -188,7 +188,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         private int GetKeyIndex(int timing)
         {
-            return keys.BisectLeft(timing, (key) => key.Timing);
+            return keys.BinarySearchNearest(timing, (key) => key.Timing);
         }
     }
 }

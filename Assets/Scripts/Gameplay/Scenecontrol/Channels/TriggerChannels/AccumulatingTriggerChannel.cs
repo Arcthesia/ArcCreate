@@ -21,6 +21,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public override void Dispatch(TriggerValueDispatchEvent value)
         {
+            if (!isDispatchComplete)
+            {
+                float t = (float)(value.StartTiming - dispatching.StartTiming) / value.Duration;
+                currentValue += dispatching.Easing.Invoke(0, dispatching.Value, t);
+            }
+
             isDispatchComplete = false;
             dispatching = value;
         }

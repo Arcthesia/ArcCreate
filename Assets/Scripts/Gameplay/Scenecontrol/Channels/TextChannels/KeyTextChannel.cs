@@ -25,13 +25,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return this;
         }
 
-        public TextChannel TransitionFromStart()
+        public KeyTextChannel TransitionFromStart()
         {
             transitionFromFirstDifference = false;
             return this;
         }
 
-        public TextChannel TransitionFromFirstDifference()
+        public KeyTextChannel TransitionFromFirstDifference()
         {
             transitionFromFirstDifference = true;
             return this;
@@ -77,26 +77,26 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
 
             float p = (float)(timing - timing1) / (timing2 - timing1);
-            int key1Factor = key1.Value.Length - key1.TransitionFrom;
+            int key1Factor = key1.Value.Length - key2.TransitionFrom;
             int key2Factor = key2.Value.Length - key2.TransitionFrom;
-            int stringBlend = (int)key1.Easing(key1Factor, -key2Factor, p);
+            int stringBlend = UnityEngine.Mathf.RoundToInt(key1.Easing(key1Factor, -key2Factor, p));
 
-            Array.Copy(key1.Value, 0, charArray, 0, key1.TransitionFrom);
+            Array.Copy(key1.Value, 0, charArray, 0, key2.TransitionFrom);
             if (stringBlend > 0)
             {
-                Array.Copy(key1.Value, key1.TransitionFrom, charArray, key1.TransitionFrom, stringBlend);
-                length = key1.TransitionFrom + stringBlend;
+                Array.Copy(key1.Value, key2.TransitionFrom, charArray, key2.TransitionFrom, stringBlend);
+                length = key2.TransitionFrom + stringBlend;
             }
             else
             {
-                Array.Copy(key2.Value, key1.TransitionFrom, charArray, key1.TransitionFrom, -stringBlend);
-                length = key1.TransitionFrom - stringBlend;
+                Array.Copy(key2.Value, key2.TransitionFrom, charArray, key2.TransitionFrom, -stringBlend);
+                length = key2.TransitionFrom - stringBlend;
             }
 
             return charArray;
         }
 
-        public TextChannel AddKey(int timing, string value, string easing = null)
+        public KeyTextChannel AddKey(int timing, string value, string easing = null)
         {
             Func<float, float, float, float> e;
             string estr;
@@ -133,21 +133,17 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 Timing = timing,
                 Value = value.ToCharArray(),
                 EasingString = estr,
-                Easing = Easing.FromString(easing),
+                Easing = e,
                 OverrideIndex = overrideIndex,
                 TransitionFrom = transitionFrom,
             });
 
             keys.Sort(this);
-            if (value.Length > charArray.Length)
-            {
-                Array.Resize(ref charArray, value.Length);
-            }
-
+            EnsureArraySize(value.Length);
             return this;
         }
 
-        public TextChannel RemoveKeyAtTiming(int timing)
+        public KeyTextChannel RemoveKeyAtTiming(int timing)
         {
             int index = GetKeyIndex(timing);
             if (keys[index].Timing == timing)
@@ -158,7 +154,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return this;
         }
 
-        public TextChannel RemoveKeyAtIndex(int index)
+        public KeyTextChannel RemoveKeyAtIndex(int index)
         {
             index -= 1;
             if (index >= 0 && index < keys.Count)
@@ -207,7 +203,21 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         private int GetKeyIndex(int timing)
         {
-            return keys.BisectLeft(timing, (key) => key.Timing);
+            return keys.BinarySearchNearest(timing, (key) => key.Timing);
+        }
+
+        private void EnsureArraySize(int length)
+        {
+            if (charArray == null)
+            {
+                charArray = new char[length];
+                return;
+            }
+
+            if (length > charArray.Length)
+            {
+                Array.Resize(ref charArray, length);
+            }
         }
     }
 }

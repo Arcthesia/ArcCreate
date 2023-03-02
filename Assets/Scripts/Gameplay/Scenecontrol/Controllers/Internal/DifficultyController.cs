@@ -11,7 +11,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public override void Reset()
         {
             base.Reset();
-            Text = TextChannel.Constant(gameplayData.DifficultyName.Value);
+            Text = TextChannelBuilder.Constant(gameplayData.DifficultyName.Value);
         }
     }
 }

@@ -6,7 +6,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
     [MoonSharpUserData]
     public class StackingTriggerChannel : TriggerChannel
     {
-        private readonly UnorderedList<TriggerValueDispatchEvent> dispatchingEvents = default;
+        private readonly UnorderedList<TriggerValueDispatchEvent> dispatchingEvents
+            = new UnorderedList<TriggerValueDispatchEvent>(5);
 
         private float currentValue;
 

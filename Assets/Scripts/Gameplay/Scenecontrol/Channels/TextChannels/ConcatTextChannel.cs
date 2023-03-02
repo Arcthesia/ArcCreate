@@ -17,11 +17,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public ConcatTextChannel(TextChannel a, TextChannel b)
         {
             components = new List<TextChannel>() { a, b };
-            int newLength = a.MaxLength + b.MaxLength;
-            if (newLength > charArray.Length)
-            {
-                Array.Resize(ref charArray, newLength);
-            }
+            EnsureArraySize();
         }
 
         public override int MaxLength => charArray.Length;
@@ -33,23 +29,15 @@ namespace ArcCreate.Gameplay.Scenecontrol
             {
                 components.Add(deserialization.GetUnitFromId((int)prop) as TextChannel);
             }
+
+            EnsureArraySize();
         }
 
         [MoonSharpUserDataMetamethod("__concat")]
         public ConcatTextChannel Concat(TextChannel channel)
         {
             components.Add(channel);
-            int size = 0;
-            foreach (var c in components)
-            {
-                size += c.MaxLength;
-            }
-
-            if (size > charArray.Length)
-            {
-                Array.Resize(ref charArray, size);
-            }
-
+            EnsureArraySize();
             return this;
         }
 
@@ -67,6 +55,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public override char[] ValueAt(int timing, out int length)
         {
             length = 0;
+            EnsureArraySize();
             for (int i = 0; i < components.Count; i++)
             {
                 TextChannel c = components[i];
@@ -76,6 +65,26 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
 
             return charArray;
+        }
+
+        private void EnsureArraySize()
+        {
+            int length = 0;
+            foreach (var c in components)
+            {
+                length += c.MaxLength;
+            }
+
+            if (charArray == null)
+            {
+                charArray = new char[length];
+                return;
+            }
+
+            if (length > charArray.Length)
+            {
+                Array.Resize(ref charArray, length);
+            }
         }
     }
 }
