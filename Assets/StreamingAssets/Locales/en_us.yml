@@ -118,6 +118,9 @@ Compose:
       AddCamera: Add camera event
       EditCamera: Edit camera event
       RemoveCamera: Remove camera event
+      AddScenecontrol: Add scenecontrol event
+      EditScenecontrol: Edit scenecontrol event
+      RemoveScenecontrol: Remove scenecontrol event
       EditValue: Edit selected note's value
       EditArc: Edit arc's values
       CreateNote:
@@ -367,6 +370,9 @@ Compose:
         DeleteGroup: Delete group
         AddEvent: Add event
         DeleteEvent: Delete event
+        AutoReload: Reload automatically
+        GenerateEmmyLua: Generate EmmyLua
+        Reload: Reload
         FreeCamera: Free camera
       CameraView:
         Default: Default view

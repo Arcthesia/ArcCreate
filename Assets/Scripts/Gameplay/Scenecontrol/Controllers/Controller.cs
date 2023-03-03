@@ -453,7 +453,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             if (this is IRectController)
             {
                 IRectController c = this as IRectController;
-                c.UpdateRect(c.DefaultRectW / 100f, c.DefaultRectH / 100f, c.DefaultAnchorMin, c.DefaultAnchorMax, c.DefaultPivot);
+                c.UpdateRect(c.DefaultRectW, c.DefaultRectH, c.DefaultAnchorMin, c.DefaultAnchorMax, c.DefaultPivot);
                 c.RectW = new ConstantChannel(c.DefaultRectW);
                 c.RectH = new ConstantChannel(c.DefaultRectH);
                 c.AnchorMinX = new ConstantChannel(c.DefaultAnchorMin.x);

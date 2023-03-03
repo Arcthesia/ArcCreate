@@ -10,6 +10,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public static ValueChannel ConstantOneChannel { get; } = new ConstantChannel(1);
 
+        public string Name { get; set; }
+
         public static ValueChannel operator +(ValueChannel a) => a;
 
         public static NegateChannel operator -(ValueChannel a) => new NegateChannel(a);
@@ -51,5 +53,20 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public abstract List<object> SerializeProperties(ScenecontrolSerialization serialization);
 
         public abstract void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization);
+
+        public ValueChannel Find(string name)
+        {
+            List<object> properties = SerializeProperties(new ScenecontrolSerialization());
+            foreach (var prop in properties)
+            {
+                if (prop is ValueChannel channel
+                 && channel.Name == name)
+                {
+                    return channel;
+                }
+            }
+
+            return null;
+        }
     }
 }

@@ -19,15 +19,17 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public List<ScenecontrolEvent> Events => events;
 
+        public Scene Scene => scene;
+
         public TMP_FontAsset DefaultFont => defaultFont;
+
+        public List<Controller> ReferencedControllers => referencedControllers;
 
         public float CurrentSpeed { get; private set; }
 
         public float CurrentGlow { get; private set; }
 
-        public string SceneControlFolder => "";
-
-        public List<Controller> ReferencedControllers => referencedControllers;
+        public string ScenecontrolFolder { get; set; }
 
         public void Load(List<ScenecontrolEvent> cameras)
         {
@@ -38,7 +40,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public void Clear()
         {
             events.Clear();
-            CleanControllers();
+            Clean();
         }
 
         public void Add(IEnumerable<ScenecontrolEvent> events)
@@ -112,7 +114,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
-        public void CleanControllers()
+        public void Clean()
         {
             referencedControllers.Clear();
             referencedControllers.AddRange(alwaysReferencedControllers);
@@ -150,6 +152,10 @@ namespace ArcCreate.Gameplay.Scenecontrol
         private void Awake()
         {
             referencedControllers.AddRange(alwaysReferencedControllers);
+            foreach (var c in scene.DisabledByDefault)
+            {
+                c.Start();
+            }
         }
     }
 }

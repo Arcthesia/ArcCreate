@@ -3,6 +3,7 @@ using ArcCreate.ChartFormat;
 using ArcCreate.Gameplay.Audio;
 using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.GameplayCamera;
+using ArcCreate.Gameplay.Scenecontrol;
 using ArcCreate.Gameplay.Skin;
 using ArcCreate.SceneTransition;
 using Cysharp.Threading.Tasks;
@@ -20,6 +21,7 @@ namespace ArcCreate.Gameplay
         [SerializeField] private SkinService skinService;
         [SerializeField] private AudioService audioService;
         [SerializeField] private CameraService cameraService;
+        [SerializeField] private ScenecontrolService scenecontrolService;
         [SerializeField] private AudioClip testAudio;
         [SerializeField] private GameplayData gameplayData;
         [SerializeField] private Camera gameplayCamera;
@@ -40,6 +42,8 @@ namespace ArcCreate.Gameplay
         public IAudioControl Audio => audioService;
 
         public ICameraControl Camera => cameraService;
+
+        public IScenecontrolControl Scenecontrol => scenecontrolService;
 
         public bool IsLoaded => chartService.IsLoaded;
 

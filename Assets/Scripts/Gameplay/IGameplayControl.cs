@@ -39,6 +39,11 @@ namespace ArcCreate.Gameplay
         ICameraControl Camera { get; }
 
         /// <summary>
+        /// Gets the controller for scenecontrol related functionality.
+        /// </summary>
+        IScenecontrolControl Scenecontrol { get; }
+
+        /// <summary>
         /// Set the rectangle boundary to render this scene's camera onto.
         /// </summary>
         /// <param name="rect">The rect boundary, normalized.</param>

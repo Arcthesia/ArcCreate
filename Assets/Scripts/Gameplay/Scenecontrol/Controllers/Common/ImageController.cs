@@ -5,12 +5,10 @@ using UnityEngine.UI;
 namespace ArcCreate.Gameplay.Scenecontrol
 {
     [MoonSharpUserData]
-    public class ImageController : Controller, IPositionController, IColorController, ITextureController, IRectController
+    public class ImageController : Controller, IPositionController, IColorController, IRectController
     {
-        private MaterialPropertyBlock mpb;
-
         [SerializeField] private RectTransform rectTransform;
-        [SerializeField] private RawImage image;
+        [SerializeField] private Image image;
 
         public Color DefaultColor { get; private set; }
 
@@ -29,10 +27,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public Vector2 DefaultAnchorMax { get; private set; }
 
         public Vector2 DefaultPivot { get; private set; }
-
-        public Vector2 DefaultTextureOffset { get; private set; }
-
-        public Vector2 DefaultTextureScale { get; private set; }
 
         public ValueChannel TranslationX { get; set; }
 
@@ -82,15 +76,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public ValueChannel PivotY { get; set; }
 
-        public ValueChannel TextureOffsetX { get; set; }
-
-        public ValueChannel TextureOffsetY { get; set; }
-
-        public ValueChannel TextureScaleX { get; set; }
-
-        public ValueChannel TextureScaleY { get; set; }
-
-        public RawImage Image => image;
+        public Image Image => image;
 
         public override void SetupDefault()
         {
@@ -103,10 +89,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
             DefaultAnchorMin = rectTransform.anchorMin;
             DefaultAnchorMax = rectTransform.anchorMax;
             DefaultPivot = rectTransform.pivot;
-
-            DefaultTextureOffset = new Vector2(0, 0);
-            DefaultTextureScale = new Vector2(1, 1);
-            mpb = mpb ?? new MaterialPropertyBlock();
         }
 
         public ImageController Copy()
@@ -126,6 +108,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
             c.Start();
             c.CopyAllChannelsFrom(this);
+            Services.Scenecontrol.ReferencedControllers.Add(c);
             return c;
         }
 
@@ -148,11 +131,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
             rectTransform.pivot = pivot;
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, w);
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, h);
-        }
-
-        public void UpdateTexture(Vector2 offset, Vector2 scale)
-        {
-            image.uvRect = new Rect(offset.x, offset.y, scale.x, scale.y);
         }
     }
 }

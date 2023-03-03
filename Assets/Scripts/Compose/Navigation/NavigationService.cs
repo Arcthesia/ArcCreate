@@ -424,7 +424,7 @@ namespace ArcCreate.Compose.Navigation
                 for (int j = 0; j < allGameObjects.Length; j++)
                 {
                     var go = allGameObjects[j];
-                    object comp = go.GetComponentInChildren(type);
+                    object comp = go.GetComponentInChildren(type, true);
                     if (comp != null)
                     {
                         return comp;

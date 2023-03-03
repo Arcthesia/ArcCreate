@@ -4,7 +4,7 @@ using TMPro;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
-    public interface IScenecontrolService
+    public interface IScenecontrolService : IScenecontrolControl
     {
         /// <summary>
         /// Gets the list of all scenecontrol events.
@@ -12,8 +12,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
         List<ScenecontrolEvent> Events { get; }
 
         TMP_FontAsset DefaultFont { get; }
-
-        string SceneControlFolder { get; }
 
         float CurrentSpeed { get; }
 

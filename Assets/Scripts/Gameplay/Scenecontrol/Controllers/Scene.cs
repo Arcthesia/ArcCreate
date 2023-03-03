@@ -252,7 +252,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public Material SoftLightMaterial;
         public Material SubtractMaterial;
         public Material VividLightMaterial;
-        public Material MeshMaterial;
+
+        [SerializeField] private int overlayLayer;
+        [SerializeField] private int notesLayer;
+        [SerializeField] private int backgroundLayer;
+
+        [MoonSharpHidden] public List<Controller> DisabledByDefault;
 
         private List<Controller> ReferencedControllers => Services.Scenecontrol.ReferencedControllers;
 #pragma warning restore
@@ -270,34 +275,48 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
-        public ImageController CreateImage(string imgPath, string material = "default")
+        public ImageController CreateImage(string imgPath, string material = "default", string renderLayer = "overlay")
         {
             GameObject obj = Instantiate(ImagePrefab, ScreenCanvas.transform);
+            obj.layer = GetLayer(renderLayer);
             ImageController c = obj.GetComponent<ImageController>();
             c.Image.material = GetMaterial(material);
 
             Texture2D t = new Texture2D(1, 1);
-            t.LoadImage(File.ReadAllBytes(Path.Combine(Services.Scenecontrol.SceneControlFolder, imgPath)));
-            c.Image.texture = t;
+            t.LoadImage(File.ReadAllBytes(Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath)));
+            c.Image.sprite = Sprite.Create(
+                texture: t,
+                rect: new Rect(0, 0, t.width, t.height),
+                pivot: new Vector2(0.5f, 0.5f),
+                pixelsPerUnit: 100,
+                extrude: 1,
+                meshType: SpriteMeshType.FullRect);
 
             c.Start();
-            c.SerializedType = $"image.{imgPath},{material}";
+            c.SerializedType = $"image.{imgPath},{material},{renderLayer}";
             ReferencedControllers.Add(c);
             return c;
         }
 
-        public SpriteController CreateSprite(string imgPath, string material = "default")
+        public SpriteController CreateSprite(string imgPath, string material = "default", string renderLayer = "overlay")
         {
             GameObject obj = Instantiate(SpritePrefab, ScreenCanvas.transform);
+            obj.layer = GetLayer(renderLayer);
             SpriteController c = obj.GetComponent<SpriteController>();
             c.SpriteRenderer.material = GetMaterial(material);
 
             Texture2D t = new Texture2D(1, 1);
-            t.LoadImage(File.ReadAllBytes(Path.Combine(Services.Scenecontrol.SceneControlFolder, imgPath)));
-            c.SpriteRenderer.sprite = Sprite.Create(t, new Rect(0, 0, t.width, t.height), new Vector2(0.5f, 0.5f), 100);
+            t.LoadImage(File.ReadAllBytes(Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath)));
+            c.SpriteRenderer.sprite = Sprite.Create(
+                texture: t,
+                rect: new Rect(0, 0, t.width, t.height),
+                pivot: new Vector2(0.5f, 0.5f),
+                pixelsPerUnit: 100,
+                extrude: 1,
+                meshType: SpriteMeshType.FullRect);
 
             c.Start();
-            c.SerializedType = $"sprite.{imgPath},{material}";
+            c.SerializedType = $"sprite.{imgPath},{material},{renderLayer}";
             ReferencedControllers.Add(c);
             return c;
         }
@@ -330,9 +349,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
             string font = "default",
             float fontSize = 40,
             float lineSpacing = 1,
-            string alignment = "middlecenter")
+            string alignment = "middlecenter",
+            string renderLayer = "overlay")
         {
             GameObject obj = Instantiate(TextPrefab, ScreenCanvas.transform);
+            obj.layer = GetLayer(renderLayer);
             TextController c = obj.GetComponent<TextController>();
             c.SetFont(font);
             c.TextComponent.fontSize = Mathf.RoundToInt(fontSize);
@@ -371,7 +392,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     break;
             }
 
-            c.SerializedType = $"text.{font},{fontSize},{lineSpacing},{alignment}";
+            c.SerializedType = $"text.{font},{fontSize},{lineSpacing},{alignment},{renderLayer}";
             ReferencedControllers.Add(c);
             return c;
         }
@@ -484,20 +505,21 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     return Darken;
                 case "image":
                     string[] imgsplit = def.Split(',');
-                    return CreateImage(imgsplit[0], imgsplit[1]);
+                    return CreateImage(imgsplit[0], imgsplit[1], imgsplit[2]);
                 case "canvas":
                     bool worldSpace = bool.Parse(def);
                     return CreateCanvas(worldSpace);
                 case "sprite":
                     string[] spriteSplit = def.Split(',');
-                    return CreateSprite(spriteSplit[0], spriteSplit[1]);
+                    return CreateSprite(spriteSplit[0], spriteSplit[1], spriteSplit[2]);
                 case "text":
                     string[] textSplit = def.Split(',');
                     return CreateText(
                         textSplit[0],
                         float.Parse(textSplit[1]),
                         float.Parse(textSplit[2]),
-                        textSplit[3]);
+                        textSplit[3],
+                        textSplit[4]);
                 case "worldcanvas":
                     return WorldCanvas;
                 case "screencanvas":
@@ -562,6 +584,21 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     return VividLightMaterial;
                 default:
                     return DefaultMaterial;
+            }
+        }
+
+        private int GetLayer(string name)
+        {
+            switch (name)
+            {
+                case "overlay":
+                    return overlayLayer;
+                case "notes":
+                    return notesLayer;
+                case "background":
+                    return backgroundLayer;
+                default:
+                    return overlayLayer;
             }
         }
 

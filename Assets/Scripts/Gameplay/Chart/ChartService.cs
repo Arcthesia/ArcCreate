@@ -11,6 +11,7 @@ namespace ArcCreate.Gameplay.Chart
         [SerializeField] private GameplayData gameplayData;
 
         [SerializeField] private GameObject beatlinePrefab;
+        [SerializeField] private Transform beatlineParent;
         [SerializeField] private Color beatlineColor;
         [SerializeField] private int beatlineCapacity;
 
@@ -438,7 +439,7 @@ namespace ArcCreate.Gameplay.Chart
 
         private void Awake()
         {
-            var beatlinePool = Pools.New<BeatlineBehaviour>(Values.BeatlinePoolName, beatlinePrefab, transform, beatlineCapacity);
+            var beatlinePool = Pools.New<BeatlineBehaviour>(Values.BeatlinePoolName, beatlinePrefab, beatlineParent, beatlineCapacity);
 
             Settings.GlobalAudioOffset.OnValueChanged.AddListener(OnGlobalOffsetChange);
             gameplayData.BaseBpm.OnValueChange += OnBaseBpm;

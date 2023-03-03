@@ -131,7 +131,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             keys.Add(new TextKey
             {
                 Timing = timing,
-                Value = value.ToCharArray(),
+                Value = value?.ToCharArray() ?? new char[0],
                 EasingString = estr,
                 Easing = e,
                 OverrideIndex = overrideIndex,
@@ -139,7 +139,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             });
 
             keys.Sort(this);
-            EnsureArraySize(value.Length);
+            EnsureArraySize(value?.Length ?? 0);
             return this;
         }
 

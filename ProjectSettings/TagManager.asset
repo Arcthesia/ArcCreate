@@ -51,21 +51,15 @@ TagManager:
   - name: Foreground
     uniqueID: 1572437291
     locked: 0
-  - name: Note
-    uniqueID: 2707171207
-    locked: 0
-  - name: Arc
-    uniqueID: 1730389971
-    locked: 0
   - name: UI
     uniqueID: 242594563
     locked: 0
   - name: Effect
     uniqueID: 2946787923
     locked: 0
-  - name: EditorUI
-    uniqueID: 53882665
-    locked: 0
   - name: Topmost
     uniqueID: 1732165149
+    locked: 0
+  - name: EditorUI
+    uniqueID: 53882665
     locked: 0

@@ -47,6 +47,7 @@ namespace ArcCreate
         public static readonly IntSetting TrackScrollMaxMovement = new IntSetting("ScrollSensitivity.MaxTiming", 200);
         public static readonly FloatSetting CameraSensitivity = new FloatSetting("CameraSensitivity", 10);
         public static readonly FloatSetting GridBpmLimit = new FloatSetting("GridBpmLimit", 1000);
+        public static readonly BoolSetting ScenecontrolAutoRebuild = new BoolSetting("ScenecontrolAutoRebuild", false);
 
         // Export
         public static readonly IntSetting ChartSortMode = new IntSetting("ChartSortMode", 0);
