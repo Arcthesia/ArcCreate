@@ -1276,12 +1276,12 @@ MonoBehaviour:
   isPersistent: 1
   rectTransform: {fileID: 246210308}
   image: {fileID: 246210309}
-  Score: {fileID: 1987114697}
-  Jacket: {fileID: 1645364861}
-  Title: {fileID: 59862592}
-  Composer: {fileID: 1931114827}
-  DifficultyText: {fileID: 1987312595}
-  DifficultyBackground: {fileID: 537426955}
+  score: {fileID: 1987114697}
+  jacket: {fileID: 1645364861}
+  title: {fileID: 59862592}
+  composer: {fileID: 1931114827}
+  difficultyText: {fileID: 1987312595}
+  difficultyBackground: {fileID: 537426955}
 --- !u!1 &263005822
 GameObject:
   m_ObjectHideFlags: 0
@@ -4653,13 +4653,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1035269747}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f209e1d360a26c643bf79d755ee1a1d6, type: 3}
+  m_Script: {fileID: 11500000, guid: 64d581184d47c2d408b2ecb136982172, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isPersistent: 1
   canvasGroup: {fileID: 1035269750}
   canvas: {fileID: 1035269752}
   rectTransform: {fileID: 1035269748}
+  pause: {fileID: 1843374753}
+  infoPanel: {fileID: 246210313}
 --- !u!225 &1035269750
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -6171,21 +6173,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPersistent: 1
   spriteRenderer: {fileID: 1445769243}
-  DivideLine01: {fileID: 605485188}
-  DivideLine12: {fileID: 722529049}
-  DivideLine23: {fileID: 1845911457}
-  DivideLine34: {fileID: 1285855348}
-  DivideLine45: {fileID: 1716413356}
-  CriticalLine0: {fileID: 902616326}
-  CriticalLine1: {fileID: 918045153}
-  CriticalLine2: {fileID: 1697655875}
-  CriticalLine3: {fileID: 2103231690}
-  CriticalLine4: {fileID: 5387789}
-  CriticalLine5: {fileID: 494440780}
-  ExtraL: {fileID: 142010983}
-  ExtraR: {fileID: 1830139709}
-  EdgeExtraL: {fileID: 409739863}
-  EdgeExtraR: {fileID: 1152665817}
+  divideLine01: {fileID: 605485188}
+  divideLine12: {fileID: 722529049}
+  divideLine23: {fileID: 1845911457}
+  divideLine34: {fileID: 1285855348}
+  divideLine45: {fileID: 1716413356}
+  criticalLine0: {fileID: 902616326}
+  criticalLine1: {fileID: 918045153}
+  criticalLine2: {fileID: 1697655875}
+  criticalLine3: {fileID: 2103231690}
+  criticalLine4: {fileID: 5387789}
+  criticalLine5: {fileID: 494440780}
+  extraL: {fileID: 142010983}
+  extraR: {fileID: 1830139709}
+  edgeExtraL: {fileID: 409739863}
+  edgeExtraR: {fileID: 1152665817}
 --- !u!1 &1450650986
 GameObject:
   m_ObjectHideFlags: 0

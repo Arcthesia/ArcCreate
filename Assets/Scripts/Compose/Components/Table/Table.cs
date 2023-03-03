@@ -201,6 +201,7 @@ namespace ArcCreate.Compose.Components
             }
 
             UpdateRowHighlight();
+            UpdateVerticalScrollbar();
         }
 
         private void OnVerticalScrollbar(float value)
@@ -237,6 +238,8 @@ namespace ArcCreate.Compose.Components
             {
                 verticalScrollbar.value = (float)StartPos / extracount;
             }
+
+            verticalScrollbar.gameObject.SetActive(size < 1);
         }
 
         private void UnfocusRowFields()

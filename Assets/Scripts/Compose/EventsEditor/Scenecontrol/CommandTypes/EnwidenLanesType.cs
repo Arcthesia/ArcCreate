@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace ArcCreate.Compose.EventsEditor
 {
-    public class EnwidenLaneType : IBuiltInScenecontrolType
+    public class EnwidenLanesType : IBuiltInScenecontrolType
     {
-        public string Typename => "enwidenlane";
+        public string Typename => "enwidenlanes";
 
         public string[] ArgumentNames => new string[] { "duration", "toggle" };
 

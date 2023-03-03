@@ -1,6 +1,5 @@
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Gameplay.Scenecontrol;
-using UnityEngine;
 
 namespace ArcCreate.Compose.EventsEditor
 {
@@ -8,28 +7,26 @@ namespace ArcCreate.Compose.EventsEditor
     {
         public string Typename => "hidegroup";
 
-        public string[] ArgumentNames => new string[] { "duration", "alpha" };
+        public string[] ArgumentNames => new string[] { "unused", "hide" };
 
         public void ExecuteCommand(ScenecontrolEvent ev)
         {
             int timing = ev.Timing;
-            int duration = Mathf.RoundToInt((float)ev.Arguments[0]);
-            float alpha = (float)ev.Arguments[1];
+            float hidden = (float)ev.Arguments[1];
 
             NoteGroupController noteGroup = Services.Gameplay.Scenecontrol.Scene.GetNoteGroup(ev.TimingGroup);
 
-            ValueChannel channel = noteGroup.ColorA.Find("internal");
+            ValueChannel channel = noteGroup.Active.Find("internal");
             if (channel == null)
             {
-                channel = new KeyChannel().SetDefaultEasing("l").AddKey(0, 1);
+                channel = new KeyChannel().SetDefaultEasing("cnsti").AddKey(0, 1);
                 channel.Name = "internal";
-                noteGroup.ColorA *= channel;
+                noteGroup.Active *= channel;
             }
 
             KeyChannel c = channel as KeyChannel;
 
-            c.AddKey(timing, c.ValueAt(timing));
-            c.AddKey(timing + duration, alpha / 255f);
+            c.AddKey(timing, 1 - hidden);
         }
     }
 }

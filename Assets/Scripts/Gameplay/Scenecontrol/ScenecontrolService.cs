@@ -116,6 +116,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public void Clean()
         {
+            Scene.ClearCache();
+            foreach (var c in referencedControllers)
+            {
+                c.CleanController();
+            }
+
             referencedControllers.Clear();
             referencedControllers.AddRange(alwaysReferencedControllers);
         }

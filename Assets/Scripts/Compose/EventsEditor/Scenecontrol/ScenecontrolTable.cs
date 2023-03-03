@@ -23,6 +23,7 @@ namespace ArcCreate.Compose.EventsEditor
         [SerializeField] private Button addButton;
         [SerializeField] private Button removeButton;
         [SerializeField] private Marker marker;
+        [SerializeField] private int maxNumVisibleFields = 4;
         private ScenecontrolLuaEnvironment luaEnvironment;
         private string currentTypename;
         private readonly SortedDictionary<string, string[]> argNames = new SortedDictionary<string, string[]>();
@@ -39,6 +40,8 @@ namespace ArcCreate.Compose.EventsEditor
                 return argNames[currentTypename].Length;
             }
         }
+
+        public int MaxNumVisibleFields => maxNumVisibleFields;
 
         public override ScenecontrolEvent Selected
         {
@@ -82,7 +85,7 @@ namespace ArcCreate.Compose.EventsEditor
             typenameDropdown.value = 0;
         }
 
-        public void OnHorizontalScroll()
+        public void OnHorizontalScroll(float value)
         {
             int argCount;
             if (currentTypename == null)
@@ -94,16 +97,12 @@ namespace ArcCreate.Compose.EventsEditor
                 argCount = argNames[currentTypename].Length;
             }
 
-            float totalWidth = Mathf.Max(300, argCount * 75);
-            float viewWidth = 300;
-
-            float x = Mathf.Lerp(0, -totalWidth + viewWidth, horizontalScrollbar.value);
             foreach (var row in Rows)
             {
-                (row as ScenecontrolRow).SetFieldOffsetX(100 + x);
+                (row as ScenecontrolRow).SetFieldOffsetX(value);
             }
 
-            parametersRow.SetFieldOffsetX(x);
+            parametersRow.SetFieldOffsetX(value);
         }
 
         public void UpdateHorizontalScrollbar()
@@ -118,17 +117,10 @@ namespace ArcCreate.Compose.EventsEditor
                 argCount = argNames[currentTypename].Length;
             }
 
-            float totalWidth = Mathf.Max(300, argCount * 75);
-            float viewWidth = 300;
-            horizontalScrollbar.size = viewWidth / totalWidth;
-            OnHorizontalScroll();
-        }
-
-        public void OnTypenameChange(Dropdown d)
-        {
-            currentTypename = argNames.Keys.ElementAt(d.value);
-            horizontalScrollbar.value = 0;
-            Rebuild();
+            float size = Mathf.Min((float)maxNumVisibleFields / argCount, 1);
+            horizontalScrollbar.size = size;
+            horizontalScrollbar.gameObject.SetActive(size < 1);
+            OnHorizontalScroll(horizontalScrollbar.value);
         }
 
         public void Rebuild()
@@ -139,10 +131,15 @@ namespace ArcCreate.Compose.EventsEditor
                 currentTypename = null;
                 scs = new List<ScenecontrolEvent>();
                 UpdateHorizontalScrollbar();
-                parametersRow.SetupFields(new string[0]);
+                parametersRow.SetupFields(new string[0], maxNumVisibleFields);
             }
             else
             {
+                if (argNames.Count == 0)
+                {
+                    return;
+                }
+
                 if (currentTypename == null || !argNames.Keys.Contains(currentTypename))
                 {
                     currentTypename = argNames.Keys.First();
@@ -150,7 +147,7 @@ namespace ArcCreate.Compose.EventsEditor
                 }
 
                 UpdateHorizontalScrollbar();
-                parametersRow.SetupFields(argNames[currentTypename]);
+                parametersRow.SetupFields(argNames[currentTypename], maxNumVisibleFields);
 
                 scs = Services.Gameplay.Chart.GetAll<ScenecontrolEvent>()
                     .Where(sc => sc.TimingGroup == Values.EditingTimingGroup.Value
@@ -159,6 +156,10 @@ namespace ArcCreate.Compose.EventsEditor
             }
 
             SetData(scs);
+            foreach (var row in Rows)
+            {
+                (row as ScenecontrolRow).SetReference(row.Reference);
+            }
         }
 
         protected override void Awake()
@@ -172,6 +173,8 @@ namespace ArcCreate.Compose.EventsEditor
             rebuildButton.onClick.AddListener(RebuildLua);
             addButton.onClick.AddListener(OnAddButton);
             removeButton.onClick.AddListener(OnRemoveButton);
+            typenameDropdown.onValueChanged.AddListener(OnTypenameChange);
+            horizontalScrollbar.onValueChanged.AddListener(OnHorizontalScroll);
             Values.EditingTimingGroup.OnValueChange += OnEdittingTimingGroup;
         }
 
@@ -184,6 +187,8 @@ namespace ArcCreate.Compose.EventsEditor
             rebuildButton.onClick.RemoveListener(RebuildLua);
             addButton.onClick.RemoveListener(OnAddButton);
             removeButton.onClick.RemoveListener(OnRemoveButton);
+            typenameDropdown.onValueChanged.RemoveListener(OnTypenameChange);
+            horizontalScrollbar.onValueChanged.RemoveListener(OnHorizontalScroll);
             Values.EditingTimingGroup.OnValueChange -= OnEdittingTimingGroup;
         }
 
@@ -216,6 +221,13 @@ namespace ArcCreate.Compose.EventsEditor
             Rebuild();
         }
 
+        private void OnTypenameChange(int value)
+        {
+            currentTypename = argNames.Keys.ElementAt(value);
+            horizontalScrollbar.value = 0;
+            Rebuild();
+        }
+
         private void OnAutoRebuildToggle(bool isOn)
         {
             Settings.ScenecontrolAutoRebuild.Value = isOn;
@@ -227,11 +239,16 @@ namespace ArcCreate.Compose.EventsEditor
 
             if (Selected == null)
             {
-                ScenecontrolEvent lastEvent = Data[Data.Count - 1];
+                int t = 0;
+                if (Data.Count > 0)
+                {
+                    t = Data[Data.Count - 1].Timing + 1;
+                }
+
                 int argCount = argNames[currentTypename].Length;
                 sc = new ScenecontrolEvent()
                 {
-                    Timing = lastEvent.Timing + 1,
+                    Timing = t,
                     Typename = currentTypename,
                     Arguments = Enumerable.Repeat((object)0f, argCount).ToList(),
                     TimingGroup = Values.EditingTimingGroup.Value,
@@ -277,7 +294,7 @@ namespace ArcCreate.Compose.EventsEditor
             Services.History.AddCommand(new EventCommand(
                 name: I18n.S("Compose.Notify.RemoveScenecontrol"),
                 remove: new List<ArcEvent>() { Selected }));
-            Selected = Data[Mathf.Max(index - 1, 0)];
+            Selected = Data.Count == 0 ? null : Data[Mathf.Max(index - 1, 0)];
             Rebuild();
             JumpTo(index - 1);
         }

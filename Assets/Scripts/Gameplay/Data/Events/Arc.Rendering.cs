@@ -158,7 +158,7 @@ namespace ArcCreate.Gameplay.Data
             Vector3 pos = (groupProperties.FallDirection * z) + basePos;
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
-            Matrix4x4 matrix = Matrix4x4.TRS(pos, rot, scl);
+            Matrix4x4 matrix = groupProperties.GroupMatrix * Matrix4x4.TRS(pos, rot, scl);
 
             float alpha = 1;
             float redArcValue = Services.Skin.GetRedArcValue(Color);
@@ -258,7 +258,7 @@ namespace ArcCreate.Gameplay.Data
             {
                 SpriteRenderProperties heightIndicatorProperties = new SpriteRenderProperties
                 {
-                    Color = heightIndicatorColor,
+                    Color = heightIndicatorColor * groupProperties.Color,
                 };
 
                 Matrix4x4 heightIndicatorMatrix = Matrix4x4.Scale(new Vector3(1, pos.y - (Values.TraceMeshOffset / 2), 1));
@@ -289,7 +289,7 @@ namespace ArcCreate.Gameplay.Data
             {
                 SpriteRenderProperties arccapProperties = new SpriteRenderProperties
                 {
-                    Color = arcCapColor,
+                    Color = arcCapColor * groupProperties.Color,
                 };
 
                 Services.Render.DrawArcCap(arcCap, matrix * arcCapMatrix, arccapProperties);

@@ -1,4 +1,3 @@
-using System;
 using ArcCreate.Gameplay.Chart;
 using MoonSharp.Interpreter;
 using UnityEngine;
@@ -81,13 +80,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public void UpdatePosition(Vector3 translation, Quaternion rotation, Vector3 scale)
         {
-            translation.x *= -1;
-            translation.z *= -1;
-            rotation.x *= -1;
-            rotation.z *= -1;
             transform.localPosition = translation;
             transform.localRotation = rotation;
             transform.localScale = scale;
+            TimingGroup.GroupProperties.GroupMatrix = Matrix4x4.TRS(translation, rotation, scale);
+        }
+
+        protected override void SetActive(bool active)
+        {
+            base.SetActive(active);
+            TimingGroup.GroupProperties.Visible = active;
         }
     }
 }

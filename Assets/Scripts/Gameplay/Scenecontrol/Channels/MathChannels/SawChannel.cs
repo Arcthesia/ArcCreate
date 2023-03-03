@@ -55,5 +55,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
             float looped = (timing + offset.ValueAt(timing)) % period.ValueAt(timing);
             return easingFunc(min.ValueAt(timing), max.ValueAt(timing), (float)looped / period.ValueAt(timing));
         }
+
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield return period;
+            yield return offset;
+            yield return min;
+            yield return max;
+        }
     }
 }

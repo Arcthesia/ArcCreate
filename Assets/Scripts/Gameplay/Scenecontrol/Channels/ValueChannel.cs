@@ -56,11 +56,15 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public ValueChannel Find(string name)
         {
-            List<object> properties = SerializeProperties(new ScenecontrolSerialization());
-            foreach (var prop in properties)
+            if (Name == name)
             {
-                if (prop is ValueChannel channel
-                 && channel.Name == name)
+                return this;
+            }
+
+            foreach (var child in GetChildrenChannels())
+            {
+                var channel = child.Find(name);
+                if (channel != null)
                 {
                     return channel;
                 }
@@ -68,5 +72,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
             return null;
         }
+
+        protected abstract IEnumerable<ValueChannel> GetChildrenChannels();
     }
 }

@@ -34,5 +34,10 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             return -target.ValueAt(timing);
         }
+
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield return target;
+        }
     }
 }

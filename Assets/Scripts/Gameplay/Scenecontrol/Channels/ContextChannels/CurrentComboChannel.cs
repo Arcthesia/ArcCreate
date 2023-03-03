@@ -19,5 +19,10 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             return Services.Score.CurrentCombo;
         }
+
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield break;
+        }
     }
 }

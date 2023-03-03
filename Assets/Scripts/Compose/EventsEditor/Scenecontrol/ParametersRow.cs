@@ -9,38 +9,43 @@ namespace ArcCreate.Compose.EventsEditor
         [SerializeField] private RectTransform nameTransform;
         [SerializeField] private GameObject namePrefab;
         [SerializeField] private TMP_Text timingName;
+        [SerializeField] private RectTransform timingRect;
         [SerializeField] private float timingFieldRatio = 0.2f;
-        [SerializeField] private float maxNumVisibleFields = 4;
-        private readonly List<TMP_Text> nameTexts = new List<TMP_Text>();
+        private readonly List<GameObject> nameTexts = new List<GameObject>();
+        private float scrollableLength;
 
-        public void SetupFields(string[] names)
+        public void SetupFields(string[] names, int maxNumVisibleFields)
         {
             foreach (var txt in nameTexts)
             {
-                Destroy(txt.gameObject);
+                Destroy(txt);
             }
 
             nameTexts.Clear();
 
-            RectTransform rect = timingName.GetComponent<RectTransform>();
             float timingFieldWidth = names.Length == 0 ? 1 : timingFieldRatio;
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = new Vector2(timingFieldWidth, 1);
+            timingRect.anchorMin = Vector2.zero;
+            timingRect.anchorMax = new Vector2(timingFieldWidth, 1);
+            timingRect.offsetMin = Vector2.zero;
+            timingRect.offsetMax = Vector2.zero;
 
             if (names.Length > 0)
             {
                 float fieldWidth = Mathf.Max((1 - timingFieldRatio) / maxNumVisibleFields, (1 - timingFieldRatio) / names.Length);
+                scrollableLength = (fieldWidth * names.Length) - 1 + timingFieldWidth;
                 int i = 0;
                 foreach (string name in names)
                 {
                     GameObject go = Instantiate(namePrefab, nameTransform);
                     RectTransform r = go.GetComponent<RectTransform>();
-                    r.anchorMin = new Vector2(fieldWidth * i, 0);
-                    r.anchorMax = new Vector2(fieldWidth * (i + 1), 1);
+                    r.anchorMin = new Vector2(timingFieldRatio + (fieldWidth * i), 0);
+                    r.anchorMax = new Vector2(timingFieldRatio + (fieldWidth * (i + 1)), 1);
+                    r.offsetMin = Vector2.zero;
+                    r.offsetMax = Vector2.zero;
 
-                    TMP_Text txt = go.GetComponent<TMP_Text>();
+                    TMP_Text txt = go.GetComponentInChildren<TMP_Text>();
                     txt.text = name;
-                    nameTexts.Add(txt);
+                    nameTexts.Add(go);
                     i++;
                 }
             }
@@ -48,7 +53,8 @@ namespace ArcCreate.Compose.EventsEditor
 
         public void SetFieldOffsetX(float x)
         {
-            nameTransform.anchoredPosition = new Vector2(x, nameTransform.anchoredPosition.y);
+            nameTransform.anchorMin = new Vector2(-x * scrollableLength, 0);
+            nameTransform.anchorMax = new Vector2(1 - (x * scrollableLength), 1);
         }
     }
 }

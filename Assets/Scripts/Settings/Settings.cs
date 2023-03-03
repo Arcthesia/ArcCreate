@@ -41,7 +41,7 @@ namespace ArcCreate
             new FloatSetting(
                 "ScrollSensitivity.Timeline",
                 Application.platform == RuntimePlatform.LinuxPlayer
-                || Application.platform == RuntimePlatform.LinuxEditor ? -1f : 1f);
+                || Application.platform == RuntimePlatform.LinuxEditor ? -0.4f : 0.4f);
 
         public static readonly FloatSetting TrackScrollThreshold = new FloatSetting("ScrollSensitivity.TrackThreshold", 1);
         public static readonly IntSetting TrackScrollMaxMovement = new IntSetting("ScrollSensitivity.MaxTiming", 200);

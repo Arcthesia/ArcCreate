@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using ArcCreate.Utility.Parser;
+using Cysharp.Threading.Tasks;
 using MoonSharp.Interpreter;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
@@ -258,9 +261,23 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [SerializeField] private int backgroundLayer;
 
         [MoonSharpHidden] public List<Controller> DisabledByDefault;
+#pragma warning restore
+
+        private readonly Dictionary<SpriteDefinition, Sprite> spriteCache = new Dictionary<SpriteDefinition, Sprite>();
+        private readonly Dictionary<int, NoteGroupController> noteGroups = new Dictionary<int, NoteGroupController>();
 
         private List<Controller> ReferencedControllers => Services.Scenecontrol.ReferencedControllers;
-#pragma warning restore
+
+        public void ClearCache()
+        {
+            foreach (var pair in spriteCache)
+            {
+                Destroy(pair.Value);
+            }
+
+            spriteCache.Clear();
+            noteGroups.Clear();
+        }
 
         public Material GetMaterial(string material, bool newMaterialInstance)
         {
@@ -275,48 +292,44 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
-        public ImageController CreateImage(string imgPath, string material = "default", string renderLayer = "overlay")
+        public ImageController CreateImage(string imgPath, string material = "default", string renderLayer = "overlay", Vector2? pivot = null)
         {
             GameObject obj = Instantiate(ImagePrefab, ScreenCanvas.transform);
             obj.layer = GetLayer(renderLayer);
             ImageController c = obj.GetComponent<ImageController>();
             c.Image.material = GetMaterial(material);
 
-            Texture2D t = new Texture2D(1, 1);
-            t.LoadImage(File.ReadAllBytes(Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath)));
-            c.Image.sprite = Sprite.Create(
-                texture: t,
-                rect: new Rect(0, 0, t.width, t.height),
-                pivot: new Vector2(0.5f, 0.5f),
-                pixelsPerUnit: 100,
-                extrude: 1,
-                meshType: SpriteMeshType.FullRect);
+            Sprite sprite = GetSprite(
+                new SpriteDefinition
+                {
+                    Path = Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath),
+                    Pivot = pivot ?? new Vector2(0.5f, 0.5f),
+                }).AsTask().Result;
+            c.Image.sprite = sprite;
 
-            c.Start();
             c.SerializedType = $"image.{imgPath},{material},{renderLayer}";
+            c.Start();
             ReferencedControllers.Add(c);
             return c;
         }
 
-        public SpriteController CreateSprite(string imgPath, string material = "default", string renderLayer = "overlay")
+        public SpriteController CreateSprite(string imgPath, string material = "default", string renderLayer = "overlay", Vector2? pivot = null)
         {
             GameObject obj = Instantiate(SpritePrefab, ScreenCanvas.transform);
             obj.layer = GetLayer(renderLayer);
             SpriteController c = obj.GetComponent<SpriteController>();
             c.SpriteRenderer.material = GetMaterial(material);
 
-            Texture2D t = new Texture2D(1, 1);
-            t.LoadImage(File.ReadAllBytes(Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath)));
-            c.SpriteRenderer.sprite = Sprite.Create(
-                texture: t,
-                rect: new Rect(0, 0, t.width, t.height),
-                pivot: new Vector2(0.5f, 0.5f),
-                pixelsPerUnit: 100,
-                extrude: 1,
-                meshType: SpriteMeshType.FullRect);
+            Sprite sprite = GetSprite(
+                new SpriteDefinition
+                {
+                    Path = Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath),
+                    Pivot = pivot ?? new Vector2(0.5f, 0.5f),
+                }).AsTask().Result;
+            c.SpriteRenderer.sprite = sprite;
 
-            c.Start();
             c.SerializedType = $"sprite.{imgPath},{material},{renderLayer}";
+            c.Start();
             ReferencedControllers.Add(c);
             return c;
         }
@@ -339,8 +352,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 c.Canvas.worldCamera = Services.Camera.GameplayCamera;
             }
 
-            c.Start();
             c.SerializedType = $"canvas.{worldSpace}";
+            c.Start();
             ReferencedControllers.Add(c);
             return c;
         }
@@ -393,19 +406,27 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
 
             c.SerializedType = $"text.{font},{fontSize},{lineSpacing},{alignment},{renderLayer}";
+            c.Start();
             ReferencedControllers.Add(c);
             return c;
         }
 
         public NoteGroupController GetNoteGroup(int tg)
         {
+            if (noteGroups.TryGetValue(tg, out NoteGroupController cached))
+            {
+                return cached;
+            }
+
             try
             {
                 var group = Services.Chart.GetTimingGroup(tg);
                 NoteGroupController c = Instantiate(GroupPrefab, transform).GetComponent<NoteGroupController>();
                 c.TimingGroup = group;
                 c.SerializedType = $"tg.{group.GroupNumber}";
+                c.Start();
                 ReferencedControllers.Add(c);
+                noteGroups.Add(group.GroupNumber, c);
                 return c;
             }
             catch
@@ -602,6 +623,41 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
+        private async UniTask<Sprite> GetSprite(SpriteDefinition definition)
+        {
+            if (spriteCache.TryGetValue(definition, out Sprite sprite))
+            {
+                return sprite;
+            }
+
+            using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(Uri.EscapeUriString(definition.Path)))
+            {
+                await req.SendWebRequest();
+                if (!string.IsNullOrWhiteSpace(req.error))
+                {
+                    throw new IOException(I18n.S(
+                        "Gameplay.Exception.ScenecontrolCantLoadSprite",
+                        new Dictionary<string, object>()
+                            {
+                                { "Path", definition.Path },
+                                { "Error", req.error },
+                            }));
+                }
+
+                var t = DownloadHandlerTexture.GetContent(req);
+                Sprite output = Sprite.Create(
+                        texture: t,
+                        rect: new Rect(0, 0, t.width, t.height),
+                        pivot: definition.Pivot,
+                        pixelsPerUnit: 100,
+                        extrude: 1,
+                        meshType: SpriteMeshType.FullRect);
+
+                spriteCache.Add(definition, output);
+                return output;
+            }
+        }
+
         private void Awake()
         {
             GameplayCamera.SerializedType = "camera";
@@ -627,6 +683,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
             WorldCanvas.SerializedType = "worldcanvas";
             ScreenCanvas.SerializedType = "screencanvas";
             CameraCanvas.SerializedType = "cameracanvas";
+        }
+
+        private struct SpriteDefinition
+        {
+            public string Path;
+            public Vector2 Pivot;
         }
     }
 }

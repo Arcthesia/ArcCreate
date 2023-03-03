@@ -93,5 +93,10 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
             return min + ((max - min) * res / (freqBandMax - freqBandMin + 1));
         }
+
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield break;
+        }
     }
 }

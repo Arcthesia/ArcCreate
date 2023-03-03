@@ -28,5 +28,10 @@ namespace ArcCreate.Gameplay.Scenecontrol
         }
 
         public override float ValueAt(int timing) => val;
+
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield break;
+        }
     }
 }

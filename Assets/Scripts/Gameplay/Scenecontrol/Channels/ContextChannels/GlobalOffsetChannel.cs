@@ -19,5 +19,10 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             return Settings.GlobalAudioOffset.Value;
         }
+
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield break;
+        }
     }
 }

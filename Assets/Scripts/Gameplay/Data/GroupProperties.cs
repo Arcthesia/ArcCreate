@@ -60,6 +60,10 @@ namespace ArcCreate.Gameplay.Data
 
         public float SCAngleY { get; set; } = 0;
 
+        public Matrix4x4 GroupMatrix { get; set; } = Matrix4x4.identity;
+
+        public bool Visible { get; set; } = true;
+
         public Vector3 FallDirection
         {
             get

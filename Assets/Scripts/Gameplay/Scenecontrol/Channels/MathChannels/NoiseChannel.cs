@@ -50,6 +50,15 @@ namespace ArcCreate.Gameplay.Scenecontrol
             float maxVal = max.ValueAt(timing);
             return minVal + ((maxVal - minVal) * noise);
         }
+
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield return octave;
+            yield return frequency;
+            yield return min;
+            yield return max;
+            yield return offset;
+        }
     }
 
     // Source: Keijiro Takahashi, 2013, 2015

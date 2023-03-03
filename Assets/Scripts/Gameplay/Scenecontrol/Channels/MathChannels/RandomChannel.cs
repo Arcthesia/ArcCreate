@@ -48,5 +48,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
             float maxVal = max.ValueAt(timing);
             return minVal + ((maxVal - minVal) * (float)randomGenerator.NextDouble());
         }
+
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield return min;
+            yield return max;
+        }
     }
 }

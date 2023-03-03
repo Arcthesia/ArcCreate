@@ -21,7 +21,7 @@ namespace ArcCreate.Gameplay
         public const float LaneFeedbackMaxAlpha = 0.15f;
 
         // Judgement winodw
-        public const int LostJudgeWindow = 150;
+        public const int LostJudgeWindow = 120;
         public const int FarJudgeWindow = 100;
         public const int PureJudgeWindow = 50;
         public const int MaxJudgeWindow = 25;

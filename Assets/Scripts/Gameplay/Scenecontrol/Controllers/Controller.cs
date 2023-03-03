@@ -196,7 +196,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [MoonSharpHidden]
         public virtual void UpdateController(int timing)
         {
-            gameObject.SetActive(Active.ValueAt(timing) >= 0.5);
+            SetActive(Active.ValueAt(timing) >= 0.5);
             if (!gameObject.activeInHierarchy)
             {
                 return;
@@ -385,9 +385,9 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 c.TranslationX = new ConstantChannel(c.DefaultTranslation.x);
                 c.TranslationY = new ConstantChannel(c.DefaultTranslation.y);
                 c.TranslationZ = new ConstantChannel(c.DefaultTranslation.z);
-                c.RotationX = new ConstantChannel(c.DefaultRotation.x);
-                c.RotationY = new ConstantChannel(c.DefaultRotation.y);
-                c.RotationZ = new ConstantChannel(c.DefaultRotation.z);
+                c.RotationX = new ConstantChannel(c.DefaultRotation.eulerAngles.x);
+                c.RotationY = new ConstantChannel(c.DefaultRotation.eulerAngles.y);
+                c.RotationZ = new ConstantChannel(c.DefaultRotation.eulerAngles.z);
                 c.ScaleX = new ConstantChannel(c.DefaultScale.x);
                 c.ScaleY = new ConstantChannel(c.DefaultScale.y);
                 c.ScaleZ = new ConstantChannel(c.DefaultScale.z);
@@ -397,10 +397,10 @@ namespace ArcCreate.Gameplay.Scenecontrol
             {
                 IColorController c = this as IColorController;
                 c.UpdateColor(c.DefaultColor);
-                c.ColorR = new ConstantChannel(c.DefaultColor.r);
-                c.ColorG = new ConstantChannel(c.DefaultColor.g);
-                c.ColorB = new ConstantChannel(c.DefaultColor.b);
-                c.ColorA = new ConstantChannel(c.DefaultColor.a);
+                c.ColorR = new ConstantChannel(c.DefaultColor.r * 255);
+                c.ColorG = new ConstantChannel(c.DefaultColor.g * 255);
+                c.ColorB = new ConstantChannel(c.DefaultColor.b * 255);
+                c.ColorA = new ConstantChannel(c.DefaultColor.a * 255);
                 c.ColorH = new ConstantChannel(0);
                 c.ColorS = new ConstantChannel(0);
                 c.ColorV = new ConstantChannel(0);

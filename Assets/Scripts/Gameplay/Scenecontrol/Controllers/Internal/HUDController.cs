@@ -1,4 +1,5 @@
 using MoonSharp.Interpreter;
+using UnityEngine;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
@@ -6,8 +7,24 @@ namespace ArcCreate.Gameplay.Scenecontrol
     public class HUDController : CanvasController
     {
 #pragma warning disable
-        public ImageController Pause;
-        public InfoPanelController InfoPanel;
+        [SerializeField] private ImageController pause;
+        public ImageController Pause
+        {
+            get
+            {
+                Services.Scenecontrol.ReferencedControllers.Add(pause);
+                return pause;
+            }
+        }
+        [SerializeField] private InfoPanelController infoPanel;
+        public InfoPanelController InfoPanel
+        {
+            get
+            {
+                Services.Scenecontrol.ReferencedControllers.Add(infoPanel);
+                return infoPanel;
+            }
+        }
 #pragma warning restore
     }
 }

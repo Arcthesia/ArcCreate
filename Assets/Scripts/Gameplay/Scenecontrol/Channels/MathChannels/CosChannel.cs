@@ -50,5 +50,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
             float maxVal = max.ValueAt(timing);
             return minVal + ((maxVal - minVal) * Mathf.Cos(omega * (timing + offset.ValueAt(timing))));
         }
+
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield return period;
+            yield return offset;
+            yield return min;
+            yield return max;
+        }
     }
 }

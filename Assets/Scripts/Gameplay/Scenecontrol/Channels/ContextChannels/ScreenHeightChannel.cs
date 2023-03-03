@@ -20,5 +20,10 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             return Screen.height;
         }
+
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield break;
+        }
     }
 }

@@ -60,5 +60,14 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
             return ifEqual.ValueAt(timing);
         }
+
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield return control;
+            yield return threshold;
+            yield return ifAbove;
+            yield return ifEqual;
+            yield return ifBelow;
+        }
     }
 }

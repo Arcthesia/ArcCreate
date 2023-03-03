@@ -36,5 +36,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public override float ValueAt(int timing)
             => a.ValueAt(timing) * b.ValueAt(timing);
+
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield return a;
+            yield return b;
+        }
     }
 }

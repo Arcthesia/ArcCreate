@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ArcCreate.Utility;
 using MoonSharp.Interpreter;
 
@@ -53,6 +54,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
 
             return BaseValue.ValueAt(timing) + currentValue + partial;
+        }
+
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield break;
         }
     }
 }

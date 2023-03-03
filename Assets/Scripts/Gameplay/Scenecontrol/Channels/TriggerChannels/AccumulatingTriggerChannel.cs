@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using MoonSharp.Interpreter;
 
 namespace ArcCreate.Gameplay.Scenecontrol
@@ -55,6 +56,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 float dispatchingVal = dispatching.Easing.Invoke(0, dispatching.Value, t);
                 return BaseValue.ValueAt(timing) + currentValue + dispatchingVal;
             }
+        }
+
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield break;
         }
     }
 }

@@ -14,17 +14,23 @@ namespace ArcCreate.Compose.EventsEditor
     public class ScenecontrolRow : Row<ScenecontrolEvent>, IPointerClickHandler
     {
         [SerializeField] private GameObject highlight;
+        [SerializeField] private GameObject highlightTiming;
         [SerializeField] private RectTransform fieldTransform;
         [SerializeField] private GameObject fieldPrefab;
         [SerializeField] private TMP_InputField timingField;
+        [SerializeField] private RectTransform timingRect;
         [SerializeField] private float timingFieldRatio = 0.2f;
-        [SerializeField] private float maxNumVisibleFields = 4;
         private readonly List<TMP_InputField> fields = new List<TMP_InputField>();
+        private float scrollableLength;
 
         public override bool Highlighted
         {
             get => highlight.activeSelf;
-            set => highlight.SetActive(value);
+            set
+            {
+                highlight.SetActive(value);
+                highlightTiming.SetActive(value);
+            }
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -60,33 +66,40 @@ namespace ArcCreate.Compose.EventsEditor
             }
         }
 
-        public void SetupFields(int paramCount)
+        public void SetupFields(int paramCount, int maxNumVisibleFields)
         {
             foreach (TMP_InputField field in fields)
             {
                 field.onEndEdit.RemoveAllListeners();
+                field.onSelect.RemoveAllListeners();
                 Destroy(field.gameObject);
             }
 
             fields.Clear();
 
-            RectTransform rect = timingField.GetComponent<RectTransform>();
             float timingFieldWidth = paramCount == 0 ? 1 : timingFieldRatio;
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = new Vector2(timingFieldWidth, 1);
+            timingRect.anchorMin = Vector2.zero;
+            timingRect.anchorMax = new Vector2(timingFieldWidth, 1);
+            timingRect.offsetMin = Vector2.zero;
+            timingRect.offsetMax = Vector2.zero;
 
             if (paramCount > 0)
             {
                 float fieldWidth = Mathf.Max((1 - timingFieldRatio) / maxNumVisibleFields, (1 - timingFieldRatio) / paramCount);
+                scrollableLength = (fieldWidth * paramCount) - 1 + timingFieldWidth;
+
                 for (int i = 0; i < paramCount; i++)
                 {
                     GameObject go = Instantiate(fieldPrefab, fieldTransform);
                     RectTransform r = go.GetComponent<RectTransform>();
-                    r.anchorMin = new Vector2(fieldWidth * i, 0);
-                    r.anchorMax = new Vector2(fieldWidth * (i + 1), 1);
+                    r.anchorMin = new Vector2(timingFieldRatio + (fieldWidth * i), 0);
+                    r.anchorMax = new Vector2(timingFieldRatio + (fieldWidth * (i + 1)), 1);
+                    r.offsetMin = Vector2.zero;
+                    r.offsetMax = Vector2.zero;
 
                     TMP_InputField field = go.GetComponent<TMP_InputField>();
                     field.onEndEdit.AddListener(OnEndEdit);
+                    field.onSelect.AddListener(OnFieldSelect);
                     fields.Add(field);
                 }
             }
@@ -96,13 +109,15 @@ namespace ArcCreate.Compose.EventsEditor
 
         public void SetFieldOffsetX(float x)
         {
-            fieldTransform.anchoredPosition = new Vector2(x, fieldTransform.anchoredPosition.y);
+            fieldTransform.anchorMin = new Vector2(-x * scrollableLength, 0);
+            fieldTransform.anchorMax = new Vector2(1 - (x * scrollableLength), 1);
         }
 
         public override void SetReference(ScenecontrolEvent datum)
         {
             Reference = datum;
-            SetupFields((Table as ScenecontrolTable).ArgCount);
+            SetupFields((Table as ScenecontrolTable).ArgCount, (Table as ScenecontrolTable).MaxNumVisibleFields);
+            timingField.gameObject.SetActive(true);
             if (Reference == null)
             {
                 foreach (var field in fields)
@@ -198,11 +213,25 @@ namespace ArcCreate.Compose.EventsEditor
             }
         }
 
+        private void OnFieldSelect(string arg)
+        {
+            Table.Selected = Reference;
+        }
+
+        private void Awake()
+        {
+            timingField.onEndEdit.AddListener(OnEndEdit);
+            timingField.onSelect.AddListener(OnFieldSelect);
+        }
+
         private void OnDestroy()
         {
+            timingField.onEndEdit.RemoveListener(OnEndEdit);
+            timingField.onSelect.RemoveListener(OnFieldSelect);
             foreach (TMP_InputField field in fields)
             {
                 field.onEndEdit.RemoveAllListeners();
+                field.onSelect.RemoveAllListeners();
             }
         }
     }

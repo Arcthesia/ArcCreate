@@ -29,7 +29,11 @@ namespace ArcCreate.Gameplay.Chart
             }
 
             UpdateJudgement(timing, groupProperties);
-            UpdateRender(timing, floorPosition, groupProperties);
+
+            if (groupProperties.Visible)
+            {
+                UpdateRender(timing, floorPosition, groupProperties);
+            }
         }
 
         public override void RebuildList()

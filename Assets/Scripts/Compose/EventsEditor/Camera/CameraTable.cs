@@ -239,7 +239,6 @@ namespace ArcCreate.Compose.EventsEditor
             addButton.onClick.AddListener(OnAddButton);
             removeButton.onClick.AddListener(OnRemoveButton);
             freeCameraButton.onClick.AddListener(OnFreeCameraButton);
-            marker.OnEndEdit += OnMarker;
         }
 
         protected override void OnDestroy()
@@ -251,7 +250,6 @@ namespace ArcCreate.Compose.EventsEditor
             addButton.onClick.RemoveListener(OnAddButton);
             removeButton.onClick.RemoveListener(OnRemoveButton);
             freeCameraButton.onClick.RemoveListener(OnFreeCameraButton);
-            marker.OnEndEdit -= OnMarker;
         }
 
         private void OnChartEdit()
@@ -329,7 +327,7 @@ namespace ArcCreate.Compose.EventsEditor
             Services.History.AddCommand(new EventCommand(
                 name: I18n.S("Compose.Notify.History.RemoveCamera"),
                 remove: new List<ArcEvent>() { Selected }));
-            Selected = Data[Mathf.Max(index - 1, 0)];
+            Selected = Data.Count == 0 ? null : Data[Mathf.Max(index - 1, 0)];
             Rebuild();
             JumpTo(index - 1);
         }
@@ -350,23 +348,6 @@ namespace ArcCreate.Compose.EventsEditor
         {
             List<CameraEvent> cam = Services.Gameplay.Chart.GetAll<CameraEvent>().Where(c => c.TimingGroup == group).ToList();
             SetData(cam);
-        }
-
-        private void OnMarker(int timing, int endTiming)
-        {
-            if (Selected == null)
-            {
-                return;
-            }
-
-            CameraEvent newValue = Selected.Clone() as CameraEvent;
-            newValue.Timing = timing;
-            newValue.Duration = endTiming - timing;
-            Services.History.AddCommand(new EventCommand(
-                name: I18n.S("Compose.Notify.History.EditCamera"),
-                update: new List<(ArcEvent instance, ArcEvent newValue)> { (Selected, newValue) }));
-            Rebuild();
-            JumpTo(IndexOf(Selected));
         }
 
         private void OnEnable()

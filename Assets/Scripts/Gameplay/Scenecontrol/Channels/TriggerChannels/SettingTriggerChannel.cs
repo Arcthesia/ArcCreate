@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using MoonSharp.Interpreter;
 
 namespace ArcCreate.Gameplay.Scenecontrol
@@ -30,6 +31,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
         protected override float CalculateAfterPoll(int timing)
         {
             return currentValue;
+        }
+
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield break;
         }
     }
 }

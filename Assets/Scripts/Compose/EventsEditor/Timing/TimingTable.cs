@@ -136,7 +136,7 @@ namespace ArcCreate.Compose.EventsEditor
             Services.History.AddCommand(new EventCommand(
                 name: I18n.S("Compose.Notify.RemoveTiming"),
                 remove: new List<ArcEvent>() { Selected }));
-            Selected = Data[Mathf.Max(index - 1, 0)];
+            Selected = Data.Count == 0 ? null : Data[Mathf.Max(index - 1, 0)];
             Rebuild();
             JumpTo(index - 1);
         }

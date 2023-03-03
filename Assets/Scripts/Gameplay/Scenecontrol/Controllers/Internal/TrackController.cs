@@ -16,25 +16,141 @@ namespace ArcCreate.Gameplay.Scenecontrol
         private float offset = 0;
 
 #pragma warning disable
-        public SpriteController DivideLine01;
-        public SpriteController DivideLine12;
-        public SpriteController DivideLine23;
-        public SpriteController DivideLine34;
-        public SpriteController DivideLine45;
-        public SpriteController[] DivideLines
-            => new SpriteController[] { DivideLine01, DivideLine12, DivideLine23, DivideLine34, DivideLine45 };
-        public SpriteController CriticalLine0;
-        public SpriteController CriticalLine1;
-        public SpriteController CriticalLine2;
-        public SpriteController CriticalLine3;
-        public SpriteController CriticalLine4;
-        public SpriteController CriticalLine5;
-        public SpriteController[] CriticalLines
-            => new SpriteController[] { CriticalLine0, CriticalLine1, CriticalLine2, CriticalLine3, CriticalLine4, CriticalLine5 };
-        public SpriteController ExtraL;
-        public SpriteController ExtraR;
-        public SpriteController EdgeExtraL;
-        public SpriteController EdgeExtraR;
+        [SerializeField] private SpriteController divideLine01;
+        public SpriteController DivideLine01
+        {
+            get
+            {
+                Services.Scenecontrol.ReferencedControllers.Add(divideLine01);
+                return divideLine01;
+            }
+        }
+        [SerializeField] private SpriteController divideLine12;
+        public SpriteController DivideLine12
+        {
+            get
+            {
+                Services.Scenecontrol.ReferencedControllers.Add(divideLine12);
+                return divideLine12;
+            }
+        }
+        [SerializeField] private SpriteController divideLine23;
+        public SpriteController DivideLine23
+        {
+            get
+            {
+                Services.Scenecontrol.ReferencedControllers.Add(divideLine23);
+                return divideLine23;
+            }
+        }
+        [SerializeField] private SpriteController divideLine34;
+        public SpriteController DivideLine34
+        {
+            get
+            {
+                Services.Scenecontrol.ReferencedControllers.Add(divideLine34);
+                return divideLine34;
+            }
+        }
+        [SerializeField] private SpriteController divideLine45;
+        public SpriteController DivideLine45
+        {
+            get
+            {
+                Services.Scenecontrol.ReferencedControllers.Add(divideLine45);
+                return divideLine45;
+            }
+        }
+        [SerializeField] private SpriteController criticalLine0;
+        public SpriteController CriticalLine0
+        {
+            get
+            {
+                Services.Scenecontrol.ReferencedControllers.Add(criticalLine0);
+                return criticalLine0;
+            }
+        }
+        [SerializeField] private SpriteController criticalLine1;
+        public SpriteController CriticalLine1
+        {
+            get
+            {
+                Services.Scenecontrol.ReferencedControllers.Add(criticalLine1);
+                return criticalLine1;
+            }
+        }
+        [SerializeField] private SpriteController criticalLine2;
+        public SpriteController CriticalLine2
+        {
+            get
+            {
+                Services.Scenecontrol.ReferencedControllers.Add(criticalLine2);
+                return criticalLine2;
+            }
+        }
+        [SerializeField] private SpriteController criticalLine3;
+        public SpriteController CriticalLine3
+        {
+            get
+            {
+                Services.Scenecontrol.ReferencedControllers.Add(criticalLine3);
+                return criticalLine3;
+            }
+        }
+        [SerializeField] private SpriteController criticalLine4;
+        public SpriteController CriticalLine4
+        {
+            get
+            {
+                Services.Scenecontrol.ReferencedControllers.Add(criticalLine4);
+                return criticalLine4;
+            }
+        }
+        [SerializeField] private SpriteController criticalLine5;
+        public SpriteController CriticalLine5
+        {
+            get
+            {
+                Services.Scenecontrol.ReferencedControllers.Add(criticalLine5);
+                return criticalLine5;
+            }
+        }
+        [SerializeField] private SpriteController extraL;
+        public SpriteController ExtraL
+        {
+            get
+            {
+                Services.Scenecontrol.ReferencedControllers.Add(extraL);
+                return extraL;
+            }
+        }
+        [SerializeField] private SpriteController extraR;
+        public SpriteController ExtraR
+        {
+            get
+            {
+                Services.Scenecontrol.ReferencedControllers.Add(extraR);
+                return extraR;
+            }
+        }
+        [SerializeField] private SpriteController edgeExtraL;
+        public SpriteController EdgeExtraL
+        {
+            get
+            {
+                Services.Scenecontrol.ReferencedControllers.Add(edgeExtraL);
+                return edgeExtraL;
+            }
+        }
+        [SerializeField] private SpriteController edgeExtraR;
+        public SpriteController EdgeExtraR
+        {
+            get
+            {
+                Services.Scenecontrol.ReferencedControllers.Add(edgeExtraR);
+                return edgeExtraR;
+            }
+        }
 
         public ValueChannel EdgeLAlpha { get; set; }
         public ValueChannel EdgeRAlpha { get; set; }

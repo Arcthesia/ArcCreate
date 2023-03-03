@@ -163,6 +163,11 @@ namespace Tests.Unit
             }
 
             public override float ValueAt(int timing) => Value;
+
+            protected override IEnumerable<ValueChannel> GetChildrenChannels()
+            {
+                yield break;
+            }
         }
 
         private class SubstituteObserveTrigger : ObserveTrigger

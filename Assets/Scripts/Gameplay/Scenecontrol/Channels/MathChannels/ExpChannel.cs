@@ -39,5 +39,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             return Mathf.Pow(num.ValueAt(timing), exp.ValueAt(timing));
         }
+
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield return num;
+            yield return exp;
+        }
     }
 }

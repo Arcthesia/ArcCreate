@@ -420,70 +420,12 @@ namespace ArcCreate.Compose.Editing
         {
             Services.Selection.OnSelectionChange += OnSelectionChange;
             gameplayData.OnChartEdit += OnChartEdit;
-            shortMarker.OnEndEdit += OnShortMarker;
-            longMarker.OnEndEdit += OnLongMarker;
         }
 
         private void OnDestroy()
         {
             Services.Selection.OnSelectionChange -= OnSelectionChange;
             gameplayData.OnChartEdit -= OnChartEdit;
-            shortMarker.OnEndEdit -= OnShortMarker;
-            longMarker.OnEndEdit -= OnLongMarker;
-        }
-
-        private void OnShortMarker(Marker arg, int timing)
-        {
-            if (targetShort != null)
-            {
-                if (targetShort is ArcTap arcTap
-                 && (timing < arcTap.Arc.Timing || timing > arcTap.Arc.EndTiming))
-                {
-                    var clone = arcTap.Clone() as ArcTap;
-                    Arc arc = arcTap.Arc;
-                    var arcClone = arc.Clone() as Arc;
-
-                    EventCommand command = new EventCommand(
-                        I18n.S("Compose.Notify.History.Drag.Timing"),
-                        update: new (ArcEvent, ArcEvent)[] { (targetShort, clone), (arc, arcClone) });
-                    clone.Timing = timing;
-                    arcClone.Timing = Mathf.Min(arcClone.Timing, timing);
-                    arcClone.EndTiming = Mathf.Max(arcClone.EndTiming, timing);
-                    Services.History.AddCommand(command);
-                }
-                else
-                {
-                    var clone = targetShort.Clone() as Note;
-                    EventCommand command = new EventCommand(
-                        I18n.S("Compose.Notify.History.Drag.Timing"),
-                        update: new (ArcEvent, ArcEvent)[] { (targetShort, clone) });
-                    clone.Timing = timing;
-                    Services.History.AddCommand(command);
-                }
-            }
-
-            shortMarker.SetTiming(targetShort.Timing);
-        }
-
-        private void OnLongMarker(int from, int to)
-        {
-            if (targetLong != null)
-            {
-                if (targetLong is Hold && from == to)
-                {
-                    return;
-                }
-
-                var clone = targetLong.Clone() as LongNote;
-                EventCommand command = new EventCommand(
-                    I18n.S("Compose.Notify.History.Drag.Timing"),
-                    update: new (ArcEvent, ArcEvent)[] { (targetLong, clone) });
-                clone.Timing = from;
-                clone.EndTiming = to;
-                Services.History.AddCommand(command);
-            }
-
-            longMarker.SetTiming(targetLong.Timing, targetLong.EndTiming);
         }
 
         private void OnChartEdit()

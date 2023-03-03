@@ -186,6 +186,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield break;
+        }
+
         private int GetKeyIndex(int timing)
         {
             return keys.BinarySearchNearest(timing, (key) => key.Timing);

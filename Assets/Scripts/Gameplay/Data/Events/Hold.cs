@@ -140,7 +140,9 @@ namespace ArcCreate.Gameplay.Data
             Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
-            Matrix4x4 matrix = Matrix4x4.TRS(pos, rot, scl) * MatrixUtility.Shear(groupProperties.FallDirection * (z - endZ));
+            Matrix4x4 matrix = groupProperties.GroupMatrix
+                             * Matrix4x4.TRS(pos, rot, scl)
+                             * MatrixUtility.Shear(groupProperties.FallDirection * (z - endZ));
 
             Texture texture = highlight ? highlightTexture : normalTexture;
             float alpha = 1;

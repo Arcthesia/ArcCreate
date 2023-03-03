@@ -45,5 +45,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             return Mathf.Clamp(a.ValueAt(timing), b.ValueAt(timing), c.ValueAt(timing));
         }
+
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield return a;
+            yield return b;
+            yield return c;
+        }
     }
 }

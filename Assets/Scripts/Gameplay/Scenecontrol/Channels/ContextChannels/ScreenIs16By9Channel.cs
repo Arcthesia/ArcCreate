@@ -21,5 +21,10 @@ namespace ArcCreate.Gameplay.Scenecontrol
             Camera cam = Services.Camera.GameplayCamera;
             return (1.77777779f - (1f * cam.pixelWidth / cam.pixelHeight) < 0.1f) ? 1 : 0;
         }
+
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield break;
+        }
     }
 }

@@ -82,7 +82,12 @@ namespace ArcCreate.Compose.EventsEditor
             catch (Exception e)
             {
                 Clean();
-                ShowError(I18n.S("Compose.Exception.Scenecontrol", lastTypename, e.Message, e.StackTrace));
+                ShowError(I18n.S("Compose.Exception.Scenecontrol", new Dictionary<string, object>()
+                {
+                    { "Type", lastTypename },
+                    { "Message", e.Message },
+                    { "StackTrace", e.StackTrace },
+                }));
             }
         }
 
@@ -113,7 +118,12 @@ namespace ArcCreate.Compose.EventsEditor
             catch (Exception e)
             {
                 Clean();
-                Debug.LogError(I18n.S("Compose.Exception.LuaScript", filePath, e.Message, e.StackTrace));
+                Debug.LogError(I18n.S("Compose.Exception.LuaScript", new Dictionary<string, object>()
+                {
+                    { "Path", filePath },
+                    { "Message", e.Message },
+                    { "StackTrace", e.StackTrace },
+                }));
             }
         }
 
@@ -129,7 +139,8 @@ namespace ArcCreate.Compose.EventsEditor
             ScDataSource.SetupChannels();
             AddType(new TrackDisplayType());
             AddType(new HideGroupType());
-            AddType(new EnwidenLaneType());
+            AddType(new GroupAlphaType());
+            AddType(new EnwidenLanesType());
             AddType(new EnwidenCameraType());
         }
 
@@ -145,8 +156,6 @@ namespace ArcCreate.Compose.EventsEditor
             {
                 throw new Exception($"Can not add two scenecontrols with the same name: {name}");
             }
-
-            scenecontrolTypes.Add(name, new LuaScenecontrolType(scDef));
 
             string[] args;
             try
@@ -165,6 +174,7 @@ namespace ArcCreate.Compose.EventsEditor
                 args = arglist.ToArray();
             }
 
+            scenecontrolTypes.Add(name, new LuaScenecontrolType(scDef, args.Length));
             scTable.SetArgument(name, args);
         }
     }

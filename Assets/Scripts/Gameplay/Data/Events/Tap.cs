@@ -95,7 +95,7 @@ namespace ArcCreate.Gameplay.Data
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
             scl.z *= ArcFormula.CalculateTapSizeScalar(z);
-            Matrix4x4 matrix = Matrix4x4.TRS(pos, rot, scl);
+            Matrix4x4 matrix = groupProperties.GroupMatrix * Matrix4x4.TRS(pos, rot, scl);
 
             float alpha = ArcFormula.CalculateFadeOutAlpha(z);
             Color color = groupProperties.Color;

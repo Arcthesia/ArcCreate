@@ -39,5 +39,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             return Mathf.Max(a.ValueAt(timing), b.ValueAt(timing));
         }
+
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield return a;
+            yield return b;
+        }
     }
 }

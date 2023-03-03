@@ -86,6 +86,12 @@ Compose:
         Invalid keystroke: The keystroke "{0}" has too many modifiers (maximum is 2).
       InvalidActionPath: |-
         Invalid action path: The string "{0}" does not match any action.
+    Scenecontrol: |-
+      'Error occured while executing scenecontrol event of type {Type}: {Message}
+      {StackTrace}'
+    LuaScript: |-
+      'Error occured while executing lua script {Path}: {Message}
+      {StackTrace}'
           
   # Notification messages
   Notify:

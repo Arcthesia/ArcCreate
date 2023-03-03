@@ -33,5 +33,10 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             return group.GetBpm(timing);
         }
+
+        protected override IEnumerable<ValueChannel> GetChildrenChannels()
+        {
+            yield break;
+        }
     }
 }

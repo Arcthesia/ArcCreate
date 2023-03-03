@@ -27,7 +27,6 @@ namespace ArcCreate.Gameplay.Chart
 
         public List<ArcEvent> ReferenceEvents { get; private set; }
 
-        // TODO: logic for scenecontrol to set visibility at the same time
         public bool IsVisible { get; set; } = true;
 
         /// <summary>
