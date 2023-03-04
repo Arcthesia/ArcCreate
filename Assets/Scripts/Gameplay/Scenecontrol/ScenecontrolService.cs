@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Extension;
+using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
     {
         private static readonly int OffsetShaderId = Shader.PropertyToID("_Offset");
         [SerializeField] private TMP_FontAsset defaultFont;
+        [SerializeField] private List<FontEntry> fonts;
         [SerializeField] private Scene scene;
         [SerializeField] private SpriteRenderer trackSprite;
         [SerializeField] private SpriteRenderer singleLineL;
@@ -33,6 +35,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public List<Controller> ReferencedControllers => referencedControllers;
 
         public string ScenecontrolFolder { get; set; }
+
+        public bool IsLoaded { get; private set; }
 
         public void Load(List<ScenecontrolEvent> cameras)
         {
@@ -123,6 +127,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
             singleLineR.material.SetFloat(OffsetShaderId, singleLineOffset);
             skyInputLine.ApplyGlow(glowAlpha);
             skyInputLabel.ApplyGlow(glowAlpha);
+
+            Services.Score.ClearJudgementsThisFrame();
         }
 
         public void Clean()
@@ -168,6 +174,25 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
+        public void WaitForSceneLoad()
+        {
+            IsLoaded = false;
+            scene.WaitForTasksComplete().ContinueWith(() => IsLoaded = true);
+        }
+
+        public TMP_FontAsset GetFont(string font)
+        {
+            foreach (var entry in fonts)
+            {
+                if (entry.Name == font || entry.FontAsset.name == font)
+                {
+                    return entry.FontAsset;
+                }
+            }
+
+            return defaultFont;
+        }
+
         private void RebuildList()
         {
             events.Sort((a, b) => a.Timing.CompareTo(b.Timing));
@@ -179,6 +204,14 @@ namespace ArcCreate.Gameplay.Scenecontrol
             {
                 c.Start();
             }
+        }
+
+        [System.Serializable]
+        private struct FontEntry
+        {
+            public string Name;
+
+            public TMP_FontAsset FontAsset;
         }
     }
 }

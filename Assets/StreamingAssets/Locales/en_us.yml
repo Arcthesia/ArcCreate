@@ -87,11 +87,11 @@ Compose:
       InvalidActionPath: |-
         Invalid action path: The string "{0}" does not match any action.
     Scenecontrol: |-
-      'Error occured while executing scenecontrol event of type {Type}: {Message}
-      {StackTrace}'
+      Error occured while executing scenecontrol event of type {Type}: {Message}
+      {StackTrace}
     LuaScript: |-
-      'Error occured while executing lua script {Path}: {Message}
-      {StackTrace}'
+      Error occured while executing lua script {Path}: {Message}
+      {StackTrace}
           
   # Notification messages
   Notify:
@@ -107,6 +107,9 @@ Compose:
       O: Roll right
       Esc: Cancel
       Enter: Confirm
+    EmmyLuaGenerated: |-
+      EmmyLua template for scenecontrol generated at the current project's folder
+      Use VsCode with the extension tangzx.emmylua to get autocompletion
     Actions:
       CannotMirror: Can not mirror any of the selected notes.
       NoDragRange: Can not drag selected notes timing. Try dragging the notes separately.

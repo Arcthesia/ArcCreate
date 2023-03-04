@@ -100,8 +100,6 @@ namespace ArcCreate.Gameplay.Score
             }
 
             SetScore(CurrentScoreTotal);
-
-            resultReceivedThisFrame.Clear();
         }
 
         public void ResetScoreTo(int currentCombo, int totalCombo)
@@ -128,6 +126,8 @@ namespace ArcCreate.Gameplay.Score
         }
 
         public List<JudgementResult> GetJudgementsThisFrame() => resultReceivedThisFrame;
+
+        public void ClearJudgementsThisFrame() => resultReceivedThisFrame.Clear();
 
         private void SetScore(int score)
         {

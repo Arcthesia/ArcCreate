@@ -6,6 +6,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
 {
     public interface IScenecontrolService : IScenecontrolControl
     {
+        bool IsLoaded { get; }
+
         /// <summary>
         /// Gets the list of all scenecontrol events.
         /// </summary>
@@ -64,5 +66,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         void Clear();
 
         void AddReferencedController(Controller c);
+
+        TMP_FontAsset GetFont(string font);
     }
 }

@@ -18,6 +18,8 @@ namespace ArcCreate.Gameplay.Score
         /// <returns>List of judgement results.</returns>
         List<JudgementResult> GetJudgementsThisFrame();
 
+        void ClearJudgementsThisFrame();
+
         /// <summary>
         /// Process one or multiple judgement events.
         /// </summary>

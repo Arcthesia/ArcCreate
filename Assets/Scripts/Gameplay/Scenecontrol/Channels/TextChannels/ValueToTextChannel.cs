@@ -25,17 +25,17 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public override int MaxLength => charArray.Length;
 
+        [MoonSharpUserDataMetamethod("__concat")]
+        public static ConcatTextChannel Concat(ValueToTextChannel a, TextChannel b)
+        {
+            return new ConcatTextChannel(a, b);
+        }
+
         public override void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization)
         {
             source = deserialization.GetUnitFromId((int)properties[0]) as ValueChannel;
             charArray = new char[(int)properties[1]];
             precision = (int)properties[2];
-        }
-
-        [MoonSharpUserDataMetamethod("__concat")]
-        public ConcatTextChannel Concat(TextChannel channel)
-        {
-            return new ConcatTextChannel(this, channel);
         }
 
         public override List<object> SerializeProperties(ScenecontrolSerialization serialization)

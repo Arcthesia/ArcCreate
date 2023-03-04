@@ -10,7 +10,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
     [EmmyDoc("Controller for a text object")]
     public class TextController : Controller, IPositionController, IRectController, ITextController, IColorController
     {
-        private static readonly Dictionary<string, TMP_FontAsset> FontCache = new Dictionary<string, TMP_FontAsset>();
         private string defaultText;
 
         [SerializeField] private TMP_Text textComponent;
@@ -119,10 +118,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
             DefaultLineSpacing = textComponent.lineSpacing;
             DefaultFontAsset = textComponent.font;
             DefaultFont = textComponent.font.name;
-            if (!FontCache.ContainsKey(textComponent.font.name))
-            {
-                FontCache.Add(textComponent.font.name, textComponent.font);
-            }
         }
 
         [EmmyDoc("Creates a copy of this controller")]
@@ -172,38 +167,15 @@ namespace ArcCreate.Gameplay.Scenecontrol
         }
 
         [MoonSharpHidden]
-        public void UpdateProperties(float fontSize, float lineSpacing, string font)
+        public void UpdateProperties(float fontSize, float lineSpacing)
         {
             textComponent.lineSpacing = lineSpacing;
             textComponent.fontSize = Mathf.RoundToInt(fontSize);
-            SetFont(font);
         }
 
-        [MoonSharpHidden]
         public void SetFont(string font)
         {
-            if (font == "default")
-            {
-                textComponent.font = Services.Scenecontrol.DefaultFont;
-            }
-
-            if (font == textComponent.font.name)
-            {
-                return;
-            }
-
-            if (FontCache.ContainsKey(font))
-            {
-                textComponent.font = FontCache[font];
-            }
-            else
-            {
-                Font customFont = new Font(font);
-                TMP_FontAsset customFontAsset = TMP_FontAsset.CreateFontAsset(customFont);
-                textComponent.font = customFont != null ? customFontAsset : DefaultFontAsset;
-            }
-
-            return;
+            textComponent.font = Services.Scenecontrol.GetFont(font);
         }
 
         [MoonSharpHidden]

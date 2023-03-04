@@ -292,6 +292,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         private readonly Dictionary<SpriteDefinition, Sprite> spriteCache = new Dictionary<SpriteDefinition, Sprite>();
         private readonly Dictionary<int, NoteGroupController> noteGroups = new Dictionary<int, NoteGroupController>();
+        private readonly List<UniTask<Sprite>> spriteTasks = new List<UniTask<Sprite>>();
 
         [MoonSharpHidden]
         public void ClearCache()
@@ -340,13 +341,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
             ImageController c = obj.GetComponent<ImageController>();
             c.Image.material = GetMaterial(material);
 
-            Sprite sprite = GetSprite(
+            spriteTasks.Add(GetSprite(
                 new SpriteDefinition
                 {
                     Path = Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath),
                     Pivot = pivot?.ToVector() ?? new Vector2(0.5f, 0.5f),
-                }).AsTask().Result;
-            c.Image.sprite = sprite;
+                }).ContinueWith(sprite => c.Image.sprite = sprite));
 
             c.SerializedType = $"image.{imgPath},{material},{renderLayer}";
             c.Start();
@@ -375,13 +375,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
             SpriteController c = obj.GetComponent<SpriteController>();
             c.SpriteRenderer.material = GetMaterial(material);
 
-            Sprite sprite = GetSprite(
+            spriteTasks.Add(GetSprite(
                 new SpriteDefinition
                 {
                     Path = Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath),
                     Pivot = pivot?.ToVector() ?? new Vector2(0.5f, 0.5f),
-                }).AsTask().Result;
-            c.SpriteRenderer.sprite = sprite;
+                }).ContinueWith(sprite => c.SpriteRenderer.sprite = sprite));
 
             c.SerializedType = $"sprite.{imgPath},{material},{renderLayer}";
             c.Start();
@@ -539,6 +538,32 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
 
             return c;
+        }
+
+        [MoonSharpHidden]
+        public async UniTask WaitForTasksComplete()
+        {
+            while (true)
+            {
+                bool complete = true;
+                foreach (var task in spriteTasks)
+                {
+                    if (task.Status == UniTaskStatus.Pending)
+                    {
+                        complete = false;
+                        break;
+                    }
+                }
+
+                if (complete)
+                {
+                    return;
+                }
+                else
+                {
+                    await UniTask.NextFrame();
+                }
+            }
         }
 
         [MoonSharpHidden]

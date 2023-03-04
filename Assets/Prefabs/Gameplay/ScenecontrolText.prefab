@@ -147,6 +147,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 360fc272b87baf04dabcae10b9adeddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPersistent: 1
+  isPersistent: 0
   textComponent: {fileID: 8265260376260124649}
   rectTransform: {fileID: 5057392586127612576}

@@ -31,20 +31,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public abstract void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization);
 
         [MoonSharpHidden]
-        public Trigger DispatchValue(ValueChannel value, ValueChannel duration, string easing)
-        {
-            TriggerDispatch = new TriggerValueDispatch
-            {
-                Value = value,
-                Duration = duration,
-                EasingString = easing,
-                Easing = Easing.FromString(easing),
-            };
-
-            return this;
-        }
-
-        [MoonSharpHidden]
         public abstract void Poll(int timing);
 
         [MoonSharpHidden]

@@ -10,11 +10,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
     public class TriggerBuilder
     {
         [EmmyDoc("Creates a trigger that activates on judgement events")]
-        public static Trigger OnJudgement()
+        public static JudgementTrigger Judgement()
             => new JudgementTrigger();
 
         [EmmyDoc("Creates a trigger that activates based on the value of a ValueChannel")]
-        public static Trigger Observe(ValueChannel channel)
+        public static ObserveTrigger Observe(ValueChannel channel)
             => new ObserveTrigger(channel);
     }
 }

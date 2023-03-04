@@ -131,7 +131,7 @@ namespace ArcCreate.Gameplay
 
         private void Update()
         {
-            if (!Services.Chart.IsLoaded || !Services.Render.IsLoaded)
+            if (!Services.Chart.IsLoaded || !Services.Render.IsLoaded || !Services.Scenecontrol.IsLoaded)
             {
                 return;
             }

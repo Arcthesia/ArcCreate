@@ -118,9 +118,10 @@ namespace EmmySharp
                 AppendStaticValue(staticVal, type);
             }
 
-            // Ignore instance values and table for static classes
             bool singleton = type.IsDefined(typeof(EmmySingletonAttribute));
-            if ((!type.IsAbstract || !type.IsSealed) && !singleton)
+
+            // Ignore instance values and table for static classes
+            if (!type.IsAbstract || !type.IsSealed)
             {
                 AppendDoc(type.EmmyDoc());
                 builder.Append($"---@class {alias ?? type.Name}");
@@ -137,8 +138,11 @@ namespace EmmySharp
                     AppendField(field);
                 }
 
-                builder.AppendLine($"{type.Name}__inst = {{}}");
-                builder.AppendLine();
+                if (!singleton)
+                {
+                    builder.AppendLine($"{type.Name}__inst = {{}}");
+                    builder.AppendLine();
+                }
             }
             else if (staticValues.Length != 0)
             {

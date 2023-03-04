@@ -87,6 +87,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4fbe8b75f2244348885313014e65c79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPersistent: 1
+  isPersistent: 0
   rectTransform: {fileID: 798248663266936844}
   image: {fileID: 7906739465072734389}

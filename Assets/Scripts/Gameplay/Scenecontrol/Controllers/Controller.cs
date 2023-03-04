@@ -131,7 +131,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 c.FontSize = c2.FontSize;
                 c.LineSpacing = c2.LineSpacing;
                 c.Text = c2.Text;
-                c.Font = c2.Font;
             }
 
             if (this is INoteGroupController && controller is INoteGroupController)
@@ -265,16 +264,14 @@ namespace ArcCreate.Gameplay.Scenecontrol
             if (this is ITextController)
             {
                 ITextController c = this as ITextController;
-                string font = c.DefaultFont;
                 float lineSpacing = c.DefaultLineSpacing;
                 float fontSize = c.DefaultFontSize;
 
-                font = c.Font.ValueAt(timing);
                 fontSize = c.FontSize.ValueAt(timing);
                 lineSpacing = c.LineSpacing.ValueAt(timing);
                 char[] text = c.Text.ValueAt(timing, out int textLength);
 
-                c.UpdateProperties(fontSize, lineSpacing, font);
+                c.UpdateProperties(fontSize, lineSpacing);
                 c.UpdateText(text, 0, textLength);
             }
 
@@ -320,8 +317,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 Vector2 anchorMax = c.DefaultAnchorMax;
                 Vector2 pivot = c.DefaultPivot;
 
-                rectW = c.RectW.ValueAt(timing) / 100f;
-                rectH = c.RectH.ValueAt(timing) / 100f;
+                rectW = c.RectW.ValueAt(timing);
+                rectH = c.RectH.ValueAt(timing);
                 anchorMin.x = c.AnchorMinX.ValueAt(timing);
                 anchorMin.y = c.AnchorMinY.ValueAt(timing);
                 anchorMax.x = c.AnchorMaxX.ValueAt(timing);
@@ -413,11 +410,10 @@ namespace ArcCreate.Gameplay.Scenecontrol
             if (this is ITextController)
             {
                 ITextController c = this as ITextController;
-                c.UpdateProperties(c.DefaultFontSize, c.DefaultLineSpacing, c.DefaultFont);
+                c.UpdateProperties(c.DefaultFontSize, c.DefaultLineSpacing);
                 c.FontSize = new ConstantChannel(c.DefaultFontSize);
                 c.LineSpacing = new ConstantChannel(c.DefaultLineSpacing);
                 c.Text = TextChannelBuilder.Constant(c.DefaultText);
-                c.Font = StringChannelBuilder.Constant(c.DefaultFont);
 
                 char[] arr = c.DefaultText.ToCharArray();
                 c.UpdateText(arr, 0, arr.Length);
@@ -538,7 +534,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 result.Add(serialization.AddUnitAndGetId(c.FontSize));
                 result.Add(serialization.AddUnitAndGetId(c.LineSpacing));
                 result.Add(serialization.AddUnitAndGetId(c.Text));
-                result.Add(serialization.AddUnitAndGetId(c.Font));
             }
 
             if (this is INoteGroupController)
@@ -647,7 +642,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 c.FontSize = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
                 c.LineSpacing = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
                 c.Text = deserialization.GetUnitFromId((int)properties[offset++]) as TextChannel;
-                c.Font = deserialization.GetUnitFromId((int)properties[offset++]) as StringChannel;
             }
 
             if (this is INoteGroupController)

@@ -321,6 +321,7 @@ namespace ArcCreate.Compose.EventsEditor
         private void GenerateEmmy()
         {
             luaEnvironment.GenerateEmmyLua();
+            Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.EmmyLuaGenerated"));
         }
     }
 }

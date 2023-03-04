@@ -9,5 +9,7 @@ namespace ArcCreate.Gameplay
         string ScenecontrolFolder { get; set; }
 
         void Clean();
+
+        void WaitForSceneLoad();
     }
 }

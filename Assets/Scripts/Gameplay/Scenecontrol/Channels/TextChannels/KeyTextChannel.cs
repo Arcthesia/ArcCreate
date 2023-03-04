@@ -20,6 +20,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public override int MaxLength => charArray.Length;
 
+        [MoonSharpUserDataMetamethod("__concat")]
+        public static ConcatTextChannel Concat(KeyTextChannel a, TextChannel b)
+        {
+            return new ConcatTextChannel(a, b);
+        }
+
         [EmmyDoc("Sets the default easing to assign to keyframe for any subsequent keys added to this channel that does not have any easing defined")]
 #pragma warning disable
         public KeyTextChannel SetDefaultEasing(
@@ -62,12 +68,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             transitionFromFirstDifference = true;
             return this;
-        }
-
-        [MoonSharpUserDataMetamethod("__concat")]
-        public ConcatTextChannel Concat(TextChannel channel)
-        {
-            return new ConcatTextChannel(this, channel);
         }
 
         public override char[] ValueAt(int timing, out int length)

@@ -42,7 +42,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [EmmyDoc("Sets the value to send to the TriggerChannel bound to this trigger.")]
         public ObserveTrigger Dispatch(ValueChannel value, ValueChannel duration = null, string easing = null)
         {
-            TriggerValueDispatch dispatch = new TriggerValueDispatch
+            TriggerDispatch = new TriggerValueDispatch
             {
                 Value = value,
                 Duration = duration ?? ValueChannel.ConstantOneChannel,

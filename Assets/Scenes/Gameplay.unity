@@ -1591,7 +1591,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 1732165149
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -1903,7 +1903,7 @@ GameObject:
   - component: {fileID: 430326261}
   - component: {fileID: 430326265}
   - component: {fileID: 430326264}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: WorldCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5996,6 +5996,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultFont: {fileID: 11400000, guid: fc246767bf759519bb5f459275194444, type: 2}
+  fonts:
+  - Name: Exo Medium
+    FontAsset: {fileID: 11400000, guid: ac74c18cee3227443b9cef4724367319, type: 2}
+  - Name: Exo Regular
+    FontAsset: {fileID: 11400000, guid: bec30f1b6a1319f47a261edf840e5ca5, type: 2}
+  - Name: Exo SemiBold
+    FontAsset: {fileID: 11400000, guid: 9adbbc1706728ea4593a1b9a6cf933c6, type: 2}
+  - Name: Geosans Light
+    FontAsset: {fileID: 11400000, guid: c86d2e7f296982746bb250c5f5dd7636, type: 2}
+  - Name: Geosans Light Oblique
+    FontAsset: {fileID: 11400000, guid: 6020daaed9998cf4698482d64486cc17, type: 2}
+  - Name: Kazesawa  Light
+    FontAsset: {fileID: 11400000, guid: f2b4cd75b70d2ec41860fb90d0c9c588, type: 2}
+  - Name: Kazesawa Regular
+    FontAsset: {fileID: 11400000, guid: c7ac2a5a49fae4b4bb4d928c18726d16, type: 2}
+  - Name: Kazesawa Semibold
+    FontAsset: {fileID: 11400000, guid: b7b1b4ddbd331de42ac5353299efdd2d, type: 2}
+  - Name: LiberationSans
+    FontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  - Name: Source Code Pro
+    FontAsset: {fileID: 11400000, guid: 15e6be735abb4e7039c80d996026f64f, type: 2}
   scene: {fileID: 1663275891}
   trackSprite: {fileID: 1445769243}
   singleLineL: {fileID: 1966378483}
@@ -6291,7 +6312,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -40}
-  m_SizeDelta: {x: 500, y: 300}
+  m_SizeDelta: {x: 1000, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1502162281
 MonoBehaviour:
@@ -6840,28 +6861,29 @@ MonoBehaviour:
     type: 3}
   GroupPrefab: {fileID: 4044602181011751714, guid: 3a19ff92a7a5f7b529ca21daf779e77a,
     type: 3}
-  DefaultMaterial: {fileID: 0}
-  ColorBurnMaterial: {fileID: 0}
-  ColorDodgeMaterial: {fileID: 0}
-  DarkenMaterial: {fileID: 0}
-  DifferenceMaterial: {fileID: 0}
-  ExclusionMaterial: {fileID: 0}
-  FastAddMaterial: {fileID: 0}
-  FastDarkenMaterial: {fileID: 0}
-  FastLightenMaterial: {fileID: 0}
-  FastMultiplyMaterial: {fileID: 0}
-  FastScreenMaterial: {fileID: 0}
-  HardLightMaterial: {fileID: 0}
-  LightenMaterial: {fileID: 0}
-  LinearBurnMaterial: {fileID: 0}
-  LinearDodgeMaterial: {fileID: 0}
-  LinearLightMaterial: {fileID: 0}
-  MultiplyMaterial: {fileID: 0}
-  OverlayMaterial: {fileID: 0}
-  ScreenMaterial: {fileID: 0}
-  SoftLightMaterial: {fileID: 0}
-  SubtractMaterial: {fileID: 0}
-  VividLightMaterial: {fileID: 0}
+  DefaultMaterial: {fileID: 2100000, guid: 0077ff23d523e3c18aae9ce29959c184, type: 2}
+  ColorBurnMaterial: {fileID: 2100000, guid: 40f43e7d31b274b3aaf597edb06654e0, type: 2}
+  ColorDodgeMaterial: {fileID: 2100000, guid: 8be0bcbba0ce3e760adfbfe8df96f2ef, type: 2}
+  DarkenMaterial: {fileID: 2100000, guid: a43f130c70ddb81f2853e31d84cd65a4, type: 2}
+  DifferenceMaterial: {fileID: 2100000, guid: 7cb7de5f846d3f2e8b88b98dd3c030f5, type: 2}
+  ExclusionMaterial: {fileID: 2100000, guid: 33ce649bb8a025452b70fcd7eed50f5d, type: 2}
+  FastAddMaterial: {fileID: 2100000, guid: 5ccce7bfb686e88a99256c0553864a3e, type: 2}
+  FastDarkenMaterial: {fileID: 2100000, guid: f490f8ff7fc2fb87b8afed72b45f08f3, type: 2}
+  FastLightenMaterial: {fileID: 2100000, guid: b9288e500417b27c9821b2929ec4736d, type: 2}
+  FastMultiplyMaterial: {fileID: 2100000, guid: 365d795ea8e5a522da9f76594c45f7db,
+    type: 2}
+  FastScreenMaterial: {fileID: 2100000, guid: 4d6129c398fabc68cb21b27e75bd4150, type: 2}
+  HardLightMaterial: {fileID: 2100000, guid: 2d6bfbea9a4594454b7663039a2e9f87, type: 2}
+  LightenMaterial: {fileID: 2100000, guid: 22d010dfa53dcb9efbc32ea971fb4f5f, type: 2}
+  LinearBurnMaterial: {fileID: 2100000, guid: f761e0f94410a9d4dbf7c1cdd762b606, type: 2}
+  LinearDodgeMaterial: {fileID: 2100000, guid: c185136ecf0ea616cb0cd13b90b34902, type: 2}
+  LinearLightMaterial: {fileID: 2100000, guid: a362fc25e944973a9bd5b9e195a1bb65, type: 2}
+  MultiplyMaterial: {fileID: 2100000, guid: 247a92668e448018ba3f5b153cc6cfd4, type: 2}
+  OverlayMaterial: {fileID: 2100000, guid: 1523d4471529f66e293d5c95bd1711a6, type: 2}
+  ScreenMaterial: {fileID: 2100000, guid: 3547b14fbe6de6512bbe742dd903e2f9, type: 2}
+  SoftLightMaterial: {fileID: 2100000, guid: 1b3c29c58b9025e6b95d47a25f5b2ae1, type: 2}
+  SubtractMaterial: {fileID: 2100000, guid: 1264479ca26cab3049206c6f3d8b6216, type: 2}
+  VividLightMaterial: {fileID: 2100000, guid: 3c0f488d0498bb229845ca36be0e0bff, type: 2}
   overlayLayer: 10
   notesLayer: 9
   backgroundLayer: 8
@@ -8020,7 +8042,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 12.9119, y: 7.262946}
+  m_ReferenceResolution: {x: 2048, y: 1536}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -8044,7 +8066,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 242594563
   m_SortingOrder: 0
   m_TargetDisplay: 0

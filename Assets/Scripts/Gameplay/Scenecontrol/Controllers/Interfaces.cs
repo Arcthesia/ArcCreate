@@ -85,8 +85,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         TextChannel Text { get; set; }
 
-        StringChannel Font { get; set; }
-
         string DefaultText { get; }
 
         float DefaultFontSize { get; }
@@ -95,7 +93,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         string DefaultFont { get; }
 
-        void UpdateProperties(float fontSize, float lineSpacing, string font);
+        void UpdateProperties(float fontSize, float lineSpacing);
 
         void UpdateText(char[] array, int start, int length);
     }

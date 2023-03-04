@@ -14,6 +14,7 @@ namespace ArcCreate.Compose.EventsEditor
     public class ScenecontrolLuaEnvironment : IScriptSetup
     {
         public const int InstructionLimit = int.MaxValue;
+        public const string ScenecontrolFolderName = "Scenecontrol";
         private readonly ScenecontrolTable scTable;
         private readonly Dictionary<string, IScenecontrolType> scenecontrolTypes = new Dictionary<string, IScenecontrolType>();
 
@@ -22,8 +23,14 @@ namespace ArcCreate.Compose.EventsEditor
             this.scTable = scTable;
         }
 
+        private string ScenecontrolFolder
+            => Path.Combine(
+                Path.GetDirectoryName(Services.Project.CurrentProject.Path),
+                ScenecontrolFolderName);
+
         public void SetupScript(Script script)
         {
+            UserData.RegisterAssembly(Assembly.GetAssembly(typeof(ScenecontrolService)));
             script.Globals["Channel"] = new ValueChannelBuilder();
             script.Globals["StringChannel"] = new StringChannelBuilder();
             script.Globals["TextChannel"] = new TextChannelBuilder();
@@ -56,8 +63,7 @@ namespace ArcCreate.Compose.EventsEditor
 
         public void Rebuild()
         {
-            Services.Gameplay.Scenecontrol.ScenecontrolFolder =
-                Path.GetDirectoryName(Services.Project.CurrentProject.Path);
+            Services.Gameplay.Scenecontrol.ScenecontrolFolder = "file://" + ScenecontrolFolder;
             Clean();
             RunScript();
             ExecuteEvents();
@@ -149,32 +155,48 @@ namespace ArcCreate.Compose.EventsEditor
         private void RunScript()
         {
             Script script = new Script();
-            string folderPath = Services.Gameplay.Scenecontrol.ScenecontrolFolder;
+            string folderPath = ScenecontrolFolder;
 
             UserData.RegisterAssembly();
-
-            string filePath = Path.Combine(folderPath, "init.lua");
             AddBuiltInTypes();
-            if (!File.Exists(filePath))
+
+            string currentChartName = Services.Project.CurrentChart.ChartPath;
+            string initPath = Path.Combine(folderPath, "init.lua");
+            string perChartPath = Path.Combine(folderPath, Path.GetFileNameWithoutExtension(currentChartName) + ".lua");
+
+            if (!File.Exists(initPath))
             {
                 return;
             }
 
+            string lastPath = initPath;
+
             try
             {
-                script.DoString(File.ReadAllText(filePath));
-                LuaRunner.RunScript(File.ReadAllText(filePath), this, InstructionLimit, new ScriptLoader(folderPath));
+                if (File.Exists(initPath))
+                {
+                    lastPath = initPath;
+                    LuaRunner.RunScript(File.ReadAllText(initPath), this, InstructionLimit, new ScriptLoader(folderPath));
+                }
+
+                if (File.Exists(perChartPath))
+                {
+                    lastPath = perChartPath;
+                    LuaRunner.RunScript(File.ReadAllText(perChartPath), this, InstructionLimit, new ScriptLoader(perChartPath));
+                }
             }
             catch (Exception e)
             {
                 Clean();
                 Debug.LogError(I18n.S("Compose.Exception.LuaScript", new Dictionary<string, object>()
                 {
-                    { "Path", filePath },
+                    { "Path", lastPath },
                     { "Message", e.Message },
                     { "StackTrace", e.StackTrace },
                 }));
             }
+
+            Services.Gameplay.Scenecontrol.WaitForSceneLoad();
         }
 
         private void Clean()
