@@ -13,12 +13,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         TMP_FontAsset DefaultFont { get; }
 
-        float CurrentSpeed { get; }
-
-        float CurrentGlow { get; }
-
-        List<Controller> ReferencedControllers { get; }
-
         /// <summary>
         /// Load a list of scenecontrol events.
         /// </summary>
@@ -68,5 +62,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         /// Clear all events.
         /// </summary>
         void Clear();
+
+        void AddReferencedController(Controller c);
     }
 }

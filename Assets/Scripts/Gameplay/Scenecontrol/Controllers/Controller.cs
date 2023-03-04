@@ -366,18 +366,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
                 c.UpdateLane(edgeLAlpha, edgeRAlpha, lane1Alpha, lane2Alpha, lane3Alpha, lane4Alpha);
             }
-
-            if (this is ISyncToSpeedController)
-            {
-                ISyncToSpeedController c = this as ISyncToSpeedController;
-                c.UpdateToSpeed(Services.Scenecontrol.CurrentSpeed, Services.Scenecontrol.CurrentGlow);
-            }
         }
 
         [MoonSharpHidden]
         public virtual void Reset()
         {
             Active = new ConstantChannel(DefaultActive ? 1 : 0);
+            SetActive(DefaultActive);
             if (this is IPositionController)
             {
                 IPositionController c = this as IPositionController;

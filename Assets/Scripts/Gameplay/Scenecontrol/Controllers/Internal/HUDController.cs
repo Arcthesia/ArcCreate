@@ -12,7 +12,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(pause);
+                Services.Scenecontrol.AddReferencedController(pause);
                 return pause;
             }
         }
@@ -21,7 +21,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(infoPanel);
+                Services.Scenecontrol.AddReferencedController(infoPanel);
                 return infoPanel;
             }
         }

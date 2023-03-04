@@ -4,9 +4,8 @@ using UnityEngine;
 namespace ArcCreate.Gameplay.Scenecontrol
 {
     [MoonSharpUserData]
-    public class TrackController : SpriteController, ITrackController, ISyncToSpeedController
+    public class TrackController : SpriteController, ITrackController
     {
-        private static int offsetShaderId = Shader.PropertyToID("_Offset");
         private static int edgeLAlphaShaderID = Shader.PropertyToID("_EdgeLAlpha");
         private static int edgeRAlphaShaderID = Shader.PropertyToID("_EdgeRAlpha");
         private static int lane1AlphaShaderID = Shader.PropertyToID("_Lane1Alpha");
@@ -21,7 +20,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(divideLine01);
+                Services.Scenecontrol.AddReferencedController(divideLine01);
                 return divideLine01;
             }
         }
@@ -30,7 +29,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(divideLine12);
+                Services.Scenecontrol.AddReferencedController(divideLine12);
                 return divideLine12;
             }
         }
@@ -39,7 +38,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(divideLine23);
+                Services.Scenecontrol.AddReferencedController(divideLine23);
                 return divideLine23;
             }
         }
@@ -48,7 +47,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(divideLine34);
+                Services.Scenecontrol.AddReferencedController(divideLine34);
                 return divideLine34;
             }
         }
@@ -57,7 +56,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(divideLine45);
+                Services.Scenecontrol.AddReferencedController(divideLine45);
                 return divideLine45;
             }
         }
@@ -66,7 +65,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(criticalLine0);
+                Services.Scenecontrol.AddReferencedController(criticalLine0);
                 return criticalLine0;
             }
         }
@@ -75,7 +74,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(criticalLine1);
+                Services.Scenecontrol.AddReferencedController(criticalLine1);
                 return criticalLine1;
             }
         }
@@ -84,7 +83,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(criticalLine2);
+                Services.Scenecontrol.AddReferencedController(criticalLine2);
                 return criticalLine2;
             }
         }
@@ -93,7 +92,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(criticalLine3);
+                Services.Scenecontrol.AddReferencedController(criticalLine3);
                 return criticalLine3;
             }
         }
@@ -102,7 +101,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(criticalLine4);
+                Services.Scenecontrol.AddReferencedController(criticalLine4);
                 return criticalLine4;
             }
         }
@@ -111,7 +110,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(criticalLine5);
+                Services.Scenecontrol.AddReferencedController(criticalLine5);
                 return criticalLine5;
             }
         }
@@ -120,7 +119,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(extraL);
+                Services.Scenecontrol.AddReferencedController(extraL);
                 return extraL;
             }
         }
@@ -129,7 +128,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(extraR);
+                Services.Scenecontrol.AddReferencedController(extraR);
                 return extraR;
             }
         }
@@ -138,7 +137,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(edgeExtraL);
+                Services.Scenecontrol.AddReferencedController(edgeExtraL);
                 return edgeExtraL;
             }
         }
@@ -147,7 +146,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(edgeExtraR);
+                Services.Scenecontrol.AddReferencedController(edgeExtraR);
                 return edgeExtraR;
             }
         }
@@ -163,7 +162,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public override void SetupDefault()
         {
             base.SetupDefault();
-            offsetShaderId = Shader.PropertyToID("_Offset");
             edgeLAlphaShaderID = Shader.PropertyToID("_EdgeLAlpha");
             edgeRAlphaShaderID = Shader.PropertyToID("_EdgeRAlpha");
             lane1AlphaShaderID = Shader.PropertyToID("_Lane1Alpha");
@@ -201,12 +199,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 ExtraL.SpriteRenderer.sprite = extraLaneSprite;
                 ExtraR.SpriteRenderer.sprite = extraLaneSprite;
             }
-        }
-
-        public void UpdateToSpeed(float speed, float glow)
-        {
-            offset += Time.deltaTime * speed * 6;
-            SpriteRenderer.material.SetFloat(offsetShaderId, offset);
         }
     }
 }

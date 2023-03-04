@@ -105,7 +105,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
             c.Start();
             c.CopyAllChannelsFrom(this);
-            Services.Scenecontrol.ReferencedControllers.Add(c);
+            Services.Scenecontrol.AddReferencedController(c);
             return c;
         }
 

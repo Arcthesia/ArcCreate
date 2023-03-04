@@ -196,9 +196,4 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         void UpdateLane(float edgeL, float edgeR, float lane1, float lane2, float lane3, float lane4);
     }
-
-    public interface ISyncToSpeedController : IController
-    {
-        void UpdateToSpeed(float speed, float glow);
-    }
 }

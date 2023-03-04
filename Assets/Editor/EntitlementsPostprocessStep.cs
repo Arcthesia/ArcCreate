@@ -4,6 +4,7 @@
 using UnityEditor;
 using UnityEditor.Callbacks;
 #if UNITY_IOS
+using System.IO;
 using UnityEditor.iOS.Xcode;
 #endif
 using UnityEngine;

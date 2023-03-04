@@ -12,7 +12,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(score);
+                Services.Scenecontrol.AddReferencedController(score);
                 return score;
             }
         }
@@ -21,7 +21,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(jacket);
+                Services.Scenecontrol.AddReferencedController(jacket);
                 return jacket;
             }
         }
@@ -30,7 +30,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(title);
+                Services.Scenecontrol.AddReferencedController(title);
                 return title;
             }
         }
@@ -39,7 +39,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(composer);
+                Services.Scenecontrol.AddReferencedController(composer);
                 return composer;
             }
         }
@@ -48,7 +48,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(difficultyText);
+                Services.Scenecontrol.AddReferencedController(difficultyText);
                 return difficultyText;
             }
         }
@@ -57,7 +57,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                Services.Scenecontrol.ReferencedControllers.Add(difficultyBackground);
+                Services.Scenecontrol.AddReferencedController(difficultyBackground);
                 return difficultyBackground;
             }
 

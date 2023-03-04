@@ -9,13 +9,20 @@ namespace ArcCreate.Gameplay.Scenecontrol
 {
     public class ScenecontrolService : MonoBehaviour, IScenecontrolService
     {
-        private List<ScenecontrolEvent> events = new List<ScenecontrolEvent>();
+        private static readonly int OffsetShaderId = Shader.PropertyToID("_Offset");
         [SerializeField] private TMP_FontAsset defaultFont;
         [SerializeField] private Scene scene;
-        [SerializeField] private HashSet<Controller> alwaysReferencedControllers = new HashSet<Controller>();
+        [SerializeField] private SpriteRenderer trackSprite;
+        [SerializeField] private SpriteRenderer singleLineL;
+        [SerializeField] private SpriteRenderer singleLineR;
+        [SerializeField] private GlowingSprite skyInputLine;
+        [SerializeField] private GlowingSprite skyInputLabel;
+        private List<ScenecontrolEvent> events = new List<ScenecontrolEvent>();
+        private readonly List<Controller> referencedControllers = new List<Controller>();
+        private float trackOffset = 0;
+        private float singleLineOffset = 0;
         private float count = 0;
         private int loopSwitch = 1;
-        private readonly List<Controller> referencedControllers = new List<Controller>();
 
         public List<ScenecontrolEvent> Events => events;
 
@@ -24,10 +31,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public TMP_FontAsset DefaultFont => defaultFont;
 
         public List<Controller> ReferencedControllers => referencedControllers;
-
-        public float CurrentSpeed { get; private set; }
-
-        public float CurrentGlow { get; private set; }
 
         public string ScenecontrolFolder { get; set; }
 
@@ -105,13 +108,21 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 loopSwitch *= -1;
             }
 
-            CurrentSpeed = Services.Audio.IsPlaying ? bpm / Values.BaseBpm : 0;
-            CurrentGlow = count / beatDuration;
+            float speed = Services.Audio.IsPlaying ? bpm / Values.BaseBpm : 0;
+            float glowAlpha = Mathf.Lerp(0.75f, 1, count / beatDuration);
 
             foreach (Controller c in referencedControllers)
             {
                 c.UpdateController(currentTiming);
             }
+
+            trackOffset += Time.deltaTime * speed * 6;
+            trackSprite.material.SetFloat(OffsetShaderId, trackOffset);
+            singleLineOffset += (speed >= 0) ? (Time.deltaTime * speed * 6) : (Time.deltaTime * 0.6f);
+            singleLineL.material.SetFloat(OffsetShaderId, singleLineOffset);
+            singleLineR.material.SetFloat(OffsetShaderId, singleLineOffset);
+            skyInputLine.ApplyGlow(glowAlpha);
+            skyInputLabel.ApplyGlow(glowAlpha);
         }
 
         public void Clean()
@@ -123,7 +134,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
 
             referencedControllers.Clear();
-            referencedControllers.AddRange(alwaysReferencedControllers);
         }
 
         public string Export()
@@ -150,6 +160,14 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
+        public void AddReferencedController(Controller c)
+        {
+            if (!referencedControllers.Contains(c))
+            {
+                referencedControllers.Add(c);
+            }
+        }
+
         private void RebuildList()
         {
             events.Sort((a, b) => a.Timing.CompareTo(b.Timing));
@@ -157,7 +175,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         private void Awake()
         {
-            referencedControllers.AddRange(alwaysReferencedControllers);
             foreach (var c in scene.DisabledByDefault)
             {
                 c.Start();

@@ -81,13 +81,19 @@ namespace ArcCreate.Compose.Components
 
         /// <summary>
         /// Set the path for this field without invoking <see cref="OnValueChangeed"/> event.
-        /// If the provided path is invalid, no change will be made.
+        /// If the provided path is invalid, no change will be made if this field is required,
+        /// or the field will be cleared if this field is not required.
         /// </summary>
         /// <param name="path">The file path.</param>
         public void SetPathWithoutNotify(string path)
         {
             if (string.IsNullOrEmpty(path))
             {
+                if (!required)
+                {
+                    ClearContent();
+                }
+
                 return;
             }
 

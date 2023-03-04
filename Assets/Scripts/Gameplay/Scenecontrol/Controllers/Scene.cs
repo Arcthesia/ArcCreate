@@ -19,7 +19,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(gameplayCamera);
+                Services.Scenecontrol.AddReferencedController(gameplayCamera);
                 return gameplayCamera;
             }
         }
@@ -28,7 +28,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(combo);
+                Services.Scenecontrol.AddReferencedController(combo);
                 return combo;
             }
         }
@@ -37,7 +37,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(score);
+                Services.Scenecontrol.AddReferencedController(score);
                 return score;
             }
         }
@@ -46,7 +46,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(jacket);
+                Services.Scenecontrol.AddReferencedController(jacket);
                 return jacket;
             }
         }
@@ -55,7 +55,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(title);
+                Services.Scenecontrol.AddReferencedController(title);
                 return title;
             }
         }
@@ -64,7 +64,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(composer);
+                Services.Scenecontrol.AddReferencedController(composer);
                 return composer;
             }
         }
@@ -73,7 +73,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(difficultyText);
+                Services.Scenecontrol.AddReferencedController(difficultyText);
                 return difficultyText;
             }
         }
@@ -82,7 +82,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(difficultyBackground);
+                Services.Scenecontrol.AddReferencedController(difficultyBackground);
                 return difficultyBackground;
             }
         }
@@ -91,7 +91,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(hUD);
+                Services.Scenecontrol.AddReferencedController(hUD);
                 return hUD;
             }
         }
@@ -101,7 +101,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(infoPanel);
+                Services.Scenecontrol.AddReferencedController(infoPanel);
                 return infoPanel;
             }
         }
@@ -110,7 +110,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(pauseButton);
+                Services.Scenecontrol.AddReferencedController(pauseButton);
                 return pauseButton;
             }
         }
@@ -119,7 +119,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(background);
+                Services.Scenecontrol.AddReferencedController(background);
                 return background;
             }
         }
@@ -128,7 +128,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(videoBackground);
+                Services.Scenecontrol.AddReferencedController(videoBackground);
                 return videoBackground;
             }
         }
@@ -137,25 +137,25 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(track);
+                Services.Scenecontrol.AddReferencedController(track);
                 return track;
             }
         }
-        [SerializeField] private SingleLineController singleLineL;
-        public SingleLineController SingleLineL
+        [SerializeField] private SpriteController singleLineL;
+        public SpriteController SingleLineL
         {
             get
             {
-                ReferencedControllers.Add(singleLineL);
+                Services.Scenecontrol.AddReferencedController(singleLineL);
                 return singleLineL;
             }
         }
-        [SerializeField] private SingleLineController singleLineR;
-        public SingleLineController SingleLineR
+        [SerializeField] private SpriteController singleLineR;
+        public SpriteController SingleLineR
         {
             get
             {
-                ReferencedControllers.Add(singleLineR);
+                Services.Scenecontrol.AddReferencedController(singleLineR);
                 return singleLineR;
             }
         }
@@ -164,7 +164,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(skyInputLine);
+                Services.Scenecontrol.AddReferencedController(skyInputLine);
                 return skyInputLine;
             }
         }
@@ -173,7 +173,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(skyInputLabel);
+                Services.Scenecontrol.AddReferencedController(skyInputLabel);
                 return skyInputLabel;
             }
         }
@@ -182,7 +182,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(beatlines);
+                Services.Scenecontrol.AddReferencedController(beatlines);
                 return beatlines;
             }
         }
@@ -191,7 +191,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(darken);
+                Services.Scenecontrol.AddReferencedController(darken);
                 return darken;
             }
         }
@@ -200,7 +200,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(worldCanvas);
+                Services.Scenecontrol.AddReferencedController(worldCanvas);
                 return worldCanvas;
             }
         }
@@ -209,7 +209,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(screenCanvas);
+                Services.Scenecontrol.AddReferencedController(screenCanvas);
                 return screenCanvas;
             }
         }
@@ -218,7 +218,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                ReferencedControllers.Add(cameraCanvas);
+                Services.Scenecontrol.AddReferencedController(cameraCanvas);
                 return cameraCanvas;
             }
         }
@@ -266,8 +266,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
         private readonly Dictionary<SpriteDefinition, Sprite> spriteCache = new Dictionary<SpriteDefinition, Sprite>();
         private readonly Dictionary<int, NoteGroupController> noteGroups = new Dictionary<int, NoteGroupController>();
 
-        private List<Controller> ReferencedControllers => Services.Scenecontrol.ReferencedControllers;
-
         public void ClearCache()
         {
             foreach (var pair in spriteCache)
@@ -309,7 +307,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
             c.SerializedType = $"image.{imgPath},{material},{renderLayer}";
             c.Start();
-            ReferencedControllers.Add(c);
+            Services.Scenecontrol.AddReferencedController(c);
             return c;
         }
 
@@ -330,7 +328,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
             c.SerializedType = $"sprite.{imgPath},{material},{renderLayer}";
             c.Start();
-            ReferencedControllers.Add(c);
+            Services.Scenecontrol.AddReferencedController(c);
             return c;
         }
 
@@ -354,7 +352,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
             c.SerializedType = $"canvas.{worldSpace}";
             c.Start();
-            ReferencedControllers.Add(c);
+            Services.Scenecontrol.AddReferencedController(c);
             return c;
         }
 
@@ -407,7 +405,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
             c.SerializedType = $"text.{font},{fontSize},{lineSpacing},{alignment},{renderLayer}";
             c.Start();
-            ReferencedControllers.Add(c);
+            Services.Scenecontrol.AddReferencedController(c);
             return c;
         }
 
@@ -425,7 +423,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 c.TimingGroup = group;
                 c.SerializedType = $"tg.{group.GroupNumber}";
                 c.Start();
-                ReferencedControllers.Add(c);
+                Services.Scenecontrol.AddReferencedController(c);
                 noteGroups.Add(group.GroupNumber, c);
                 return c;
             }
@@ -660,29 +658,29 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         private void Awake()
         {
-            GameplayCamera.SerializedType = "camera";
-            Combo.SerializedType = "combo";
-            Score.SerializedType = "score";
-            Jacket.SerializedType = "jacket";
-            Title.SerializedType = "title";
-            Composer.SerializedType = "composer";
-            DifficultyText.SerializedType = "diff";
-            DifficultyBackground.SerializedType = "diffBg";
-            HUD.SerializedType = "hud";
-            InfoPanel.SerializedType = "info";
-            PauseButton.SerializedType = "pause";
-            Background.SerializedType = "bg";
-            VideoBackground.SerializedType = "videobg";
-            Track.SerializedType = "track";
-            SingleLineL.SerializedType = "singlelinel";
-            SingleLineR.SerializedType = "singleliner";
-            SkyInputLine.SerializedType = "skyinputline";
-            SkyInputLabel.SerializedType = "skyinputlabel";
-            Beatlines.SerializedType = "beatlines";
-            Darken.SerializedType = "darken";
-            WorldCanvas.SerializedType = "worldcanvas";
-            ScreenCanvas.SerializedType = "screencanvas";
-            CameraCanvas.SerializedType = "cameracanvas";
+            gameplayCamera.SerializedType = "camera";
+            combo.SerializedType = "combo";
+            score.SerializedType = "score";
+            jacket.SerializedType = "jacket";
+            title.SerializedType = "title";
+            composer.SerializedType = "composer";
+            difficultyText.SerializedType = "diff";
+            difficultyBackground.SerializedType = "diffBg";
+            hUD.SerializedType = "hud";
+            infoPanel.SerializedType = "info";
+            pauseButton.SerializedType = "pause";
+            background.SerializedType = "bg";
+            videoBackground.SerializedType = "videobg";
+            track.SerializedType = "track";
+            singleLineL.SerializedType = "singlelinel";
+            singleLineR.SerializedType = "singleliner";
+            skyInputLine.SerializedType = "skyinputline";
+            skyInputLabel.SerializedType = "skyinputlabel";
+            beatlines.SerializedType = "beatlines";
+            darken.SerializedType = "darken";
+            worldCanvas.SerializedType = "worldcanvas";
+            screenCanvas.SerializedType = "screencanvas";
+            cameraCanvas.SerializedType = "cameracanvas";
         }
 
         private struct SpriteDefinition

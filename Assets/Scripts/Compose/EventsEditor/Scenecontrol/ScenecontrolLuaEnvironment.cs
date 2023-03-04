@@ -136,7 +136,6 @@ namespace ArcCreate.Compose.EventsEditor
 
         private void AddBuiltInTypes()
         {
-            ScDataSource.SetupChannels();
             AddType(new TrackDisplayType());
             AddType(new HideGroupType());
             AddType(new GroupAlphaType());

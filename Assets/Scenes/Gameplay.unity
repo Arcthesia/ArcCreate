@@ -1788,7 +1788,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 401828840}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a0111f043e4383408bfbb57c062bc77, type: 3}
+  m_Script: {fileID: 11500000, guid: 18c7ee7c5ac19574ea8baf479448a1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isPersistent: 1
@@ -3202,6 +3202,7 @@ GameObject:
   - component: {fileID: 658714734}
   - component: {fileID: 658714735}
   - component: {fileID: 658714736}
+  - component: {fileID: 658714737}
   m_Layer: 10
   m_Name: Line
   m_TagString: Untagged
@@ -3302,6 +3303,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPersistent: 1
   spriteRenderer: {fileID: 658714734}
+  glowingSprite: {fileID: 658714737}
+--- !u!114 &658714737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 658714732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19e22e568b5851ee1a5711a53561b0f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprite: {fileID: 658714734}
 --- !u!1 &698490208
 GameObject:
   m_ObjectHideFlags: 0
@@ -4708,7 +4723,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 1
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -5125,6 +5140,7 @@ GameObject:
   - component: {fileID: 1125645941}
   - component: {fileID: 1125645942}
   - component: {fileID: 1125645943}
+  - component: {fileID: 1125645944}
   m_Layer: 10
   m_Name: Label
   m_TagString: Untagged
@@ -5225,6 +5241,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPersistent: 1
   spriteRenderer: {fileID: 1125645941}
+  glowingSprite: {fileID: 1125645944}
+--- !u!114 &1125645944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125645939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19e22e568b5851ee1a5711a53561b0f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprite: {fileID: 1125645941}
 --- !u!1 &1152665814
 GameObject:
   m_ObjectHideFlags: 0
@@ -5967,6 +5997,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultFont: {fileID: 11400000, guid: fc246767bf759519bb5f459275194444, type: 2}
   scene: {fileID: 1663275891}
+  trackSprite: {fileID: 1445769243}
+  singleLineL: {fileID: 1966378483}
+  singleLineR: {fileID: 401828842}
+  skyInputLine: {fileID: 658714737}
+  skyInputLabel: {fileID: 1125645944}
 --- !u!4 &1382682620
 Transform:
   m_ObjectHideFlags: 0
@@ -8552,7 +8587,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1966378481}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a0111f043e4383408bfbb57c062bc77, type: 3}
+  m_Script: {fileID: 11500000, guid: 18c7ee7c5ac19574ea8baf479448a1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isPersistent: 1

@@ -92,6 +92,13 @@ namespace ArcCreate.Compose.Project
 
         private void OnVideo(FilePath path)
         {
+            if (path == null)
+            {
+                Target.VideoPath = null;
+                GameplayData.VideoBackgroundUrl.Value = null;
+                return;
+            }
+
             Target.VideoPath = path.ShortenedPath;
             GameplayData.VideoBackgroundUrl.Value = "file:///" + path.FullPath.Replace("\\", "/");
 
