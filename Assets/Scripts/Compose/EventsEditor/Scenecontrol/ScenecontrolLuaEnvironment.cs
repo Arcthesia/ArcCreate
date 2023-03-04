@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Gameplay.Scenecontrol;
 using ArcCreate.Utilities.Lua;
@@ -23,7 +24,6 @@ namespace ArcCreate.Compose.EventsEditor
 
         public void SetupScript(Script script)
         {
-            script.Globals["addScenecontrol"] = (Action<string, DynValue, DynValue>)AddScenecontrolType;
             script.Globals["Channel"] = new ValueChannelBuilder();
             script.Globals["StringChannel"] = new StringChannelBuilder();
             script.Globals["TextChannel"] = new TextChannelBuilder();
@@ -31,11 +31,12 @@ namespace ArcCreate.Compose.EventsEditor
             script.Globals["TriggerChannel"] = new TriggerChannelBuilder();
             script.Globals["Scene"] = Services.Gameplay.Scenecontrol.Scene;
             script.Globals["Context"] = new Context();
-
             // script.Globals["PostProcessing"] = Services.Gameplay.Scenecontrol.PostProcessing;
-            script.Globals["notify"] = (Action<object>)((value) => Services.Popups.Notify(Popups.Severity.Info, value.ToString()));
-            script.Globals["notifyWarn"] = (Action<object>)((value) => Services.Popups.Notify(Popups.Severity.Warning, value.ToString()));
-            script.Globals["notifyError"] = (Action<object>)((value) => Services.Popups.Notify(Popups.Severity.Error, value.ToString()));
+
+            script.Globals["addScenecontrol"] = (Action<string, DynValue, DynValue>)AddScenecontrol;
+            script.Globals["notify"] = (Action<object>)Notify;
+            script.Globals["notifyWarn"] = (Action<object>)NotifyWarn;
+            script.Globals["notifyError"] = (Action<object>)NotifyError;
 
             Script.GlobalOptions.CustomConverters.SetScriptToClrCustomConversion(DataType.Number, typeof(ValueChannel), dyn =>
             {
@@ -61,6 +62,55 @@ namespace ArcCreate.Compose.EventsEditor
             RunScript();
             ExecuteEvents();
         }
+
+        public void GenerateEmmyLua()
+        {
+            Assembly scAssembly = Assembly.GetAssembly(typeof(ScenecontrolService));
+            LuaRunner.GetCommonEmmySharp()
+                .AppendAssembly(scAssembly)
+                .AppendFunction(typeof(ScenecontrolLuaEnvironment).GetMethod("AddScenecontrol"))
+                .AppendFunction(typeof(ScenecontrolLuaEnvironment).GetMethod("Notify"))
+                .AppendFunction(typeof(ScenecontrolLuaEnvironment).GetMethod("NotifyWarn"))
+                .AppendFunction(typeof(ScenecontrolLuaEnvironment).GetMethod("NotifyError"))
+                .Build(Path.GetDirectoryName(Services.Project.CurrentProject.Path));
+        }
+
+        public void AddScenecontrol(string name, DynValue argNames, DynValue scDef)
+        {
+            if (scenecontrolTypes.ContainsKey(name))
+            {
+                throw new Exception($"Can not add two scenecontrols with the same name: {name}");
+            }
+
+            string[] args;
+            try
+            {
+                args = argNames.Table.Values.Select(val => val.String).ToArray();
+            }
+            catch
+            {
+                int count = (int)Math.Round(argNames.Number);
+                List<string> arglist = new List<string>();
+                for (int i = 1; i <= count; i++)
+                {
+                    arglist.Add(i.ToString());
+                }
+
+                args = arglist.ToArray();
+            }
+
+            scenecontrolTypes.Add(name, new LuaScenecontrolType(scDef, args.Length));
+            scTable.SetArgument(name, args);
+        }
+
+        public void Notify(object content)
+            => Services.Popups.Notify(Popups.Severity.Info, content.ToString());
+
+        public void NotifyWarn(object content)
+            => Services.Popups.Notify(Popups.Severity.Warning, content.ToString());
+
+        public void NotifyError(object content)
+            => Services.Popups.Notify(Popups.Severity.Error, content.ToString());
 
         private void ExecuteEvents()
         {
@@ -147,34 +197,6 @@ namespace ArcCreate.Compose.EventsEditor
         {
             scenecontrolTypes.Add(type.Typename, type);
             scTable.SetArgument(type.Typename, type.ArgumentNames);
-        }
-
-        private void AddScenecontrolType(string name, DynValue argNames, DynValue scDef)
-        {
-            if (scenecontrolTypes.ContainsKey(name))
-            {
-                throw new Exception($"Can not add two scenecontrols with the same name: {name}");
-            }
-
-            string[] args;
-            try
-            {
-                args = argNames.Table.Values.Select(val => val.String).ToArray();
-            }
-            catch
-            {
-                int count = (int)Math.Round(argNames.Number);
-                List<string> arglist = new List<string>();
-                for (int i = 1; i <= count; i++)
-                {
-                    arglist.Add(i.ToString());
-                }
-
-                args = arglist.ToArray();
-            }
-
-            scenecontrolTypes.Add(name, new LuaScenecontrolType(scDef, args.Length));
-            scTable.SetArgument(name, args);
         }
     }
 }

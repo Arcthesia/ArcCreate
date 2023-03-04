@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using EmmySharp;
 using MoonSharp.Interpreter;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
     [MoonSharpUserData]
+    [EmmyDoc("Text channel that's combined from multiple other text channel")]
     public class ConcatTextChannel : TextChannel
     {
         private List<TextChannel> components;

@@ -1,13 +1,17 @@
+using EmmySharp;
 using MoonSharp.Interpreter;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
     [MoonSharpUserData]
+    [EmmyDoc("Controller for the scene's camera")]
     public class CameraController : Controller, ICameraController, IPositionController
     {
+        [EmmyDoc("Channel for the camera's field of view. Value of this channel is added to the camera's internal field of view value (Default is 0)")]
         public ValueChannel FieldOfView { get; set; }
 
+        [EmmyDoc("Channel for the camera's tilt factor. Camera tilting rotation is multipled with the value of this channel (Default is 1)")]
         public ValueChannel TiltFactor { get; set; }
 
         public ValueChannel TranslationX { get; set; }
@@ -28,19 +32,21 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public ValueChannel ScaleZ { get; set; }
 
-        public float DefaultFieldOfView => 0;
+        [MoonSharpHidden] public float DefaultFieldOfView => 0;
 
-        public Vector3 DefaultTranslation => Vector3.zero;
+        [MoonSharpHidden] public Vector3 DefaultTranslation => Vector3.zero;
 
-        public Quaternion DefaultRotation => Quaternion.identity;
+        [MoonSharpHidden] public Quaternion DefaultRotation => Quaternion.identity;
 
-        public Vector3 DefaultScale => Vector3.one;
+        [MoonSharpHidden] public Vector3 DefaultScale => Vector3.one;
 
+        [MoonSharpHidden]
         public void UpdateCamera(float fieldOfView, float tiltFactor)
         {
             Services.Camera.SetPropertiesExternal(fieldOfView, tiltFactor);
         }
 
+        [MoonSharpHidden]
         public void UpdatePosition(Vector3 translation, Quaternion rotation, Vector3 scale)
         {
             Services.Camera.SetTransformExternal(translation, rotation);

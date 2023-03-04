@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using ArcCreate.Utility.Extension;
+using EmmySharp;
 using MoonSharp.Interpreter;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
     [MoonSharpUserData]
+    [EmmyDoc("Channel whose string value is defined by keyframes")]
     public class KeyStringChannel : StringChannel, IComparer<StringKey>
     {
         private readonly List<StringKey> keys = new List<StringKey>();
@@ -37,6 +39,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return keys[index].Value;
         }
 
+        [EmmyDoc("Add a keyframe to this channel")]
         public KeyStringChannel AddKey(int timing, string value)
         {
             int overrideIndex = 0;
@@ -56,6 +59,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return this;
         }
 
+        [EmmyDoc("Remove the first key that has matching timing value")]
         public KeyStringChannel RemoveKeyAtTiming(int timing)
         {
             int index = GetKeyIndex(timing);
@@ -67,17 +71,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return this;
         }
 
-        public KeyStringChannel RemoveKeyAtIndex(int index)
-        {
-            index -= 1;
-            if (index >= 0 && index < keys.Count)
-            {
-                keys.RemoveAt(index);
-            }
-
-            return this;
-        }
-
+        [MoonSharpHidden]
         public int Compare(StringKey x, StringKey y)
         {
             if (x.Timing == y.Timing)

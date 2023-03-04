@@ -1,9 +1,11 @@
+using EmmySharp;
 using MoonSharp.Interpreter;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
     [MoonSharpUserData]
+    [EmmyDoc("Controller for beatlines display")]
     public class BeatlinesController : Controller, IPositionController
     {
         public ValueChannel TranslationX { get; set; }
@@ -34,6 +36,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public Vector3 DefaultScale => Vector3.one;
 
+        [MoonSharpHidden]
         public void UpdatePosition(Vector3 translation, Quaternion rotation, Vector3 scale)
         {
             translation.x *= -1;

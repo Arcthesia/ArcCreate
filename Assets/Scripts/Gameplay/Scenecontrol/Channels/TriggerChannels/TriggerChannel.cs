@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using EmmySharp;
 using MoonSharp.Interpreter;
 
 namespace ArcCreate.Gameplay.Scenecontrol
@@ -40,6 +41,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return result;
         }
 
+        [EmmyDoc("Sets the base value of this channel.")]
         public TriggerChannel SetBaseValue(ValueChannel value)
         {
             BaseValue = value;
@@ -56,6 +58,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return CalculateAfterPoll(timing);
         }
 
+        [MoonSharpHidden]
         public abstract void Dispatch(TriggerValueDispatchEvent value);
 
         protected abstract float CalculateAfterPoll(int timing);

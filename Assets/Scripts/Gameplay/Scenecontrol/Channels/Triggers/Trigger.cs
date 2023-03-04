@@ -8,23 +8,29 @@ namespace ArcCreate.Gameplay.Scenecontrol
     {
         private TriggerChannel channel;
 
+        [MoonSharpHidden]
         public TriggerValueDispatch TriggerDispatch { get; set; }
 
+        [MoonSharpHidden]
         public void BindToChannel(TriggerChannel channel)
         {
             this.channel = channel;
         }
 
+        [MoonSharpHidden]
         public virtual void Destroy()
         {
         }
 
+        [MoonSharpHidden]
         public virtual void Reset()
         {
         }
 
+        [MoonSharpHidden]
         public abstract void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization);
 
+        [MoonSharpHidden]
         public Trigger DispatchValue(ValueChannel value, ValueChannel duration, string easing)
         {
             TriggerDispatch = new TriggerValueDispatch
@@ -38,10 +44,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return this;
         }
 
+        [MoonSharpHidden]
         public abstract void Poll(int timing);
 
+        [MoonSharpHidden]
         public abstract List<object> SerializeProperties(ScenecontrolSerialization serialization);
 
+        [MoonSharpHidden]
         protected virtual void Dispatch(int timing)
         {
             channel.Dispatch(new TriggerValueDispatchEvent

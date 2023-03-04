@@ -1,9 +1,7 @@
 using System;
-using MoonSharp.Interpreter;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
-    [MoonSharpUserData]
     public class Key
     {
         public int Timing { get; set; }

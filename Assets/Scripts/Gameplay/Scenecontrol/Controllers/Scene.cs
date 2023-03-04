@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using ArcCreate.Utilities.Lua;
 using ArcCreate.Utility.Parser;
 using Cysharp.Threading.Tasks;
+using EmmySharp;
 using MoonSharp.Interpreter;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -10,11 +12,14 @@ using UnityEngine.Networking;
 namespace ArcCreate.Gameplay.Scenecontrol
 {
     [MoonSharpUserData]
+    [EmmySingleton]
+    [EmmyDoc("Class for interacting with the scene")]
     public class Scene : MonoBehaviour
     {
 #pragma warning disable
         [Header("Internal")]
         [SerializeField] private CameraController gameplayCamera;
+        [EmmyDoc("Gets the gameplay camera controller")]
         public CameraController GameplayCamera
         {
             get
@@ -24,6 +29,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private TextController combo;
+        [EmmyDoc("Gets the combo text controller")]
         public TextController Combo
         {
             get
@@ -33,6 +39,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private TextController score;
+        [EmmyDoc("Gets the score text controller")]
         public TextController Score
         {
             get
@@ -42,6 +49,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private ImageController jacket;
+        [EmmyDoc("Gets the jacket art image controller")]
         public ImageController Jacket
         {
             get
@@ -51,6 +59,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private TitleController title;
+        [EmmyDoc("Gets the title text controller")]
         public TitleController Title
         {
             get
@@ -60,6 +69,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private ComposerController composer;
+        [EmmyDoc("Gets the composer text controller")]
         public ComposerController Composer
         {
             get
@@ -69,6 +79,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private DifficultyController difficultyText;
+        [EmmyDoc("Gets the difficulty text controller")]
         public DifficultyController DifficultyText
         {
             get
@@ -78,6 +89,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private ImageController difficultyBackground;
+        [EmmyDoc("Gets the difficulty background image controller")]
         public ImageController DifficultyBackground
         {
             get
@@ -87,6 +99,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private CanvasController hUD;
+        [EmmyDoc("Gets the HUD canvas controller")]
         public CanvasController HUD
         {
             get
@@ -97,6 +110,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         }
         public CanvasController hud => HUD;
         [SerializeField] private InfoPanelController infoPanel;
+        [EmmyDoc("Gets the info panel image controller")]
         public InfoPanelController InfoPanel
         {
             get
@@ -106,6 +120,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private ImageController pauseButton;
+        [EmmyDoc("Gets the pause button image controller")]
         public ImageController PauseButton
         {
             get
@@ -115,6 +130,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private ImageController background;
+        [EmmyDoc("Gets the background image controller")]
         public ImageController Background
         {
             get
@@ -124,6 +140,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private SpriteController videoBackground;
+        [EmmyDoc("Gets the video background sprite controller")]
         public SpriteController VideoBackground
         {
             get
@@ -133,6 +150,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private TrackController track;
+        [EmmyDoc("Gets the track sprite controller")]
         public TrackController Track
         {
             get
@@ -142,6 +160,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private SpriteController singleLineL;
+        [EmmyDoc("Gets the left single line sprite controller")]
         public SpriteController SingleLineL
         {
             get
@@ -151,6 +170,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private SpriteController singleLineR;
+        [EmmyDoc("Gets the right single line sprite controller")]
         public SpriteController SingleLineR
         {
             get
@@ -160,6 +180,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private GlowingSpriteController skyInputLine;
+        [EmmyDoc("Gets the sky input line sprite controller")]
         public GlowingSpriteController SkyInputLine
         {
             get
@@ -169,6 +190,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private GlowingSpriteController skyInputLabel;
+        [EmmyDoc("Gets the sky input label sprite controller")]
         public GlowingSpriteController SkyInputLabel
         {
             get
@@ -178,6 +200,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private BeatlinesController beatlines;
+        [EmmyDoc("Gets the beatlines display controller")]
         public BeatlinesController Beatlines
         {
             get
@@ -187,6 +210,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private SpriteController darken;
+        [EmmyDoc("Gets the background darkening sprite controller")]
         public SpriteController Darken
         {
             get
@@ -196,6 +220,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private CanvasController worldCanvas;
+        [EmmyDoc("Gets the world canvas controller")]
         public CanvasController WorldCanvas
         {
             get
@@ -205,6 +230,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private CanvasController screenCanvas;
+        [EmmyDoc("Gets the screen canvas controller")]
         public CanvasController ScreenCanvas
         {
             get
@@ -214,6 +240,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private CanvasController cameraCanvas;
+        [EmmyDoc("Gets the camera canvas controller")]
         public CanvasController CameraCanvas
         {
             get
@@ -223,38 +250,38 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
-        public Transform CanvasParent;
+        [MoonSharpHidden] public Transform CanvasParent;
 
         [Header("Prefab")]
-        public GameObject ImagePrefab;
-        public GameObject CanvasPrefab;
-        public GameObject SpritePrefab;
-        public GameObject TextPrefab;
-        public GameObject GroupPrefab;
+        [MoonSharpHidden] public GameObject ImagePrefab;
+        [MoonSharpHidden] public GameObject CanvasPrefab;
+        [MoonSharpHidden] public GameObject SpritePrefab;
+        [MoonSharpHidden] public GameObject TextPrefab;
+        [MoonSharpHidden] public GameObject GroupPrefab;
 
         [Header("Materials")]
-        public Material DefaultMaterial;
-        public Material ColorBurnMaterial;
-        public Material ColorDodgeMaterial;
-        public Material DarkenMaterial;
-        public Material DifferenceMaterial;
-        public Material ExclusionMaterial;
-        public Material FastAddMaterial;
-        public Material FastDarkenMaterial;
-        public Material FastLightenMaterial;
-        public Material FastMultiplyMaterial;
-        public Material FastScreenMaterial;
-        public Material HardLightMaterial;
-        public Material LightenMaterial;
-        public Material LinearBurnMaterial;
-        public Material LinearDodgeMaterial;
-        public Material LinearLightMaterial;
-        public Material MultiplyMaterial;
-        public Material OverlayMaterial;
-        public Material ScreenMaterial;
-        public Material SoftLightMaterial;
-        public Material SubtractMaterial;
-        public Material VividLightMaterial;
+        [MoonSharpHidden] public Material DefaultMaterial;
+        [MoonSharpHidden] public Material ColorBurnMaterial;
+        [MoonSharpHidden] public Material ColorDodgeMaterial;
+        [MoonSharpHidden] public Material DarkenMaterial;
+        [MoonSharpHidden] public Material DifferenceMaterial;
+        [MoonSharpHidden] public Material ExclusionMaterial;
+        [MoonSharpHidden] public Material FastAddMaterial;
+        [MoonSharpHidden] public Material FastDarkenMaterial;
+        [MoonSharpHidden] public Material FastLightenMaterial;
+        [MoonSharpHidden] public Material FastMultiplyMaterial;
+        [MoonSharpHidden] public Material FastScreenMaterial;
+        [MoonSharpHidden] public Material HardLightMaterial;
+        [MoonSharpHidden] public Material LightenMaterial;
+        [MoonSharpHidden] public Material LinearBurnMaterial;
+        [MoonSharpHidden] public Material LinearDodgeMaterial;
+        [MoonSharpHidden] public Material LinearLightMaterial;
+        [MoonSharpHidden] public Material MultiplyMaterial;
+        [MoonSharpHidden] public Material OverlayMaterial;
+        [MoonSharpHidden] public Material ScreenMaterial;
+        [MoonSharpHidden] public Material SoftLightMaterial;
+        [MoonSharpHidden] public Material SubtractMaterial;
+        [MoonSharpHidden] public Material VividLightMaterial;
 
         [SerializeField] private int overlayLayer;
         [SerializeField] private int notesLayer;
@@ -266,6 +293,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         private readonly Dictionary<SpriteDefinition, Sprite> spriteCache = new Dictionary<SpriteDefinition, Sprite>();
         private readonly Dictionary<int, NoteGroupController> noteGroups = new Dictionary<int, NoteGroupController>();
 
+        [MoonSharpHidden]
         public void ClearCache()
         {
             foreach (var pair in spriteCache)
@@ -277,6 +305,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             noteGroups.Clear();
         }
 
+        [MoonSharpHidden]
         public Material GetMaterial(string material, bool newMaterialInstance)
         {
             Material m = GetMaterial(material);
@@ -290,7 +319,21 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
-        public ImageController CreateImage(string imgPath, string material = "default", string renderLayer = "overlay", Vector2? pivot = null)
+#pragma warning disable
+        [EmmyDoc("Creates an image controller from an image file")]
+        public ImageController CreateImage(
+            string imgPath,
+            [EmmyChoice("default", "colorburn", "colordodge", "darken",
+                        "difference", "exclusion", "add", "fastadd", "fastdarken",
+                        "fastlighten", "fastmultiply", "fastscreen", "hardlight",
+                        "lighten", "linearburn", "lineardodge", "linearlight",
+                        "multiply", "overlay", "screen", "softlight",
+                        "subtract", "vividlight")]
+            string material = "default",
+            [EmmyChoice("overlay", "notes", "background")]
+            string renderLayer = "overlay",
+            XY pivot = null)
+#pragma warning restore
         {
             GameObject obj = Instantiate(ImagePrefab, ScreenCanvas.transform);
             obj.layer = GetLayer(renderLayer);
@@ -301,7 +344,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 new SpriteDefinition
                 {
                     Path = Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath),
-                    Pivot = pivot ?? new Vector2(0.5f, 0.5f),
+                    Pivot = pivot?.ToVector() ?? new Vector2(0.5f, 0.5f),
                 }).AsTask().Result;
             c.Image.sprite = sprite;
 
@@ -311,7 +354,21 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return c;
         }
 
-        public SpriteController CreateSprite(string imgPath, string material = "default", string renderLayer = "overlay", Vector2? pivot = null)
+#pragma warning disable
+        [EmmyDoc("Creates a sprite controller from an image file")]
+        public SpriteController CreateSprite(
+            string imgPath,
+            [EmmyChoice("default", "colorburn", "colordodge", "darken",
+                        "difference", "exclusion", "add", "fastadd", "fastdarken",
+                        "fastlighten", "fastmultiply", "fastscreen", "hardlight",
+                        "lighten", "linearburn", "lineardodge", "linearlight",
+                        "multiply", "overlay", "screen", "softlight",
+                        "subtract", "vividlight")]
+            string material = "default",
+            [EmmyChoice("overlay", "notes", "background")]
+            string renderLayer = "overlay",
+            XY pivot = null)
+#pragma warning restore
         {
             GameObject obj = Instantiate(SpritePrefab, ScreenCanvas.transform);
             obj.layer = GetLayer(renderLayer);
@@ -322,7 +379,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 new SpriteDefinition
                 {
                     Path = Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath),
-                    Pivot = pivot ?? new Vector2(0.5f, 0.5f),
+                    Pivot = pivot?.ToVector() ?? new Vector2(0.5f, 0.5f),
                 }).AsTask().Result;
             c.SpriteRenderer.sprite = sprite;
 
@@ -332,6 +389,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return c;
         }
 
+        [EmmyDoc("Creates a canvas either in world space or in screen space")]
         public CanvasController CreateCanvas(bool worldSpace = false)
         {
             GameObject obj = Instantiate(CanvasPrefab, CanvasParent);
@@ -356,11 +414,14 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return c;
         }
 
+        [EmmyDoc("Creates a new text controller")]
         public TextController CreateText(
             string font = "default",
             float fontSize = 40,
             float lineSpacing = 1,
+            [EmmyChoice("upperleft", "uppercenter", "upperright", "middleleft", "middlecenter", "middlerigh", "lowerleft", "lowercenter", "lowerright")]
             string alignment = "middlecenter",
+            [EmmyChoice("overlay", "notes", "background")]
             string renderLayer = "overlay")
         {
             GameObject obj = Instantiate(TextPrefab, ScreenCanvas.transform);
@@ -409,6 +470,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return c;
         }
 
+        [EmmyDoc("Creates a note group controller for a timing group")]
         public NoteGroupController GetNoteGroup(int tg)
         {
             if (noteGroups.TryGetValue(tg, out NoteGroupController cached))
@@ -433,6 +495,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
+        [MoonSharpHidden]
         public Controller CreateFromTypeName(string type)
         {
             if (string.IsNullOrEmpty(type))
@@ -478,6 +541,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return c;
         }
 
+        [MoonSharpHidden]
         private Controller GetBaseControlerFromTypeName(string def, string arg)
         {
             switch (def)

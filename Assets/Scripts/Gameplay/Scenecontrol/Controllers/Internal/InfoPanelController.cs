@@ -1,13 +1,16 @@
+using EmmySharp;
 using MoonSharp.Interpreter;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
     [MoonSharpUserData]
+    [EmmyDoc("Controller for the HUD's information panel")]
     public class InfoPanelController : ImageController
     {
 #pragma warning disable
         [SerializeField] private TextController score;
+        [EmmyDoc("Gets the score text controller")]
         public TextController Score
         {
             get
@@ -17,6 +20,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private ImageController jacket;
+        [EmmyDoc("Gets the jacket image controller")]
         public ImageController Jacket
         {
             get
@@ -26,6 +30,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private TitleController title;
+        [EmmyDoc("Gets the title text controller")]
         public TitleController Title
         {
             get
@@ -35,6 +40,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private ComposerController composer;
+        [EmmyDoc("Gets the composer text controller")]
         public ComposerController Composer
         {
             get
@@ -44,6 +50,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private DifficultyController difficultyText;
+        [EmmyDoc("Gets the difficulty text controller")]
         public DifficultyController DifficultyText
         {
             get
@@ -53,6 +60,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
         [SerializeField] private ImageController difficultyBackground;
+        [EmmyDoc("Gets the difficulty image controller")]
         public ImageController DifficultyBackground
         {
             get

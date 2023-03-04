@@ -22,6 +22,7 @@ namespace ArcCreate.Compose.EventsEditor
         [SerializeField] private Scrollbar horizontalScrollbar;
         [SerializeField] private Button addButton;
         [SerializeField] private Button removeButton;
+        [SerializeField] private Button generateEmmyButton;
         [SerializeField] private Marker marker;
         [SerializeField] private int maxNumVisibleFields = 4;
         private ScenecontrolLuaEnvironment luaEnvironment;
@@ -175,6 +176,7 @@ namespace ArcCreate.Compose.EventsEditor
             removeButton.onClick.AddListener(OnRemoveButton);
             typenameDropdown.onValueChanged.AddListener(OnTypenameChange);
             horizontalScrollbar.onValueChanged.AddListener(OnHorizontalScroll);
+            generateEmmyButton.onClick.AddListener(GenerateEmmy);
             Values.EditingTimingGroup.OnValueChange += OnEdittingTimingGroup;
         }
 
@@ -189,6 +191,7 @@ namespace ArcCreate.Compose.EventsEditor
             removeButton.onClick.RemoveListener(OnRemoveButton);
             typenameDropdown.onValueChanged.RemoveListener(OnTypenameChange);
             horizontalScrollbar.onValueChanged.RemoveListener(OnHorizontalScroll);
+            generateEmmyButton.onClick.AddListener(GenerateEmmy);
             Values.EditingTimingGroup.OnValueChange -= OnEdittingTimingGroup;
         }
 
@@ -313,6 +316,11 @@ namespace ArcCreate.Compose.EventsEditor
             {
                 marker.gameObject.SetActive(false);
             }
+        }
+
+        private void GenerateEmmy()
+        {
+            luaEnvironment.GenerateEmmyLua();
         }
     }
 }

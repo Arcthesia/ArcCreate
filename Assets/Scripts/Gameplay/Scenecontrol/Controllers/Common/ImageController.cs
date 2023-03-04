@@ -1,3 +1,4 @@
+using EmmySharp;
 using MoonSharp.Interpreter;
 using UnityEngine;
 using UnityEngine.UI;
@@ -5,28 +6,29 @@ using UnityEngine.UI;
 namespace ArcCreate.Gameplay.Scenecontrol
 {
     [MoonSharpUserData]
+    [EmmyDoc("Controller for an image")]
     public class ImageController : Controller, IPositionController, IColorController, IRectController
     {
         [SerializeField] private RectTransform rectTransform;
         [SerializeField] private Image image;
 
-        public Color DefaultColor { get; private set; }
+        [MoonSharpHidden] public Color DefaultColor { get; private set; }
 
-        public Vector3 DefaultTranslation { get; private set; } = Vector3.zero;
+        [MoonSharpHidden] public Vector3 DefaultTranslation { get; private set; } = Vector3.zero;
 
-        public Quaternion DefaultRotation { get; private set; } = Quaternion.identity;
+        [MoonSharpHidden] public Quaternion DefaultRotation { get; private set; } = Quaternion.identity;
 
-        public Vector3 DefaultScale { get; private set; } = Vector3.one;
+        [MoonSharpHidden] public Vector3 DefaultScale { get; private set; } = Vector3.one;
 
-        public float DefaultRectW { get; private set; }
+        [MoonSharpHidden] public float DefaultRectW { get; private set; }
 
-        public float DefaultRectH { get; private set; }
+        [MoonSharpHidden] public float DefaultRectH { get; private set; }
 
-        public Vector2 DefaultAnchorMin { get; private set; }
+        [MoonSharpHidden] public Vector2 DefaultAnchorMin { get; private set; }
 
-        public Vector2 DefaultAnchorMax { get; private set; }
+        [MoonSharpHidden] public Vector2 DefaultAnchorMax { get; private set; }
 
-        public Vector2 DefaultPivot { get; private set; }
+        [MoonSharpHidden] public Vector2 DefaultPivot { get; private set; }
 
         public ValueChannel TranslationX { get; set; }
 
@@ -76,8 +78,9 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public ValueChannel PivotY { get; set; }
 
-        public Image Image => image;
+        [MoonSharpHidden] public Image Image => image;
 
+        [MoonSharpHidden]
         public override void SetupDefault()
         {
             DefaultColor = image.color;
@@ -91,6 +94,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             DefaultPivot = rectTransform.pivot;
         }
 
+        [EmmyDoc("Creates a copy of this controller")]
         public ImageController Copy()
         {
             var c = Instantiate(gameObject, transform.parent).GetComponent<ImageController>();
@@ -112,11 +116,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return c;
         }
 
+        [MoonSharpHidden]
         public void UpdateColor(Color color)
         {
             image.color = color;
         }
 
+        [MoonSharpHidden]
         public virtual void UpdatePosition(Vector3 translation, Quaternion rotation, Vector3 scale)
         {
             rectTransform.anchoredPosition3D = translation;
@@ -124,6 +130,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             rectTransform.localRotation = rotation;
         }
 
+        [MoonSharpHidden]
         public void UpdateRect(float w, float h, Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot)
         {
             rectTransform.anchorMin = anchorMin;

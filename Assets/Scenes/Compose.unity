@@ -46694,6 +46694,7 @@ MonoBehaviour:
   horizontalScrollbar: {fileID: 1013561183}
   addButton: {fileID: 587516231}
   removeButton: {fileID: 1641629642}
+  generateEmmyButton: {fileID: 1878039314}
   marker: {fileID: 505069962}
   maxNumVisibleFields: 3
 --- !u!114 &1162622227
@@ -71380,6 +71381,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1868263133}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1878039314 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5857211232641198068, guid: 4cd3e44ebb6225a779912ab5c58f0554,
+    type: 3}
+  m_PrefabInstance: {fileID: 691934055}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1885947847 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6896460699168774306, guid: 7094a4d6c12511470979e758070476b0,

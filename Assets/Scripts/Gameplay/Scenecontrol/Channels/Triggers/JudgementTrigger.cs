@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
+using EmmySharp;
 using MoonSharp.Interpreter;
 
 namespace ArcCreate.Gameplay.Scenecontrol
@@ -15,12 +16,14 @@ namespace ArcCreate.Gameplay.Scenecontrol
         private bool triggerOnLostEarly = false;
         private bool triggerOnLostLate = false;
 
+        [EmmyDoc("Sets the channel to listen to Max judge event")]
         public JudgementTrigger OnMax()
         {
             triggerOnMax = true;
             return this;
         }
 
+        [EmmyDoc("Sets the channel to listen to Pure judge event")]
         public JudgementTrigger OnPure()
         {
             triggerOnPureEarly = true;
@@ -29,18 +32,21 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return this;
         }
 
+        [EmmyDoc("Sets the channel to listen to Early Pure judge event")]
         public JudgementTrigger OnPureEarly()
         {
             triggerOnPureEarly = true;
             return this;
         }
 
+        [EmmyDoc("Sets the channel to listen to Late Pure judge event")]
         public JudgementTrigger OnPureLate()
         {
             triggerOnPureLate = true;
             return this;
         }
 
+        [EmmyDoc("Sets the channel to listen to Far judge event")]
         public JudgementTrigger OnFar()
         {
             triggerOnFarEarly = true;
@@ -48,18 +54,21 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return this;
         }
 
+        [EmmyDoc("Sets the channel to listen to Early Far judge event")]
         public JudgementTrigger OnFarEarly()
         {
             triggerOnFarEarly = true;
             return this;
         }
 
+        [EmmyDoc("Sets the channel to listen to Late Far judge event")]
         public JudgementTrigger OnFarLate()
         {
             triggerOnFarLate = true;
             return this;
         }
 
+        [EmmyDoc("Sets the channel to listen to Lost judge event")]
         public JudgementTrigger OnLost()
         {
             triggerOnLostEarly = true;
@@ -67,18 +76,21 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return this;
         }
 
+        [EmmyDoc("Sets the channel to listen to Early Lost judge event")]
         public JudgementTrigger OnLostEarly()
         {
             triggerOnLostEarly = true;
             return this;
         }
 
+        [EmmyDoc("Sets the channel to listen to Late Lost judge event")]
         public JudgementTrigger OnLostLate()
         {
             triggerOnLostLate = true;
             return this;
         }
 
+        [EmmyDoc("Sets the value to send to the TriggerChannel bound to this trigger.")]
         public JudgementTrigger Dispatch(ValueChannel value, ValueChannel duration = null, string easing = null)
         {
             TriggerValueDispatch dispatch = new TriggerValueDispatch

@@ -1,16 +1,21 @@
-using System.Collections.Generic;
+using EmmySharp;
 using MoonSharp.Interpreter;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
     [MoonSharpUserData]
+    [EmmyAlias("StringChannel")]
+    [EmmyDoc("Class for creating string channels")]
+    [EmmySingleton]
     public class StringChannelBuilder
     {
-        public static StringChannel Create()
+        [EmmyDoc("Creates an empty keyframe string channel")]
+        public static KeyStringChannel Create()
         {
             return new KeyStringChannel();
         }
 
+        [EmmyDoc("Creates constant string channel")]
         public static StringChannel Constant(string value)
         {
             KeyStringChannel channel = new KeyStringChannel();

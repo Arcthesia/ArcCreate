@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using ArcCreate.Utility.Extension;
+using EmmySharp;
 using MoonSharp.Interpreter;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
     [MoonSharpUserData]
+    [EmmyDoc("Channel whose value is defined by interpolating between keyframes")]
     public class KeyChannel : ValueChannel, IComparer<Key>
     {
         private readonly List<Key> keys = new List<Key>();
@@ -18,19 +20,44 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public int KeyCount => keys.Count;
 
-        public KeyChannel SetDefaultEasing(string easing)
+        [EmmyDoc("Sets the default easing to assign to keyframe for any subsequent keys added to this channel that does not have any easing defined")]
+#pragma warning disable
+        public KeyChannel SetDefaultEasing(
+            [EmmyChoice(
+                "linear", "l", "inconstant", "inconst", "cnsti",
+                "outconstant", "outconst", "cnsto", "inoutconstant", "inoutconst",
+                "cnstb", "insine", "si", "outsine", "so",
+                "inoutsine", "b", "inquadratic", "inquad", "2i",
+                "outquadratic", "outquad", "2o", "inoutquadratic", "inoutquad",
+                "2b", "incubic", "3i", "outcubic", "outcube",
+                "3o", "inoutcubic", "inoutcube", "3b", "inquartic",
+                "inquart", "4i", "outquartic", "outquart", "4o",
+                "inoutquartic", "inoutquart", "4b", "inquintic", "inquint",
+                "5i", "outquintic", "outquint", "5o", "inoutquintic",
+                "inoutquint", "5b", "inexponential", "inexpo", "exi",
+                "outexponential", "outexpo", "exo", "inoutexponential", "inoutexpo",
+                "exb", "incircle", "incirc", "ci", "outcircle",
+                "outcirc", "co", "inoutcircle", "inoutcirc", "cb",
+                "inback", "bki", "outback", "bko", "inoutback",
+                "bkb", "inelastic", "eli", "outelastic", "elo",
+                "inoutelastic", "elb", "inbounce", "bni", "outbounce",
+                "bno", "inoutbounce", "bnb")]
+            string easing)
+#pragma warning restore
         {
             defaultEasing = Easing.FromString(easing);
             defaultEasingString = easing;
             return this;
         }
 
+        [EmmyDoc("Sets whether or not to extrapolate value for timing values before the first key")]
         public KeyChannel SetIntroExtrapolation(bool extrapolation)
         {
             IntroExtrapolation = extrapolation;
             return this;
         }
 
+        [EmmyDoc("Sets whether or not to extrapolate value for timing values after the last key")]
         public KeyChannel SetOuttroExtrapolation(bool extrapolation)
         {
             OuttroExtrapolation = extrapolation;
@@ -93,7 +120,32 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return value;
         }
 
-        public KeyChannel AddKey(int timing, float value, string easing = null)
+        [EmmyDoc("Add a keyframe to this channel")]
+#pragma warning disable
+        public KeyChannel AddKey(
+            int timing,
+            float value,
+            [EmmyChoice(
+                "linear", "l", "inconstant", "inconst", "cnsti",
+                "outconstant", "outconst", "cnsto", "inoutconstant", "inoutconst",
+                "cnstb", "insine", "si", "outsine", "so",
+                "inoutsine", "b", "inquadratic", "inquad", "2i",
+                "outquadratic", "outquad", "2o", "inoutquadratic", "inoutquad",
+                "2b", "incubic", "3i", "outcubic", "outcube",
+                "3o", "inoutcubic", "inoutcube", "3b", "inquartic",
+                "inquart", "4i", "outquartic", "outquart", "4o",
+                "inoutquartic", "inoutquart", "4b", "inquintic", "inquint",
+                "5i", "outquintic", "outquint", "5o", "inoutquintic",
+                "inoutquint", "5b", "inexponential", "inexpo", "exi",
+                "outexponential", "outexpo", "exo", "inoutexponential", "inoutexpo",
+                "exb", "incircle", "incirc", "ci", "outcircle",
+                "outcirc", "co", "inoutcircle", "inoutcirc", "cb",
+                "inback", "bki", "outback", "bko", "inoutback",
+                "bkb", "inelastic", "eli", "outelastic", "elo",
+                "inoutelastic", "elb", "inbounce", "bni", "outbounce",
+                "bno", "inoutbounce", "bnb")]
+            string easing = null)
+#pragma warning restore
         {
             Func<float, float, float, float> e;
             string estr;
@@ -128,6 +180,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return this;
         }
 
+        [EmmyDoc("Remove the first key that has matching timing value")]
         public KeyChannel RemoveKeyAtTiming(int timing)
         {
             int index = GetKeyIndex(timing);
@@ -139,17 +192,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return this;
         }
 
-        public KeyChannel RemoveKeyAtIndex(int index)
-        {
-            index -= 1;
-            if (index >= 0 && index < keys.Count)
-            {
-                keys.RemoveAt(index);
-            }
-
-            return this;
-        }
-
+        [MoonSharpHidden]
         public int Compare(Key x, Key y)
         {
             if (x.Timing == y.Timing)

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using EmmySharp;
 using MoonSharp.Interpreter;
 using TMPro;
 using UnityEngine;
@@ -6,6 +7,7 @@ using UnityEngine;
 namespace ArcCreate.Gameplay.Scenecontrol
 {
     [MoonSharpUserData]
+    [EmmyDoc("Controller for a text object")]
     public class TextController : Controller, IPositionController, IRectController, ITextController, IColorController
     {
         private static readonly Dictionary<string, TMP_FontAsset> FontCache = new Dictionary<string, TMP_FontAsset>();
@@ -14,31 +16,31 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [SerializeField] private TMP_Text textComponent;
         [SerializeField] private RectTransform rectTransform;
 
-        public Vector3 DefaultTranslation { get; private set; }
+        [MoonSharpHidden] public Vector3 DefaultTranslation { get; private set; }
 
-        public Quaternion DefaultRotation { get; private set; }
+        [MoonSharpHidden] public Quaternion DefaultRotation { get; private set; }
 
-        public Vector3 DefaultScale { get; private set; }
+        [MoonSharpHidden] public Vector3 DefaultScale { get; private set; }
 
-        public float DefaultRectW { get; private set; }
+        [MoonSharpHidden] public float DefaultRectW { get; private set; }
 
-        public float DefaultRectH { get; private set; }
+        [MoonSharpHidden] public float DefaultRectH { get; private set; }
 
-        public Vector2 DefaultAnchorMin { get; private set; }
+        [MoonSharpHidden] public Vector2 DefaultAnchorMin { get; private set; }
 
-        public Vector2 DefaultAnchorMax { get; private set; }
+        [MoonSharpHidden] public Vector2 DefaultAnchorMax { get; private set; }
 
-        public Vector2 DefaultPivot { get; private set; }
+        [MoonSharpHidden] public Vector2 DefaultPivot { get; private set; }
 
-        public Color DefaultColor { get; private set; }
+        [MoonSharpHidden] public Color DefaultColor { get; private set; }
 
-        public float DefaultFontSize { get; private set; }
+        [MoonSharpHidden] public float DefaultFontSize { get; private set; }
 
-        public float DefaultLineSpacing { get; private set; }
+        [MoonSharpHidden] public float DefaultLineSpacing { get; private set; }
 
-        public TMP_FontAsset DefaultFontAsset { get; private set; }
+        [MoonSharpHidden] public TMP_FontAsset DefaultFontAsset { get; private set; }
 
-        public string DefaultFont { get; private set; }
+        [MoonSharpHidden] public string DefaultFont { get; private set; }
 
         public ValueChannel TranslationX { get; set; }
 
@@ -96,10 +98,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public StringChannel Font { get; set; }
 
-        public virtual string DefaultText => defaultText;
+        [MoonSharpHidden] public virtual string DefaultText => defaultText;
 
-        public TMP_Text TextComponent => textComponent;
+        [MoonSharpHidden] public TMP_Text TextComponent => textComponent;
 
+        [MoonSharpHidden]
         public override void SetupDefault()
         {
             DefaultColor = textComponent.color;
@@ -122,6 +125,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
+        [EmmyDoc("Creates a copy of this controller")]
         public TextController Copy()
         {
             var c = Instantiate(gameObject, transform.parent).GetComponent<TextController>();
@@ -143,11 +147,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return c;
         }
 
+        [MoonSharpHidden]
         public void UpdateColor(Color color)
         {
             textComponent.color = color;
         }
 
+        [MoonSharpHidden]
         public void UpdatePosition(Vector3 translation, Quaternion rotation, Vector3 scale)
         {
             rectTransform.anchoredPosition3D = translation;
@@ -155,6 +161,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             rectTransform.localRotation = rotation;
         }
 
+        [MoonSharpHidden]
         public void UpdateRect(float w, float h, Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot)
         {
             rectTransform.anchorMin = anchorMin;
@@ -164,6 +171,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, h);
         }
 
+        [MoonSharpHidden]
         public void UpdateProperties(float fontSize, float lineSpacing, string font)
         {
             textComponent.lineSpacing = lineSpacing;
@@ -171,6 +179,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             SetFont(font);
         }
 
+        [MoonSharpHidden]
         public void SetFont(string font)
         {
             if (font == "default")
@@ -197,6 +206,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return;
         }
 
+        [MoonSharpHidden]
         public void UpdateText(char[] text, int start, int length)
         {
             textComponent.SetCharArray(text, start, length);

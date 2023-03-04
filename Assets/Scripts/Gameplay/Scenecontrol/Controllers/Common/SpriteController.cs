@@ -1,32 +1,34 @@
+using EmmySharp;
 using MoonSharp.Interpreter;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
     [MoonSharpUserData]
+    [EmmyDoc("Controller for a sprite")]
     public class SpriteController : Controller, IPositionController, ILayerController, ITextureController, IColorController
     {
         private static readonly int TextureModifyShaderId = Shader.PropertyToID("_Modify");
         private MaterialPropertyBlock mpb;
         [SerializeField] private SpriteRenderer spriteRenderer;
 
-        public Vector3 DefaultTranslation { get; private set; }
+        [MoonSharpHidden] public Vector3 DefaultTranslation { get; private set; }
 
-        public Quaternion DefaultRotation { get; private set; }
+        [MoonSharpHidden] public Quaternion DefaultRotation { get; private set; }
 
-        public Vector3 DefaultScale { get; private set; }
+        [MoonSharpHidden] public Vector3 DefaultScale { get; private set; }
 
-        public string DefaultLayer { get; private set; }
+        [MoonSharpHidden] public string DefaultLayer { get; private set; }
 
-        public int DefaultSort { get; private set; }
+        [MoonSharpHidden] public int DefaultSort { get; private set; }
 
-        public float DefaultAlpha { get; private set; }
+        [MoonSharpHidden] public float DefaultAlpha { get; private set; }
 
-        public Color DefaultColor { get; private set; }
+        [MoonSharpHidden] public Color DefaultColor { get; private set; }
 
-        public Vector2 DefaultTextureOffset { get; private set; }
+        [MoonSharpHidden] public Vector2 DefaultTextureOffset { get; private set; }
 
-        public Vector2 DefaultTextureScale { get; private set; }
+        [MoonSharpHidden] public Vector2 DefaultTextureScale { get; private set; }
 
         public ValueChannel TranslationX { get; set; }
 
@@ -74,8 +76,9 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public ValueChannel TextureScaleY { get; set; }
 
-        public SpriteRenderer SpriteRenderer => spriteRenderer;
+        [MoonSharpHidden] public SpriteRenderer SpriteRenderer => spriteRenderer;
 
+        [MoonSharpHidden]
         public override void SetupDefault()
         {
             DefaultColor = spriteRenderer.color;
@@ -93,6 +96,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             mpb = mpb ?? new MaterialPropertyBlock();
         }
 
+        [EmmyDoc("Creates a copy of this controller")]
         public virtual SpriteController Copy()
         {
             var c = Instantiate(gameObject, transform.parent).GetComponent<SpriteController>();
@@ -115,17 +119,20 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return c;
         }
 
+        [MoonSharpHidden]
         public virtual void UpdateColor(Color color)
         {
             spriteRenderer.color = color;
         }
 
+        [MoonSharpHidden]
         public void UpdateLayer(string layer, int sort = 0, float alpha = 255f)
         {
             spriteRenderer.sortingLayerName = layer;
             spriteRenderer.sortingOrder = sort;
         }
 
+        [MoonSharpHidden]
         public void UpdatePosition(Vector3 translation, Quaternion rotation, Vector3 scale)
         {
             transform.localScale = scale;
@@ -133,6 +140,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             transform.localPosition = translation;
         }
 
+        [MoonSharpHidden]
         public void UpdateTexture(Vector2 offset, Vector2 scale)
         {
             Vector4 modifyVec = new Vector4(offset.x, offset.y, scale.x, scale.y);

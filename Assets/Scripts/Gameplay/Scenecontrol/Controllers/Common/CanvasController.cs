@@ -1,36 +1,38 @@
+using EmmySharp;
 using MoonSharp.Interpreter;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
     [MoonSharpUserData]
+    [EmmyDoc("Controller for a canvas")]
     public class CanvasController : Controller, ILayerController, IPositionController, IRectController
     {
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private Canvas canvas;
         [SerializeField] private RectTransform rectTransform;
 
-        public Vector3 DefaultTranslation { get; private set; }
+        [MoonSharpHidden] public Vector3 DefaultTranslation { get; private set; }
 
-        public Quaternion DefaultRotation { get; private set; }
+        [MoonSharpHidden] public Quaternion DefaultRotation { get; private set; }
 
-        public Vector3 DefaultScale { get; private set; }
+        [MoonSharpHidden] public Vector3 DefaultScale { get; private set; }
 
-        public string DefaultLayer { get; private set; }
+        [MoonSharpHidden] public string DefaultLayer { get; private set; }
 
-        public int DefaultSort { get; private set; }
+        [MoonSharpHidden] public int DefaultSort { get; private set; }
 
-        public float DefaultAlpha { get; private set; }
+        [MoonSharpHidden] public float DefaultAlpha { get; private set; }
 
-        public float DefaultRectW { get; private set; }
+        [MoonSharpHidden] public float DefaultRectW { get; private set; }
 
-        public float DefaultRectH { get; private set; }
+        [MoonSharpHidden] public float DefaultRectH { get; private set; }
 
-        public Vector2 DefaultAnchorMin { get; private set; }
+        [MoonSharpHidden] public Vector2 DefaultAnchorMin { get; private set; }
 
-        public Vector2 DefaultAnchorMax { get; private set; }
+        [MoonSharpHidden] public Vector2 DefaultAnchorMax { get; private set; }
 
-        public Vector2 DefaultPivot { get; private set; }
+        [MoonSharpHidden] public Vector2 DefaultPivot { get; private set; }
 
         public StringChannel Layer { get; set; }
 
@@ -72,8 +74,9 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public ValueChannel PivotY { get; set; }
 
-        public Canvas Canvas => canvas;
+        [MoonSharpHidden] public Canvas Canvas => canvas;
 
+        [MoonSharpHidden]
         public override void SetupDefault()
         {
             DefaultLayer = canvas.sortingLayerName;
@@ -89,6 +92,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             DefaultPivot = rectTransform.pivot;
         }
 
+        [EmmyDoc("Creates a copy of this controller")]
         public CanvasController Copy()
         {
             var c = Instantiate(gameObject, transform.parent).GetComponent<CanvasController>();
@@ -109,6 +113,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return c;
         }
 
+        [MoonSharpHidden]
         public void UpdateLayer(string layer, int sort, float alpha)
         {
             canvas.sortingLayerName = layer;
@@ -116,6 +121,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             canvasGroup.alpha = alpha;
         }
 
+        [MoonSharpHidden]
         public void UpdatePosition(Vector3 translation, Quaternion rotation, Vector3 scale)
         {
             rectTransform.anchoredPosition3D = translation;
@@ -123,6 +129,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             rectTransform.localRotation = rotation;
         }
 
+        [MoonSharpHidden]
         public void UpdateRect(float w, float h, Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot)
         {
             rectTransform.anchorMin = anchorMin;

@@ -1,4 +1,5 @@
 using System;
+using EmmySharp;
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Loaders;
 using UnityEngine;
@@ -40,32 +41,57 @@ namespace ArcCreate.Utilities.Lua
 
         public static void RegisterCommon(Script scriptObject)
         {
-            scriptObject.Globals["xy"] = (Func<float, float, XY>)((x, y) => new XY(x, y));
-            scriptObject.Globals["xyz"] = (Func<float, float, float, XYZ>)((x, y, z) => new XYZ(x, y, z));
-            scriptObject.Globals["hsva"] = (Func<float, float, float, float, HSVA>)((h, s, v, a) => new HSVA(h, s, v, a));
-            scriptObject.Globals["rgba"] = (Func<float, float, float, float, RGBA>)((r, g, b, a) => new RGBA(r, g, b, a));
-            scriptObject.Globals["rgba"] = (Func<float, float, float, float, RGBA>)((r, g, b, a) => new RGBA(r, g, b, a));
+            scriptObject.Globals["xy"] = (Func<float, float, XY>)XY;
+            scriptObject.Globals["xyz"] = (Func<float, float, float, XYZ>)XYZ;
+            scriptObject.Globals["hsva"] = (Func<float, float, float, float, HSVA>)HSVA;
+            scriptObject.Globals["rgba"] = (Func<float, float, float, float, RGBA>)RGBA;
             scriptObject.Globals["Convert"] = new Convert();
 
-            scriptObject.Globals["log"] = (Action<object>)((value) => Debug.Log(value.ToString()));
-            scriptObject.Globals["toNumber"] = (Func<DynValue, double>)((value) =>
-                {
-                    if (double.TryParse(value.String, out double result))
-                    {
-                        return result;
-                    }
+            scriptObject.Globals["log"] = (Action<object>)Log;
+            scriptObject.Globals["toNumber"] = (Func<DynValue, double>)ToNumber;
+            scriptObject.Globals["toBool"] = (Func<DynValue, bool>)ToBool;
+        }
 
-                    return 0;
-                });
-            scriptObject.Globals["toBool"] = (Func<DynValue, bool>)((value) =>
-                {
-                    if (bool.TryParse(value.String, out bool result))
-                    {
-                        return result;
-                    }
+        public static XY XY(float x, float y) => new XY(x, y);
 
-                    return false;
-                });
+        public static XYZ XYZ(float x, float y, float z) => new XYZ(x, y, z);
+
+        public static HSVA HSVA(float h, float s, float v, float a) => new HSVA(h, s, v, a);
+
+        public static RGBA RGBA(float r, float g, float b, float a) => new RGBA(r, g, b, a);
+
+        public static void Log(object content) => Debug.Log(content.ToString());
+
+        public static double ToNumber(DynValue value)
+        {
+            if (double.TryParse(value.String, out double result))
+            {
+                return result;
+            }
+
+            return 0;
+        }
+
+        public static bool ToBool(DynValue value)
+        {
+            if (bool.TryParse(value.String, out bool result))
+            {
+                return result;
+            }
+
+            return false;
+        }
+
+        public static EmmySharpBuilder GetCommonEmmySharp()
+        {
+            return EmmySharpBuilder.ForThisAssembly()
+                .AppendFunction(typeof(LuaRunner).GetMethod("XY"))
+                .AppendFunction(typeof(LuaRunner).GetMethod("XYZ"))
+                .AppendFunction(typeof(LuaRunner).GetMethod("HSVA"))
+                .AppendFunction(typeof(LuaRunner).GetMethod("RGBA"))
+                .AppendFunction(typeof(LuaRunner).GetMethod("Log"))
+                .AppendFunction(typeof(LuaRunner).GetMethod("ToNumber"))
+                .AppendFunction(typeof(LuaRunner).GetMethod("ToBool"));
         }
     }
 }

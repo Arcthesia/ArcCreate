@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using EmmySharp;
 using MoonSharp.Interpreter;
 
 namespace ArcCreate.Gameplay.Scenecontrol
@@ -24,18 +25,21 @@ namespace ArcCreate.Gameplay.Scenecontrol
             below = new ConstantChannel(float.MinValue);
         }
 
+        [EmmyDoc("Set the upper threshold value. The channel activates if the target channel's value go above the lower threshold")]
         public ObserveTrigger GoAbove(ValueChannel above)
         {
             this.above = above;
             return this;
         }
 
+        [EmmyDoc("Set the lower threshold value. The channel activates if the target channel's value go below the lower threshold")]
         public ObserveTrigger GoBelow(ValueChannel below)
         {
             this.below = below;
             return this;
         }
 
+        [EmmyDoc("Sets the value to send to the TriggerChannel bound to this trigger.")]
         public ObserveTrigger Dispatch(ValueChannel value, ValueChannel duration = null, string easing = null)
         {
             TriggerValueDispatch dispatch = new TriggerValueDispatch

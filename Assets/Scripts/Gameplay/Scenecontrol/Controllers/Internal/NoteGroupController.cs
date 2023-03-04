@@ -1,10 +1,13 @@
 using ArcCreate.Gameplay.Chart;
+using ArcCreate.Utilities.Lua;
+using EmmySharp;
 using MoonSharp.Interpreter;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
     [MoonSharpUserData]
+    [EmmyDoc("Controller for a timing group")]
     public class NoteGroupController : Controller, IPositionController, INoteGroupController, IColorController
     {
         [MoonSharpHidden] public TimingGroup TimingGroup { get; set; }
@@ -57,19 +60,21 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public ValueChannel ColorA { get; set; }
 
-        public Vector3 DefaultTranslation => Vector3.zero;
+        [MoonSharpHidden] public Vector3 DefaultTranslation => Vector3.zero;
 
-        public Quaternion DefaultRotation => Quaternion.identity;
+        [MoonSharpHidden] public Quaternion DefaultRotation => Quaternion.identity;
 
-        public Vector3 DefaultScale => Vector3.one;
+        [MoonSharpHidden] public Vector3 DefaultScale => Vector3.one;
 
-        public Color DefaultColor => Color.white;
+        [MoonSharpHidden] public Color DefaultColor => Color.white;
 
+        [MoonSharpHidden]
         public void UpdateColor(Color color)
         {
             TimingGroup.GroupProperties.Color = color;
         }
 
+        [MoonSharpHidden]
         public void UpdateNoteGroup(Quaternion rotation, Vector3 scale, Vector2 angle)
         {
             TimingGroup.GroupProperties.SCAngleX = angle.x;
@@ -78,6 +83,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             TimingGroup.GroupProperties.ScaleIndividual = scale;
         }
 
+        [MoonSharpHidden]
         public void UpdatePosition(Vector3 translation, Quaternion rotation, Vector3 scale)
         {
             transform.localPosition = translation;

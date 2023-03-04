@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using EmmySharp;
 using MoonSharp.Interpreter;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
     [MoonSharpUserData]
+    [EmmySingleton]
     public class Easing
     {
         private const float Pi = Mathf.PI;
@@ -290,6 +292,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return start + ((end - start) * (x < 0.5 ? (1 - OutBounce(0, 1, 1 - (2 * x))) / 2 : (1 + OutBounce(0, 1, (2 * x) - 1)) / 2));
         }
 
+        [MoonSharpHidden]
         public static Func<float, float, float, float> FromString(string s)
         {
             if (!StringMapping.ContainsKey(s))
