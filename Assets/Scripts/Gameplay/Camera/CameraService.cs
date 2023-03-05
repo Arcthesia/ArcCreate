@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Extension;
@@ -11,6 +12,7 @@ namespace ArcCreate.Gameplay.GameplayCamera
         [SerializeField] private Camera arcCamera;
         [SerializeField] private Camera uiCamera;
         [SerializeField] private Transform skyInputLabel;
+        [SerializeField] private RectTransform backgroundRect;
         private float currentTilt;
         private float currentArcPos;
         private bool isReset;
@@ -94,13 +96,15 @@ namespace ArcCreate.Gameplay.GameplayCamera
             RebuildList();
         }
 
-        public IEnumerable<CameraEvent> FindByTiming(int timing)
+        public IEnumerable<CameraEvent> FindByTiming(int from, int to)
         {
-            int i = events.BisectLeft(timing, n => n.Timing);
-            while (i >= 0 && i < events.Count && events[i].Timing == timing)
+            for (int i = 0; i < events.Count; i++)
             {
-                yield return events[i];
-                i++;
+                CameraEvent cam = events[i];
+                if (cam.Timing >= from && cam.Timing >= from && cam.Timing <= to)
+                {
+                    yield return cam;
+                }
             }
         }
 
@@ -135,6 +139,7 @@ namespace ArcCreate.Gameplay.GameplayCamera
 
         public void UpdateCamera(int currentTiming)
         {
+            UpdateBackgroundCanvas();
             if (IsEditorCamera)
             {
                 GameplayCamera.transform.localPosition = EditorCameraPosition;
@@ -187,6 +192,22 @@ namespace ArcCreate.Gameplay.GameplayCamera
             }
 
             UpdateCameraTilt();
+        }
+
+        private void UpdateBackgroundCanvas()
+        {
+            if (Is16By9)
+            {
+                backgroundRect.pivot = new Vector2(0.5f, 0.87f);
+                backgroundRect.anchorMin = new Vector2(0.5f, 1f);
+                backgroundRect.anchorMax = new Vector2(0.5f, 1f);
+            }
+            else
+            {
+                backgroundRect.pivot = new Vector2(0.5f, 0.5f);
+                backgroundRect.anchorMin = new Vector2(0.5f, 0.5f);
+                backgroundRect.anchorMax = new Vector2(0.5f, 0.5f);
+            }
         }
 
         private void UpdateCameraTilt()

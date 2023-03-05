@@ -71,10 +71,10 @@ namespace ArcCreate.Gameplay.Scenecontrol
             RebuildList();
         }
 
-        public IEnumerable<ScenecontrolEvent> FindByTiming(int timing)
+        public IEnumerable<ScenecontrolEvent> FindByTiming(int from, int to)
         {
-            int i = events.BisectLeft(timing, n => n.Timing);
-            while (i >= 0 && i < events.Count && events[i].Timing == timing)
+            int i = events.BisectLeft(from, n => n.Timing);
+            while (i >= 0 && i < events.Count && events[i].Timing >= from && events[i].Timing <= to)
             {
                 yield return events[i];
                 i++;

@@ -87,6 +87,7 @@ namespace ArcCreate.Gameplay
 
             Settings.InputMode.Value = (int)InputMode.Mouse;
             Services.Judgement.SetDebugDisplayMode(true);
+            Services.Scenecontrol.WaitForSceneLoad();
         }
 
         protected override void OnSceneLoad()

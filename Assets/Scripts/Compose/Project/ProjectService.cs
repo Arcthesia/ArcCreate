@@ -43,7 +43,13 @@ namespace ArcCreate.Compose.Project
 
         public void CreateNewProject(NewProjectInfo info)
         {
-            string dir = Path.GetDirectoryName(info.ProjectFile.FullPath);
+            string projPath = info.ProjectFile.FullPath;
+            if (!projPath.EndsWith(".arcproj"))
+            {
+                projPath = projPath + ".arcproj";
+            }
+
+            string dir = Path.GetDirectoryName(projPath);
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -81,7 +87,7 @@ namespace ArcCreate.Compose.Project
 
             if (info.JacketPath?.ShouldCopy ?? false)
             {
-                info.BackgroundPath.RenameUntilNoOverwrite();
+                info.JacketPath.RenameUntilNoOverwrite();
                 File.Copy(info.JacketPath.OriginalPath, info.JacketPath.FullPath);
             }
 
@@ -387,8 +393,6 @@ namespace ArcCreate.Compose.Project
                 gameplayData.AudioOffset.Value,
                 gameplayData.TimingPointDensityFactor.Value,
                 chartData);
-            string json = Services.Gameplay.Scenecontrol.Export();
-            File.WriteAllText(Path.GetDirectoryName(Application.dataPath) + "/sc.json", json);
         }
 
         private void OpenUnsavedChangesDialog(Action onConfirm)

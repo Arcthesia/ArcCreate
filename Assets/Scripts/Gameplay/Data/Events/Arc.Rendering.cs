@@ -179,7 +179,7 @@ namespace ArcCreate.Gameplay.Data
                 }
                 else
                 {
-                    if (currentTiming >= firstArcOfBranch.Timing)
+                    if (currentTiming >= (firstArcOfBranch?.Timing ?? Timing))
                     {
                         alpha = Values.MissedArcAlphaScalar;
                     }

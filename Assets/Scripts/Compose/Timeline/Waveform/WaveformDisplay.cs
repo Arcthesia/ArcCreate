@@ -117,7 +117,7 @@ namespace ArcCreate.Compose.Timeline
         /// <param name="seconds">The time value in seconds.</param>
         public void FocusOnTiming(float seconds)
         {
-            float viewDistance = viewToSecond - viewFromSecond;
+            float viewDistance = targetViewToSecond - targetViewFromSecond;
             float newFrom = seconds - (viewDistance / 2);
             newFrom = Mathf.Clamp(newFrom, 0, clip.length - viewDistance);
             viewFromSecond = newFrom;

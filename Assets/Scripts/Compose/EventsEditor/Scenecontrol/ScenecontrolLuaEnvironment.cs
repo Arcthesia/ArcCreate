@@ -12,7 +12,6 @@ using UnityEngine;
 
 namespace ArcCreate.Compose.EventsEditor
 {
-    [EditorScope("lua")]
     public class ScenecontrolLuaEnvironment : IScriptSetup
     {
         public const int InstructionLimit = int.MaxValue;
@@ -26,15 +25,6 @@ namespace ArcCreate.Compose.EventsEditor
         public ScenecontrolLuaEnvironment(ScenecontrolTable scTable)
         {
             this.scTable = scTable;
-        }
-
-        [EditorAction("debugsc", true)]
-        public void DebugSc()
-        {
-            string json = Services.Gameplay.Scenecontrol.Export();
-            Services.Gameplay.Scenecontrol.Clean();
-            File.WriteAllText(Path.GetDirectoryName(Application.dataPath) + "/sc.json", json);
-            Services.Gameplay.Scenecontrol.Import(json);
         }
 
         public void SetupScript(Script script)

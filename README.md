@@ -13,7 +13,7 @@ This project was made with Unity 2019.4.34f1. You can download the exact version
 - [x] Gameplay rendering
 - [x] Gameplay judgement
 - [ ] Pause menu
-- [ ] Compiled scenecontrol support
+- [x] Compiled scenecontrol support
 - [ ] Support for controller input
 - [ ] Level selection menu
 - [ ] Level management menu
@@ -28,7 +28,7 @@ This project was made with Unity 2019.4.34f1. You can download the exact version
 - [x] Custom hotkeys configuration
 - [ ] FFmpeg rendering support
 - [ ] Lua macro support
-- [ ] Lua scenecontrol editing & compiling
+- [x] Lua scenecontrol editing & compiling
 - [x] LAN communication between desktop and mobile
 
 # Contributing

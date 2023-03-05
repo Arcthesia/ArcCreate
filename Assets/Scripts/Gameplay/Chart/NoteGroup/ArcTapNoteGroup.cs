@@ -34,7 +34,7 @@ namespace ArcCreate.Gameplay.Chart
             RemoveConnection(note);
 
             IEnumerable<Tap> connectedTaps
-                = Services.Chart.FindByTiming<Tap>(note.Timing);
+                = Services.Chart.FindByTiming<Tap>(note.Timing - 1, note.Timing + 1);
 
             foreach (Tap tap in connectedTaps)
             {

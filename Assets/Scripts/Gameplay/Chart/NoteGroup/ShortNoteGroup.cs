@@ -48,7 +48,7 @@ namespace ArcCreate.Gameplay.Chart
             floorPositionSearch.Sort();
         }
 
-        public override IEnumerable<Note> FindByTiming(int timing)
+        public override IEnumerable<Note> FindByTiming(int from, int to)
         {
             // Avoid modifying the cache of search tree.
             if (Notes.Count == 0)
@@ -56,9 +56,9 @@ namespace ArcCreate.Gameplay.Chart
                 yield break;
             }
 
-            int i = timingSearch.List.BisectLeft(timing, n => n.Timing);
+            int i = timingSearch.List.BisectLeft(from, n => n.Timing);
 
-            while (i >= 0 && i < timingSearch.List.Count && timingSearch.List[i].Timing == timing)
+            while (i >= 0 && i < timingSearch.List.Count && timingSearch.List[i].Timing >= from && timingSearch.List[i].Timing <= to)
             {
                 yield return timingSearch.List[i];
                 i++;

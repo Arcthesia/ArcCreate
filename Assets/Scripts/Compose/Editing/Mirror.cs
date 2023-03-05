@@ -10,54 +10,10 @@ namespace ArcCreate.Compose.Editing
     [EditorScope("Mirror")]
     public class Mirror
     {
-        [EditorAction("Horizontal", true, "m")]
-        [SelectionService.RequireSelection]
-        public void MirrorHorizontal()
+        public static void MirrorHorizontal(IEnumerable<Note> notes, bool switchColor)
         {
-            MirrorHorizontal(true);
-        }
-
-        [EditorAction("HorizontalNoColorSwitch", true, "<c-m>")]
-        [SelectionService.RequireSelection]
-        public void MirrorHorizontalNoColorSwitch()
-        {
-            MirrorHorizontal(false);
-        }
-
-        [EditorAction("Vertical", true, "<a-m>")]
-        [SelectionService.RequireSelection]
-        public void MirrorVertical()
-        {
-            HashSet<Note> selected = Services.Selection.SelectedNotes;
             List<(ArcEvent instance, ArcEvent newValue)> events = new List<(ArcEvent, ArcEvent)>();
-            foreach (ArcEvent ev in selected)
-            {
-                if (ev is Arc a)
-                {
-                    Arc newArc = a.Clone() as Arc;
-                    newArc.YStart = 1 - newArc.YStart;
-                    newArc.YEnd = 1 - newArc.YEnd;
-                    events.Add((a, newArc));
-                }
-            }
-
-            if (events.Count > 0)
-            {
-                Services.History.AddCommand(new EventCommand(
-                    name: I18n.S("Compose.Notify.History.Mirror.Vertical"),
-                    update: events));
-            }
-            else
-            {
-                Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.Mirror.CannotMirror"));
-            }
-        }
-
-        private void MirrorHorizontal(bool switchColor)
-        {
-            HashSet<Note> selected = Services.Selection.SelectedNotes;
-            List<(ArcEvent instance, ArcEvent newValue)> events = new List<(ArcEvent, ArcEvent)>();
-            foreach (ArcEvent ev in selected)
+            foreach (ArcEvent ev in notes)
             {
                 switch (ev)
                 {
@@ -89,6 +45,49 @@ namespace ArcCreate.Compose.Editing
             {
                 Services.History.AddCommand(new EventCommand(
                     name: I18n.S("Compose.Notify.History.Mirror.Horizontal"),
+                    update: events));
+            }
+            else
+            {
+                Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.Mirror.CannotMirror"));
+            }
+        }
+
+        [EditorAction("Horizontal", true, "m")]
+        [SelectionService.RequireSelection]
+        public void MirrorHorizontal()
+        {
+            MirrorHorizontal(Services.Selection.SelectedNotes, true);
+        }
+
+        [EditorAction("HorizontalNoColorSwitch", true, "<c-m>")]
+        [SelectionService.RequireSelection]
+        public void MirrorHorizontalNoColorSwitch()
+        {
+            MirrorHorizontal(Services.Selection.SelectedNotes, false);
+        }
+
+        [EditorAction("Vertical", true, "<a-m>")]
+        [SelectionService.RequireSelection]
+        public void MirrorVertical()
+        {
+            HashSet<Note> selected = Services.Selection.SelectedNotes;
+            List<(ArcEvent instance, ArcEvent newValue)> events = new List<(ArcEvent, ArcEvent)>();
+            foreach (ArcEvent ev in selected)
+            {
+                if (ev is Arc a)
+                {
+                    Arc newArc = a.Clone() as Arc;
+                    newArc.YStart = 1 - newArc.YStart;
+                    newArc.YEnd = 1 - newArc.YEnd;
+                    events.Add((a, newArc));
+                }
+            }
+
+            if (events.Count > 0)
+            {
+                Services.History.AddCommand(new EventCommand(
+                    name: I18n.S("Compose.Notify.History.Mirror.Vertical"),
                     update: events));
             }
             else

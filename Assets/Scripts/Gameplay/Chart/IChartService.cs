@@ -32,19 +32,21 @@ namespace ArcCreate.Gameplay.Chart
         /// <summary>
         /// Find all events that have matching timing value.
         /// </summary>
-        /// <param name="timing">The query timing value.</param>
+        /// <param name="from">The query timing value range's lower end.</param>
+        /// <param name="to">The query timing value range's upper end.</param>
         /// <typeparam name="T">Event type to search for.</typeparam>
         /// <returns>All events with matching timing value.</returns>
-        IEnumerable<T> FindByTiming<T>(int timing)
+        IEnumerable<T> FindByTiming<T>(int from, int to)
             where T : ArcEvent;
 
         /// <summary>
         /// Find all long notes that have matching end timing value.
         /// </summary>
-        /// <param name="endTiming">The query end timing value.</param>
+        /// <param name="from">The query end timing value range's lower end.</param>
+        /// <param name="to">The query end timing value range's upper end.</param>
         /// <typeparam name="T">Long note type to search for.</typeparam>
         /// <returns>All long notes with matching end timing value.</returns>
-        IEnumerable<T> FindByEndTiming<T>(int endTiming)
+        IEnumerable<T> FindByEndTiming<T>(int from, int to)
             where T : LongNote;
 
         /// <summary>

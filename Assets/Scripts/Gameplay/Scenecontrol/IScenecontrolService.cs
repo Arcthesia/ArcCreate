@@ -30,9 +30,10 @@ namespace ArcCreate.Gameplay.Scenecontrol
         /// <summary>
         /// Find all scenecontrol events with matching timing.
         /// </summary>
-        /// <param name="timing">The query timing value.</param>
+        /// <param name="from">The query timing value range's lower end.</param>
+        /// <param name="to">The query timing value range's upper end.</param>
         /// <returns>All matching scenecontrol events.</returns>
-        IEnumerable<ScenecontrolEvent> FindByTiming(int timing);
+        IEnumerable<ScenecontrolEvent> FindByTiming(int from, int to);
 
         /// <summary>
         /// Find all scenecontrol events bounded by provided timing range.

@@ -67,12 +67,12 @@ namespace ArcCreate.Gameplay.Chart
             Services.Judgement.ResetJudge();
         }
 
-        public IEnumerable<T> FindByTiming<T>(int timing)
+        public IEnumerable<T> FindByTiming<T>(int from, int to)
             where T : ArcEvent
         {
             if (typeof(T) == typeof(ScenecontrolEvent))
             {
-                foreach (var note in Services.Scenecontrol.FindByTiming(timing))
+                foreach (var note in Services.Scenecontrol.FindByTiming(from, to))
                 {
                     yield return note as T;
                 }
@@ -80,7 +80,7 @@ namespace ArcCreate.Gameplay.Chart
 
             if (typeof(T) == typeof(CameraEvent))
             {
-                foreach (var note in Services.Camera.FindByTiming(timing))
+                foreach (var note in Services.Camera.FindByTiming(from, to))
                 {
                     yield return note as T;
                 }
@@ -89,7 +89,7 @@ namespace ArcCreate.Gameplay.Chart
             for (int i = 0; i < timingGroups.Count; i++)
             {
                 TimingGroup tg = timingGroups[i];
-                IEnumerable<T> groupNotes = tg.FindByTiming<T>(timing);
+                IEnumerable<T> groupNotes = tg.FindByTiming<T>(from, to);
                 foreach (T note in groupNotes)
                 {
                     yield return note;
@@ -97,13 +97,13 @@ namespace ArcCreate.Gameplay.Chart
             }
         }
 
-        public IEnumerable<T> FindByEndTiming<T>(int endTiming)
+        public IEnumerable<T> FindByEndTiming<T>(int from, int to)
             where T : LongNote
         {
             for (int i = 0; i < timingGroups.Count; i++)
             {
                 TimingGroup tg = timingGroups[i];
-                IEnumerable<T> groupNotes = tg.FindByEndTiming<T>(endTiming);
+                IEnumerable<T> groupNotes = tg.FindByEndTiming<T>(from, to);
                 foreach (T note in groupNotes)
                 {
                     yield return note;

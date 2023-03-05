@@ -45,13 +45,15 @@ namespace ArcCreate.Compose.Editing
         [EditorAction("Paste", true, "<c-v>")]
         [RequireClipboard]
         [SubAction("Confirm", false, "<mouse1>")]
+        [SubAction("Mirror", false, "m")]
         [SubAction("Cancel", true, "<esc>")]
         [WhitelistScopes(typeof(Grid.GridService), typeof(Timeline.TimelineService))]
         public async UniTask Paste(EditorAction action)
         {
             SubAction confirm = action.GetSubAction("Confirm");
+            SubAction mirror = action.GetSubAction("Mirror");
             SubAction cancel = action.GetSubAction("Cancel");
-            await StartPasting(defaultClipboard, confirm, cancel);
+            await StartPasting(defaultClipboard, confirm, mirror, cancel);
         }
 
         [EditorAction("Clear", true)]
@@ -108,6 +110,7 @@ namespace ArcCreate.Compose.Editing
 
         [EditorAction("NamedPaste", false, "<c-a-v>")]
         [SubAction("Confirm", false, "<mouse1>")]
+        [SubAction("Mirror", false, "m")]
         [SubAction("Cancel", true, "<esc>")]
         [WhitelistScopes(typeof(Grid.GridService), typeof(Timeline.TimelineService))]
         public async UniTask NamedPaste(EditorAction action)
@@ -116,12 +119,13 @@ namespace ArcCreate.Compose.Editing
             if (namedClipboards.TryGetValue(name, out var notes))
             {
                 SubAction confirm = action.GetSubAction("Confirm");
+                SubAction mirror = action.GetSubAction("Mirror");
                 SubAction cancel = action.GetSubAction("Cancel");
-                await StartPasting(notes, confirm, cancel);
+                await StartPasting(notes, confirm, mirror, cancel);
             }
         }
 
-        private async UniTask StartPasting(HashSet<Note> notes, SubAction confirm, SubAction cancel)
+        private async UniTask StartPasting(HashSet<Note> notes, SubAction confirm, SubAction mirror, SubAction cancel)
         {
             List<Note> newNotes = new List<Note>(MakePaste(notes));
             EventCommand command = new EventCommand(
@@ -144,53 +148,66 @@ namespace ArcCreate.Compose.Editing
             Services.Gameplay.Chart.EnableColliderGeneration = false;
             Services.Gameplay.Chart.EnableArcRebuildSegment = false;
 
-            var (success, timing) = await Services.Cursor.RequestTimingSelection(
+            var request = Services.Cursor.RequestTimingSelection(
                 confirm,
                 cancel,
                 update: t =>
                 {
                     ApplyTimingToPastingNotes(t, newNotes, anchorNote);
                     Services.Gameplay.Chart.UpdateEvents(newNotes);
-                });
-
-            if (success)
-            {
-                Services.Gameplay.Chart.EnableColliderGeneration = true;
-                Services.Gameplay.Chart.EnableArcRebuildSegment = true;
-                ApplyTimingToPastingNotes(timing, newNotes, anchorNote);
-                Services.Gameplay.Chart.UpdateEvents(newNotes);
-
-                List<Arc> extraArc = new List<Arc>();
-                foreach (var note in newNotes)
-                {
-                    if (note is ArcTap at && (at.Timing < at.Arc.Timing || at.Timing > at.Arc.EndTiming))
+                }).ContinueWith(tuple =>
                     {
-                        Arc newArc = at.Arc.Clone() as Arc;
-                        at.Arc = newArc;
-                        newArc.Timing = newArc.Timing - minTiming + timing;
-                        newArc.EndTiming = newArc.EndTiming - minTiming + timing;
-                        extraArc.Add(newArc);
-                    }
-                }
+                        bool success = tuple.wasSuccessful;
+                        int timing = tuple.timing;
+                        if (success)
+                        {
+                            Services.Gameplay.Chart.EnableColliderGeneration = true;
+                            Services.Gameplay.Chart.EnableArcRebuildSegment = true;
+                            ApplyTimingToPastingNotes(timing, newNotes, anchorNote);
+                            Services.Gameplay.Chart.UpdateEvents(newNotes);
 
-                if (extraArc.Count > 0)
-                {
-                    command.Undo();
-                    newNotes.AddRange(extraArc);
-                    command = new EventCommand(
-                        name: I18n.S("Compose.Notify.History.Paste"),
-                        add: newNotes);
+                            List<Arc> extraArc = new List<Arc>();
+                            foreach (var note in newNotes)
+                            {
+                                if (note is ArcTap at && (at.Timing < at.Arc.Timing || at.Timing > at.Arc.EndTiming))
+                                {
+                                    Arc newArc = at.Arc.Clone() as Arc;
+                                    at.Arc = newArc;
+                                    newArc.Timing = newArc.Timing - minTiming + timing;
+                                    newArc.EndTiming = newArc.EndTiming - minTiming + timing;
+                                    extraArc.Add(newArc);
+                                }
+                            }
 
-                    command.Execute();
-                }
+                            if (extraArc.Count > 0)
+                            {
+                                command.Undo();
+                                newNotes.AddRange(extraArc);
+                                command = new EventCommand(
+                                    name: I18n.S("Compose.Notify.History.Paste"),
+                                    add: newNotes);
 
-                Services.History.AddCommandWithoutExecuting(command);
-            }
-            else
+                                command.Execute();
+                            }
+
+                            Services.History.AddCommandWithoutExecuting(command);
+                        }
+                        else
+                        {
+                            Services.Gameplay.Chart.EnableColliderGeneration = true;
+                            Services.Gameplay.Chart.EnableArcRebuildSegment = true;
+                            command.Undo();
+                        }
+                    });
+
+            while (request.Status == UniTaskStatus.Pending)
             {
-                Services.Gameplay.Chart.EnableColliderGeneration = true;
-                Services.Gameplay.Chart.EnableArcRebuildSegment = true;
-                command.Undo();
+                if (mirror.WasExecuted)
+                {
+                    Mirror.MirrorHorizontal(newNotes, true);
+                }
+
+                await UniTask.NextFrame();
             }
         }
 

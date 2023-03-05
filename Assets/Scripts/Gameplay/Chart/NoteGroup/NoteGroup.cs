@@ -160,9 +160,10 @@ namespace ArcCreate.Gameplay.Chart
         /// <summary>
         /// Find all notes of this group that match the queried timing.
         /// </summary>
-        /// <param name="timing">The query timing value.</param>
+        /// <param name="from">The query timing value range's lower end.</param>
+        /// <param name="to">The query timing value range's upper end.</param>
         /// <returns>All matching notes of this note group.</returns>
-        public abstract IEnumerable<Note> FindByTiming(int timing);
+        public abstract IEnumerable<Note> FindByTiming(int from, int to);
 
         /// <summary>
         /// Find all notes of this group that are bounded by the provided timing range.

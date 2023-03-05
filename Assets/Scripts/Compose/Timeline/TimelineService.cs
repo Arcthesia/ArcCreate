@@ -24,7 +24,6 @@ namespace ArcCreate.Compose.Timeline
         [SerializeField] private Button stopButton;
 
         private bool shouldFocusWaveformView = false;
-        private bool isWaveformDraggingThisFrame = true;
 
         public int ViewFromTiming => waveformDisplay.ViewFromTiming;
 
@@ -103,23 +102,18 @@ namespace ArcCreate.Compose.Timeline
                 return;
             }
 
-            if (!isWaveformDraggingThisFrame)
+            int currentTiming = Services.Gameplay.Audio.AudioTiming;
+            timingMarker.SetTiming(currentTiming);
+
+            if (IsPlaying && shouldFocusWaveformView)
             {
-                int currentTiming = Services.Gameplay.Audio.AudioTiming;
-                timingMarker.SetTiming(currentTiming);
-
-                if (IsPlaying && shouldFocusWaveformView)
-                {
-                    waveformDisplay.FocusOnTiming(Services.Gameplay.Audio.AudioTiming / 1000f);
-                }
-
-                if (!IsPlaying)
-                {
-                    Services.Gameplay.Audio.SetResumeAt(Services.Gameplay.Audio.AudioTiming);
-                }
+                waveformDisplay.FocusOnTiming(Services.Gameplay.Audio.AudioTiming / 1000f);
             }
 
-            isWaveformDraggingThisFrame = false;
+            if (!IsPlaying)
+            {
+                Services.Gameplay.Audio.SetResumeAt(Services.Gameplay.Audio.AudioTiming);
+            }
         }
 
         private void Pause()
@@ -184,7 +178,7 @@ namespace ArcCreate.Compose.Timeline
             timingMarker.SetDragPosition(x);
             Services.Gameplay.Audio.AudioTiming = timingMarker.Timing;
             Services.Gameplay.Audio.SetResumeAt(timingMarker.Timing);
-            isWaveformDraggingThisFrame = true;
+            shouldFocusWaveformView = false;
         }
 
         private void OnWaveformScroll()
@@ -196,7 +190,7 @@ namespace ArcCreate.Compose.Timeline
         {
             Services.Gameplay.Audio.AudioTiming = timing;
             Services.Gameplay.Audio.SetResumeAt(timing);
-            isWaveformDraggingThisFrame = true;
+            shouldFocusWaveformView = false;
         }
     }
 }

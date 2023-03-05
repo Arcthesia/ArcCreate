@@ -14,6 +14,7 @@ namespace ArcCreate.Compose.Timeline
         [SerializeField] private TMP_InputField timingField;
         [SerializeField] private RectTransform numberBackground;
         [SerializeField] private float spacing;
+        [SerializeField] private Camera editorCamera;
 
         private RectTransform rectTransform;
         private RectTransform parentRectTransform;
@@ -41,8 +42,12 @@ namespace ArcCreate.Compose.Timeline
 
         public void OnDrag(PointerEventData eventData)
         {
-            float parentWidth = parentRectTransform.rect.width / 2;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRectTransform, eventData.position, eventData.enterEventCamera, out Vector2 local);
+            Vector2 screenPos = eventData.position;
+            screenPos.x = Mathf.Clamp(screenPos.x, 0, Screen.width);
+            screenPos.y = Mathf.Clamp(screenPos.y, 0, Screen.height);
+
+            float parentWidth = parentRectTransform.rect.width;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRectTransform, screenPos, editorCamera, out Vector2 local);
             local.x = Mathf.Clamp(local.x, -parentWidth, parentWidth);
             SetDragPosition(local.x);
             IsDragging = true;

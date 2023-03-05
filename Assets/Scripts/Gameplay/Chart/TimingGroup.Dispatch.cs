@@ -207,35 +207,36 @@ namespace ArcCreate.Gameplay.Chart
         /// <summary>
         /// Find all events of this group that have matching timing value.
         /// </summary>
-        /// <param name="timing">The query timing value.</param>
+        /// <param name="from">The query timing value range's lower end.</param>
+        /// <param name="to">The query timing value range's upper end.</param>
         /// <typeparam name="T">Event type to search for.</typeparam>
         /// <returns>All events with matching timing value.</returns>
-        public IEnumerable<T> FindByTiming<T>(int timing)
+        public IEnumerable<T> FindByTiming<T>(int from, int to)
             where T : ArcEvent
         {
             if (typeof(T) == typeof(Tap))
             {
-                return taps.FindByTiming(timing).Cast<T>();
+                return taps.FindByTiming(from, to).Cast<T>();
             }
 
             if (typeof(T) == typeof(Hold))
             {
-                return holds.FindByTiming(timing).Cast<T>();
+                return holds.FindByTiming(from, to).Cast<T>();
             }
 
             if (typeof(T) == typeof(ArcTap))
             {
-                return arcTaps.FindByTiming(timing).Cast<T>();
+                return arcTaps.FindByTiming(from, to).Cast<T>();
             }
 
             if (typeof(T) == typeof(Arc))
             {
-                return arcs.FindByTiming(timing).Cast<T>();
+                return arcs.FindByTiming(from, to).Cast<T>();
             }
 
             if (typeof(T) == typeof(TimingEvent))
             {
-                return FindTimingEventsByTiming(timing).Cast<T>();
+                return FindTimingEventsByTiming(from, to).Cast<T>();
             }
 
             return Enumerable.Empty<T>();
@@ -244,20 +245,21 @@ namespace ArcCreate.Gameplay.Chart
         /// <summary>
         /// Find all long notes of this group that have matching end timing value.
         /// </summary>
-        /// <param name="endTiming">The query end timing value.</param>
+        /// <param name="from">The query end timing value range's lower end.</param>
+        /// <param name="to">The query end timing value range's upper end.</param>
         /// <typeparam name="T">Long note type to search for.</typeparam>
         /// <returns>All long notes with matching end timing value.</returns>
-        public IEnumerable<T> FindByEndTiming<T>(int endTiming)
+        public IEnumerable<T> FindByEndTiming<T>(int from, int to)
             where T : LongNote
         {
             if (typeof(T) == typeof(Hold))
             {
-                return holds.FindByEndTiming(endTiming).Cast<T>();
+                return holds.FindByEndTiming(from, to).Cast<T>();
             }
 
             if (typeof(T) == typeof(Arc))
             {
-                return arcs.FindByEndTiming(endTiming).Cast<T>();
+                return arcs.FindByEndTiming(from, to).Cast<T>();
             }
 
             return Enumerable.Empty<T>();

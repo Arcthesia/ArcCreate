@@ -33,11 +33,12 @@ namespace ArcCreate.Gameplay.GameplayCamera
         void AddTiltToCamera(float arcWorldX);
 
         /// <summary>
-        /// Find all camera events with matching timing.
+        /// Find all scenecontrol events with matching timing.
         /// </summary>
-        /// <param name="timing">The query timing value.</param>
-        /// <returns>All matching camera events.</returns>
-        IEnumerable<CameraEvent> FindByTiming(int timing);
+        /// <param name="from">The query timing value range's lower end.</param>
+        /// <param name="to">The query timing value range's upper end.</param>
+        /// <returns>All matching scenecontrol events.</returns>
+        IEnumerable<CameraEvent> FindByTiming(int from, int to);
 
         /// <summary>
         /// Find all camera events bounded by provided timing range.

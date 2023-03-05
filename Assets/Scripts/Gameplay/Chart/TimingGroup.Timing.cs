@@ -195,11 +195,11 @@ namespace ArcCreate.Gameplay.Chart
             arcs.RebuildList();
         }
 
-        private IEnumerable<TimingEvent> FindTimingEventsByTiming(int timing)
+        private IEnumerable<TimingEvent> FindTimingEventsByTiming(int from, int to)
         {
-            int i = timings.BisectLeft(timing, n => n.Timing);
+            int i = timings.BisectLeft(from, n => n.Timing);
 
-            while (i >= 0 && i < timings.Count && timings[i].Timing == timing)
+            while (i >= 0 && i < timings.Count && timings[i].Timing >= from && timings[i].Timing <= to)
             {
                 yield return timings[i];
                 i++;
