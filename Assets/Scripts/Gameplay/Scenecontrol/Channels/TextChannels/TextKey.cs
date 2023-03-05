@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
@@ -27,7 +28,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public object Serialize()
         {
-            return $"{Timing},{Value},{TransitionFrom},{EasingString}";
+            StringBuilder str = new StringBuilder();
+            for (int i = 0; i < Value.Length; i++)
+            {
+                str.Append(Value[i]);
+            }
+
+            return $"{Timing},{str},{TransitionFrom},{EasingString}";
         }
     }
 }

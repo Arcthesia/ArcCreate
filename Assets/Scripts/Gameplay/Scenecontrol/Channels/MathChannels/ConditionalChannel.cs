@@ -27,11 +27,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public override void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization)
         {
-            control = deserialization.GetUnitFromId((int)properties[0]) as ValueChannel;
-            threshold = deserialization.GetUnitFromId((int)properties[1]) as ValueChannel;
-            ifAbove = deserialization.GetUnitFromId((int)properties[2]) as ValueChannel;
-            ifEqual = deserialization.GetUnitFromId((int)properties[3]) as ValueChannel;
-            ifBelow = deserialization.GetUnitFromId((int)properties[4]) as ValueChannel;
+            control = deserialization.GetUnitFromId<ValueChannel>(properties[0]);
+            threshold = deserialization.GetUnitFromId<ValueChannel>(properties[1]);
+            ifAbove = deserialization.GetUnitFromId<ValueChannel>(properties[2]);
+            ifEqual = deserialization.GetUnitFromId<ValueChannel>(properties[3]);
+            ifBelow = deserialization.GetUnitFromId<ValueChannel>(properties[4]);
         }
 
         public override List<object> SerializeProperties(ScenecontrolSerialization serialization)

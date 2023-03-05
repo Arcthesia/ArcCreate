@@ -48,12 +48,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public override void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization)
         {
-            freqBandMin = (int)properties[0];
-            freqBandMax = (int)properties[1];
-            min = (float)properties[2];
-            max = (float)properties[3];
-            smoothness = (float)properties[4];
-            scalar = (float)properties[5];
+            freqBandMin = (int)(double)properties[0];
+            freqBandMax = (int)(double)properties[1];
+            min = (float)(double)properties[2];
+            max = (float)(double)properties[3];
+            smoothness = (float)(double)properties[4];
+            scalar = (float)(double)properties[5];
         }
 
         public override List<object> SerializeProperties(ScenecontrolSerialization serialization)

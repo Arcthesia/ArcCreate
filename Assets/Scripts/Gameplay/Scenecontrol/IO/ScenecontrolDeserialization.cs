@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
@@ -7,12 +8,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
     {
         private readonly Scene scene;
         private readonly List<SerializedUnit> serializedUnits;
-        private readonly List<ISerializableUnit> deserialized = new List<ISerializableUnit>();
+        private readonly ISerializableUnit[] deserialized;
 
         public ScenecontrolDeserialization(Scene scene, List<SerializedUnit> serializedUnits)
         {
             this.serializedUnits = serializedUnits;
             this.scene = scene;
+            deserialized = new ISerializableUnit[serializedUnits.Count];
             for (int i = 0; i < serializedUnits.Count; i++)
             {
                 SerializedUnit unit = serializedUnits[i];
@@ -20,7 +22,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
-        public List<ISerializableUnit> Result => deserialized;
+        public List<ISerializableUnit> Result => deserialized.ToList();
 
         public ISerializableUnit GetUnitFromId(int id)
         {
@@ -29,6 +31,22 @@ namespace ArcCreate.Gameplay.Scenecontrol
             ISerializableUnit result = GetUnitFromType(serializedChannel.Type);
             result.DeserializeProperties(serializedChannel.Properties, this);
             return result;
+        }
+
+        public T GetUnitFromId<T>(object obj)
+            where T : class, ISerializableUnit
+        {
+            if (obj == null)
+            {
+                return null;
+            }
+
+            int id = Convert.ToInt32(obj);
+            SerializedUnit serializedChannel = serializedUnits[id];
+
+            ISerializableUnit result = GetUnitFromType(serializedChannel.Type);
+            result.DeserializeProperties(serializedChannel.Properties, this);
+            return result as T;
         }
 
         public ISerializableUnit GetUnitFromType(string type)

@@ -387,6 +387,8 @@ namespace ArcCreate.Compose.Project
                 gameplayData.AudioOffset.Value,
                 gameplayData.TimingPointDensityFactor.Value,
                 chartData);
+            string json = Services.Gameplay.Scenecontrol.Export();
+            File.WriteAllText(Path.GetDirectoryName(Application.dataPath) + "/sc.json", json);
         }
 
         private void OpenUnsavedChangesDialog(Action onConfirm)

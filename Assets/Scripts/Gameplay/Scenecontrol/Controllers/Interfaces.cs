@@ -93,9 +93,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         string DefaultFont { get; }
 
+        string CustomFont { get; set; }
+
         void UpdateProperties(float fontSize, float lineSpacing);
 
         void UpdateText(char[] array, int start, int length);
+
+        void ApplyCustomFont(string font);
     }
 
     public interface INoteGroupController : IController
@@ -192,6 +196,10 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         ValueChannel Lane4Alpha { get; set; }
 
+        string CustomSkin { get; set; }
+
         void UpdateLane(float edgeL, float edgeR, float lane1, float lane2, float lane3, float lane4);
+
+        void ApplySkin(string customSkin);
     }
 }

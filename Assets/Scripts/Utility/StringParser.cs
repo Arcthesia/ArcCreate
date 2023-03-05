@@ -25,7 +25,7 @@
 
         public float ReadFloat(string ternimator = null)
         {
-            int end = ternimator != null ? str.IndexOf(ternimator, pos) : (str.Length - 1);
+            int end = ternimator != null ? str.IndexOf(ternimator, pos) : str.Length;
             if (!Evaluator.TryFloat(str.Substring(pos, end - pos), out float value))
             {
                 throw new System.ArgumentException(str.Substring(pos, end - pos));
@@ -37,7 +37,7 @@
 
         public int ReadInt(string ternimator = null)
         {
-            int end = ternimator != null ? str.IndexOf(ternimator, pos) : (str.Length - 1);
+            int end = ternimator != null ? str.IndexOf(ternimator, pos) : str.Length;
             if (!Evaluator.TryInt(str.Substring(pos, end - pos), out int value))
             {
                 throw new System.ArgumentException(str.Substring(pos, end - pos));
@@ -49,7 +49,7 @@
 
         public bool ReadBool(string ternimator = null)
         {
-            int end = ternimator != null ? str.IndexOf(ternimator, pos) : (str.Length - 1);
+            int end = ternimator != null ? str.IndexOf(ternimator, pos) : str.Length;
             bool value = bool.Parse(str.Substring(pos, end - pos));
             pos += end - pos + 1;
             return value;
@@ -57,7 +57,7 @@
 
         public string ReadString(string ternimator = null)
         {
-            int end = ternimator != null ? str.IndexOf(ternimator, pos) : (str.Length - 1);
+            int end = ternimator != null ? str.IndexOf(ternimator, pos) : str.Length;
             string value = str.Substring(pos, end - pos);
             pos += end - pos + 1;
             return value;

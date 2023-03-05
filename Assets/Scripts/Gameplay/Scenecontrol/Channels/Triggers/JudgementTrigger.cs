@@ -192,8 +192,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
             triggerOnLostLate = (bool)properties[6];
             TriggerDispatch = new TriggerValueDispatch
             {
-                Value = deserialization.GetUnitFromId((int)properties[7]) as ValueChannel,
-                Duration = deserialization.GetUnitFromId((int)properties[8]) as ValueChannel,
+                Value = deserialization.GetUnitFromId<ValueChannel>(properties[7]),
+                Duration = deserialization.GetUnitFromId<ValueChannel>(properties[8]),
                 EasingString = (string)properties[9],
                 Easing = Easing.FromString((string)properties[10]),
             };

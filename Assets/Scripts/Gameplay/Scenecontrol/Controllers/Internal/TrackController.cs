@@ -173,6 +173,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public ValueChannel Lane2Alpha { get; set; }
         public ValueChannel Lane3Alpha { get; set; }
         public ValueChannel Lane4Alpha { get; set; }
+
+        public string CustomSkin { get; set; }
 #pragma warning restore
 
         [MoonSharpHidden]
@@ -205,9 +207,14 @@ namespace ArcCreate.Gameplay.Scenecontrol
             SpriteRenderer.material.SetFloat(lane4AlphaShaderID, lane4);
         }
 
-        [EmmyDoc("Sets the sprite of the track. Will not take effect if the provided name is invalid.")]
+        [EmmyDoc("Sets the sprite of the track. Only works for copies of the original track.\nIf provided name is invalid, the default track skin for current side is used.")]
         public void SetTrackSprite(string name)
         {
+            if (IsPersistent)
+            {
+                return;
+            }
+
             name = name.ToLower();
             var (trackSprite, extraLaneSprite) = Services.Skin.GetTrackSprite(name);
             SpriteRenderer.sprite = trackSprite;
@@ -219,6 +226,38 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 ExtraL.SpriteRenderer.sprite = extraLaneSprite;
                 ExtraR.SpriteRenderer.sprite = extraLaneSprite;
             }
+
+            CustomSkin = name;
+        }
+
+        [MoonSharpHidden]
+        public void ApplySkin(string name)
+        {
+            if (IsPersistent || string.IsNullOrEmpty(name))
+            {
+                return;
+            }
+
+            SetTrackSprite(name);
+        }
+
+        private void Awake()
+        {
+            divideLine01.SerializedType = "divline01";
+            divideLine12.SerializedType = "divline12";
+            divideLine23.SerializedType = "divline23";
+            divideLine34.SerializedType = "divline34";
+            divideLine45.SerializedType = "divline45";
+            criticalLine0.SerializedType = "critline0";
+            criticalLine1.SerializedType = "critline1";
+            criticalLine2.SerializedType = "critline2";
+            criticalLine3.SerializedType = "critline3";
+            criticalLine4.SerializedType = "critline4";
+            criticalLine5.SerializedType = "critline5";
+            edgeExtraL.SerializedType = "edgeextraL";
+            edgeExtraR.SerializedType = "edgeextraR";
+            extraL.SerializedType = "extraL";
+            extraR.SerializedType = "extraR";
         }
     }
 }

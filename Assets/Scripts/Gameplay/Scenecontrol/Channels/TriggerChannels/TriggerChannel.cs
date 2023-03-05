@@ -26,7 +26,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             triggers = new Trigger[properties.Count];
             for (int i = 0; i < triggers.Length; i++)
             {
-                triggers[i] = deserialization.GetUnitFromId((int)properties[i]) as Trigger;
+                triggers[i] = deserialization.GetUnitFromId<Trigger>(properties[i]);
             }
         }
 

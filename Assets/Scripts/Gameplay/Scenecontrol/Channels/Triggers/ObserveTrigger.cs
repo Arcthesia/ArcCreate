@@ -86,13 +86,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public override void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization)
         {
-            target = deserialization.GetUnitFromId((int)properties[0]) as ValueChannel;
-            above = deserialization.GetUnitFromId((int)properties[1]) as ValueChannel;
-            below = deserialization.GetUnitFromId((int)properties[2]) as ValueChannel;
+            target = deserialization.GetUnitFromId<ValueChannel>(properties[0]);
+            above = deserialization.GetUnitFromId<ValueChannel>(properties[1]);
+            below = deserialization.GetUnitFromId<ValueChannel>(properties[2]);
             TriggerDispatch = new TriggerValueDispatch
             {
-                Value = deserialization.GetUnitFromId((int)properties[3]) as ValueChannel,
-                Duration = deserialization.GetUnitFromId((int)properties[4]) as ValueChannel,
+                Value = deserialization.GetUnitFromId<ValueChannel>(properties[3]),
+                Duration = deserialization.GetUnitFromId<ValueChannel>(properties[4]),
                 EasingString = (string)properties[5],
                 Easing = Easing.FromString((string)properties[5]),
             };

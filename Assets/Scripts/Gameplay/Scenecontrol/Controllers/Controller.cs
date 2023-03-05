@@ -414,6 +414,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 c.FontSize = new ConstantChannel(c.DefaultFontSize);
                 c.LineSpacing = new ConstantChannel(c.DefaultLineSpacing);
                 c.Text = TextChannelBuilder.Constant(c.DefaultText);
+                c.ApplyCustomFont(c.DefaultFont);
+                c.CustomFont = null;
 
                 char[] arr = c.DefaultText.ToCharArray();
                 c.UpdateText(arr, 0, arr.Length);
@@ -475,6 +477,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 c.Lane2Alpha = new ConstantChannel(255);
                 c.Lane3Alpha = new ConstantChannel(255);
                 c.Lane4Alpha = new ConstantChannel(255);
+                c.CustomSkin = null;
             }
         }
 
@@ -492,6 +495,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             List<object> result = new List<object>
             {
                 serialization.AddUnitAndGetId(customParent),
+                serialization.AddUnitAndGetId(Active),
             };
 
             if (this is IPositionController)
@@ -534,6 +538,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 result.Add(serialization.AddUnitAndGetId(c.FontSize));
                 result.Add(serialization.AddUnitAndGetId(c.LineSpacing));
                 result.Add(serialization.AddUnitAndGetId(c.Text));
+                result.Add(c.CustomFont);
             }
 
             if (this is INoteGroupController)
@@ -587,6 +592,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 result.Add(serialization.AddUnitAndGetId(c.Lane2Alpha));
                 result.Add(serialization.AddUnitAndGetId(c.Lane3Alpha));
                 result.Add(serialization.AddUnitAndGetId(c.Lane4Alpha));
+                result.Add(c.CustomSkin);
             }
 
             return result;
@@ -594,107 +600,111 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization)
         {
-            customParent = deserialization.GetUnitFromId((int)properties[0]) as Controller;
+            customParent = deserialization.GetUnitFromId<Controller>(properties[0]);
+            Active = deserialization.GetUnitFromId<ValueChannel>(properties[1]);
             if (customParent != null)
             {
                 SetParent(customParent);
             }
 
-            int offset = 1;
+            int offset = 2;
 
             if (this is IPositionController)
             {
                 IPositionController c = this as IPositionController;
-                c.TranslationX = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.TranslationY = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.TranslationZ = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.RotationX = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.RotationY = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.RotationZ = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.ScaleX = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.ScaleY = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.ScaleZ = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
+                c.TranslationX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.TranslationY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.TranslationZ = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.RotationX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.RotationY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.RotationZ = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.ScaleX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.ScaleY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.ScaleZ = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
             }
 
             if (this is IColorController)
             {
                 IColorController c = this as IColorController;
-                c.ColorR = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.ColorG = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.ColorB = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.ColorA = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.ColorH = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.ColorS = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.ColorV = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
+                c.ColorR = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.ColorG = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.ColorB = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.ColorA = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.ColorH = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.ColorS = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.ColorV = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
             }
 
             if (this is ILayerController)
             {
                 ILayerController c = this as ILayerController;
-                c.Layer = deserialization.GetUnitFromId((int)properties[offset++]) as StringChannel;
-                c.Sort = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.Alpha = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
+                c.Layer = deserialization.GetUnitFromId<StringChannel>(properties[offset++]);
+                c.Sort = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.Alpha = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
             }
 
             if (this is ITextController)
             {
                 ITextController c = this as ITextController;
-                c.FontSize = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.LineSpacing = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.Text = deserialization.GetUnitFromId((int)properties[offset++]) as TextChannel;
+                c.FontSize = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.LineSpacing = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.Text = deserialization.GetUnitFromId<TextChannel>(properties[offset++]);
+                c.CustomFont = (string)properties[offset++];
+                c.ApplyCustomFont(c.CustomFont);
             }
 
             if (this is INoteGroupController)
             {
                 INoteGroupController c = this as INoteGroupController;
-                c.AngleX = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.AngleY = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.RotationIndividualX = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.RotationIndividualY = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.RotationIndividualZ = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.ScaleIndividualX = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.ScaleIndividualY = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.ScaleIndividualZ = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
+                c.AngleX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.AngleY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.RotationIndividualX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.RotationIndividualY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.RotationIndividualZ = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.ScaleIndividualX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.ScaleIndividualY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.ScaleIndividualZ = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
             }
 
             if (this is ICameraController)
             {
                 ICameraController c = this as ICameraController;
-                c.FieldOfView = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.TiltFactor = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
+                c.FieldOfView = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.TiltFactor = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
             }
 
             if (this is IRectController)
             {
                 IRectController c = this as IRectController;
-                c.RectW = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.RectH = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.AnchorMinX = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.AnchorMinY = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.AnchorMaxX = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.AnchorMaxY = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.PivotX = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.PivotY = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
+                c.RectW = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.RectH = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.AnchorMinX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.AnchorMinY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.AnchorMaxX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.AnchorMaxY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.PivotX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.PivotY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
             }
 
             if (this is ITextureController)
             {
                 ITextureController c = this as ITextureController;
-                c.TextureOffsetX = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.TextureOffsetY = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.TextureScaleX = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.TextureScaleY = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
+                c.TextureOffsetX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.TextureOffsetY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.TextureScaleX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.TextureScaleY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
             }
 
             if (this is ITrackController)
             {
                 ITrackController c = this as ITrackController;
-                c.EdgeLAlpha = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.EdgeRAlpha = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.Lane1Alpha = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.Lane2Alpha = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.Lane3Alpha = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
-                c.Lane4Alpha = deserialization.GetUnitFromId((int)properties[offset++]) as ValueChannel;
+                c.EdgeLAlpha = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.EdgeRAlpha = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.Lane1Alpha = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.Lane2Alpha = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.Lane3Alpha = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.Lane4Alpha = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                c.CustomSkin = (string)properties[offset++];
             }
         }
 

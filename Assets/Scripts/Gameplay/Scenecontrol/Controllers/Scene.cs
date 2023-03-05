@@ -557,6 +557,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
                 if (complete)
                 {
+                    spriteTasks.Clear();
                     return;
                 }
                 else
@@ -611,6 +612,36 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     return Beatlines;
                 case "darken":
                     return Darken;
+                case "divline01":
+                    return track.DivideLine01;
+                case "divline12":
+                    return track.DivideLine12;
+                case "divline23":
+                    return track.DivideLine23;
+                case "divline34":
+                    return track.DivideLine34;
+                case "divline45":
+                    return track.DivideLine45;
+                case "critline0":
+                    return track.CriticalLine0;
+                case "critline1":
+                    return track.CriticalLine1;
+                case "critline2":
+                    return track.CriticalLine2;
+                case "critline3":
+                    return track.CriticalLine3;
+                case "critline4":
+                    return track.CriticalLine4;
+                case "critline5":
+                    return track.CriticalLine5;
+                case "edgeextraL":
+                    return track.EdgeExtraL;
+                case "edgeextraR":
+                    return track.EdgeExtraR;
+                case "extraL":
+                    return track.ExtraL;
+                case "extraR":
+                    return track.ExtraR;
                 case "image":
                     string[] imgsplit = def.Split(',');
                     return CreateImage(imgsplit[0], imgsplit[1], imgsplit[2]);

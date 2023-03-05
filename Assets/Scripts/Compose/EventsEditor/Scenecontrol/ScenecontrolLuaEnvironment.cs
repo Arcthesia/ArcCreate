@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using ArcCreate.Compose.Navigation;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Gameplay.Scenecontrol;
 using ArcCreate.Utilities.Lua;
@@ -11,22 +12,30 @@ using UnityEngine;
 
 namespace ArcCreate.Compose.EventsEditor
 {
+    [EditorScope("lua")]
     public class ScenecontrolLuaEnvironment : IScriptSetup
     {
         public const int InstructionLimit = int.MaxValue;
-        public const string ScenecontrolFolderName = "Scenecontrol";
         private readonly ScenecontrolTable scTable;
         private readonly Dictionary<string, IScenecontrolType> scenecontrolTypes = new Dictionary<string, IScenecontrolType>();
+
+        public ScenecontrolLuaEnvironment()
+        {
+        }
 
         public ScenecontrolLuaEnvironment(ScenecontrolTable scTable)
         {
             this.scTable = scTable;
         }
 
-        private string ScenecontrolFolder
-            => Path.Combine(
-                Path.GetDirectoryName(Services.Project.CurrentProject.Path),
-                ScenecontrolFolderName);
+        [EditorAction("debugsc", true)]
+        public void DebugSc()
+        {
+            string json = Services.Gameplay.Scenecontrol.Export();
+            Services.Gameplay.Scenecontrol.Clean();
+            File.WriteAllText(Path.GetDirectoryName(Application.dataPath) + "/sc.json", json);
+            Services.Gameplay.Scenecontrol.Import(json);
+        }
 
         public void SetupScript(Script script)
         {
@@ -63,7 +72,7 @@ namespace ArcCreate.Compose.EventsEditor
 
         public void Rebuild()
         {
-            Services.Gameplay.Scenecontrol.ScenecontrolFolder = "file://" + ScenecontrolFolder;
+            Services.Gameplay.Scenecontrol.ScenecontrolFolder = "file://" + Values.ScenecontrolFolder;
             Clean();
             RunScript();
             ExecuteEvents();
@@ -155,7 +164,7 @@ namespace ArcCreate.Compose.EventsEditor
         private void RunScript()
         {
             Script script = new Script();
-            string folderPath = ScenecontrolFolder;
+            string folderPath = Values.ScenecontrolFolder;
 
             UserData.RegisterAssembly();
             AddBuiltInTypes();
@@ -163,12 +172,6 @@ namespace ArcCreate.Compose.EventsEditor
             string currentChartName = Services.Project.CurrentChart.ChartPath;
             string initPath = Path.Combine(folderPath, "init.lua");
             string perChartPath = Path.Combine(folderPath, Path.GetFileNameWithoutExtension(currentChartName) + ".lua");
-
-            if (!File.Exists(initPath))
-            {
-                return;
-            }
-
             string lastPath = initPath;
 
             try

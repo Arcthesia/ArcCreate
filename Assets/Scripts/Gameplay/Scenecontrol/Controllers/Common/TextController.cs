@@ -97,6 +97,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public StringChannel Font { get; set; }
 
+        public string CustomFont { get; set; }
+
         [MoonSharpHidden] public virtual string DefaultText => defaultText;
 
         [MoonSharpHidden] public TMP_Text TextComponent => textComponent;
@@ -173,9 +175,18 @@ namespace ArcCreate.Gameplay.Scenecontrol
             textComponent.fontSize = Mathf.RoundToInt(fontSize);
         }
 
+        [EmmyDoc("Change the font of this text object.")]
         public void SetFont(string font)
         {
             textComponent.font = Services.Scenecontrol.GetFont(font);
+        }
+
+        public void ApplyCustomFont(string font)
+        {
+            if (string.IsNullOrEmpty(font))
+            {
+                SetFont(font);
+            }
         }
 
         [MoonSharpHidden]

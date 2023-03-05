@@ -41,36 +41,51 @@ namespace ArcCreate.Compose.Remote
         {
             string filePath = string.Empty;
             string dir = Path.GetDirectoryName(Services.Project.CurrentProject.Path);
-            switch (path)
+
+            if (path.StartsWith("scenecontrol/"))
             {
-                case "audio":
-                    filePath = Services.Project.CurrentChart.AudioPath;
-                    break;
-                case "jacket":
-                    filePath = Services.Project.CurrentChart.JacketPath;
-                    break;
-                case "background":
-                    filePath = Services.Project.CurrentChart.BackgroundPath;
-                    break;
-                case "chart":
-                    filePath = "remote.aff";
-                    new ChartSerializer(new PhysicalFileAccess(), dir).WriteSingleFile(
-                        filePath,
-                        gameplayData.AudioOffset.Value,
-                        gameplayData.TimingPointDensityFactor.Value,
-                        new RawEventsBuilder().GetEvents());
-                    break;
-                case "video":
-                    // video backgrounds are absolute path
-                    filePath = Services.Project.CurrentChart.VideoPath;
-                    extension = Path.GetExtension(filePath);
-                    return File.OpenRead(filePath);
-                case "metadata":
-                    filePath = Services.Project.CurrentProject.Path;
-                    extension = Path.GetExtension(filePath);
-                    break;
-                default:
-                    throw new FileNotFoundException(path);
+                path = path.Substring("scenecontrol/".Length);
+                filePath = Path.Combine(Values.ScenecontrolFolder, path);
+                extension = Path.GetExtension(filePath);
+            }
+            else
+            {
+                switch (path)
+                {
+                    case "audio":
+                        filePath = Services.Project.CurrentChart.AudioPath;
+                        break;
+                    case "jacket":
+                        filePath = Services.Project.CurrentChart.JacketPath;
+                        break;
+                    case "background":
+                        filePath = Services.Project.CurrentChart.BackgroundPath;
+                        break;
+                    case "chart":
+                        filePath = "remote.aff";
+                        new ChartSerializer(new PhysicalFileAccess(), dir).WriteSingleFile(
+                            filePath,
+                            gameplayData.AudioOffset.Value,
+                            gameplayData.TimingPointDensityFactor.Value,
+                            new RawEventsBuilder().GetEvents());
+                        break;
+                    case "scjson":
+                        filePath = "remote.sc.json";
+                        string json = Services.Gameplay.Scenecontrol.Export();
+                        File.WriteAllText(Path.Combine(dir, filePath), json);
+                        break;
+                    case "video":
+                        // video backgrounds are absolute path
+                        filePath = Services.Project.CurrentChart.VideoPath;
+                        extension = Path.GetExtension(filePath);
+                        return File.OpenRead(filePath);
+                    case "metadata":
+                        filePath = Services.Project.CurrentProject.Path;
+                        extension = Path.GetExtension(filePath);
+                        break;
+                    default:
+                        throw new FileNotFoundException(path);
+                }
             }
 
             extension = Path.GetExtension(filePath);
@@ -163,6 +178,7 @@ namespace ArcCreate.Compose.Remote
         private void SendChart()
         {
             channel?.SendMessage(RemoteControl.Chart, null);
+            channel?.SendMessage(RemoteControl.Scenecontrol, null);
         }
 
         private void SendAudio()

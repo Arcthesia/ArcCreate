@@ -121,6 +121,12 @@ namespace ArcCreate.Remote.Gameplay
                             Debug.Log($"Reloading chart metadata completed");
                             break;
 
+                        case RemoteControl.Scenecontrol:
+                            Debug.Log($"Starting to reload scenecontrol");
+                            await RetrieveScenecontrol();
+                            Debug.Log($"Reloading scenecontrol completed");
+                            break;
+
                         case RemoteControl.Speed:
                             Settings.DropRate.Value = GetInt(data);
                             Debug.Log($"Setting droprate to {Settings.DropRate.Value}");
@@ -166,7 +172,8 @@ namespace ArcCreate.Remote.Gameplay
             UniTask jacketTask = RetrieveJacket(useDefaultJacket);
             UniTask bgTask = RetrieveBackground(useDefaultBackground);
             UniTask metadataTask = RetrieveMetadata(chartPath);
-            await UniTask.WhenAll(chartTask, audioTask, jacketTask, bgTask, metadataTask);
+            UniTask scTask = RetrieveScenecontrol();
+            await UniTask.WhenAll(chartTask, audioTask, jacketTask, bgTask, metadataTask, scTask);
         }
 
         private async UniTask RetrieveChart()
@@ -313,6 +320,28 @@ namespace ArcCreate.Remote.Gameplay
                         break;
                     }
                 }
+            }
+        }
+
+        private async UniTask RetrieveScenecontrol()
+        {
+            string uri = GetURI("scjson");
+            using (UnityWebRequest req = UnityWebRequest.Get(uri))
+            {
+                await req.SendWebRequest();
+                if (!string.IsNullOrWhiteSpace(req.error))
+                {
+                    Debug.LogWarning(I18n.S("Gameplay.Exception.Scenecontrol", new Dictionary<string, object>()
+                    {
+                        { "Path", uri },
+                        { "Error", req.error },
+                    }));
+                    return;
+                }
+
+                string json = req.downloadHandler.text;
+                gameplay.Scenecontrol.Import(json);
+                gameplay.Scenecontrol.WaitForSceneLoad();
             }
         }
 

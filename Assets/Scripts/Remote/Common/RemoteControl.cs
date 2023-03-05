@@ -21,6 +21,7 @@ namespace ArcCreate.Remote.Common
         JacketArt = 19,
         Background = 20,
         Metadata = 21,
+        Scenecontrol = 22,
 
         // Settings
         Speed = 32,

@@ -26,9 +26,9 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public override void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization)
         {
-            a = deserialization.GetUnitFromId((int)properties[0]) as ValueChannel;
-            b = deserialization.GetUnitFromId((int)properties[1]) as ValueChannel;
-            c = deserialization.GetUnitFromId((int)properties[2]) as ValueChannel;
+            a = deserialization.GetUnitFromId<ValueChannel>(properties[0]);
+            b = deserialization.GetUnitFromId<ValueChannel>(properties[1]);
+            c = deserialization.GetUnitFromId<ValueChannel>(properties[2]);
         }
 
         public override List<object> SerializeProperties(ScenecontrolSerialization serialization)

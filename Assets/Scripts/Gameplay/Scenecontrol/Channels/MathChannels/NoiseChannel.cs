@@ -28,11 +28,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public override void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization)
         {
-            octave = deserialization.GetUnitFromId((int)properties[0]) as ValueChannel;
-            frequency = deserialization.GetUnitFromId((int)properties[1]) as ValueChannel;
-            min = deserialization.GetUnitFromId((int)properties[2]) as ValueChannel;
-            max = deserialization.GetUnitFromId((int)properties[3]) as ValueChannel;
-            offset = deserialization.GetUnitFromId((int)properties[4]) as ValueChannel;
+            octave = deserialization.GetUnitFromId<ValueChannel>(properties[0]);
+            frequency = deserialization.GetUnitFromId<ValueChannel>(properties[1]);
+            min = deserialization.GetUnitFromId<ValueChannel>(properties[2]);
+            max = deserialization.GetUnitFromId<ValueChannel>(properties[3]);
+            offset = deserialization.GetUnitFromId<ValueChannel>(properties[4]);
         }
 
         public override List<object> SerializeProperties(ScenecontrolSerialization serialization)

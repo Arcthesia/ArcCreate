@@ -529,6 +529,9 @@ Gameplay:
     Skin: |-
       An error occured while trying to load the image located at {Path}.
       {Error}
+    Scenecontrol: |-
+      An error occured while trying to load scenecontrol json located at {Path}.
+      {Error}
   HUD:
     Play: Play
     Retry: Retry

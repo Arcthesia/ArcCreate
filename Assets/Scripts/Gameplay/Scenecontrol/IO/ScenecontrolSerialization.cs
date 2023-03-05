@@ -11,22 +11,28 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public List<SerializedUnit> Result => serializedUnits;
 
-        public int AddUnitAndGetId(ISerializableUnit channel)
+        public int? AddUnitAndGetId(ISerializableUnit unit)
         {
-            if (idLookup.TryGetValue(channel, out int id))
+            if (unit == null)
+            {
+                return null;
+            }
+
+            if (idLookup.TryGetValue(unit, out int id))
             {
                 return id;
             }
 
-            units.Add(channel);
+            units.Add(unit);
             id = units.Count - 1;
-            idLookup.Add(channel, id);
-
-            serializedUnits.Add(new SerializedUnit
+            idLookup.Add(unit, id);
+            SerializedUnit serialized = default;
+            serializedUnits.Add(serialized);
+            serializedUnits[id] = new SerializedUnit
             {
-                Type = GetTypeFromUnit(channel),
-                Properties = channel.SerializeProperties(this),
-            });
+                Type = GetTypeFromUnit(unit),
+                Properties = unit.SerializeProperties(this),
+            };
 
             return id;
         }

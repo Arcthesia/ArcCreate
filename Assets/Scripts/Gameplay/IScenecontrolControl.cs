@@ -10,6 +10,10 @@ namespace ArcCreate.Gameplay
 
         void Clean();
 
+        string Export();
+
+        void Import(string json);
+
         void WaitForSceneLoad();
     }
 }

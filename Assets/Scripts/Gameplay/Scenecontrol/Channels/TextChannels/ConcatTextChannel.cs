@@ -41,7 +41,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             components = new List<TextChannel>();
             foreach (var prop in properties)
             {
-                components.Add(deserialization.GetUnitFromId((int)prop) as TextChannel);
+                components.Add(deserialization.GetUnitFromId<TextChannel>(prop));
             }
 
             EnsureArraySize();

@@ -1,3 +1,4 @@
+using System.IO;
 using ArcCreate.Gameplay.Data;
 
 namespace ArcCreate.Compose
@@ -51,5 +52,8 @@ namespace ArcCreate.Compose
         public static float LaneToX { get; set; } = 8.5f;
 
         public static bool ProjectModified { get; set; } = false;
+
+        public static string ScenecontrolFolder
+            => Path.Combine(Path.GetDirectoryName(Services.Project.CurrentProject.Path), "Scenecontrol");
     }
 }
