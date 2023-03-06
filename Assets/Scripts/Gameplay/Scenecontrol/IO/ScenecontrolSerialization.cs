@@ -127,14 +127,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 case ObserveTrigger tobserve:
                     return "trigger.observe";
                 default:
-                    Controller controller = unit as Controller;
-                    string name = controller == null ? null : controller.SerializedType;
-                    if (string.IsNullOrEmpty(name))
+                    if (unit is ISceneController controller)
                     {
-                        throw new Exception($"Could not get type of object: {unit.GetType().Name}");
+                        string name = controller?.SerializedType;
+                        if (!string.IsNullOrEmpty(name))
+                        {
+                            return name;
+                        }
                     }
 
-                    return name;
+                    throw new Exception($"Could not get type of object: {unit.GetType().Name}");
             }
         }
     }

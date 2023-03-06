@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ArcCreate.Gameplay.Scenecontrol
 {
     [MoonSharpUserData]
-    public abstract class Controller : MonoBehaviour, ISerializableUnit, IController
+    public abstract class Controller : MonoBehaviour, ISerializableUnit, IController, ISceneController
     {
         [SerializeField] private bool isPersistent = true;
         private Controller customParent;

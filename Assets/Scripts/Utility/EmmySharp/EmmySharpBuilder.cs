@@ -128,7 +128,8 @@ namespace EmmySharp
 
                 if (type.BaseType != typeof(object) && Attribute.IsDefined(type.BaseType, typeof(MoonSharpUserDataAttribute)))
                 {
-                    builder.Append($" : {type.BaseType.Name}");
+                    string baseAlias = type.BaseType.EmmyAlias();
+                    builder.Append($" : {baseAlias ?? type.BaseType.Name}");
                 }
 
                 builder.AppendLine();
@@ -140,7 +141,7 @@ namespace EmmySharp
 
                 if (!singleton)
                 {
-                    builder.AppendLine($"{type.Name}__inst = {{}}");
+                    builder.AppendLine($"{alias ?? type.Name}__inst = {{}}");
                     builder.AppendLine();
                 }
             }

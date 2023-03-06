@@ -54,7 +54,33 @@ namespace ArcCreate.Gameplay.Scenecontrol
             => new RandomChannel(seed, min, max);
 
         [EmmyDoc("Create a saw channel that loop between values")]
-        public static SawChannel Saw(string easing, ValueChannel period, ValueChannel min, ValueChannel max, ValueChannel offset)
+        public static SawChannel Saw(
+#pragma warning disable
+            [EmmyChoice(
+                "linear", "l", "inconstant", "inconst", "cnsti",
+                "outconstant", "outconst", "cnsto", "inoutconstant", "inoutconst",
+                "cnstb", "insine", "si", "outsine", "so",
+                "inoutsine", "b", "inquadratic", "inquad", "2i",
+                "outquadratic", "outquad", "2o", "inoutquadratic", "inoutquad",
+                "2b", "incubic", "3i", "outcubic", "outcube",
+                "3o", "inoutcubic", "inoutcube", "3b", "inquartic",
+                "inquart", "4i", "outquartic", "outquart", "4o",
+                "inoutquartic", "inoutquart", "4b", "inquintic", "inquint",
+                "5i", "outquintic", "outquint", "5o", "inoutquintic",
+                "inoutquint", "5b", "inexponential", "inexpo", "exi",
+                "outexponential", "outexpo", "exo", "inoutexponential", "inoutexpo",
+                "exb", "incircle", "incirc", "ci", "outcircle",
+                "outcirc", "co", "inoutcircle", "inoutcirc", "cb",
+                "inback", "bki", "outback", "bko", "inoutback",
+                "bkb", "inelastic", "eli", "outelastic", "elo",
+                "inoutelastic", "elb", "inbounce", "bni", "outbounce",
+                "bno", "inoutbounce", "bnb")]
+            string easing,
+#pragma warning restore
+            ValueChannel period,
+            ValueChannel min,
+            ValueChannel max,
+            ValueChannel offset)
             => new SawChannel(easing, period, min, max, offset);
 
         [EmmyDoc("Create a periodic sine channel")]

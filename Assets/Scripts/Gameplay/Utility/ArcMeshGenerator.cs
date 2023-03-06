@@ -116,7 +116,6 @@ namespace ArcCreate.Gameplay.Utility
                     0, 1, 4,
                     0, 4, 5,
                 },
-                bounds = new Bounds(Vector3.zero, Vector3.one * float.MaxValue),
             };
         }
 
@@ -150,7 +149,6 @@ namespace ArcCreate.Gameplay.Utility
                     0, 1, 3,
                     1, 2, 3,
                 },
-                bounds = new Bounds(Vector3.zero, Vector3.one * float.MaxValue),
             };
         }
 

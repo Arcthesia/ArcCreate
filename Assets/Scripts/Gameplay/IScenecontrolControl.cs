@@ -6,6 +6,8 @@ namespace ArcCreate.Gameplay
     {
         Scene Scene { get; }
 
+        PostProcessing PostProcessing { get; }
+
         string ScenecontrolFolder { get; set; }
 
         void Clean();

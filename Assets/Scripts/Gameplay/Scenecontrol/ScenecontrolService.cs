@@ -14,13 +14,14 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [SerializeField] private TMP_FontAsset defaultFont;
         [SerializeField] private List<FontEntry> fonts;
         [SerializeField] private Scene scene;
+        [SerializeField] private PostProcessing postProcessing;
         [SerializeField] private SpriteRenderer trackSprite;
         [SerializeField] private SpriteRenderer singleLineL;
         [SerializeField] private SpriteRenderer singleLineR;
         [SerializeField] private GlowingSprite skyInputLine;
         [SerializeField] private GlowingSprite skyInputLabel;
         private List<ScenecontrolEvent> events = new List<ScenecontrolEvent>();
-        private readonly List<Controller> referencedControllers = new List<Controller>();
+        private readonly List<ISceneController> referencedControllers = new List<ISceneController>();
         private float trackOffset = 0;
         private float singleLineOffset = 0;
         private float count = 0;
@@ -30,9 +31,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public Scene Scene => scene;
 
-        public TMP_FontAsset DefaultFont => defaultFont;
-
-        public List<Controller> ReferencedControllers => referencedControllers;
+        public PostProcessing PostProcessing => postProcessing;
 
         public string ScenecontrolFolder { get; set; }
 
@@ -115,7 +114,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             float speed = Services.Audio.IsPlaying ? bpm / Values.BaseBpm : 0;
             float glowAlpha = Mathf.Lerp(0.75f, 1, count / beatDuration);
 
-            foreach (Controller c in referencedControllers)
+            foreach (var c in referencedControllers)
             {
                 c.UpdateController(currentTiming);
             }
@@ -156,7 +155,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public void Import(string def)
         {
             var units = JsonConvert.DeserializeObject<List<SerializedUnit>>(def);
-            var deserialization = new ScenecontrolDeserialization(scene, units);
+            var deserialization = new ScenecontrolDeserialization(scene, postProcessing, units);
             foreach (var unit in deserialization.Result)
             {
                 if (unit is Controller c)
@@ -166,7 +165,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
-        public void AddReferencedController(Controller c)
+        public void AddReferencedController(ISceneController c)
         {
             if (!referencedControllers.Contains(c))
             {

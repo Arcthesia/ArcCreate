@@ -47,8 +47,17 @@ namespace ArcCreate.Gameplay.Chart
             {
                 if (IsChained(overlap, arc))
                 {
-                    arc.PreviousArcs.Add(overlap);
-                    overlap.NextArcs.Add(arc);
+                    if (arc.PreviousArc == null
+                     || arc.PreviousArc.Color == overlap.Color)
+                    {
+                        arc.PreviousArc = overlap;
+                    }
+
+                    if (overlap.NextArc == null
+                     || overlap.NextArc.Color == arc.Color)
+                    {
+                        overlap.NextArc = arc;
+                    }
                 }
             }
 
@@ -56,26 +65,35 @@ namespace ArcCreate.Gameplay.Chart
             {
                 if (IsChained(arc, overlap))
                 {
-                    arc.NextArcs.Add(overlap);
-                    overlap.PreviousArcs.Add(arc);
+                    if (arc.NextArc == null
+                     || arc.NextArc.Color == overlap.Color)
+                    {
+                        arc.NextArc = overlap;
+                    }
+
+                    if (overlap.PreviousArc == null
+                     || overlap.PreviousArc.Color == arc.Color)
+                    {
+                        overlap.PreviousArc = arc;
+                    }
                 }
             }
         }
 
         private void RemoveArcFromChainGroups(Arc arc)
         {
-            foreach (var other in arc.NextArcs)
+            if (arc.NextArc != null && arc.NextArc.PreviousArc == arc)
             {
-                other.PreviousArcs.Remove(arc);
+                arc.NextArc.PreviousArc = null;
             }
 
-            foreach (var other in arc.PreviousArcs)
+            if (arc.PreviousArc != null && arc.PreviousArc.NextArc == arc)
             {
-                other.NextArcs.Remove(arc);
+                arc.PreviousArc.NextArc = null;
             }
 
-            arc.NextArcs.Clear();
-            arc.PreviousArcs.Clear();
+            arc.NextArc = null;
+            arc.PreviousArc = null;
         }
 
         private bool IsChained(Arc first, Arc second)

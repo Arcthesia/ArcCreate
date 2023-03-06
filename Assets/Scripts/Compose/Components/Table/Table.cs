@@ -228,6 +228,7 @@ namespace ArcCreate.Compose.Components
             float size = (extracount + rows.Count == 0) ?
                          1 :
                          (float)rows.Count / (extracount + rows.Count);
+            size = Mathf.Max(size, 0.1f);
             verticalScrollbar.size = size;
 
             if (extracount <= 0)

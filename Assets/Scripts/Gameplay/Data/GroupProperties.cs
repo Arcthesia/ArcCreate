@@ -72,7 +72,7 @@ namespace ArcCreate.Gameplay.Data
                 float angleYf = AngleY + SCAngleY;
 
                 float x = Mathf.Sin(angleXf * Mathf.Deg2Rad) * Mathf.Sin(angleYf * Mathf.Deg2Rad);
-                float y = Mathf.Cos(angleXf * Mathf.Deg2Rad);
+                float y = -Mathf.Cos(angleXf * Mathf.Deg2Rad);
                 float z = Mathf.Sin(angleXf * Mathf.Deg2Rad) * Mathf.Cos(angleYf * Mathf.Deg2Rad);
                 return new Vector3(x, y, z);
             }

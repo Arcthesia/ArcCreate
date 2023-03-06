@@ -219,7 +219,7 @@ namespace ArcCreate.Gameplay.Audio
             }
 
             dspStartPlayingTime = AudioSettings.dspTime + ((double)delay / 1000);
-            startTime = timing;
+            startTime = timing + FullOffset;
             if (delay > 0)
             {
                 audioSource.PlayScheduled(dspStartPlayingTime);

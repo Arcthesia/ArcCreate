@@ -13,8 +13,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
         /// </summary>
         List<ScenecontrolEvent> Events { get; }
 
-        TMP_FontAsset DefaultFont { get; }
-
         /// <summary>
         /// Load a list of scenecontrol events.
         /// </summary>
@@ -66,7 +64,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         /// </summary>
         void Clear();
 
-        void AddReferencedController(Controller c);
+        void AddReferencedController(ISceneController c);
 
         TMP_FontAsset GetFont(string font);
     }

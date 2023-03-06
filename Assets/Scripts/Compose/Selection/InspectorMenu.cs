@@ -81,7 +81,7 @@ namespace ArcCreate.Compose.Selection
             positionFields.SetActive(showArcSettings);
             arcSettingsFields.SetActive(showArcSettings);
             sfxField.gameObject.SetActive(showArcSettings);
-            groupField.gameObject.SetActive(true);
+            groupField.gameObject.SetActive(selected.Any(n => !(n is ArcTap)));
             selectArcButton.gameObject.SetActive(includeArctap);
             selectArcTapButton.gameObject.SetActive(true);
 
@@ -468,7 +468,7 @@ namespace ArcCreate.Compose.Selection
             if (tg.GroupProperties.Editable)
             {
                 ModifyNotes<Note>(
-                    ev => ev.TimingGroup != tg.GroupNumber,
+                    ev => !(ev is ArcTap) && ev.TimingGroup != tg.GroupNumber,
                     ev => ev.TimingGroup = tg.GroupNumber);
             }
 

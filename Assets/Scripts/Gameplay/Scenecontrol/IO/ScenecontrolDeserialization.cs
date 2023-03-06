@@ -7,13 +7,15 @@ namespace ArcCreate.Gameplay.Scenecontrol
     public class ScenecontrolDeserialization
     {
         private readonly Scene scene;
+        private readonly PostProcessing postProcessing;
         private readonly List<SerializedUnit> serializedUnits;
         private readonly ISerializableUnit[] deserialized;
 
-        public ScenecontrolDeserialization(Scene scene, List<SerializedUnit> serializedUnits)
+        public ScenecontrolDeserialization(Scene scene, PostProcessing postProcessing, List<SerializedUnit> serializedUnits)
         {
             this.serializedUnits = serializedUnits;
             this.scene = scene;
+            this.postProcessing = postProcessing;
             deserialized = new ISerializableUnit[serializedUnits.Count];
             for (int i = 0; i < serializedUnits.Count; i++)
             {
@@ -139,13 +141,19 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 case "trigger.observe":
                     return new ObserveTrigger();
                 default:
-                    Controller c = scene.CreateFromTypeName(type);
-                    if (c == null)
+                    ISceneController c = scene.CreateFromTypeName(type);
+                    if (c != null)
                     {
-                        throw new Exception($"Could not resolve object type: {type}");
+                        return c;
                     }
 
-                    return c;
+                    ISceneController p = postProcessing.CreateFromTypeName(type);
+                    if (p != null)
+                    {
+                        return p;
+                    }
+
+                    throw new Exception($"Could not resolve object type {type}");
             }
         }
     }

@@ -191,14 +191,16 @@ namespace ArcCreate.Compose.Remote
         private void SendJacket()
         {
             string jacket = Services.Project.CurrentChart.JacketPath;
-            bool useDefault = jacket == null;
+            string dir = Path.GetDirectoryName(Services.Project.CurrentProject.Path);
+            bool useDefault = jacket == null || !File.Exists(Path.Combine(dir, jacket));
             channel?.SendMessage(RemoteControl.JacketArt, FromBool(useDefault));
         }
 
         private void SendBackgrond()
         {
             string bg = Services.Project.CurrentChart.BackgroundPath;
-            bool useDefault = bg == null;
+            string dir = Path.GetDirectoryName(Services.Project.CurrentProject.Path);
+            bool useDefault = bg == null || !File.Exists(Path.Combine(dir, bg));
             channel?.SendMessage(RemoteControl.Background, FromBool(useDefault));
         }
 
@@ -231,14 +233,16 @@ namespace ArcCreate.Compose.Remote
                 return;
             }
 
+            string dir = Path.GetDirectoryName(Services.Project.CurrentProject.Path);
+
             string audioPath = Services.Project.CurrentChart.AudioPath;
             string ext = System.IO.Path.GetExtension(audioPath);
 
             string jacket = Services.Project.CurrentChart.JacketPath;
-            bool useDefaultJacket = jacket == null;
+            bool useDefaultJacket = jacket == null || !File.Exists(Path.Combine(dir, jacket));
 
             string bg = Services.Project.CurrentChart.BackgroundPath;
-            bool useDefaultBg = bg == null;
+            bool useDefaultBg = bg == null || !File.Exists(Path.Combine(dir, bg));
 
             string chartPath = Services.Project.CurrentChart.ChartPath;
 

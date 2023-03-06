@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using ArcCreate.Gameplay.Judgement;
 using ArcCreate.Gameplay.Render;
 using ArcCreate.Gameplay.Utility;
@@ -42,9 +41,9 @@ namespace ArcCreate.Gameplay.Data
 
         public ArcLineType LineType { get; set; }
 
-        public HashSet<Arc> NextArcs { get; } = new HashSet<Arc>();
+        public Arc NextArc { get; set; }
 
-        public HashSet<Arc> PreviousArcs { get; } = new HashSet<Arc>();
+        public Arc PreviousArc { get; set; }
 
         public float SegmentLength => ArcFormula.CalculateArcSegmentLength(EndTiming - Timing);
 
@@ -52,27 +51,9 @@ namespace ArcCreate.Gameplay.Data
 
         public float ArcCapSize => IsTrace ? Values.TraceCapSize : Values.ArcCapSize;
 
-        public bool IsFirstArcOfGroup => PreviousArcs.Count == 0;
+        public bool IsFirstArcOfGroup => PreviousArc == null;
 
-        public bool IsFirstArcOfBranch
-        {
-            get
-            {
-                if (PreviousArcs.Count == 0)
-                {
-                    return true;
-                }
-
-                Arc prev = PreviousArcs.First();
-                if (prev.NextArcs.Count == 1)
-                {
-                    return false;
-                }
-
-                Arc nextFirst = prev.NextArcs.First();
-                return nextFirst != this;
-            }
-        }
+        public bool IsFirstArcOfBranch => PreviousArc == null || PreviousArc.NextArc != this;
 
         public override ArcEvent Clone()
         {
@@ -197,7 +178,7 @@ namespace ArcCreate.Gameplay.Data
 
             int clipToTiming;
             double clipToFloorPosition;
-            if (hasBeenHitOnce || IsTrace || groupProperties.NoInput)
+            if (hasBeenHitOnce || IsTrace || groupProperties.NoInput || Timing == EndTiming)
             {
                 clipToTiming = currentTiming;
                 clipToFloorPosition = currentFloorPosition;
@@ -298,7 +279,7 @@ namespace ArcCreate.Gameplay.Data
             if (currentTiming <= longParticleUntil && currentTiming >= Timing && currentTiming <= EndTiming)
             {
                 Services.Particle.PlayLongParticle(
-                    firstArcOfBranch,
+                    firstArcOfBranch ?? this,
                     new Vector3(WorldXAt(currentTiming), WorldYAt(currentTiming), 0));
             }
         }
@@ -510,10 +491,7 @@ namespace ArcCreate.Gameplay.Data
             }
 
             recursivelyCalled = true;
-            foreach (Arc arc in NextArcs)
-            {
-                arc.SetGroupHighlight(highlight, longParticleUntil);
-            }
+            NextArc?.SetGroupHighlight(highlight, longParticleUntil);
 
             this.highlight = highlight;
             this.longParticleUntil = longParticleUntil;
@@ -528,10 +506,7 @@ namespace ArcCreate.Gameplay.Data
             }
 
             recursivelyCalled = true;
-            foreach (Arc next in NextArcs)
-            {
-                next.SetBranchFirst(arc);
-            }
+            NextArc?.SetBranchFirst(arc);
 
             firstArcOfBranch = arc;
             recursivelyCalled = false;

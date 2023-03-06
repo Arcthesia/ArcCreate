@@ -12,6 +12,9 @@ using UnityEngine;
 
 namespace ArcCreate.Compose.EventsEditor
 {
+#if UNITY_EDITOR
+    [EditorScope("Scenecontrol")]
+#endif
     public class ScenecontrolLuaEnvironment : IScriptSetup
     {
         public const int InstructionLimit = int.MaxValue;
@@ -27,6 +30,17 @@ namespace ArcCreate.Compose.EventsEditor
             this.scTable = scTable;
         }
 
+#if UNITY_EDITOR
+        [EditorAction("Reserialize", true)]
+        public void Reseralize()
+        {
+            string json = Services.Gameplay.Scenecontrol.Export();
+            Services.Gameplay.Scenecontrol.Clean();
+            Services.Gameplay.Scenecontrol.Import(json);
+            Services.Gameplay.Scenecontrol.WaitForSceneLoad();
+        }
+#endif
+
         public void SetupScript(Script script)
         {
             UserData.RegisterAssembly(Assembly.GetAssembly(typeof(ScenecontrolService)));
@@ -37,7 +51,7 @@ namespace ArcCreate.Compose.EventsEditor
             script.Globals["TriggerChannel"] = new TriggerChannelBuilder();
             script.Globals["Scene"] = Services.Gameplay.Scenecontrol.Scene;
             script.Globals["Context"] = new Context();
-            // script.Globals["PostProcessing"] = Services.Gameplay.Scenecontrol.PostProcessing;
+            script.Globals["PostProcessing"] = Services.Gameplay.Scenecontrol.PostProcessing;
 
             script.Globals["addScenecontrol"] = (Action<string, DynValue, DynValue>)AddScenecontrol;
             script.Globals["notify"] = (Action<object>)Notify;

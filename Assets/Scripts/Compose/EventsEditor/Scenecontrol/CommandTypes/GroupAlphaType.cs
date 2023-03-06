@@ -21,7 +21,7 @@ namespace ArcCreate.Compose.EventsEditor
             ValueChannel channel = noteGroup.ColorA.Find("internal");
             if (channel == null)
             {
-                channel = new KeyChannel().SetDefaultEasing("l").AddKey(0, 255);
+                channel = new KeyChannel().SetDefaultEasing("l").AddKey(0, 1);
                 channel.Name = "internal";
                 noteGroup.ColorA *= channel;
             }

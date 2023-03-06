@@ -40,7 +40,31 @@ namespace ArcCreate.Gameplay.Scenecontrol
         }
 
         [EmmyDoc("Sets the value to send to the TriggerChannel bound to this trigger.")]
-        public ObserveTrigger Dispatch(ValueChannel value, ValueChannel duration = null, string easing = null)
+        public ObserveTrigger Dispatch(
+            ValueChannel value,
+            ValueChannel duration = null,
+#pragma warning disable
+            [EmmyChoice(
+                "linear", "l", "inconstant", "inconst", "cnsti",
+                "outconstant", "outconst", "cnsto", "inoutconstant", "inoutconst",
+                "cnstb", "insine", "si", "outsine", "so",
+                "inoutsine", "b", "inquadratic", "inquad", "2i",
+                "outquadratic", "outquad", "2o", "inoutquadratic", "inoutquad",
+                "2b", "incubic", "3i", "outcubic", "outcube",
+                "3o", "inoutcubic", "inoutcube", "3b", "inquartic",
+                "inquart", "4i", "outquartic", "outquart", "4o",
+                "inoutquartic", "inoutquart", "4b", "inquintic", "inquint",
+                "5i", "outquintic", "outquint", "5o", "inoutquintic",
+                "inoutquint", "5b", "inexponential", "inexpo", "exi",
+                "outexponential", "outexpo", "exo", "inoutexponential", "inoutexpo",
+                "exb", "incircle", "incirc", "ci", "outcircle",
+                "outcirc", "co", "inoutcircle", "inoutcirc", "cb",
+                "inback", "bki", "outback", "bko", "inoutback",
+                "bkb", "inelastic", "eli", "outelastic", "elo",
+                "inoutelastic", "elb", "inbounce", "bni", "outbounce",
+                "bno", "inoutbounce", "bnb")]
+            string easing = null)
+#pragma warning restore
         {
             TriggerDispatch = new TriggerValueDispatch
             {

@@ -163,7 +163,7 @@ namespace ArcCreate.Compose.Editing
                     arc.EndTiming = t;
                     Services.Gameplay.Chart.UpdateEvents(events);
                 },
-                constraint: t => t > arc.Timing);
+                constraint: t => t >= arc.Timing);
 
             if (!endTimingSuccess)
             {
