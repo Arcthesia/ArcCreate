@@ -76,6 +76,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         [MoonSharpHidden] public Canvas Canvas => canvas;
 
+        [MoonSharpHidden] public RectTransform RectTransform => rectTransform;
+
         [MoonSharpHidden]
         public override void SetupDefault()
         {
@@ -130,7 +132,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         }
 
         [MoonSharpHidden]
-        public void UpdateRect(float w, float h, Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot)
+        public virtual void UpdateRect(float w, float h, Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot)
         {
             rectTransform.anchorMin = anchorMin;
             rectTransform.anchorMax = anchorMax;

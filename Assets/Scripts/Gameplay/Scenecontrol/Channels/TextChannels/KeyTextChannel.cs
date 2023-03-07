@@ -241,6 +241,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 key.Deserialize(str);
                 key.Easing = Easing.FromString(key.EasingString);
                 keys.Add(key);
+                EnsureArraySize(key?.Value?.Length ?? 0);
             }
         }
 

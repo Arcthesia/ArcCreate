@@ -23,7 +23,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             string[] split = str.Split(',');
             Timing = UnityEngine.Mathf.RoundToInt(float.Parse(split[0]));
-            Value = UnityEngine.Mathf.RoundToInt(float.Parse(split[1]));
+            Value = float.Parse(split[1]);
             EasingString = split[2];
         }
     }

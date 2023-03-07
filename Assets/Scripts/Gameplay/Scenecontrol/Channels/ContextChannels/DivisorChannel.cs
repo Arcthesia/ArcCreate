@@ -20,7 +20,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public override void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization)
         {
-            int tg = (int)(double)properties[0];
+            int tg = (int)(long)properties[0];
             group = Services.Chart.GetTimingGroup(tg);
         }
 

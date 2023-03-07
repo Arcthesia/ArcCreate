@@ -172,7 +172,7 @@ namespace ArcCreate.Gameplay.GameplayCamera
                 if (isReset)
                 {
                     isReset = true;
-                    position = ResetPosition;
+                    position = ResetPosition + translationExternal;
                     rotation = ResetRotation;
                 }
 

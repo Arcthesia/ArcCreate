@@ -299,7 +299,15 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             foreach (var pair in spriteCache)
             {
-                Destroy(pair.Value);
+                if (pair.Value != null)
+                {
+                    Destroy(pair.Value);
+
+                    if (pair.Value.texture != null)
+                    {
+                        Destroy(pair.Value.texture);
+                    }
+                }
             }
 
             spriteCache.Clear();
@@ -745,11 +753,17 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         private async UniTask<Sprite> GetSprite(SpriteDefinition definition)
         {
-            if (spriteCache.TryGetValue(definition, out Sprite sprite))
+            if (spriteCache.ContainsKey(definition))
             {
-                return sprite;
+                while (spriteCache[definition] == null)
+                {
+                    await UniTask.NextFrame();
+                }
+
+                return spriteCache[definition];
             }
 
+            spriteCache.Add(definition, null);
             using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(Uri.EscapeUriString(definition.Path)))
             {
                 await req.SendWebRequest();
@@ -773,7 +787,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                         extrude: 1,
                         meshType: SpriteMeshType.FullRect);
 
-                spriteCache.Add(definition, output);
+                spriteCache[definition] = output;
                 return output;
             }
         }

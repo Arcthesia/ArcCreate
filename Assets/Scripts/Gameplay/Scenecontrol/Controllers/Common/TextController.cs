@@ -183,7 +183,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public void ApplyCustomFont(string font)
         {
-            if (string.IsNullOrEmpty(font))
+            if (!string.IsNullOrEmpty(font))
             {
                 SetFont(font);
             }

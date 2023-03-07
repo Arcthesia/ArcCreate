@@ -204,10 +204,34 @@ namespace ArcCreate.Gameplay.Skin
         public Sprite DefaultBackground => currentAlignment.DefaultBackground.Value;
 
         public (Texture texture, Color connectionLineColor) GetTapSkin(Tap note)
-            => currentNoteSkin.GetTapSkin(note);
+        {
+            switch (note.TimingGroupInstance.GroupProperties.SkinOverride)
+            {
+                case NoteSkinOverride.Default:
+                    return currentNoteSkin.GetTapSkin(note);
+                case NoteSkinOverride.Light:
+                    return noteSkinOptions[0].GetTapSkin(note);
+                case NoteSkinOverride.Conflict:
+                    return noteSkinOptions[1].GetTapSkin(note);
+                default:
+                    return currentNoteSkin.GetTapSkin(note);
+            }
+        }
 
         public (Texture normal, Texture highlight) GetHoldSkin(Hold note)
-            => currentNoteSkin.GetHoldSkin(note);
+        {
+            switch (note.TimingGroupInstance.GroupProperties.SkinOverride)
+            {
+                case NoteSkinOverride.Default:
+                    return currentNoteSkin.GetHoldSkin(note);
+                case NoteSkinOverride.Light:
+                    return noteSkinOptions[0].GetHoldSkin(note);
+                case NoteSkinOverride.Conflict:
+                    return noteSkinOptions[1].GetHoldSkin(note);
+                default:
+                    return currentNoteSkin.GetHoldSkin(note);
+            }
+        }
 
         public Texture GetArcTapSkin(ArcTap note)
         {

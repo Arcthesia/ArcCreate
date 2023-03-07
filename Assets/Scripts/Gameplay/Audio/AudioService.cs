@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -137,6 +138,8 @@ namespace ArcCreate.Gameplay.Audio
                 lastPausedTiming = onPauseReturnTo;
                 AudioTiming = onPauseReturnTo;
             }
+
+            SetEnableAutorotation(true);
         }
 
         public void Stop()
@@ -144,6 +147,8 @@ namespace ArcCreate.Gameplay.Audio
             audioSource.Stop();
             lastPausedTiming = 0;
             AudioTiming = 0;
+
+            SetEnableAutorotation(true);
         }
 
         public void PlayImmediately(int timing)
@@ -228,6 +233,8 @@ namespace ArcCreate.Gameplay.Audio
             {
                 audioSource.Play();
             }
+
+            SetEnableAutorotation(false);
         }
 
         private void Awake()
@@ -243,6 +250,14 @@ namespace ArcCreate.Gameplay.Audio
         private void OnClipLoad(AudioClip clip)
         {
             AudioClip = clip;
+        }
+
+        private void SetEnableAutorotation(bool v)
+        {
+            Screen.autorotateToLandscapeLeft = v;
+            Screen.autorotateToLandscapeRight = v;
+            Screen.autorotateToPortrait = v;
+            Screen.autorotateToPortraitUpsideDown = v;
         }
     }
 }

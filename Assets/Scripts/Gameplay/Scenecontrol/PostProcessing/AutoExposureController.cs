@@ -110,7 +110,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             KeyValue = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
             SpeedUp = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
             SpeedDown = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
-            TargetEffect.eyeAdaptation.Override((EyeAdaptation)(int)(double)properties[offset++]);
+            TargetEffect.eyeAdaptation.Override((EyeAdaptation)(int)(long)properties[offset++]);
         }
 
         protected override void SetupDefault()

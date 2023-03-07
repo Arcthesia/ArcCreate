@@ -205,7 +205,8 @@ namespace ArcCreate.Gameplay.Data
                 float endZPos = segment.CalculateEndZPos(currentFloorPosition);
                 if (from > 1
                  || (zPos < -Values.TrackLengthForward && endZPos < -Values.TrackLengthForward)
-                 || (zPos > Values.TrackLengthBackward && endZPos > Values.TrackLengthBackward))
+                 || (zPos > Values.TrackLengthBackward && endZPos > Values.TrackLengthBackward)
+                 || (Timing != EndTiming && zPos == endZPos))
                 {
                     continue;
                 }
@@ -446,6 +447,11 @@ namespace ArcCreate.Gameplay.Data
                 if (currentTiming >= segment.Timing && currentTiming < segment.EndTiming)
                 {
                     float p = (float)((currentFloorPosition - segment.FloorPosition) / (segment.EndFloorPosition - segment.FloorPosition));
+                    if (segment.EndFloorPosition == segment.FloorPosition)
+                    {
+                        p = 0;
+                    }
+
                     Vector3 capPos = segment.StartPosition + (p * (segment.EndPosition - segment.StartPosition)) - (fallDirection * z);
                     Vector3 scale = new Vector3(ArcCapSize, ArcCapSize, 1);
                     Vector4 color = new Vector4(1, 1, 1, IsTrace ? Values.TraceCapAlpha : Values.ArcCapAlpha);

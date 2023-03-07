@@ -26,7 +26,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public override void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization)
         {
-            seed = (int)(double)properties[0];
+            seed = (int)(long)properties[0];
             randomGenerator = new Random(seed);
             min = deserialization.GetUnitFromId<ValueChannel>(properties[1]);
             max = deserialization.GetUnitFromId<ValueChannel>(properties[2]);
