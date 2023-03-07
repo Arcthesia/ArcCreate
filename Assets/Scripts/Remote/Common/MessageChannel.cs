@@ -53,29 +53,28 @@ namespace ArcCreate.Remote.Common
             listenerThread.Start();
         }
 
-        public async UniTask SetupSender(IPAddress ip, int sendToPort, string code, int retries = 10)
+        public async UniTask SetupSender(IPAddress ip, int sendToPort, string code, int timeoutMs = 10000)
         {
             this.ip = ip;
             this.sendToPort = sendToPort;
 
-            Exception e = null;
-            while (retries > 0)
-            {
-                await UniTask.Delay(1000);
-                if (TryConnectToTcpServer(out e))
-                {
-                    break;
-                }
+            Thread connectThread = new Thread(new ThreadStart(TryConnectToTcpServer));
+            connectThread.Start();
+            var timeout = UniTask.Delay(timeoutMs);
 
-                retries -= 1;
+            while (targetClient == null && timeout.Status == UniTaskStatus.Pending)
+            {
+                await UniTask.NextFrame();
             }
 
-            if (retries <= 0)
+            connectThread.Abort();
+
+            if (targetClient == null)
             {
-                throw new Exception($"Could not connect to socket: {e}");
+                throw new Exception($"Could not connect to target client {ip}:{sendToPort}");
             }
 
-            SendMessage(RemoteControl.StartConnection, Encoding.ASCII.GetBytes(code));
+            SendMessage(RemoteControl.StartConnection, code == null ? null : Encoding.ASCII.GetBytes(code));
             IsRunning = true;
         }
 
@@ -137,19 +136,21 @@ namespace ArcCreate.Remote.Common
             listenerThread.Abort();
         }
 
-        private bool TryConnectToTcpServer(out Exception exception)
+        private void TryConnectToTcpServer()
         {
-            try
+            while (targetClient == null)
             {
-                targetClient = new TcpClient(ip.ToString(), sendToPort);
-                exception = null;
-                return true;
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("On client connect exception " + ip.ToString() + ":" + sendToPort + " " + e);
-                exception = e;
-                return false;
+                try
+                {
+                    targetClient = new TcpClient(ip.ToString(), sendToPort);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError("On client connect exception " + ip.ToString() + ":" + sendToPort + " " + e);
+                    targetClient = null;
+                }
+
+                Thread.Sleep(1000);
             }
         }
 
@@ -172,7 +173,7 @@ namespace ArcCreate.Remote.Common
                                 packager.ProcessMessage(buffer, 0, length);
                                 while (packager.HasQueuedMessage(out RemoteControl control, out byte[] message))
                                 {
-                                    if (control == RemoteControl.StartConnection && waitingForConnection && code == Encoding.ASCII.GetString(message))
+                                    if (control == RemoteControl.StartConnection && waitingForConnection && (code == null || code == Encoding.ASCII.GetString(message)))
                                     {
                                         ip = ((IPEndPoint)connectedClient.Client.RemoteEndPoint).Address;
                                         onConnected?.Invoke(ip);

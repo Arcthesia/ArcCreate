@@ -40,6 +40,7 @@ namespace ArcCreate.Remote.Gameplay
 
         public void SetTarget(IPAddress requestFileFromIP, int requestFileFromPort, MessageChannel channel)
         {
+            Debug.Log(requestFileFromIP);
             this.requestFileFromIP = requestFileFromIP;
             this.requestFileFromPort = requestFileFromPort;
             this.channel = channel;
@@ -167,13 +168,20 @@ namespace ArcCreate.Remote.Gameplay
 
             string chartPath = split[3];
 
-            UniTask chartTask = RetrieveChart();
-            UniTask audioTask = RetrieveAudio(ext);
-            UniTask jacketTask = RetrieveJacket(useDefaultJacket);
-            UniTask bgTask = RetrieveBackground(useDefaultBackground);
-            UniTask metadataTask = RetrieveMetadata(chartPath);
-            UniTask scTask = RetrieveScenecontrol();
-            await UniTask.WhenAll(chartTask, audioTask, jacketTask, bgTask, metadataTask, scTask);
+            try
+            {
+                UniTask chartTask = RetrieveChart();
+                UniTask audioTask = RetrieveAudio(ext);
+                UniTask jacketTask = RetrieveJacket(useDefaultJacket);
+                UniTask bgTask = RetrieveBackground(useDefaultBackground);
+                UniTask metadataTask = RetrieveMetadata(chartPath);
+                UniTask scTask = RetrieveScenecontrol();
+                await UniTask.WhenAll(chartTask, audioTask, jacketTask, bgTask, metadataTask, scTask);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
 
         private async UniTask RetrieveChart()
@@ -340,6 +348,7 @@ namespace ArcCreate.Remote.Gameplay
                 }
 
                 string json = req.downloadHandler.text;
+                gameplay.Scenecontrol.ScenecontrolFolder = GetURI("scenecontrol/");
                 gameplay.Scenecontrol.Import(json);
                 gameplay.Scenecontrol.WaitForSceneLoad();
             }
@@ -347,7 +356,9 @@ namespace ArcCreate.Remote.Gameplay
 
         private string GetURI(string path)
         {
-            return $"http://{requestFileFromIP}:{requestFileFromPort}/{path}";
+            var uri = $"http://{requestFileFromIP}:{requestFileFromPort}/{path}";
+            Debug.Log(uri);
+            return uri;
         }
 
         private bool GetBool(byte[] bytes)

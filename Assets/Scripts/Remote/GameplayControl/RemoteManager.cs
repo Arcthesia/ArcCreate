@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using ArcCreate.Gameplay;
 using ArcCreate.Remote.Common;
@@ -24,6 +25,7 @@ namespace ArcCreate.Remote.Gameplay
         [SerializeField] private Color warningColor;
         [SerializeField] private Color errorColor;
         [SerializeField] private Color normalColor;
+        [SerializeField] private Button startManualIpButton;
         [SerializeField] private RemoteGameplayControl remoteGameplayControl;
         private readonly List<RemoteDeviceRow> rows = new List<RemoteDeviceRow>();
 
@@ -54,16 +56,71 @@ namespace ArcCreate.Remote.Gameplay
         public override void OnUnloadScene()
         {
             startNewSessionButton.onClick.RemoveListener(OnStartNewSessionButton);
+            startManualIpButton.onClick.RemoveListener(OnStartManualIP);
             Application.logMessageReceived -= DisplayLog;
         }
 
         protected override void OnSceneLoad()
         {
             startNewSessionButton.onClick.AddListener(OnStartNewSessionButton);
+            startManualIpButton.onClick.AddListener(OnStartManualIP);
             startNewSessionButton.gameObject.SetActive(false);
             selectDeviceParent.gameObject.SetActive(true);
+            startManualIpButton.gameObject.SetActive(true);
             Application.logMessageReceived += DisplayLog;
             LoadGameplayScene();
+        }
+
+        private void OnStartManualIP()
+        {
+            if (broadcastReceiver?.IsRunning ?? false)
+            {
+                broadcastReceiver.Dispose();
+            }
+
+            foreach (var row in rows)
+            {
+                Destroy(row.gameObject);
+            }
+
+            ctx.Cancel();
+            rows.Clear();
+
+            startManualIpButton.gameObject.SetActive(false);
+            startNewSessionButton.gameObject.SetActive(false);
+            statusText.text = I18n.S("Remote.State.ManualIP", GetLocalIP());
+
+            channel = new MessageChannel(this);
+            channel.OnError += OnChannelError;
+            channel.SetupListener(Ports.Gameplay);
+            channel.WaitForConnection(null, OnClientConnect);
+            Debug.Log($"Gameplay: Waiting for manual connection");
+        }
+
+        private void OnClientConnect(IPAddress ip)
+        {
+            StartManualConnection(ip).Forget();
+        }
+
+        private string GetLocalIP()
+        {
+            using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
+            {
+                socket.Connect("8.8.8.8", 65530);
+                IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
+                return endPoint.Address.ToString();
+            }
+        }
+
+        private async UniTask StartManualConnection(IPAddress ip)
+        {
+            await UniTask.SwitchToMainThread();
+            indicateListening.SetActive(false);
+            remoteGameplayControl.SetTarget(ip, Ports.HttpCompose, channel);
+            await channel.SetupSender(ip, Ports.Compose, null);
+            StopListeningForBroadcast();
+
+            Debug.Log($"Gameplay: Connected to {ip}:{Ports.Compose}");
         }
 
         private void OnStartNewSessionButton()
@@ -71,6 +128,7 @@ namespace ArcCreate.Remote.Gameplay
             StartListeningForBroadcast();
             startNewSessionButton.gameObject.SetActive(false);
             selectDeviceParent.gameObject.SetActive(true);
+            startManualIpButton.gameObject.SetActive(true);
         }
 
         private void LoadGameplayScene()
@@ -222,9 +280,13 @@ namespace ArcCreate.Remote.Gameplay
 
         private void StopSession()
         {
-            channel?.SendMessage(RemoteControl.Abort, System.Text.Encoding.ASCII.GetBytes("From Gameplay"));
-            channel?.Dispose();
-            channel.OnError -= OnChannelError;
+            if (channel != null)
+            {
+                channel.SendMessage(RemoteControl.Abort, System.Text.Encoding.ASCII.GetBytes("From Gameplay"));
+                channel.Dispose();
+                channel.OnError -= OnChannelError;
+            }
+
             channel = null;
             Debug.Log("Gameplay: Stopped session");
         }

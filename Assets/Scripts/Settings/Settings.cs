@@ -9,7 +9,7 @@ namespace ArcCreate
         public static readonly StringSetting Locale = new StringSetting("Locale", "en_us");
 
         // Gameplay
-        public static readonly IntSetting DropRate = new IntSetting("DropRate", 300);
+        public static readonly IntSetting DropRate = new IntSetting("DropRate", 150);
         public static readonly IntSetting ViewportAspectRatioSetting = new IntSetting("ViewportAspectRatioSetting", 0);
         public static readonly IntSetting InputMode = new IntSetting("Gameplay.InputMode", 0);
 
@@ -22,6 +22,10 @@ namespace ArcCreate
         public static readonly IntSetting Framerate = new IntSetting("Framerate", 60);
         public static readonly IntSetting VSync = new IntSetting("VSync", 1);
         public static readonly BoolSetting ShowFPSCounter = new BoolSetting("ShowFrameCounter", false);
+
+        // Remote
+        public static readonly IntSetting RemoteDroprate = new IntSetting("Remote.DropRate", 150);
+        public static readonly IntSetting RemoteOffset = new IntSetting("Remote.GlobalAudioOffset", 0);
 
         // Input
         public static readonly IntSetting GridSlot = new IntSetting("GridSlot", 0);

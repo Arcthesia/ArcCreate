@@ -340,15 +340,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
             obj.layer = GetLayer(renderLayer);
             ImageController c = obj.GetComponent<ImageController>();
             c.Image.material = GetMaterial(material);
+            Vector2 pivotVec = pivot?.ToVector() ?? new Vector2(0.5f, 0.5f);
 
             spriteTasks.Add(GetSprite(
                 new SpriteDefinition
                 {
                     Path = Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath),
-                    Pivot = pivot?.ToVector() ?? new Vector2(0.5f, 0.5f),
+                    Pivot = pivotVec,
                 }).ContinueWith(sprite => c.Image.sprite = sprite));
 
-            c.SerializedType = $"image.{imgPath},{material},{renderLayer}";
+            c.SerializedType = $"image.{imgPath},{material},{renderLayer},{pivotVec.x},{pivotVec.y}";
             c.Start();
             Services.Scenecontrol.AddReferencedController(c);
             return c;
@@ -374,15 +375,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
             obj.layer = GetLayer(renderLayer);
             SpriteController c = obj.GetComponent<SpriteController>();
             c.SpriteRenderer.material = GetMaterial(material);
+            Vector2 pivotVec = pivot?.ToVector() ?? new Vector2(0.5f, 0.5f);
 
             spriteTasks.Add(GetSprite(
                 new SpriteDefinition
                 {
                     Path = Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath),
-                    Pivot = pivot?.ToVector() ?? new Vector2(0.5f, 0.5f),
+                    Pivot = pivotVec,
                 }).ContinueWith(sprite => c.SpriteRenderer.sprite = sprite));
 
-            c.SerializedType = $"sprite.{imgPath},{material},{renderLayer}";
+            c.SerializedType = $"sprite.{imgPath},{material},{renderLayer},{pivotVec.x},{pivotVec.y}";
             c.Start();
             Services.Scenecontrol.AddReferencedController(c);
             return c;
@@ -643,16 +645,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 case "extraR":
                     return track.ExtraR;
                 case "image":
-                    string[] imgsplit = def.Split(',');
-                    return CreateImage(imgsplit[0], imgsplit[1], imgsplit[2]);
+                    string[] imgsplit = arg.Split(',');
+                    return CreateImage(imgsplit[0], imgsplit[1], imgsplit[2], new XY(float.Parse(imgsplit[3]), float.Parse(imgsplit[4])));
                 case "canvas":
                     bool worldSpace = bool.Parse(def);
                     return CreateCanvas(worldSpace);
                 case "sprite":
-                    string[] spriteSplit = def.Split(',');
-                    return CreateSprite(spriteSplit[0], spriteSplit[1], spriteSplit[2]);
+                    string[] spriteSplit = arg.Split(',');
+                    return CreateSprite(spriteSplit[0], spriteSplit[1], spriteSplit[2], new XY(float.Parse(spriteSplit[3]), float.Parse(spriteSplit[4])));
                 case "text":
-                    string[] textSplit = def.Split(',');
+                    string[] textSplit = arg.Split(',');
                     return CreateText(
                         textSplit[0],
                         float.Parse(textSplit[1]),

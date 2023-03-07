@@ -469,11 +469,17 @@ Compose:
         SelectArctap: Select sky notes
 
 Remote:
+  Exception:
+    InvalidIP: Invalid IP address
   State:
     Listening: |-
       Listening for broadcast...
       <size=20>
       On your desktop ArcCreate client, open "Remote" tab and press "Start broadcasting" to begin.</size>
+    ManualIP: |-
+      Waiting for connection from desktop client.
+      <size=20>
+      On your desktop ArcCreate client, open "Remote" tab and enter the IP address: {0}.</size>
     Found: |-
       Broadcast received from the following device(s).
       Select a device to continue.
@@ -497,6 +503,7 @@ Remote:
     BroadcastAgain: Broadcast again
     StopSession: Stop session
     StartNewSession: Start new session
+    ManualIP: Manually set up connection
   Control:
     Name: Control
     Sync:
@@ -507,7 +514,10 @@ Remote:
       Jacket: Jacket
       Background: Background
       Metadata: Metadata
-      Settings: Offset and speed
+    Settings:
+      Name: Settings
+      Offset: Device offset
+      Speed: Device speed
     StartTiming: Play from timing
     EndTiming: Play to timing      
     Loop: Loop playback

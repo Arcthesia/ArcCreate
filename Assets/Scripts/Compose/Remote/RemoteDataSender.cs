@@ -7,6 +7,8 @@ using ArcCreate.Compose.Project;
 using ArcCreate.Compose.Timeline;
 using ArcCreate.Gameplay;
 using ArcCreate.Remote.Common;
+using ArcCreate.Utility.Parser;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,6 +22,10 @@ namespace ArcCreate.Compose.Remote
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private Marker remoteCurrentTiming;
 
+        [Header("Fields")]
+        [SerializeField] private TMP_InputField offsetField;
+        [SerializeField] private TMP_InputField speedField;
+
         [Header("Sync Buttons")]
         [SerializeField] private Button syncAllButton;
         [SerializeField] private Button syncChartButton;
@@ -27,7 +33,6 @@ namespace ArcCreate.Compose.Remote
         [SerializeField] private Button syncJacketButton;
         [SerializeField] private Button syncBackgroundButton;
         [SerializeField] private Button syncMetadata;
-        [SerializeField] private Button syncSettingsButton;
 
         [Header("Window")]
         [SerializeField] private Window remoteWindow;
@@ -121,13 +126,15 @@ namespace ArcCreate.Compose.Remote
             showLogToggle.onValueChanged.AddListener(SendShowLog);
             showDebugToggle.onValueChanged.AddListener(SendShowDebug);
 
+            offsetField.onSubmit.AddListener(OnOffsetField);
+            speedField.onSubmit.AddListener(OnSpeedField);
+
             syncAllButton.onClick.AddListener(SendAll);
             syncChartButton.onClick.AddListener(SendChart);
             syncAudioButton.onClick.AddListener(SendAudio);
             syncJacketButton.onClick.AddListener(SendJacket);
             syncBackgroundButton.onClick.AddListener(SendBackgrond);
             syncMetadata.onClick.AddListener(SendMetadata);
-            syncSettingsButton.onClick.AddListener(SendSettings);
 
             playButton.onClick.AddListener(SendPlay);
             pauseButton.onClick.AddListener(SendPause);
@@ -141,13 +148,15 @@ namespace ArcCreate.Compose.Remote
             showLogToggle.onValueChanged.RemoveListener(SendShowLog);
             showDebugToggle.onValueChanged.RemoveListener(SendShowDebug);
 
+            offsetField.onSubmit.RemoveListener(OnOffsetField);
+            speedField.onSubmit.RemoveListener(OnSpeedField);
+
             syncAllButton.onClick.RemoveListener(SendAll);
             syncChartButton.onClick.RemoveListener(SendChart);
             syncAudioButton.onClick.RemoveListener(SendAudio);
             syncJacketButton.onClick.RemoveListener(SendJacket);
             syncBackgroundButton.onClick.RemoveListener(SendBackgrond);
             syncMetadata.onClick.RemoveListener(SendMetadata);
-            syncSettingsButton.onClick.RemoveListener(SendSettings);
 
             playButton.onClick.RemoveListener(SendPlay);
             pauseButton.onClick.RemoveListener(SendPause);
@@ -158,6 +167,28 @@ namespace ArcCreate.Compose.Remote
         private void OnDestroy()
         {
             StopListeningForEvents();
+        }
+
+        private void OnSpeedField(string val)
+        {
+            if (Evaluator.TryFloat(val, out float speed))
+            {
+                Settings.RemoteDroprate.Value = Mathf.RoundToInt(speed * Values.DropRateScalar);
+                SendSpeed();
+            }
+
+            speedField.SetTextWithoutNotify((Settings.RemoteDroprate.Value / Values.DropRateScalar).ToString());
+        }
+
+        private void OnOffsetField(string val)
+        {
+            if (Evaluator.TryInt(val, out int offset))
+            {
+                Settings.RemoteOffset.Value = offset;
+                SendOffset();
+            }
+
+            offsetField.SetTextWithoutNotify(Settings.RemoteOffset.Value.ToString());
         }
 
         private void SendTiming(Marker marker, int timing)
@@ -206,13 +237,13 @@ namespace ArcCreate.Compose.Remote
 
         private void SendSpeed()
         {
-            int dr = Settings.DropRate.Value;
+            int dr = Settings.RemoteDroprate.Value;
             channel?.SendMessage(RemoteControl.Speed, FromInt(dr));
         }
 
-        private void SendGlobalOffset()
+        private void SendOffset()
         {
-            int offset = Settings.GlobalAudioOffset.Value;
+            int offset = Settings.RemoteOffset.Value;
             channel?.SendMessage(RemoteControl.GlobalOffset, FromInt(offset));
         }
 
@@ -250,19 +281,14 @@ namespace ArcCreate.Compose.Remote
             string msg = $"{ext},{useDefaultJacket},{useDefaultBg},{chartPath}";
 
             channel.SendMessage(RemoteControl.ReloadAllFiles, FromStringASCII(msg));
-            SendSettings();
+            SendSpeed();
+            SendOffset();
         }
 
         private void SendMetadata()
         {
             string chartPath = Services.Project.CurrentChart.ChartPath;
             channel.SendMessage(RemoteControl.Metadata, FromStringASCII(chartPath));
-        }
-
-        private void SendSettings()
-        {
-            SendSpeed();
-            SendGlobalOffset();
         }
 
         private void SendTimingToCurrent()
@@ -283,6 +309,12 @@ namespace ArcCreate.Compose.Remote
         private byte[] FromStringASCII(string val)
         {
             return Encoding.ASCII.GetBytes(val);
+        }
+
+        private void Awake()
+        {
+            speedField.SetTextWithoutNotify((Settings.RemoteDroprate.Value / Values.DropRateScalar).ToString());
+            offsetField.SetTextWithoutNotify(Settings.RemoteOffset.Value.ToString());
         }
     }
 }
