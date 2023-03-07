@@ -28,6 +28,8 @@ namespace ArcCreate.Compose.EventsEditor
         public ScenecontrolLuaEnvironment(ScenecontrolTable scTable)
         {
             this.scTable = scTable;
+            UserData.RegisterAssembly(Assembly.GetAssembly(typeof(ScenecontrolService)));
+            LuaArithmetic.SetupForBaseType<ValueChannel>();
         }
 
 #if UNITY_EDITOR
@@ -43,7 +45,6 @@ namespace ArcCreate.Compose.EventsEditor
 
         public void SetupScript(Script script)
         {
-            UserData.RegisterAssembly(Assembly.GetAssembly(typeof(ScenecontrolService)));
             script.Globals["Channel"] = new ValueChannelBuilder();
             script.Globals["StringChannel"] = new StringChannelBuilder();
             script.Globals["TextChannel"] = new TextChannelBuilder();
