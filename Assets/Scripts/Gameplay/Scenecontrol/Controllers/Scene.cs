@@ -341,7 +341,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             string material = "default",
             [EmmyChoice("overlay", "notes", "background")]
             string renderLayer = "overlay",
-            XY pivot = null)
+            XY? pivot = null)
 #pragma warning restore
         {
             GameObject obj = Instantiate(ImagePrefab, ScreenCanvas.transform);
@@ -376,7 +376,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             string material = "default",
             [EmmyChoice("overlay", "notes", "background")]
             string renderLayer = "overlay",
-            XY pivot = null)
+            XY? pivot = null)
 #pragma warning restore
         {
             GameObject obj = Instantiate(SpritePrefab, ScreenCanvas.transform);

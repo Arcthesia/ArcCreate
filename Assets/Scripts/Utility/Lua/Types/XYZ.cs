@@ -4,20 +4,17 @@ using UnityEngine;
 namespace ArcCreate.Utilities.Lua
 {
     [MoonSharpUserData]
-    public class XYZ
+    public struct XYZ
     {
+        public float X;
+        public float Y;
+        public float Z;
+
         public XYZ(Vector3 unityVector)
         {
             X = unityVector.x;
             Y = unityVector.y;
             Z = unityVector.z;
-        }
-
-        public XYZ()
-        {
-            X = 0;
-            Y = 0;
-            Z = 0;
         }
 
         public XYZ(float x, float y, float z)
@@ -26,12 +23,6 @@ namespace ArcCreate.Utilities.Lua
             Y = y;
             Z = z;
         }
-
-        public float X { get; set; }
-
-        public float Y { get; set; }
-
-        public float Z { get; set; }
 
         public static XYZ operator +(XYZ xyz1, XYZ xyz2)
         {

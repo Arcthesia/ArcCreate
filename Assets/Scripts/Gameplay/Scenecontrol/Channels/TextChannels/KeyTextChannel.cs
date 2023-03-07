@@ -10,11 +10,18 @@ namespace ArcCreate.Gameplay.Scenecontrol
     [EmmyDoc("Channel whose text value is defined by interpolating between keyframes")]
     public class KeyTextChannel : TextChannel, IComparer<TextKey>
     {
-        private readonly List<TextKey> keys = new List<TextKey>();
+        private readonly List<TextKey> keys;
+        private readonly CachedBinarySearch<TextKey, int> keySearch;
         private Func<float, float, float, float> defaultEasing;
         private string defaultEasingString;
         private bool transitionFromFirstDifference = true;
         private char[] charArray;
+
+        public KeyTextChannel()
+        {
+            keySearch = new CachedBinarySearch<TextKey, int>(new List<TextKey>(), k => k.Timing, this);
+            keys = keySearch.List;
+        }
 
         public int KeyCount => keys.Count;
 
@@ -90,7 +97,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 return keys[keys.Count - 1].Value;
             }
 
-            int index = GetKeyIndex(timing);
+            int index = keySearch.Search(timing);
             int timing1 = keys[index].Timing;
             int timing2 = keys[index + 1].Timing;
             TextKey key1 = keys[index];
@@ -164,7 +171,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
 
             int overrideIndex = 0;
-            if (keys.Count > 0 && keys[GetKeyIndex(timing)].Timing == timing)
+            if (keys.Count > 0 && keys[keySearch.Search(timing)].Timing == timing)
             {
                 overrideIndex += 1;
             }
@@ -190,7 +197,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 TransitionFrom = transitionFrom,
             });
 
-            keys.Sort(this);
+            keySearch.Sort();
             EnsureArraySize(value?.Length ?? 0);
             return this;
         }
@@ -198,11 +205,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [EmmyDoc("Remove the first key that has matching timing value")]
         public KeyTextChannel RemoveKeyAtTiming(int timing)
         {
-            int index = GetKeyIndex(timing);
+            int index = keySearch.Search(timing);
             if (keys[index].Timing == timing)
             {
                 keys.RemoveAt(index);
             }
+
+            keySearch.Sort();
 
             return this;
         }
@@ -243,11 +252,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 keys.Add(key);
                 EnsureArraySize(key?.Value?.Length ?? 0);
             }
-        }
 
-        private int GetKeyIndex(int timing)
-        {
-            return keys.BinarySearchNearest(timing, (key) => key.Timing);
+            keySearch.Sort();
         }
 
         private void EnsureArraySize(int length)

@@ -4,22 +4,19 @@ using UnityEngine;
 namespace ArcCreate.Utilities.Lua
 {
     [MoonSharpUserData]
-    public class RGBA
+    public struct RGBA
     {
+        public float R;
+        public float G;
+        public float B;
+        public float A;
+
         public RGBA(Color color)
         {
             R = color.r * 255;
             G = color.g * 255;
             B = color.b * 255;
             A = color.a * 255;
-        }
-
-        public RGBA()
-        {
-            R = 0;
-            G = 0;
-            B = 0;
-            A = 255;
         }
 
         public RGBA(float r, float g, float b, float a)
@@ -29,14 +26,6 @@ namespace ArcCreate.Utilities.Lua
             B = b;
             A = a;
         }
-
-        public float R { get; set; }
-
-        public float G { get; set; }
-
-        public float B { get; set; }
-
-        public float A { get; set; }
 
         public static RGBA operator +(RGBA c1, RGBA c2)
         {

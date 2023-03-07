@@ -3,15 +3,12 @@ using MoonSharp.Interpreter;
 namespace ArcCreate.Utilities.Lua
 {
     [MoonSharpUserData]
-    public class HSVA
+    public struct HSVA
     {
-        public HSVA()
-        {
-            H = 0;
-            S = 0;
-            V = 0;
-            A = 1;
-        }
+        public float H;
+        public float S;
+        public float V;
+        public float A;
 
         public HSVA(float h, float s, float v, float a)
         {
@@ -20,14 +17,6 @@ namespace ArcCreate.Utilities.Lua
             V = v;
             A = a;
         }
-
-        public float H { get; set; }
-
-        public float S { get; set; }
-
-        public float V { get; set; }
-
-        public float A { get; set; }
 
         public static HSVA operator +(HSVA c1, HSVA c2)
         {

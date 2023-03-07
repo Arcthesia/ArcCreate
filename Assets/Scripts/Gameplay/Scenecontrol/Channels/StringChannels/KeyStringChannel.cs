@@ -9,7 +9,14 @@ namespace ArcCreate.Gameplay.Scenecontrol
     [EmmyDoc("Channel whose string value is defined by keyframes")]
     public class KeyStringChannel : StringChannel, IComparer<StringKey>
     {
-        private readonly List<StringKey> keys = new List<StringKey>();
+        private readonly List<StringKey> keys;
+        private readonly CachedBinarySearch<StringKey, int> keySearch;
+
+        public KeyStringChannel()
+        {
+            keySearch = new CachedBinarySearch<StringKey, int>(new List<StringKey>(), k => k.Timing, this);
+            keys = keySearch.List;
+        }
 
         public int KeyCount => keys.Count;
 
@@ -35,7 +42,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 return keys[keys.Count - 1].Value;
             }
 
-            int index = GetKeyIndex(timing);
+            int index = keySearch.Search(timing);
             return keys[index].Value;
         }
 
@@ -43,7 +50,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public KeyStringChannel AddKey(int timing, string value)
         {
             int overrideIndex = 0;
-            if (keys.Count > 0 && keys[GetKeyIndex(timing)].Timing == timing)
+            if (keys.Count > 0 && keys[keySearch.Search(timing)].Timing == timing)
             {
                 overrideIndex += 1;
             }
@@ -55,18 +62,20 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 OverrideIndex = overrideIndex,
             });
 
-            keys.Sort(this);
+            keySearch.Sort();
             return this;
         }
 
         [EmmyDoc("Remove the first key that has matching timing value")]
         public KeyStringChannel RemoveKeyAtTiming(int timing)
         {
-            int index = GetKeyIndex(timing);
+            int index = keySearch.Search(timing);
             if (keys[index].Timing == timing)
             {
                 keys.RemoveAt(index);
             }
+
+            keySearch.Sort();
 
             return this;
         }
@@ -105,11 +114,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 key.Deserialize(str);
                 keys.Add(key);
             }
-        }
 
-        private int GetKeyIndex(int timing)
-        {
-            return keys.BinarySearchNearest(timing, (key) => key.Timing);
+            keySearch.Sort();
         }
     }
 }
