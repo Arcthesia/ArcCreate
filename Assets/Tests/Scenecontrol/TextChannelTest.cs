@@ -150,7 +150,7 @@ namespace Tests.Unit
         private void AssertCharArrayEquality(TextChannel channel, int timing, string compare)
         {
             StringBuilder builder = new StringBuilder();
-            char[] array = channel.ValueAt(timing, out int length);
+            char[] array = channel.ValueAt(timing, out int length, out bool _);
 
             for (int i = 0; i < length; i++)
             {

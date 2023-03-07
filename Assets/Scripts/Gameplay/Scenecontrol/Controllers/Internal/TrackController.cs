@@ -16,6 +16,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
         private static int lane4AlphaShaderID = Shader.PropertyToID("_Lane4Alpha");
 
 #pragma warning disable
+        private ValueChannel edgeLAlpha;
+        private ValueChannel edgeRAlpha;
+        private ValueChannel lane1Alpha;
+        private ValueChannel lane2Alpha;
+        private ValueChannel lane3Alpha;
+        private ValueChannel lane4Alpha;
         [SerializeField] private SpriteController divideLine01;
         [EmmyDoc("Gets the divide line between lane 0 and 1")]
         public SpriteController DivideLine01
@@ -167,14 +173,64 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
-        public ValueChannel EdgeLAlpha { get; set; }
-        public ValueChannel EdgeRAlpha { get; set; }
-        public ValueChannel Lane1Alpha { get; set; }
-        public ValueChannel Lane2Alpha { get; set; }
-        public ValueChannel Lane3Alpha { get; set; }
-        public ValueChannel Lane4Alpha { get; set; }
+        public ValueChannel EdgeLAlpha
+        {
+            get => edgeLAlpha;
+            set
+            {
+                edgeLAlpha = value;
+                EnableTrackModule = true;
+            }
+        }
+        public ValueChannel EdgeRAlpha
+        {
+            get => edgeRAlpha;
+            set
+            {
+                edgeRAlpha = value;
+                EnableTrackModule = true;
+            }
+        }
+        public ValueChannel Lane1Alpha
+        {
+            get => lane1Alpha;
+            set
+            {
+                lane1Alpha = value;
+                EnableTrackModule = true;
+            }
+        }
+        public ValueChannel Lane2Alpha
+        {
+            get => lane2Alpha;
+            set
+            {
+                lane2Alpha = value;
+                EnableTrackModule = true;
+            }
+        }
+        public ValueChannel Lane3Alpha
+        {
+            get => lane3Alpha;
+            set
+            {
+                lane3Alpha = value;
+                EnableTrackModule = true;
+            }
+        }
+        public ValueChannel Lane4Alpha
+        {
+            get => lane4Alpha;
+            set
+            {
+                lane4Alpha = value;
+                EnableTrackModule = true;
+            }
+        }
 
         public string CustomSkin { get; set; }
+
+        public bool EnableTrackModule { get; set; }
 #pragma warning restore
 
         [MoonSharpHidden]

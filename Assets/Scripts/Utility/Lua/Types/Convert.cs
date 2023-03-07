@@ -33,7 +33,7 @@ namespace ArcCreate.Utilities.Lua
             bool converted = ColorUtility.TryParseHtmlString(hex, out Color color);
             if (!converted)
             {
-                return new RGBA();
+                return default;
             }
 
             return new RGBA(color);

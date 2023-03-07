@@ -11,17 +11,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public abstract int MaxLength { get; }
 
         [MoonSharpHidden]
-        public abstract char[] ValueAt(int timing, out int length);
-
-        [MoonSharpHidden]
-        public void Reset()
-        {
-        }
-
-        [MoonSharpHidden]
-        public void Destroy()
-        {
-        }
+        public abstract char[] ValueAt(int timing, out int length, out bool hasChanged);
 
         [MoonSharpHidden]
         public abstract List<object> SerializeProperties(ScenecontrolSerialization serialization);

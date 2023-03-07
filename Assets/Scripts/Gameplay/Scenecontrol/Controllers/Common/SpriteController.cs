@@ -10,6 +10,29 @@ namespace ArcCreate.Gameplay.Scenecontrol
     {
         private static readonly int TextureModifyShaderId = Shader.PropertyToID("_Modify");
         private MaterialPropertyBlock mpb;
+        private ValueChannel translationX;
+        private ValueChannel translationY;
+        private ValueChannel translationZ;
+        private ValueChannel rotationX;
+        private ValueChannel rotationY;
+        private ValueChannel rotationZ;
+        private ValueChannel scaleX;
+        private ValueChannel scaleY;
+        private ValueChannel scaleZ;
+        private StringChannel layer;
+        private ValueChannel sort;
+        private ValueChannel alpha;
+        private ValueChannel colorR;
+        private ValueChannel colorG;
+        private ValueChannel colorB;
+        private ValueChannel colorH;
+        private ValueChannel colorS;
+        private ValueChannel colorV;
+        private ValueChannel colorA;
+        private ValueChannel textureOffsetX;
+        private ValueChannel textureOffsetY;
+        private ValueChannel textureScaleX;
+        private ValueChannel textureScaleY;
         [SerializeField] private SpriteRenderer spriteRenderer;
 
         [MoonSharpHidden] public Vector3 DefaultTranslation { get; private set; }
@@ -30,53 +53,245 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         [MoonSharpHidden] public Vector2 DefaultTextureScale { get; private set; }
 
-        public ValueChannel TranslationX { get; set; }
+        public ValueChannel TranslationX
+        {
+            get => translationX;
+            set
+            {
+                translationX = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel TranslationY { get; set; }
+        public ValueChannel TranslationY
+        {
+            get => translationY;
+            set
+            {
+                translationY = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel TranslationZ { get; set; }
+        public ValueChannel TranslationZ
+        {
+            get => translationZ;
+            set
+            {
+                translationZ = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel RotationX { get; set; }
+        public ValueChannel RotationX
+        {
+            get => rotationX;
+            set
+            {
+                rotationX = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel RotationY { get; set; }
+        public ValueChannel RotationY
+        {
+            get => rotationY;
+            set
+            {
+                rotationY = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel RotationZ { get; set; }
+        public ValueChannel RotationZ
+        {
+            get => rotationZ;
+            set
+            {
+                rotationZ = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel ScaleX { get; set; }
+        public ValueChannel ScaleX
+        {
+            get => scaleX;
+            set
+            {
+                scaleX = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel ScaleY { get; set; }
+        public ValueChannel ScaleY
+        {
+            get => scaleY;
+            set
+            {
+                scaleY = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel ScaleZ { get; set; }
+        public ValueChannel ScaleZ
+        {
+            get => scaleZ;
+            set
+            {
+                scaleZ = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public StringChannel Layer { get; set; }
+        public StringChannel Layer
+        {
+            get => layer;
+            set
+            {
+                layer = value;
+                EnableLayerModule = true;
+            }
+        }
 
-        public ValueChannel Sort { get; set; }
+        public ValueChannel Sort
+        {
+            get => sort;
+            set
+            {
+                sort = value;
+                EnableLayerModule = true;
+            }
+        }
 
-        public ValueChannel Alpha { get; set; }
+        public ValueChannel Alpha
+        {
+            get => alpha;
+            set
+            {
+                alpha = value;
+                EnableLayerModule = true;
+            }
+        }
 
-        public ValueChannel ColorR { get; set; }
+        public ValueChannel ColorR
+        {
+            get => colorR;
+            set
+            {
+                colorR = value;
+                EnableColorModule = true;
+            }
+        }
 
-        public ValueChannel ColorG { get; set; }
+        public ValueChannel ColorG
+        {
+            get => colorG;
+            set
+            {
+                colorG = value;
+                EnableColorModule = true;
+            }
+        }
 
-        public ValueChannel ColorB { get; set; }
+        public ValueChannel ColorB
+        {
+            get => colorB;
+            set
+            {
+                colorB = value;
+                EnableColorModule = true;
+            }
+        }
 
-        public ValueChannel ColorH { get; set; }
+        public ValueChannel ColorH
+        {
+            get => colorH;
+            set
+            {
+                colorH = value;
+                EnableColorModule = true;
+            }
+        }
 
-        public ValueChannel ColorS { get; set; }
+        public ValueChannel ColorS
+        {
+            get => colorS;
+            set
+            {
+                colorS = value;
+                EnableColorModule = true;
+            }
+        }
 
-        public ValueChannel ColorV { get; set; }
+        public ValueChannel ColorV
+        {
+            get => colorV;
+            set
+            {
+                colorV = value;
+                EnableColorModule = true;
+            }
+        }
 
-        public ValueChannel ColorA { get; set; }
+        public ValueChannel ColorA
+        {
+            get => colorA;
+            set
+            {
+                colorA = value;
+                EnableColorModule = true;
+            }
+        }
 
-        public ValueChannel TextureOffsetX { get; set; }
+        public ValueChannel TextureOffsetX
+        {
+            get => textureOffsetX;
+            set
+            {
+                textureOffsetX = value;
+                EnableTextureModule = true;
+            }
+        }
 
-        public ValueChannel TextureOffsetY { get; set; }
+        public ValueChannel TextureOffsetY
+        {
+            get => textureOffsetY;
+            set
+            {
+                textureOffsetY = value;
+                EnableTextureModule = true;
+            }
+        }
 
-        public ValueChannel TextureScaleX { get; set; }
+        public ValueChannel TextureScaleX
+        {
+            get => textureScaleX;
+            set
+            {
+                textureScaleX = value;
+                EnableTextureModule = true;
+            }
+        }
 
-        public ValueChannel TextureScaleY { get; set; }
+        public ValueChannel TextureScaleY
+        {
+            get => textureScaleY;
+            set
+            {
+                textureScaleY = value;
+                EnableTextureModule = true;
+            }
+        }
 
         [MoonSharpHidden] public SpriteRenderer SpriteRenderer => spriteRenderer;
+
+        public bool EnablePositionModule { get; set; }
+
+        public bool EnableLayerModule { get; set; }
+
+        public bool EnableTextureModule { get; set; }
+
+        public bool EnableColorModule { get; set; }
 
         [MoonSharpHidden]
         public override void SetupDefault()

@@ -8,6 +8,8 @@ namespace ArcCreate.Gameplay
     /// <summary>
     /// Class for managing bisection with index caching.
     /// Optimized for accessing a list repeatedly while the returned index rarely changes.
+    /// Unlike <see cref="CachedBinarySearch{T, R}"/> which returns the index of the largest element smaller than the search value,
+    /// this returns the smallest element larger than the search value.
     /// </summary>
     /// <typeparam name="T">The type of the list.</typeparam>
     /// <typeparam name="R">The type of the property to search by.</typeparam>
@@ -25,8 +27,9 @@ namespace ArcCreate.Gameplay
         private bool prevRebisectAvailable;
         private bool hasResetted = true;
         private readonly List<T> list;
-        private readonly int count;
+        private int count;
         private readonly Func<T, R> property;
+        private readonly IComparer<T> comparer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedBisect{T, R}"/> class.
@@ -35,30 +38,30 @@ namespace ArcCreate.Gameplay
         /// and the original enumerable will remain unchanged.</param>
         /// <param name="property">Function that extracts the property <see cref="{R}"/> from items.</param>
         /// <param name="comparison">Comparison function for sorting items.</param>
-        public CachedBisect(IEnumerable<T> list, Func<T, R> property)
+        /// <param name="comparer">Optionally, provide a ccomparer for list items.</param>
+        public CachedBisect(IEnumerable<T> list, Func<T, R> property, IComparer<T> comparer = null)
         {
             this.list = new List<T>(list);
-            this.list.Sort((a, b) => property(a).CompareTo(property(b)));
             count = this.list.Count;
             this.property = property;
+            this.comparer = comparer;
+            Sort();
         }
 
         public List<T> List => list;
 
-        /// <summary>
-        /// Modify the internal list, and re-sort the list afterwards.
-        /// </summary>
-        /// <param name="modifier">Action defining how to modify the list.</param>
-        public void ModifyList(Action<List<T>> modifier)
-        {
-            modifier(list);
-            list.Sort((a, b) => property(a).CompareTo(property(b)));
-            Reset();
-        }
-
         public void Sort()
         {
-            list.Sort((a, b) => property(a).CompareTo(property(b)));
+            if (comparer == null)
+            {
+                list.Sort((a, b) => property(a).CompareTo(property(b)));
+            }
+            else
+            {
+                list.Sort(comparer);
+            }
+
+            count = list.Count;
             Reset();
         }
 

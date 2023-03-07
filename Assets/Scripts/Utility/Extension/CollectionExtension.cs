@@ -185,15 +185,17 @@ namespace ArcCreate.Utility.Extension
         /// <param name="value">The value to search for.</param>
         /// <param name="property">Property extractor.</param>
         /// <typeparam name="T">The list's element's type.</typeparam>
+        /// <typeparam name="R">Type of the property to search by.</typeparam>
         /// <returns>Index of the nearest element.</returns>
-        public static int BinarySearchNearest<T>(this IList<T> list, int value, Func<T, int> property)
+        public static int BinarySearchNearest<T, R>(this IList<T> list, R value, Func<T, R> property)
+            where R : IComparable<R>
         {
-            if (value <= property(list[0]))
+            if (value.CompareTo(property(list[0])) <= 0)
             {
                 return 0;
             }
 
-            if (value >= property(list[list.Count - 1]))
+            if (value.CompareTo(property(list[list.Count - 1])) >= 0)
             {
                 return list.Count - 1;
             }
@@ -203,18 +205,18 @@ namespace ArcCreate.Utility.Extension
             int first = 0;
             int last = list.Count - 1;
             int mid = 0;
-            int midValue = property(list[mid]);
+            R midValue = property(list[mid]);
 
             while (first < last - 1)
             {
                 mid = (first + last) / 2;
                 midValue = property(list[mid]);
-                if (value == midValue)
+                if (value.CompareTo(midValue) == 0)
                 {
                     index = mid;
                     break;
                 }
-                else if (value < midValue)
+                else if (value.CompareTo(midValue) < 0)
                 {
                     last = mid;
                 }
@@ -224,7 +226,7 @@ namespace ArcCreate.Utility.Extension
                 }
             }
 
-            if (midValue <= value)
+            if (midValue.CompareTo(value) <= 0)
             {
                 index = mid;
             }

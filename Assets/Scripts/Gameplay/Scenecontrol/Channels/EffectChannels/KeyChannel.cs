@@ -10,9 +10,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
     [EmmyDoc("Channel whose value is defined by interpolating between keyframes")]
     public class KeyChannel : ValueChannel, IComparer<Key>
     {
-        private readonly List<Key> keys = new List<Key>();
+        private readonly CachedBinarySearch<Key, int> keySearch;
         private Func<float, float, float, float> defaultEasing;
+        private readonly List<Key> keys;
         private string defaultEasingString;
+
+        public KeyChannel()
+        {
+            keySearch = new CachedBinarySearch<Key, int>(new List<Key>(), k => k.Timing, this);
+            keys = keySearch.List;
+        }
 
         public bool IntroExtrapolation { get; set; } = false;
 
@@ -103,7 +110,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 }
             }
 
-            int index = GetKeyIndex(timing);
+            int index = keySearch.Search(timing);
             int timing1 = keys[index].Timing;
             int timing2 = keys[index + 1].Timing;
             Key key1 = keys[index];
@@ -161,7 +168,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
 
             int overrideIndex = 0;
-            if (keys.Count > 0 && keys[GetKeyIndex(timing)].Timing == timing)
+            if (keys.Count > 0 && keys[keySearch.Search(timing)].Timing == timing)
             {
                 overrideIndex += 1;
             }
@@ -176,19 +183,20 @@ namespace ArcCreate.Gameplay.Scenecontrol
             };
 
             keys.Add(key);
-            keys.Sort(this);
+            keySearch.Sort();
             return this;
         }
 
-        [EmmyDoc("Remove the first key that has matching timing value")]
+        [EmmyDoc("Remove all keys that has matching timing value")]
         public KeyChannel RemoveKeyAtTiming(int timing)
         {
-            int index = GetKeyIndex(timing);
+            int index = keySearch.Search(timing);
             if (keys[index].Timing == timing)
             {
                 keys.RemoveAt(index);
             }
 
+            keySearch.Sort();
             return this;
         }
 
@@ -227,16 +235,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 key.Easing = Easing.FromString(key.EasingString);
                 keys.Add(key);
             }
+
+            keySearch.Sort();
         }
 
         protected override IEnumerable<ValueChannel> GetChildrenChannels()
         {
             yield break;
-        }
-
-        private int GetKeyIndex(int timing)
-        {
-            return keys.BinarySearchNearest(timing, (key) => key.Timing);
         }
     }
 }

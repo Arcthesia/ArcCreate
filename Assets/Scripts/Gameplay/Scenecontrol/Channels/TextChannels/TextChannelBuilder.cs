@@ -18,9 +18,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [EmmyDoc("Creates a constant text channel")]
         public static TextChannel Constant(string value)
         {
-            KeyTextChannel channel = new KeyTextChannel();
-            channel.AddKey(int.MinValue, value);
-            return channel;
+            return new ConstantTextChannel(value);
         }
 
         [EmmyDoc("Creates a text channel that display a value. Beware of floating point precision")]

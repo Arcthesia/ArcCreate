@@ -12,6 +12,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
     public interface IPositionController : IController
     {
+        bool EnablePositionModule { get; set; }
+
         ValueChannel TranslationX { get; set; }
 
         ValueChannel TranslationY { get; set; }
@@ -41,6 +43,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
     public interface IColorController : IController
     {
+        bool EnableColorModule { get; set; }
+
         ValueChannel ColorR { get; set; }
 
         ValueChannel ColorG { get; set; }
@@ -62,6 +66,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
     public interface ILayerController : IController
     {
+        bool EnableLayerModule { get; set; }
+
         StringChannel Layer { get; set; }
 
         ValueChannel Sort { get; set; }
@@ -79,6 +85,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
     public interface ITextController : IController
     {
+        bool EnableTextModule { get; set; }
+
         ValueChannel FontSize { get; set; }
 
         ValueChannel LineSpacing { get; set; }
@@ -104,6 +112,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
     public interface INoteGroupController : IController
     {
+        bool EnableNoteGroupModule { get; set; }
+
         ValueChannel AngleX { get; set; }
 
         ValueChannel AngleY { get; set; }
@@ -125,6 +135,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
     public interface ICameraController : IController
     {
+        bool EnableCameraModule { get; set; }
+
         ValueChannel FieldOfView { get; set; }
 
         ValueChannel TiltFactor { get; set; }
@@ -136,6 +148,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
     public interface IRectController : IController
     {
+        bool EnableRectModule { get; set; }
+
         ValueChannel RectW { get; set; }
 
         ValueChannel RectH { get; set; }
@@ -167,6 +181,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
     public interface ITextureController : IController
     {
+        bool EnableTextureModule { get; set; }
+
         ValueChannel TextureOffsetX { get; set; }
 
         ValueChannel TextureOffsetY { get; set; }
@@ -184,6 +200,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
     public interface ITrackController : IController
     {
+        bool EnableTrackModule { get; set; }
+
         ValueChannel EdgeLAlpha { get; set; }
 
         ValueChannel EdgeRAlpha { get; set; }

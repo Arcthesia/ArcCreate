@@ -18,16 +18,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
         }
 
         [MoonSharpHidden]
-        public virtual void Destroy()
-        {
-        }
-
-        [MoonSharpHidden]
-        public virtual void Reset()
-        {
-        }
-
-        [MoonSharpHidden]
         public abstract void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization);
 
         [MoonSharpHidden]

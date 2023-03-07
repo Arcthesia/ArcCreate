@@ -11,6 +11,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
         private ValueChannel source;
         private char[] charArray;
         private int precision;
+        private float prevValue;
+        private int prevLength;
 
         public ValueToTextChannel()
         {
@@ -50,9 +52,17 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return result;
         }
 
-        public override char[] ValueAt(int timing, out int length)
+        public override char[] ValueAt(int timing, out int length, out bool hasChanged)
         {
             float number = source.ValueAt(timing);
+            if (number == prevValue)
+            {
+                length = prevLength;
+                hasChanged = false;
+                return charArray;
+            }
+
+            prevValue = number;
             bool isNegativeNumber = number < 0f;
             number = isNegativeNumber ? -number : number;
 
@@ -160,6 +170,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
 
             length = charIndex;
+            prevLength = length;
+            hasChanged = true;
             return charArray;
         }
     }

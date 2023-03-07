@@ -4,8 +4,11 @@ using UnityEngine;
 namespace ArcCreate.Utilities.Lua
 {
     [MoonSharpUserData]
-    public class XY
+    public struct XY
     {
+        public float X;
+        public float Y;
+
         public XY(float x, float y)
         {
             X = x;
@@ -23,10 +26,6 @@ namespace ArcCreate.Utilities.Lua
             X = v.x;
             Y = v.y;
         }
-
-        public float X { get; set; }
-
-        public float Y { get; set; }
 
         public static XY operator +(XY xy1, XY xy2)
         {

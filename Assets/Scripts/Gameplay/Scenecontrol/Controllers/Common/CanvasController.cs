@@ -8,6 +8,26 @@ namespace ArcCreate.Gameplay.Scenecontrol
     [EmmyDoc("Controller for a canvas")]
     public class CanvasController : Controller, ILayerController, IPositionController, IRectController
     {
+        private StringChannel layer;
+        private ValueChannel sort;
+        private ValueChannel alpha;
+        private ValueChannel translationX;
+        private ValueChannel translationY;
+        private ValueChannel translationZ;
+        private ValueChannel rotationX;
+        private ValueChannel rotationY;
+        private ValueChannel rotationZ;
+        private ValueChannel scaleX;
+        private ValueChannel scaleY;
+        private ValueChannel scaleZ;
+        private ValueChannel rectW;
+        private ValueChannel rectH;
+        private ValueChannel anchorMinX;
+        private ValueChannel anchorMinY;
+        private ValueChannel anchorMaxY;
+        private ValueChannel pivotX;
+        private ValueChannel pivotY;
+        private ValueChannel anchorMaxX;
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private Canvas canvas;
         [SerializeField] private RectTransform rectTransform;
@@ -34,49 +54,215 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         [MoonSharpHidden] public Vector2 DefaultPivot { get; private set; }
 
-        public StringChannel Layer { get; set; }
+        public StringChannel Layer
+        {
+            get => layer;
+            set
+            {
+                layer = value;
+                EnableLayerModule = true;
+            }
+        }
 
-        public ValueChannel Sort { get; set; }
+        public ValueChannel Sort
+        {
+            get => sort;
+            set
+            {
+                sort = value;
+                EnableLayerModule = true;
+            }
+        }
 
-        public ValueChannel Alpha { get; set; }
+        public ValueChannel Alpha
+        {
+            get => alpha;
+            set
+            {
+                alpha = value;
+                EnableLayerModule = true;
+            }
+        }
 
-        public ValueChannel TranslationX { get; set; }
+        public ValueChannel TranslationX
+        {
+            get => translationX;
+            set
+            {
+                translationX = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel TranslationY { get; set; }
+        public ValueChannel TranslationY
+        {
+            get => translationY;
+            set
+            {
+                translationY = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel TranslationZ { get; set; }
+        public ValueChannel TranslationZ
+        {
+            get => translationZ;
+            set
+            {
+                translationZ = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel RotationX { get; set; }
+        public ValueChannel RotationX
+        {
+            get => rotationX;
+            set
+            {
+                rotationX = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel RotationY { get; set; }
+        public ValueChannel RotationY
+        {
+            get => rotationY;
+            set
+            {
+                rotationY = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel RotationZ { get; set; }
+        public ValueChannel RotationZ
+        {
+            get => rotationZ;
+            set
+            {
+                rotationZ = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel ScaleX { get; set; }
+        public ValueChannel ScaleX
+        {
+            get => scaleX;
+            set
+            {
+                scaleX = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel ScaleY { get; set; }
+        public ValueChannel ScaleY
+        {
+            get => scaleY;
+            set
+            {
+                scaleY = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel ScaleZ { get; set; }
+        public ValueChannel ScaleZ
+        {
+            get => scaleZ;
+            set
+            {
+                scaleZ = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel RectW { get; set; }
+        public ValueChannel RectW
+        {
+            get => rectW;
+            set
+            {
+                rectW = value;
+                EnableRectModule = true;
+            }
+        }
 
-        public ValueChannel RectH { get; set; }
+        public ValueChannel RectH
+        {
+            get => rectH;
+            set
+            {
+                rectH = value;
+                EnableRectModule = true;
+            }
+        }
 
-        public ValueChannel AnchorMinX { get; set; }
+        public ValueChannel AnchorMinX
+        {
+            get => anchorMinX;
+            set
+            {
+                anchorMinX = value;
+                EnableRectModule = true;
+            }
+        }
 
-        public ValueChannel AnchorMinY { get; set; }
+        public ValueChannel AnchorMinY
+        {
+            get => anchorMinY;
+            set
+            {
+                anchorMinY = value;
+                EnableRectModule = true;
+            }
+        }
 
-        public ValueChannel AnchorMaxX { get; set; }
+        public ValueChannel AnchorMaxX
+        {
+            get => anchorMaxX;
+            set
+            {
+                anchorMaxX = value;
+                EnableRectModule = true;
+            }
+        }
 
-        public ValueChannel AnchorMaxY { get; set; }
+        public ValueChannel AnchorMaxY
+        {
+            get => anchorMaxY;
+            set
+            {
+                anchorMaxY = value;
+                EnableRectModule = true;
+            }
+        }
 
-        public ValueChannel PivotX { get; set; }
+        public ValueChannel PivotX
+        {
+            get => pivotX;
+            set
+            {
+                pivotX = value;
+                EnableRectModule = true;
+            }
+        }
 
-        public ValueChannel PivotY { get; set; }
+        public ValueChannel PivotY
+        {
+            get => pivotY;
+            set
+            {
+                pivotY = value;
+                EnableRectModule = true;
+            }
+        }
 
         [MoonSharpHidden] public Canvas Canvas => canvas;
 
         [MoonSharpHidden] public RectTransform RectTransform => rectTransform;
+
+        public bool EnableLayerModule { get; set; }
+
+        public bool EnablePositionModule { get; set; }
+
+        public bool EnableRectModule { get; set; }
 
         [MoonSharpHidden]
         public override void SetupDefault()

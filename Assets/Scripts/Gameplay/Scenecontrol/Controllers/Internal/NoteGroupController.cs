@@ -1,5 +1,4 @@
 using ArcCreate.Gameplay.Chart;
-using ArcCreate.Utilities.Lua;
 using EmmySharp;
 using MoonSharp.Interpreter;
 using UnityEngine;
@@ -10,55 +9,272 @@ namespace ArcCreate.Gameplay.Scenecontrol
     [EmmyDoc("Controller for a timing group")]
     public class NoteGroupController : Controller, IPositionController, INoteGroupController, IColorController
     {
+        private ValueChannel translationX;
+        private ValueChannel translationY;
+        private ValueChannel translationZ;
+        private ValueChannel rotationX;
+        private ValueChannel rotationY;
+        private ValueChannel rotationZ;
+        private ValueChannel scaleX;
+        private ValueChannel scaleY;
+        private ValueChannel scaleZ;
+        private ValueChannel colorR;
+        private ValueChannel colorG;
+        private ValueChannel colorB;
+        private ValueChannel colorH;
+        private ValueChannel colorV;
+        private ValueChannel colorA;
+        private ValueChannel colorS;
+        private ValueChannel angleX;
+        private ValueChannel angleY;
+        private ValueChannel rotationIndividualX;
+        private ValueChannel rotationIndividualY;
+        private ValueChannel rotationIndividualZ;
+        private ValueChannel scaleIndividualX;
+        private ValueChannel scaleIndividualY;
+        private ValueChannel scaleIndividualZ;
+
         [MoonSharpHidden] public TimingGroup TimingGroup { get; set; }
 
-        public ValueChannel TranslationX { get; set; }
+        public ValueChannel TranslationX
+        {
+            get => translationX;
+            set
+            {
+                translationX = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel TranslationY { get; set; }
+        public ValueChannel TranslationY
+        {
+            get => translationY;
+            set
+            {
+                translationY = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel TranslationZ { get; set; }
+        public ValueChannel TranslationZ
+        {
+            get => translationZ;
+            set
+            {
+                translationZ = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel RotationX { get; set; }
+        public ValueChannel RotationX
+        {
+            get => rotationX;
+            set
+            {
+                rotationX = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel RotationY { get; set; }
+        public ValueChannel RotationY
+        {
+            get => rotationY;
+            set
+            {
+                rotationY = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel RotationZ { get; set; }
+        public ValueChannel RotationZ
+        {
+            get => rotationZ;
+            set
+            {
+                rotationZ = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel ScaleX { get; set; }
+        public ValueChannel ScaleX
+        {
+            get => scaleX;
+            set
+            {
+                scaleX = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel ScaleY { get; set; }
+        public ValueChannel ScaleY
+        {
+            get => scaleY;
+            set
+            {
+                scaleY = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel ScaleZ { get; set; }
+        public ValueChannel ScaleZ
+        {
+            get => scaleZ;
+            set
+            {
+                scaleZ = value;
+                EnablePositionModule = true;
+            }
+        }
 
-        public ValueChannel AngleX { get; set; }
+        public ValueChannel AngleX
+        {
+            get => angleX;
+            set
+            {
+                angleX = value;
+                EnableNoteGroupModule = true;
+            }
+        }
 
-        public ValueChannel AngleY { get; set; }
+        public ValueChannel AngleY
+        {
+            get => angleY;
+            set
+            {
+                angleY = value;
+                EnableNoteGroupModule = true;
+            }
+        }
 
-        public ValueChannel RotationIndividualX { get; set; }
+        public ValueChannel RotationIndividualX
+        {
+            get => rotationIndividualX;
+            set
+            {
+                rotationIndividualX = value;
+                EnableNoteGroupModule = true;
+            }
+        }
 
-        public ValueChannel RotationIndividualY { get; set; }
+        public ValueChannel RotationIndividualY
+        {
+            get => rotationIndividualY;
+            set
+            {
+                rotationIndividualY = value;
+                EnableNoteGroupModule = true;
+            }
+        }
 
-        public ValueChannel RotationIndividualZ { get; set; }
+        public ValueChannel RotationIndividualZ
+        {
+            get => rotationIndividualZ;
+            set
+            {
+                rotationIndividualZ = value;
+                EnableNoteGroupModule = true;
+            }
+        }
 
-        public ValueChannel ScaleIndividualX { get; set; }
+        public ValueChannel ScaleIndividualX
+        {
+            get => scaleIndividualX;
+            set
+            {
+                scaleIndividualX = value;
+                EnableNoteGroupModule = true;
+            }
+        }
 
-        public ValueChannel ScaleIndividualY { get; set; }
+        public ValueChannel ScaleIndividualY
+        {
+            get => scaleIndividualY;
+            set
+            {
+                scaleIndividualY = value;
+                EnableNoteGroupModule = true;
+            }
+        }
 
-        public ValueChannel ScaleIndividualZ { get; set; }
+        public ValueChannel ScaleIndividualZ
+        {
+            get => scaleIndividualZ;
+            set
+            {
+                scaleIndividualZ = value;
+                EnableNoteGroupModule = true;
+            }
+        }
 
-        public ValueChannel ColorR { get; set; }
+        public ValueChannel ColorR
+        {
+            get => colorR;
+            set
+            {
+                colorR = value;
+                EnableColorModule = true;
+            }
+        }
 
-        public ValueChannel ColorG { get; set; }
+        public ValueChannel ColorG
+        {
+            get => colorG;
+            set
+            {
+                colorG = value;
+                EnableColorModule = true;
+            }
+        }
 
-        public ValueChannel ColorB { get; set; }
+        public ValueChannel ColorB
+        {
+            get => colorB;
+            set
+            {
+                colorB = value;
+                EnableColorModule = true;
+            }
+        }
 
-        public ValueChannel ColorH { get; set; }
+        public ValueChannel ColorH
+        {
+            get => colorH;
+            set
+            {
+                colorH = value;
+                EnableColorModule = true;
+            }
+        }
 
-        public ValueChannel ColorS { get; set; }
+        public ValueChannel ColorS
+        {
+            get => colorS;
+            set
+            {
+                colorS = value;
+                EnableColorModule = true;
+            }
+        }
 
-        public ValueChannel ColorV { get; set; }
+        public ValueChannel ColorV
+        {
+            get => colorV;
+            set
+            {
+                colorV = value;
+                EnableColorModule = true;
+            }
+        }
 
-        public ValueChannel ColorA { get; set; }
+        public ValueChannel ColorA
+        {
+            get => colorA;
+            set
+            {
+                colorA = value;
+                EnableColorModule = true;
+            }
+        }
 
         [MoonSharpHidden] public Vector3 DefaultTranslation => Vector3.zero;
 
@@ -67,6 +283,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [MoonSharpHidden] public Vector3 DefaultScale => Vector3.one;
 
         [MoonSharpHidden] public Color DefaultColor => Color.white;
+
+        public bool EnablePositionModule { get; set; }
+
+        public bool EnableNoteGroupModule { get; set; }
+
+        public bool EnableColorModule { get; set; }
 
         [MoonSharpHidden]
         public void UpdateColor(Color color)
@@ -95,7 +317,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         protected override void SetActive(bool active)
         {
             base.SetActive(active);
-            TimingGroup.GroupProperties.Visible = active;
+            TimingGroup.GroupProperties.Visible = gameObject.activeInHierarchy;
         }
     }
 }
