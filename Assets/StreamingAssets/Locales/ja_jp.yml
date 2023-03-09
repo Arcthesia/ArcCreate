@@ -116,11 +116,14 @@ Compose:
         無効なキーストローク: キーストロークに使える修飾キーは2つまでに制限されています: "{0}"
       InvalidActionPath: |-
         無効なアクションパス: 文字列"{0}"をアクションに変換できません。不明なアクションパスです。
-    Scenecontrol: |-
-      Error occured while executing scenecontrol event of type {Type}: {Message}
+    Scenecontrol: |- # (?) 後で実際に使ってみて見直す
+      SceneControl "{0}"を実行中にエラーが発生しました。
+      詳細: {Message}
       {StackTrace}
     LuaScript: |-
-      Error occured while executing lua script {Path}: {Message}
+      Luaスクリプトを実行中にエラーが発生しました。
+      ファイル: {Path}
+      詳細: {Message}
       {StackTrace}
 
   # Notification messages
@@ -137,9 +140,9 @@ Compose:
       O: 右回転
       Esc: キャンセル
       Enter: 確定
-    EmmyLuaGenerated: |-
-      EmmyLua template for scenecontrol generated at the current project's folder
-      Use VsCode with the extension tangzx.emmylua to get autocompletion
+    EmmyLuaGenerated: |- # (?) もっといい訳を考える
+      EmmyLuaテンプレートをプロジェクトフォルダに生成しました。
+      VSCodeで拡張機能"tangzx.emmylua"を使って補完が利用できます。
     Actions:
       CannotMirror: 選択中のノーツをミラーできませんでした。
       NoDragRange: 選択中のノーツのタイミングをドラッグできませんでした。個別にドラッグしてみてください。
@@ -157,9 +160,9 @@ Compose:
       AddCamera: Cameraイベントを追加
       EditCamera: Cameraイベントを編集
       RemoveCamera: Cameraイベントを削除
-      AddScenecontrol: Add scenecontrol event
-      EditScenecontrol: Edit scenecontrol event
-      RemoveScenecontrol: Remove scenecontrol event
+      AddScenecontrol: SceneControlイベントを追加
+      EditScenecontrol: SceneControlイベントを編集
+      RemoveScenecontrol: SceneControlイベントを削除
       EditValue: ノーツのプロパティを編集
       EditArc: Arcのプロパティを編集
       CreateNote:
@@ -411,9 +414,9 @@ Compose:
         DeleteGroup: 削除
         AddEvent: 追加
         DeleteEvent: 削除
-        AutoReload: Reload automatically
-        GenerateEmmyLua: Generate EmmyLua
-        Reload: Reload
+        AutoReload: 自動再読み込み
+        GenerateEmmyLua: EmmyLuaファイルを生成 # (?)
+        Reload: 再読み込み
         FreeCamera: フリー
       CameraView:
         Default: '視点: デフォルト'
@@ -502,16 +505,16 @@ Compose:
 
 Remote:
   Exception:
-    InvalidIP: Invalid IP address
+    InvalidIP: 無効なIPアドレス。
   State:
     Listening: |-
       ブロードキャストを待機中……
       <size=20>
       PCのArcCreateから"Remote"タブを開いて「ブロードキャストを開始」ボタンを押してください。</size>
     ManualIP: |-
-      Waiting for connection from desktop client.
+      PCのArcCreateからの接続を待機中……
       <size=20>
-      On your desktop ArcCreate client, open "Remote" tab and enter the IP address: {0}.</size>
+      PCのArcCreateから"Remote"タブを開いてIPアドレス「{0}」を入力してください。</size>
     Found: |-
       以下のデバイスからブロードキャストを受信しました。
       リストからデバイスを選んでください。
@@ -535,7 +538,7 @@ Remote:
     BroadcastAgain: 再送信
     StopSession: セッションを終了
     StartNewSession: 新しいセッションを開始
-    ManualIP: Manually set up connection
+    ManualIP: マニュアルで接続する
   Control:
     Name: Control
     Sync:
@@ -547,9 +550,9 @@ Remote:
       Background: 背景
       Metadata: メタデータ
     Settings:
-      Name: Settings
-      Offset: Device offset
-      Speed: Device speed
+      Name: プレイ設定
+      Offset: オフセット
+      Speed: 譜面速度
     StartTiming: 開始タイミング
     EndTiming: 終了タイミング
     Loop: ループ再生
@@ -575,7 +578,8 @@ Gameplay:
       ファイル: "{Path}"
       {Error}
     Scenecontrol: |-
-      An error occured while trying to load scenecontrol json located at {Path}.
+      SceneControlデータの読み込み中にエラーが発生しました。
+      ファイル: "{Path}"
       {Error}
   HUD: # (?) 用途不明
     Play: プレイ
