@@ -34,11 +34,7 @@ namespace ArcCreate.Compose.Grid
                     currentTiming.Bpm == 0 ?
                     float.MaxValue :
                     60000f / Mathf.Abs(currentTiming.Bpm) / Values.BeatlineDensity.Value;
-
-                if (distanceBetweenTwoLine <= 0)
-                {
-                    continue;
-                }
+                distanceBetweenTwoLine = Mathf.Max(distanceBetweenTwoLine, 1);
 
                 int count = 0;
                 for (float timing = currentTiming.Timing; timing < limit; timing += distanceBetweenTwoLine)
@@ -67,20 +63,18 @@ namespace ArcCreate.Compose.Grid
                     lastTiming.Bpm == 0 ?
                     float.MaxValue :
                     60000f / Mathf.Abs(lastTiming.Bpm) / Values.BeatlineDensity.Value;
+                distanceBetweenTwoLine = Mathf.Max(distanceBetweenTwoLine, 1);
 
-                if (distanceBetweenTwoLine > 0)
+                int count = 0;
+                for (float timing = lastTiming.Timing; timing <= limit; timing += distanceBetweenTwoLine)
                 {
-                    int count = 0;
-                    for (float timing = lastTiming.Timing; timing <= limit; timing += distanceBetweenTwoLine)
-                    {
-                        Color beatlineColor = ResolveColor(count, Values.BeatlineDensity.Value);
-                        yield return new Beatline(
-                            Mathf.RoundToInt(timing),
-                            tg.GetFloorPosition(Mathf.RoundToInt(timing)),
-                            Values.EditorBeatlineThickness,
-                            beatlineColor);
-                        count++;
-                    }
+                    Color beatlineColor = ResolveColor(count, Values.BeatlineDensity.Value);
+                    yield return new Beatline(
+                        Mathf.RoundToInt(timing),
+                        tg.GetFloorPosition(Mathf.RoundToInt(timing)),
+                        Values.EditorBeatlineThickness,
+                        beatlineColor);
+                    count++;
                 }
             }
         }

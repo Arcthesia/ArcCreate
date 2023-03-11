@@ -62,8 +62,8 @@ namespace ArcCreate.Gameplay.Judgement.Input
                     Vector3 deltaToNote = screenPosition - input.ScreenPos;
                     float distanceToNote = deltaToNote.sqrMagnitude;
 
-                    if (timingDifference < minTimingDifference
-                     || (distanceToNote <= minPositionDifference && LaneCollide(input, screenPosition, req.Lane)))
+                    if (LaneCollide(input, screenPosition, req.Lane)
+                    && (timingDifference < minTimingDifference || distanceToNote <= minPositionDifference))
                     {
                         minTimingDifference = timingDifference;
                         minPositionDifference = distanceToNote;
@@ -91,8 +91,8 @@ namespace ArcCreate.Gameplay.Judgement.Input
                     Vector3 deltaToNote = screenPosition - input.ScreenPos;
                     float distanceToNote = deltaToNote.sqrMagnitude;
 
-                    if (timingDifference < minTimingDifference
-                    || (distanceToNote <= minPositionDifference && ArcTapCollide(input.ScreenPos, screenPosition)))
+                    if (ArcTapCollide(input.ScreenPos, screenPosition)
+                    && (timingDifference < minTimingDifference || distanceToNote <= minPositionDifference))
                     {
                         minTimingDifference = timingDifference;
                         minPositionDifference = distanceToNote;

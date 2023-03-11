@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using ArcCreate.Utility.Extension;
 using EmmySharp;
 using MoonSharp.Interpreter;
 
@@ -16,6 +15,15 @@ namespace ArcCreate.Gameplay.Scenecontrol
         private string defaultEasingString;
         private bool transitionFromFirstDifference = true;
         private char[] charArray;
+        private int prevIndex = int.MinValue;
+        private int prevStringBlend;
+        private bool readOnce;
+
+        public KeyTextChannel()
+        {
+            keySearch = new CachedBinarySearch<TextKey, int>(new List<TextKey>(), k => k.Timing, this);
+            keys = keySearch.List;
+        }
 
         public KeyTextChannel()
         {
@@ -77,23 +85,31 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return this;
         }
 
-        public override char[] ValueAt(int timing, out int length)
+        public override char[] ValueAt(int timing, out int length, out bool hasChanged)
         {
             if (keys.Count == 0)
             {
                 length = 0;
+                hasChanged = !readOnce;
+                readOnce = true;
                 return charArray;
             }
 
             if (keys.Count == 1 || timing <= keys[0].Timing)
             {
                 length = keys[0].Value.Length;
+                hasChanged = prevIndex == 0 && prevStringBlend == 0;
+                prevIndex = 0;
+                prevStringBlend = 0;
                 return keys[0].Value;
             }
 
             if (timing >= keys[keys.Count - 1].Timing)
             {
                 length = keys[keys.Count - 1].Value.Length;
+                hasChanged = prevIndex == keys.Count - 1 && prevStringBlend == 0;
+                prevIndex = keys.Count - 1;
+                prevStringBlend = 0;
                 return keys[keys.Count - 1].Value;
             }
 
@@ -107,6 +123,9 @@ namespace ArcCreate.Gameplay.Scenecontrol
             {
                 TextKey outp = key1.OverrideIndex > key2.OverrideIndex ? key1 : key2;
                 length = outp.Value.Length;
+                hasChanged = prevIndex == keys.Count - 1 && prevStringBlend == 0;
+                prevIndex = keys.Count - 1;
+                prevStringBlend = 0;
                 return outp.Value;
             }
 
@@ -127,6 +146,9 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 length = key2.TransitionFrom - stringBlend;
             }
 
+            hasChanged = stringBlend == prevStringBlend && index == prevIndex;
+            prevIndex = index;
+            prevStringBlend = stringBlend;
             return charArray;
         }
 

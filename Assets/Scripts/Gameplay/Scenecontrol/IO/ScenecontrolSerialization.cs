@@ -90,6 +90,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 // String channels
                 case KeyStringChannel keystring:
                     return "channel.string.key";
+                case ConstantTextChannel constanttext:
+                    return "channel.text.constant";
                 case KeyTextChannel keytext:
                     return "channel.text.key";
                 case ConcatTextChannel concat:

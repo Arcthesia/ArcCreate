@@ -28,8 +28,6 @@ namespace ArcCreate.Gameplay
         [SerializeField] private Camera arcCamera;
         [SerializeField] private Camera uiCamera;
         [SerializeField] private string testPlayChartFileName = "test_chart.aff";
-        private const float OrientationCheckInterval = 2f;
-        private float nextOrientationCheckTime;
 
         public bool ShouldUpdateInputSystem
         {

@@ -22937,7 +22937,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 7aa8a800795d9664a864b2be473b4518, type: 3}
-    m_FontSize: 0
+    m_FontSize: -15
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -38662,6 +38662,26 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &945916951 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5283801741898608176, guid: 9ed3984a4492e324da168e94325c1e58,
+    type: 3}
+  m_PrefabInstance: {fileID: 653369295}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &945916952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 945916951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32ed771c5ecb9c0b803c7385241b686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: Remote.Control.ManualIP
+  readIdFromContent: 0
 --- !u!1001 &946965109
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39949,7 +39969,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 7aa8a800795d9664a864b2be473b4518, type: 3}
-    m_FontSize: 0
+    m_FontSize: -15
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -46764,7 +46784,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000030517578}
+  m_AnchoredPosition: {x: 0, y: 0.000061035156}
   m_SizeDelta: {x: 0, y: 380}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1137713762
@@ -48204,6 +48224,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Text
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5283801742262788888, guid: 9ed3984a4492e324da168e94325c1e58,
+        type: 3}
+      propertyPath: m_LineType
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5283801742262788889, guid: 9ed3984a4492e324da168e94325c1e58,
         type: 3}
@@ -58944,8 +58969,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 181.85712, y: 0}
+  m_SizeDelta: {x: 363.71423, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1505927680
 MonoBehaviour:
@@ -60112,8 +60137,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 215.2657, y: 0}
+  m_SizeDelta: {x: 276.89703, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1554505476
 MonoBehaviour:

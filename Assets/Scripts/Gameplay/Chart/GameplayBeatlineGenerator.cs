@@ -23,20 +23,24 @@ namespace ArcCreate.Gameplay.Chart
 
                 float start = -3000 - Values.ChartAudioOffset - Settings.GlobalAudioOffset.Value;
 
-                float distanceBetweenTwoLine =
-                    firstTiming.Bpm == 0 ?
-                    float.MaxValue :
-                    60000f / Mathf.Abs(firstTiming.Bpm) * firstTiming.Divisor;
-
-                if (distanceBetweenTwoLine > 0)
+                if (firstTiming.Bpm <= 10000)
                 {
-                    for (float timing = 0; timing >= start; timing -= distanceBetweenTwoLine)
+                    float distanceBetweenTwoLine =
+                        firstTiming.Bpm == 0 ?
+                        float.MaxValue :
+                        60000f / Mathf.Abs(firstTiming.Bpm) * firstTiming.Divisor;
+                    distanceBetweenTwoLine = Mathf.Max(distanceBetweenTwoLine, 1);
+
+                    if (distanceBetweenTwoLine > 0)
                     {
-                        yield return new Beatline(
-                            Mathf.RoundToInt(timing),
-                            tg.GetFloorPosition(Mathf.RoundToInt(timing)),
-                            Values.BeatlineThickness,
-                            beatlineColor);
+                        for (float timing = 0; timing >= start; timing -= distanceBetweenTwoLine)
+                        {
+                            yield return new Beatline(
+                                Mathf.RoundToInt(timing),
+                                tg.GetFloorPosition(Mathf.RoundToInt(timing)),
+                                Values.BeatlineThickness,
+                                beatlineColor);
+                        }
                     }
                 }
             }
@@ -46,10 +50,16 @@ namespace ArcCreate.Gameplay.Chart
                 TimingEvent currentTiming = timings[i];
                 int limit = timings[i + 1].Timing;
 
+                if (currentTiming.Bpm > 10000)
+                {
+                    continue;
+                }
+
                 float distanceBetweenTwoLine =
                     currentTiming.Bpm == 0 ?
                     float.MaxValue :
                     60000f / Mathf.Abs(currentTiming.Bpm) * currentTiming.Divisor;
+                distanceBetweenTwoLine = Mathf.Max(distanceBetweenTwoLine, 1);
 
                 if (distanceBetweenTwoLine <= 0)
                 {
@@ -71,20 +81,24 @@ namespace ArcCreate.Gameplay.Chart
                 TimingEvent lastTiming = timings[timings.Count - 1];
                 int limit = audioLength;
 
-                float distanceBetweenTwoLine =
-                    lastTiming.Bpm == 0 ?
-                    float.MaxValue :
-                    60000f / Mathf.Abs(lastTiming.Bpm) * lastTiming.Divisor;
-
-                if (distanceBetweenTwoLine > 0)
+                if (lastTiming.Bpm <= 10000)
                 {
-                    for (float timing = lastTiming.Timing; timing <= limit; timing += distanceBetweenTwoLine)
+                    float distanceBetweenTwoLine =
+                        lastTiming.Bpm == 0 ?
+                        float.MaxValue :
+                        60000f / Mathf.Abs(lastTiming.Bpm) * lastTiming.Divisor;
+                    distanceBetweenTwoLine = Mathf.Max(distanceBetweenTwoLine, 1);
+
+                    if (distanceBetweenTwoLine > 0)
                     {
-                        yield return new Beatline(
-                            Mathf.RoundToInt(timing),
-                            tg.GetFloorPosition(Mathf.RoundToInt(timing)),
-                            Values.BeatlineThickness,
-                            beatlineColor);
+                        for (float timing = lastTiming.Timing; timing <= limit; timing += distanceBetweenTwoLine)
+                        {
+                            yield return new Beatline(
+                                Mathf.RoundToInt(timing),
+                                tg.GetFloorPosition(Mathf.RoundToInt(timing)),
+                                Values.BeatlineThickness,
+                                beatlineColor);
+                        }
                     }
                 }
             }

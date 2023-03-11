@@ -22,7 +22,7 @@ namespace SFB
         static StandaloneFileBrowser()
         {
 #if UNITY_EDITOR
-            _platformWrapper = new StandaloneFileBrowserEditor();
+            _platformWrapper = new StandaloneFileBrowserLinux();
 #elif UNITY_STANDALONE_WIN
             _platformWrapper = new StandaloneFileBrowserWindows();
 #elif UNITY_STANDALONE_OSX

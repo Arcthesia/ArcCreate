@@ -11,16 +11,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public abstract string ValueAt(int timing);
 
         [MoonSharpHidden]
-        public void Reset()
-        {
-        }
-
-        [MoonSharpHidden]
-        public void Destroy()
-        {
-        }
-
-        [MoonSharpHidden]
         public abstract List<object> SerializeProperties(ScenecontrolSerialization serialization);
 
         [MoonSharpHidden]

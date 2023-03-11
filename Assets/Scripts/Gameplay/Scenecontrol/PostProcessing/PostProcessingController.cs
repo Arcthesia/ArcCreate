@@ -50,16 +50,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
         }
 
         [MoonSharpHidden]
-        void ISerializableUnit.Reset()
-        {
-        }
-
-        [MoonSharpHidden]
-        public void Destroy()
-        {
-        }
-
-        [MoonSharpHidden]
         public abstract List<object> SerializeProperties(ScenecontrolSerialization serialization);
 
         [MoonSharpHidden]

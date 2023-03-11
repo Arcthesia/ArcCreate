@@ -58,16 +58,18 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return result;
         }
 
-        public override char[] ValueAt(int timing, out int length)
+        public override char[] ValueAt(int timing, out int length, out bool hasChanged)
         {
             length = 0;
             EnsureArraySize();
+            hasChanged = false;
             for (int i = 0; i < components.Count; i++)
             {
                 TextChannel c = components[i];
-                char[] partial = c.ValueAt(timing, out int partialLength);
+                char[] partial = c.ValueAt(timing, out int partialLength, out bool partialHasChanged);
                 Array.Copy(partial, 0, charArray, length, partialLength);
                 length += partialLength;
+                hasChanged = hasChanged || partialHasChanged;
             }
 
             return charArray;
