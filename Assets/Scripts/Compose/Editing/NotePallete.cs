@@ -246,7 +246,6 @@ namespace ArcCreate.Compose.Editing
             if (selectedArcs.Count > 0)
             {
                 ModifySelectedArcs(a => a.LineType = type, a => a.LineType != type);
-                return;
             }
 
             Values.CreateArcTypeMode.Value = type;

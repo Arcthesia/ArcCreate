@@ -86,7 +86,13 @@ Compose:
         Pulsación de teclas no válida: la pulsación de teclas "{0}" tiene demasiados modicadores (máximo es 2).
       InvalidActionPath: |-
         Ruta de acción no válida: la cadena "{0}" no coincide con ninguna acción.
-          
+    Scenecontrol: |-
+      Ha ocurrido un error mientras se ejecutaba evento de escena de tipo {Type}: {Message}
+      {StackTrace}
+    LuaScript: |-
+      Ha ocurrido un error mientras se ejecutada el script Lua {Path}: {Message}
+      {StackTrace}
+      
   # Notification messages
   Notify:
     GameplayLoaded: Escena de juego cargada con éxito
@@ -101,6 +107,9 @@ Compose:
       O: Rodar hacia la derecha
       Esc: Cancelar
       Enter: Confirmar
+    EmmyLuaGenerated: |-
+      Plantilla EmmyLua de escena generada en la carpeta de proyecto actual
+      Usa VsCode con la extensión tangzx.emmylua para obtener el autocompletado  
     Actions:
       CannotMirror: No se pueden voltear ninguna de las notas seleccionadas.
       NoDragRange: No se pueden arrastrar el tiempo de las notas seleccionado. Intenta arrastrar las notas por separado.
@@ -118,6 +127,9 @@ Compose:
       AddCamera: Añadir evento de cámara
       EditCamera: Editar evento de cámara
       RemoveCamera: Quitar evento de cámara
+      AddScenecontrol: Añadir evento de escena
+      EditScenecontrol: Editar evento de escena
+      RemoveScenecontrol: Quitar evento de escena
       EditValue: Editar valores de las notas seleccionadas
       EditArc: Editar valores del arco
       CreateNote:
@@ -367,6 +379,9 @@ Compose:
         DeleteGroup: Eliminar grupo
         AddEvent: <size=10>Añadir evento</size>
         DeleteEvent: <size=10>Eliminar evento</size>
+        AutoReload: <size=10>Recargar automáticamente</size>
+        GenerateEmmyLua: Generar EmmyLua
+        Reload: Recargar
         FreeCamera: Cámara libre
       CameraView:
         Default: Vista predeterminada
@@ -454,11 +469,17 @@ Compose:
         SelectArctap: Selecciona notas flotantes
 
 Remote:
+  Exception:
+    InvalidIP: Dirección IP no válida
   State:
     Listening: |-
       Esperando transmisión...
       <size=20>
       En tu cliente de escritorio ArcCreate, abre la pestaña "Remoto" y pulsa "Empezar transmisión" para comenzar.</size>
+    ManualIP: |-
+      Esperando conexión desde el cliente de escritorio.
+      <size=20>
+      En tu cliente de escritorio ArcCreate, abre la pestaña "Remoto" e introduce la dirección IP: {0}.</size>  
     Found: |-
       Transmisión recibida desde el/los siguiente(s) dispositivo(s).
       Selecciona un dispositivo para continuar.
@@ -482,6 +503,7 @@ Remote:
     BroadcastAgain: <size=10>Transmitir de nuevo</size>
     StopSession: Detener sesión
     StartNewSession: Iniciar nueva sesión
+    ManualIP: Configurar conexión manualmente
   Control:
     Name: Control
     Sync:
@@ -492,7 +514,10 @@ Remote:
       Jacket: Carátula
       Background: Fondo
       Metadata: Metadatos
-      Settings: Desplazamiento y velocidad
+    Settings:
+      Name: Ajustes del dispositivo
+      Offset: <size=11>Desplazamiento</size>
+      Speed: <size=12>Velocidad</size>
     StartTiming: Reproducir desde tiempo
     EndTiming: Reproducir hasta tiempo      
     Loop: Reproducir en bucle
@@ -514,6 +539,9 @@ Gameplay:
     Skin: |-
       Ha ocurrido un error mientras se intentaba cargar la imagen localizada en {Path}.
       {Error}
+    Scenecontrol: |-
+      Ha ocurrido un error mientras se intentaba cargar la escena json localizada en {Path}.
+      {Error}  
   HUD:
     Play: Jugar
     Retry: Reintentar

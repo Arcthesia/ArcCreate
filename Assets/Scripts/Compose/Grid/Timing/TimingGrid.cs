@@ -23,7 +23,7 @@ namespace ArcCreate.Compose.Grid
         {
             int index = timingList.BisectLeft(sourceTiming);
             index -= 1;
-            if (index < 0 || index > timingList.Count)
+            if (index < 0 || index >= timingList.Count)
             {
                 return sourceTiming;
             }
@@ -34,7 +34,7 @@ namespace ArcCreate.Compose.Grid
         public int MoveTimingForward(int sourceTiming)
         {
             int index = timingList.BisectRight(sourceTiming);
-            if (index < 0 || index > timingList.Count)
+            if (index < 0 || index >= timingList.Count)
             {
                 return sourceTiming;
             }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Cysharp.Threading.Tasks;
@@ -44,7 +45,8 @@ namespace ArcCreate.Compose.Components
 
         private async UniTask StartLoadingImage(string path)
         {
-            using (UnityWebRequest request = UnityWebRequestTexture.GetTexture("file://" + path))
+            using (UnityWebRequest request = UnityWebRequestTexture.GetTexture(
+                Uri.EscapeUriString("file:///" + path.Replace("\\", "/"))))
             {
                 await request.SendWebRequest();
                 if (string.IsNullOrEmpty(request.error))

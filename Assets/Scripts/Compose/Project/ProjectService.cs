@@ -102,7 +102,7 @@ namespace ArcCreate.Compose.Project
 
             ProjectSettings projectSettings = new ProjectSettings()
             {
-                Path = info.ProjectFile.FullPath,
+                Path = projPath,
                 LastOpenedChartPath = info.StartingChartPath,
                 Charts = new List<ChartSettings>() { chart },
             };
@@ -348,6 +348,11 @@ namespace ArcCreate.Compose.Project
 
             if (!File.Exists(path))
             {
+                if (!Directory.Exists(Path.GetDirectoryName(path)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(path));
+                }
+
                 var writer = ChartFileWriterFactory.GetWriterFromFilename(path);
                 using (FileStream fileStream = File.OpenWrite(path))
                 {
@@ -387,7 +392,7 @@ namespace ArcCreate.Compose.Project
 
         private void SerializeChart(ProjectSettings projectSettings)
         {
-            string dir = Path.GetDirectoryName(projectSettings.Path);
+            string dir = Path.Combine(Path.GetDirectoryName(projectSettings.Path), Path.GetDirectoryName(CurrentChart.ChartPath));
             var chartData = new RawEventsBuilder().GetEvents();
             new ChartSerializer(new PhysicalFileAccess(), dir).Write(
                 gameplayData.AudioOffset.Value,
