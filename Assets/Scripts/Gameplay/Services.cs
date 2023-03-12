@@ -1,6 +1,7 @@
 using ArcCreate.Gameplay.Audio;
 using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.GameplayCamera;
+using ArcCreate.Gameplay.Hitsound;
 using ArcCreate.Gameplay.InputFeedback;
 using ArcCreate.Gameplay.Judgement;
 using ArcCreate.Gameplay.Particle;
@@ -24,6 +25,7 @@ namespace ArcCreate.Gameplay
         [SerializeField] private ScoreService score;
         [SerializeField] private ScenecontrolService scenecontrol;
         [SerializeField] private RenderService render;
+        [SerializeField] private HitsoundService hitsound;
 
         public static ISkinService Skin { get; private set; }
 
@@ -45,6 +47,8 @@ namespace ArcCreate.Gameplay
 
         public static IRenderService Render { get; private set; }
 
+        public static IHitsoundService Hitsound { get; private set; }
+
         private void Awake()
         {
             Skin = skin;
@@ -57,6 +61,7 @@ namespace ArcCreate.Gameplay
             Scenecontrol = scenecontrol;
             Camera = camera;
             Render = render;
+            Hitsound = hitsound;
         }
     }
 }

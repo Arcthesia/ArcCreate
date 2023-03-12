@@ -21,18 +21,59 @@ namespace ArcCreate.Gameplay.Chart
             return timingSearch.List.BisectRight(timing, note => note.Timing);
         }
 
-        public override void Update(int timing, double floorPosition, GroupProperties groupProperties)
+        public override void UpdateJudgement(int timing, double floorPosition, GroupProperties groupProperties)
         {
-            if (Notes.Count == 0)
+            if (Notes.Count == 0 || groupProperties.NoInput)
             {
                 return;
             }
 
-            UpdateJudgement(timing, groupProperties);
-
-            if (groupProperties.Visible)
+            int judgeFrom = timing - Values.LostJudgeWindow;
+            int judgeTo = timing + Values.LostJudgeWindow;
+            int judgeIndex = timingSearch.Bisect(judgeFrom);
+            while (judgeIndex < timingSearch.List.Count)
             {
-                UpdateRender(timing, floorPosition, groupProperties);
+                Note note = timingSearch.List[judgeIndex];
+                if (note.Timing > judgeTo)
+                {
+                    break;
+                }
+
+                timingSearch.List[judgeIndex].UpdateJudgement(timing, groupProperties);
+                judgeIndex++;
+            }
+        }
+
+        public override void UpdateRender(int timing, double floorPosition, GroupProperties groupProperties)
+        {
+            if (Notes.Count == 0 || !groupProperties.Visible)
+            {
+                return;
+            }
+
+            double fpDistForward = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLengthForward));
+            double fpDistBackward = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLengthBackward));
+            double renderFrom =
+                (groupProperties.NoInput && !groupProperties.NoClip) ?
+                floorPosition :
+                floorPosition - fpDistBackward;
+            double renderTo = floorPosition + fpDistForward;
+
+            int renderIndex = floorPositionSearch.Bisect(renderFrom);
+            lastRenderingNotes.Clear();
+
+            // Update notes
+            while (renderIndex < floorPositionSearch.List.Count)
+            {
+                Note note = floorPositionSearch.List[renderIndex];
+                if (note.FloorPosition > renderTo)
+                {
+                    break;
+                }
+
+                note.UpdateRender(timing, floorPosition, groupProperties);
+                lastRenderingNotes.Add(note);
+                renderIndex++;
             }
         }
 
@@ -83,56 +124,5 @@ namespace ArcCreate.Gameplay.Chart
         }
 
         public override IEnumerable<Note> GetRenderingNotes() => lastRenderingNotes;
-
-        private void UpdateJudgement(int timing, GroupProperties groupProperties)
-        {
-            if (groupProperties.NoInput)
-            {
-                return;
-            }
-
-            int judgeFrom = timing - Values.LostJudgeWindow;
-            int judgeTo = timing + Values.LostJudgeWindow;
-            int judgeIndex = timingSearch.Bisect(judgeFrom);
-            while (judgeIndex < timingSearch.List.Count)
-            {
-                Note note = timingSearch.List[judgeIndex];
-                if (note.Timing > judgeTo)
-                {
-                    break;
-                }
-
-                timingSearch.List[judgeIndex].UpdateJudgement(timing, groupProperties);
-                judgeIndex++;
-            }
-        }
-
-        private void UpdateRender(int timing, double floorPosition, GroupProperties groupProperties)
-        {
-            double fpDistForward = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLengthForward));
-            double fpDistBackward = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLengthBackward));
-            double renderFrom =
-                (groupProperties.NoInput && !groupProperties.NoClip) ?
-                floorPosition :
-                floorPosition - fpDistBackward;
-            double renderTo = floorPosition + fpDistForward;
-
-            int renderIndex = floorPositionSearch.Bisect(renderFrom);
-            lastRenderingNotes.Clear();
-
-            // Update notes
-            while (renderIndex < floorPositionSearch.List.Count)
-            {
-                Note note = floorPositionSearch.List[renderIndex];
-                if (note.FloorPosition > renderTo)
-                {
-                    break;
-                }
-
-                note.UpdateRender(timing, floorPosition, groupProperties);
-                lastRenderingNotes.Add(note);
-                renderIndex++;
-            }
-        }
     }
 }

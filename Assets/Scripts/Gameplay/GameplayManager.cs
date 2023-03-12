@@ -132,7 +132,7 @@ namespace ArcCreate.Gameplay
 
         private void Update()
         {
-            if (!Services.Chart.IsLoaded || !Services.Render.IsLoaded || !Services.Scenecontrol.IsLoaded)
+            if (!Services.Chart.IsLoaded || !Services.Render.IsLoaded || !Services.Scenecontrol.IsLoaded || !Services.Hitsound.IsLoaded)
             {
                 return;
             }
@@ -142,8 +142,10 @@ namespace ArcCreate.Gameplay
             Services.InputFeedback.UpdateInputFeedback();
 
             int currentTiming = Services.Audio.ChartTiming;
-            Services.Chart.UpdateChart(currentTiming);
+
+            Services.Chart.UpdateChartJudgement(currentTiming);
             Services.Judgement.ProcessInput(currentTiming);
+            Services.Chart.UpdateChartRender(currentTiming);
             Services.Score.UpdateDisplay(currentTiming);
             Services.Camera.UpdateCamera(currentTiming);
             Services.Scenecontrol.UpdateScenecontrol(currentTiming);

@@ -92,7 +92,7 @@ namespace ArcCreate.Gameplay.Chart
         /// Update the group.
         /// </summary>
         /// <param name="timing">The timing to update the group to.</param>
-        public void UpdateGroup(int timing)
+        public void UpdateGroupJudgement(int timing)
         {
             if (!IsVisible)
             {
@@ -100,10 +100,24 @@ namespace ArcCreate.Gameplay.Chart
             }
 
             double floorPosition = GetFloorPosition(timing);
-            taps.Update(timing, floorPosition, groupProperties);
-            holds.Update(timing, floorPosition, groupProperties);
-            arcs.Update(timing, floorPosition, groupProperties);
-            arcTaps.Update(timing, floorPosition, groupProperties);
+            taps.UpdateJudgement(timing, floorPosition, groupProperties);
+            holds.UpdateJudgement(timing, floorPosition, groupProperties);
+            arcs.UpdateJudgement(timing, floorPosition, groupProperties);
+            arcTaps.UpdateJudgement(timing, floorPosition, groupProperties);
+        }
+
+        public void UpdateGroupRender(int timing)
+        {
+            if (!IsVisible)
+            {
+                return;
+            }
+
+            double floorPosition = GetFloorPosition(timing);
+            taps.UpdateRender(timing, floorPosition, groupProperties);
+            holds.UpdateRender(timing, floorPosition, groupProperties);
+            arcs.UpdateRender(timing, floorPosition, groupProperties);
+            arcTaps.UpdateRender(timing, floorPosition, groupProperties);
         }
 
         /// <summary>

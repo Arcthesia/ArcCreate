@@ -560,6 +560,8 @@ Remote:
       Name: Settings
       Offset: Device offset
       Speed: Device speed
+      MusicVolume: Music volume
+      EffectVolume: Effect volume
     StartTiming: Play from timing
     EndTiming: Play to timing      
     Loop: Loop playback

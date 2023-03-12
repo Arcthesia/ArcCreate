@@ -386,7 +386,7 @@ namespace ArcCreate.Compose.Project
             ChartReader reader = ChartReaderFactory.GetReader(new PhysicalFileAccess(), path);
 
             reader.Parse();
-            gameplayData.LoadChart(reader);
+            gameplayData.LoadChart(reader, "file:///" + Path.GetDirectoryName(path));
             OnChartLoad?.Invoke(chart);
             Values.ProjectModified = false;
 

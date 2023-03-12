@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -240,11 +239,14 @@ namespace ArcCreate.Gameplay.Audio
         private void Awake()
         {
             gameplayData.AudioClip.OnValueChange += OnClipLoad;
+            Settings.MusicAudio.OnValueChanged.AddListener(OnMusicAudioSettings);
+            OnMusicAudioSettings(Settings.MusicAudio.Value);
         }
 
         private void OnDestroy()
         {
             gameplayData.AudioClip.OnValueChange -= OnClipLoad;
+            Settings.MusicAudio.OnValueChanged.RemoveListener(OnMusicAudioSettings);
         }
 
         private void OnClipLoad(AudioClip clip)
@@ -258,6 +260,11 @@ namespace ArcCreate.Gameplay.Audio
             Screen.autorotateToLandscapeRight = v;
             Screen.autorotateToPortrait = v;
             Screen.autorotateToPortraitUpsideDown = v;
+        }
+
+        private void OnMusicAudioSettings(float volume)
+        {
+            audioSource.volume = Mathf.Clamp(volume, 0, 1);
         }
     }
 }

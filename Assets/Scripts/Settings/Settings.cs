@@ -15,8 +15,8 @@ namespace ArcCreate
 
         // Audio
         public static readonly IntSetting GlobalAudioOffset = new IntSetting("GlobalAudioOffset", 0);
-        public static readonly FloatSetting MusicAudio = new FloatSetting("SoundPreferences.ChartAudio", 0.7f);
-        public static readonly FloatSetting EffectAudio = new FloatSetting("SoundPreferences.EffectAudio", 0.7f);
+        public static readonly FloatSetting MusicAudio = new FloatSetting("SoundPreferences.ChartAudio", 1f);
+        public static readonly FloatSetting EffectAudio = new FloatSetting("SoundPreferences.EffectAudio", 0.4f);
 
         // Display
         public static readonly IntSetting Framerate = new IntSetting("Framerate", 60);
@@ -26,6 +26,8 @@ namespace ArcCreate
         // Remote
         public static readonly IntSetting RemoteDroprate = new IntSetting("Remote.DropRate", 150);
         public static readonly IntSetting RemoteOffset = new IntSetting("Remote.GlobalAudioOffset", 0);
+        public static readonly FloatSetting RemoteMusicVolume = new FloatSetting("Remote.MusicVolume", 1);
+        public static readonly FloatSetting RemoteEffectVolume = new FloatSetting("Remote.EffectVolume", 0.2f);
 
         // Input
         public static readonly IntSetting GridSlot = new IntSetting("GridSlot", 0);

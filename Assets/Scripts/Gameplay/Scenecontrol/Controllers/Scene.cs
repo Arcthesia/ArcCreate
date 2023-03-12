@@ -764,7 +764,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
 
             spriteCache.Add(definition, null);
-            using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(Uri.EscapeUriString(definition.Path)))
+            using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(Uri.EscapeUriString(definition.Path.Replace("\\", "/"))))
             {
                 await req.SendWebRequest();
                 if (!string.IsNullOrWhiteSpace(req.error))

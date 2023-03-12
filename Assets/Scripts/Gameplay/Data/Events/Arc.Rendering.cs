@@ -69,6 +69,7 @@ namespace ArcCreate.Gameplay.Data
                 Color = Color,
                 IsTrace = IsTrace,
                 TimingGroup = TimingGroup,
+                Sfx = Sfx,
             };
 
             return arc;
@@ -86,6 +87,7 @@ namespace ArcCreate.Gameplay.Data
             Color = n.Color;
             IsTrace = n.IsTrace;
             TimingGroup = n.TimingGroup;
+            Sfx = n.Sfx;
         }
 
         public override int ComboAt(int timing)

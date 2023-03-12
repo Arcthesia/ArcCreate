@@ -26,5 +26,7 @@ namespace ArcCreate.Remote.Common
         // Settings
         Speed = 32,
         GlobalOffset = 33,
+        MusicVolume = 34,
+        EffectVolume = 35,
     }
 }

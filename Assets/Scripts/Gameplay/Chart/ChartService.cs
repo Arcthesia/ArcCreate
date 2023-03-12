@@ -423,12 +423,21 @@ namespace ArcCreate.Gameplay.Chart
             timingGroups.Remove(group);
         }
 
-        public void UpdateChart(int currentTiming)
+        public void UpdateChartJudgement(int currentTiming)
         {
             for (int i = 0; i < timingGroups.Count; i++)
             {
                 TimingGroup tg = timingGroups[i];
-                tg.UpdateGroup(currentTiming);
+                tg.UpdateGroupJudgement(currentTiming);
+            }
+        }
+
+        public void UpdateChartRender(int currentTiming)
+        {
+            for (int i = 0; i < timingGroups.Count; i++)
+            {
+                TimingGroup tg = timingGroups[i];
+                tg.UpdateGroupRender(currentTiming);
 
                 if (i == 0)
                 {

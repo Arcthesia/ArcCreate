@@ -13,13 +13,17 @@
 /[Tt]est/
 /Assets/InitTestScene**.unity
 /Skin/
+/Assets/Plugins/Native Audio/*
+/Assets/Plugins/Native Audio/Runtime/*
+!/Assets/Plugins/Native Audio/Runtime/
+!/Assets/Plugins/Native Audio/Runtime/E7.NativeAudio.asmdef
 
 # EmmySharp testing
 .vscode/workspace/
 test.lua
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
-!/[Aa]ssets/**/*.meta
+# !/[Aa]ssets/**/*.meta
 
 # Uncomment this line if you wish to ignore the asset store tools plugin
 # /[Aa]ssets/AssetStoreTools*

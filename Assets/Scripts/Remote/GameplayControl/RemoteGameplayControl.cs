@@ -136,6 +136,14 @@ namespace ArcCreate.Remote.Gameplay
                             Settings.GlobalAudioOffset.Value = GetInt(data);
                             Debug.Log($"Setting global offset to {Settings.GlobalAudioOffset.Value}");
                             break;
+                        case RemoteControl.MusicVolume:
+                            Settings.MusicAudio.Value = GetFloat(data);
+                            Debug.Log($"Setting music volume to {Settings.MusicAudio.Value}");
+                            break;
+                        case RemoteControl.EffectVolume:
+                            Settings.EffectAudio.Value = GetFloat(data);
+                            Debug.Log($"Setting effect volume to {Settings.EffectAudio.Value}");
+                            break;
                         case RemoteControl.ShowLog:
                             logDisplay.SetActive(GetBool(data));
                             break;
@@ -203,7 +211,7 @@ namespace ArcCreate.Remote.Gameplay
                 string chartData = req.downloadHandler.text;
                 var reader = new AffChartReader(new VirtualFileAccess(chartData), string.Empty, string.Empty, string.Empty);
                 reader.Parse();
-                gameplayData.LoadChart(reader);
+                gameplayData.LoadChart(reader, GetURI("sfx/"));
             }
         }
 
@@ -369,6 +377,11 @@ namespace ArcCreate.Remote.Gameplay
         private int GetInt(byte[] bytes)
         {
             return BitConverter.ToInt32(bytes, 0);
+        }
+
+        private float GetFloat(byte[] bytes)
+        {
+            return BitConverter.ToSingle(bytes, 0);
         }
 
         private string GetStringASCII(byte[] bytes)

@@ -10,6 +10,7 @@ namespace ArcCreate.Gameplay.Data
         private bool judgementRequestSent = false;
         private bool isHit = false;
         private bool isSfx;
+        private bool sfxPlayed = false;
         private Texture texture;
 
         public HashSet<Tap> ConnectedTaps { get; } = new HashSet<Tap>();
@@ -43,6 +44,7 @@ namespace ArcCreate.Gameplay.Data
         {
             judgementRequestSent = timing > Timing;
             isHit = timing > Timing;
+            sfxPlayed = timing > Timing;
         }
 
         public void Rebuild()
@@ -76,6 +78,12 @@ namespace ArcCreate.Gameplay.Data
             {
                 RequestJudgement();
                 judgementRequestSent = true;
+            }
+
+            if (currentTiming >= Timing && !sfxPlayed)
+            {
+                Services.Hitsound.PlayArcTapHitsound(Sfx, isFromJudgement: false);
+                sfxPlayed = true;
             }
         }
 
@@ -129,6 +137,11 @@ namespace ArcCreate.Gameplay.Data
             Services.Particle.PlayTextParticle(new Vector3(WorldX, WorldY), result);
             Services.Score.ProcessJudgement(result);
             isHit = true;
+
+            if (!result.IsLost())
+            {
+                Services.Hitsound.PlayArcTapHitsound(Sfx, isFromJudgement: true);
+            }
         }
 
         private void RequestJudgement()

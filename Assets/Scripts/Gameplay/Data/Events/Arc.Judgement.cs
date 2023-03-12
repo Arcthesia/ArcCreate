@@ -115,6 +115,11 @@ namespace ArcCreate.Gameplay.Data
             else if (currentTiming <= EndTiming + Values.HoldLostLateJudgeWindow)
             {
                 SetGroupHighlight(true, currentTiming + Values.HoldParticlePersistDuration);
+                if (!hasBeenHitOnce)
+                {
+                    Services.Hitsound.PlayArcHitsound();
+                }
+
                 hasBeenHitOnce = true;
 
                 if (isJudgement)

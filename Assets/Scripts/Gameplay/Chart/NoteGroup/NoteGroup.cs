@@ -140,12 +140,20 @@ namespace ArcCreate.Gameplay.Chart
         }
 
         /// <summary>
-        /// Update the state of all notes of this group to the new timing value.
+        /// Update judgement state of all notes of this group to the new timing value.
         /// </summary>
         /// <param name="timing">The timing value.</param>
         /// <param name="floorPosition">Floor position value corresponding to the timing value.</param>
         /// <param name="groupProperties">The group properties of the notes' timing group.</param>
-        public abstract void Update(int timing, double floorPosition, GroupProperties groupProperties);
+        public abstract void UpdateJudgement(int timing, double floorPosition, GroupProperties groupProperties);
+
+        /// <summary>
+        /// Update render state of all notes of this group to the new timing value.
+        /// </summary>
+        /// <param name="timing">The timing value.</param>
+        /// <param name="floorPosition">Floor position value corresponding to the timing value.</param>
+        /// <param name="groupProperties">The group properties of the notes' timing group.</param>
+        public abstract void UpdateRender(int timing, double floorPosition, GroupProperties groupProperties);
 
         /// <summary>
         /// Called every time there's a change to the note list.

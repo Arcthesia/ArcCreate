@@ -72,9 +72,15 @@ namespace ArcCreate.Gameplay.Chart
         void Clear();
 
         /// <summary>
-        /// Update all notes in the chart.
+        /// Update judgement of all notes in the chart.
         /// </summary>
         /// <param name="currentTiming">The current audio timing.</param>
-        void UpdateChart(int currentTiming);
+        void UpdateChartJudgement(int currentTiming);
+
+        /// <summary>
+        /// Update rendering of all notes in the chart.
+        /// </summary>
+        /// <param name="currentTiming">The current audio timing.</param>
+        void UpdateChartRender(int currentTiming);
     }
 }

@@ -18,18 +18,50 @@ namespace ArcCreate.Gameplay.Chart
 
         protected RangeTree<Note> TimingTree => timingTree;
 
-        public override void Update(int timing, double floorPosition, GroupProperties groupProperties)
+        public override void UpdateJudgement(int timing, double floorPosition, GroupProperties groupProperties)
         {
-            if (Notes.Count == 0)
+            if (Notes.Count == 0 || groupProperties.NoInput)
             {
                 return;
             }
 
-            UpdateJudgement(timing, groupProperties);
+            int judgeFrom = timing - Values.LostJudgeWindow;
+            int judgeTo = timing + Values.HoldLostLateJudgeWindow;
+            var notesInRange = timingTree[judgeFrom, judgeTo];
 
-            if (groupProperties.Visible)
+            int i = 0;
+            while (notesInRange.MoveNext())
             {
-                UpdateRender(timing, floorPosition, groupProperties);
+                var note = notesInRange.Current;
+                note.UpdateJudgement(timing, groupProperties);
+                i++;
+            }
+        }
+
+        public override void UpdateRender(int timing, double floorPosition, GroupProperties groupProperties)
+        {
+            if (Notes.Count == 0 || !groupProperties.Visible)
+            {
+                return;
+            }
+
+            double fpDistForward = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLengthForward));
+            double fpDistBackward = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLengthBackward));
+            double renderFrom =
+                (groupProperties.NoInput && !groupProperties.NoClip) ?
+                floorPosition :
+                floorPosition - fpDistBackward;
+            double renderTo = floorPosition + fpDistForward;
+
+            var notesInRange = floorPositionTree[renderFrom, renderTo];
+            lastRenderingNotes.Clear();
+
+            // Update notes
+            while (notesInRange.MoveNext())
+            {
+                var note = notesInRange.Current;
+                lastRenderingNotes.Add(note);
+                note.UpdateRender(timing, floorPosition, groupProperties);
             }
         }
 
@@ -133,47 +165,5 @@ namespace ArcCreate.Gameplay.Chart
         }
 
         public override IEnumerable<Note> GetRenderingNotes() => lastRenderingNotes;
-
-        private void UpdateJudgement(int timing, GroupProperties groupProperties)
-        {
-            if (groupProperties.NoInput)
-            {
-                return;
-            }
-
-            int judgeFrom = timing - Values.LostJudgeWindow;
-            int judgeTo = timing + Values.HoldLostLateJudgeWindow;
-            var notesInRange = timingTree[judgeFrom, judgeTo];
-
-            int i = 0;
-            while (notesInRange.MoveNext())
-            {
-                var note = notesInRange.Current;
-                note.UpdateJudgement(timing, groupProperties);
-                i++;
-            }
-        }
-
-        private void UpdateRender(int timing, double floorPosition, GroupProperties groupProperties)
-        {
-            double fpDistForward = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLengthForward));
-            double fpDistBackward = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLengthBackward));
-            double renderFrom =
-                (groupProperties.NoInput && !groupProperties.NoClip) ?
-                floorPosition :
-                floorPosition - fpDistBackward;
-            double renderTo = floorPosition + fpDistForward;
-
-            var notesInRange = floorPositionTree[renderFrom, renderTo];
-            lastRenderingNotes.Clear();
-
-            // Update notes
-            while (notesInRange.MoveNext())
-            {
-                var note = notesInRange.Current;
-                lastRenderingNotes.Add(note);
-                note.UpdateRender(timing, floorPosition, groupProperties);
-            }
-        }
     }
 }

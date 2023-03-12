@@ -469,7 +469,17 @@ namespace ArcCreate.Compose.Selection
             {
                 ModifyNotes<Note>(
                     ev => !(ev is ArcTap) && ev.TimingGroup != tg.GroupNumber,
-                    ev => ev.TimingGroup = tg.GroupNumber);
+                    ev =>
+                    {
+                        ev.TimingGroup = tg.GroupNumber;
+                        if (ev is Arc arc)
+                        {
+                            foreach (var at in Services.Gameplay.Chart.GetAll<ArcTap>().Where(at => at.Arc == arc))
+                            {
+                                ev.TimingGroup = tg.GroupNumber;
+                            }
+                        }
+                    });
             }
 
             groupField.SetValueWithoutNotify(selected.First().TimingGroupInstance);
