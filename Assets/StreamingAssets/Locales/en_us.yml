@@ -433,6 +433,7 @@ Compose:
           Width: Width
           Height: Height
           Size: Size
+          ShowShutter: Show shutter
         Start: Start rendering
         Cancel: Cancel rendering
         Status: |-

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using ArcCreate.SceneTransition;
 using Cysharp.Threading.Tasks;
 using Unity.Collections;
 using UnityEngine;
@@ -24,23 +25,35 @@ namespace ArcCreate.Compose.Rendering
         private readonly AudioRenderer audioRenderer;
         private readonly int width;
         private readonly int height;
+        private readonly bool showShutter;
         private byte[] cachedByteArray;
 
-        public FrameRenderer(string outputPath, Camera[] cameras, int width, int height, float fps, int crf, int from, int to, AudioRenderer audioRenderer)
+        public FrameRenderer(
+            string outputPath,
+            Camera[] cameras,
+            int width,
+            int height,
+            float fps,
+            int crf,
+            int from,
+            int to,
+            AudioRenderer audioRenderer,
+            bool showShutter)
         {
             this.audioRenderer = audioRenderer;
             this.width = width;
             this.height = height;
             this.cameras = cameras;
             this.outputPath = outputPath;
-            renderTexture = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32);
-            texture2D = new Texture2D(width, height, TextureFormat.ARGB32, false, true);
-
-            startRenderingTime = from / 1000f;
-            endRenderingTime = to / 1000f;
+            this.showShutter = showShutter;
             this.crf = crf;
             this.fps = fps;
 
+            startRenderingTime = from / 1000f;
+            endRenderingTime = to / 1000f;
+
+            renderTexture = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32);
+            texture2D = new Texture2D(width, height, TextureFormat.ARGB32, false, true);
             defaultRenderTextures = new RenderTexture[cameras.Length];
             for (int i = 0; i < cameras.Length; i++)
             {
@@ -66,6 +79,7 @@ namespace ArcCreate.Compose.Rendering
                 return;
             }
 
+            ITransition shutterTransition = new ShutterWithInfoTransition();
             RenderTexture activeRT = RenderTexture.active;
             foreach (Camera cam in cameras)
             {
@@ -95,8 +109,32 @@ namespace ArcCreate.Compose.Rendering
             {
                 DateTime startAt = DateTime.Now;
                 Time.captureFramerate = Mathf.RoundToInt(fps);
+                Services.Gameplay.Audio.AudioTiming = Mathf.RoundToInt(startRenderingTime * 1000);
 
+                bool shouldUpdateTiming = false;
                 float unityStartTime = Time.time;
+                float bonusDuration = 0;
+                if (showShutter)
+                {
+                    shutterTransition.EnableGameObject();
+                    shutterTransition
+                        .StartTransition()
+                        .ContinueWith(() => UniTask.Delay(shutterTransition.WaitDurationMs))
+                        .ContinueWith(shutterTransition.EndTransition)
+                        .ContinueWith(() =>
+                        {
+                            shouldUpdateTiming = true;
+                            shutterTransition.DisableGameObject();
+                        }).AttachExternalCancellation(token).Forget();
+
+                    unityStartTime += Shutter.FullSequenceSeconds;
+                    bonusDuration = Shutter.FullSequenceSeconds;
+                }
+                else
+                {
+                    shouldUpdateTiming = true;
+                }
+
                 while (!token.IsCancellationRequested)
                 {
                     if (ffmpegProcess.HasExited)
@@ -130,20 +168,23 @@ namespace ArcCreate.Compose.Rendering
                     await UniTask.Yield(PlayerLoopTiming.LastPostLateUpdate);
 
                     float time = Time.time - unityStartTime + startRenderingTime;
-                    if (time * 1000 > Services.Gameplay.Audio.AudioLength || time > endRenderingTime)
+                    if ((time * 1000 > Services.Gameplay.Audio.AudioLength || time > endRenderingTime) && shouldUpdateTiming)
                     {
                         break;
                     }
                     else
                     {
-                        Services.Gameplay.Audio.AudioTiming = Mathf.RoundToInt(time * 1000);
+                        if (shouldUpdateTiming)
+                        {
+                            Services.Gameplay.Audio.SetAudioTimingSilent(Mathf.RoundToInt((time * 1000) + Settings.GlobalAudioOffset.Value));
+                        }
+
                         Time.timeScale = 0;
                     }
 
                     TimeSpan elapsed = DateTime.Now - startAt;
-
-                    double speed = (time - startRenderingTime) / elapsed.TotalSeconds;
-                    TimeSpan eta = TimeSpan.FromSeconds((endRenderingTime - time) / speed);
+                    double speed = (time - startRenderingTime + bonusDuration) / elapsed.TotalSeconds;
+                    TimeSpan eta = TimeSpan.FromSeconds((endRenderingTime - time + bonusDuration) / speed);
                     onETA.Invoke(elapsed, eta);
                 }
             }
@@ -171,6 +212,7 @@ namespace ArcCreate.Compose.Rendering
                 }
 
                 Time.captureFramerate = 0;
+                shutterTransition.EndTransition().ContinueWith(shutterTransition.DisableGameObject).Forget();
             }
         }
 
@@ -254,7 +296,7 @@ namespace ArcCreate.Compose.Rendering
             };
 
             ffmpegProcess.Start();
-            ffmpegProcess.ErrorDataReceived += (sender, eventArgs) => { UnityEngine.Debug.LogError(eventArgs.Data); };
+            ffmpegProcess.ErrorDataReceived += (sender, eventArgs) => { UnityEngine.Debug.Log(eventArgs.Data); };
             ffmpegProcess.BeginErrorReadLine();
             ffmpegProcess.OutputDataReceived += (sender, eventArgs) => { UnityEngine.Debug.Log(eventArgs.Data); };
             ffmpegProcess.BeginOutputReadLine();
@@ -264,7 +306,13 @@ namespace ArcCreate.Compose.Rendering
 
         private string GetPath(string fileName = "")
         {
-            return Path.Combine(new DirectoryInfo(Application.dataPath).Parent.FullName, "Rendering", fileName);
+            string path = Path.Combine(new DirectoryInfo(Application.dataPath).Parent.FullName, "Rendering", fileName);
+            if (!Directory.Exists(Path.GetDirectoryName(path)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+            }
+
+            return path;
         }
     }
 }

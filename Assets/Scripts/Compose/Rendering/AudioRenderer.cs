@@ -21,6 +21,7 @@ namespace ArcCreate.Compose.Rendering
         private readonly int startTiming;
         private readonly int endTiming;
         private readonly int audioOffset;
+        private readonly bool showShutter;
 
         public AudioRenderer(
             int startTiming,
@@ -31,7 +32,8 @@ namespace ArcCreate.Compose.Rendering
             AudioClip arcAudio,
             AudioClip shutterCloseAudio,
             AudioClip shutterOpenAudio,
-            Dictionary<string, AudioClip> sfxAudio)
+            Dictionary<string, AudioClip> sfxAudio,
+            bool showShutter)
         {
             this.startTiming = startTiming;
             this.endTiming = endTiming;
@@ -42,6 +44,7 @@ namespace ArcCreate.Compose.Rendering
             this.shutterCloseAudio = shutterCloseAudio;
             this.shutterOpenAudio = shutterOpenAudio;
             this.sfxAudio = sfxAudio;
+            this.showShutter = showShutter;
         }
 
         public List<string> SfxAudioList => sfxAudio.Keys.ToList();
@@ -58,9 +61,9 @@ namespace ArcCreate.Compose.Rendering
 
             tapSound.AddRange(Services.Gameplay.Chart.GetAll<Tap>().Where((n) => n.Timing >= startRange && n.Timing <= endRange && !n.NoInput));
             tapSound.AddRange(Services.Gameplay.Chart.GetAll<Hold>().Where((n) => n.Timing >= startRange && n.Timing <= endRange && !n.NoInput));
-            arcSound.AddRange(Services.Gameplay.Chart.GetAll<Arc>().Where((n) => n.Timing >= startRange && n.Timing <= endRange && !n.NoInput));
+            arcSound.AddRange(Services.Gameplay.Chart.GetAll<Arc>().Where((n) => n.Timing >= startRange && n.Timing <= endRange && n.Timing < n.EndTiming && !n.IsTrace && !n.NoInput));
 
-            IEnumerable<ArcTap> arctaps = Services.Gameplay.Chart.GetAll<ArcTap>().Where((n) => n.Timing >= startRange && n.Timing <= endRange);
+            IEnumerable<ArcTap> arctaps = Services.Gameplay.Chart.GetAll<ArcTap>().Where((n) => n.Timing >= startRange && n.Timing <= endRange && !n.NoInput);
             arcSound.AddRange(arctaps.Where(at => !sfxAudio.ContainsKey(at.Sfx)));
 
             foreach (ArcTap at in arctaps)
@@ -69,10 +72,9 @@ namespace ArcCreate.Compose.Rendering
                 {
                     sfxSound[at.Sfx].Add(at);
                 }
-                else
+                else if (!string.IsNullOrEmpty(at.Sfx) && at.Sfx != "none")
                 {
-                    sfxSound.Add(at.Sfx, new List<Note>());
-                    sfxSound[at.Sfx].Add(at);
+                    sfxSound.Add(at.Sfx, new List<Note> { at });
                 }
             }
 
@@ -105,7 +107,7 @@ namespace ArcCreate.Compose.Rendering
 
             // Combine
             float audioLength = (endTiming - startTiming) / 1000f;
-            if (startTiming <= 0)
+            if (showShutter)
             {
                 audioLength += Shutter.FullSequenceMs / 1000f;
             }
@@ -133,7 +135,7 @@ namespace ArcCreate.Compose.Rendering
                 Debug.Log($"Prepared {s.Key} sfx samples array of size: {sfxSamples[s.Key].Length}");
             }
 
-            if (startTiming <= 0)
+            if (showShutter)
             {
                 for (int i = 0; i < shutterClose.Length; i++)
                 {
@@ -253,7 +255,7 @@ namespace ArcCreate.Compose.Rendering
         private int TimingToSampleIndex(int timing, int channels, int frequency)
         {
             int offset = audioOffset;
-            if (startTiming <= 0)
+            if (showShutter)
             {
                 offset += Shutter.FullSequenceMs;
             }
@@ -272,7 +274,7 @@ namespace ArcCreate.Compose.Rendering
         private float[] GetSongSamples(AudioClip clip)
         {
             float audioLength = (endTiming - startTiming) / 1000f;
-            if (startTiming <= 0)
+            if (showShutter)
             {
                 audioLength += Shutter.FullSequenceMs / 1000f;
             }
@@ -284,7 +286,7 @@ namespace ArcCreate.Compose.Rendering
             clip.GetData(samples, readOffset);
 
             // shift forward
-            if (startTiming <= 0)
+            if (showShutter)
             {
                 int shiftIndex = (int)(Shutter.FullSequenceMs / 1000f * clip.frequency) * clip.channels;
                 for (int i = samples.Length - 1; i >= shiftIndex; i--)
@@ -303,7 +305,13 @@ namespace ArcCreate.Compose.Rendering
 
         private string GetPath(string fileName = "")
         {
-            return Path.Combine(new DirectoryInfo(Application.dataPath).Parent.FullName, "Rendering", fileName);
+            string path = Path.Combine(new DirectoryInfo(Application.dataPath).Parent.FullName, "Rendering", fileName);
+            if (!Directory.Exists(Path.GetDirectoryName(path)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+            }
+
+            return path;
         }
     }
 }

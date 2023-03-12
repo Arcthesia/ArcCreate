@@ -101,5 +101,11 @@ namespace ArcCreate.Gameplay
         /// <param name="cond">Whether or not to return.</param>
         /// <param name="timing">The timing to return to.</param>
         void SetReturnOnPause(bool cond, int timing = 0);
+
+        /// <summary>
+        /// Sets <see cref="AudioTiming"/> without affecting the audio or resetting judgement.
+        /// </summary>
+        /// <param name="timing">The new audio timing value.</param>
+        void SetAudioTimingSilent(int timing);
     }
 }

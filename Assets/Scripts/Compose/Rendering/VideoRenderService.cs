@@ -28,6 +28,7 @@ namespace ArcCreate.Compose.Rendering
         [SerializeField] private TMP_InputField fpsField;
         [SerializeField] private TMP_InputField widthField;
         [SerializeField] private TMP_InputField heightField;
+        [SerializeField] private Toggle showShutterToggle;
         [SerializeField] private Button startButton;
         [SerializeField] private MarkerRange renderRangeMarker;
 
@@ -60,24 +61,34 @@ namespace ArcCreate.Compose.Rendering
                 return;
             }
 
+            AudioRenderer audioRenderer = new AudioRenderer(
+                startTiming: from,
+                endTiming: to,
+                showShutter: showShutterToggle.isOn,
+                audioOffset: gameplayData.AudioOffset.Value,
+                songAudio: gameplayData.AudioClip.Value,
+                tapAudio: Services.Gameplay.Audio.TapHitsoundClip,
+                arcAudio: Services.Gameplay.Audio.ArcHitsoundClip,
+                shutterCloseAudio: Shutter.ExternalStartAudio.Value,
+                shutterOpenAudio: Shutter.ExternalOpenAudio.Value,
+                sfxAudio: Services.Gameplay.Audio.SfxAudioClips);
+
+            try
+            {
+                audioRenderer.CreateAudio();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+                return;
+            }
+
             cts = new CancellationTokenSource();
             renderInProgressIndicator.SetActive(true);
             renderPreview.gameObject.SetActive(true);
 
             UniTask.WaitUntil(() => cancel.WasExecuted, cancellationToken: cts.Token)
                 .ContinueWith(cts.Cancel).Forget();
-
-            AudioRenderer audioRenderer = new AudioRenderer(
-                startTiming: from,
-                endTiming: to,
-                audioOffset: gameplayData.AudioOffset.Value,
-                songAudio: gameplayData.AudioClip.Value,
-                tapAudio: Services.Gameplay.Audio.TapHitsoundClip,
-                arcAudio: Services.Gameplay.Audio.ArcHitsoundClip,
-                shutterCloseAudio: Shutter.ExternalCloseAudio.Value,
-                shutterOpenAudio: Shutter.ExternalStartAudio.Value,
-                sfxAudio: Services.Gameplay.Audio.SfxAudioClips);
-            audioRenderer.CreateAudio();
 
             using (var renderer = new FrameRenderer(
                 outputPath: outputPath,
@@ -88,6 +99,7 @@ namespace ArcCreate.Compose.Rendering
                 crf: Settings.CRF.Value,
                 from: from,
                 to: to,
+                showShutter: showShutterToggle.isOn,
                 audioRenderer: audioRenderer))
             {
                 renderPreview.texture = renderer.Texture2D;
@@ -187,6 +199,7 @@ namespace ArcCreate.Compose.Rendering
             renderRangeMarker.SetTiming(from, to);
             fromTimingField.text = from.ToString();
             toTimingField.text = to.ToString();
+            showShutterToggle.isOn = from <= 0;
         }
 
         private void OnMarker(int from, int to)
@@ -195,6 +208,7 @@ namespace ArcCreate.Compose.Rendering
             this.to = to;
             fromTimingField.text = from.ToString();
             toTimingField.text = to.ToString();
+            showShutterToggle.isOn = from <= 0;
         }
 
         private void OnQualityField(string val)

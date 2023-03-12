@@ -105,6 +105,11 @@ namespace ArcCreate.Gameplay.Audio
 
         private int FullOffset => Values.ChartAudioOffset + Settings.GlobalAudioOffset.Value;
 
+        public void SetAudioTimingSilent(int timing)
+        {
+            audioTiming = timing;
+        }
+
         public void UpdateTime()
         {
             double dspTime = AudioSettings.dspTime;
