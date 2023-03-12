@@ -5,6 +5,11 @@ namespace ArcCreate.Gameplay
     public interface ICameraControl
     {
         /// <summary>
+        /// Gets all cameras rendering in the scene.
+        /// </summary>
+        Camera[] RenderingCameras { get; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether or not the gameplay camera is in a custom position/rotation.
         /// </summary>
         bool IsEditorCamera { get; set; }

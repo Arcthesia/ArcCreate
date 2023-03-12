@@ -1511,7 +1511,6 @@ MonoBehaviour:
   canvasGroup: {fileID: 371341946}
   canvas: {fileID: 371341945}
   rectTransform: {fileID: 371341942}
-  scaleParentRect: {fileID: 0}
 --- !u!1 &388761276
 GameObject:
   m_ObjectHideFlags: 0
@@ -1906,7 +1905,6 @@ MonoBehaviour:
   canvasGroup: {fileID: 430326264}
   canvas: {fileID: 430326263}
   rectTransform: {fileID: 430326260}
-  scaleParentRect: {fileID: 0}
 --- !u!1 &431220129
 GameObject:
   m_ObjectHideFlags: 0
@@ -4591,7 +4589,6 @@ MonoBehaviour:
   canvasGroup: {fileID: 1035269750}
   canvas: {fileID: 1035269752}
   rectTransform: {fileID: 1035269748}
-  scaleParentRect: {fileID: 1060812227}
   pause: {fileID: 1843374753}
   infoPanel: {fileID: 246210313}
 --- !u!225 &1035269750
@@ -4640,7 +4637,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 1
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -8366,7 +8363,6 @@ MonoBehaviour:
   canvasGroup: {fileID: 1904479570}
   canvas: {fileID: 1904479569}
   rectTransform: {fileID: 1904479566}
-  scaleParentRect: {fileID: 0}
 --- !u!1 &1905251841
 GameObject:
   m_ObjectHideFlags: 0

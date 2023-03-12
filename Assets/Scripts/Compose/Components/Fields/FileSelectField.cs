@@ -43,6 +43,12 @@ namespace ArcCreate.Compose.Components
         /// </summary>
         public bool IsValidPath => File.Exists(CurrentPath.FullPath);
 
+        public string[] AcceptedExtensions
+        {
+            get => acceptedExtensions;
+            set => acceptedExtensions = value;
+        }
+
         private string CurrentProjectFolder => Path.GetDirectoryName(Services.Project.CurrentProject.Path);
 
         /// <summary>
@@ -51,9 +57,14 @@ namespace ArcCreate.Compose.Components
         /// </summary>
         public void ClearContent()
         {
+            ClearContentWithoutNotify();
+            OnValueChanged?.Invoke(null);
+        }
+
+        public void ClearContentWithoutNotify()
+        {
             CurrentPath = null;
             OnInvalidFilePath();
-            OnValueChanged?.Invoke(null);
 
             contentText.text = string.Empty;
             contentText.gameObject.SetActive(false);
@@ -91,7 +102,7 @@ namespace ArcCreate.Compose.Components
             {
                 if (!required)
                 {
-                    ClearContent();
+                    ClearContentWithoutNotify();
                 }
 
                 return;

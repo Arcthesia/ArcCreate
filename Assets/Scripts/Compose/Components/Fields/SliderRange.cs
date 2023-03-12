@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace ArcCreateo.Compose.Components
+namespace ArcCreate.Compose.Components
 {
     public class SliderRange : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHandler
     {

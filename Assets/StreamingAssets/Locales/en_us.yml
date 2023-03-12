@@ -92,6 +92,16 @@ Compose:
     LuaScript: |-
       Error occured while executing lua script {Path}: {Message}
       {StackTrace}
+    FFmpeg:
+      NotFound: |-
+        Could not find any FFmpeg executable.
+        Please confirm that the configured path {0} is correct.
+      Start: |-
+        Error occured while starting FFmpeg at {Path}: {Message}
+        {StackTrace}
+      Write: |-
+        Error occured while writing to FFmpeg process: {Message}
+        {StackTrace}
           
   # Notification messages
   Notify:
@@ -176,6 +186,10 @@ Compose:
       CopyPosition: Copied arc's position
       CopyX: Copied arc's x coordinate
       CopyY: Copied arc's y coordinate
+    Export:
+      Render:
+        Cancelled: Render cancelled
+        Complete: Render complete
   # Dialog boxes
   Dialog:
     RemoveGroup:
@@ -393,6 +407,34 @@ Compose:
         Timing: Timing
         Camera: Camera
         Scenecontrol: Scene
+    # Export panel
+    Export:
+      Render:
+        Name: Render video
+        Description: |-
+          Automatically export chart view video.
+          Requires FFmpeg to be installed.
+        ConfigureFFmpeg: Configure FFmpeg executable path
+        Settings:
+          Name: Settings
+          From: From
+          To: To
+          Quality: Quality
+          FPS: FPS
+          Width: Width
+          Height: Height
+          Size: Size
+        Start: Start rendering
+        Cancel: Cancel rendering
+        Status: |-
+          Rendering video. This will take a while.
+          Elapsed: {0}
+          Remaining: {1}
+      Package:
+        Name: Export package
+        Description: |-
+          Export a .arcpkg package file to share to other players.
+        Export: Export
     # Editor settings panel
     Settings:
       Label:

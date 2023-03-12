@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Extension;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 namespace ArcCreate.Gameplay.GameplayCamera
 {
@@ -54,6 +54,8 @@ namespace ArcCreate.Gameplay.GameplayCamera
                 uiCamera.orthographicSize = value;
             }
         }
+
+        public Camera[] RenderingCameras { get; private set; }
 
         private bool Is16By9
             => 1.77777779f - (1f * gameplayCamera.pixelWidth / gameplayCamera.pixelHeight) < 0.1f;
@@ -246,6 +248,7 @@ namespace ArcCreate.Gameplay.GameplayCamera
         {
             currentArcPos = 0;
             isReset = true;
+            RenderingCameras = new Camera[] { gameplayCamera, arcCamera, uiCamera };
         }
     }
 }

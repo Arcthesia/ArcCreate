@@ -56,9 +56,11 @@ namespace ArcCreate
         // Export
         public static readonly IntSetting ChartSortMode = new IntSetting("ChartSortMode", 0);
         public static readonly FloatSetting FPS = new FloatSetting("RenderPreferences.FPS", 60);
-        public static readonly IntSetting CRF = new IntSetting("RenderPreferences.CRF", 18);
+        public static readonly IntSetting CRF = new IntSetting("RenderPreferences.CRF", 25);
+        public static readonly IntSetting RenderWidth = new IntSetting("RenderPreferences.Width", 1920);
+        public static readonly IntSetting RenderHeight = new IntSetting("RenderPreferences.Height", 1080);
         public static readonly FloatSetting DownscaleFactor = new FloatSetting("RenderPreferences.DownscaleFactor", 1.0f);
-        public static readonly StringSetting FFmpegPath = new StringSetting("RenderPreferences.FFmpegPath", "");
+        public static readonly StringSetting FFmpegPath = new StringSetting("RenderPreferences.FFmpegPath", "ffmpeg");
         public static readonly BoolSetting EnableEasterEggs = new BoolSetting("Fun.EasterEggs", Application.isEditor);
 
         [RuntimeInitializeOnLoadMethod]

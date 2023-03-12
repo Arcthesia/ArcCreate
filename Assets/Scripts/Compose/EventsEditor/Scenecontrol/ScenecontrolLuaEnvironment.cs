@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using ArcCreate.Compose.Navigation;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Gameplay.Scenecontrol;
 using ArcCreate.Utilities.Lua;
@@ -12,18 +11,11 @@ using UnityEngine;
 
 namespace ArcCreate.Compose.EventsEditor
 {
-#if UNITY_EDITOR
-    [EditorScope("Scenecontrol")]
-#endif
     public class ScenecontrolLuaEnvironment : IScriptSetup
     {
         public const int InstructionLimit = int.MaxValue;
         private readonly ScenecontrolTable scTable;
         private readonly Dictionary<string, IScenecontrolType> scenecontrolTypes = new Dictionary<string, IScenecontrolType>();
-
-        public ScenecontrolLuaEnvironment()
-        {
-        }
 
         public ScenecontrolLuaEnvironment(ScenecontrolTable scTable)
         {
@@ -31,17 +23,6 @@ namespace ArcCreate.Compose.EventsEditor
             UserData.RegisterAssembly(Assembly.GetAssembly(typeof(ScenecontrolService)));
             LuaArithmetic.SetupForBaseType<ValueChannel>();
         }
-
-#if UNITY_EDITOR
-        [EditorAction("Reserialize", true)]
-        public void Reseralize()
-        {
-            string json = Services.Gameplay.Scenecontrol.Export();
-            Services.Gameplay.Scenecontrol.Clean();
-            Services.Gameplay.Scenecontrol.Import(json);
-            Services.Gameplay.Scenecontrol.WaitForSceneLoad();
-        }
-#endif
 
         public void SetupScript(Script script)
         {

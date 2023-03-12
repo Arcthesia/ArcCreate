@@ -4,6 +4,8 @@
 
 Fast and powerful .aff editor made with Unity.
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Q5Q1JE1B1)
+
 # Getting started
 
 This project was made with Unity 2019.4.34f1. You can download the exact version from the [official Download Archive here](https://unity.com/releases/editor/archive).

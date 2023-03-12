@@ -1,4 +1,4 @@
-// #if UNITY_STANDALONE_LINUX
+#if UNITY_STANDALONE_LINUX
 
 using System;
 using System.IO;
@@ -124,4 +124,4 @@ namespace SFB
     }
 }
 
-// #endif
+#endif

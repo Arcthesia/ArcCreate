@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ArcCrreate.Components
+namespace ArcCreate.Components
 {
     // Because VerticalLayoutGroup breaks literally everything
     [RequireComponent(typeof(RectTransform))]
