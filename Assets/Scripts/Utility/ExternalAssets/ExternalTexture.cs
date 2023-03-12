@@ -5,32 +5,32 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace ArcCreate.Gameplay.Hitsound
+namespace ArcCreate.Utilities.ExternalAssets
 {
     /// <summary>
-    /// Class for handling loading extenal skin as sprites.
+    /// Class for handling loading external skin as textures.
     /// </summary>
-    public class ExternalAudioClip
+    public class ExternalTexture
     {
-        private static readonly string[] Extensions = new string[] { ".wav" };
-        private static readonly Dictionary<string, AudioClip> Cache = new Dictionary<string, AudioClip>();
+        private static readonly string[] Extensions = new string[] { ".jpg", ".png" };
+        private static readonly Dictionary<string, Texture> Cache = new Dictionary<string, Texture>();
 
-        private readonly AudioClip original;
+        private readonly Texture original;
         private readonly string subDirectory;
-        private AudioClip external;
+        private Texture external;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExternalAudioClip"/> class.
+        /// Initializes a new instance of the <see cref="ExternalTexture"/> class.
         /// </summary>
-        /// <param name="original">The original clip.</param>
+        /// <param name="original">The original texture.</param>
         /// <param name="subDirectory">The sub directory (relative to Skin directory) to look for the file.</param>
-        public ExternalAudioClip(AudioClip original, string subDirectory)
+        public ExternalTexture(Texture original, string subDirectory)
         {
             this.original = original;
             this.subDirectory = subDirectory;
         }
 
-        public AudioClip Value => external != null ? external : original;
+        public Texture Value => external != null ? external : original;
 
         public static void ClearCache()
         {
@@ -42,22 +42,22 @@ namespace ArcCreate.Gameplay.Hitsound
             foreach (string ext in Extensions)
             {
                 string path = string.IsNullOrEmpty(subDirectory) ?
-                    Path.Combine(Values.SkinFolderPath, original.name + ext) :
-                    Path.Combine(Values.SkinFolderPath, subDirectory, original.name + ext);
+                    Path.Combine(ExternalAssetsCommon.SkinFolderPath, original.name + ext) :
+                    Path.Combine(ExternalAssetsCommon.SkinFolderPath, subDirectory, original.name + ext);
 
                 if (!File.Exists(path))
                 {
                     continue;
                 }
 
-                if (Cache.TryGetValue(path, out AudioClip s))
+                if (Cache.TryGetValue(path, out Texture s))
                 {
                     external = s;
                     return;
                 }
 
-                using (UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(
-                    Uri.EscapeUriString("file:///" + path.Replace("\\", "/")), AudioType.WAV))
+                using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(
+                    Uri.EscapeUriString("file:///" + path.Replace("\\", "/"))))
                 {
                     await req.SendWebRequest();
                     if (!string.IsNullOrWhiteSpace(req.error))
@@ -70,9 +70,9 @@ namespace ArcCreate.Gameplay.Hitsound
                         return;
                     }
 
-                    AudioClip clip = DownloadHandlerAudioClip.GetContent(req);
-                    Cache.Add(path, clip);
-                    external = clip;
+                    var t = DownloadHandlerTexture.GetContent(req);
+                    Cache.Add(path, t);
+                    external = t;
                     return;
                 }
             }

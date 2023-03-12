@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 265dd79ef4deeab47b1ea07cce04fb3c, type: 3}
+  m_Script: {fileID: 11500000, guid: 1a7d248d3cb8a43db862251f8ae2158e, type: 3}
   m_Name: SingleLineLight
   m_EditorClassIdentifier: 
   Name: light

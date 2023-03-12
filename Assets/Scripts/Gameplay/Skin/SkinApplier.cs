@@ -18,6 +18,7 @@ namespace ArcCreate.Gameplay.Skin
         [SerializeField] private StringSO composerSO;
         [SerializeField] private StringSO illustratorSO;
         [SerializeField] private StringSO charterSO;
+        [SerializeField] private StringSO aliasSO;
         [SerializeField] private TMP_Text difficultyText;
         [SerializeField] private Image difficultyColor;
 
@@ -32,6 +33,7 @@ namespace ArcCreate.Gameplay.Skin
             gameplayData.Composer.OnValueChange += OnComposer;
             gameplayData.Illustrator.OnValueChange += OnIllustrator;
             gameplayData.Charter.OnValueChange += OnCharter;
+            gameplayData.Alias.OnValueChange += OnAlias;
         }
 
         private void OnDestroy()
@@ -45,6 +47,12 @@ namespace ArcCreate.Gameplay.Skin
             gameplayData.Composer.OnValueChange -= OnComposer;
             gameplayData.Illustrator.OnValueChange -= OnIllustrator;
             gameplayData.Charter.OnValueChange -= OnCharter;
+            gameplayData.Alias.OnValueChange -= OnAlias;
+        }
+
+        private void OnAlias(string value)
+        {
+            aliasSO.Value = value;
         }
 
         private void OnCharter(string value)

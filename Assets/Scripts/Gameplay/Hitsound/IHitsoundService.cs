@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace ArcCreate.Gameplay.Hitsound
 {
@@ -11,6 +13,21 @@ namespace ArcCreate.Gameplay.Hitsound
         /// Gets a value indicating whether or not all hitsounds have been loaded.
         /// </summary>
         bool IsLoaded { get; }
+
+        /// <summary>
+        /// Gets the hitsound audio clip for tap notes.
+        /// </summary>
+        AudioClip TapHitsoundClip { get; }
+
+        /// <summary>
+        /// Gets the hitsound audio clip for arc notes.
+        /// </summary>
+        AudioClip ArcHitsoundClip { get; }
+
+        /// <summary>
+        /// Gets a map of sfx name to audioclip loaded for the current chart.
+        /// </summary>
+        Dictionary<string, AudioClip> SfxAudioClips { get; }
 
         /// <summary>
         /// Plays the tap hitsound.

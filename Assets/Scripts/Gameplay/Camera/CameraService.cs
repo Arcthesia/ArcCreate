@@ -25,6 +25,8 @@ namespace ArcCreate.Gameplay.GameplayCamera
 
         public Camera GameplayCamera => gameplayCamera;
 
+        public Camera UICamera => uiCamera;
+
         public List<CameraEvent> Events => events;
 
         public bool IsEditorCamera { get; set; }

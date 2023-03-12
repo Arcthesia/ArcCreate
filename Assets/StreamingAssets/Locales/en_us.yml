@@ -92,16 +92,21 @@ Compose:
     LuaScript: |-
       Error occured while executing lua script {Path}: {Message}
       {StackTrace}
-    FFmpeg:
-      NotFound: |-
-        Could not find any FFmpeg executable.
-        Please confirm that the configured path {0} is correct.
-      Start: |-
-        Error occured while starting FFmpeg at {Path}: {Message}
-        {StackTrace}
-      Write: |-
-        Error occured while writing to FFmpeg process: {Message}
-        {StackTrace}
+    Render:
+      FFmpeg:
+        NotFound: |-
+          Could not find any FFmpeg executable.
+          Please confirm that the configured path {0} is correct.
+        Start: |-
+          Error occured while starting FFmpeg at {Path}: {Message}
+          {StackTrace}
+        Write: |-
+          Error occured while writing to FFmpeg process: {Message}
+          {StackTrace}
+      Audio:
+        IncompatibleSfx: |-
+          The audio clip {Sfx} is incompatible for rendering.
+          Expected channel count of {ExpectedChannels} and frequency of {ExpectedFrequency}, but the clip's channel count is {Channels} and its frequency is {Frequency}.
           
   # Notification messages
   Notify:
@@ -324,6 +329,7 @@ Compose:
         Composer: Composer
         Illustrator: Illustrator
         Charter: Charter
+        Alias: Alias
         BPM: BPM
         BaseBPM: Base BPM
         SyncBaseBPM: Sync
@@ -356,6 +362,9 @@ Compose:
         NoProjectLoaded: |-
           No project loaded.
           Create or open a new project
+        Shutter: Shutter
+        ShowShutter: Show shutter
+        HideShutter: Hide shutter
       Options:
         Inherit: Inherit
         Light: Light
@@ -591,3 +600,9 @@ Gameplay:
     Play: Play
     Retry: Retry
     Return: Return
+
+Shutter:
+  Composer: Music
+  Illustrator: Illustration
+  Charter: Note Design
+  Alias: as

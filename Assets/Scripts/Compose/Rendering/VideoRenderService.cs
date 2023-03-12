@@ -5,6 +5,7 @@ using ArcCreate.Compose.Components;
 using ArcCreate.Compose.Navigation;
 using ArcCreate.Compose.Timeline;
 using ArcCreate.Gameplay;
+using ArcCreate.SceneTransition;
 using ArcCreate.Utility;
 using ArcCreate.Utility.Parser;
 using Cysharp.Threading.Tasks;
@@ -66,6 +67,18 @@ namespace ArcCreate.Compose.Rendering
             UniTask.WaitUntil(() => cancel.WasExecuted, cancellationToken: cts.Token)
                 .ContinueWith(cts.Cancel).Forget();
 
+            AudioRenderer audioRenderer = new AudioRenderer(
+                startTiming: from,
+                endTiming: to,
+                audioOffset: gameplayData.AudioOffset.Value,
+                songAudio: gameplayData.AudioClip.Value,
+                tapAudio: Services.Gameplay.Audio.TapHitsoundClip,
+                arcAudio: Services.Gameplay.Audio.ArcHitsoundClip,
+                shutterCloseAudio: Shutter.ExternalCloseAudio.Value,
+                shutterOpenAudio: Shutter.ExternalStartAudio.Value,
+                sfxAudio: Services.Gameplay.Audio.SfxAudioClips);
+            audioRenderer.CreateAudio();
+
             using (var renderer = new FrameRenderer(
                 outputPath: outputPath,
                 cameras: Services.Gameplay.Camera.RenderingCameras,
@@ -74,7 +87,8 @@ namespace ArcCreate.Compose.Rendering
                 fps: Settings.FPS.Value,
                 crf: Settings.CRF.Value,
                 from: from,
-                to: to))
+                to: to,
+                audioRenderer: audioRenderer))
             {
                 renderPreview.texture = renderer.Texture2D;
 

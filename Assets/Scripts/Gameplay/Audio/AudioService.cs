@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -95,6 +96,12 @@ namespace ArcCreate.Gameplay.Audio
                 AudioLength = Mathf.RoundToInt(value.length * 1000);
             }
         }
+
+        public AudioClip TapHitsoundClip => Services.Hitsound.TapHitsoundClip;
+
+        public AudioClip ArcHitsoundClip => Services.Hitsound.ArcHitsoundClip;
+
+        public Dictionary<string, AudioClip> SfxAudioClips => Services.Hitsound.SfxAudioClips;
 
         private int FullOffset => Values.ChartAudioOffset + Settings.GlobalAudioOffset.Value;
 

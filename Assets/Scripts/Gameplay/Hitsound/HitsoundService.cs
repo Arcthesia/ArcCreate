@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using ArcCreate.Gameplay.Data;
+using ArcCreate.Utilities.ExternalAssets;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -22,6 +23,12 @@ namespace ArcCreate.Gameplay.Hitsound
         private readonly Dictionary<string, AudioClip> sfxClips = new Dictionary<string, AudioClip>();
 
         public bool IsLoaded { get; private set; }
+
+        public AudioClip TapHitsoundClip => tapClipLoader.Value;
+
+        public AudioClip ArcHitsoundClip => arcClipLoader.Value;
+
+        public Dictionary<string, AudioClip> SfxAudioClips => sfxClips;
 
         public void PlayTapHitsound()
         {

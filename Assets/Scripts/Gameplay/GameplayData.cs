@@ -64,6 +64,11 @@ namespace ArcCreate.Gameplay
         public State<string> Charter { get; } = new State<string>();
 
         /// <summary>
+        /// The charter's alias.
+        /// </summary>
+        public State<string> Alias { get; } = new State<string>();
+
+        /// <summary>
         /// The text of the difficulty display.
         /// </summary>
         public State<string> DifficultyName { get; } = new State<string>();

@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace ArcCreate.Gameplay.Skin
+namespace ArcCreate.Utilities.ExternalAssets
 {
     /// <summary>
     /// Class for handling loading extenal skin as sprites.
@@ -45,8 +45,8 @@ namespace ArcCreate.Gameplay.Skin
             foreach (string ext in Extensions)
             {
                 string path = string.IsNullOrEmpty(subDirectory) ?
-                    Path.Combine(Values.SkinFolderPath, original.name + ext) :
-                    Path.Combine(Values.SkinFolderPath, subDirectory, original.name + ext);
+                    Path.Combine(ExternalAssetsCommon.SkinFolderPath, original.name + ext) :
+                    Path.Combine(ExternalAssetsCommon.SkinFolderPath, subDirectory, original.name + ext);
 
                 if (!File.Exists(path))
                 {

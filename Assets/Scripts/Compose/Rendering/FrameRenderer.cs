@@ -21,12 +21,14 @@ namespace ArcCreate.Compose.Rendering
         private readonly float endRenderingTime;
         private readonly int crf;
         private readonly float fps;
+        private readonly AudioRenderer audioRenderer;
         private readonly int width;
         private readonly int height;
         private byte[] cachedByteArray;
 
-        public FrameRenderer(string outputPath, Camera[] cameras, int width, int height, float fps, int crf, int from, int to)
+        public FrameRenderer(string outputPath, Camera[] cameras, int width, int height, float fps, int crf, int from, int to, AudioRenderer audioRenderer)
         {
+            this.audioRenderer = audioRenderer;
             this.width = width;
             this.height = height;
             this.cameras = cameras;
@@ -74,12 +76,12 @@ namespace ArcCreate.Compose.Rendering
             BinaryWriter ffmpegWriter = null;
             try
             {
-                ffmpegProcess = GetFFmpegProcess(outputPath);
+                ffmpegProcess = GetFFmpegProcess(outputPath, audioRenderer.SfxAudioList);
                 ffmpegWriter = new BinaryWriter(ffmpegProcess.StandardInput.BaseStream);
             }
             catch (Exception e)
             {
-                UnityEngine.Debug.LogError(I18n.S("Compose.Exception.FFmpeg.Start", new Dictionary<string, object>()
+                UnityEngine.Debug.LogError(I18n.S("Compose.Exception.Render.FFmpeg.Start", new Dictionary<string, object>()
                 {
                     { "Message", e.Message },
                     { "StackTrace", e.StackTrace },
@@ -147,7 +149,7 @@ namespace ArcCreate.Compose.Rendering
             }
             catch (Exception e)
             {
-                UnityEngine.Debug.LogError(I18n.S("Compose.Exception.FFmpeg.Write", new Dictionary<string, object>()
+                UnityEngine.Debug.LogError(I18n.S("Compose.Exception.Render.FFmpeg.Write", new Dictionary<string, object>()
                 {
                     { "Message", e.Message },
                     { "StackTrace", e.StackTrace },
@@ -190,15 +192,15 @@ namespace ArcCreate.Compose.Rendering
             }
             catch (Exception)
             {
-                UnityEngine.Debug.LogError(I18n.S("Compose.Exception.FFmpeg.NotFound", Settings.FFmpegPath.Value));
+                UnityEngine.Debug.LogError(I18n.S("Compose.Exception.Render.FFmpeg.NotFound", Settings.FFmpegPath.Value));
             }
 
             return false;
         }
 
-        private Process GetFFmpegProcess(string videoPath)
+        private Process GetFFmpegProcess(string videoPath, List<string> sfxAudioList)
         {
-            // string path = GetPath();
+            string path = GetPath();
 
             // libx264 doesn't believe in odd sizes
             int w = Mathf.Max(width - (width % 2), 2);
@@ -211,18 +213,18 @@ namespace ArcCreate.Compose.Rendering
 
             UnityEngine.Debug.Log($"Writing to {videoPath}");
 
-            // string argsForSfxAudio = "";
-            // foreach (string key in sfxAudio.Keys)
-            // {
-            //     argsForSfxAudio += $"-i \"{Path.Combine(path, $"sfx_{key}.wav")}\" ";
-            // }
+            string argsForSfxAudio = "";
+            foreach (string key in sfxAudioList)
+            {
+                argsForSfxAudio += $"-i \"{Path.Combine(path, $"sfx_{key}.wav")}\" ";
+            }
 #pragma warning disable
             string args = ""
             + $" -f rawvideo -pixel_format argb -video_size {width}x{height} -framerate {fps} -i pipe: "
-            // + $"-i \"{Path.Combine(path, "sfx.wav")}\" "   // First audio (sfx)
-            // + $"-i \"{Path.Combine(path, "song.wav")}\" "  // Second audio (sfx)
-            // + argsForSfxAudio
-            // + $"-filter_complex amix=inputs={2 + sfxAudio.Count}:duration=longest " //Mix 2 audio files
+            + $"-i \"{Path.Combine(path, "sfx.wav")}\" "   // First audio (sfx)
+            + $"-i \"{Path.Combine(path, "song.wav")}\" "  // Second audio (sfx)
+            + argsForSfxAudio
+            + $"-filter_complex amix=inputs={2 + sfxAudioList.Count}:duration=longest " //Mix audio files
             + $"-c:v libx264 "             //Video codec
             + $"-c:a aac "                 //Audio codec
             + $"-pix_fmt yuv420p "         //Set pixel format for QuickTime
@@ -252,12 +254,17 @@ namespace ArcCreate.Compose.Rendering
             };
 
             ffmpegProcess.Start();
-            ffmpegProcess.ErrorDataReceived += (sender, eventArgs) => { UnityEngine.Debug.Log(eventArgs.Data); };
+            ffmpegProcess.ErrorDataReceived += (sender, eventArgs) => { UnityEngine.Debug.LogError(eventArgs.Data); };
             ffmpegProcess.BeginErrorReadLine();
             ffmpegProcess.OutputDataReceived += (sender, eventArgs) => { UnityEngine.Debug.Log(eventArgs.Data); };
             ffmpegProcess.BeginOutputReadLine();
 
             return ffmpegProcess;
+        }
+
+        private string GetPath(string fileName = "")
+        {
+            return Path.Combine(new DirectoryInfo(Application.dataPath).Parent.FullName, "Rendering", fileName);
         }
     }
 }

@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ArcCreate.Gameplay.Skin
+namespace ArcCreate.Utilities.ExternalAssets
 {
     public class ExternalSpriteLoaderComponent : MonoBehaviour
     {

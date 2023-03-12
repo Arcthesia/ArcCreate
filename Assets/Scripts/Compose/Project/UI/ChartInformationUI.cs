@@ -17,6 +17,7 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private TMP_InputField composer;
         [SerializeField] private TMP_InputField illustrator;
         [SerializeField] private TMP_InputField charter;
+        [SerializeField] private TMP_InputField alias;
         [SerializeField] private TMP_InputField baseBpm;
         [SerializeField] private Toggle syncBaseBpm;
         [SerializeField] private TMP_InputField chartOffset;
@@ -32,6 +33,7 @@ namespace ArcCreate.Compose.Project
             composer.text = chart.Composer ?? "";
             illustrator.text = chart.Illustrator ?? "";
             charter.text = chart.Charter ?? "";
+            alias.text = chart.Alias ?? "";
             baseBpm.text = chart.BaseBpm.ToString();
             syncBaseBpm.isOn = chart.SyncBaseBpm;
             chartConstant.text = chart.ChartConstant.ToString();
@@ -57,6 +59,7 @@ namespace ArcCreate.Compose.Project
             GameplayData.Composer.Value = chart.Composer ?? "";
             GameplayData.Illustrator.Value = chart.Illustrator ?? "";
             GameplayData.Charter.Value = chart.Charter ?? "";
+            GameplayData.Alias.Value = chart.Alias ?? "";
             GameplayData.DifficultyName.Value = chart.Difficulty ?? "";
             GameplayData.DifficultyColor.Value = c;
         }
@@ -68,6 +71,7 @@ namespace ArcCreate.Compose.Project
             composer.onEndEdit.AddListener(OnComposer);
             illustrator.onEndEdit.AddListener(OnIllustrator);
             charter.onEndEdit.AddListener(OnCharter);
+            alias.onEndEdit.AddListener(OnAlias);
             baseBpm.onEndEdit.AddListener(OnBaseBpm);
             syncBaseBpm.onValueChanged.AddListener(OnSyncBaseBPM);
             chartConstant.onEndEdit.AddListener(OnChartConstant);
@@ -99,6 +103,7 @@ namespace ArcCreate.Compose.Project
             composer.onEndEdit.RemoveListener(OnComposer);
             illustrator.onEndEdit.RemoveListener(OnIllustrator);
             charter.onEndEdit.RemoveListener(OnCharter);
+            alias.onEndEdit.RemoveListener(OnAlias);
             baseBpm.onEndEdit.RemoveListener(OnBaseBpm);
             syncBaseBpm.onValueChanged.RemoveListener(OnSyncBaseBPM);
             chartConstant.onEndEdit.RemoveListener(OnChartConstant);
@@ -197,6 +202,14 @@ namespace ArcCreate.Compose.Project
         {
             Target.Charter = value;
             GameplayData.Charter.Value = value;
+
+            Values.ProjectModified = true;
+        }
+
+        private void OnAlias(string value)
+        {
+            Target.Alias = value;
+            GameplayData.Alias.Value = value;
 
             Values.ProjectModified = true;
         }

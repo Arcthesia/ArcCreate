@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay
@@ -32,6 +33,12 @@ namespace ArcCreate.Gameplay
         /// Gets a value indicating whether or not the audio is playing.
         /// </summary>
         bool IsPlaying { get; }
+
+        AudioClip TapHitsoundClip { get; }
+
+        AudioClip ArcHitsoundClip { get; }
+
+        Dictionary<string, AudioClip> SfxAudioClips { get; }
 
         /// <summary>
         /// Play the audio immediately without delay. See <see cref="PlayWithDelay"/> for playing audio with minimal audio lag.

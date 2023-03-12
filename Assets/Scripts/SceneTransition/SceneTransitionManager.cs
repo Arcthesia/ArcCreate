@@ -18,7 +18,7 @@ namespace ArcCreate.SceneTransition
     // Code yoinked from ArcCore
 
     /// <summary>
-    /// Manager for shutter and scene transition. Allows for easy data transfer between scenes.
+    /// Manager for scene transitioning. Allows for easy data transfer between scenes.
     /// </summary>
     public class SceneTransitionManager : MonoBehaviour
     {
@@ -112,7 +112,6 @@ namespace ArcCreate.SceneTransition
         /// <summary>
         /// Start the transition without switching scene.
         /// </summary>
-        /// <param name="showInfo">Whether or not to show the information on shutter.</param>
         /// <returns>Unitask instance.</returns>
         public async UniTask StartTransitionWithoutSwitchingScene()
         {
@@ -157,13 +156,13 @@ namespace ArcCreate.SceneTransition
             }
         }
 
-        private void OnShutterCloseCallback()
+        private void OnTransitionWaitCallback()
         {
             onTransitionWait?.Invoke();
             onTransitionWait = null;
         }
 
-        private void OnShutterOpenCallback()
+        private void OnTransitionEndCallback()
         {
             OnTransitionEnd?.Invoke();
             OnTransitionEnd = null;
@@ -175,7 +174,7 @@ namespace ArcCreate.SceneTransition
 
             transition.EnableGameObject();
             await transition.StartTransition();
-            OnShutterCloseCallback();
+            OnTransitionWaitCallback();
 
             transitionState = TransitionState.Waiting;
             await UniTask.Delay(transition.WaitDurationMs);
@@ -193,7 +192,7 @@ namespace ArcCreate.SceneTransition
             transitionState = TransitionState.Ending;
 
             await transition.EndTransition();
-            OnShutterOpenCallback();
+            OnTransitionEndCallback();
             transition.DisableGameObject();
             transitionState = TransitionState.Idle;
         }

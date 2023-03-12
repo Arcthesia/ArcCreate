@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.SceneTransition;
+using ArcCreate.Utilities.ExternalAssets;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;

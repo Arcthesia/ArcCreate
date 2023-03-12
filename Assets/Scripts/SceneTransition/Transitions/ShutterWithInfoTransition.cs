@@ -1,25 +1,26 @@
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 
 namespace ArcCreate.SceneTransition
 {
-    [RequireComponent(typeof(Shutter))]
-    public class ShutterWithInfoTransition : MonoBehaviour, ITransition
+    public class ShutterWithInfoTransition : ITransition
     {
-        private Shutter shutter;
+        private readonly Shutter shutter;
 
-        public ShutterWithInfoTransition Instance { get; private set; }
+        public ShutterWithInfoTransition()
+        {
+            shutter = Shutter.Instance;
+        }
 
-        public int WaitDurationMs => Shutter.WaitBetween;
+        public int WaitDurationMs => Shutter.WaitBetweenMs;
 
         public void DisableGameObject()
         {
-            gameObject.SetActive(false);
+            shutter.gameObject.SetActive(false);
         }
 
         public void EnableGameObject()
         {
-            gameObject.SetActive(true);
+            shutter.gameObject.SetActive(true);
         }
 
         public async UniTask StartTransition()
@@ -30,12 +31,6 @@ namespace ArcCreate.SceneTransition
         public async UniTask EndTransition()
         {
             await shutter.Open();
-        }
-
-        private void Awake()
-        {
-            Instance = this;
-            shutter = GetComponent<Shutter>();
         }
     }
 }

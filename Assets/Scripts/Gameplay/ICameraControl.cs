@@ -38,5 +38,10 @@ namespace ArcCreate.Gameplay
         /// Gets the gameplay camera of the scene.
         /// </summary>
         Camera GameplayCamera { get; }
+
+        /// <summary>
+        /// Gets the UI camera of the scene.
+        /// </summary>
+        Camera UICamera { get; }
     }
 }

@@ -1143,7 +1143,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 246210307}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9312242bf01d1f232aa551ec459431c0, type: 3}
+  m_Script: {fileID: 11500000, guid: 04bc46ea7beddc0238d01a6145dbd40a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   subdirectories:
@@ -1254,7 +1254,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 263005822}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9312242bf01d1f232aa551ec459431c0, type: 3}
+  m_Script: {fileID: 11500000, guid: 04bc46ea7beddc0238d01a6145dbd40a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   subdirectories:
@@ -2502,7 +2502,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 537426950}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9312242bf01d1f232aa551ec459431c0, type: 3}
+  m_Script: {fileID: 11500000, guid: 04bc46ea7beddc0238d01a6145dbd40a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   subdirectories:
@@ -3219,7 +3219,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 658714732}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9312242bf01d1f232aa551ec459431c0, type: 3}
+  m_Script: {fileID: 11500000, guid: 04bc46ea7beddc0238d01a6145dbd40a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   subdirectories:
@@ -5179,7 +5179,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1125645939}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9312242bf01d1f232aa551ec459431c0, type: 3}
+  m_Script: {fileID: 11500000, guid: 04bc46ea7beddc0238d01a6145dbd40a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   subdirectories:
@@ -8103,7 +8103,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1843374746}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9312242bf01d1f232aa551ec459431c0, type: 3}
+  m_Script: {fileID: 11500000, guid: 04bc46ea7beddc0238d01a6145dbd40a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   subdirectories:
@@ -8118,7 +8118,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1843374746}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1af0b24784511a404a3f4a68f2ed7071, type: 3}
+  m_Script: {fileID: 11500000, guid: 7395c3ebd06275bdf985228dc11f3be4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   subdirectories:
@@ -10069,6 +10069,7 @@ MonoBehaviour:
   composerSO: {fileID: 11400000, guid: 8fa009c365becf9439b7df7055ef9aa9, type: 2}
   illustratorSO: {fileID: 11400000, guid: 955659b8f14e8cb4786e57c919033252, type: 2}
   charterSO: {fileID: 11400000, guid: 6da6e53bfac950742a3939124ad6f2cc, type: 2}
+  aliasSO: {fileID: 11400000, guid: f10ee7d9b9ec2b3d388db0c4f6a60245, type: 2}
   difficultyText: {fileID: 1987312593}
   difficultyColor: {fileID: 537426952}
 --- !u!1 &2136307876

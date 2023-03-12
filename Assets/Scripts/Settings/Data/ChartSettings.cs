@@ -22,6 +22,8 @@ namespace ArcCreate.Data
 
         public string Charter { get; set; }
 
+        public string Alias { get; set; }
+
         public string Illustrator { get; set; }
 
         public string Difficulty { get; set; }
@@ -45,6 +47,7 @@ namespace ArcCreate.Data
                 Title = Title,
                 Composer = Composer,
                 Charter = Charter,
+                Alias = Alias,
                 Illustrator = Illustrator,
                 BaseBpm = BaseBpm,
                 SyncBaseBpm = SyncBaseBpm,

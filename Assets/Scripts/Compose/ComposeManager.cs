@@ -53,6 +53,7 @@ namespace ArcCreate.Compose
             Services.Gameplay = gameplay ?? throw new System.Exception("Could not load gameplay scene");
             gameplay.ShouldUpdateInputSystem = false;
             gameplay.Chart.EnableColliderGeneration = true;
+            Shutter.Instance.SetTargetCamera(gameplay.Camera.UICamera, "Topmost");
             Debug.Log(I18n.S("Compose.Notify.GameplayLoaded"));
         }
 
