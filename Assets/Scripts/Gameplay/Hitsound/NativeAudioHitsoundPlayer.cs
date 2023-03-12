@@ -1,3 +1,4 @@
+#if USE_NATIVE_AUDIO
 using E7.Native;
 using UnityEngine;
 
@@ -65,3 +66,4 @@ namespace ArcCreate.Gameplay.Hitsound
         }
     }
 }
+#endif

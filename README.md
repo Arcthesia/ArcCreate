@@ -28,7 +28,7 @@ This project was made with Unity 2019.4.34f1. You can download the exact version
 - [x] Note editing
 - [x] Timing, camera editing
 - [x] Custom hotkeys configuration
-- [ ] FFmpeg rendering support
+- [x] FFmpeg rendering support
 - [ ] Lua macro support
 - [x] Lua scenecontrol editing & compiling
 - [x] LAN communication between desktop and mobile

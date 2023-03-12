@@ -20,6 +20,11 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
+            
+      - name: Decrypt & extract secrets
+        run: ./decrypt_secret.sh
+        env:
+          SECRET_PASSPHRASE: ${{ secrets.ENCRYPTED_FILE_SECRET_PASSPHRASE }}
 
       - uses: actions/cache@v2
         with:

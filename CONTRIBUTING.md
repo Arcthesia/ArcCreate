@@ -43,6 +43,14 @@ If you're writing a complex pieces of code, and you want to make sure that it fu
 
 If you want to make any major changes to the application, such as addition of entirely new features, or major refactoring, make sure to discuss with me before doing anything. This helps both you and me from wasting each other times, and I can offer some advices if necessary. For small changes feel free to open a PR without discussing beforehands.
 
+### About paid assets
+
+This project makes no use of paid assets except for NativeAudio. Due to licensing the asset will not be included in the public git repository.
+
+The codebase is setup so that NativeAudio will only be included when building for Android and iOS, and also if the [scripting define symbol](https://docs.unity3d.com/2019.4/Documentation/Manual/PlatformDependentCompilation.html) `USE_NATIVE_AUDIO` is defined. Therefore, if you don't have the asset yourself, everything should still function normally.
+
+If you own NativeAudio and would like to use it in your own project, first import and move the plugin to `Assets/Plugins/Native Audio`, be careful not to overwrite any file (especially `E7.NativeAudio.asmdef.meta`). Then create the file `Assets/csc.rsp` and write `-define:USE_NATIVE_AUDIO` in the file, save it and then reimport any script in the Unity Editor.
+
 ### Optimization guidelines
 
 #### Only optimize where necessary
