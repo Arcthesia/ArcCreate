@@ -195,6 +195,8 @@ Compose:
       Render:
         Cancelled: Render cancelled
         Complete: Render complete
+      Package:
+        Complete: Exported package to {0}
   # Dialog boxes
   Dialog:
     RemoveGroup:
@@ -444,6 +446,10 @@ Compose:
         Name: Export package
         Description: |-
           Export a .arcpkg package file to share to other players.
+        Publisher: Publisher
+        Package: Package
+        BlankField: Please enter both publisher and package name information
+        Identifier: "Your package identifier is: {0}"
         Export: Export
     # Editor settings panel
     Settings:

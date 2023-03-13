@@ -9,6 +9,7 @@ using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Parser;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Selection
@@ -46,6 +47,8 @@ namespace ArcCreate.Compose.Selection
         [SerializeField] private Sprite traceIcon;
 
         private HashSet<Note> selected;
+
+        public bool IsCursorHovering => RectTransformUtility.RectangleContainsScreenPoint(rect, Mouse.current.position.ReadValue(), null);
 
         public void ApplySelection(HashSet<Note> selected)
         {

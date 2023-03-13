@@ -55,6 +55,7 @@ namespace ArcCreate.Compose.Selection
 
             if (EventSystem.current.currentSelectedGameObject != null
              || !Services.Cursor.IsCursorAboveViewport
+             || inspectorMenu.IsCursorHovering
              || (Values.CreateNoteMode.Value != CreateNoteMode.Idle && Services.Cursor.IsHittingLane)
              || RangeSelected)
             {

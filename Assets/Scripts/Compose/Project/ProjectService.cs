@@ -24,7 +24,6 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private Button openProjectButton;
         [SerializeField] private Button saveProjectButton;
         [SerializeField] private Button openFolderButton;
-        [SerializeField] private Button exportProjectButton;
         [SerializeField] private CanvasGroup toggleInteractiveCanvas;
         [SerializeField] private GameObject noProjectLoadedHint;
         [SerializeField] private ChartPicker chartPicker;
@@ -227,7 +226,6 @@ namespace ArcCreate.Compose.Project
             openProjectButton.onClick.AddListener(StartOpeningProject);
             saveProjectButton.onClick.AddListener(SaveProject);
             openFolderButton.onClick.AddListener(OpenProjectFolder);
-            exportProjectButton.onClick.AddListener(ExportProject);
             toggleInteractiveCanvas.interactable = false;
             noProjectLoadedHint.SetActive(true);
         }
@@ -238,7 +236,6 @@ namespace ArcCreate.Compose.Project
             openProjectButton.onClick.RemoveListener(StartOpeningProject);
             saveProjectButton.onClick.RemoveListener(SaveProject);
             openFolderButton.onClick.RemoveListener(OpenProjectFolder);
-            exportProjectButton.onClick.RemoveListener(ExportProject);
         }
 
         private void OpenProject(string path)
@@ -274,10 +271,6 @@ namespace ArcCreate.Compose.Project
                 {
                     { "Path", path },
                 }));
-        }
-
-        private void ExportProject()
-        {
         }
 
         private void SerializeProject(ProjectSettings projectSettings)
