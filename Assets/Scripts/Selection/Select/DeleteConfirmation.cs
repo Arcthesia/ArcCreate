@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using ArcCreate.Storage;
 using ArcCreate.Storage.Data;
 using ArcCreate.Utility.Animation;
 using TMPro;
@@ -10,6 +11,7 @@ namespace ArcCreate.Selection.Select
 {
     public class DeleteConfirmation : MonoBehaviour
     {
+        [SerializeField] private StorageData storageData;
         [SerializeField] private TMP_Text listText;
         [SerializeField] private Button deleteButton;
         [SerializeField] private Button cancelButton;
@@ -58,6 +60,7 @@ namespace ArcCreate.Selection.Select
             storageUnits.Clear();
             animator.Hide();
             Services.Select.ClearSelection();
+            storageData.NotifyStorageChange();
         }
     }
 }

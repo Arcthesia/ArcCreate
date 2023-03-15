@@ -3626,6 +3626,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3659e6b46da2b0467bee3418adfe99aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  storageData: {fileID: 11400000, guid: 799db18f533da7c0ba7f0c6f431e7706, type: 2}
   replaceWithCreatedAt: {fileID: 1481753333}
   originalCreatedAt: {fileID: 1999096012}
   replaceWithIdentifier: {fileID: 581892521}

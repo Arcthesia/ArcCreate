@@ -15,13 +15,18 @@ namespace ArcCreate.Storage
 #if UNITY_EDITOR
         public static readonly string RootPath = Path.Combine(Application.dataPath, ".imported");
 #else
-        public static readonly string RootPath = Application.persistentDataPath;
+        public static readonly string RootPath = Path.Combine(Application.persistentDataPath, "Persistent");
 #endif
 
         public static readonly string DatabasePath = Path.Combine(RootPath, Database);
         public static readonly string FileStoragePath = Path.Combine(RootPath, FileStorage);
         public static readonly string DefaultPackagePath = Path.Combine(Application.streamingAssetsPath, DefaultPackage);
-        public static readonly string TempPath = Application.temporaryCachePath;
-        public static readonly string TempImportPath = Path.Combine(Application.temporaryCachePath, "import");
+
+#if UNITY_EDITOR
+        public static readonly string TempPath = Path.Combine(Application.dataPath, ".temporary");
+#else
+        public static readonly string TempPath = Path.Combine(Application.persistentDataPath, "Temporary");
+#endif
+        public static readonly string TempImportPath = Path.Combine(TempPath, "import");
     }
 }

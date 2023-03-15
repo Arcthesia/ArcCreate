@@ -60,5 +60,10 @@ namespace ArcCreate.Utility.InfiniteScroll
             cts.Dispose();
             cts = new CancellationTokenSource();
         }
+
+        public void MarkFullyLoaded()
+        {
+            HierarchyData.IsFullyLoaded = true;
+        }
     }
 }

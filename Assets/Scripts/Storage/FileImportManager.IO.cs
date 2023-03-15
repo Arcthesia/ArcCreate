@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Threading.Tasks;
 using ArcCreate.Data;
 using ArcCreate.Storage.Data;
 using Cysharp.Threading.Tasks;
@@ -34,7 +33,17 @@ namespace ArcCreate.Storage
         {
             foreach (var entry in archive.Entries)
             {
+                if (string.IsNullOrEmpty(entry.Name))
+                {
+                    continue;
+                }
+
                 string path = Path.Combine(FileStatics.TempImportPath, entry.FullName);
+                if (!Directory.Exists(Path.GetDirectoryName(path)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(path));
+                }
+
                 using (FileStream fs = File.OpenWrite(path))
                 {
                     using (Stream zs = entry.Open())
@@ -50,7 +59,11 @@ namespace ArcCreate.Storage
             }
             catch (Exception e)
             {
-                Directory.Delete(FileStatics.TempImportPath, true);
+                if (Directory.Exists(FileStatics.TempImportPath))
+                {
+                    Directory.Delete(FileStatics.TempImportPath, true);
+                }
+
                 throw e;
             }
         }
@@ -123,13 +136,18 @@ namespace ArcCreate.Storage
             {
                 foreach (string rawVirtualPath in data.FileReferences)
                 {
-                    string virtualPath = Path.Combine(data.Type, data.Identifier, rawVirtualPath);
+                    string virtualPath = string.Join("/", data.Type, data.Identifier, rawVirtualPath);
                     string realPath = Path.Combine(dir.FullName, importingFileReferences[(data, rawVirtualPath)]);
                     FileStorage.ImportFile(realPath, virtualPath);
                 }
             }
 
-            Directory.Delete(FileStatics.TempPath, true);
+            if (Directory.Exists(FileStatics.TempPath))
+            {
+                Directory.Delete(FileStatics.TempPath, true);
+            }
+
+            storageData.NotifyStorageChange();
         }
 
         /// <summary>
@@ -176,6 +194,7 @@ namespace ArcCreate.Storage
 
                 if (storage != null)
                 {
+                    storage.Identifier = import.Identifier;
                     storage.CreatedAt = import.CreatedAt;
                     storage.FileReferences = new List<string>();
 
@@ -202,7 +221,6 @@ namespace ArcCreate.Storage
                         }
                     }
 
-                    storage.Insert();
                     importingData.Add(storage);
                 }
             }
