@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ArcCreate.Utility;
-using ArcCreate.Utility;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;

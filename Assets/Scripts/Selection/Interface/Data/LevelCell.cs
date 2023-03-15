@@ -96,10 +96,10 @@ namespace ArcCreate.Selection.Interface
 
             if (currentChart == null && selectedChart != null)
             {
-                float minCcDiff = float.MaxValue;
+                double minCcDiff = double.MaxValue;
                 foreach (var chart in level.Settings.Charts)
                 {
-                    float ccDiff = chart.ChartConstant - selectedChart.ChartConstant;
+                    double ccDiff = chart.ChartConstant - selectedChart.ChartConstant;
                     if (ccDiff < minCcDiff)
                     {
                         currentChart = chart;

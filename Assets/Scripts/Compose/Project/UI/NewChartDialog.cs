@@ -16,7 +16,7 @@ namespace ArcCreate.Compose.Project
 
         private void OnConfirm(string name)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(name) || name == "remote")
             {
                 warningObject.SetActive(true);
                 warningText.text = I18n.S("Compose.Exception.InvalidChartFile");

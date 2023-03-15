@@ -10,6 +10,8 @@ namespace ArcCreate.Utility.Animation
         private float length = 0;
         private bool isSetup = false;
 
+        public float Length => length;
+
         public void Show()
         {
             if (disableGameObject)
@@ -91,12 +93,7 @@ namespace ArcCreate.Utility.Animation
             return sequence;
         }
 
-        private void Awake()
-        {
-            SetupComponents();
-        }
-
-        private void SetupComponents()
+        public void SetupComponents()
         {
             foreach (var c in components)
             {
@@ -105,6 +102,11 @@ namespace ArcCreate.Utility.Animation
             }
 
             isSetup = true;
+        }
+
+        private void Awake()
+        {
+            SetupComponents();
         }
     }
 }

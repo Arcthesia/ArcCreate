@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using UltraLiteDB;
 
 namespace ArcCreate.Storage.Data
@@ -13,7 +10,7 @@ namespace ArcCreate.Storage.Data
 
         public string Identifier { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public int Version { get; set; }
 
         public List<string> FileReferences { get; set; }
 
@@ -39,20 +36,21 @@ namespace ArcCreate.Storage.Data
             Database.Current.GetCollection<T>().Insert(this as T);
         }
 
-        public void Update(IStorageUnit other)
-        {
-            foreach (string refr in FileReferences)
-            {
-                FileStorage.DeleteReference(string.Join("/", Type, Identifier, refr));
-            }
-
-            T newValue = other as T;
-            Database.Current.GetCollection<T>().Update(Id, newValue);
-        }
-
         public string GetRealPath(string virtualPath)
         {
             return FileStorage.GetFilePath(string.Join("/", Type, Identifier, virtualPath));
+        }
+
+        public virtual bool ValidateSelf(out string reason)
+        {
+            if (!string.IsNullOrEmpty(Identifier))
+            {
+                reason = "Identifier is empty";
+                return false;
+            }
+
+            reason = string.Empty;
+            return true;
         }
     }
 }

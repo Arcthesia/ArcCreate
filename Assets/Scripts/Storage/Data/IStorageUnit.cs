@@ -7,7 +7,7 @@ namespace ArcCreate.Storage.Data
     {
         string Identifier { get; set; }
 
-        DateTime CreatedAt { get; set; }
+        int Version { get; set; }
 
         List<string> FileReferences { get; set; }
 
@@ -17,8 +17,8 @@ namespace ArcCreate.Storage.Data
 
         void Delete();
 
-        void Update(IStorageUnit other);
-
         IStorageUnit GetConflictingIdentifier();
+
+        bool ValidateSelf(out string reason);
     }
 }

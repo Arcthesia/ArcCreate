@@ -17,11 +17,13 @@ namespace ArcCreate.EditorScripts
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Show animation"))
             {
+                animator.SetupComponents();
                 RunTween(animator.GetShowTween(out float duration), duration);
             }
 
             if (GUILayout.Button("Hide animation"))
             {
+                animator.SetupComponents();
                 RunTween(animator.GetHideTween(out float duration), duration);
             }
 
@@ -30,11 +32,13 @@ namespace ArcCreate.EditorScripts
 
             if (GUILayout.Button("Register default values"))
             {
+                animator.SetupComponents();
                 animator.RegisterDefaultValues();
             }
 
             if (GUILayout.Button("Reset to default"))
             {
+                animator.SetupComponents();
                 animator.RegisterDefaultValues();
             }
 
