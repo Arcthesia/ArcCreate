@@ -4,7 +4,7 @@ namespace ArcCreate.Storage
 {
     public class ImportInformation
     {
-        public const string FileName = "import.yml";
+        public const string FileName = "index.yml";
         public const string LevelType = "level";
         public const string PackType = "pack";
 

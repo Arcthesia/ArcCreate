@@ -273,6 +273,7 @@ GameObject:
   m_Component:
   - component: {fileID: 82553795}
   - component: {fileID: 82553796}
+  - component: {fileID: 82553797}
   m_Layer: 0
   m_Name: Services
   m_TagString: Untagged
@@ -307,7 +308,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c6690513346bea42bec223484a9f057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  select: {fileID: 0}
+  select: {fileID: 1611718376}
+--- !u!114 &82553797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 82553794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4ea6a9b86b9b97dcae133ccc92e296e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &112000600
 GameObject:
   m_ObjectHideFlags: 0

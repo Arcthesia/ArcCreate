@@ -9,7 +9,9 @@ namespace ArcCreate.Storage.Data
     public abstract class StorageUnit<T> : IStorageUnit
         where T : StorageUnit<T>
     {
-        [BsonId] public string Identifier { get; set; }
+        [BsonId] public int Id { get; set; }
+
+        public string Identifier { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
@@ -21,15 +23,15 @@ namespace ArcCreate.Storage.Data
         {
             foreach (string refr in FileReferences)
             {
-                FileStorage.DeleteReference(Path.Combine(Type, Identifier, refr));
+                FileStorage.DeleteReference(string.Join("/", Type, Identifier, refr));
             }
 
-            Database.Current.GetCollection<T>().Delete(Identifier);
+            Database.Current.GetCollection<T>().Delete(Id);
         }
 
         public IStorageUnit GetConflictingIdentifier()
         {
-            return Database.Current.GetCollection<T>().FindById(Identifier);
+            return Database.Current.GetCollection<T>().FindOne(Query.EQ("Identifier", Identifier));
         }
 
         public void Insert()
@@ -41,11 +43,16 @@ namespace ArcCreate.Storage.Data
         {
             foreach (string refr in FileReferences)
             {
-                FileStorage.DeleteReference(Path.Combine(Type, Identifier, refr));
+                FileStorage.DeleteReference(string.Join("/", Type, Identifier, refr));
             }
 
             T newValue = other as T;
-            Database.Current.GetCollection<T>().Update(Identifier, newValue);
+            Database.Current.GetCollection<T>().Update(Id, newValue);
+        }
+
+        public string GetRealPath(string virtualPath)
+        {
+            return FileStorage.GetFilePath(string.Join("/", Type, Identifier, virtualPath));
         }
     }
 }

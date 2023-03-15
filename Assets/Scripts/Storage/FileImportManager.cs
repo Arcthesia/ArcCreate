@@ -15,6 +15,7 @@ namespace ArcCreate.Storage
     /// </summary>
     public partial class FileImportManager : MonoBehaviour
     {
+        [SerializeField] private StorageData storageData;
         [SerializeField] private TMP_Text replaceWithCreatedAt;
         [SerializeField] private TMP_Text originalCreatedAt;
         [SerializeField] private TMP_Text replaceWithIdentifier;
@@ -84,6 +85,11 @@ namespace ArcCreate.Storage
                 // Copy to temporary path
                 byte[] data = req.downloadHandler.data;
                 string copyPath = Path.Combine(FileStatics.TempPath, FileStatics.DefaultPackage);
+                if (!Directory.Exists(Path.GetDirectoryName(copyPath)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(copyPath));
+                }
+
                 using (FileStream fs = new FileStream(copyPath, FileMode.OpenOrCreate, FileAccess.Write))
                 {
                     fs.Write(data, 0, data.Length);
@@ -148,6 +154,7 @@ namespace ArcCreate.Storage
                 replaceButton.onClick.RemoveAllListeners();
 
                 Application.focusChanged -= CheckPackageImport;
+                Database.Dispose();
             }
         }
 
