@@ -11,6 +11,66 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
+            <intent-filter android:priority="999" android:label="ArcCreate Package">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.ggVGcategory.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.OPENABLE" />
+                <data android:scheme="http" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\.arcpkg" />
+                <data android:scheme="file" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\.arcpkg" />
+                <data android:scheme="https" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\.arcpkg" />
+                <data android:scheme="content" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\.arcpkg" />
+                <data android:scheme="http" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\.arcpkg" />
+                <data android:scheme="file" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\.arcpkg" />
+                <data android:scheme="https" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\.arcpkg" />
+                <data android:scheme="content" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\.arcpkg" />
+                <data android:scheme="http" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="file" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="https" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="content" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="http" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="file" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="https" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="content" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="http" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="file" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="https" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="content" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="http" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="file" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="https" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="content" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
+            </intent-filter>
+            <intent-filter android:priority="999" android:label="ArcCreate Package">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.OPENABLE" />
+                <data android:scheme="http" android:host="*" android:pathPattern=".*\\.arcpkg" />
+                <data android:scheme="file" android:host="*" android:pathPattern=".*\\.arcpkg" />
+                <data android:scheme="https" android:host="*" android:pathPattern=".*\\.arcpkg" />
+                <data android:scheme="content" android:host="*" android:pathPattern=".*\\.arcpkg" />
+                <data android:scheme="http" android:host="*" android:pathPattern=".*\\..*\\.arcpkg" />
+                <data android:scheme="file" android:host="*" android:pathPattern=".*\\..*\\.arcpkg" />
+                <data android:scheme="https" android:host="*" android:pathPattern=".*\\..*\\.arcpkg" />
+                <data android:scheme="content" android:host="*" android:pathPattern=".*\\..*\\.arcpkg" />
+                <data android:scheme="http" android:host="*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="file" android:host="*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="https" android:host="*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="content" android:host="*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="http" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="file" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="https" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="content" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="http" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="file" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="https" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="content" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="http" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="file" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="https" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
+                <data android:scheme="content" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
+            </intent-filter>
         </activity>
     </application>
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>

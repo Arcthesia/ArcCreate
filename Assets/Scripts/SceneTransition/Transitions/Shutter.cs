@@ -1,5 +1,5 @@
 ﻿using System;
-using ArcCreate.Utilities.ExternalAssets;
+using ArcCreate.Utility.ExternalAssets;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;

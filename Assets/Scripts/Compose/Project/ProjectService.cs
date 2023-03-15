@@ -312,8 +312,8 @@ namespace ArcCreate.Compose.Project
 
         private void AutofillChart(ChartSettings chart)
         {
-            chart.Title = Values.DefaultTitle;
-            chart.Composer = Values.DefaultComposer;
+            chart.Title = string.IsNullOrEmpty(chart.Title) ? Values.DefaultTitle : chart.Title;
+            chart.Composer = string.IsNullOrEmpty(chart.Composer) ? Values.DefaultComposer : chart.Composer;
             chart.SyncBaseBpm = true;
 
             switch (chart.ChartPath.Split('.')[0])

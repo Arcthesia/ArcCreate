@@ -607,9 +607,31 @@ Gameplay:
     Play: Play
     Retry: Retry
     Return: Return
+  Selection:
+    SelectStatus:
+      Singular: |-
+        {0} asset selected
+      Plural: |-
+        {0} assets selected
+    DeleteConfirmation: |-
+      Are you sure you want to delete the following assets?
+      Your score will not be deleted.
+    Action:
+      Delete: Delete
+      Cancel: Cancel
 
 Shutter:
   Composer: Music
   Illustrator: Illustration
   Charter: Note Design
   Alias: as
+    
+Storage:
+  ImportConflict:
+    Message: |-
+      You're trying to import an older version of an asset.
+      Which version would you like to keep?
+    ReplaceAsset:
+      Replace with importing asset
+    KeepOriginal:
+      Keep the original asset

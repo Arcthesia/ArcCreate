@@ -1,6 +1,6 @@
 using MoonSharp.Interpreter;
 
-namespace ArcCreate.Utilities.Lua
+namespace ArcCreate.Utility.Lua
 {
     /// <summary>
     /// Interface for setting up a lua script object.

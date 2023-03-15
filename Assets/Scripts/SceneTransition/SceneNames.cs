@@ -6,6 +6,7 @@
         public const string ComposeScene = "Compose";
         public const string GameplayScene = "Gameplay";
         public const string RemoteScene = "Remote";
+        public const string SelectScene = "Select";
 
 #if UNITY_EDITOR || UNITY_STANDALONE
         public const string DefaultScene = ComposeScene;

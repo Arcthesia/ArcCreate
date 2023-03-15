@@ -1,6 +1,6 @@
 using MoonSharp.Interpreter;
 
-namespace ArcCreate.Utilities.Lua
+namespace ArcCreate.Utility.Lua
 {
     [MoonSharpUserData]
     public struct HSVA

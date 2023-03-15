@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace ArcCreate.Utilities.ExternalAssets
+namespace ArcCreate.Utility.ExternalAssets
 {
     /// <summary>
     /// Class for handling loading external skin as textures.
