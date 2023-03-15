@@ -17,20 +17,29 @@ namespace ArcCreate.Storage
     /// </summary>
     public partial class FileImportManager : MonoBehaviour
     {
-        private async UniTask ImportArchive(string path)
+        public async UniTask ImportArchive(string path, bool isImportingDefaultPackage = false)
         {
             using (FileStream fs = File.OpenRead(path))
             {
                 using (ZipArchive zip = new ZipArchive(fs, ZipArchiveMode.Read))
                 {
                     Debug.Log("Importing package from " + path);
-                    await ImportLevelArchive(zip);
+                    await ImportLevelArchive(zip, isImportingDefaultPackage);
                 }
             }
         }
 
-        private async UniTask ImportLevelArchive(ZipArchive archive)
+        public async UniTask ImportLevelArchive(ZipArchive archive, bool isImportingDefaultPackage = false)
         {
+            ClearError();
+            ClearSummary();
+
+            if (!isImportingDefaultPackage)
+            {
+                ShowLoading(I18n.S("Storage.Loading.Archive"));
+                await UniTask.NextFrame();
+            }
+
             foreach (var entry in archive.Entries)
             {
                 if (string.IsNullOrEmpty(entry.Name))
@@ -55,7 +64,7 @@ namespace ArcCreate.Storage
 
             try
             {
-                await ImportDirectory(new DirectoryInfo(FileStatics.TempImportPath));
+                await ImportDirectory(new DirectoryInfo(FileStatics.TempImportPath), isImportingDefaultPackage);
             }
             catch (Exception e)
             {
@@ -64,16 +73,22 @@ namespace ArcCreate.Storage
                     Directory.Delete(FileStatics.TempImportPath, true);
                 }
 
-                throw e;
+                DisplayError("Archive file", e);
             }
         }
 
-        private async UniTask ImportDirectory(DirectoryInfo dir)
+        private async UniTask ImportDirectory(DirectoryInfo dir, bool isImportingDefaultPackage)
         {
             var pendingConflicts = new List<IStorageUnit>();
             var identifierToData = new Dictionary<string, IStorageUnit>();
             var toStore = new List<IStorageUnit>();
-            var toReplace = new List<(IStorageUnit, IStorageUnit)>();
+            var toDelete = new List<IStorageUnit>();
+
+            if (!isImportingDefaultPackage)
+            {
+                ShowLoading(I18n.S("Storage.Loading.ValidatePackage"));
+                await UniTask.NextFrame();
+            }
 
             var (importingData, importingFileReferences) = ReadItemsFromDirectory(dir);
 
@@ -91,55 +106,81 @@ namespace ArcCreate.Storage
             }
 
             // Detect duplicate identifier with existing package (i.e import conflict)
+            if (!isImportingDefaultPackage)
+            {
+                ShowLoading(I18n.S("Storage.Loading.CheckConflict"));
+                await UniTask.NextFrame();
+            }
+
             foreach (IStorageUnit data in importingData)
             {
+                identifierToData.Add(data.Identifier, data);
                 IStorageUnit conflict = data.GetConflictingIdentifier();
                 if (conflict != null)
                 {
                     pendingConflicts.Add(conflict);
                 }
-
-                identifierToData.Add(data.Identifier, data);
-                toStore.Add(data);
+                else
+                {
+                    toStore.Add(data);
+                }
             }
 
             // Await confirmation
-            bool hasConflict = pendingConflicts.Count == 0;
+            bool hasConflict = pendingConflicts.Count >= 0;
             if (hasConflict)
             {
                 foreach (var conflict in pendingConflicts)
                 {
                     IStorageUnit replaceWith = identifierToData[conflict.Identifier];
                     bool shouldReplace =
-                        replaceWith.CreatedAt > conflict.CreatedAt
+                        replaceWith.Version >= conflict.Version
                         || await PromptConflictToUser(replaceWith, conflict);
                     if (shouldReplace)
                     {
-                        toReplace.Add((conflict, replaceWith));
+                        toDelete.Add(conflict);
+                        toStore.Add(replaceWith);
+                    }
+                    else
+                    {
                         toStore.Remove(replaceWith);
                     }
                 }
             }
 
             // There should be no issues importing now
-            foreach ((IStorageUnit replaced, IStorageUnit replaceWith) in toReplace)
+            foreach (IStorageUnit item in toDelete)
             {
-                replaced.Update(replaceWith);
+                if (!isImportingDefaultPackage)
+                {
+                    ShowLoading(I18n.S("Storage.Loading.DeleteAsset", item.Identifier));
+                    await UniTask.NextFrame();
+                }
+
+                item.Delete();
             }
 
             foreach (IStorageUnit item in toStore)
             {
-                item.Insert();
-            }
-
-            foreach (IStorageUnit data in importingData)
-            {
-                foreach (string rawVirtualPath in data.FileReferences)
+                if (!isImportingDefaultPackage)
                 {
-                    string virtualPath = string.Join("/", data.Type, data.Identifier, rawVirtualPath);
-                    string realPath = Path.Combine(dir.FullName, importingFileReferences[(data, rawVirtualPath)]);
+                    ShowLoading(I18n.S("Storage.Loading.StoreAsset", item.Identifier));
+                    await UniTask.NextFrame();
+                }
+
+                item.Insert();
+                foreach (string rawVirtualPath in item.FileReferences)
+                {
+                    string virtualPath = string.Join("/", item.Type, item.Identifier, rawVirtualPath);
+                    string realPath = Path.Combine(dir.FullName, importingFileReferences[(item, rawVirtualPath)]);
                     FileStorage.ImportFile(realPath, virtualPath);
                 }
+            }
+
+            if (!isImportingDefaultPackage)
+            {
+                ShowLoading(I18n.S("Storage.Loading.Finalizing"));
+                await UniTask.NextFrame();
             }
 
             if (Directory.Exists(FileStatics.TempPath))
@@ -148,10 +189,17 @@ namespace ArcCreate.Storage
             }
 
             storageData.NotifyStorageChange();
+
+            if (!isImportingDefaultPackage)
+            {
+                ShowSummary(toStore);
+            }
+
+            HideLoading();
         }
 
         /// <summary>
-        /// Reads the directory and add detected items to importingLevel and importingData.
+        /// Reads the directory and return all items along with their file references.
         /// </summary>
         /// <param name="parentDirectory">The directory to read from.</param>
         /// <returns>List of all importing assets and list of files for each asset.</returnx>
@@ -173,29 +221,43 @@ namespace ArcCreate.Storage
             {
                 IStorageUnit storage = null;
                 string settingsContent = File.ReadAllText(Path.Combine(parentDirectory.FullName, import.Directory, import.SettingsFile));
-                switch (import.Type)
+
+                try
                 {
-                    case ImportInformation.LevelType:
-                        storage = new LevelStorage()
-                        {
-                            Settings = deserializer.Deserialize<ProjectSettings>(settingsContent),
-                        };
-                        break;
-                    case ImportInformation.PackType:
-                        var packInfo = deserializer.Deserialize<PackStorage.PackImportInformation>(settingsContent);
-                        storage = new PackStorage()
-                        {
-                            PackName = packInfo.PackName,
-                            ImagePath = packInfo.ImagePath,
-                            LevelIdentifiers = packInfo.LevelIdentifiers,
-                        };
-                        break;
+                    switch (import.Type)
+                    {
+                        case ImportInformation.LevelType:
+                            storage = new LevelStorage()
+                            {
+                                Settings = deserializer.Deserialize<ProjectSettings>(settingsContent),
+                            };
+                            break;
+                        case ImportInformation.PackType:
+                            var packInfo = deserializer.Deserialize<PackStorage.PackImportInformation>(settingsContent);
+                            storage = new PackStorage()
+                            {
+                                PackName = packInfo.PackName,
+                                ImagePath = packInfo.ImagePath,
+                                LevelIdentifiers = packInfo.LevelIdentifiers,
+                            };
+                            break;
+                    }
+
+                    if (!storage.ValidateSelf(out string reason))
+                    {
+                        throw new Exception($"Invalid package, Importing was skipped.\n{reason}");
+                    }
+                }
+                catch (Exception e)
+                {
+                    DisplayError($"Asset ({import.Type}, {import.Identifier})", e);
+                    continue;
                 }
 
                 if (storage != null)
                 {
                     storage.Identifier = import.Identifier;
-                    storage.CreatedAt = import.CreatedAt;
+                    storage.Version = import.Version;
                     storage.FileReferences = new List<string>();
 
                     Stack<DirectoryInfo> directoriesToImport = new Stack<DirectoryInfo>();

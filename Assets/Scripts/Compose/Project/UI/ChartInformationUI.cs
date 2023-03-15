@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ArcCreate.Compose.Components;
 using ArcCreate.Data;
@@ -20,6 +21,9 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private TMP_InputField alias;
         [SerializeField] private TMP_InputField baseBpm;
         [SerializeField] private Toggle syncBaseBpm;
+        [SerializeField] private TMP_InputField bpmText;
+        [SerializeField] private TMP_InputField previewStart;
+        [SerializeField] private TMP_InputField previewEnd;
         [SerializeField] private TMP_InputField chartOffset;
         [SerializeField] private TMP_InputField timingPointDensityFactor;
         [SerializeField] private TMP_InputField chartConstant;
@@ -55,6 +59,12 @@ namespace ArcCreate.Compose.Project
                 GameplayData.BaseBpm.Value = chart.BaseBpm;
             }
 
+            bpmText.text = string.IsNullOrEmpty(chart.BpmText) ? chart.BaseBpm.ToString() : chart.BpmText;
+            Target.BpmText = bpmText.text;
+
+            previewStart.text = chart.PreviewStart.ToString();
+            previewEnd.text = chart.PreviewEnd.ToString();
+
             GameplayData.Title.Value = chart.Title ?? "";
             GameplayData.Composer.Value = chart.Composer ?? "";
             GameplayData.Illustrator.Value = chart.Illustrator ?? "";
@@ -77,6 +87,9 @@ namespace ArcCreate.Compose.Project
             chartConstant.onEndEdit.AddListener(OnChartConstant);
             difficultyName.onEndEdit.AddListener(OnDifficultyName);
             difficultyColor.OnValueChange += OnDifficultyColor;
+            bpmText.onEndEdit.AddListener(OnBpmText);
+            previewStart.onEndEdit.AddListener(OnPreviewRange);
+            previewEnd.onEndEdit.AddListener(OnPreviewRange);
 
             GameplayData.AudioOffset.OnValueChange += OnGameplayAudioOffset;
             chartOffset.onEndEdit.AddListener(OnChartOffset);
@@ -86,6 +99,7 @@ namespace ArcCreate.Compose.Project
 
             GameplayData.OnChartTimingEdit += OnChartTimingEdit;
             GameplayData.BaseBpm.OnValueChange += OnGameplayBaseBpm;
+            GameplayData.AudioClip.OnValueChange += OnAudioClip;
 
             for (int i = 0; i < diffColorPresets.Count; i++)
             {
@@ -109,6 +123,9 @@ namespace ArcCreate.Compose.Project
             chartConstant.onEndEdit.RemoveListener(OnChartConstant);
             difficultyName.onEndEdit.RemoveListener(OnDifficultyName);
             difficultyColor.OnValueChange -= OnDifficultyColor;
+            bpmText.onEndEdit.RemoveListener(OnBpmText);
+            previewStart.onEndEdit.RemoveListener(OnPreviewRange);
+            previewEnd.onEndEdit.RemoveListener(OnPreviewRange);
 
             GameplayData.AudioOffset.OnValueChange -= OnGameplayAudioOffset;
             chartOffset.onEndEdit.RemoveListener(OnChartOffset);
@@ -118,17 +135,13 @@ namespace ArcCreate.Compose.Project
 
             GameplayData.OnChartTimingEdit -= OnChartTimingEdit;
             GameplayData.BaseBpm.OnValueChange -= OnGameplayBaseBpm;
+            GameplayData.AudioClip.OnValueChange -= OnAudioClip;
 
             for (int i = 0; i < diffColorPresets.Count; i++)
             {
                 Button btn = diffColorPresets[i];
                 btn.onClick.RemoveAllListeners();
             }
-        }
-
-        private void OnGameplayAudioOffset(int obj)
-        {
-            chartOffset.SetTextWithoutNotify(obj.ToString());
         }
 
         private void OnChartOffset(string value)
@@ -259,7 +272,7 @@ namespace ArcCreate.Compose.Project
         {
             if (Evaluator.TryFloat(value, out float cc))
             {
-                Target.ChartConstant = cc;
+                Target.ChartConstant = (double)Mathf.RoundToInt(cc * 100) / 100;
 
                 Values.ProjectModified = true;
             }
@@ -336,6 +349,48 @@ namespace ArcCreate.Compose.Project
             GameplayData.OnChartTimingEdit -= OnChartTimingEdit;
             Services.Gameplay.Chart.UpdateEvents(new List<TimingEvent> { baseTiming });
             GameplayData.OnChartTimingEdit += OnChartTimingEdit;
+        }
+
+        private void OnBpmText(string text)
+        {
+            Target.BpmText = text;
+
+            Values.ProjectModified = true;
+        }
+
+        private void OnPreviewRange(string arg0)
+        {
+            if (Evaluator.TryInt(previewStart.text, out int val1)
+             && Evaluator.TryInt(previewEnd.text, out int val2))
+            {
+                int audioLength = Mathf.RoundToInt(GameplayData.AudioClip.Value.length * 1000);
+                val1 = Mathf.Clamp(val1, 0, audioLength);
+                val2 = Mathf.Clamp(val2, 0, audioLength);
+
+                Target.PreviewStart = Mathf.Min(val1, val2);
+                Target.PreviewEnd = Mathf.Max(val1, val2);
+
+                Target.PreviewEnd = Mathf.Clamp(Target.PreviewEnd, Mathf.Min(Target.PreviewStart + Values.MinPreviewSegmentLengthMs, audioLength), audioLength);
+                Target.PreviewStart = Mathf.Clamp(Target.PreviewStart, 0, Mathf.Max(Target.PreviewEnd - Values.MinPreviewSegmentLengthMs, 0));
+            }
+
+            previewStart.text = Target.PreviewStart.ToString();
+            previewEnd.text = Target.PreviewEnd.ToString();
+        }
+
+        private void OnAudioClip(AudioClip clip)
+        {
+            int audioLength = Mathf.RoundToInt(clip.length * 1000);
+            Target.PreviewEnd = Mathf.Clamp(Target.PreviewEnd, Mathf.Min(Target.PreviewStart + Values.MinPreviewSegmentLengthMs, audioLength), audioLength);
+            Target.PreviewStart = Mathf.Clamp(Target.PreviewStart, 0, Mathf.Max(Target.PreviewEnd - Values.MinPreviewSegmentLengthMs, 0));
+
+            previewStart.text = Target.PreviewStart.ToString();
+            previewEnd.text = Target.PreviewEnd.ToString();
+        }
+
+        private void OnGameplayAudioOffset(int obj)
+        {
+            chartOffset.SetTextWithoutNotify(obj.ToString());
         }
     }
 }

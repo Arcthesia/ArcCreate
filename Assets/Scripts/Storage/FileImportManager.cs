@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using ArcCreate.Storage.Data;
+using ArcCreate.Utility.Animation;
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -16,21 +18,33 @@ namespace ArcCreate.Storage
     public partial class FileImportManager : MonoBehaviour
     {
         [SerializeField] private StorageData storageData;
-        [SerializeField] private TMP_Text replaceWithCreatedAt;
-        [SerializeField] private TMP_Text originalCreatedAt;
+
+        [Header("Conflict")]
+        [SerializeField] private TMP_Text replaceWithVersion;
+        [SerializeField] private TMP_Text originalVersion;
         [SerializeField] private TMP_Text replaceWithIdentifier;
         [SerializeField] private TMP_Text originalIdentifier;
         [SerializeField] private Button replaceButton;
         [SerializeField] private Button keepOriginalButton;
 
+        [Header("Loading")]
+        [SerializeField] private TMP_Text loadingText;
+
+        [Header("Exception")]
+        [SerializeField] private TMP_Text errorText;
+        [SerializeField] private Button errorConfirmButton;
+
+        [Header("Summary")]
+        [SerializeField] private TMP_Text summaryText;
+        [SerializeField] private Button summaryConfirmButton;
+        [SerializeField] private GameObject noAssetImportedIndicator;
+        [SerializeField] private GameObject assetsImportedIndicator;
+
         [Header("Animation")]
-        [SerializeField] private RectTransform conflictNotifyRect;
-        [SerializeField] private CanvasGroup conflictNotifyCanvas;
-        [SerializeField] private Vector3 animationStartScale;
-        [SerializeField] private float animationScaleDuration;
-        [SerializeField] private float animationAlphaDuration;
-        [SerializeField] private Ease animationScaleEasing;
-        [SerializeField] private Ease animationAlphaEasing;
+        [SerializeField] private ScriptedAnimator loadingAnimator;
+        [SerializeField] private ScriptedAnimator conflictAnimator;
+        [SerializeField] private ScriptedAnimator errorAnimator;
+        [SerializeField] private ScriptedAnimator summaryAnimator;
 
         private bool replacePressed;
         private bool keepPressed;
@@ -60,7 +74,7 @@ namespace ArcCreate.Storage
                 }
                 else
                 {
-                    ImportArchive(FileStatics.DefaultPackagePath).Forget();
+                    ImportArchive(FileStatics.DefaultPackagePath, true).Forget();
                 }
             }
             else
@@ -96,42 +110,29 @@ namespace ArcCreate.Storage
                 }
 
                 // Import copied file
-                await ImportArchive(copyPath);
+                await ImportArchive(copyPath, true);
                 File.Delete(copyPath);
             }
         }
 
         private async UniTask<bool> PromptConflictToUser(IStorageUnit replaceWith, IStorageUnit original)
         {
-            replaceWithCreatedAt.text = TimeZoneInfo.ConvertTimeFromUtc(replaceWith.CreatedAt, TimeZoneInfo.Local).ToShortDateString();
-            originalCreatedAt.text = TimeZoneInfo.ConvertTimeFromUtc(original.CreatedAt, TimeZoneInfo.Local).ToShortDateString();
-            replaceWithIdentifier.text = replaceWith.Identifier;
-            originalIdentifier.text = original.Identifier;
+            replaceWithVersion.text = I18n.S("Storage.ImportConflict.Version", replaceWith.Version);
+            originalVersion.text = I18n.S("Storage.ImportConflict.Version", original.Version);
+            replaceWithIdentifier.text = I18n.S("Storage.ImportConflict.Identifier", replaceWith.Identifier);
+            originalIdentifier.text = I18n.S("Storage.ImportConflict.Identifier", original.Identifier);
 
-            AnimateCanvasAppear();
-
+            await UniTask.NextFrame();
+            loadingAnimator.Hide();
+            conflictAnimator.Show();
             replacePressed = false;
             keepPressed = false;
             await UniTask.WaitUntil(() => replacePressed || keepPressed);
-
-            AnimateCanvasDisappear();
+            conflictAnimator.Hide();
+            loadingAnimator.Show();
+            await UniTask.Delay((int)(conflictAnimator.Length * 1000));
 
             return replacePressed;
-        }
-
-        private void AnimateCanvasAppear()
-        {
-            conflictNotifyRect.gameObject.SetActive(true);
-            conflictNotifyRect.DOScale(Vector3.one, animationScaleDuration).SetEase(animationScaleEasing);
-            conflictNotifyCanvas.alpha = 0;
-            conflictNotifyCanvas.DOFade(1, animationAlphaDuration).SetEase(animationAlphaEasing);
-        }
-
-        private void AnimateCanvasDisappear()
-        {
-            conflictNotifyRect.DOScale(animationStartScale, animationScaleDuration).SetEase(animationScaleEasing);
-            conflictNotifyCanvas.DOFade(0, animationAlphaDuration).SetEase(animationAlphaEasing)
-                .OnComplete(() => conflictNotifyRect.gameObject.SetActive(false));
         }
 
         private void Awake()
@@ -140,6 +141,8 @@ namespace ArcCreate.Storage
             {
                 keepOriginalButton.onClick.AddListener(() => keepPressed = true);
                 replaceButton.onClick.AddListener(() => replacePressed = true);
+                errorConfirmButton.onClick.AddListener(HideError);
+                summaryConfirmButton.onClick.AddListener(HideSummary);
                 LoadDatabase();
 
                 Application.focusChanged += CheckPackageImport;
@@ -152,6 +155,8 @@ namespace ArcCreate.Storage
             {
                 keepOriginalButton.onClick.RemoveAllListeners();
                 replaceButton.onClick.RemoveAllListeners();
+                errorConfirmButton.onClick.RemoveListener(HideError);
+                summaryConfirmButton.onClick.RemoveListener(HideSummary);
 
                 Application.focusChanged -= CheckPackageImport;
                 Database.Dispose();
@@ -175,6 +180,94 @@ namespace ArcCreate.Storage
             }
             catch
             {
+            }
+        }
+
+        private void ClearError()
+        {
+            errorText.text = string.Empty;
+            errorAnimator.gameObject.SetActive(false);
+        }
+
+        private void DisplayError(string target, Exception e)
+        {
+            if (string.IsNullOrEmpty(errorText.text))
+            {
+                errorText.text = $"Import target: {target}\nException:\n{e.Message}";
+            }
+            else
+            {
+                errorText.text += $"\n---\nImport target: {target}\nException:\n{e.Message}";
+            }
+
+            if (!errorAnimator.gameObject.activeSelf)
+            {
+                HideLoading();
+                errorAnimator.Show();
+            }
+        }
+
+        private void ClearSummary()
+        {
+            summaryText.text = string.Empty;
+            summaryAnimator.gameObject.SetActive(false);
+        }
+
+        private void ShowSummary(List<IStorageUnit> assets)
+        {
+            if (assets == null || assets.Count == 0)
+            {
+                noAssetImportedIndicator.SetActive(true);
+                assetsImportedIndicator.SetActive(false);
+            }
+            else
+            {
+                noAssetImportedIndicator.SetActive(false);
+                assetsImportedIndicator.SetActive(true);
+                StringBuilder sb = new StringBuilder();
+                foreach (var asset in assets)
+                {
+                    sb.Append($"{asset.Type}: {asset.Identifier}\n");
+                }
+
+                summaryText.text = sb.ToString();
+            }
+
+            if (!summaryAnimator.gameObject.activeSelf && !errorAnimator.gameObject.activeSelf)
+            {
+                HideLoading();
+                summaryAnimator.Show();
+            }
+        }
+
+        private void ShowLoading(string task)
+        {
+            loadingText.text = I18n.S("Storage.Loading.Message", task);
+            if (!loadingAnimator.gameObject.activeSelf)
+            {
+                loadingAnimator.Show();
+            }
+        }
+
+        private void HideError()
+        {
+            errorAnimator.Hide();
+            if (!string.IsNullOrEmpty(summaryText.text))
+            {
+                summaryAnimator.Show();
+            }
+        }
+
+        private void HideSummary()
+        {
+            summaryAnimator.Hide();
+        }
+
+        private void HideLoading()
+        {
+            if (loadingAnimator.gameObject.activeSelf)
+            {
+                loadingAnimator.Hide();
             }
         }
     }

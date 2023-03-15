@@ -16,14 +16,14 @@ namespace ArcCreate.Compose.Project
         private readonly ProjectSettings project;
         private readonly string publisher;
         private readonly string package;
-        private readonly DateTime builtAt;
+        private readonly int version;
 
-        public Exporter(ProjectSettings project, string publisher, string package, DateTime builtAt)
+        public Exporter(ProjectSettings project, string publisher, string package, int version)
         {
             this.project = project;
             this.publisher = publisher;
             this.package = package;
-            this.builtAt = builtAt;
+            this.version = version;
         }
 
         public void Export(string outputPath)
@@ -36,7 +36,7 @@ namespace ArcCreate.Compose.Project
                     Directory = subdir,
                     Identifier = $"{publisher}.{package}",
                     SettingsFile = Path.GetFileName(project.Path),
-                    CreatedAt = builtAt,
+                    Version = version,
                     Type = ImportInformation.LevelType,
                 },
             };
@@ -63,7 +63,12 @@ namespace ArcCreate.Compose.Project
                         }
 
                         var projectDir = new DirectoryInfo(Path.GetDirectoryName(project.Path));
-                        WriteDirectoryToZip(projectDir, zip, subdir, outputPath);
+                        WriteDirectoryToZip(projectDir, zip, subdir, new List<string>()
+                        {
+                            outputPath,
+                            "remote.aff",
+                            "remote.sc.json",
+                        });
                     }
                 }
 
@@ -81,11 +86,11 @@ namespace ArcCreate.Compose.Project
             }
         }
 
-        private void WriteDirectoryToZip(DirectoryInfo projectDir, ZipArchive zip, string subdir, string blockPath)
+        private void WriteDirectoryToZip(DirectoryInfo projectDir, ZipArchive zip, string subdir, List<string> blockedPaths)
         {
             foreach (FileInfo file in projectDir.EnumerateFiles())
             {
-                if (file.FullName != blockPath)
+                if (!blockedPaths.Contains(file.FullName))
                 {
                     WriteFileToZip(zip, file.FullName, Path.Combine(subdir, file.Name));
                 }
@@ -93,7 +98,7 @@ namespace ArcCreate.Compose.Project
 
             foreach (DirectoryInfo dir in projectDir.EnumerateDirectories())
             {
-                WriteDirectoryToZip(dir, zip, Path.Combine(subdir, dir.Name), blockPath);
+                WriteDirectoryToZip(dir, zip, Path.Combine(subdir, dir.Name), blockedPaths);
             }
         }
 

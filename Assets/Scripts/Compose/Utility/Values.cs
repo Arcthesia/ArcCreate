@@ -34,6 +34,8 @@ namespace ArcCreate.Compose
         public const string BeatlinePoolName = "EditorBeatlinePool";
         public const string ColliderPoolName = "NoteColliderPool";
 
+        public const int MinPreviewSegmentLengthMs = 5000;
+
         // States
         public static State<int> EditingTimingGroup { get; } = new State<int>();
 

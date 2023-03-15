@@ -327,6 +327,7 @@ Compose:
         ProjectFile: Project File
         ChartFile: Chart file
         Information: Information
+        Gameplay: Gameplay
         Title: Title
         Composer: Composer
         Illustrator: Illustrator
@@ -334,6 +335,7 @@ Compose:
         Alias: Alias
         BPM: BPM
         BaseBPM: Base BPM
+        BPMText: BPM Text
         SyncBaseBPM: Sync
         ChartOffset: Chart Offset
         TimingPointDensityFactor: Judge Density
@@ -367,6 +369,7 @@ Compose:
         Shutter: Shutter
         ShowShutter: Show shutter
         HideShutter: Hide shutter
+        PreviewSegment: Preview segment
       Options:
         Inherit: Inherit
         Light: Light
@@ -448,6 +451,7 @@ Compose:
           Export a .arcpkg package file to share to other players.
         Publisher: Publisher
         Package: Package
+        Version: Version
         BlankField: Please enter both publisher and package name information
         Identifier: "Your package identifier is: {0}"
         Export: Export
@@ -627,6 +631,13 @@ Shutter:
   Alias: as
     
 Storage:
+  Confirm: Confirm
+  ImportErrors: |-
+    The following assets could not be imported:
+  ImportSummary: |-
+    Successfully imported the following assets:
+  NoAssetImported: |-
+    No assets were imported.
   ImportConflict:
     Message: |-
       You're trying to import an older version of an asset.
@@ -635,3 +646,13 @@ Storage:
       Replace with importing asset
     KeepOriginal:
       Keep the original asset
+    Identifier: "Identifier: {0}"
+    Version: "Version: {0}"
+  Loading:
+    Message: 'Loading: {0}...'
+    Archive: Unpacking archive
+    ValidatePackage: Validating package
+    CheckConflict: Checking for conflict
+    DeleteAsset: Deleting asset {0}
+    StoreAsset: Storing asset {0}
+    Finalizing: Finalizing

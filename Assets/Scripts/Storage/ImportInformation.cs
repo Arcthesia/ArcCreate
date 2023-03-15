@@ -1,5 +1,3 @@
-using System;
-
 namespace ArcCreate.Storage
 {
     public class ImportInformation
@@ -14,7 +12,7 @@ namespace ArcCreate.Storage
 
         public string SettingsFile { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public int Version { get; set; }
 
         public string Type { get; set; }
     }

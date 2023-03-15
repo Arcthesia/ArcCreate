@@ -16,6 +16,35 @@ namespace ArcCreate.Storage.Data
 
         [BsonIgnore] public List<LevelStorage> Levels { get; set; }
 
+        public override bool ValidateSelf(out string reason)
+        {
+            if (!base.ValidateSelf(out reason))
+            {
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(PackName))
+            {
+                reason = "Pack name is empty";
+                return false;
+            }
+
+            if (!string.IsNullOrEmpty(ImagePath))
+            {
+                reason = "Image path is not defined";
+                return false;
+            }
+
+            if (LevelIdentifiers == null || LevelIdentifiers.Count <= 0)
+            {
+                reason = "Pack contaisn no levels";
+                return false;
+            }
+
+            reason = string.Empty;
+            return true;
+        }
+
         public struct PackImportInformation
         {
             public string PackName { get; set; }

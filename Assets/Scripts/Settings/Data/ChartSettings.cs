@@ -32,7 +32,7 @@ namespace ArcCreate.Data
 
         public string Difficulty { get; set; }
 
-        public float ChartConstant { get; set; }
+        public double ChartConstant { get; set; }
 
         public string DifficultyColor { get; set; }
 
