@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Gameplay.Judgement;
 using ArcCreate.Gameplay.Skin;
-using ArcCreate.Utilities.ExternalAssets;
+using ArcCreate.Utility.ExternalAssets;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;

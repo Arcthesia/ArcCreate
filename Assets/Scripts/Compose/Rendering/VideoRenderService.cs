@@ -83,6 +83,7 @@ namespace ArcCreate.Compose.Rendering
                 return;
             }
 
+            cts.Dispose();
             cts = new CancellationTokenSource();
             renderInProgressIndicator.SetActive(true);
             renderPreview.gameObject.SetActive(true);
@@ -168,6 +169,7 @@ namespace ArcCreate.Compose.Rendering
             startButton.onClick.RemoveListener(OnStartRenderButton);
             gameplayData.AudioClip.OnValueChange -= OnClipChange;
             cancelButton.onClick.AddListener(OnCancelRenderButton);
+            cts.Dispose();
         }
 
         private void OnEnable()

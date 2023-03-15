@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using ArcCreate.Data;
+using ArcCreate.Storage;
 using ArcCreate.Utility;
 using UnityEngine;
 using YamlDotNet.Serialization;
@@ -27,12 +29,16 @@ namespace ArcCreate.Compose.Project
         public void Export(string outputPath)
         {
             string subdir = package;
-            ImportInformation info = new ImportInformation
+            List<ImportInformation> info = new List<ImportInformation>()
             {
-                Directory = subdir,
-                Identifier = $"{publisher}.{package}",
-                CreatedAt = builtAt,
-                Type = ImportInformation.LevelType,
+                new ImportInformation
+                {
+                    Directory = subdir,
+                    Identifier = $"{publisher}.{package}",
+                    SettingsFile = Path.GetFileName(project.Path),
+                    CreatedAt = builtAt,
+                    Type = ImportInformation.LevelType,
+                },
             };
 
             var serializer = new SerializerBuilder()
@@ -101,20 +107,6 @@ namespace ArcCreate.Compose.Project
                     fileStream.CopyTo(entryStream);
                 }
             }
-        }
-
-        public class ImportInformation
-        {
-            public const string FileName = "import.yml";
-            public const string LevelType = "level";
-
-            public string Directory { get; set; }
-
-            public string Identifier { get; set; }
-
-            public DateTime CreatedAt { get; set; }
-
-            public string Type { get; set; }
         }
     }
 }

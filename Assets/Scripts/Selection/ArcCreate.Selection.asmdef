@@ -1,0 +1,25 @@
+{
+    "name": "ArcCreate.Selection",
+    "references": [
+        "GUID:01ac7ee8347a8dc4ab295317e5a85380",
+        "GUID:e057305c1554d8e5a97137707ec8777e",
+        "GUID:5a90b6a42fe02ee42b9280a92e2fb82d",
+        "GUID:90e3d095a2e0078458a68d742741768c",
+        "GUID:a4865fc28ed398642afb08af630e5025",
+        "GUID:f730c3c07ef64a264b4893f1fb637d1d",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:b3f49edfedc855a48aa1a9e5d3cba438",
+        "GUID:4955ea543c7d37317adad658f64728fc",
+        "GUID:2236a98d74e6674839d907b723722dc8"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

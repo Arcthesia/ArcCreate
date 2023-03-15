@@ -5,7 +5,7 @@ using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Interop;
 using MoonSharp.Interpreter.Interop.BasicDescriptors;
 
-namespace ArcCreate.Utilities.Lua
+namespace ArcCreate.Utility.Lua
 {
     public static class LuaArithmetic
     {

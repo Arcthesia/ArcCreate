@@ -49,9 +49,10 @@ This project was licensed under GPL-3.0 license (see [LICENSE](LICENSE.md)).
 - `Assets/Plugins/DOTween`: http://dotween.demigiant.com
 - `Assets/Plugins/DynamicPanels`: https://github.com/yasirkula/UnityDynamicPanels
 - `Assets/Plugins/MaterialIcons`: https://fonts.google.com/icons for the icons themselves and https://github.com/convalise/unity-material-icons/ for packaging them for Unity.
-- `Assets/Plugins/NativeFileSO`: https://github.com/keiwando/nativefileso
 - `Assets/Plugins/StandaloneFileBrowser`: https://github.com/gkngkc/UnityStandaloneFileBrowser
 - `Assets/Plugins/UIGradient`: https://github.com/azixMcAze/Unity-UIGradient
 - `Assets/Plugins/YamlDotNet`: https://github.com/aaubry/YamlDotNet
 - Other files under `Assets/Plugins/` are downloaded from NuGet
-- A large portion of files under `Assets/Textures/Gameplay` are taken from, or derived from https://github.com/yojohanshinwataikei/Arcade-plus
+- A large portion of files under `Assets/Textures/Gameplay` are taken from, or derived from https://github.com/yojohanshinwataikei/arcade-plus
+- Files under `Assets/AudioClips` are from https://github.com/yojohanshinwataikei/Arcade-plus.
+- Files under `Assets/Fonts/FontFiles` are free font files taken from https://fonts.google.com

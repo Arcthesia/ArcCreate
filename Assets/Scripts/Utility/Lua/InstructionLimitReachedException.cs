@@ -1,6 +1,6 @@
 using System;
 
-namespace ArcCreate.Utilities.Lua
+namespace ArcCreate.Utility.Lua
 {
     [Serializable]
     public class InstructionLimitReachedException : Exception

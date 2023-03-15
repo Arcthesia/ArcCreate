@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Debugging;
 
-namespace ArcCreate.Utilities.Lua
+namespace ArcCreate.Utility.Lua
 {
     public class LimitInstructionDebugger : IDebugger
     {

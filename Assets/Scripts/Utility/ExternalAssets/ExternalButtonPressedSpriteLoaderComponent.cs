@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ArcCreate.Utilities.ExternalAssets
+namespace ArcCreate.Utility.ExternalAssets
 {
     [RequireComponent(typeof(Button))]
     public class ExternalButtonPressedSpriteLoaderComponent : MonoBehaviour
