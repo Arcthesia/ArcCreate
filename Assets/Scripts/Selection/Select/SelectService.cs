@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ArcCreate.Storage.Data;
 using ArcCreate.Utility.Animation;
@@ -15,31 +16,33 @@ namespace ArcCreate.Selection.Select
         [SerializeField] private ScriptedAnimator selectPromptAnimator;
         [SerializeField] private DeleteConfirmation deleteConfirmation;
 
-        private readonly HashSet<Components.Selectable> selected = new HashSet<Components.Selectable>();
+        private readonly HashSet<IStorageUnit> selected = new HashSet<IStorageUnit>();
         private bool isCurrentlyVisible = false;
+
+        public event Action OnClear;
 
         public bool IsAnySelected => selected.Count > 0;
 
-        public void AddComponent(Components.Selectable deletable)
+        public void Add(IStorageUnit item)
         {
-            selected.Add(deletable);
+            selected.Add(item);
             UpdateState();
         }
 
-        public void RemoveComponent(Components.Selectable deletable)
+        public void Remove(IStorageUnit item)
         {
-            selected.Remove(deletable);
+            selected.Remove(item);
             UpdateState();
         }
+
+        public bool IsStorageSelected(IStorageUnit item)
+            => selected.Contains(item);
 
         public void ClearSelection()
         {
-            foreach (var comp in selected)
-            {
-                comp.DeselectSelf();
-            }
-
             selected.Clear();
+            UpdateState();
+            OnClear?.Invoke();
         }
 
         private void UpdateState()
@@ -54,7 +57,9 @@ namespace ArcCreate.Selection.Select
                 selectPromptAnimator.Hide();
             }
 
-            promptText.text = I18n.S("Gameplay.Selection.SelectStatus", selected.Count);
+            promptText.text = selected.Count >= 2 ?
+                              I18n.S("Gameplay.Selection.SelectStatus.Plural", selected.Count) :
+                              I18n.S("Gameplay.Selection.SelectStatus.Singular", selected.Count);
             isCurrentlyVisible = selected.Count > 0;
         }
 
@@ -72,16 +77,7 @@ namespace ArcCreate.Selection.Select
 
         private void PromptDeleteSelection()
         {
-            List<IStorageUnit> units = new List<IStorageUnit>();
-            foreach (var comp in selected)
-            {
-                if (comp.StorageUnit != null)
-                {
-                    units.Add(comp.StorageUnit);
-                }
-            }
-
-            deleteConfirmation.PromptUser(units);
+            deleteConfirmation.PromptUser(selected);
         }
     }
 }

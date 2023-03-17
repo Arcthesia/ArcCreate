@@ -1,15 +1,19 @@
-using ArcCreate.Selection.Components;
+using ArcCreate.Storage.Data;
 
 namespace ArcCreate.Selection.Select
 {
     public interface ISelectService
     {
+        event System.Action OnClear;
+
         bool IsAnySelected { get; }
 
         void ClearSelection();
 
-        void AddComponent(Selectable deletable);
+        bool IsStorageSelected(IStorageUnit storageUnit);
 
-        void RemoveComponent(Selectable deletable);
+        void Add(IStorageUnit storageUnit);
+
+        void Remove(IStorageUnit storageUnit);
     }
 }

@@ -65,6 +65,9 @@ namespace ArcCreate
         public static readonly StringSetting FFmpegPath = new StringSetting("RenderPreferences.FFmpegPath", "ffmpeg");
         public static readonly BoolSetting EnableEasterEggs = new BoolSetting("Fun.EasterEggs", Application.isEditor);
 
+        public static readonly StringSetting SelectionGroupStrategy = new StringSetting("Selection.Group", "none");
+        public static readonly StringSetting SelectionSortStrategy = new StringSetting("Selection.Sort", "title");
+
         [RuntimeInitializeOnLoadMethod]
         public static void OnInitialize()
         {

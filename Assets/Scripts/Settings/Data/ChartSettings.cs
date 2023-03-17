@@ -82,8 +82,13 @@ namespace ArcCreate.Data
                 return false;
             }
 
+            return IsSameDifficulty(other.ChartPath, other.Difficulty);
+        }
+
+        public bool IsSameDifficulty(string chartPath, string difficultyName)
+        {
             int thisRightDot = ChartPath.LastIndexOf('.');
-            int otherRightDot = other.ChartPath.LastIndexOf('.');
+            int otherRightDot = chartPath.LastIndexOf('.');
 
             bool isSame = true;
             if (thisRightDot != otherRightDot)
@@ -94,7 +99,7 @@ namespace ArcCreate.Data
             {
                 for (int i = 0; i < thisRightDot; i++)
                 {
-                    if (ChartPath[i] != other.ChartPath[i])
+                    if (ChartPath[i] != chartPath[i])
                     {
                         isSame = false;
                         break;
@@ -107,13 +112,21 @@ namespace ArcCreate.Data
                 return true;
             }
 
-            if (string.IsNullOrEmpty(Difficulty) || string.IsNullOrEmpty(other.Difficulty))
+            // The difficulty name check is only meant for custom chart file names.
+            // If either chart file has 1 character as its name then treat it as internal difficulty type.
+            // A bit hacky but it's ok
+            if (thisRightDot == 1 || otherRightDot == 1)
+            {
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(Difficulty) || string.IsNullOrEmpty(difficultyName))
             {
                 return false;
             }
 
             int thisRightSpace = Difficulty.LastIndexOf(' ');
-            int otherRightSpace = other.Difficulty.LastIndexOf(' ');
+            int otherRightSpace = difficultyName.LastIndexOf(' ');
 
             if (thisRightSpace == -1 || otherRightSpace == -1 || thisRightSpace != otherRightSpace)
             {
@@ -122,7 +135,7 @@ namespace ArcCreate.Data
 
             for (int i = 0; i < thisRightSpace; i++)
             {
-                if (Difficulty[i] != other.Difficulty[i])
+                if (Difficulty[i] != difficultyName[i])
                 {
                     return false;
                 }
@@ -138,6 +151,22 @@ namespace ArcCreate.Data
             bool isPlus = roundDown >= 9 && (ChartConstant - roundDown) >= 0.7;
 
             return (roundDown, isPlus);
+        }
+
+        public (string name, string number) ParseDifficultyName(int maxNumberLength)
+        {
+            if (string.IsNullOrEmpty(Difficulty))
+            {
+                return (string.Empty, string.Empty);
+            }
+
+            int lastSpaceIndex = Difficulty.LastIndexOf(' ');
+            if (lastSpaceIndex < 0 || lastSpaceIndex >= Difficulty.Length)
+            {
+                return Difficulty.Length > maxNumberLength ? (Difficulty, string.Empty) : (string.Empty, Difficulty);
+            }
+
+            return (Difficulty.Substring(0, lastSpaceIndex), Difficulty.Substring(lastSpaceIndex + 1));
         }
     }
 }

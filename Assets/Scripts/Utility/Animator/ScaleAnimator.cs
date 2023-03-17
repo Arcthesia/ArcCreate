@@ -39,5 +39,15 @@ namespace ArcCreate.Utility.Animation
         public override void SetupComponents()
         {
         }
+
+        public override void HideImmediate()
+        {
+            transform.localScale = defaultScale.Multiply(animationScaleMultiplier);
+        }
+
+        public override void ShowImmediate()
+        {
+            transform.localScale = defaultScale;
+        }
     }
 }

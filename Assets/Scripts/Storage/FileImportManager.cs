@@ -81,6 +81,7 @@ namespace ArcCreate.Storage
             {
                 Debug.Log("db file exists at " + FileStatics.DatabasePath);
                 Database.Initialize();
+                storageData.NotifyStorageChange();
             }
         }
 

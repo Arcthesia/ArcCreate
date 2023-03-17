@@ -40,5 +40,15 @@ namespace ArcCreate.Utility.Animation
         {
             rect.anchoredPosition = defaultPosition;
         }
+
+        public override void HideImmediate()
+        {
+            rect.sizeDelta = defaultPosition - animationMoveVector;
+        }
+
+        public override void ShowImmediate()
+        {
+            rect.sizeDelta = defaultPosition;
+        }
     }
 }

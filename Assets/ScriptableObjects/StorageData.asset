@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 579a6d9f7643e60a390d3b5960db7de7, type: 3}
   m_Name: StorageData
   m_EditorClassIdentifier: 
+  defaultJacket: {fileID: 2800000, guid: 59b3f8a72c80ebbe0942ad10f3765d43, type: 3}

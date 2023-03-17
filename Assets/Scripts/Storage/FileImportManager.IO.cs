@@ -259,6 +259,7 @@ namespace ArcCreate.Storage
                     storage.Identifier = import.Identifier;
                     storage.Version = import.Version;
                     storage.FileReferences = new List<string>();
+                    storage.AddedDate = DateTime.UtcNow;
 
                     Stack<DirectoryInfo> directoriesToImport = new Stack<DirectoryInfo>();
                     DirectoryInfo root = new DirectoryInfo(Path.Combine(parentDirectory.FullName, import.Directory));
@@ -274,7 +275,7 @@ namespace ArcCreate.Storage
 
                         foreach (var file in dir.EnumerateFiles())
                         {
-                            string relativeToRoot = file.FullName.Substring(root.FullName.Length);
+                            string relativeToRoot = file.FullName.Substring(root.FullName.Length).TrimStart('/', '\\');
                             if (relativeToRoot != import.SettingsFile)
                             {
                                 storage.FileReferences.Add(relativeToRoot);
