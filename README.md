@@ -3,6 +3,7 @@
 ![Logo](Assets/Textures/LogoFull.png?raw=true "Title")
 
 Fast and powerful .aff editor made with Unity.
+
 Download the latest nightly build: https://nightly.link/0thElement/ArcCreate/workflows/build/master
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Q5Q1JE1B1)
