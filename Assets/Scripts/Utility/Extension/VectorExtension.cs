@@ -17,6 +17,18 @@ namespace ArcCreate.Utility.Extension
         }
 
         /// <summary>
+        /// Multiply two vectors term by term.
+        /// Note: This is neither dot product nor cross product.
+        /// </summary>
+        /// <param name="a">The first vector.</param>
+        /// <param name="b">The second vector.</param>
+        /// <returns>The result.</returns>
+        public static Vector2 Multiply(this Vector2 a, Vector2 b)
+        {
+            return new Vector2(a.x * b.x, a.y * b.y);
+        }
+
+        /// <summary>
         /// The dot product of two vectors.
         /// </summary>
         /// <param name="a">The first vector.</param>

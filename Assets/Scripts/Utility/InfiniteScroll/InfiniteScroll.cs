@@ -44,14 +44,23 @@ namespace ArcCreate.Utility.InfiniteScroll
 
             set
             {
+                if (hierarchy.Count == 0)
+                {
+                    return;
+                }
+
                 if (IsVertical)
                 {
+                    float halfContainerHeight = containerRect.rect.height / 2;
+                    value = Mathf.Clamp(value, halfContainerHeight, contentRect.rect.height - halfContainerHeight);
                     contentRect.anchoredPosition = new Vector2(
                         contentRect.anchoredPosition.x,
-                        value - (containerRect.rect.height / 2));
+                        value - halfContainerHeight);
                 }
                 else
                 {
+                    float halfContainerWidth = containerRect.rect.width / 2;
+                    value = Mathf.Clamp(value, halfContainerWidth, contentRect.rect.width - halfContainerWidth);
                     contentRect.anchoredPosition = new Vector2(
                         -value + (containerRect.rect.width / 2),
                         contentRect.anchoredPosition.y);
@@ -74,6 +83,12 @@ namespace ArcCreate.Utility.InfiniteScroll
 
             this.data.Clear();
             hierarchy.Clear();
+
+            foreach (Cell cell in visibleCells)
+            {
+                cell.CellData.Pool.Return(cell);
+            }
+
             visibleCells.Clear();
 
             foreach (CellData cellData in data)
@@ -150,15 +165,18 @@ namespace ArcCreate.Utility.InfiniteScroll
         private void OnScroll(Vector2 val)
         {
             Rebuild();
+        }
 
+        private void Update()
+        {
             if (useTwoStageLoading)
             {
                 Vector2 velocity = contentRect.anchoredPosition - previousContentRectPosition;
                 velocity /= Time.deltaTime;
                 LoadSecondStage(IsVertical ? velocity.y : velocity.x);
-            }
 
-            previousContentRectPosition = contentRect.anchoredPosition;
+                previousContentRectPosition = contentRect.anchoredPosition;
+            }
         }
 
         private void RecalculateCellsState()

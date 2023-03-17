@@ -623,6 +623,13 @@ Gameplay:
     Action:
       Delete: Delete
       Cancel: Cancel
+    List:
+      OtherDifficulties: Other difficulties
+    Info:
+      UndefinedTitle: Unnamed
+      UndefinedComposer: N/A
+      UndefinedCharter: Unknown
+      Charter: 'Charter: {0}'
 
 Shutter:
   Composer: Music

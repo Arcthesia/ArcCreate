@@ -41,7 +41,7 @@ See:
 
 # License
 
-This project was licensed under GPL-3.0 license (see [LICENSE](LICENSE.md)).
+This project was licensed under GPL-3.0 license (see [LICENSE](LICENSE)).
 
 # Credits
 

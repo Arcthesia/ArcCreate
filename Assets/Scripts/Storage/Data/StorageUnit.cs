@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UltraLiteDB;
 
@@ -13,6 +14,8 @@ namespace ArcCreate.Storage.Data
         public int Version { get; set; }
 
         public List<string> FileReferences { get; set; }
+
+        public DateTime AddedDate { get; set; }
 
         public abstract string Type { get; }
 
@@ -51,6 +54,19 @@ namespace ArcCreate.Storage.Data
 
             reason = string.Empty;
             return true;
+        }
+
+        public bool Equals(IStorageUnit other)
+        {
+            return other != null && Type == other.Type && Id == other.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = 1325953389;
+            hashCode = (hashCode * -1521134295) + Id.GetHashCode();
+            hashCode = (hashCode * -1521134295) + EqualityComparer<string>.Default.GetHashCode(Type);
+            return hashCode;
         }
     }
 }

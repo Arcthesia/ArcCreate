@@ -12,6 +12,24 @@ namespace ArcCreate.Utility.Animation
 
         public float Length => length;
 
+        public bool IsShown { get; private set; }
+
+        public void ShowImmediate()
+        {
+            foreach (var c in components)
+            {
+                c.ShowImmediate();
+            }
+        }
+
+        public void HideImmediate()
+        {
+            foreach (var c in components)
+            {
+                c.HideImmediate();
+            }
+        }
+
         public void Show()
         {
             if (disableGameObject)
@@ -19,6 +37,7 @@ namespace ArcCreate.Utility.Animation
                 gameObject.SetActive(true);
             }
 
+            IsShown = true;
             GetShowTween(out float _).Play();
         }
 
@@ -30,6 +49,8 @@ namespace ArcCreate.Utility.Animation
                 {
                     gameObject.SetActive(false);
                 }
+
+                IsShown = false;
             });
         }
 

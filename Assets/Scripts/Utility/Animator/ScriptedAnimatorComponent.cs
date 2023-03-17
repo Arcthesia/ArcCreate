@@ -16,5 +16,9 @@ namespace ArcCreate.Utility.Animation
         public abstract void RegisterDefaultValues();
 
         public abstract void Reset();
+
+        public abstract void HideImmediate();
+
+        public abstract void ShowImmediate();
     }
 }

@@ -39,5 +39,15 @@ namespace ArcCreate.Utility.Animation
         {
             canvasGroup.alpha = defaultAlpha;
         }
+
+        public override void HideImmediate()
+        {
+            canvasGroup.alpha = 0;
+        }
+
+        public override void ShowImmediate()
+        {
+            canvasGroup.alpha = defaultAlpha;
+        }
     }
 }

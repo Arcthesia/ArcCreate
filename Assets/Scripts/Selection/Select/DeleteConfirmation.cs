@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using ArcCreate.Storage;
 using ArcCreate.Storage.Data;
@@ -19,9 +20,9 @@ namespace ArcCreate.Selection.Select
 
         private List<IStorageUnit> storageUnits;
 
-        public void PromptUser(List<IStorageUnit> storageUnits)
+        public void PromptUser(IEnumerable<IStorageUnit> units)
         {
-            this.storageUnits = storageUnits;
+            storageUnits = units.ToList();
             StringBuilder str = new StringBuilder();
             foreach (var st in storageUnits)
             {

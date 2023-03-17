@@ -15,7 +15,6 @@ Shader "Compose/Waveform"
 		Blend SrcAlpha OneMinusSrcAlpha
 		ZWrite Off
 		Cull Off
-		Blend SrcAlpha OneMinusSrcAlpha
 
 		Pass
 		{
