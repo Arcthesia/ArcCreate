@@ -1,9 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.Data;
 using ArcCreate.Storage;
 using ArcCreate.Storage.Data;
-using ArcCreate.Utility.Animation;
 using ArcCreate.Utility.InfiniteScroll;
 using DG.Tweening;
 using UnityEngine;
@@ -18,11 +18,10 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private GameObject levelCellPrefab;
         [SerializeField] private GameObject difficultyCellPrefab;
         [SerializeField] private GameObject groupCellPrefab;
-        [SerializeField] private GameObject packCellPrefab;
         [SerializeField] private float levelCellSize;
-        [SerializeField] private float packCellSize;
         [SerializeField] private float groupCellSize;
-        [SerializeField] private float autoScrollDuration = 0.3f;
+        [SerializeField] private float autoScrollDuration = 1f;
+        [SerializeField] private float rebuildDuration = 0.3f;
         private PackStorage currentPack;
         private ChartSettings currentChart;
         private LevelStorage currentLevel;
@@ -35,15 +34,12 @@ namespace ArcCreate.Selection.Interface
 
         public static float GroupCellSize { get; set; }
 
-        public static float PackCellSize { get; set; }
-
         private void Awake()
         {
             Pools.New<Cell>("LevelCell", levelCellPrefab, scroll.transform, 5);
             Pools.New<DifficultyCell>("DifficultyCell", difficultyCellPrefab, scroll.transform, 30);
             Pools.New<Cell>("GroupCell", groupCellPrefab, scroll.transform, 3);
 
-            // Pools.New<Cell>("PackCell", packCellPrefab, transform, 10);
             storageData.OnStorageChange += RebuildList;
             storageData.SelectedChart.OnValueChange += OnSelectedChart;
             storageData.SelectedPack.OnValueChange += OnSelectedPack;
@@ -55,7 +51,8 @@ namespace ArcCreate.Selection.Interface
 
             LevelCellSize = levelCellSize;
             GroupCellSize = groupCellSize;
-            PackCellSize = packCellSize;
+
+            scroll.OnPointerEvent += KillTween;
         }
 
         private void OnDestroy()
@@ -64,20 +61,46 @@ namespace ArcCreate.Selection.Interface
             Pools.Destroy<DifficultyCell>("DifficultyCell");
             Pools.Destroy<Cell>("GroupCell");
 
-            // Pools.Destroy<Cell>("PackCell");
             storageData.OnStorageChange -= RebuildList;
             storageData.SelectedChart.OnValueChange -= OnSelectedChart;
             storageData.SelectedPack.OnValueChange -= OnSelectedPack;
 
             Settings.SelectionGroupStrategy.OnValueChanged.RemoveListener(OnGroupStrategyChanged);
             Settings.SelectionSortStrategy.OnValueChanged.RemoveListener(OnSortStrategyChanged);
+
+            scroll.OnPointerEvent -= KillTween;
         }
 
         private void OnSelectedPack(PackStorage pack)
         {
             if (pack != currentPack)
             {
-                RebuildList();
+                if (pack == null)
+                {
+                    RebuildList();
+                    currentPack = pack;
+                    return;
+                }
+
+                bool found = false;
+                foreach (var level in pack.Levels)
+                {
+                    if (currentLevel != null && level.Id == currentLevel.Id)
+                    {
+                        found = true;
+                    }
+                }
+
+                if (!found)
+                {
+                    var (level, chart) = storageData.GetLastSelectedChart(pack?.Identifier);
+                    currentLevel = level;
+                    storageData.SelectedChart.Value = (level, chart);
+                }
+                else
+                {
+                    RebuildList();
+                }
             }
 
             currentPack = pack;
@@ -86,7 +109,7 @@ namespace ArcCreate.Selection.Interface
         private void OnSelectedChart((LevelStorage, ChartSettings) obj)
         {
             var (level, chart) = obj;
-            if (!chart.IsSameDifficulty(currentChart))
+            if (!chart.IsSameDifficulty(currentChart) || storageData.SelectedPack.Value != currentPack)
             {
                 RebuildList();
             }
@@ -172,7 +195,7 @@ namespace ArcCreate.Selection.Interface
             if (prevCount > 0)
             {
                 scrollRect.anchorMin = new Vector2(-0.4f, 0);
-                scrollRect.DOAnchorMin(Vector2.zero, autoScrollDuration).SetEase(Ease.OutCubic);
+                scrollRect.DOAnchorMin(Vector2.zero, rebuildDuration).SetEase(Ease.OutCubic);
             }
 
             FocusOnLevel(currentLevel);
@@ -200,6 +223,11 @@ namespace ArcCreate.Selection.Interface
             float scrollTo = item.ValueToCenterCell;
             scrollTween?.Kill();
             scrollTween = DOTween.To((float val) => scroll.Value = val, scrollFrom, scrollTo, autoScrollDuration).SetEase(Ease.OutExpo);
+        }
+
+        private void KillTween()
+        {
+            scrollTween?.Kill();
         }
     }
 }

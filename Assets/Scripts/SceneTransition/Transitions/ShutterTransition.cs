@@ -6,12 +6,13 @@ namespace ArcCreate.SceneTransition
     {
         private readonly Shutter shutter;
 
-        public ShutterTransition()
+        public ShutterTransition(int waitDurationMs = 0)
         {
             shutter = Shutter.Instance;
+            WaitDurationMs = waitDurationMs;
         }
 
-        public int WaitDurationMs => 0;
+        public int WaitDurationMs { get; private set; }
 
         public void DisableGameObject()
         {

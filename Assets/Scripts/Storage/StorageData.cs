@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ArcCreate.Data;
 using ArcCreate.Gameplay;
 using ArcCreate.SceneTransition;
@@ -36,6 +37,8 @@ namespace ArcCreate.Storage
 
         public UltraLiteCollection<PackStorage> PackCollection { get; private set; }
 
+        public bool IsTransitioning { get; private set; }
+
         public LevelStorage GetLevel(string id)
         {
             return LevelCollection.FindOne(Query.EQ("Identifier", id));
@@ -65,7 +68,7 @@ namespace ArcCreate.Storage
 
         public IEnumerable<PackStorage> GetAllPacks()
         {
-            IEnumerable<PackStorage> packs = PackCollection.FindAll();
+            List<PackStorage> packs = PackCollection.FindAll().ToList();
             foreach (var pack in packs)
             {
                 FetchLevelsForPack(pack);
@@ -101,9 +104,10 @@ namespace ArcCreate.Storage
             SelectedPack.SetValueWithoutNotify(GetLastSelectedPack());
             SelectedChart.SetValueWithoutNotify(GetLastSelectedChart(SelectedPack.Value?.Identifier));
             OnStorageChange?.Invoke();
+            IsTransitioning = false;
         }
 
-        public async UniTask AssignTexture(RawImage jacket, LevelStorage level, string jacketPath)
+        public async UniTask AssignTexture(RawImage jacket, IStorageUnit level, string jacketPath)
         {
             jacketPath = level.GetRealPath(jacketPath);
             if (jacketPath == null)
@@ -149,7 +153,7 @@ namespace ArcCreate.Storage
             }
         }
 
-        public bool TryAssignTextureFromCache(RawImage jacket, LevelStorage level, string jacketPath)
+        public bool TryAssignTextureFromCache(RawImage jacket, IStorageUnit level, string jacketPath)
         {
             jacketPath = level.GetRealPath(jacketPath);
             if (jacketPath == null)
@@ -168,7 +172,7 @@ namespace ArcCreate.Storage
             return false;
         }
 
-        public async UniTask<AudioClip> GetAudioClipStreaming(LevelStorage level, string audioPath)
+        public async UniTask<AudioClip> GetAudioClipStreaming(IStorageUnit level, string audioPath)
         {
             audioPath = level.GetRealPath(audioPath);
             if (audioPath == null)
@@ -224,9 +228,15 @@ namespace ArcCreate.Storage
 
         public void SwitchToPlayScene((LevelStorage level, ChartSettings chart) selection)
         {
+            if (IsTransitioning)
+            {
+                return;
+            }
+
             var (level, chart) = selection;
             SceneTransitionManager.Instance.SetTransition(new ShutterWithInfoTransition());
             IGameplayControl gameplay = null;
+            IsTransitioning = true;
             OnSwitchToGameplayScene.Invoke();
             SceneTransitionManager.Instance.SwitchScene(
                 SceneNames.GameplayScene,
@@ -237,58 +247,18 @@ namespace ArcCreate.Storage
                         await new GameplayLoader(gameplayControl, gameplayData).Load(level, chart);
                         gameplay = gameplayControl;
                     }
+
+                    IsTransitioning = false;
                 },
-                (e) => OnSwitchToGameplaySceneException?.Invoke(e))
+                e =>
+                {
+                    OnSwitchToGameplaySceneException?.Invoke(e);
+                    IsTransitioning = false;
+                })
                 .ContinueWith(() => gameplay?.Audio.PlayWithDelay(0, 2000));
         }
 
-        private static void DestroyCache<T>(Incompletable<T> obj)
-            where T : UnityEngine.Object
-        {
-            Destroy(obj.Value);
-        }
-
-        private void Awake()
-        {
-            SelectedPack.OnValueChange += OnPackChange;
-            SelectedChart.OnValueChange += OnChartChange;
-        }
-
-        private void OnDestroy()
-        {
-            SelectedPack.OnValueChange -= OnPackChange;
-            SelectedChart.OnValueChange -= OnChartChange;
-        }
-
-        private void OnPackChange(PackStorage pack)
-        {
-            PlayerPrefs.SetString("Selection.LastPack", pack.Identifier);
-        }
-
-        private void OnChartChange((LevelStorage level, ChartSettings chart) obj)
-        {
-            var (level, chart) = obj;
-            if (level != null && chart != null)
-            {
-                PlayerPrefs.SetString($"Selection.LastLevel.{SelectedPack.Value?.Identifier ?? "all"}", level.Identifier);
-                PlayerPrefs.SetString("Selection.LastChartPath", chart.ChartPath);
-                PlayerPrefs.SetString("Selection.LastDifficultyName", chart.Difficulty);
-                PlayerPrefs.SetFloat("Selection.LastCc", (float)chart.ChartConstant);
-            }
-        }
-
-        private PackStorage GetLastSelectedPack()
-        {
-            string id = PlayerPrefs.GetString("Selection.LastPack", null);
-            if (id == null)
-            {
-                return null;
-            }
-
-            return GetPack(id);
-        }
-
-        private (LevelStorage level, ChartSettings chart) GetLastSelectedChart(string packId)
+        public (LevelStorage level, ChartSettings chart) GetLastSelectedChart(string packId)
         {
             string levelId = PlayerPrefs.GetString($"Selection.LastLevel.{packId ?? "all"}", null);
             string chartPath = PlayerPrefs.GetString($"Selection.LastChartPath", null);
@@ -341,6 +311,52 @@ namespace ArcCreate.Storage
                 }
 
                 return (lv, lv.Settings.GetClosestDifficultyToConstant(cc));
+            }
+        }
+
+        public PackStorage GetLastSelectedPack()
+        {
+            string id = PlayerPrefs.GetString("Selection.LastPack", null);
+            if (id == null)
+            {
+                return null;
+            }
+
+            return GetPack(id);
+        }
+
+        private static void DestroyCache<T>(Incompletable<T> obj)
+            where T : UnityEngine.Object
+        {
+            Destroy(obj.Value);
+        }
+
+        private void Awake()
+        {
+            SelectedPack.OnValueChange += OnPackChange;
+            SelectedChart.OnValueChange += OnChartChange;
+        }
+
+        private void OnDestroy()
+        {
+            SelectedPack.OnValueChange -= OnPackChange;
+            SelectedChart.OnValueChange -= OnChartChange;
+        }
+
+        private void OnPackChange(PackStorage pack)
+        {
+            PlayerPrefs.SetString("Selection.LastPack", pack.Identifier);
+        }
+
+        private void OnChartChange((LevelStorage level, ChartSettings chart) obj)
+        {
+            var (level, chart) = obj;
+            if (level != null && chart != null)
+            {
+                PlayerPrefs.SetString($"Selection.LastLevel.{SelectedPack.Value?.Identifier ?? "all"}", level.Identifier);
+                PlayerPrefs.SetString("Selection.LastChartPath", chart.ChartPath);
+                PlayerPrefs.SetString("Selection.LastDifficultyName", chart.Difficulty);
+                PlayerPrefs.SetFloat("Selection.LastCc", (float)chart.ChartConstant);
             }
         }
 

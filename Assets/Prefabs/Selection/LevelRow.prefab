@@ -564,7 +564,7 @@ MonoBehaviour:
   playIndicate: {fileID: 4693412260767247356}
   rect: {fileID: 5510217423951784835}
   selectedSizeDelta: {x: 1052, y: 170}
-  animationDuration: 0.15
+  animationDuration: 0.3
   animationEase: 18
 --- !u!114 &4693412261632797695
 MonoBehaviour:
@@ -941,6 +941,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseGraphic: {fileID: 4693412262199128386}
   gradietntGraphic: {fileID: 4693412261253951035}
+  tweenDuration: 0
+  tweenEase: 0
 --- !u!1 &8968072562530167192
 GameObject:
   m_ObjectHideFlags: 0

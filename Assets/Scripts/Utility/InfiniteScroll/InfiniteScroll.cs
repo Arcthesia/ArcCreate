@@ -1,11 +1,13 @@
+using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace ArcCreate.Utility.InfiniteScroll
 {
-    public class InfiniteScroll : MonoBehaviour
+    public class InfiniteScroll : MonoBehaviour, IDragHandler
     {
         /// <summary>
         /// User defined cell data.
@@ -32,6 +34,8 @@ namespace ArcCreate.Utility.InfiniteScroll
         private RectTransform containerRect;
         private bool setup;
         private Vector2 previousContentRectPosition;
+
+        public event Action OnPointerEvent;
 
         public float Value
         {
@@ -110,6 +114,11 @@ namespace ArcCreate.Utility.InfiniteScroll
             hierarchy[cellIndex].IsCollapsed = !hierarchy[cellIndex].IsCollapsed;
             RecalculateCellsState();
             Rebuild(true);
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            OnPointerEvent?.Invoke();
         }
 
         /// <summary>

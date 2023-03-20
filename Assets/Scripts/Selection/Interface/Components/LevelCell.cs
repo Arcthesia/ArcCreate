@@ -41,7 +41,7 @@ namespace ArcCreate.Selection.Interface
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (Services.Select.IsAnySelected)
+            if (Services.Select.IsAnySelected || storage.IsTransitioning)
             {
                 return;
             }
