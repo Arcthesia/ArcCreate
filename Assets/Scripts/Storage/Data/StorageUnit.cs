@@ -19,6 +19,8 @@ namespace ArcCreate.Storage.Data
 
         public abstract string Type { get; }
 
+        public bool IsDefaultAsset { get; set; }
+
         public void Delete()
         {
             foreach (string refr in FileReferences)
@@ -63,7 +65,7 @@ namespace ArcCreate.Storage.Data
 
         public override int GetHashCode()
         {
-            int hashCode = 1325953389;
+            int hashCode = -31773061;
             hashCode = (hashCode * -1521134295) + Id.GetHashCode();
             hashCode = (hashCode * -1521134295) + EqualityComparer<string>.Default.GetHashCode(Type);
             return hashCode;

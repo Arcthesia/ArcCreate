@@ -1,9 +1,17 @@
+using System;
 using System.IO;
 
 namespace ArcCreate.ChartFormat
 {
     public class PhysicalFileAccess : IFileAccessWrapper
     {
+        public string GetFileUri(string path)
+        {
+            return "file:///" + Uri.EscapeUriString(path.Replace("\\", "/"));
+        }
+
+        public string GetPath(string path) => path;
+
         public string ReadFile(string path)
         {
             return File.ReadAllText(path);

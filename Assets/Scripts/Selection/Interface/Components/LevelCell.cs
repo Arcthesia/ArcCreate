@@ -37,6 +37,7 @@ namespace ArcCreate.Selection.Interface
         private readonly List<DifficultyCell> difficultyCells = new List<DifficultyCell>();
         private ChartSettings visibleChart;
         private Vector2 defaultSizeDelta;
+        private bool isSelected;
 
         public void OnPointerClick(PointerEventData eventData)
         {
@@ -45,7 +46,14 @@ namespace ArcCreate.Selection.Interface
                 return;
             }
 
-            storage.SelectedChart.Value = (level, visibleChart);
+            if (isSelected)
+            {
+                storage.SwitchToPlayScene((level, visibleChart));
+            }
+            else
+            {
+                storage.SelectedChart.Value = (level, visibleChart);
+            }
         }
 
         public override void SetCellData(CellData cellData)
@@ -62,7 +70,7 @@ namespace ArcCreate.Selection.Interface
 
         public override async UniTask LoadCellFully(CellData cellData, CancellationToken cancellationToken)
         {
-            await storage.AssignTexture(jacket, level, visibleChart.JacketPath, cancellationToken);
+            await storage.AssignTexture(jacket, level, visibleChart.JacketPath);
         }
 
         private void SetInfo()
@@ -122,6 +130,7 @@ namespace ArcCreate.Selection.Interface
             difficulty.gameObject.SetActive(!isSelected);
 
             rect.DOSizeDelta(isSelected ? selectedSizeDelta : defaultSizeDelta, animationDuration).SetEase(animationEase);
+            this.isSelected = isSelected;
         }
 
         private void UpdateSelectedStateImmediate(bool isSelected)
@@ -132,6 +141,7 @@ namespace ArcCreate.Selection.Interface
             rect.DOKill();
             rect.localScale = Vector3.one;
             rect.sizeDelta = isSelected ? selectedSizeDelta : defaultSizeDelta;
+            this.isSelected = isSelected;
         }
     }
 }

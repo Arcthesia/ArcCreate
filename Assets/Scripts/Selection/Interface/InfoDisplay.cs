@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using ArcCreate.Data;
+using ArcCreate.SceneTransition;
 using ArcCreate.Storage;
 using ArcCreate.Storage.Data;
 using Cysharp.Threading.Tasks;
@@ -20,6 +22,7 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private TMP_Text bpm;
         [SerializeField] private TMP_Text score;
         [SerializeField] private TMP_Text charter;
+        [SerializeField] private Button switchDiffButton;
 
         [Header("Difficulty")]
         [SerializeField] private TMP_Text currDiffName;
@@ -29,21 +32,54 @@ namespace ArcCreate.Selection.Interface
 
         [Header("Images")]
         [SerializeField] private RawImage jacket;
+        [SerializeField] private RawImage[] backgrounds;
         [SerializeField] private Image side;
         [SerializeField] private Sprite[] sideSprites;
+        [SerializeField] private Texture[] defaultBackgrounds;
+
+        [Header("Shutter")]
+        [SerializeField] private SpriteSO shutterJacketSprite;
+        [SerializeField] private StringSO shutterTitle;
+        [SerializeField] private StringSO shutterComposer;
+        [SerializeField] private StringSO shutterIllustrator;
+        [SerializeField] private StringSO shutterCharter;
+        [SerializeField] private StringSO shutterAlias;
+        [SerializeField] private SpriteSO shutterJacketShadowSprite;
+        [SerializeField] private Sprite[] jacketShadowSprites;
+
+        [Header("Exception")]
+        [SerializeField] private Dialog exceptionDialog;
+        [SerializeField] private TMP_Text exceptionText;
+        private Sprite jacketSprite;
         private readonly CancellationTokenSource cts = new CancellationTokenSource();
 
         private void Awake()
         {
             storage.SelectedChart.OnValueChange += OnChartChange;
             storage.OnStorageChange += OnStorageChange;
+            switchDiffButton.onClick.AddListener(SwitchDifficulty);
+            storage.OnSwitchToGameplaySceneException += OnGameplayException;
         }
 
         private void OnDestroy()
         {
             storage.SelectedChart.OnValueChange -= OnChartChange;
             storage.OnStorageChange -= OnStorageChange;
+            switchDiffButton.onClick.AddListener(SwitchDifficulty);
+            storage.OnSwitchToGameplaySceneException -= OnGameplayException;
             cts.Cancel();
+        }
+
+        private void OnGameplayException(Exception e)
+        {
+            exceptionDialog.Show();
+            exceptionText.text = I18n.S("Gameplay.Exception.Load", new Dictionary<string, object>()
+            {
+                { "Identifier", storage.SelectedChart.Value.level?.Identifier ?? "unknown" },
+                { "ChartPath", storage.SelectedChart.Value.chart?.ChartPath ?? "unknown" },
+                { "Message", e.Message },
+                { "StackTrace", e.StackTrace },
+            });
         }
 
         private void OnStorageChange()
@@ -59,27 +95,66 @@ namespace ArcCreate.Selection.Interface
                 return;
             }
 
-            title.text = string.IsNullOrEmpty(chart.Title) ? I18n.S("Gameplay.Selection.Info.UndefinedTitle") : chart.Title;
-            composer.text = string.IsNullOrEmpty(chart.Composer) ? I18n.S("Gameplay.Selection.Info.UndefinedComposer") : chart.Composer;
+            title.text = string.IsNullOrEmpty(chart.Title) ? I18n.S("Gameplay.Selection.Info.Undefined.Title") : chart.Title;
+            composer.text = string.IsNullOrEmpty(chart.Composer) ? I18n.S("Gameplay.Selection.Info.Undefined.Composer") : chart.Composer;
             bpm.text = string.IsNullOrEmpty(chart.BpmText) ? "BPM: " + chart.BaseBpm.ToString() : chart.BpmText;
             score.text = "Coming soon";
-            charter.text = string.IsNullOrEmpty(chart.Charter) ? I18n.S("Gameplay.Undefined.Charter") : I18n.S("Gameplay.Selection.Info.Charter", chart.Charter);
+            charter.text = string.IsNullOrEmpty(chart.Charter) ? I18n.S("Gameplay.Selection.Info.Undefined.Charter") : I18n.S("Gameplay.Selection.Info.Charter", chart.Charter);
 
-            storage.AssignTexture(jacket, level, chart.JacketPath, cts.Token).Forget();
+            shutterTitle.Value = title.text;
+            shutterComposer.Value = composer.text;
+            shutterIllustrator.Value = chart.Illustrator;
+            shutterCharter.Value = chart.Charter;
+            shutterAlias.Value = chart.Alias;
 
-            switch ((chart.Skin?.Side ?? "").ToLower())
+            string sideString = (chart.Skin?.Side ?? "").ToLower();
+            storage.AssignTexture(jacket, level, chart.JacketPath).ContinueWith(() =>
+            {
+                if (jacketSprite != null)
+                {
+                    Destroy(jacketSprite);
+                }
+
+                Texture texture = jacket.texture;
+                jacketSprite = Sprite.Create(texture as Texture2D, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+                shutterJacketSprite.Value = jacketSprite;
+            });
+            foreach (var bg in backgrounds)
+            {
+                switch (sideString)
+                {
+                    case "light":
+                        bg.texture = defaultBackgrounds[0];
+                        break;
+                    case "conflict":
+                        bg.texture = defaultBackgrounds[1];
+                        break;
+                    case "colorless":
+                        bg.texture = defaultBackgrounds[2];
+                        break;
+                    default:
+                        bg.texture = defaultBackgrounds[0];
+                        break;
+                }
+            }
+
+            switch (sideString)
             {
                 case "light":
                     side.sprite = sideSprites[0];
+                    shutterJacketShadowSprite.Value = jacketShadowSprites[0];
                     break;
                 case "conflict":
                     side.sprite = sideSprites[1];
+                    shutterJacketShadowSprite.Value = jacketShadowSprites[1];
                     break;
                 case "colorless":
                     side.sprite = sideSprites[2];
+                    shutterJacketShadowSprite.Value = jacketShadowSprites[2];
                     break;
                 default:
                     side.sprite = sideSprites[0];
+                    shutterJacketShadowSprite.Value = jacketShadowSprites[0];
                     break;
             }
 
@@ -111,7 +186,7 @@ namespace ArcCreate.Selection.Interface
                     break;
                 }
 
-                (string diffName, string diffNum) = chart.ParseDifficultyName(maxNumberLength: 3);
+                (string diffName, string diffNum) = otherChart.ParseDifficultyName(maxNumberLength: 3);
                 ColorUtility.TryParseHtmlString(otherChart.DifficultyColor, out Color diffColor);
 
                 diffNumbers[i].gameObject.SetActive(true);
@@ -130,6 +205,34 @@ namespace ArcCreate.Selection.Interface
                 diffNumbers[i].gameObject.SetActive(false);
                 diffColors[i].Color = inactiveDiffColor;
             }
+        }
+
+        private void SwitchDifficulty()
+        {
+            var (level, chart) = storage.SelectedChart.Value;
+            if (level == null)
+            {
+                return;
+            }
+
+            if (chart == null)
+            {
+                storage.SelectedChart.Value = (level, level.Settings.Charts[0]);
+            }
+
+            int indexOfCurrentChart = 0;
+            for (int i = 0; i < level.Settings.Charts.Count; i++)
+            {
+                ChartSettings otherChart = level.Settings.Charts[i];
+                if (otherChart == chart)
+                {
+                    indexOfCurrentChart = i;
+                    break;
+                }
+            }
+
+            ChartSettings next = level.Settings.Charts[(indexOfCurrentChart + 1) % level.Settings.Charts.Count];
+            storage.SelectedChart.Value = (level, next);
         }
     }
 }

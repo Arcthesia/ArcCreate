@@ -180,10 +180,11 @@ namespace ArcCreate.Gameplay
         /// </summary>
         /// <param name="reader">The chart reader defining the chart.</param>
         /// <param name="sfxParentUri">The parent uri for loading custom SFX files.</param>
-        public void LoadChart(ChartReader reader, string sfxParentUri)
+        /// <param name="fileAccess">Custom file accessor.</param>
+        public void LoadChart(ChartReader reader, string sfxParentUri, IFileAccessWrapper fileAccess = null)
         {
             Services.Chart.LoadChart(reader);
-            Services.Hitsound.LoadCustomSfxs(sfxParentUri).Forget();
+            Services.Hitsound.LoadCustomSfxs(sfxParentUri, fileAccess).Forget();
             OnChartFileLoad?.Invoke();
         }
 
