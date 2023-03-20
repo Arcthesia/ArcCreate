@@ -607,6 +607,14 @@ Gameplay:
     Scenecontrol: |-
       An error occured while trying to load scenecontrol json located at {Path}.
       {Error}
+    ScenecontrolSprite: |-
+      An error occured while trying to load a scenecontrol sprite located at {Path}.
+      {Error}
+    Load: |-
+      An unknown error occured while trying to load the chart {Identifier}, {ChartPath}
+      Error: {Message}
+      Stack trace:
+      {StackTrace}
   HUD:
     Play: Play
     Retry: Retry
@@ -620,15 +628,18 @@ Gameplay:
     DeleteConfirmation: |-
       Are you sure you want to delete the following assets?
       Your score will not be deleted.
+    CannotDeleteDefault: |-
+      Default assets cannot be deleted.
     Action:
       Delete: Delete
       Cancel: Cancel
     List:
       OtherDifficulties: Other difficulties
     Info:
-      UndefinedTitle: Unnamed
-      UndefinedComposer: N/A
-      UndefinedCharter: Unknown
+      Undefined:
+        Title: Unnamed
+        Composer: N/A
+        Charter: Unknown
       Charter: 'Charter: {0}'
 
 Shutter:

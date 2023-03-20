@@ -90,7 +90,7 @@ namespace ArcCreate.Compose.Project
         {
             foreach (FileInfo file in projectDir.EnumerateFiles())
             {
-                if (!blockedPaths.Contains(file.FullName))
+                if (!blockedPaths.Contains(file.FullName) && !file.FullName.EndsWith(".arcpkg"))
                 {
                     WriteFileToZip(zip, file.FullName, Path.Combine(subdir, file.Name));
                 }

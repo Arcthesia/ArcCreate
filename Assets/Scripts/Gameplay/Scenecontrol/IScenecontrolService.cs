@@ -6,8 +6,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
 {
     public interface IScenecontrolService : IScenecontrolControl
     {
-        bool IsLoaded { get; }
-
         /// <summary>
         /// Gets the list of all scenecontrol events.
         /// </summary>

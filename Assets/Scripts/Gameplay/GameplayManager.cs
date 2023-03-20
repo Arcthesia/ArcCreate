@@ -45,7 +45,11 @@ namespace ArcCreate.Gameplay
 
         public IScenecontrolControl Scenecontrol => scenecontrolService;
 
-        public bool IsLoaded => chartService.IsLoaded;
+        public bool IsLoaded =>
+            Services.Chart.IsLoaded
+            && Services.Scenecontrol.IsLoaded
+            && Services.Render.IsLoaded
+            && Services.Hitsound.IsLoaded;
 
         public void SetCameraViewportRect(Rect rect)
         {
@@ -132,8 +136,12 @@ namespace ArcCreate.Gameplay
 
         private void Update()
         {
-            if (!Services.Chart.IsLoaded || !Services.Render.IsLoaded || !Services.Scenecontrol.IsLoaded || !Services.Hitsound.IsLoaded)
+            if (!IsLoaded)
             {
+                var c = Services.Chart;
+                var r = Services.Render;
+                var s = Services.Scenecontrol;
+                var h = Services.Hitsound;
                 return;
             }
 

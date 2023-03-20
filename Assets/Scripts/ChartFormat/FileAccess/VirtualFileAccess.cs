@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace ArcCreate.ChartFormat
@@ -16,6 +17,13 @@ namespace ArcCreate.ChartFormat
         {
             streamWriter = new StreamWriter(stream);
         }
+
+        public string GetFileUri(string path)
+        {
+            return "file:///" + Uri.EscapeUriString(path.Replace("\\", "/"));
+        }
+
+        public string GetPath(string path) => path;
 
         public string[] ReadFileByLines(string path) => data;
 

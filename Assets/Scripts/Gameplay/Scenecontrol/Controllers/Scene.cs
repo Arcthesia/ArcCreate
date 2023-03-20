@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using ArcCreate.ChartFormat;
 using ArcCreate.Utility.Lua;
 using ArcCreate.Utility.Parser;
 using Cysharp.Threading.Tasks;
@@ -288,11 +289,18 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [SerializeField] private int backgroundLayer;
 
         [MoonSharpHidden] public List<Controller> DisabledByDefault;
+        private IFileAccessWrapper customFileAccess;
 #pragma warning restore
 
         private readonly Dictionary<SpriteDefinition, Sprite> spriteCache = new Dictionary<SpriteDefinition, Sprite>();
         private readonly Dictionary<int, NoteGroupController> noteGroups = new Dictionary<int, NoteGroupController>();
         private readonly List<UniTask<Sprite>> spriteTasks = new List<UniTask<Sprite>>();
+
+        [MoonSharpHidden]
+        public void SetFileAccess(IFileAccessWrapper fileAccess)
+        {
+            customFileAccess = fileAccess;
+        }
 
         [MoonSharpHidden]
         public void ClearCache()
@@ -353,7 +361,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             spriteTasks.Add(GetSprite(
                 new SpriteDefinition
                 {
-                    Path = Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath),
+                    Uri = customFileAccess?.GetFileUri(Path.Combine("Scenecontrol", imgPath)) ?? Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath),
                     Pivot = pivotVec,
                 }).ContinueWith(sprite => c.Image.sprite = sprite));
 
@@ -388,7 +396,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             spriteTasks.Add(GetSprite(
                 new SpriteDefinition
                 {
-                    Path = Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath),
+                    Uri = customFileAccess?.GetFileUri(Path.Combine("Scenecontrol", imgPath)) ?? Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath),
                     Pivot = pivotVec,
                 }).ContinueWith(sprite => c.SpriteRenderer.sprite = sprite));
 
@@ -562,6 +570,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     {
                         complete = false;
                         break;
+                    }
+
+                    if (task.Status == UniTaskStatus.Faulted)
+                    {
+                        throw new Exception("Could not load a sprite for scenecontrol (Unknown error)");
                     }
                 }
 
@@ -764,31 +777,35 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
 
             spriteCache.Add(definition, null);
-            using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(Uri.EscapeUriString(definition.Path.Replace("\\", "/"))))
+            using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(Uri.EscapeUriString(definition.Uri.Replace("\\", "/"))))
             {
-                await req.SendWebRequest();
-                if (!string.IsNullOrWhiteSpace(req.error))
+                try
                 {
+                    await req.SendWebRequest();
+
+                    var t = DownloadHandlerTexture.GetContent(req);
+                    Sprite output = Sprite.Create(
+                            texture: t,
+                            rect: new Rect(0, 0, t.width, t.height),
+                            pivot: definition.Pivot,
+                            pixelsPerUnit: 100,
+                            extrude: 1,
+                            meshType: SpriteMeshType.FullRect);
+
+                    spriteCache[definition] = output;
+                    return output;
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e);
                     throw new IOException(I18n.S(
                         "Gameplay.Exception.ScenecontrolCantLoadSprite",
                         new Dictionary<string, object>()
                             {
-                                { "Path", definition.Path },
-                                { "Error", req.error },
+                                { "Path", definition.Uri },
+                                { "Error", e.Message + e.StackTrace },
                             }));
                 }
-
-                var t = DownloadHandlerTexture.GetContent(req);
-                Sprite output = Sprite.Create(
-                        texture: t,
-                        rect: new Rect(0, 0, t.width, t.height),
-                        pivot: definition.Pivot,
-                        pixelsPerUnit: 100,
-                        extrude: 1,
-                        meshType: SpriteMeshType.FullRect);
-
-                spriteCache[definition] = output;
-                return output;
             }
         }
 
@@ -821,7 +838,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         private struct SpriteDefinition
         {
-            public string Path;
+            public string Uri;
             public Vector2 Pivot;
         }
     }

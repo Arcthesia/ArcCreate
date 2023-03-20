@@ -11,6 +11,8 @@ namespace ArcCreate.Storage.Data
 
         int Version { get; set; }
 
+        bool IsDefaultAsset { get; set; }
+
         List<string> FileReferences { get; set; }
 
         DateTime AddedDate { get; set; }
@@ -24,5 +26,7 @@ namespace ArcCreate.Storage.Data
         IStorageUnit GetConflictingIdentifier();
 
         bool ValidateSelf(out string reason);
+
+        string GetRealPath(string virtualPath);
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ArcCreate.Selection.Interface;
 using ArcCreate.Storage.Data;
 using ArcCreate.Utility.Animation;
 using TMPro;
@@ -15,6 +16,7 @@ namespace ArcCreate.Selection.Select
         [SerializeField] private Button cancelButton;
         [SerializeField] private ScriptedAnimator selectPromptAnimator;
         [SerializeField] private DeleteConfirmation deleteConfirmation;
+        [SerializeField] private Dialog cannotDeleteConfirmation;
 
         private readonly HashSet<IStorageUnit> selected = new HashSet<IStorageUnit>();
         private bool isCurrentlyVisible = false;
@@ -77,7 +79,16 @@ namespace ArcCreate.Selection.Select
 
         private void PromptDeleteSelection()
         {
-            deleteConfirmation.PromptUser(selected);
+            foreach (var item in selected)
+            {
+                if (item.IsDefaultAsset)
+                {
+                    deleteConfirmation.PromptUser(selected);
+                    return;
+                }
+            }
+
+            cannotDeleteConfirmation.Show();
         }
     }
 }

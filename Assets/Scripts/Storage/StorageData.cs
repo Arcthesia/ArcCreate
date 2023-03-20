@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using ArcCreate.Data;
+using ArcCreate.Gameplay;
+using ArcCreate.SceneTransition;
 using ArcCreate.Storage.Data;
 using ArcCreate.Utility.LRUCache;
 using Cysharp.Threading.Tasks;
@@ -15,11 +16,17 @@ namespace ArcCreate.Storage
     [CreateAssetMenu(fileName = "StorageData", menuName = "ScriptableObject/StorageData")]
     public class StorageData : ScriptableObject
     {
-        private static readonly LRUCache<string, Incompletable<Texture>> JacketCache = new LRUCache<string, Incompletable<Texture>>(50, DestroyTexture);
+        private static readonly LRUCache<string, Incompletable<Texture>> JacketCache = new LRUCache<string, Incompletable<Texture>>(50, DestroyCache);
+        private static readonly LRUCache<string, Incompletable<AudioClip>> AudioClipCache = new LRUCache<string, Incompletable<AudioClip>>(10, DestroyCache);
 
         [SerializeField] private Texture defaultJacket;
+        [SerializeField] private GameplayData gameplayData;
 
         public event Action OnStorageChange;
+
+        public event Action OnSwitchToGameplayScene;
+
+        public event Action<Exception> OnSwitchToGameplaySceneException;
 
         public State<PackStorage> SelectedPack { get; } = new State<PackStorage>();
 
@@ -96,7 +103,7 @@ namespace ArcCreate.Storage
             OnStorageChange?.Invoke();
         }
 
-        public async UniTask AssignTexture(RawImage jacket, LevelStorage level, string jacketPath, CancellationToken ct)
+        public async UniTask AssignTexture(RawImage jacket, LevelStorage level, string jacketPath)
         {
             jacketPath = level.GetRealPath(jacketPath);
             if (jacketPath == null)
@@ -161,7 +168,82 @@ namespace ArcCreate.Storage
             return false;
         }
 
-        private static void DestroyTexture(Incompletable<Texture> obj)
+        public async UniTask<AudioClip> GetAudioClipStreaming(LevelStorage level, string audioPath)
+        {
+            audioPath = level.GetRealPath(audioPath);
+            if (audioPath == null)
+            {
+                return null;
+            }
+
+            Incompletable<AudioClip> cachedClip = AudioClipCache.Get(audioPath);
+            if (cachedClip != null)
+            {
+                while (!cachedClip.Completed)
+                {
+                    await UniTask.NextFrame();
+                }
+
+                if (cachedClip.IsSuccess)
+                {
+                    return cachedClip.Value;
+                }
+
+                return null;
+            }
+
+            Incompletable<AudioClip> loading = new Incompletable<AudioClip>();
+            AudioClipCache.Add(audioPath, loading);
+            using (UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(
+                "file:///" + Uri.EscapeDataString(audioPath.Replace("\\", "/")),
+                audioPath.EndsWith(".ogg") ? AudioType.OGGVORBIS : AudioType.WAV))
+            {
+                ((DownloadHandlerAudioClip)req.downloadHandler).streamAudio = true;
+                await req.SendWebRequest();
+
+                while (!req.isNetworkError && req.downloadedBytes < 1024)
+                {
+                    await UniTask.NextFrame();
+                }
+
+                loading.Completed = true;
+                if (string.IsNullOrEmpty(req.error))
+                {
+                    AudioClip clip = ((DownloadHandlerAudioClip)req.downloadHandler).audioClip;
+                    loading.Value = clip;
+                    loading.IsSuccess = true;
+                    return clip;
+                }
+                else
+                {
+                    loading.IsSuccess = false;
+                    return null;
+                }
+            }
+        }
+
+        public void SwitchToPlayScene((LevelStorage level, ChartSettings chart) selection)
+        {
+            var (level, chart) = selection;
+            SceneTransitionManager.Instance.SetTransition(new ShutterWithInfoTransition());
+            IGameplayControl gameplay = null;
+            OnSwitchToGameplayScene.Invoke();
+            SceneTransitionManager.Instance.SwitchScene(
+                SceneNames.GameplayScene,
+                async (rep) =>
+                {
+                    if (rep is IGameplayControl gameplayControl)
+                    {
+                        await new GameplayLoader(gameplayControl, gameplayData).Load(level, chart);
+                        gameplay = gameplayControl;
+                    }
+                },
+                (e) => OnSwitchToGameplaySceneException?.Invoke(e))
+                .ContinueWith(() => gameplay?.Audio.PlayWithDelay(0, 2000));
+        }
+
+        private static void DestroyCache<T>(Incompletable<T> obj)
+            where T : UnityEngine.Object
         {
             Destroy(obj.Value);
         }

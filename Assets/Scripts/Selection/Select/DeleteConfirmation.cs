@@ -26,10 +26,11 @@ namespace ArcCreate.Selection.Select
             StringBuilder str = new StringBuilder();
             foreach (var st in storageUnits)
             {
-                str.Append($"{st.Type}: {st.Identifier}");
+                if (!st.IsDefaultAsset)
+                {
+                    str.Append($"{st.Type}: {st.Identifier}");
+                }
             }
-
-            listText.text = str.ToString();
 
             animator.Show();
         }

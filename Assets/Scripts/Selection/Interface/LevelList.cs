@@ -163,12 +163,17 @@ namespace ArcCreate.Selection.Interface
 
         private void RebuildList()
         {
+            int prevCount = scroll.Data.Count;
             List<LevelStorage> levels = (storageData.SelectedPack.Value?.Levels ?? storageData.GetAllLevels()).ToList();
             List<CellData> data = LevelListBuilder.Build(levels, storageData.SelectedChart.Value.chart, groupStrategy, sortStrategy);
             scroll.SetData(data);
 
-            scrollRect.anchorMin = new Vector2(-0.4f, 0);
-            scrollRect.DOAnchorMin(Vector2.zero, autoScrollDuration).SetEase(Ease.OutCubic);
+            // Only play animation on the second load onward
+            if (prevCount > 0)
+            {
+                scrollRect.anchorMin = new Vector2(-0.4f, 0);
+                scrollRect.DOAnchorMin(Vector2.zero, autoScrollDuration).SetEase(Ease.OutCubic);
+            }
 
             FocusOnLevel(currentLevel);
         }

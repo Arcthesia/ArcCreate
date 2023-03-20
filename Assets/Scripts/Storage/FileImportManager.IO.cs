@@ -74,6 +74,7 @@ namespace ArcCreate.Storage
                 }
 
                 DisplayError("Archive file", e);
+                print(e.Message + " " + e.StackTrace);
             }
         }
 
@@ -91,6 +92,10 @@ namespace ArcCreate.Storage
             }
 
             var (importingData, importingFileReferences) = ReadItemsFromDirectory(dir);
+            foreach (var item in importingData)
+            {
+                item.IsDefaultAsset = isImportingDefaultPackage;
+            }
 
             // Detect duplicate identifier within the same importing package file
             HashSet<string> ids = new HashSet<string>();
@@ -172,7 +177,7 @@ namespace ArcCreate.Storage
                 foreach (string rawVirtualPath in item.FileReferences)
                 {
                     string virtualPath = string.Join("/", item.Type, item.Identifier, rawVirtualPath);
-                    string realPath = Path.Combine(dir.FullName, importingFileReferences[(item, rawVirtualPath)]);
+                    string realPath = Path.Combine(dir.FullName, importingFileReferences[string.Join("/", item.Identifier, rawVirtualPath)]);
                     FileStorage.ImportFile(realPath, virtualPath);
                 }
             }
@@ -203,7 +208,7 @@ namespace ArcCreate.Storage
         /// </summary>
         /// <param name="parentDirectory">The directory to read from.</param>
         /// <returns>List of all importing assets and list of files for each asset.</returnx>
-        private (List<IStorageUnit> importingData, Dictionary<(IStorageUnit, string), string> fileReferences)
+        private (List<IStorageUnit> importingData, Dictionary<string, string> fileReferences)
             ReadItemsFromDirectory(DirectoryInfo parentDirectory)
         {
             // Read import info
@@ -214,7 +219,7 @@ namespace ArcCreate.Storage
                 .Build();
             List<ImportInformation> imports = deserializer.Deserialize<List<ImportInformation>>(yaml);
 
-            Dictionary<(IStorageUnit, string), string> fileReferences = new Dictionary<(IStorageUnit, string), string>();
+            Dictionary<string, string> fileReferences = new Dictionary<string, string>();
             List<IStorageUnit> importingData = new List<IStorageUnit>();
 
             foreach (ImportInformation import in imports)
@@ -279,7 +284,7 @@ namespace ArcCreate.Storage
                             if (relativeToRoot != import.SettingsFile)
                             {
                                 storage.FileReferences.Add(relativeToRoot);
-                                fileReferences.Add((storage, relativeToRoot), file.FullName);
+                                fileReferences.Add(string.Join("/", storage.Identifier, relativeToRoot), file.FullName);
                             }
                         }
                     }

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,13 +9,17 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private Graphic baseGraphic;
         [SerializeField] private Graphic gradietntGraphic;
 
+        [Header("Animation")]
+        [SerializeField] private float tweenDuration;
+        [SerializeField] private Ease tweenEase;
+
         public Color Color
         {
             get => baseGraphic.color;
             set
             {
-                baseGraphic.color = value;
-                gradietntGraphic.color = InterfaceUtility.DarkenDiffColor(value);
+                baseGraphic.DOColor(value, tweenDuration).SetEase(tweenEase);
+                gradietntGraphic.DOColor(InterfaceUtility.DarkenDiffColor(value), tweenDuration).SetEase(tweenEase);
             }
         }
     }
