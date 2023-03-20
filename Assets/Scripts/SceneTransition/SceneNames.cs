@@ -7,11 +7,12 @@
         public const string GameplayScene = "Gameplay";
         public const string RemoteScene = "Remote";
         public const string SelectScene = "Select";
+        public const string StorageScene = "Storage";
 
 #if UNITY_EDITOR || UNITY_STANDALONE
-        public const string DefaultScene = ComposeScene;
+        public static readonly string[] DefaultScenes = new string[] { ComposeScene };
 #else
-        public const string DefaultScene = RemoteScene;
+        public static readonly string[] DefaultScenes = new string[] { StorageScene, SelectScene };
 #endif
     }
 }

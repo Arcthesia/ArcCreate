@@ -147,7 +147,10 @@ namespace ArcCreate.SceneTransition
 
             if (SceneManager.sceneCount == 1)
             {
-                SceneManager.LoadScene(SceneNames.DefaultScene, LoadSceneMode.Additive);
+                foreach (string scene in SceneNames.DefaultScenes)
+                {
+                    SceneManager.LoadScene(scene, LoadSceneMode.Additive);
+                }
             }
             else
             {

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using ArcCreate.Data;
 using UltraLiteDB;
 
 namespace ArcCreate.Storage.Data
@@ -29,7 +28,7 @@ namespace ArcCreate.Storage.Data
                 return false;
             }
 
-            if (!string.IsNullOrEmpty(ImagePath))
+            if (string.IsNullOrEmpty(ImagePath))
             {
                 reason = "Image path is not defined";
                 return false;
@@ -37,7 +36,7 @@ namespace ArcCreate.Storage.Data
 
             if (LevelIdentifiers == null || LevelIdentifiers.Count <= 0)
             {
-                reason = "Pack contaisn no levels";
+                reason = "Pack contains no levels";
                 return false;
             }
 
