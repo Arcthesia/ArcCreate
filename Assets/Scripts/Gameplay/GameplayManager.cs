@@ -51,6 +51,8 @@ namespace ArcCreate.Gameplay
             && Services.Render.IsLoaded
             && Services.Hitsound.IsLoaded;
 
+        public bool EnablePauseMenu { get => Values.EnablePauseMenu; set => Values.EnablePauseMenu = value; }
+
         public void SetCameraViewportRect(Rect rect)
         {
             gameplayCamera.rect = rect;
@@ -138,10 +140,6 @@ namespace ArcCreate.Gameplay
         {
             if (!IsLoaded)
             {
-                var c = Services.Chart;
-                var r = Services.Render;
-                var s = Services.Scenecontrol;
-                var h = Services.Hitsound;
                 return;
             }
 

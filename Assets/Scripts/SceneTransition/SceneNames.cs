@@ -10,9 +10,15 @@
         public const string StorageScene = "Storage";
 
 #if UNITY_EDITOR || UNITY_STANDALONE
-        public static readonly string[] DefaultScenes = new string[] { ComposeScene };
+        public const string DefaultScene = ComposeScene;
 #else
-        public static readonly string[] DefaultScenes = new string[] { StorageScene, SelectScene };
+        public const string DefaultScene = SelectScene;
+#endif
+
+#if UNITY_EDITOR || !UNITY_STANDALONE
+        public static readonly string[] RequiredScenes = new string[] { StorageScene };
+#else
+        public static readonly string[] RequiredScenes = new string[0];
 #endif
     }
 }

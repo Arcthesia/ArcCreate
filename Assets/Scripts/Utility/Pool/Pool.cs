@@ -36,6 +36,8 @@ public class Pool<T>
 
     public List<T> CurrentlyOccupied => new List<T>(occupied);
 
+    public bool IsDestroyed { get; private set; }
+
     /// <summary>
     /// Expand the pool by one object.
     /// </summary>
@@ -125,5 +127,6 @@ public class Pool<T>
 
         available = null;
         occupied = null;
+        IsDestroyed = true;
     }
 }

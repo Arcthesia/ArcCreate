@@ -616,7 +616,7 @@ Gameplay:
       Stack trace:
       {StackTrace}
   HUD:
-    Play: Play
+    Play: Resume
     Retry: Retry
     Return: Return
   Selection:

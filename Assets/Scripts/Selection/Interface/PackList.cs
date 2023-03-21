@@ -36,13 +36,16 @@ namespace ArcCreate.Selection.Interface
             backToPackListButton.onClick.AddListener(BackToPackList);
             allSongsPack.onClick.AddListener(SelectAllSongsPack);
             remotePack.onClick.AddListener(SwitchToRemoteScene);
+
+            if (storageData.IsLoaded)
+            {
+                RebuildList();
+            }
         }
 
         private void OnDestroy()
         {
-            Pools.Destroy<Cell>("LevelCell");
-            Pools.Destroy<DifficultyCell>("DifficultyCell");
-            Pools.Destroy<Cell>("GroupCell");
+            Pools.Destroy<Cell>("PackCell");
 
             storageData.OnStorageChange -= RebuildList;
             storageData.SelectedPack.OnValueChange -= OnSelectedPack;

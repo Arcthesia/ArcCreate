@@ -19,6 +19,11 @@ namespace ArcCreate.Gameplay
         bool ShouldUpdateInputSystem { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether or not to enable showing the pause menu.
+        /// </summary>
+        bool EnablePauseMenu { get; set; }
+
+        /// <summary>
         /// Gets the controller for chart related functionality.
         /// </summary>
         IChartControl Chart { get; }

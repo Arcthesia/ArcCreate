@@ -59,6 +59,11 @@ namespace ArcCreate.Selection.Interface
             storage.OnStorageChange += OnStorageChange;
             switchDiffButton.onClick.AddListener(SwitchDifficulty);
             storage.OnSwitchToGameplaySceneException += OnGameplayException;
+
+            if (storage.IsLoaded)
+            {
+                OnStorageChange();
+            }
         }
 
         private void OnDestroy()

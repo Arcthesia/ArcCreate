@@ -40,7 +40,7 @@ namespace ArcCreate.Selection.Interface
             Pools.New<DifficultyCell>("DifficultyCell", difficultyCellPrefab, scroll.transform, 30);
             Pools.New<Cell>("GroupCell", groupCellPrefab, scroll.transform, 3);
 
-            storageData.OnStorageChange += RebuildList;
+            storageData.OnStorageChange += OnStorageChange;
             storageData.SelectedChart.OnValueChange += OnSelectedChart;
             storageData.SelectedPack.OnValueChange += OnSelectedPack;
 
@@ -53,6 +53,11 @@ namespace ArcCreate.Selection.Interface
             GroupCellSize = groupCellSize;
 
             scroll.OnPointerEvent += KillTween;
+
+            if (storageData.IsLoaded)
+            {
+                OnStorageChange();
+            }
         }
 
         private void OnDestroy()
@@ -61,7 +66,7 @@ namespace ArcCreate.Selection.Interface
             Pools.Destroy<DifficultyCell>("DifficultyCell");
             Pools.Destroy<Cell>("GroupCell");
 
-            storageData.OnStorageChange -= RebuildList;
+            storageData.OnStorageChange -= OnStorageChange;
             storageData.SelectedChart.OnValueChange -= OnSelectedChart;
             storageData.SelectedPack.OnValueChange -= OnSelectedPack;
 
@@ -69,6 +74,13 @@ namespace ArcCreate.Selection.Interface
             Settings.SelectionSortStrategy.OnValueChanged.RemoveListener(OnSortStrategyChanged);
 
             scroll.OnPointerEvent -= KillTween;
+        }
+
+        private void OnStorageChange()
+        {
+            currentPack = storageData.SelectedPack.Value;
+            (currentLevel, currentChart) = storageData.SelectedChart.Value;
+            RebuildList();
         }
 
         private void OnSelectedPack(PackStorage pack)

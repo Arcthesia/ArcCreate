@@ -51,6 +51,7 @@ namespace ArcCreate.Gameplay.Audio
         /// Return to this timing point after next pause.
         /// </summary>
         private int onPauseReturnTo = 0;
+        private bool isStationary;
 
         public AudioSource AudioSource => audioSource;
 
@@ -84,6 +85,8 @@ namespace ArcCreate.Gameplay.Audio
         public int AudioLength { get; private set; }
 
         public bool IsPlaying { get => audioSource.isPlaying; }
+
+        public bool IsPlayingAndNotStationary { get => audioSource.isPlaying && !isStationary; }
 
         public bool IsLoaded => audioSource.clip != null;
 
@@ -119,6 +122,8 @@ namespace ArcCreate.Gameplay.Audio
                 return;
             }
 
+            isStationary = stationaryBeforeStart && dspTime <= dspStartPlayingTime;
+
             if (stationaryBeforeStart)
             {
                 dspTime = System.Math.Max(dspTime, dspStartPlayingTime);
@@ -127,7 +132,7 @@ namespace ArcCreate.Gameplay.Audio
             int timePassedSinceAudioStart = Mathf.RoundToInt((float)((dspTime - dspStartPlayingTime) * 1000));
             int newDspTiming = timePassedSinceAudioStart + startTime - FullOffset;
 
-            if (lastDspTiming == newDspTiming && dspTime >= dspStartPlayingTime)
+            if (lastDspTiming == newDspTiming && dspTime > dspStartPlayingTime)
             {
                 audioTiming += Mathf.RoundToInt(Time.deltaTime * 1000);
             }
@@ -176,16 +181,16 @@ namespace ArcCreate.Gameplay.Audio
             returnOnPause = false;
         }
 
-        public void ResumeImmediately()
+        public void ResumeImmediately(bool resetJudge = true)
         {
-            Play(lastPausedTiming);
+            Play(lastPausedTiming, 0, resetJudge);
             stationaryBeforeStart = true;
             returnOnPause = false;
         }
 
-        public void ResumeWithDelay(int delayMs)
+        public void ResumeWithDelay(int delayMs, bool resetJudge = true)
         {
-            Play(lastPausedTiming, delayMs);
+            Play(lastPausedTiming, delayMs, resetJudge);
             stationaryBeforeStart = true;
             returnOnPause = false;
         }
@@ -217,7 +222,7 @@ namespace ArcCreate.Gameplay.Audio
             onPauseReturnTo = timing;
         }
 
-        private void Play(int timing = 0, int delay = 0)
+        private void Play(int timing = 0, int delay = 0, bool resetJudge = true)
         {
             delay = Mathf.Max(delay, 0);
             if (timing >= AudioLength - 1)
@@ -226,7 +231,11 @@ namespace ArcCreate.Gameplay.Audio
             }
 
             audioTiming = timing;
-            Services.Chart.ResetJudge();
+
+            if (resetJudge)
+            {
+                Services.Chart.ResetJudge();
+            }
 
             audioSource.time = Mathf.Max(0, timing) / 1000f;
             if (timing < 0)

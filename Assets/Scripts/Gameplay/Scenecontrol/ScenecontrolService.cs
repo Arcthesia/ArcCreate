@@ -95,6 +95,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public void UpdateScenecontrol(int currentTiming)
         {
+            if (!Services.Audio.IsPlayingAndNotStationary)
+            {
+                return;
+            }
+
             float bpm = Services.Chart.GetTimingGroup(0).GetBpm(currentTiming);
             float beatDuration = (bpm != 0) ? 60.0f / bpm : Mathf.Infinity;
 
