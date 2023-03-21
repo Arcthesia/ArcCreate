@@ -121,5 +121,7 @@ namespace ArcCreate.Gameplay
         public static float ScreenSize { get; set; } = 1;
 
         public static float LaneScreenHitbox => LaneScreenHitboxBase * ScreenSize / ScreenSizeBase;
+
+        public static bool EnablePauseMenu { get; internal set; } = true;
     }
 }

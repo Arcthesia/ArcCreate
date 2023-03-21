@@ -19,7 +19,6 @@ namespace ArcCreate.Storage
     {
         private static readonly LRUCache<string, Incompletable<Texture>> JacketCache = new LRUCache<string, Incompletable<Texture>>(50, DestroyCache);
         private static readonly LRUCache<string, Incompletable<AudioClip>> AudioClipCache = new LRUCache<string, Incompletable<AudioClip>>(10, DestroyCache);
-
         [SerializeField] private Texture defaultJacket;
         [SerializeField] private GameplayData gameplayData;
 
@@ -38,6 +37,8 @@ namespace ArcCreate.Storage
         public UltraLiteCollection<PackStorage> PackCollection { get; private set; }
 
         public bool IsTransitioning { get; private set; }
+
+        public bool IsLoaded => LevelCollection != null && PackCollection != null;
 
         public LevelStorage GetLevel(string id)
         {
@@ -329,35 +330,6 @@ namespace ArcCreate.Storage
             where T : UnityEngine.Object
         {
             Destroy(obj.Value);
-        }
-
-        private void Awake()
-        {
-            SelectedPack.OnValueChange += OnPackChange;
-            SelectedChart.OnValueChange += OnChartChange;
-        }
-
-        private void OnDestroy()
-        {
-            SelectedPack.OnValueChange -= OnPackChange;
-            SelectedChart.OnValueChange -= OnChartChange;
-        }
-
-        private void OnPackChange(PackStorage pack)
-        {
-            PlayerPrefs.SetString("Selection.LastPack", pack.Identifier);
-        }
-
-        private void OnChartChange((LevelStorage level, ChartSettings chart) obj)
-        {
-            var (level, chart) = obj;
-            if (level != null && chart != null)
-            {
-                PlayerPrefs.SetString($"Selection.LastLevel.{SelectedPack.Value?.Identifier ?? "all"}", level.Identifier);
-                PlayerPrefs.SetString("Selection.LastChartPath", chart.ChartPath);
-                PlayerPrefs.SetString("Selection.LastDifficultyName", chart.Difficulty);
-                PlayerPrefs.SetFloat("Selection.LastCc", (float)chart.ChartConstant);
-            }
         }
 
         private class Incompletable<T>

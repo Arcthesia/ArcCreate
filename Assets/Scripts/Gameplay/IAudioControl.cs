@@ -34,6 +34,8 @@ namespace ArcCreate.Gameplay
         /// </summary>
         bool IsPlaying { get; }
 
+        bool IsPlayingAndNotStationary { get; }
+
         AudioClip TapHitsoundClip { get; }
 
         AudioClip ArcHitsoundClip { get; }
@@ -67,13 +69,15 @@ namespace ArcCreate.Gameplay
         /// Resume the audio immediately without delay from the last paused timing.
         /// See <see cref="ResumeWithDelay"/> for playing audio with minimal audio lag.
         /// </summary>
-        void ResumeImmediately();
+        /// <param name="resetJudge">Whether or not to reset judgement.</param>
+        void ResumeImmediately(bool resetJudge = true);
 
         /// <summary>
         /// Resume the audio from the last paused timing, after a set delay to minimize audio lag.
         /// </summary>
         /// <param name="delayMs">The delay after which audio starts playing.</param>
-        void ResumeWithDelay(int delayMs);
+        /// <param name="resetJudge">Whether or not to reset judgement.</param>
+        void ResumeWithDelay(int delayMs, bool resetJudge = true);
 
         /// <summary>
         /// Resume the audio immediately without delay from the last paused timing.

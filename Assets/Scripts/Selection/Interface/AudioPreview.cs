@@ -23,6 +23,11 @@ namespace ArcCreate.Selection.Interface
             storage.SelectedChart.OnValueChange += OnChartChange;
             storage.OnStorageChange += OnStorageChange;
             storage.OnSwitchToGameplayScene += OnSwitchToGameplayScene;
+
+            if (storage.IsLoaded)
+            {
+                OnStorageChange();
+            }
         }
 
         private void OnDestroy()

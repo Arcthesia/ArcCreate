@@ -27,8 +27,6 @@ namespace ArcCreate.SceneTransition
         private ITransition transition;
         private TransitionState transitionState = TransitionState.Idle;
 
-        private Action onTransitionWait;
-        private Action<SceneRepresentative> onLoadSceneComplete;
         private SceneRepresentative loadingSceneRep;
         private readonly List<(string sceneName, SceneRepresentative representative)> additivelyLoadedScenes = new List<(string, SceneRepresentative)>();
 
@@ -145,12 +143,14 @@ namespace ArcCreate.SceneTransition
                 await I18n.StartLoadingLocale();
             }
 
+            foreach (string scene in SceneNames.RequiredScenes)
+            {
+                SceneManager.LoadScene(scene, LoadSceneMode.Additive);
+            }
+
             if (SceneManager.sceneCount == 1)
             {
-                foreach (string scene in SceneNames.DefaultScenes)
-                {
-                    SceneManager.LoadScene(scene, LoadSceneMode.Additive);
-                }
+                SceneManager.LoadScene(SceneNames.DefaultScene, LoadSceneMode.Additive);
             }
             else
             {
