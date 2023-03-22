@@ -4,6 +4,7 @@ Shader "Sprites/FadeMiddle"
 	{
 		_MainTex ("Sprite Texture", 2D) = "white" {}
 		_Color ("Tint", Color) = (1,1,1,1)
+		_Border("Border", Range(0, 0.5)) = 0.1
 		_Range("Range", Range(0, 0.5)) = 0.1
 	}
 
@@ -50,6 +51,7 @@ Shader "Sprites/FadeMiddle"
 			float4 _MainTex_TexelSize;
 			fixed4 _Color;
             float _Range;
+            float _Border;
 
 			v2f vert(appdata_t IN)
 			{
@@ -65,10 +67,11 @@ Shader "Sprites/FadeMiddle"
 				fixed4 c = tex2D(_MainTex, IN.texcoord) * IN.color;
                 
                 float y = IN.vertex.y / _ScreenParams.y;
-                c.a = y < _Range ?
-                      (1 - y / _Range) :
-                      (y > (1 - _Range) ?
-                       (y - 1 + _Range) / _Range : 0);
+                c.a = y < _Border ? 1 :
+					  y > (1 - _Border) ? 1 :
+					  y < _Border + _Range ? (1 - (y - _Border) / _Range) :
+                      y > (1 - _Border - _Range) ? (y - 1 + _Range + _Border) / _Range :
+					  0;
 				return c;
 			}
 		ENDCG

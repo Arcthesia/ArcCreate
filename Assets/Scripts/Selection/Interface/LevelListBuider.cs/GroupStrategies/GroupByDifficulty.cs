@@ -6,6 +6,8 @@ namespace ArcCreate.Selection.Interface
 {
     public class GroupByDifficulty : IGroupStrategy
     {
+        public const string Typename = "Difficulty";
+
         public List<CellData> GroupCells(List<LevelCellData> cells, ISortStrategy sortStrategy)
         {
             if (cells.Count == 0)

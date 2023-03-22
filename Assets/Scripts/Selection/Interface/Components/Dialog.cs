@@ -19,12 +19,12 @@ namespace ArcCreate.Selection.Interface
             animator.Hide();
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             hideButton.onClick.AddListener(Hide);
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             hideButton.onClick.RemoveListener(Hide);
         }

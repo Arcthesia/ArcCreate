@@ -141,13 +141,13 @@ namespace ArcCreate.Selection.Interface
         {
             switch (strat)
             {
-                case "none":
+                case NoGroup.Typename:
                     groupStrategy = new NoGroup();
                     break;
-                case "grade":
+                case GroupByGrade.Typename:
                     groupStrategy = new GroupByGrade();
                     break;
-                case "difficulty":
+                case GroupByDifficulty.Typename:
                     groupStrategy = new GroupByDifficulty();
                     break;
                 default:
@@ -166,28 +166,28 @@ namespace ArcCreate.Selection.Interface
         {
             switch (strat)
             {
-                case "addedDate":
+                case SortByAddedDate.Typename:
                     sortStrategy = new SortByAddedDate();
                     break;
-                case "difficulty":
+                case SortByDifficulty.Typename:
                     sortStrategy = new SortByDifficulty();
                     break;
-                case "grade":
+                case SortByGrade.Typename:
                     sortStrategy = new SortByGrade();
                     break;
-                case "score":
+                case SortByScore.Typename:
                     sortStrategy = new SortByScore();
                     break;
-                case "title":
+                case SortByTitle.Typename:
                     sortStrategy = new SortByTitle();
                     break;
-                case "composer":
+                case SortByComposer.Typename:
                     sortStrategy = new SortByComposer();
                     break;
-                case "charter":
+                case SortByCharter.Typename:
                     sortStrategy = new SortByCharter();
                     break;
-                case "playcount":
+                case SortByPlayCount.Typename:
                     sortStrategy = new SortByPlayCount();
                     break;
                 default:

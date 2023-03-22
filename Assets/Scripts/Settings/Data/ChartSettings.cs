@@ -148,7 +148,7 @@ namespace ArcCreate.Data
         {
             int roundDown = (int)ChartConstant;
 
-            bool isPlus = roundDown >= 9 && (ChartConstant - roundDown) >= 0.7;
+            bool isPlus = roundDown >= 9 && (ChartConstant - roundDown) >= 0.69999;
 
             return (roundDown, isPlus);
         }

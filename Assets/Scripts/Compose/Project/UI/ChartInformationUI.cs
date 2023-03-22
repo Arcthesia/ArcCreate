@@ -4,6 +4,7 @@ using ArcCreate.Compose.Components;
 using ArcCreate.Data;
 using ArcCreate.Gameplay;
 using ArcCreate.Gameplay.Data;
+using ArcCreate.Utility;
 using ArcCreate.Utility.Extension;
 using ArcCreate.Utility.Parser;
 using TMPro;
@@ -370,8 +371,8 @@ namespace ArcCreate.Compose.Project
                 Target.PreviewStart = Mathf.Min(val1, val2);
                 Target.PreviewEnd = Mathf.Max(val1, val2);
 
-                Target.PreviewEnd = Mathf.Clamp(Target.PreviewEnd, Mathf.Min(Target.PreviewStart + Values.MinPreviewSegmentLengthMs, audioLength), audioLength);
-                Target.PreviewStart = Mathf.Clamp(Target.PreviewStart, 0, Mathf.Max(Target.PreviewEnd - Values.MinPreviewSegmentLengthMs, 0));
+                Target.PreviewEnd = Mathf.Clamp(Target.PreviewEnd, Mathf.Min(Target.PreviewStart + Constants.MinPreviewSegmentLengthMs, audioLength), audioLength);
+                Target.PreviewStart = Mathf.Clamp(Target.PreviewStart, 0, Mathf.Max(Target.PreviewEnd - Constants.MinPreviewSegmentLengthMs, 0));
             }
 
             previewStart.text = Target.PreviewStart.ToString();
@@ -381,8 +382,8 @@ namespace ArcCreate.Compose.Project
         private void OnAudioClip(AudioClip clip)
         {
             int audioLength = Mathf.RoundToInt(clip.length * 1000);
-            Target.PreviewEnd = Mathf.Clamp(Target.PreviewEnd, Mathf.Min(Target.PreviewStart + Values.MinPreviewSegmentLengthMs, audioLength), audioLength);
-            Target.PreviewStart = Mathf.Clamp(Target.PreviewStart, 0, Mathf.Max(Target.PreviewEnd - Values.MinPreviewSegmentLengthMs, 0));
+            Target.PreviewEnd = Mathf.Clamp(Target.PreviewEnd, Mathf.Min(Target.PreviewStart + Constants.MinPreviewSegmentLengthMs, audioLength), audioLength);
+            Target.PreviewStart = Mathf.Clamp(Target.PreviewStart, 0, Mathf.Max(Target.PreviewEnd - Constants.MinPreviewSegmentLengthMs, 0));
 
             previewStart.text = Target.PreviewStart.ToString();
             previewEnd.text = Target.PreviewEnd.ToString();
