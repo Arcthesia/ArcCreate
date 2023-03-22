@@ -5,7 +5,7 @@ namespace ArcCreate.Selection.Interface
 {
     public class SortByComposer : ISortStrategy
     {
-        public const string Typename = "Composer";
+        public const string Typename = "composer";
 
         public List<LevelCellData> Sort(List<LevelCellData> cells)
         {

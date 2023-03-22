@@ -5,7 +5,7 @@ namespace ArcCreate.Selection.Interface
 {
     public class SortByDifficulty : ISortStrategy
     {
-        public const string Typename = "Difficulty";
+        public const string Typename = "difficulty";
 
         public List<LevelCellData> Sort(List<LevelCellData> cells)
         {

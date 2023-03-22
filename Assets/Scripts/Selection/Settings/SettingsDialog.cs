@@ -138,13 +138,13 @@ namespace ArcCreate.Selection.Interface
         private void OnFrPmIndicatorPositionSettings(int value)
         {
             FrPmPosition position = (FrPmPosition)value;
-            frPmDisplayPositionText.text = I18n.S($"Gameplay.Selection.Settings.FrPmPosition.{position}");
+            frPmDisplayPositionText.text = I18n.S($"Gameplay.Selection.Settings.FrPmPosition.{position.ToString().ToLower()}");
         }
 
         private void OnLateEarlyTextPositionSettings(int value)
         {
             EarlyLateTextPosition position = (EarlyLateTextPosition)value;
-            lateEarlyPositionText.text = I18n.S($"Gameplay.Selection.Settings.EarlyLateTextPosition.{position}");
+            lateEarlyPositionText.text = I18n.S($"Gameplay.Selection.Settings.EarlyLateTextPosition.{position.ToString().ToLower()}");
         }
 
         private void OnVsyncSettings(int value)

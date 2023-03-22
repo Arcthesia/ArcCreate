@@ -643,18 +643,18 @@ Gameplay:
         Charter: Unknown
       Charter: 'Charter: {0}'
     Sort:
-      AddedDate: "Sort: Added date"
-      Charter: "Sort: Charter"
-      Composer: "Sort: Composer"
-      Difficulty: "Sort: Difficulty"
-      Grade: "Sort: Grade"
-      PlayCount: "Sort: Play count"
-      Score: "Sort: Score"
-      Title: "Sort: Title"
+      addeddate: "Sort: Added date"
+      charter: "Sort: Charter"
+      composer: "Sort: Composer"
+      difficulty: "Sort: Difficulty"
+      grade: "Sort: Grade"
+      playcount: "Sort: Play count"
+      score: "Sort: Score"
+      title: "Sort: Title"
     Group:
-      None: "Group: None"
-      Difficulty: "Group: Difficulty"
-      Grade: "Group: Grade"
+      none: "Group: None"
+      difficulty: "Group: Difficulty"
+      grade: "Group: Grade"
     Settings:
       Name: Settings
       Language: Language
@@ -692,13 +692,13 @@ Gameplay:
         ShowFPS: Show FPS
         ShowFPSDetail: Toggle FPS display.
       FrPmPosition:
-        Middle: Middle
-        InfoPanel: Info panel
-        Off: Off
+        middle: Middle
+        infopanel: Info panel
+        off: Off
       EarlyLateTextPosition:
-        Middle: Middle
-        Bottom: Bottom
-        Top: Top
+        middle: Middle
+        bottom: Bottom
+        top: Top
 
 Shutter:
   Composer: Music

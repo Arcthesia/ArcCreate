@@ -48,7 +48,6 @@ namespace ArcCreate.Selection.Interface
 
         private async UniTask StartCalibrationTask(CancellationToken ct)
         {
-            Application.targetFrameRate = Screen.currentResolution.refreshRate;
             audioPreview.StopPreview();
 
             double dspStartTime = AudioSettings.dspTime + 1;
@@ -114,7 +113,6 @@ namespace ArcCreate.Selection.Interface
             avgOffset /= expectedHitTimings.Length;
             Settings.GlobalAudioOffset.Value = avgOffset;
 
-            Application.targetFrameRate = 60;
             audioSource.Stop();
             audioPreview.ResumePreview();
         }
