@@ -1,7 +1,9 @@
+using System;
 using System.Threading;
 using ArcCreate.Data;
 using ArcCreate.Storage;
 using ArcCreate.Storage.Data;
+using ArcCreate.Utility;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
@@ -14,12 +16,28 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private float audioFadeDuration = 1;
         [SerializeField] private float switchSceneAudioFadeDuration = 1;
-        [SerializeField] private float minPreviewLength = 5;
         private CancellationTokenSource cts = new CancellationTokenSource();
         private (LevelStorage level, string audioPath) currentlyPlaying;
+        private float minPreviewLength = 5;
+
+        public void StopPreview()
+        {
+            cts.Cancel();
+            cts.Dispose();
+            cts = new CancellationTokenSource();
+
+            audioSource.DOFade(0, audioFadeDuration).OnComplete(audioSource.Stop);
+        }
+
+        public void ResumePreview()
+        {
+            var (level, chart) = storage.SelectedChart.Value;
+            PlayPreviewAudio(level, chart, cts.Token).Forget();
+        }
 
         private void Awake()
         {
+            minPreviewLength = Constants.MinPreviewSegmentLengthMs / 1000f;
             storage.SelectedChart.OnValueChange += OnChartChange;
             storage.OnStorageChange += OnStorageChange;
             storage.OnSwitchToGameplayScene += OnSwitchToGameplayScene;

@@ -5,6 +5,8 @@ namespace ArcCreate.Selection.Interface
 {
     public class SortByAddedDate : ISortStrategy
     {
+        public const string Typename = "AddedDate";
+
         public List<LevelCellData> Sort(List<LevelCellData> cells)
         {
             if (cells.Count == 0)

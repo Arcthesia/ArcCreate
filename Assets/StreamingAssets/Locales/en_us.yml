@@ -633,6 +633,7 @@ Gameplay:
     Action:
       Delete: Delete
       Cancel: Cancel
+      Done: Done
     List:
       OtherDifficulties: Other difficulties
     Info:
@@ -641,6 +642,63 @@ Gameplay:
         Composer: N/A
         Charter: Unknown
       Charter: 'Charter: {0}'
+    Sort:
+      AddedDate: "Sort: Added date"
+      Charter: "Sort: Charter"
+      Composer: "Sort: Composer"
+      Difficulty: "Sort: Difficulty"
+      Grade: "Sort: Grade"
+      PlayCount: "Sort: Play count"
+      Score: "Sort: Score"
+      Title: "Sort: Title"
+    Group:
+      None: "Group: None"
+      Difficulty: "Group: Difficulty"
+      Grade: "Group: Grade"
+    Settings:
+      Name: Settings
+      Language: Language
+      Gameplay:
+        Name: Gameplay
+        Speed: Speed
+        SpeedDetail: |-
+          Adjust the speed at which notes approach the judgement area.
+        EarlyLatePureDisplay: Early/Late pure display
+        EarlyLatePureDisplayDetail: |-
+          Change whether or not to display early/late pure judgements.
+      Audio:
+        Name: Audio
+        Offset: Offset
+        OffsetDetail: |-
+          Adjust music synchronization.
+          Increase if you're getting LATE, or decrease if you're getting EARLY.
+        Calibrate: Calibrate
+        MusicAudio: Music volume
+        MusicAudioDetail: |-
+          Change the volume of music during gameplay.
+        EffectAudio: Effect volume
+        EffectAudioDetail: |-
+          Change the volume of hit sounds during gameplay.
+      Visual:
+        Name: Visual
+        Colorblind: Colorblind mode
+        ColorblindDetail: Use alternate arc colors.
+        FrPmDisplay: FR/PM display
+        FrPmDisplayDetail: Adjust FR/PM indicator position.
+        EarlyLateDisplay: Early/Late display
+        EarlyLateDisplayDetail: Adjust early/late text position.
+        Vsync: Vsync
+        VsyncDetail: Turn vsync on to limit FPS.
+        ShowFPS: Show FPS
+        ShowFPSDetail: Toggle FPS display.
+      FrPmPosition:
+        Middle: Middle
+        InfoPanel: Info panel
+        Off: Off
+      EarlyLateTextPosition:
+        Middle: Middle
+        Bottom: Bottom
+        Top: Top
 
 Shutter:
   Composer: Music

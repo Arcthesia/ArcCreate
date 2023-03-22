@@ -5,6 +5,8 @@ namespace ArcCreate.Selection.Interface
 {
     public class SortByTitle : ISortStrategy
     {
+        public const string Typename = "Title";
+
         public List<LevelCellData> Sort(List<LevelCellData> cells)
         {
             if (cells.Count == 0)

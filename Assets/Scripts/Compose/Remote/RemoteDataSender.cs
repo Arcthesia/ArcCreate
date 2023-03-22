@@ -186,11 +186,11 @@ namespace ArcCreate.Compose.Remote
             if (Evaluator.TryFloat(val, out float speed))
             {
                 speed = Mathf.Max(speed, 0.1f);
-                Settings.RemoteDroprate.Value = Mathf.RoundToInt(speed * Values.DropRateScalar);
+                Settings.RemoteDroprate.Value = Mathf.RoundToInt(speed * Utility.Constants.DropRateScalar);
                 SendSpeed();
             }
 
-            speedField.SetTextWithoutNotify((Settings.RemoteDroprate.Value / Values.DropRateScalar).ToString());
+            speedField.SetTextWithoutNotify((Settings.RemoteDroprate.Value / Utility.Constants.DropRateScalar).ToString());
         }
 
         private void OnOffsetField(string val)
@@ -369,7 +369,7 @@ namespace ArcCreate.Compose.Remote
 
         private void Awake()
         {
-            speedField.SetTextWithoutNotify((Settings.RemoteDroprate.Value / Values.DropRateScalar).ToString());
+            speedField.SetTextWithoutNotify((Settings.RemoteDroprate.Value / Utility.Constants.DropRateScalar).ToString());
             offsetField.SetTextWithoutNotify(Settings.RemoteOffset.Value.ToString());
             musicVolumeField.SetTextWithoutNotify(Settings.RemoteMusicVolume.Value.ToString());
             effectVolumeField.SetTextWithoutNotify(Settings.RemoteEffectVolume.Value.ToString());

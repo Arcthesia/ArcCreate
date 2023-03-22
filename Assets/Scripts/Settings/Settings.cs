@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using UnityEditor;
 using UnityEngine;
 
 namespace ArcCreate
@@ -10,6 +9,10 @@ namespace ArcCreate
 
         // Gameplay
         public static readonly IntSetting DropRate = new IntSetting("DropRate", 150);
+        public static readonly BoolSetting ShowEarlyLatePure = new BoolSetting("ShowEarlyLate", true);
+        public static readonly BoolSetting EnableColorblind = new BoolSetting("EnableColorblind", false);
+        public static readonly IntSetting FrPmIndicatorPosition = new IntSetting("FrPmIndicatorPosition", 0);
+        public static readonly IntSetting LateEarlyTextPosition = new IntSetting("LateEarlyTextPosition", 0);
         public static readonly IntSetting ViewportAspectRatioSetting = new IntSetting("ViewportAspectRatioSetting", 0);
         public static readonly IntSetting InputMode = new IntSetting("Gameplay.InputMode", 0);
 
