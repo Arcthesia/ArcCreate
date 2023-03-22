@@ -6,7 +6,7 @@ namespace ArcCreate.Selection.Interface
 {
     public class NoGroup : IGroupStrategy
     {
-        public const string Typename = "None";
+        public const string Typename = "none";
 
         public List<CellData> GroupCells(List<LevelCellData> cells, ISortStrategy sortStrategy)
         {

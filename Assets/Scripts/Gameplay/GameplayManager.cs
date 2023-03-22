@@ -73,11 +73,6 @@ namespace ArcCreate.Gameplay
             Services.Judgement.SetDebugDisplayMode(enable);
         }
 
-        public override void OnUnloadScene()
-        {
-            Application.targetFrameRate = 60;
-        }
-
         public override void OnNoBootScene()
         {
             // Load test chart
@@ -98,7 +93,6 @@ namespace ArcCreate.Gameplay
 
         protected override void OnSceneLoad()
         {
-            Application.targetFrameRate = Screen.currentResolution.refreshRate;
             if (Application.platform == RuntimePlatform.Android
              || Application.platform == RuntimePlatform.IPhonePlayer)
             {

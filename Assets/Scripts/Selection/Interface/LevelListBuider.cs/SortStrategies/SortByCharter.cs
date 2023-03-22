@@ -5,7 +5,7 @@ namespace ArcCreate.Selection.Interface
 {
     public class SortByCharter : ISortStrategy
     {
-        public const string Typename = "Charter";
+        public const string Typename = "charter";
 
         public List<LevelCellData> Sort(List<LevelCellData> cells)
         {

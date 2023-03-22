@@ -10,7 +10,7 @@
         public const string StorageScene = "Storage";
 
 #if UNITY_EDITOR || UNITY_STANDALONE
-        public const string DefaultScene = ComposeScene;
+        public const string DefaultScene = SelectScene;
 #else
         public const string DefaultScene = SelectScene;
 #endif

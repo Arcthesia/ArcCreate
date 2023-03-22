@@ -74,8 +74,11 @@ namespace ArcCreate
         [RuntimeInitializeOnLoadMethod]
         public static void OnInitialize()
         {
-            Framerate.OnValueChanged.AddListener((value) => Application.targetFrameRate = value);
-            Application.targetFrameRate = Framerate.Value;
+            if (Application.platform != RuntimePlatform.Android && Application.platform != RuntimePlatform.IPhonePlayer)
+            {
+                Framerate.OnValueChanged.AddListener((value) => Application.targetFrameRate = value);
+                Application.targetFrameRate = Framerate.Value;
+            }
 
             VSync.OnValueChanged.AddListener((value) => QualitySettings.vSyncCount = value);
             QualitySettings.vSyncCount = VSync.Value;
