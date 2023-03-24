@@ -7,9 +7,6 @@ using ArcCreate.Utility.Animation;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-#if UNITY_ANDROID
-using UnityEngine.Android;
-#endif
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
@@ -20,6 +17,8 @@ namespace ArcCreate.Storage
     /// </summary>
     public partial class FileImportManager : MonoBehaviour
     {
+        private const int InternalPackageVersion = 0;
+
         [SerializeField] private StorageData storageData;
 
         [Header("Conflict")]
@@ -62,7 +61,9 @@ namespace ArcCreate.Storage
             }
 
             // Import default arcpkg if db does not exist
-            if (!File.Exists(FileStatics.DatabasePath))
+            bool dbExists = File.Exists(FileStatics.DatabasePath);
+            bool outdatedInternalPackage = PlayerPrefs.GetInt("CurrentInternalPackageVersion", -1) < InternalPackageVersion;
+            if (!dbExists || outdatedInternalPackage)
             {
                 if (Directory.Exists(FileStatics.FileStoragePath))
                 {
@@ -79,6 +80,8 @@ namespace ArcCreate.Storage
                 {
                     ImportArchive(FileStatics.DefaultPackagePath, true).Forget();
                 }
+
+                PlayerPrefs.SetInt("CurrentInternalPackageVersion", InternalPackageVersion);
             }
             else
             {
@@ -211,6 +214,19 @@ namespace ArcCreate.Storage
                 DisplayError("Package", e);
                 Debug.LogError(e);
             }
+#endif
+
+#if UNITY_IOS
+            try
+            {
+
+            }
+            catch (Exception e)
+            {
+                DisplayError("Package", e);
+                Debug.LogError(e);
+            }
+
 #endif
         }
 

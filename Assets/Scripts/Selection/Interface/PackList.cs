@@ -27,6 +27,14 @@ namespace ArcCreate.Selection.Interface
         private Pool<Cell> packCellPool;
         private Tween scrollTween;
 
+        public void BackToPackList()
+        {
+            packListAnimator.Show();
+            levelListAnimator.Hide();
+            packListCanvasGroup.interactable = true;
+            packListCanvasGroup.blocksRaycasts = true;
+        }
+
         private void Awake()
         {
             packCellPool = Pools.New<Cell>("PackCell", packCellPrefab, scroll.transform, 5);
@@ -41,6 +49,8 @@ namespace ArcCreate.Selection.Interface
             {
                 RebuildList();
             }
+
+            BackToPackList();
         }
 
         private void OnDestroy()
@@ -67,6 +77,11 @@ namespace ArcCreate.Selection.Interface
 
         private void OnSelectedPack(PackStorage pack)
         {
+            if (pack?.Levels?.Count == 0)
+            {
+                return;
+            }
+
             packListAnimator.Hide();
             levelListAnimator.Show();
             packListCanvasGroup.interactable = false;
@@ -111,14 +126,6 @@ namespace ArcCreate.Selection.Interface
                 scrollTween?.Kill();
                 scrollTween = DOTween.To((float val) => scroll.Value = val, scrollFrom, scrollTo, autoScrollDuration).SetEase(Ease.OutExpo);
             }
-        }
-
-        private void BackToPackList()
-        {
-            packListAnimator.Show();
-            levelListAnimator.Hide();
-            packListCanvasGroup.interactable = true;
-            packListCanvasGroup.blocksRaycasts = true;
         }
     }
 }

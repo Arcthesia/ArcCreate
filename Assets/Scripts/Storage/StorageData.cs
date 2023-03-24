@@ -278,15 +278,15 @@ namespace ArcCreate.Storage
                 {
                     lv = pack.Levels[0];
                 }
-
-                if (lv == null)
-                {
-                    return (null, null);
-                }
             }
             else
             {
                 lv = GetLevel(levelId);
+            }
+
+            if (lv == null)
+            {
+                return (null, null);
             }
 
             if (SelectedChart.Value.chart != null)
