@@ -201,7 +201,7 @@ namespace ArcCreate.Gameplay.Data
         public void ProcessLaneTapJudgement(int offset)
         {
             int currentTiming = Services.Audio.ChartTiming;
-            if (currentTiming >= EndTiming)
+            if (currentTiming >= EndTiming + Values.FarJudgeWindow)
             {
                 return;
             }
@@ -264,7 +264,7 @@ namespace ArcCreate.Gameplay.Data
         {
             Services.Judgement.Request(new LaneTapJudgementRequest()
             {
-                ExpireAtTiming = EndTiming,
+                ExpireAtTiming = EndTiming + Values.FarJudgeWindow,
                 AutoAtTiming = Timing,
                 Lane = Lane,
                 Receiver = this,

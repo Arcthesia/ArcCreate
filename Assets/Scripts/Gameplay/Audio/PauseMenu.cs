@@ -42,7 +42,7 @@ namespace ArcCreate.Gameplay.Audio
         private void OnPlayButton()
         {
             pauseScreen.SetActive(false);
-            Services.Audio.ResumeWithDelay(1000, false);
+            Services.Audio.ResumeWithDelay(200, false);
         }
 
         private void OnRetryButton()
@@ -58,7 +58,7 @@ namespace ArcCreate.Gameplay.Audio
             await transition.StartTransition();
             Services.Audio.AudioTiming = 0;
             await transition.EndTransition();
-            Services.Audio.PlayWithDelay(0, 1000);
+            Services.Audio.PlayWithDelay(0, 200);
         }
 
         private void OnReturnButton()
