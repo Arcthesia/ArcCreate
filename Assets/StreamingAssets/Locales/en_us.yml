@@ -618,7 +618,7 @@ Gameplay:
   HUD:
     Play: Resume
     Retry: Retry
-    Return: Return
+    Return: Quit
   Selection:
     SelectStatus:
       Singular: |-
