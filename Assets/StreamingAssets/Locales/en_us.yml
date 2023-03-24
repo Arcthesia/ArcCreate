@@ -687,8 +687,8 @@ Gameplay:
         FrPmDisplayDetail: Adjust FR/PM indicator position.
         EarlyLateDisplay: Early/Late display
         EarlyLateDisplayDetail: Adjust early/late text position.
-        Vsync: Vsync
-        VsyncDetail: Turn vsync on to limit FPS.
+        LimitFramerate: Limit framerate
+        LimitFramerateDetail: Limit display framerate to 60 FPS to preserve battery life. Might increase latency.
         ShowFPS: Show FPS
         ShowFPSDetail: Toggle FPS display.
       FrPmPosition:

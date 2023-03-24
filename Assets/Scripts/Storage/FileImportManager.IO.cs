@@ -7,6 +7,7 @@ using ArcCreate.Data;
 using ArcCreate.Storage.Data;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Networking;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -19,12 +20,43 @@ namespace ArcCreate.Storage
     {
         public async UniTask ImportArchive(string path, bool isImportingDefaultPackage = false)
         {
-            using (FileStream fs = File.OpenRead(path))
+            using (FileStream fs = File.Open(path, FileMode.Open, FileAccess.Read))
             {
                 using (ZipArchive zip = new ZipArchive(fs, ZipArchiveMode.Read))
                 {
                     Debug.Log("Importing package from " + path);
                     await ImportLevelArchive(zip, isImportingDefaultPackage);
+                }
+            }
+        }
+
+        public async UniTask ImportFromUri(string uri)
+        {
+            string tempPath = Path.Combine(FileStatics.TempPath, "importing.arcpkg");
+            try
+            {
+                using (UnityWebRequest req = new UnityWebRequest(uri))
+                {
+                    await req.SendWebRequest();
+
+                    byte[] data = req.downloadHandler.data;
+                    using (FileStream fs = File.OpenWrite(tempPath))
+                    {
+                        fs.Write(data, 0, data.Length);
+                    }
+                }
+
+                await ImportArchive(tempPath);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+            finally
+            {
+                if (File.Exists(tempPath))
+                {
+                    File.Delete(tempPath);
                 }
             }
         }

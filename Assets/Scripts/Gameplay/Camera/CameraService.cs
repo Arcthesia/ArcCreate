@@ -2,15 +2,13 @@ using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Extension;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
 
 namespace ArcCreate.Gameplay.GameplayCamera
 {
     public class CameraService : MonoBehaviour, ICameraService, ICameraControl
     {
-        [SerializeField] private Camera gameplayCamera;
-        [SerializeField] private Camera arcCamera;
-        [SerializeField] private Camera uiCamera;
+        [SerializeField] private Camera backgroundCamera;
+        [SerializeField] private Camera overlayCamera;
         [SerializeField] private Transform skyInputLabel;
         [SerializeField] private RectTransform backgroundRect;
         private float currentTilt;
@@ -23,9 +21,9 @@ namespace ArcCreate.Gameplay.GameplayCamera
         private Vector3 translationExternal;
         private Quaternion rotationExternal;
 
-        public Camera GameplayCamera => gameplayCamera;
+        public Camera GameplayCamera => backgroundCamera;
 
-        public Camera UICamera => uiCamera;
+        public Camera UICamera => overlayCamera;
 
         public List<CameraEvent> Events => events;
 
@@ -37,30 +35,28 @@ namespace ArcCreate.Gameplay.GameplayCamera
 
         public bool IsOrthographic
         {
-            get => gameplayCamera.orthographic;
+            get => backgroundCamera.orthographic;
             set
             {
-                gameplayCamera.orthographic = value;
-                arcCamera.orthographic = value;
-                uiCamera.orthographic = value;
+                backgroundCamera.orthographic = value;
+                overlayCamera.orthographic = value;
             }
         }
 
         public float OrthographicSize
         {
-            get => gameplayCamera.orthographicSize;
+            get => backgroundCamera.orthographicSize;
             set
             {
-                gameplayCamera.orthographicSize = value;
-                arcCamera.orthographicSize = value;
-                uiCamera.orthographicSize = value;
+                backgroundCamera.orthographicSize = value;
+                overlayCamera.orthographicSize = value;
             }
         }
 
         public Camera[] RenderingCameras { get; private set; }
 
         private bool Is16By9
-            => 1.77777779f - (1f * gameplayCamera.pixelWidth / gameplayCamera.pixelHeight) < 0.1f;
+            => 1.77777779f - (1f * backgroundCamera.pixelWidth / backgroundCamera.pixelHeight) < 0.1f;
 
         private Vector3 ResetPosition
             => new Vector3(0f, Values.CameraY, Is16By9 ? Values.CameraZ : Values.CameraZTablet);
@@ -156,13 +152,12 @@ namespace ArcCreate.Gameplay.GameplayCamera
                 skyInputLabel.localPosition.y,
                 skyInputLabel.localPosition.z);
 
-            Vector3 prevPosition = gameplayCamera.transform.localPosition;
+            Vector3 prevPosition = backgroundCamera.transform.localPosition;
             Vector3 position = ResetPosition + translationExternal;
             Vector3 rotation = ResetRotation;
             float fov = Is16By9 ? 50 : 65 + fieldOfViewExternal;
-            gameplayCamera.fieldOfView = fov;
-            arcCamera.fieldOfView = fov;
-            uiCamera.fieldOfView = fov;
+            backgroundCamera.fieldOfView = fov;
+            overlayCamera.fieldOfView = fov;
 
             for (int i = 0; i < events.Count; i++)
             {
@@ -187,12 +182,12 @@ namespace ArcCreate.Gameplay.GameplayCamera
 
             if (position.IsNaN() || rotation.IsNaN())
             {
-                gameplayCamera.transform.localPosition = prevPosition;
+                backgroundCamera.transform.localPosition = prevPosition;
             }
             else
             {
-                gameplayCamera.transform.localPosition = position;
-                gameplayCamera.transform.localRotation = Quaternion.Euler(0f, 0f, rotation.z) * Quaternion.Euler(rotation.x, rotation.y, 0f) * rotationExternal;
+                backgroundCamera.transform.localPosition = position;
+                backgroundCamera.transform.localRotation = Quaternion.Euler(0f, 0f, rotation.z) * Quaternion.Euler(rotation.x, rotation.y, 0f) * rotationExternal;
             }
 
             UpdateCameraTilt();
@@ -235,8 +230,8 @@ namespace ArcCreate.Gameplay.GameplayCamera
             }
 
             currentTilt *= tiltFactorExternal;
-            gameplayCamera.transform.LookAt(
-                gameplayCamera.transform.localPosition - ResetPosition + new Vector3(0, -5.5f, -20),
+            backgroundCamera.transform.LookAt(
+                backgroundCamera.transform.localPosition - ResetPosition + new Vector3(0, -5.5f, -20),
                 new Vector3(currentTilt, 1 - currentTilt, 0));
             currentArcPos = 0;
         }
@@ -250,7 +245,7 @@ namespace ArcCreate.Gameplay.GameplayCamera
         {
             currentArcPos = 0;
             isReset = true;
-            RenderingCameras = new Camera[] { gameplayCamera, arcCamera, uiCamera };
+            RenderingCameras = new Camera[] { backgroundCamera, overlayCamera };
         }
     }
 }

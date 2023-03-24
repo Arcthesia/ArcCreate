@@ -139,6 +139,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public void Clean()
         {
             Scene.ClearCache();
+            PostProcessing.DisablePostProcess();
             foreach (var c in referencedControllers)
             {
                 c.CleanController();

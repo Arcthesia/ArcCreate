@@ -1104,7 +1104,7 @@ GameObject:
   m_Component:
   - component: {fileID: 69348018}
   m_Layer: 9
-  m_Name: Vsync
+  m_Name: LimitFps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2737,7 +2737,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18.55
+  m_fontSize: 25.4
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5473,7 +5473,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 31.25
+  m_fontSize: 38.1
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -6133,7 +6133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a32ed771c5ecb9c0b803c7385241b686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: Gameplay.Selection.Settings.Visual.Vsync
+  id: Gameplay.Selection.Settings.Visual.LimitFramerate
   readIdFromContent: 0
 --- !u!114 &527347494
 MonoBehaviour:
@@ -6154,7 +6154,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Vsync
+  m_text: Limit framerate
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fc246767bf759519bb5f459275194444, type: 2}
   m_sharedMaterial: {fileID: 3714936077332224653, guid: fc246767bf759519bb5f459275194444,
@@ -7254,7 +7254,7 @@ RectTransform:
   m_Father: {fileID: 1186633069}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 0.34918034}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 5, y: 0}
   m_SizeDelta: {x: 10, y: 20}
@@ -9522,7 +9522,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 512036301}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0
+  m_Size: 0.9793836
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -9835,7 +9835,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 198.49997}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 610}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &805666521
 CanvasRenderer:
@@ -10794,7 +10794,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 66.05
+  m_fontSize: 81.15
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -11043,7 +11043,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a32ed771c5ecb9c0b803c7385241b686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: Gameplay.Selection.Settings.Visual.VsyncDetail
+  id: Gameplay.Selection.Settings.Visual.LimitFramerateDetail
   readIdFromContent: 0
 --- !u!114 &953276263
 MonoBehaviour:
@@ -11064,7 +11064,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Turn vsync on to limit FPS.
+  m_text: Limit display framerate to 60 FPS to preserve battery life. Might increase
+    latency.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fc246767bf759519bb5f459275194444, type: 2}
   m_sharedMaterial: {fileID: 3714936077332224653, guid: fc246767bf759519bb5f459275194444,
@@ -15211,7 +15212,7 @@ MonoBehaviour:
   frPmDisplayPositionText: {fileID: 7012911295444285836}
   changeLateEarlyPositionButton: {fileID: 179950793}
   lateEarlyPositionText: {fileID: 2067245650}
-  vsyncToggle: {fileID: 286383461}
+  limitFrameRateToggle: {fileID: 286383461}
   showFpsToggle: {fileID: 1763482175}
 --- !u!114 &1467990474
 MonoBehaviour:
@@ -15998,8 +15999,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 641842108}
   m_HandleRect: {fileID: 641842107}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 1
+  m_Value: 1.0000002
+  m_Size: 0.65081966
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -19155,7 +19156,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 431.99994}
+  m_AnchoredPosition: {x: 0, y: 540.0002}
   m_SizeDelta: {x: 0, y: 700}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1961179716

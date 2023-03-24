@@ -141,6 +141,16 @@ public static class I18n
     /// <returns>List of all locales available.</returns>
     public static string[] ListAllLocales()
     {
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            return new string[]
+            {
+                "en_us",
+                "es_es",
+                "ja_jp",
+            };
+        }
+
         DirectoryInfo dir = new DirectoryInfo(LocaleDirectory);
         FileInfo[] yamls = dir.GetFiles("*.yaml");
         FileInfo[] ymls = dir.GetFiles("*.yml");

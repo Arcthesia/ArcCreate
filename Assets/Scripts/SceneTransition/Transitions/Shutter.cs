@@ -31,18 +31,24 @@ namespace ArcCreate.SceneTransition
 
         public static Shutter Instance { get; private set; }
 
-        public async UniTask Open()
+        public async UniTask Open(bool showInfo = false)
         {
             AudioSource.PlayClipAtPoint(ExternalOpenAudio.Value, default);
 
-            await UniTask.Delay(DurationMs);
+            if (showInfo)
+            {
+                animator.Hide();
+            }
+            else
+            {
+                shutterOnlyAnimator.Hide();
+            }
 
-            animator.Hide();
+            await UniTask.Delay(DurationMs);
         }
 
         public async UniTask Close(bool showInfo = false)
         {
-            // TODO: MAGIC NUMBER
             if (showInfo)
             {
                 AudioSource.PlayClipAtPoint(ExternalStartAudio.Value, default);

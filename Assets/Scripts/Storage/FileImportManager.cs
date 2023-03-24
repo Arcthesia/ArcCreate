@@ -7,6 +7,9 @@ using ArcCreate.Utility.Animation;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+#if UNITY_ANDROID
+using UnityEngine.Android;
+#endif
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
@@ -166,22 +169,49 @@ namespace ArcCreate.Storage
 
         private void CheckPackageImport(bool focus)
         {
+#if UNITY_ANDROID
             try
             {
                 var jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
                 AndroidJavaObject context = jc.GetStatic<AndroidJavaObject>("currentActivity");
                 AndroidJavaObject intent = context.Call<AndroidJavaObject>("getIntent");
-                string action = intent.Call<string>("getAction");
+                string action = intent?.Call<string>("getAction");
                 if (action == "android.intent.action.VIEW")
                 {
+                    string tempPath = Path.Combine(FileStatics.TempPath, "import_temp.arcpkg");
+                    AndroidJavaObject contentResolver = context.Call<AndroidJavaObject>("getContentResolver");
                     AndroidJavaObject uri = intent.Call<AndroidJavaObject>("getData");
+                    AndroidJavaObject inputStream = contentResolver.Call<AndroidJavaObject>("openInputStream", uri);
+
                     string path = uri.Call<string>("getPath");
-                    ImportArchive(path).Forget();
+                    var helper = new AndroidJavaObject("com.Arcthesia.ArcCreate.ArcCreateHelper");
+
+                    if (File.Exists(tempPath))
+                    {
+                        File.Delete(tempPath);
+                    }
+
+                    if (!Directory.Exists(Path.GetDirectoryName(tempPath)))
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(tempPath));
+                    }
+
+                    string error = helper.Call<string>("processInputStream", inputStream, tempPath);
+                    if (!string.IsNullOrEmpty(error))
+                    {
+                        throw new Exception(error);
+                    }
+
+                    ImportArchive(tempPath).Forget();
+                    context.Call("setIntent", null);
                 }
             }
-            catch
+            catch (Exception e)
             {
+                DisplayError("Package", e);
+                Debug.LogError(e);
             }
+#endif
         }
 
         private void ClearError()

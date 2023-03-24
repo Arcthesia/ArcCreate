@@ -73,7 +73,7 @@ namespace ArcCreate.Compose.Components
             effectAudioField.SetTextWithoutNotify(Settings.EffectAudio.Value.ToString());
             globalOffsetField.SetTextWithoutNotify(Settings.GlobalAudioOffset.Value.ToString());
             framerateField.SetTextWithoutNotify(Settings.Framerate.Value.ToString());
-            vsyncField.SetIsOnWithoutNotify(Settings.VSync.Value == 1);
+            vsyncField.SetIsOnWithoutNotify(Settings.VSync.Value);
             showFramerateToggle.SetIsOnWithoutNotify(Settings.ShowFPSCounter.Value);
             scrollVerticalField.SetTextWithoutNotify(Settings.ScrollSensitivityVertical.Value.ToString());
             scrollHorizontalField.SetTextWithoutNotify(Settings.ScrollSensitivityHorizontal.Value.ToString());
@@ -157,7 +157,7 @@ namespace ArcCreate.Compose.Components
 
         private void OnVsyncField(bool value)
         {
-            Settings.VSync.Value = value ? 1 : 0;
+            Settings.VSync.Value = value;
         }
 
         private void OnShowFramerateToggle(bool value)

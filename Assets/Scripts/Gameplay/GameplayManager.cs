@@ -24,9 +24,8 @@ namespace ArcCreate.Gameplay
         [SerializeField] private ScenecontrolService scenecontrolService;
         [SerializeField] private AudioClip testAudio;
         [SerializeField] private GameplayData gameplayData;
-        [SerializeField] private Camera gameplayCamera;
-        [SerializeField] private Camera arcCamera;
-        [SerializeField] private Camera uiCamera;
+        [SerializeField] private Camera backgroundCamera;
+        [SerializeField] private Camera overlayCamera;
         [SerializeField] private string testPlayChartFileName = "test_chart.aff";
 
         public bool ShouldUpdateInputSystem
@@ -55,17 +54,15 @@ namespace ArcCreate.Gameplay
 
         public void SetCameraViewportRect(Rect rect)
         {
-            gameplayCamera.rect = rect;
-            arcCamera.rect = rect;
-            uiCamera.rect = rect;
-            Values.ScreenSize = gameplayCamera.pixelWidth;
+            backgroundCamera.rect = rect;
+            overlayCamera.rect = rect;
+            Values.ScreenSize = backgroundCamera.pixelWidth;
         }
 
         public void SetCameraEnabled(bool enable)
         {
-            gameplayCamera.enabled = enable;
-            arcCamera.enabled = enable;
-            uiCamera.enabled = enable;
+            backgroundCamera.enabled = enable;
+            overlayCamera.enabled = enable;
         }
 
         public void SetEnableArcDebug(bool enable)
