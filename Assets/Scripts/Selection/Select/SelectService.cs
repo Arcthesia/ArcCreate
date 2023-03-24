@@ -81,7 +81,7 @@ namespace ArcCreate.Selection.Select
         {
             foreach (var item in selected)
             {
-                if (item.IsDefaultAsset)
+                if (!item.IsDefaultAsset)
                 {
                     deleteConfirmation.PromptUser(selected);
                     return;

@@ -22,6 +22,7 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private float groupCellSize;
         [SerializeField] private float autoScrollDuration = 1f;
         [SerializeField] private float rebuildDuration = 0.3f;
+        [SerializeField] private PackList packList;
         private PackStorage currentPack;
         private ChartSettings currentChart;
         private LevelStorage currentLevel;
@@ -106,8 +107,11 @@ namespace ArcCreate.Selection.Interface
                 if (!found)
                 {
                     var (level, chart) = storageData.GetLastSelectedChart(pack?.Identifier);
-                    currentLevel = level;
-                    storageData.SelectedChart.Value = (level, chart);
+                    if (level != null && chart != null)
+                    {
+                        currentLevel = level;
+                        storageData.SelectedChart.Value = (level, chart);
+                    }
                 }
                 else
                 {
@@ -199,7 +203,13 @@ namespace ArcCreate.Selection.Interface
         private void RebuildList()
         {
             int prevCount = scroll.Data.Count;
-            List<LevelStorage> levels = (storageData.SelectedPack.Value?.Levels ?? storageData.GetAllLevels()).ToList();
+            List<LevelStorage> levels = (storageData.SelectedPack.Value?.Levels ?? storageData.GetAllLevels())?.ToList();
+            if (levels?.Count == 0)
+            {
+                packList.BackToPackList();
+                return;
+            }
+
             List<CellData> data = LevelListBuilder.Build(levels, storageData.SelectedChart.Value.chart, groupStrategy, sortStrategy);
             scroll.SetData(data);
 

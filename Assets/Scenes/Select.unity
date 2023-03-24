@@ -2401,6 +2401,7 @@ MonoBehaviour:
   groupCellSize: 60
   autoScrollDuration: 1
   rebuildDuration: 0.3
+  packList: {fileID: 722168716}
 --- !u!1 &179950791
 GameObject:
   m_ObjectHideFlags: 0
@@ -2737,7 +2738,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25.4
+  m_fontSize: 18.55
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5473,7 +5474,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 38.1
+  m_fontSize: 31.25
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -9522,7 +9523,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 512036301}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9793836
+  m_Size: 0.9623974
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -10104,7 +10105,7 @@ MonoBehaviour:
   animationMoveVector: {x: -1000, y: 0}
   animationDuration: 0.5
   animationEase: 9
-  defaultPosition: {x: 0, y: 0}
+  defaultPosition: {x: -222.59998, y: 0}
 --- !u!1 &847644868
 GameObject:
   m_ObjectHideFlags: 0
@@ -10794,7 +10795,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 81.15
+  m_fontSize: 66.05
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -19156,7 +19157,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 540.0002}
+  m_AnchoredPosition: {x: 0, y: 432.0006}
   m_SizeDelta: {x: 0, y: 700}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1961179716
