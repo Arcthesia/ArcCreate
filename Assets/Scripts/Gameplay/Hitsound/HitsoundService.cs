@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using ArcCreate.ChartFormat;
 using ArcCreate.Gameplay.Data;
-using ArcCreate.Utilities.ExternalAssets;
+using ArcCreate.Utility.ExternalAssets;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -62,7 +63,7 @@ namespace ArcCreate.Gameplay.Hitsound
             }
         }
 
-        public async UniTask LoadCustomSfxs(string parentUri)
+        public async UniTask LoadCustomSfxs(string parentUri, IFileAccessWrapper fileAccess)
         {
             IsLoaded = false;
 
@@ -98,7 +99,7 @@ namespace ArcCreate.Gameplay.Hitsound
                     finalSfx = finalSfx + ".wav";
                 }
 
-                string uri = Path.Combine(parentUri, finalSfx);
+                string uri = fileAccess?.GetFileUri(finalSfx) ?? Path.Combine(parentUri, finalSfx);
                 loadTasks.Add(LoadCustomSfx(sfx, uri));
             }
 

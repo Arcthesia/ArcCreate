@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.SceneTransition;
-using ArcCreate.Utilities.ExternalAssets;
+using ArcCreate.Utility.ExternalAssets;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -236,7 +236,17 @@ namespace ArcCreate.Gameplay.Skin
 
         public Texture GetArcTapSkin(ArcTap note)
         {
-            return currentNoteSkin.GetArcTapSkin(note);
+            switch (note.TimingGroupInstance.GroupProperties.SkinOverride)
+            {
+                case NoteSkinOverride.Default:
+                    return currentNoteSkin.GetArcTapSkin(note);
+                case NoteSkinOverride.Light:
+                    return noteSkinOptions[0].GetArcTapSkin(note);
+                case NoteSkinOverride.Conflict:
+                    return noteSkinOptions[1].GetArcTapSkin(note);
+                default:
+                    return currentNoteSkin.GetArcTapSkin(note);
+            }
         }
 
         public (Texture arcCap, Color heightIndicatorColor) GetArcSkin(Arc note)

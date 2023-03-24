@@ -1,9 +1,12 @@
+using ArcCreate.ChartFormat;
 using ArcCreate.Gameplay.Scenecontrol;
 
 namespace ArcCreate.Gameplay
 {
     public interface IScenecontrolControl
     {
+        bool IsLoaded { get; }
+
         Scene Scene { get; }
 
         PostProcessing PostProcessing { get; }
@@ -14,7 +17,7 @@ namespace ArcCreate.Gameplay
 
         string Export();
 
-        void Import(string json);
+        void Import(string json, IFileAccessWrapper fileAccess = null);
 
         void WaitForSceneLoad();
     }

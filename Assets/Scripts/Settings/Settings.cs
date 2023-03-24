@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using UnityEditor;
 using UnityEngine;
 
 namespace ArcCreate
@@ -10,6 +9,10 @@ namespace ArcCreate
 
         // Gameplay
         public static readonly IntSetting DropRate = new IntSetting("DropRate", 150);
+        public static readonly BoolSetting ShowEarlyLatePure = new BoolSetting("ShowEarlyLate", true);
+        public static readonly BoolSetting EnableColorblind = new BoolSetting("EnableColorblind", false);
+        public static readonly IntSetting FrPmIndicatorPosition = new IntSetting("FrPmIndicatorPosition", 0);
+        public static readonly IntSetting LateEarlyTextPosition = new IntSetting("LateEarlyTextPosition", 0);
         public static readonly IntSetting ViewportAspectRatioSetting = new IntSetting("ViewportAspectRatioSetting", 0);
         public static readonly IntSetting InputMode = new IntSetting("Gameplay.InputMode", 0);
 
@@ -19,8 +22,9 @@ namespace ArcCreate
         public static readonly FloatSetting EffectAudio = new FloatSetting("SoundPreferences.EffectAudio", 0.4f);
 
         // Display
-        public static readonly IntSetting Framerate = new IntSetting("Framerate", 60);
-        public static readonly IntSetting VSync = new IntSetting("VSync", 1);
+        public static readonly IntSetting Framerate = new IntSetting("DisplayFramerate", -1);
+        public static readonly BoolSetting VSync = new BoolSetting("EnableVSync", false);
+        public static readonly BoolSetting LimitFrameRate = new BoolSetting("LimitFrameRate", false);
         public static readonly BoolSetting ShowFPSCounter = new BoolSetting("ShowFrameCounter", false);
 
         // Remote
@@ -65,16 +69,29 @@ namespace ArcCreate
         public static readonly StringSetting FFmpegPath = new StringSetting("RenderPreferences.FFmpegPath", "ffmpeg");
         public static readonly BoolSetting EnableEasterEggs = new BoolSetting("Fun.EasterEggs", Application.isEditor);
 
+        public static readonly StringSetting SelectionGroupStrategy = new StringSetting("Selection.Group", "none");
+        public static readonly StringSetting SelectionSortStrategy = new StringSetting("Selection.Sort", "title");
+
         [RuntimeInitializeOnLoadMethod]
         public static void OnInitialize()
         {
-            Framerate.OnValueChanged.AddListener((value) => Application.targetFrameRate = value);
-            Application.targetFrameRate = Framerate.Value;
+            if (Application.isMobilePlatform)
+            {
+                LimitFrameRate.OnValueChanged.AddListener((value) => Application.targetFrameRate = value ? 60 : Screen.currentResolution.refreshRate * 2);
+                Application.targetFrameRate = LimitFrameRate.Value ? 60 : Screen.currentResolution.refreshRate * 2;
 
-            VSync.OnValueChanged.AddListener((value) => QualitySettings.vSyncCount = value);
-            QualitySettings.vSyncCount = VSync.Value;
+                QualitySettings.vSyncCount = 0;
+            }
+            else
+            {
+                Framerate.OnValueChanged.AddListener((value) => Application.targetFrameRate = value);
+                Application.targetFrameRate = Framerate.Value;
+
+                VSync.OnValueChanged.AddListener((value) => QualitySettings.vSyncCount = value ? 1 : 0);
+                QualitySettings.vSyncCount = VSync.Value ? 1 : 0;
+            }
+
             Application.quitting += OnApplicationQuit;
-
             CultureInfo.CurrentCulture = new CultureInfo("en");
         }
 

@@ -30,7 +30,7 @@ namespace ArcCreate.SceneTransition
 
         public async UniTask EndTransition()
         {
-            await shutter.Open();
+            await shutter.Open(true);
         }
     }
 }

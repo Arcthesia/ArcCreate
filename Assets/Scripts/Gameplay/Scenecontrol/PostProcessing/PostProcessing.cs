@@ -1,7 +1,7 @@
-using System;
 using EmmySharp;
 using MoonSharp.Interpreter;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
@@ -19,11 +19,15 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [SerializeField] private MotionBlurController motionBlur;
         [SerializeField] private VignetteController vignette;
 
+        [SerializeField] private PostProcessLayer layer;
+        [SerializeField] private PostProcessVolume volume;
+
         public AutoExposureController AutoExposure
         {
             get
             {
                 Services.Scenecontrol.AddReferencedController(autoExposure);
+                EnablePostProcess();
                 return autoExposure;
             }
         }
@@ -33,6 +37,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             get
             {
                 Services.Scenecontrol.AddReferencedController(bloom);
+                EnablePostProcess();
                 return bloom;
             }
         }
@@ -42,6 +47,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             get
             {
                 Services.Scenecontrol.AddReferencedController(chromaticAberration);
+                EnablePostProcess();
                 return chromaticAberration;
             }
         }
@@ -51,6 +57,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             get
             {
                 Services.Scenecontrol.AddReferencedController(colorGrading);
+                EnablePostProcess();
                 return colorGrading;
             }
         }
@@ -60,6 +67,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             get
             {
                 Services.Scenecontrol.AddReferencedController(depthOfField);
+                EnablePostProcess();
                 return depthOfField;
             }
         }
@@ -69,6 +77,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             get
             {
                 Services.Scenecontrol.AddReferencedController(grain);
+                EnablePostProcess();
                 return grain;
             }
         }
@@ -78,6 +87,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             get
             {
                 Services.Scenecontrol.AddReferencedController(lensDistortion);
+                EnablePostProcess();
                 return lensDistortion;
             }
         }
@@ -87,6 +97,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             get
             {
                 Services.Scenecontrol.AddReferencedController(motionBlur);
+                EnablePostProcess();
                 return motionBlur;
             }
         }
@@ -96,10 +107,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
             get
             {
                 Services.Scenecontrol.AddReferencedController(vignette);
+                EnablePostProcess();
                 return vignette;
             }
         }
 
+        [MoonSharpHidden]
         public ISceneController CreateFromTypeName(string type)
         {
             switch (type)
@@ -125,6 +138,20 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 default:
                     return null;
             }
+        }
+
+        [MoonSharpHidden]
+        public void EnablePostProcess()
+        {
+            layer.enabled = true;
+            volume.enabled = true;
+        }
+
+        [MoonSharpHidden]
+        public void DisablePostProcess()
+        {
+            layer.enabled = false;
+            volume.enabled = false;
         }
 
         private void Awake()

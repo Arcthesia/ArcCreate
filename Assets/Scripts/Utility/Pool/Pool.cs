@@ -36,6 +36,8 @@ public class Pool<T>
 
     public List<T> CurrentlyOccupied => new List<T>(occupied);
 
+    public bool IsDestroyed { get; private set; }
+
     /// <summary>
     /// Expand the pool by one object.
     /// </summary>
@@ -115,15 +117,26 @@ public class Pool<T>
     {
         foreach (T obj in occupied)
         {
+            if (obj == null)
+            {
+                continue;
+            }
+
             GameObject.Destroy(obj.gameObject);
         }
 
         foreach (T obj in available)
         {
+            if (obj == null)
+            {
+                continue;
+            }
+
             GameObject.Destroy(obj.gameObject);
         }
 
         available = null;
         occupied = null;
+        IsDestroyed = true;
     }
 }

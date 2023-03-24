@@ -327,6 +327,7 @@ Compose:
         ProjectFile: Project File
         ChartFile: Chart file
         Information: Information
+        Gameplay: Gameplay
         Title: Title
         Composer: Composer
         Illustrator: Illustrator
@@ -334,6 +335,7 @@ Compose:
         Alias: Alias
         BPM: BPM
         BaseBPM: Base BPM
+        BPMText: BPM Text
         SyncBaseBPM: Sync
         ChartOffset: Chart Offset
         TimingPointDensityFactor: Judge Density
@@ -367,6 +369,7 @@ Compose:
         Shutter: Shutter
         ShowShutter: Show shutter
         HideShutter: Hide shutter
+        PreviewSegment: Preview segment
       Options:
         Inherit: Inherit
         Light: Light
@@ -448,6 +451,7 @@ Compose:
           Export a .arcpkg package file to share to other players.
         Publisher: Publisher
         Package: Package
+        Version: Version
         BlankField: Please enter both publisher and package name information
         Identifier: "Your package identifier is: {0}"
         Export: Export
@@ -603,13 +607,128 @@ Gameplay:
     Scenecontrol: |-
       An error occured while trying to load scenecontrol json located at {Path}.
       {Error}
+    ScenecontrolSprite: |-
+      An error occured while trying to load a scenecontrol sprite located at {Path}.
+      {Error}
+    Load: |-
+      An unknown error occured while trying to load the chart {Identifier}, {ChartPath}
+      Error: {Message}
+      Stack trace:
+      {StackTrace}
   HUD:
-    Play: Play
+    Play: Resume
     Retry: Retry
-    Return: Return
+    Return: Quit
+  Selection:
+    SelectStatus:
+      Singular: |-
+        {0} asset selected
+      Plural: |-
+        {0} assets selected
+    DeleteConfirmation: |-
+      Are you sure you want to delete the following assets?
+      Your score will not be deleted.
+    CannotDeleteDefault: |-
+      Default assets cannot be deleted.
+    Action:
+      Delete: Delete
+      Cancel: Cancel
+      Done: Done
+    List:
+      OtherDifficulties: Other difficulties
+    Info:
+      Undefined:
+        Title: Unnamed
+        Composer: N/A
+        Charter: Unknown
+      Charter: 'Charter: {0}'
+    Sort:
+      addeddate: "Sort: Added date"
+      charter: "Sort: Charter"
+      composer: "Sort: Composer"
+      difficulty: "Sort: Difficulty"
+      grade: "Sort: Grade"
+      playcount: "Sort: Play count"
+      score: "Sort: Score"
+      title: "Sort: Title"
+    Group:
+      none: "Group: None"
+      difficulty: "Group: Difficulty"
+      grade: "Group: Grade"
+    Settings:
+      Name: Settings
+      Language: Language
+      Gameplay:
+        Name: Gameplay
+        Speed: Speed
+        SpeedDetail: |-
+          Adjust the speed at which notes approach the judgement area.
+        EarlyLatePureDisplay: Early/Late pure display
+        EarlyLatePureDisplayDetail: |-
+          Change whether or not to display early/late pure judgements.
+      Audio:
+        Name: Audio
+        Offset: Offset
+        OffsetDetail: |-
+          Adjust music synchronization.
+          Increase if you're getting LATE, or decrease if you're getting EARLY.
+        Calibrate: Calibrate
+        MusicAudio: Music volume
+        MusicAudioDetail: |-
+          Change the volume of music during gameplay.
+        EffectAudio: Effect volume
+        EffectAudioDetail: |-
+          Change the volume of hit sounds during gameplay.
+      Visual:
+        Name: Visual
+        Colorblind: Colorblind mode
+        ColorblindDetail: Use alternate arc colors.
+        FrPmDisplay: FR/PM display
+        FrPmDisplayDetail: Adjust FR/PM indicator position.
+        EarlyLateDisplay: Early/Late display
+        EarlyLateDisplayDetail: Adjust early/late text position.
+        LimitFramerate: Limit framerate
+        LimitFramerateDetail: Limit display framerate to 60 FPS to preserve battery life. Might increase latency.
+        ShowFPS: Show FPS
+        ShowFPSDetail: Toggle FPS display.
+      FrPmPosition:
+        middle: Middle
+        infopanel: Info panel
+        off: Off
+      EarlyLateTextPosition:
+        middle: Middle
+        bottom: Bottom
+        top: Top
 
 Shutter:
   Composer: Music
   Illustrator: Illustration
   Charter: Note Design
   Alias: as
+    
+Storage:
+  Confirm: Confirm
+  ImportErrors: |-
+    The following assets could not be imported:
+  ImportSummary: |-
+    Successfully imported the following assets:
+  NoAssetImported: |-
+    No assets were imported.
+  ImportConflict:
+    Message: |-
+      You're trying to import an older version of an asset.
+      Which version would you like to keep?
+    ReplaceAsset:
+      Replace with importing asset
+    KeepOriginal:
+      Keep the original asset
+    Identifier: "Identifier: {0}"
+    Version: "Version: {0}"
+  Loading:
+    Message: 'Loading: {0}...'
+    Archive: Unpacking archive
+    ValidatePackage: Validating package
+    CheckConflict: Checking for conflict
+    DeleteAsset: Deleting asset {0}
+    StoreAsset: Storing asset {0}
+    Finalizing: Finalizing

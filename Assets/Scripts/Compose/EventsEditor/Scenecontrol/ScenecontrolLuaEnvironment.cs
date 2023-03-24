@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Gameplay.Scenecontrol;
-using ArcCreate.Utilities.Lua;
+using ArcCreate.Utility.Lua;
 using MoonSharp.Interpreter;
 using UnityEngine;
 

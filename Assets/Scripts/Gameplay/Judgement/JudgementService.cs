@@ -69,15 +69,20 @@ namespace ArcCreate.Gameplay.Judgement
 
         public void ProcessInput(int currentTiming)
         {
-            if (!isAuto)
-            {
-                PruneExpiredRequests(currentTiming);
-            }
-
             // Manually update input system to minimalize lag
             if (Values.ShouldUpdateInputSystem)
             {
                 InputSystem.Update();
+            }
+
+            if (!Services.Audio.IsPlayingAndNotStationary)
+            {
+                return;
+            }
+
+            if (!isAuto)
+            {
+                PruneExpiredRequests(currentTiming);
             }
 
             inputHandler.PollInput();

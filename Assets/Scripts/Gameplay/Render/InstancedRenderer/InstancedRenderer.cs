@@ -3,7 +3,7 @@ using UnityEngine;
 public class InstancedRenderer<T>
     where T : struct
 {
-    public const int Population = 511;
+    public const int Population = 127;
 
     private readonly Material material;
     private readonly Mesh mesh;

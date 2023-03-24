@@ -110,7 +110,7 @@ namespace ArcCreate.Compose.Cursor
                 confirm: confirm,
                 cancel: cancel,
                 selector: () => selectingVerticalPoint,
-                isValidTypedChar: (c) => char.IsDigit(c) || c == ',',
+                isValidTypedChar: (c) => char.IsDigit(c) || c == ',' || c == '.',
                 convertTypedStringToValue: (s) =>
                 {
                     string[] split = s.Split(',');

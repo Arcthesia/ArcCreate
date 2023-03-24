@@ -33,7 +33,7 @@ namespace ArcCreate.Remote.Gameplay
         private BroadcastReceiver broadcastReceiver;
         private MessageChannel channel;
         private readonly BroadcastSender broadcastSender = new BroadcastSender(Ports.Compose);
-        private readonly CancellationTokenSource ctx = new CancellationTokenSource();
+        private readonly CancellationTokenSource cts = new CancellationTokenSource();
 
         public void Process(RemoteControl control, byte[] message)
         {
@@ -55,6 +55,7 @@ namespace ArcCreate.Remote.Gameplay
 
         public override void OnUnloadScene()
         {
+            cts.Dispose();
             startNewSessionButton.onClick.RemoveListener(OnStartNewSessionButton);
             startManualIpButton.onClick.RemoveListener(OnStartManualIP);
             Application.logMessageReceived -= DisplayLog;
@@ -83,7 +84,7 @@ namespace ArcCreate.Remote.Gameplay
                 Destroy(row.gameObject);
             }
 
-            ctx.Cancel();
+            cts.Cancel();
             rows.Clear();
 
             startManualIpButton.gameObject.SetActive(false);
@@ -198,7 +199,7 @@ namespace ArcCreate.Remote.Gameplay
 
             if (Application.platform == RuntimePlatform.Android)
             {
-                AcquireMulticastLockPeriodically(ctx.Token).Forget();
+                AcquireMulticastLockPeriodically(cts.Token).Forget();
             }
         }
 
@@ -216,7 +217,7 @@ namespace ArcCreate.Remote.Gameplay
                 Destroy(row.gameObject);
             }
 
-            ctx.Cancel();
+            cts.Cancel();
             rows.Clear();
             Debug.Log($"Gameplay: Stopped listening");
         }

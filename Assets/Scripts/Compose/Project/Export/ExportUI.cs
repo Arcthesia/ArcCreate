@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using ArcCreate.Data;
 using ArcCreate.Utility;
+using ArcCreate.Utility.Parser;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,7 @@ namespace ArcCreate.Compose.Project
     {
         [SerializeField] private TMP_InputField publisherField;
         [SerializeField] private TMP_InputField packageNameField;
+        [SerializeField] private TMP_InputField versionField;
         [SerializeField] private GameObject requiredIndicator;
         [SerializeField] private TMP_Text identifierPreview;
         [SerializeField] private Button confirmButton;
@@ -42,6 +44,7 @@ namespace ArcCreate.Compose.Project
         {
             string publisher = publisherField.text;
             string package = packageNameField.text;
+            Evaluator.TryInt(versionField.text, out int version);
             DateTime builtAt = DateTime.UtcNow;
 
             if (string.IsNullOrEmpty(publisher) || string.IsNullOrEmpty(package))
@@ -70,7 +73,7 @@ namespace ArcCreate.Compose.Project
                 Services.Project.SaveProject();
             }
 
-            new Exporter(proj, publisher, package, builtAt).Export(outputPath);
+            new Exporter(proj, publisher, package, version).Export(outputPath);
         }
     }
 }

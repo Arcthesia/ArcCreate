@@ -312,8 +312,8 @@ namespace ArcCreate.Compose.Project
 
         private void AutofillChart(ChartSettings chart)
         {
-            chart.Title = Values.DefaultTitle;
-            chart.Composer = Values.DefaultComposer;
+            chart.Title = string.IsNullOrEmpty(chart.Title) ? Values.DefaultTitle : chart.Title;
+            chart.Composer = string.IsNullOrEmpty(chart.Composer) ? Values.DefaultComposer : chart.Composer;
             chart.SyncBaseBpm = true;
 
             switch (chart.ChartPath.Split('.')[0])
@@ -398,6 +398,13 @@ namespace ArcCreate.Compose.Project
                 gameplayData.AudioOffset.Value,
                 gameplayData.TimingPointDensityFactor.Value,
                 chartData);
+
+            string scJson = Services.Gameplay.Scenecontrol.Export();
+            if (scJson != "[]")
+            {
+                string scPath = Path.Combine(dir, Path.GetFileNameWithoutExtension(CurrentChart.ChartPath) + ".sc.json");
+                File.WriteAllText(scPath, scJson);
+            }
         }
 
         private void OpenUnsavedChangesDialog(Action onConfirm)

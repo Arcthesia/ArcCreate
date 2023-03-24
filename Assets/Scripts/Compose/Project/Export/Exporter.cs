@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using ArcCreate.Data;
+using ArcCreate.Storage;
 using ArcCreate.Utility;
 using UnityEngine;
 using YamlDotNet.Serialization;
@@ -14,25 +16,29 @@ namespace ArcCreate.Compose.Project
         private readonly ProjectSettings project;
         private readonly string publisher;
         private readonly string package;
-        private readonly DateTime builtAt;
+        private readonly int version;
 
-        public Exporter(ProjectSettings project, string publisher, string package, DateTime builtAt)
+        public Exporter(ProjectSettings project, string publisher, string package, int version)
         {
             this.project = project;
             this.publisher = publisher;
             this.package = package;
-            this.builtAt = builtAt;
+            this.version = version;
         }
 
         public void Export(string outputPath)
         {
             string subdir = package;
-            ImportInformation info = new ImportInformation
+            List<ImportInformation> info = new List<ImportInformation>()
             {
-                Directory = subdir,
-                Identifier = $"{publisher}.{package}",
-                CreatedAt = builtAt,
-                Type = ImportInformation.LevelType,
+                new ImportInformation
+                {
+                    Directory = subdir,
+                    Identifier = $"{publisher}.{package}",
+                    SettingsFile = Path.GetFileName(project.Path),
+                    Version = version,
+                    Type = ImportInformation.LevelType,
+                },
             };
 
             var serializer = new SerializerBuilder()
@@ -57,7 +63,12 @@ namespace ArcCreate.Compose.Project
                         }
 
                         var projectDir = new DirectoryInfo(Path.GetDirectoryName(project.Path));
-                        WriteDirectoryToZip(projectDir, zip, subdir, outputPath);
+                        WriteDirectoryToZip(projectDir, zip, subdir, new List<string>()
+                        {
+                            outputPath,
+                            "remote.aff",
+                            "remote.sc.json",
+                        });
                     }
                 }
 
@@ -75,11 +86,11 @@ namespace ArcCreate.Compose.Project
             }
         }
 
-        private void WriteDirectoryToZip(DirectoryInfo projectDir, ZipArchive zip, string subdir, string blockPath)
+        private void WriteDirectoryToZip(DirectoryInfo projectDir, ZipArchive zip, string subdir, List<string> blockedPaths)
         {
             foreach (FileInfo file in projectDir.EnumerateFiles())
             {
-                if (file.FullName != blockPath)
+                if (!blockedPaths.Contains(file.FullName) && !file.FullName.EndsWith(".arcpkg") && !file.FullName.EndsWith(".mp4"))
                 {
                     WriteFileToZip(zip, file.FullName, Path.Combine(subdir, file.Name));
                 }
@@ -87,7 +98,7 @@ namespace ArcCreate.Compose.Project
 
             foreach (DirectoryInfo dir in projectDir.EnumerateDirectories())
             {
-                WriteDirectoryToZip(dir, zip, Path.Combine(subdir, dir.Name), blockPath);
+                WriteDirectoryToZip(dir, zip, Path.Combine(subdir, dir.Name), blockedPaths);
             }
         }
 
@@ -101,20 +112,6 @@ namespace ArcCreate.Compose.Project
                     fileStream.CopyTo(entryStream);
                 }
             }
-        }
-
-        public class ImportInformation
-        {
-            public const string FileName = "import.yml";
-            public const string LevelType = "level";
-
-            public string Directory { get; set; }
-
-            public string Identifier { get; set; }
-
-            public DateTime CreatedAt { get; set; }
-
-            public string Type { get; set; }
         }
     }
 }

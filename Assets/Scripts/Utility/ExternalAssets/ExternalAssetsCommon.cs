@@ -1,7 +1,7 @@
 using System.IO;
 using UnityEngine;
 
-namespace ArcCreate.Utilities.ExternalAssets
+namespace ArcCreate.Utility.ExternalAssets
 {
     public static class ExternalAssetsCommon
     {

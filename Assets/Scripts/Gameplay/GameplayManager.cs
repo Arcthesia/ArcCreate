@@ -24,9 +24,8 @@ namespace ArcCreate.Gameplay
         [SerializeField] private ScenecontrolService scenecontrolService;
         [SerializeField] private AudioClip testAudio;
         [SerializeField] private GameplayData gameplayData;
-        [SerializeField] private Camera gameplayCamera;
-        [SerializeField] private Camera arcCamera;
-        [SerializeField] private Camera uiCamera;
+        [SerializeField] private Camera backgroundCamera;
+        [SerializeField] private Camera overlayCamera;
         [SerializeField] private string testPlayChartFileName = "test_chart.aff";
 
         public bool ShouldUpdateInputSystem
@@ -45,31 +44,30 @@ namespace ArcCreate.Gameplay
 
         public IScenecontrolControl Scenecontrol => scenecontrolService;
 
-        public bool IsLoaded => chartService.IsLoaded;
+        public bool IsLoaded =>
+            Services.Chart.IsLoaded
+            && Services.Scenecontrol.IsLoaded
+            && Services.Render.IsLoaded
+            && Services.Hitsound.IsLoaded;
+
+        public bool EnablePauseMenu { get => Values.EnablePauseMenu; set => Values.EnablePauseMenu = value; }
 
         public void SetCameraViewportRect(Rect rect)
         {
-            gameplayCamera.rect = rect;
-            arcCamera.rect = rect;
-            uiCamera.rect = rect;
-            Values.ScreenSize = gameplayCamera.pixelWidth;
+            backgroundCamera.rect = rect;
+            overlayCamera.rect = rect;
+            Values.ScreenSize = backgroundCamera.pixelWidth;
         }
 
         public void SetCameraEnabled(bool enable)
         {
-            gameplayCamera.enabled = enable;
-            arcCamera.enabled = enable;
-            uiCamera.enabled = enable;
+            backgroundCamera.enabled = enable;
+            overlayCamera.enabled = enable;
         }
 
         public void SetEnableArcDebug(bool enable)
         {
             Services.Judgement.SetDebugDisplayMode(enable);
-        }
-
-        public override void OnUnloadScene()
-        {
-            Application.targetFrameRate = 60;
         }
 
         public override void OnNoBootScene()
@@ -92,7 +90,6 @@ namespace ArcCreate.Gameplay
 
         protected override void OnSceneLoad()
         {
-            Application.targetFrameRate = Screen.currentResolution.refreshRate;
             if (Application.platform == RuntimePlatform.Android
              || Application.platform == RuntimePlatform.IPhonePlayer)
             {
@@ -132,7 +129,7 @@ namespace ArcCreate.Gameplay
 
         private void Update()
         {
-            if (!Services.Chart.IsLoaded || !Services.Render.IsLoaded || !Services.Scenecontrol.IsLoaded || !Services.Hitsound.IsLoaded)
+            if (!IsLoaded)
             {
                 return;
             }

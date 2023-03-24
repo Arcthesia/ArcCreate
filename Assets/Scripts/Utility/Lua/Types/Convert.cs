@@ -2,7 +2,7 @@ using EmmySharp;
 using MoonSharp.Interpreter;
 using UnityEngine;
 
-namespace ArcCreate.Utilities.Lua
+namespace ArcCreate.Utility.Lua
 {
     [MoonSharpUserData]
     [EmmySingleton]

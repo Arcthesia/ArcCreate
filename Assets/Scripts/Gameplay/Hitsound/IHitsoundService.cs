@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ArcCreate.ChartFormat;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -46,6 +47,12 @@ namespace ArcCreate.Gameplay.Hitsound
         /// <param name="isFromJudgement">Whether this was invoked as a feedback to a judgement, or was invoked on the note's timing.</param>
         void PlayArcTapHitsound(string sfx, bool isFromJudgement);
 
-        UniTask LoadCustomSfxs(string sfxParentUri);
+        /// <summary>
+        /// Loads all sfx file referenced by the currently loaded chart from sfxParentUri.
+        /// </summary>
+        /// <param name="sfxParentUri">Where to load sfx files from.</param>
+        /// <param name="fileAccess">Custom file accessor.</param>
+        /// <returns>Unitask instance.</returns>
+        UniTask LoadCustomSfxs(string sfxParentUri, IFileAccessWrapper fileAccess);
     }
 }

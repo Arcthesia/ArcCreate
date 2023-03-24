@@ -2,7 +2,7 @@ using System.IO;
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Loaders;
 
-namespace ArcCreate.Utilities.Lua
+namespace ArcCreate.Utility.Lua
 {
     public class ScriptLoader : FileSystemScriptLoader
     {

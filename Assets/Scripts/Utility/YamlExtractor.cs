@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using YamlDotNet.RepresentationModel;
 
-namespace ArcCreate.Utilities
+namespace ArcCreate.Utility
 {
     public static class YamlExtractor
     {

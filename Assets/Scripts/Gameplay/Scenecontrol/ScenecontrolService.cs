@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ArcCreate.ChartFormat;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Extension;
 using Cysharp.Threading.Tasks;
@@ -94,6 +95,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public void UpdateScenecontrol(int currentTiming)
         {
+            if (!Services.Audio.IsPlayingAndNotStationary)
+            {
+                return;
+            }
+
             float bpm = Services.Chart.GetTimingGroup(0).GetBpm(currentTiming);
             float beatDuration = (bpm != 0) ? 60.0f / bpm : Mathf.Infinity;
 
@@ -133,6 +139,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public void Clean()
         {
             Scene.ClearCache();
+            PostProcessing.DisablePostProcess();
             foreach (var c in referencedControllers)
             {
                 c.CleanController();
@@ -152,8 +159,9 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return JsonConvert.SerializeObject(serialization.Result);
         }
 
-        public void Import(string def)
+        public void Import(string def, IFileAccessWrapper fileAccess)
         {
+            scene.SetFileAccess(fileAccess);
             var units = JsonConvert.DeserializeObject<List<SerializedUnit>>(def);
             var deserialization = new ScenecontrolDeserialization(scene, postProcessing, units);
             foreach (var unit in deserialization.Result)

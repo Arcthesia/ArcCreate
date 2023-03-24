@@ -73,7 +73,7 @@ namespace ArcCreate.Compose.Components
             effectAudioField.SetTextWithoutNotify(Settings.EffectAudio.Value.ToString());
             globalOffsetField.SetTextWithoutNotify(Settings.GlobalAudioOffset.Value.ToString());
             framerateField.SetTextWithoutNotify(Settings.Framerate.Value.ToString());
-            vsyncField.SetIsOnWithoutNotify(Settings.VSync.Value == 1);
+            vsyncField.SetIsOnWithoutNotify(Settings.VSync.Value);
             showFramerateToggle.SetIsOnWithoutNotify(Settings.ShowFPSCounter.Value);
             scrollVerticalField.SetTextWithoutNotify(Settings.ScrollSensitivityVertical.Value.ToString());
             scrollHorizontalField.SetTextWithoutNotify(Settings.ScrollSensitivityHorizontal.Value.ToString());
@@ -81,7 +81,7 @@ namespace ArcCreate.Compose.Components
             trackThresholdField.SetTextWithoutNotify(Settings.TrackScrollThreshold.Value.ToString());
             trackMaxTimingField.SetTextWithoutNotify(Settings.TrackScrollMaxMovement.Value.ToString());
             inputModeDropdown.SetValueWithoutNotify(Settings.InputMode.Value);
-            speedField.SetTextWithoutNotify((Settings.DropRate.Value / Values.DropRateScalar).ToString());
+            speedField.SetTextWithoutNotify((Settings.DropRate.Value / Constants.DropRateScalar).ToString("F1"));
             densityField.SetTextWithoutNotify(Values.BeatlineDensity.Value.ToString());
         }
 
@@ -157,7 +157,7 @@ namespace ArcCreate.Compose.Components
 
         private void OnVsyncField(bool value)
         {
-            Settings.VSync.Value = value ? 1 : 0;
+            Settings.VSync.Value = value;
         }
 
         private void OnShowFramerateToggle(bool value)
@@ -240,10 +240,10 @@ namespace ArcCreate.Compose.Components
             if (Evaluator.TryFloat(value, out float speed))
             {
                 speed = Mathf.Max(speed, 0.1f);
-                Settings.DropRate.Value = Mathf.RoundToInt(speed * Values.DropRateScalar);
+                Settings.DropRate.Value = (int)System.Math.Round(speed * Constants.DropRateScalar);
             }
 
-            speedField.SetTextWithoutNotify((Settings.DropRate.Value / Values.DropRateScalar).ToString());
+            speedField.SetTextWithoutNotify((Settings.DropRate.Value / Constants.DropRateScalar).ToString());
         }
 
         private void OnDensityField(string value)

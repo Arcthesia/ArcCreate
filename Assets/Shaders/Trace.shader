@@ -10,7 +10,6 @@
 		Tags { "Queue" = "Transparent"  "RenderType" = "Transparent" "CanUseSpriteAtlas"="true" "IgnoreProjector"="true"}
 
 		Blend SrcAlpha OneMinusSrcAlpha
-		AlphaToMask Off
         Cull Off
         Lighting Off
 		ZWrite Off

@@ -5,7 +5,8 @@
         "Unity.TextMeshPro",
         "UniTask",
         "YamlDotNet",
-        "ArcCreate.Settings"
+        "ArcCreate.Settings",
+        "Demigiant.DOTween"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -13,7 +14,8 @@
     "overrideReferences": true,
     "precompiledReferences": [
         "Jace.dll",
-        "MoonSharp.Interpreter.dll"
+        "MoonSharp.Interpreter.dll",
+        "DOTween.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],
