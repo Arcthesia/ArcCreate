@@ -50,6 +50,7 @@ This project was licensed under GPL-3.0 license (see [LICENSE](LICENSE)).
 - `Assets/Plugins/ColorPicker`: https://github.com/mmaletin/UnityColorPicker
 - `Assets/Plugins/DOTween`: http://dotween.demigiant.com
 - `Assets/Plugins/DynamicPanels`: https://github.com/yasirkula/UnityDynamicPanels
+- `Assets/Plugins/Graphy`: https://github.com/Tayx94/graphy/
 - `Assets/Plugins/MaterialIcons`: https://fonts.google.com/icons for the icons themselves and https://github.com/convalise/unity-material-icons/ for packaging them for Unity.
 - `Assets/Plugins/StandaloneFileBrowser`: https://github.com/gkngkc/UnityStandaloneFileBrowser
 - `Assets/Plugins/UIGradient`: https://github.com/azixMcAze/Unity-UIGradient

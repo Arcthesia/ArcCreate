@@ -117,11 +117,21 @@ public class Pool<T>
     {
         foreach (T obj in occupied)
         {
+            if (obj == null)
+            {
+                continue;
+            }
+
             GameObject.Destroy(obj.gameObject);
         }
 
         foreach (T obj in available)
         {
+            if (obj == null)
+            {
+                continue;
+            }
+
             GameObject.Destroy(obj.gameObject);
         }
 

@@ -15,16 +15,16 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 1
+    value: 0
   focusDistance:
     overrideState: 0
     value: 10
   aperture:
     overrideState: 0
-    value: 5.6
+    value: 10.1
   focalLength:
     overrideState: 0
-    value: 50
+    value: 158
   kernelSize:
     overrideState: 0
     value: 1
@@ -43,7 +43,7 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 1
+    value: 0
   shutterAngle:
     overrideState: 0
     value: 270
@@ -65,7 +65,7 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 1
+    value: 0
   mode:
     overrideState: 0
     value: 0
@@ -131,7 +131,7 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 1
+    value: 0
   gradingMode:
     overrideState: 0
     value: 1
@@ -1442,7 +1442,7 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 1
+    value: 0
   intensity:
     overrideState: 0
     value: 0
@@ -1489,7 +1489,7 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 1
+    value: 0
   colored:
     overrideState: 0
     value: 1
@@ -1517,7 +1517,7 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 1
+    value: 0
   spectralLut:
     overrideState: 0
     value: {fileID: 0}
@@ -1543,7 +1543,7 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 1
+    value: 0
   filtering:
     overrideState: 0
     value: {x: 50, y: 95}
@@ -1580,7 +1580,7 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 1
+    value: 0
   intensity:
     overrideState: 0
     value: 0

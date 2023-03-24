@@ -97,6 +97,7 @@ namespace ArcCreate.SceneTransition
                 await UniTask.WaitUntil(() => waitTask.Status == UniTaskStatus.Succeeded);
                 transitionState = TransitionState.Ending;
 
+                await UniTask.NextFrame();
                 await transition.EndTransition();
                 OnTransitionEnd?.Invoke();
                 OnTransitionEnd = null;

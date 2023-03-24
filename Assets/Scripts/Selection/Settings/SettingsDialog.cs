@@ -1,3 +1,4 @@
+using System;
 using ArcCreate.Utility;
 using TMPro;
 using UnityEngine;
@@ -32,7 +33,7 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private TMP_Text frPmDisplayPositionText;
         [SerializeField] private Button changeLateEarlyPositionButton;
         [SerializeField] private TMP_Text lateEarlyPositionText;
-        [SerializeField] private Toggle vsyncToggle;
+        [SerializeField] private Toggle limitFrameRateToggle;
         [SerializeField] private Toggle showFpsToggle;
 
         protected override void Awake()
@@ -50,7 +51,8 @@ namespace ArcCreate.Selection.Interface
             colorblindModeToggle.onValueChanged.AddListener(OnColorblindModeToggle);
             changeFrPmDisplayPositionButton.onClick.AddListener(OnFrPmDisplayButton);
             changeLateEarlyPositionButton.onClick.AddListener(OnChangeLateEarlyPositionButton);
-            vsyncToggle.onValueChanged.AddListener(OnVsyncToggle);
+            limitFrameRateToggle.onValueChanged.AddListener(OnLimitFrameRateToggle);
+            showFpsToggle.onValueChanged.AddListener(OnShowFpsToggle);
 
             Settings.DropRate.OnValueChanged.AddListener(OnDropRateSettings);
             Settings.ShowEarlyLatePure.OnValueChanged.AddListener(OnShowEarlyLatePureSettings);
@@ -60,7 +62,8 @@ namespace ArcCreate.Selection.Interface
             Settings.EnableColorblind.OnValueChanged.AddListener(OnEnableColorblindSettings);
             Settings.FrPmIndicatorPosition.OnValueChanged.AddListener(OnFrPmIndicatorPositionSettings);
             Settings.LateEarlyTextPosition.OnValueChanged.AddListener(OnLateEarlyTextPositionSettings);
-            Settings.VSync.OnValueChanged.AddListener(OnVsyncSettings);
+            Settings.LimitFrameRate.OnValueChanged.AddListener(OnLimitFrameRateSettings);
+            Settings.ShowFPSCounter.OnValueChanged.AddListener(OnShowFPSCounterSettings);
 
             OnDropRateSettings(Settings.DropRate.Value);
             OnShowEarlyLatePureSettings(Settings.ShowEarlyLatePure.Value);
@@ -70,7 +73,8 @@ namespace ArcCreate.Selection.Interface
             OnEnableColorblindSettings(Settings.EnableColorblind.Value);
             OnFrPmIndicatorPositionSettings(Settings.FrPmIndicatorPosition.Value);
             OnLateEarlyTextPositionSettings(Settings.LateEarlyTextPosition.Value);
-            OnVsyncSettings(Settings.VSync.Value);
+            OnLimitFrameRateSettings(Settings.LimitFrameRate.Value);
+            OnShowFPSCounterSettings(Settings.ShowFPSCounter.Value);
 
             // setupOffsetButton.onClick.AddListener(setupOffsetDialog.Show);
         }
@@ -90,7 +94,8 @@ namespace ArcCreate.Selection.Interface
             colorblindModeToggle.onValueChanged.RemoveListener(OnColorblindModeToggle);
             changeFrPmDisplayPositionButton.onClick.RemoveListener(OnFrPmDisplayButton);
             changeLateEarlyPositionButton.onClick.RemoveListener(OnChangeLateEarlyPositionButton);
-            vsyncToggle.onValueChanged.RemoveListener(OnVsyncToggle);
+            limitFrameRateToggle.onValueChanged.RemoveListener(OnLimitFrameRateToggle);
+            showFpsToggle.onValueChanged.RemoveListener(OnShowFpsToggle);
 
             Settings.DropRate.OnValueChanged.RemoveListener(OnDropRateSettings);
             Settings.ShowEarlyLatePure.OnValueChanged.RemoveListener(OnShowEarlyLatePureSettings);
@@ -100,7 +105,8 @@ namespace ArcCreate.Selection.Interface
             Settings.EnableColorblind.OnValueChanged.RemoveListener(OnEnableColorblindSettings);
             Settings.FrPmIndicatorPosition.OnValueChanged.RemoveListener(OnFrPmIndicatorPositionSettings);
             Settings.LateEarlyTextPosition.OnValueChanged.RemoveListener(OnLateEarlyTextPositionSettings);
-            Settings.VSync.OnValueChanged.RemoveListener(OnVsyncSettings);
+            Settings.LimitFrameRate.OnValueChanged.RemoveListener(OnLimitFrameRateSettings);
+            Settings.ShowFPSCounter.OnValueChanged.RemoveListener(OnShowFPSCounterSettings);
 
             // setupOffsetButton.onClick.RemoveListener(setupOffsetDialog.Show);
         }
@@ -112,7 +118,7 @@ namespace ArcCreate.Selection.Interface
 
         private void OnShowEarlyLatePureSettings(bool value)
         {
-            earlyLatePureToggle.isOn = value;
+            earlyLatePureToggle.SetIsOnWithoutNotify(value);
         }
 
         private void OnMusicAudioSettings(float value)
@@ -132,7 +138,7 @@ namespace ArcCreate.Selection.Interface
 
         private void OnEnableColorblindSettings(bool value)
         {
-            colorblindModeToggle.isOn = value;
+            colorblindModeToggle.SetIsOnWithoutNotify(value);
         }
 
         private void OnFrPmIndicatorPositionSettings(int value)
@@ -147,9 +153,14 @@ namespace ArcCreate.Selection.Interface
             lateEarlyPositionText.text = I18n.S($"Gameplay.Selection.Settings.EarlyLateTextPosition.{position.ToString().ToLower()}");
         }
 
-        private void OnVsyncSettings(int value)
+        private void OnLimitFrameRateSettings(bool value)
         {
-            vsyncToggle.isOn = value == 1;
+            limitFrameRateToggle.SetIsOnWithoutNotify(value);
+        }
+
+        private void OnShowFPSCounterSettings(bool value)
+        {
+            showFpsToggle.SetIsOnWithoutNotify(value);
         }
 
         private void OnDecreaseSpeedButton()
@@ -212,9 +223,14 @@ namespace ArcCreate.Selection.Interface
             Settings.LateEarlyTextPosition.Value = (Settings.LateEarlyTextPosition.Value + 1) % 3;
         }
 
-        private void OnVsyncToggle(bool value)
+        private void OnLimitFrameRateToggle(bool value)
         {
-            Settings.VSync.Value = value ? 1 : 0;
+            Settings.LimitFrameRate.Value = value;
+        }
+
+        private void OnShowFpsToggle(bool value)
+        {
+            Settings.ShowFPSCounter.Value = value;
         }
     }
 }

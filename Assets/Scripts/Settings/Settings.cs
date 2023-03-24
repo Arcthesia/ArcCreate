@@ -22,8 +22,9 @@ namespace ArcCreate
         public static readonly FloatSetting EffectAudio = new FloatSetting("SoundPreferences.EffectAudio", 0.4f);
 
         // Display
-        public static readonly IntSetting Framerate = new IntSetting("Framerate", 60);
-        public static readonly IntSetting VSync = new IntSetting("VSync", 1);
+        public static readonly IntSetting Framerate = new IntSetting("DisplayFramerate", -1);
+        public static readonly BoolSetting VSync = new BoolSetting("EnableVSync", false);
+        public static readonly BoolSetting LimitFrameRate = new BoolSetting("LimitFrameRate", false);
         public static readonly BoolSetting ShowFPSCounter = new BoolSetting("ShowFrameCounter", false);
 
         // Remote
@@ -74,16 +75,23 @@ namespace ArcCreate
         [RuntimeInitializeOnLoadMethod]
         public static void OnInitialize()
         {
-            if (Application.platform != RuntimePlatform.Android && Application.platform != RuntimePlatform.IPhonePlayer)
+            if (Application.isMobilePlatform)
+            {
+                LimitFrameRate.OnValueChanged.AddListener((value) => Application.targetFrameRate = value ? 60 : Screen.currentResolution.refreshRate * 2);
+                Application.targetFrameRate = LimitFrameRate.Value ? 60 : Screen.currentResolution.refreshRate * 2;
+
+                QualitySettings.vSyncCount = 0;
+            }
+            else
             {
                 Framerate.OnValueChanged.AddListener((value) => Application.targetFrameRate = value);
                 Application.targetFrameRate = Framerate.Value;
+
+                VSync.OnValueChanged.AddListener((value) => QualitySettings.vSyncCount = value ? 1 : 0);
+                QualitySettings.vSyncCount = VSync.Value ? 1 : 0;
             }
 
-            VSync.OnValueChanged.AddListener((value) => QualitySettings.vSyncCount = value);
-            QualitySettings.vSyncCount = VSync.Value;
             Application.quitting += OnApplicationQuit;
-
             CultureInfo.CurrentCulture = new CultureInfo("en");
         }
 

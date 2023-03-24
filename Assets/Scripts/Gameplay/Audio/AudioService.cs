@@ -52,6 +52,7 @@ namespace ArcCreate.Gameplay.Audio
         /// </summary>
         private int onPauseReturnTo = 0;
         private bool isStationary;
+        private float updatePace;
 
         public AudioSource AudioSource => audioSource;
 
@@ -132,13 +133,15 @@ namespace ArcCreate.Gameplay.Audio
             int timePassedSinceAudioStart = Mathf.RoundToInt((float)((dspTime - dspStartPlayingTime) * 1000));
             int newDspTiming = timePassedSinceAudioStart + startTime - FullOffset;
 
-            if (lastDspTiming == newDspTiming && dspTime > dspStartPlayingTime)
+            int newTiming = audioTiming + Mathf.RoundToInt(Time.deltaTime * 1000 * updatePace);
+            if (dspTime > dspStartPlayingTime)
             {
-                audioTiming += Mathf.RoundToInt(Time.deltaTime * 1000);
+                audioTiming = newTiming;
             }
-            else
+
+            if (lastDspTiming != newDspTiming)
             {
-                audioTiming = newDspTiming;
+                updatePace = 1 + (Mathf.Sign(newDspTiming - newTiming) * 0.05f);
             }
 
             timingSlider.value = (float)audioTiming / AudioLength;
@@ -279,8 +282,8 @@ namespace ArcCreate.Gameplay.Audio
         {
             Screen.autorotateToLandscapeLeft = v;
             Screen.autorotateToLandscapeRight = v;
-            Screen.autorotateToPortrait = v;
-            Screen.autorotateToPortraitUpsideDown = v;
+            Screen.autorotateToPortrait = false;
+            Screen.autorotateToPortraitUpsideDown = false;
         }
 
         private void OnMusicAudioSettings(float volume)
