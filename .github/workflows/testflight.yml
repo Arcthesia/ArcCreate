@@ -36,6 +36,7 @@ jobs:
         with:
           targetPlatform: iOS 
           buildName: ArcCreate
+          versioning: none
 
       - uses: actions/upload-artifact@v2
         with:

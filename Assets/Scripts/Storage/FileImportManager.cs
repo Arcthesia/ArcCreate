@@ -5,6 +5,7 @@ using System.Text;
 using ArcCreate.Storage.Data;
 using ArcCreate.Utility.Animation;
 using Cysharp.Threading.Tasks;
+using NativeFilePickerNamespace;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -150,6 +151,7 @@ namespace ArcCreate.Storage
                 replaceButton.onClick.AddListener(() => replacePressed = true);
                 errorConfirmButton.onClick.AddListener(HideError);
                 summaryConfirmButton.onClick.AddListener(HideSummary);
+                storageData.OnOpenFilePicker += ImportPackageFromFilePicker;
                 LoadDatabase();
 
                 Application.focusChanged += CheckPackageImport;
@@ -165,9 +167,49 @@ namespace ArcCreate.Storage
                 replaceButton.onClick.RemoveAllListeners();
                 errorConfirmButton.onClick.RemoveListener(HideError);
                 summaryConfirmButton.onClick.RemoveListener(HideSummary);
+                storageData.OnOpenFilePicker -= ImportPackageFromFilePicker;
 
                 Application.focusChanged -= CheckPackageImport;
                 Database.Dispose();
+            }
+        }
+
+        private void ImportPackageFromFilePicker()
+        {
+#if UNITY_EDITOR || UNITY_STANDALONE
+            string[] args = new string[] { ".arcpkg" };
+#elif UNITY_IOS
+            string[] args = new string[] { ".arcpkg" , "public.data", "public.archive"};
+#elif UNITY_ANDROID
+            string[] args = new string[] { ".arcpkg" , "image/*", "application/*"};
+#endif
+            try
+            {
+                if (NativeFilePicker.IsFilePickerBusy())
+                {
+                    return;
+                }
+
+                // Pick a file
+                NativeFilePicker.Permission permission = NativeFilePicker.PickFile(
+                    (path) =>
+                    {
+                        if (path == null)
+                        {
+                            Debug.Log("Operation cancelled");
+                        }
+                        else
+                        {
+                            ImportArchive(path).Forget();
+                        }
+                    }, args);
+
+                Debug.Log("Permission result: " + permission);
+            }
+            catch (Exception e)
+            {
+                DisplayError("Package", e);
+                Debug.LogError(e);
             }
         }
 
@@ -215,19 +257,6 @@ namespace ArcCreate.Storage
                 DisplayError("Package", e);
                 Debug.LogError(e);
             }
-#endif
-
-#if UNITY_IOS
-            try
-            {
-
-            }
-            catch (Exception e)
-            {
-                DisplayError("Package", e);
-                Debug.LogError(e);
-            }
-
 #endif
         }
 

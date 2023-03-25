@@ -1,6 +1,4 @@
-using System.Collections;
 using System.IO;
-using System.Linq;
 using ArcCreate.ChartFormat;
 using ArcCreate.Gameplay.Audio;
 using ArcCreate.Gameplay.Chart;
@@ -11,7 +9,6 @@ using ArcCreate.SceneTransition;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.SceneManagement;
 
 namespace ArcCreate.Gameplay
 {
@@ -30,13 +27,6 @@ namespace ArcCreate.Gameplay
         [SerializeField] private Camera backgroundCamera;
         [SerializeField] private Camera overlayCamera;
         [SerializeField] private string testPlayChartFileName = "test_chart.aff";
-        [SerializeField] private Camera gameplayCamera;
-        [SerializeField] private Camera arcCamera;
-        [SerializeField] private Camera uiCamera;
-        [SerializeField] private string testPlayChartDirectory = "";
-
-        public GameObject RemoteListeningHUD;
-        public GameObject RemoteReceivingHUD;
 
         public bool ShouldUpdateInputSystem
         {
@@ -80,26 +70,8 @@ namespace ArcCreate.Gameplay
             Services.Judgement.SetDebugDisplayMode(enable);
         }
 
-
         public override void OnNoBootScene()
         {
-            // Load test chart
-            /* string path = Path.Combine(Application.streamingAssetsPath, testPlayChartDirectory);
-             if (Application.platform == RuntimePlatform.Android)
-             {
-                 ImportTestChartAndroid(path).Forget();
-             }
-             else
-             {
-                 ImportTestChart(path);
-             }
-
-             Settings.InputMode.Value = (int)InputMode.Mouse;
-             Services.Judgement.SetDebugDisplayMode(false);
-             Services.Scenecontrol.WaitForSceneLoad();
-             //Services.Judgement.SetDebugDisplayMode(false);
-             */
-
             // Load test chart
             string path = Path.Combine(Application.streamingAssetsPath, testPlayChartFileName);
             if (Application.platform == RuntimePlatform.Android)
@@ -116,8 +88,6 @@ namespace ArcCreate.Gameplay
             Services.Scenecontrol.WaitForSceneLoad();
         }
 
-
-
         protected override void OnSceneLoad()
         {
             if (Application.platform == RuntimePlatform.Android
@@ -128,47 +98,6 @@ namespace ArcCreate.Gameplay
 
             Time.timeScale = 1;
         }
-
-        /*protected override void OnSceneLoad()
-        {
-            Application.targetFrameRate = Screen.currentResolution.refreshRate;
-
-            SceneTransitionManager sceneTransitionManager = SceneTransitionManager.Instance;
-
-            //sceneTransitionManager.OldInputSystem.SetActive(false);
-            //sceneTransitionManager.NewInputSystem.SetActive(true);
-
-            if (Application.platform == RuntimePlatform.Android
-             || Application.platform == RuntimePlatform.IPhonePlayer)
-            {
-                
-                Settings.InputMode.Value = (int)InputMode.Touch;
-            }
-            else
-            {
-                Settings.InputMode.Value = (int)InputMode.Mouse;
-            }
- 
-            if(sceneTransitionManager.shouldLoadTestChart)
-            {
-                sceneTransitionManager.shouldLoadTestChart = false;
-
-                // Load test chart
-                testPlayChartDirectory = SceneTransitionManager.Instance.currentTestSongDirectory;
-                string path = Path.Combine(Application.streamingAssetsPath, testPlayChartDirectory);
-                testPlayChartDirectory = path;
-                if (Application.platform == RuntimePlatform.Android)
-                {
-                    ImportTestChartAndroid(path).Forget();
-                }
-                else
-                {
-                    ImportTestChart(path);
-                }
-          
-                Services.Judgement.SetDebugDisplayMode(false);
-            }
-        }*/
 
         private async UniTask ImportTestChartAndroid(string path)
         {
@@ -193,16 +122,13 @@ namespace ArcCreate.Gameplay
 
         private void ImportTestChart(string path)
         {
-            string chartPath = Path.Combine(testPlayChartDirectory, "2.aff");
-            ChartReader reader = ChartReaderFactory.GetReader(new PhysicalFileAccess(), chartPath);
+            ChartReader reader = ChartReaderFactory.GetReader(new PhysicalFileAccess(), path);
             reader.Parse();
 
-            string audioPath = Path.Combine(testPlayChartDirectory, "base.wav");
-            gameplayData.LoadAudio(audioPath);
-
+            gameplayData.AudioClip.Value = testAudio;
             chartService.LoadChart(reader);
 
-            Audio.PlayImmediately(0);
+            Audio.PlayWithDelay(0, 2000);
         }
 
         private void Update()
@@ -211,7 +137,6 @@ namespace ArcCreate.Gameplay
             {
                 return;
             }
-
 
             Services.Audio.UpdateTime();
             Services.Particle.UpdateParticles();

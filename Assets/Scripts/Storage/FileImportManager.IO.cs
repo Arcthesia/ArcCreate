@@ -79,7 +79,7 @@ namespace ArcCreate.Storage
                     continue;
                 }
 
-                string path = Path.Combine(FileStatics.TempImportPath, entry.FullName);
+                string path = Path.Combine(FileStatics.TempImportPath, entry.FullName.Replace("\\", "/"));
                 if (!Directory.Exists(Path.GetDirectoryName(path)))
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(path));

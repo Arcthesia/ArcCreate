@@ -26,6 +26,8 @@ namespace ArcCreate.Storage
 
         public event Action OnSwitchToGameplayScene;
 
+        public event Action OnOpenFilePicker;
+
         public event Action<Exception> OnSwitchToGameplaySceneException;
 
         public State<PackStorage> SelectedPack { get; } = new State<PackStorage>();
@@ -106,6 +108,11 @@ namespace ArcCreate.Storage
             SelectedChart.SetValueWithoutNotify(GetLastSelectedChart(SelectedPack.Value?.Identifier));
             OnStorageChange?.Invoke();
             IsTransitioning = false;
+        }
+
+        public void NotifyOpenFilePicker()
+        {
+            OnOpenFilePicker?.Invoke();
         }
 
         public async UniTask AssignTexture(RawImage jacket, IStorageUnit level, string jacketPath)

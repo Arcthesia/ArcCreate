@@ -2,8 +2,6 @@
 {
     public static class SceneNames
     {
-        public const string TitleScene = "Title";
-        public const string SongSelectScene = "Select";
         public const string BootScene = "Boot";
         public const string ComposeScene = "Compose";
         public const string GameplayScene = "Gameplay";

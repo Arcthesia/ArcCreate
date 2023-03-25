@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 namespace ArcCreate.SceneTransition
@@ -36,14 +35,6 @@ namespace ArcCreate.SceneTransition
         public Action OnTransitionEnd { get; set; }
 
         public TransitionState TransitionState => transitionState;
-
-        public GameObject NewInputSystem;
-        public GameObject OldInputSystem;
-        public bool shouldLoadTestChart = false;
-        public string currentTestSongDirectory = "";
-        public const string TestSongDirectory1 = "In Your Mind";
-        public const string TestSongDirectory2 = "Unfitting Facade";
-        public const string TestSongDirectory3 = "Overload";
 
         /// <summary>
         /// Called if game started without boot scene.
