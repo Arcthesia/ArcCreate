@@ -12,60 +12,60 @@
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
         <category android:name="android.intent.category.OPENABLE" />
-        <data android:scheme="http" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\.arcpkg" />
-        <data android:scheme="file" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\.arcpkg" />
-        <data android:scheme="https" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\.arcpkg" />
-        <data android:scheme="content" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\.arcpkg" />
-        <data android:scheme="http" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\.arcpkg" />
-        <data android:scheme="file" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\.arcpkg" />
-        <data android:scheme="https" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\.arcpkg" />
-        <data android:scheme="content" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\.arcpkg" />
-        <data android:scheme="http" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="file" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="https" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="content" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="http" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="file" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="https" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="content" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="http" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="file" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="https" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="content" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="http" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="file" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="https" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="content" android:host="*" android:port="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="http" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\.arcpkg" />
+        <data android:scheme="file" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\.arcpkg" />
+        <data android:scheme="https" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\.arcpkg" />
+        <data android:scheme="content" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\.arcpkg" />
+        <data android:scheme="http" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\.arcpkg" />
+        <data android:scheme="file" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\.arcpkg" />
+        <data android:scheme="https" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\.arcpkg" />
+        <data android:scheme="content" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\.arcpkg" />
+        <data android:scheme="http" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="file" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="https" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="content" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="http" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="file" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="https" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="content" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="http" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="file" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="https" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="content" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="http" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="file" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="https" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="content" android:host="*" android:mimeType="*/*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
       </intent-filter>
       <intent-filter android:priority="999" android:label="ArcCreate Package">
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
         <category android:name="android.intent.category.OPENABLE" />
-        <data android:scheme="http" android:host="*" android:port="*" android:pathPattern=".*\\.arcpkg" />
-        <data android:scheme="file" android:host="*" android:port="*" android:pathPattern=".*\\.arcpkg" />
-        <data android:scheme="https" android:host="*" android:port="*" android:pathPattern=".*\\.arcpkg" />
-        <data android:scheme="content" android:host="*" android:port="*" android:pathPattern=".*\\.arcpkg" />
-        <data android:scheme="http" android:host="*" android:port="*" android:pathPattern=".*\\..*\\.arcpkg" />
-        <data android:scheme="file" android:host="*" android:port="*" android:pathPattern=".*\\..*\\.arcpkg" />
-        <data android:scheme="https" android:host="*" android:port="*" android:pathPattern=".*\\..*\\.arcpkg" />
-        <data android:scheme="content" android:host="*" android:port="*" android:pathPattern=".*\\..*\\.arcpkg" />
-        <data android:scheme="http" android:host="*" android:port="*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="file" android:host="*" android:port="*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="https" android:host="*" android:port="*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="content" android:host="*" android:port="*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="http" android:host="*" android:port="*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="file" android:host="*" android:port="*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="https" android:host="*" android:port="*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="content" android:host="*" android:port="*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="http" android:host="*" android:port="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="file" android:host="*" android:port="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="https" android:host="*" android:port="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="content" android:host="*" android:port="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="http" android:port="*" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="file" android:port="*" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="https" android:port="*" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
-        <data android:scheme="content" android:port="*" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="http" android:host="*" android:pathPattern=".*\\.arcpkg" />
+        <data android:scheme="file" android:host="*" android:pathPattern=".*\\.arcpkg" />
+        <data android:scheme="https" android:host="*" android:pathPattern=".*\\.arcpkg" />
+        <data android:scheme="content" android:host="*" android:pathPattern=".*\\.arcpkg" />
+        <data android:scheme="http" android:host="*" android:pathPattern=".*\\..*\\.arcpkg" />
+        <data android:scheme="file" android:host="*" android:pathPattern=".*\\..*\\.arcpkg" />
+        <data android:scheme="https" android:host="*" android:pathPattern=".*\\..*\\.arcpkg" />
+        <data android:scheme="content" android:host="*" android:pathPattern=".*\\..*\\.arcpkg" />
+        <data android:scheme="http" android:host="*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="file" android:host="*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="https" android:host="*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="content" android:host="*" android:pathPattern=".*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="http" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="file" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="https" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="content" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="http" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="file" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="https" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="content" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="http" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="file" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="https" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
+        <data android:scheme="content" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.arcpkg" />
       </intent-filter>
     </activity>
   </application>

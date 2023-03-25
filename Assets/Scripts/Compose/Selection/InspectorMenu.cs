@@ -470,29 +470,44 @@ namespace ArcCreate.Compose.Selection
         {
             if (tg.GroupProperties.Editable)
             {
+                HashSet<Note> notes = new HashSet<Note>();
+                foreach (var note in selected)
+                {
+                    if (note is Arc arc)
+                    {
+                        foreach (var at in Services.Gameplay.Chart.GetAll<ArcTap>().Where(at => at.Arc == arc))
+                        {
+                            notes.Add(at);
+                        }
+
+                        notes.Add(note);
+                    }
+                    else if (note is ArcTap)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        notes.Add(note);
+                    }
+                }
+
                 ModifyNotes<Note>(
-                    ev => !(ev is ArcTap) && ev.TimingGroup != tg.GroupNumber,
+                    ev => ev.TimingGroup != tg.GroupNumber,
                     ev =>
                     {
                         ev.TimingGroup = tg.GroupNumber;
-                        if (ev is Arc arc)
-                        {
-                            foreach (var at in Services.Gameplay.Chart.GetAll<ArcTap>().Where(at => at.Arc == arc))
-                            {
-                                ev.TimingGroup = tg.GroupNumber;
-                            }
-                        }
-                    });
+                    }, customList: notes);
             }
 
             groupField.SetValueWithoutNotify(selected.First().TimingGroupInstance);
         }
 
-        private void ModifyNotes<T>(Func<T, bool> include, Action<T> modifier, Func<T, bool> requirement = null)
+        private void ModifyNotes<T>(Func<T, bool> include, Action<T> modifier, Func<T, bool> requirement = null, HashSet<Note> customList = null)
             where T : ArcEvent
         {
             List<(ArcEvent instance, ArcEvent newValue)> batch = new List<(ArcEvent instance, ArcEvent newValue)>();
-            foreach (Note n in selected)
+            foreach (Note n in customList ?? selected)
             {
                 if (n is T note && include.Invoke(note))
                 {

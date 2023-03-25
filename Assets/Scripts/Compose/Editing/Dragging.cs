@@ -99,6 +99,10 @@ namespace ArcCreate.Compose.Editing
                         if (note is Arc arc)
                         {
                             limitUpper = Mathf.Min(limitUpper, arc.EndTiming);
+                            foreach (var at in Services.Gameplay.Chart.GetAll<ArcTap>().Where(at => at.Arc == arc))
+                            {
+                                limitUpper = Mathf.Min(limitUpper, at.Timing);
+                            }
                         }
                     }
                 }
@@ -113,6 +117,14 @@ namespace ArcCreate.Compose.Editing
                         dragEnd.Add(clone);
 
                         limitLower = Mathf.Max(limitLower, l.Timing + (note is Hold ? 1 : 0));
+                    }
+
+                    if (note is Arc arc)
+                    {
+                        foreach (var at in Services.Gameplay.Chart.GetAll<ArcTap>().Where(at => at.Arc == arc))
+                        {
+                            limitLower = Mathf.Max(limitLower, at.Timing);
+                        }
                     }
                 }
             }
