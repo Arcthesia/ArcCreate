@@ -54,7 +54,6 @@ namespace ArcCreate.Gameplay.Hitsound
                 if ((muted ^ isFromJudgement) && !string.IsNullOrEmpty(sfx) && sfxClips.TryGetValue(sfx, out AudioClip clip))
                 {
                     musicAudioSource.PlayOneShot(clip);
-                    print("Played clip");
                 }
                 else if (!muted && isFromJudgement)
                 {

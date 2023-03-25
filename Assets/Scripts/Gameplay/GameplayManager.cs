@@ -33,7 +33,7 @@ namespace ArcCreate.Gameplay
         [SerializeField] private Camera gameplayCamera;
         [SerializeField] private Camera arcCamera;
         [SerializeField] private Camera uiCamera;
-        [SerializeField] private string testPlayChartDirectory= "";
+        [SerializeField] private string testPlayChartDirectory = "";
 
         public GameObject RemoteListeningHUD;
         public GameObject RemoteReceivingHUD;
@@ -116,7 +116,7 @@ namespace ArcCreate.Gameplay
             Services.Scenecontrol.WaitForSceneLoad();
         }
 
-        
+
 
         protected override void OnSceneLoad()
         {
@@ -126,22 +126,7 @@ namespace ArcCreate.Gameplay
                 Settings.InputMode.Value = (int)InputMode.Touch;
             }
 
-            UnityEngine.SceneManagement.Scene[] scenes = SceneManager.GetAllScenes();
-
-            foreach (UnityEngine.SceneManagement.Scene scene in scenes)
-            {
-                if(scene.name == "Remote")
-                {
-                    RemoteListeningHUD = GameObject.Find("Listening");
-                    RemoteReceivingHUD = GameObject.Find("Receiving");
-                    RemoteReceivingHUD.SetActive(false);
-
-                    PauseMenu pMenu = GameObject.Find("AudioService").GetComponent<PauseMenu>();
-                    pMenu.gameplayManager = this;
-                    pMenu.inRemote = true;
-                    break;
-                }
-            }
+            Time.timeScale = 1;
         }
 
         /*protected override void OnSceneLoad()
@@ -214,9 +199,9 @@ namespace ArcCreate.Gameplay
 
             string audioPath = Path.Combine(testPlayChartDirectory, "base.wav");
             gameplayData.LoadAudio(audioPath);
-            
+
             chartService.LoadChart(reader);
-            
+
             Audio.PlayImmediately(0);
         }
 

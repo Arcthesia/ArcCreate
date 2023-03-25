@@ -31,7 +31,7 @@ namespace ArcCreate.Compose.Grid
                 }
 
                 float distanceBetweenTwoLine =
-                    currentTiming.Bpm == 0 ?
+                    currentTiming.Bpm * Values.BeatlineDensity.Value == 0 ?
                     float.MaxValue :
                     60000f / Mathf.Abs(currentTiming.Bpm) / Values.BeatlineDensity.Value;
                 distanceBetweenTwoLine = Mathf.Max(distanceBetweenTwoLine, 1);
@@ -60,7 +60,7 @@ namespace ArcCreate.Compose.Grid
                 }
 
                 float distanceBetweenTwoLine =
-                    lastTiming.Bpm == 0 ?
+                    lastTiming.Bpm * Values.BeatlineDensity.Value == 0 ?
                     float.MaxValue :
                     60000f / Mathf.Abs(lastTiming.Bpm) / Values.BeatlineDensity.Value;
                 distanceBetweenTwoLine = Mathf.Max(distanceBetweenTwoLine, 1);
