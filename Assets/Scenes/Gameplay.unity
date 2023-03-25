@@ -1082,7 +1082,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 33.00006, y: -16}
+  m_AnchoredPosition: {x: 33, y: -16}
   m_SizeDelta: {x: 616, y: 314}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &246210309
@@ -4035,7 +4035,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 0.205
+  m_PixelsPerUnitMultiplier: 0.204
 --- !u!222 &802200425
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4162,8 +4162,7 @@ MonoBehaviour:
   m_text: Retry
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 41ceab91f4e8eea15bdc790d32319be5, type: 2}
-  m_sharedMaterial: {fileID: -3874562187620930737, guid: 41ceab91f4e8eea15bdc790d32319be5,
-    type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 2059a3839629e4b48a0f6486d9c7fb60, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4739,8 +4738,7 @@ MonoBehaviour:
   m_text: Resume
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 41ceab91f4e8eea15bdc790d32319be5, type: 2}
-  m_sharedMaterial: {fileID: -3874562187620930737, guid: 41ceab91f4e8eea15bdc790d32319be5,
-    type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 2059a3839629e4b48a0f6486d9c7fb60, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5200,7 +5198,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 242594563
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!1 &1048608175
 GameObject:
@@ -5394,8 +5392,7 @@ MonoBehaviour:
   m_text: Return
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 41ceab91f4e8eea15bdc790d32319be5, type: 2}
-  m_sharedMaterial: {fileID: -3874562187620930737, guid: 41ceab91f4e8eea15bdc790d32319be5,
-    type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 2059a3839629e4b48a0f6486d9c7fb60, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5705,7 +5702,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 1
-  m_SortingLayerID: 242594563
+  m_SortingLayerID: 1732165149
   m_SortingOrder: 9
   m_TargetDisplay: 0
 --- !u!224 &1060812227
@@ -6911,7 +6908,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
-  m_SortingLayerID: 242594563
+  m_SortingLayerID: 1732165149
   m_SortingOrder: 50
   m_TargetDisplay: 0
 --- !u!1 &1405293679
@@ -8763,7 +8760,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -118, y: -23}
+  m_AnchoredPosition: {x: -118.000015, y: -23}
   m_SizeDelta: {x: 237.33, y: 99}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1843374748

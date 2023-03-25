@@ -14,7 +14,7 @@ namespace ArcCreate.SceneTransition
         public const float WaitBetweenSeconds = WaitBetweenMs / 1000f;
         public const float FullSequenceSeconds = FullSequenceMs / 1000f;
 
-        [SerializeField] private Canvas canvas;
+        [SerializeField] private Canvas[] canvases;
 
         [SerializeField] private AudioClip closeAudio;
         [SerializeField] private AudioClip openAudio;
@@ -65,23 +65,28 @@ namespace ArcCreate.SceneTransition
 
         public void SetTargetCamera(Camera camera, string layer = null)
         {
-            if (camera == null)
+            foreach (var canvas in canvases)
             {
-                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            }
-            else
-            {
-                canvas.renderMode = RenderMode.ScreenSpaceCamera;
-                canvas.worldCamera = camera;
-                canvas.sortingLayerName = layer;
+                if (camera == null)
+                {
+                    canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                }
+                else
+                {
+                    canvas.renderMode = RenderMode.ScreenSpaceCamera;
+                    canvas.worldCamera = camera;
+                    canvas.sortingLayerName = layer;
+                }
             }
         }
 
         private void Awake()
         {
             StartLoadingExternalAudio().Forget();
+
             animator.Hide();
             gameObject.SetActive(false);
+
             Instance = this;
         }
 
@@ -92,6 +97,7 @@ namespace ArcCreate.SceneTransition
             ExternalStartAudio = new ExternalAudioClip(startAudio, "AudioClips");
 
             await UniTask.WhenAll(ExternalCloseAudio.Load(), ExternalOpenAudio.Load(), ExternalStartAudio.Load());
+            gameObject.SetActive(false);
         }
 
         private void OnDestroy()

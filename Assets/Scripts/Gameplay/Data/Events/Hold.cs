@@ -167,7 +167,7 @@ namespace ArcCreate.Gameplay.Data
             color.a *= alpha;
 
             float from = 0;
-            if (!locked || groupProperties.NoInput)
+            if ((!locked || groupProperties.NoInput) && !groupProperties.NoClip)
             {
                 from = (float)((currentFloorPosition - FloorPosition) / (EndFloorPosition - FloorPosition));
             }

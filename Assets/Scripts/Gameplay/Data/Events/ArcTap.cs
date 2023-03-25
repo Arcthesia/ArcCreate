@@ -89,7 +89,7 @@ namespace ArcCreate.Gameplay.Data
 
         public void UpdateRender(int currentTiming, double currentFloorPosition, GroupProperties groupProperties)
         {
-            if (isHit)
+            if (isHit && !groupProperties.NoClip)
             {
                 return;
             }

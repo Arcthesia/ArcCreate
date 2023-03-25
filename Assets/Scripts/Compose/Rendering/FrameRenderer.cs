@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using ArcCreate.Compose.Components;
 using ArcCreate.SceneTransition;
 using Cysharp.Threading.Tasks;
 using Unity.Collections;
@@ -23,6 +24,7 @@ namespace ArcCreate.Compose.Rendering
         private readonly int crf;
         private readonly float fps;
         private readonly AudioRenderer audioRenderer;
+        private readonly GameplayViewport gameplayViewport;
         private readonly int width;
         private readonly int height;
         private readonly bool showShutter;
@@ -38,7 +40,8 @@ namespace ArcCreate.Compose.Rendering
             int from,
             int to,
             AudioRenderer audioRenderer,
-            bool showShutter)
+            bool showShutter,
+            GameplayViewport gameplayViewport)
         {
             this.audioRenderer = audioRenderer;
             this.width = width;
@@ -48,6 +51,7 @@ namespace ArcCreate.Compose.Rendering
             this.showShutter = showShutter;
             this.crf = crf;
             this.fps = fps;
+            this.gameplayViewport = gameplayViewport;
 
             startRenderingTime = from / 1000f;
             endRenderingTime = to / 1000f;
@@ -81,6 +85,10 @@ namespace ArcCreate.Compose.Rendering
 
             ITransition shutterTransition = new ShutterWithInfoTransition();
             RenderTexture activeRT = RenderTexture.active;
+            gameplayViewport.enabled = false;
+            Services.Gameplay.SetCameraViewportRect(new Rect(0, 0, 1, 1));
+            Services.Gameplay.SetCameraEnabled(true);
+            Services.Gameplay.Audio.IsRendering = true;
             foreach (Camera cam in cameras)
             {
                 cam.targetTexture = renderTexture;
@@ -212,7 +220,10 @@ namespace ArcCreate.Compose.Rendering
                 }
 
                 Time.captureFramerate = 0;
+                Time.timeScale = 1;
                 shutterTransition.EndTransition().ContinueWith(shutterTransition.DisableGameObject).Forget();
+                gameplayViewport.enabled = true;
+                Services.Gameplay.Audio.IsRendering = false;
             }
         }
 

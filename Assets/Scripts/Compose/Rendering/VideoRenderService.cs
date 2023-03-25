@@ -31,6 +31,7 @@ namespace ArcCreate.Compose.Rendering
         [SerializeField] private Toggle showShutterToggle;
         [SerializeField] private Button startButton;
         [SerializeField] private MarkerRange renderRangeMarker;
+        [SerializeField] private GameplayViewport gameplayViewport;
 
         [Header("Render in progress")]
         [SerializeField] private GameObject renderInProgressIndicator;
@@ -38,7 +39,7 @@ namespace ArcCreate.Compose.Rendering
         [SerializeField] private TMP_Text renderStatusText;
         [SerializeField] private Button cancelButton;
 
-        private CancellationTokenSource cts;
+        private CancellationTokenSource cts = new CancellationTokenSource();
 
         private int from;
         private int to;
@@ -101,7 +102,8 @@ namespace ArcCreate.Compose.Rendering
                 from: from,
                 to: to,
                 showShutter: showShutterToggle.isOn,
-                audioRenderer: audioRenderer))
+                audioRenderer: audioRenderer,
+                gameplayViewport: gameplayViewport))
             {
                 renderPreview.texture = renderer.Texture2D;
 
@@ -129,6 +131,8 @@ namespace ArcCreate.Compose.Rendering
 
         private void Awake()
         {
+            Time.timeScale = 1;
+
             ffmpegPathField.OnValueChanged += OnFFmpegPath;
             fromTimingField.onEndEdit.AddListener(OnTimingFields);
             toTimingField.onEndEdit.AddListener(OnTimingFields);
