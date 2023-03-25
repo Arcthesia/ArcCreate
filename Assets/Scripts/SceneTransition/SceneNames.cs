@@ -2,6 +2,8 @@
 {
     public static class SceneNames
     {
+        public const string TitleScene = "Title";
+        public const string SongSelectScene = "Select";
         public const string BootScene = "Boot";
         public const string ComposeScene = "Compose";
         public const string GameplayScene = "Gameplay";
@@ -10,7 +12,7 @@
         public const string StorageScene = "Storage";
 
 #if UNITY_EDITOR || UNITY_STANDALONE
-        public const string DefaultScene = ComposeScene;
+        public const string DefaultScene = SelectScene;
 #else
         public const string DefaultScene = SelectScene;
 #endif

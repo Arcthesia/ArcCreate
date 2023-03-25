@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311926, g: 0.38073993, b: 0.35872683, a: 1}
+  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.35872698, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -8808,7 +8808,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1843374749}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 744329227}
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1843374749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11100,11 +11111,15 @@ MonoBehaviour:
   audioService: {fileID: 744329227}
   cameraService: {fileID: 842073648}
   scenecontrolService: {fileID: 1382682619}
-  testAudio: {fileID: 8300000, guid: c277ac71a78e6c24e81cf0d7cb9a5fc3, type: 3}
+  testAudio: {fileID: 0}
   gameplayData: {fileID: 11400000, guid: ae19a07671eb9dc748d6346649a697b7, type: 2}
   backgroundCamera: {fileID: 613949612}
   overlayCamera: {fileID: 2036585311}
   testPlayChartFileName: test_chart.aff
+  gameplayCamera: {fileID: 0}
+  arcCamera: {fileID: 0}
+  uiCamera: {fileID: 0}
+  testPlayChartDirectory: 
 --- !u!1 &2141704179
 GameObject:
   m_ObjectHideFlags: 0

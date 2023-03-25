@@ -80,6 +80,7 @@ namespace ArcCreate.SceneTransition
         private void Awake()
         {
             StartLoadingExternalAudio().Forget();
+            animator.Hide();
             gameObject.SetActive(false);
             Instance = this;
         }

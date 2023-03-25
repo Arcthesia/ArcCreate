@@ -3,6 +3,8 @@ using ArcCreate.SceneTransition;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using ArcCreate.Gameplay;
+using System.Linq.Expressions;
 
 namespace ArcCreate.Gameplay.Audio
 {
@@ -13,6 +15,8 @@ namespace ArcCreate.Gameplay.Audio
         [SerializeField] private Button playButton;
         [SerializeField] private Button retryButton;
         [SerializeField] private Button returnButton;
+        public bool inRemote = false;
+        public GameplayManager gameplayManager;
 
         private void Awake()
         {
@@ -32,6 +36,14 @@ namespace ArcCreate.Gameplay.Audio
 
         private void OnPauseButton()
         {
+            if(inRemote)
+            {
+                if (gameplayManager.RemoteListeningHUD.activeSelf == true || gameplayManager.RemoteReceivingHUD.activeSelf == true)
+                {
+                    return;
+                }
+            }
+
             if (Values.EnablePauseMenu)
             {
                 pauseScreen.SetActive(true);

@@ -215,6 +215,19 @@ namespace ArcCreate.Storage
                 Debug.LogError(e);
             }
 #endif
+
+#if UNITY_IOS
+            try
+            {
+
+            }
+            catch (Exception e)
+            {
+                DisplayError("Package", e);
+                Debug.LogError(e);
+            }
+
+#endif
         }
 
         private void ClearError()

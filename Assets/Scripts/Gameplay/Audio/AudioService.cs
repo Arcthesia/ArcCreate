@@ -132,9 +132,9 @@ namespace ArcCreate.Gameplay.Audio
 
             int timePassedSinceAudioStart = Mathf.RoundToInt((float)((dspTime - dspStartPlayingTime) * 1000));
             int newDspTiming = timePassedSinceAudioStart + startTime - FullOffset;
-
+            //
             int newTiming = audioTiming + Mathf.RoundToInt(Time.deltaTime * 1000 * updatePace);
-            if (dspTime > dspStartPlayingTime)
+            if (dspTime >= dspStartPlayingTime)
             {
                 audioTiming = newTiming;
             }
@@ -143,9 +143,22 @@ namespace ArcCreate.Gameplay.Audio
             {
                 updatePace = 1 + (Mathf.Sign(newDspTiming - newTiming) * 0.05f);
             }
+            //
 
             timingSlider.value = (float)audioTiming / AudioLength;
             lastDspTiming = newDspTiming;
+        }
+
+        public void PauseButtonPressed()
+        {
+            if (!IsPlaying)
+            {
+                ResumeImmediately();
+            }
+            else
+            {
+                Pause();
+            }
         }
 
         public void Pause()

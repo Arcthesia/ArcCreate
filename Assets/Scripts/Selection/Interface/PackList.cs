@@ -49,6 +49,8 @@ namespace ArcCreate.Selection.Interface
             {
                 RebuildList();
             }
+
+            BackToPackList();
         }
 
         private void OnDestroy()

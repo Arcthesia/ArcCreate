@@ -26,6 +26,7 @@ namespace ArcCreate.Remote.Gameplay
         [SerializeField] private Color errorColor;
         [SerializeField] private Color normalColor;
         [SerializeField] private Button startManualIpButton;
+        [SerializeField] private Button returnToSelectButton;
         [SerializeField] private RemoteGameplayControl remoteGameplayControl;
         private readonly List<RemoteDeviceRow> rows = new List<RemoteDeviceRow>();
 
@@ -58,6 +59,7 @@ namespace ArcCreate.Remote.Gameplay
             cts.Dispose();
             startNewSessionButton.onClick.RemoveListener(OnStartNewSessionButton);
             startManualIpButton.onClick.RemoveListener(OnStartManualIP);
+            returnToSelectButton.onClick.RemoveListener(OnReturnToSelect);
             Application.logMessageReceived -= DisplayLog;
         }
 
@@ -65,11 +67,18 @@ namespace ArcCreate.Remote.Gameplay
         {
             startNewSessionButton.onClick.AddListener(OnStartNewSessionButton);
             startManualIpButton.onClick.AddListener(OnStartManualIP);
+            returnToSelectButton.onClick.AddListener(OnReturnToSelect);
             startNewSessionButton.gameObject.SetActive(false);
             selectDeviceParent.gameObject.SetActive(true);
             startManualIpButton.gameObject.SetActive(true);
             Application.logMessageReceived += DisplayLog;
             LoadGameplayScene();
+        }
+
+        private void OnReturnToSelect()
+        {
+            SceneTransitionManager.Instance.SetTransition(new ShutterTransition());
+            SceneTransitionManager.Instance.SwitchScene(SceneNames.SelectScene).Forget();
         }
 
         private void OnStartManualIP()
@@ -161,7 +170,6 @@ namespace ArcCreate.Remote.Gameplay
             gameplay.ShouldUpdateInputSystem = true;
             gameplay.Chart.EnableColliderGeneration = false;
             remoteGameplayControl.SetGameplay(gameplay);
-
             Debug.Log(I18n.S("Compose.Notify.GameplayLoaded"));
 
             StartListeningForBroadcast();

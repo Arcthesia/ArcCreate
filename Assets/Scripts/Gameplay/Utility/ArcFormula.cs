@@ -173,9 +173,10 @@ namespace ArcCreate.Gameplay
             if (z <= 0)
             {
                 return Mathf.Abs(1.5f + (6.25f * -z / Values.TrackLengthForward));
+                return Mathf.Abs(1.5f + (7.25f * -z / Values.TrackLengthForward));
             }
 
-            return Mathf.Abs(1.5f + (6.25f * z / Values.TrackLengthBackward));
+            return Mathf.Abs(1.5f + (7.25f * z / Values.TrackLengthBackward));
         }
 
         public static float CalculateBeatlineSizeScalar(float thickness, float z)
