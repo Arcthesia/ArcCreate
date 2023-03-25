@@ -197,7 +197,8 @@ namespace ArcCreate.Gameplay.Data
                 clipToTiming,
                 clipToFloorPosition,
                 groupProperties.FallDirection,
-                z);
+                z,
+                groupProperties.NoClip);
 
             for (int i = 0; i < segments.Count; i++)
             {
@@ -238,7 +239,7 @@ namespace ArcCreate.Gameplay.Data
                 }
             }
 
-            if (clipToTiming <= Timing && ShouldDrawHeightIndicator)
+            if ((clipToTiming <= Timing || groupProperties.NoClip) && ShouldDrawHeightIndicator)
             {
                 SpriteRenderProperties heightIndicatorProperties = new SpriteRenderProperties
                 {
@@ -250,7 +251,7 @@ namespace ArcCreate.Gameplay.Data
                 Services.Render.DrawHeightIndicator(matrix * heightIndicatorMatrix, heightIndicatorProperties);
             }
 
-            if (clipToTiming <= Timing && IsFirstArcOfGroup)
+            if ((clipToTiming <= Timing || groupProperties.NoClip) && IsFirstArcOfGroup)
             {
                 ArcRenderProperties properties = new ArcRenderProperties
                 {
@@ -425,16 +426,17 @@ namespace ArcCreate.Gameplay.Data
             int clipToTiming,
             double clipToFloorPosition,
             Vector3 fallDirection,
-            float z)
+            float z,
+            bool noclip)
         {
             for (int i = 0; i < segments.Count; i++)
             {
                 ArcSegmentData segment = segments[i];
-                if (clipToTiming >= segment.EndTiming && currentTiming >= segment.EndTiming)
+                if (clipToTiming >= segment.EndTiming && currentTiming >= segment.EndTiming && !noclip)
                 {
                     segment.From = 1;
                 }
-                else if (clipToTiming <= segment.Timing)
+                else if (clipToTiming <= segment.Timing || noclip)
                 {
                     segment.From = 0;
                 }

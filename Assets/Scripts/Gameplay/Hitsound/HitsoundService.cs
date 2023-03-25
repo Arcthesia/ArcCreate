@@ -93,7 +93,7 @@ namespace ArcCreate.Gameplay.Hitsound
                     finalSfx = sfx.Substring(0, sfx.Length - "_wav".Length) + ".wav";
                 }
 
-                if (!sfx.EndsWith(".wav"))
+                if (!finalSfx.EndsWith(".wav"))
                 {
                     finalSfx = finalSfx + ".wav";
                 }

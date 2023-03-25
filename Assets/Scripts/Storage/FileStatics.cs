@@ -28,5 +28,11 @@ namespace ArcCreate.Storage
         public static readonly string TempPath = Path.Combine(Application.persistentDataPath, "Temporary");
 #endif
         public static readonly string TempImportPath = Path.Combine(TempPath, "import");
+
+#if UNITY_EDITOR
+        public static readonly string CheckImportPath = Path.Combine(Application.dataPath, ".checkimport");
+#else
+        public static readonly string CheckImportPath = Path.Combine(Application.persistentDataPath, "Import");
+#endif
     }
 }

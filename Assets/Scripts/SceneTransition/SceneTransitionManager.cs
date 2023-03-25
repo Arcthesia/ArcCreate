@@ -134,6 +134,7 @@ namespace ArcCreate.SceneTransition
         private void Awake()
         {
             Instance = this;
+            Time.timeScale = 1;
             LoadDefaultScene().Forget();
         }
 

@@ -80,7 +80,6 @@ jobs:
           find $IOS_BUILD_PATH -type f -name "**.sh" -exec chmod +x {} \;
           bundle install
           bundle exec fastlane ios beta
-          bundle exec fastlane action update_info_plist
 
       - name: Cleanup to avoid storage limit
         if: always()

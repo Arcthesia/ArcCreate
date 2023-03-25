@@ -153,6 +153,7 @@ namespace ArcCreate.Storage
                 LoadDatabase();
 
                 Application.focusChanged += CheckPackageImport;
+                CheckPackageImportInPersistentDirectory().Forget();
             }
         }
 
@@ -215,6 +216,48 @@ namespace ArcCreate.Storage
                 Debug.LogError(e);
             }
 #endif
+        }
+
+        private async UniTask CheckPackageImportInPersistentDirectory()
+        {
+            await UniTask.DelayFrame(10);
+            DirectoryInfo dir = new DirectoryInfo(Path.Combine(FileStatics.CheckImportPath));
+            if (!dir.Exists)
+            {
+                Directory.CreateDirectory(dir.FullName);
+                return;
+            }
+
+            string error = string.Empty;
+
+            List<FileInfo> imported = new List<FileInfo>();
+            foreach (FileInfo fileInfo in dir.EnumerateFiles())
+            {
+                print(fileInfo.FullName);
+                if (fileInfo.Extension == ".arcpkg")
+                {
+                    try
+                    {
+                        await ImportArchive(fileInfo.FullName);
+                        imported.Add(fileInfo);
+                    }
+                    catch (Exception e)
+                    {
+                        error += e.Message + "\n";
+                    }
+                }
+            }
+
+            foreach (FileInfo fileInfo in imported)
+            {
+                fileInfo.CopyTo(fileInfo.FullName + ".imported");
+                fileInfo.Delete();
+            }
+
+            if (!string.IsNullOrEmpty(error))
+            {
+                DisplayError("Package", new Exception(error));
+            }
         }
 
         private void ClearError()
