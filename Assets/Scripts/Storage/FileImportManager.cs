@@ -9,6 +9,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using NativeFilePickerNamespace;
+using JetBrains.Annotations;
 
 namespace ArcCreate.Storage
 {
@@ -171,6 +173,84 @@ namespace ArcCreate.Storage
             }
         }
 
+        public void ImportNewArcPkg()
+        {
+#if UNITY_EDITOR || UNITY_STANDALONE
+            try
+            {
+
+                if (NativeFilePicker.IsFilePickerBusy())
+                    return;
+
+                // Pick a file
+                NativeFilePicker.Permission permission = NativeFilePicker.PickFile((path) =>
+                {
+                    if (path == null)
+                        Debug.Log("Operation cancelled");
+                    else
+                        ImportArchive(path).Forget();
+                }, new string[] { ".arcpkg" });
+
+                Debug.Log("Permission result: " + permission);
+            }
+            catch (Exception e)
+            {
+                DisplayError("Package", e);
+                Debug.LogError(e);
+            }
+
+#endif
+#if UNITY_IOS
+            try
+            {
+
+                if (NativeFilePicker.IsFilePickerBusy())
+                    return;
+
+                // Pick a file
+                NativeFilePicker.Permission permission = NativeFilePicker.PickFile((path) =>
+                {
+                    if (path == null)
+                        Debug.Log("Operation cancelled");
+                    else
+                        ImportArchive(path).Forget();
+                }, new string[] { ".arcpkg" , "public.data", "public.archive"});
+
+                Debug.Log("Permission result: " + permission);
+            }
+            catch (Exception e)
+            {
+                DisplayError("Package", e);
+                Debug.LogError(e);
+            }
+
+#endif
+#if UNITY_ANDROID
+try
+            {
+
+                if (NativeFilePicker.IsFilePickerBusy())
+                    return;
+
+                // Pick a file
+                NativeFilePicker.Permission permission = NativeFilePicker.PickFile((path) =>
+                {
+                    if (path == null)
+                        Debug.Log("Operation cancelled");
+                    else
+                        ImportArchive(path).Forget();
+                }, new string[] { ".arcpkg" , "image/*", "application/*"});
+
+                Debug.Log("Permission result: " + permission);
+            }
+            catch (Exception e)
+            {
+                DisplayError("Package", e);
+                Debug.LogError(e);
+            }
+#endif
+        }
+
         private void CheckPackageImport(bool focus)
         {
 #if UNITY_ANDROID
@@ -217,18 +297,7 @@ namespace ArcCreate.Storage
             }
 #endif
 
-#if UNITY_IOS
-            try
-            {
 
-            }
-            catch (Exception e)
-            {
-                DisplayError("Package", e);
-                Debug.LogError(e);
-            }
-
-#endif
         }
 
         private async UniTask CheckPackageImportInPersistentDirectory()

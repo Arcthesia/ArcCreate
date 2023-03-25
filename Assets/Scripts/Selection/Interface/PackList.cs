@@ -24,8 +24,10 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private Button backToPackListButton;
         [SerializeField] private Button allSongsPack;
         [SerializeField] private Button remotePack;
+        [SerializeField] private Button loadChartsPack;
         private Pool<Cell> packCellPool;
         private Tween scrollTween;
+        public FileImportManager fileImportManager;
 
         public void BackToPackList()
         {
@@ -38,6 +40,8 @@ namespace ArcCreate.Selection.Interface
 
         private void Awake()
         {
+            fileImportManager = GameObject.Find("FileManagement").GetComponent<FileImportManager>();
+
             packCellPool = Pools.New<Cell>("PackCell", packCellPrefab, scroll.transform, 5);
 
             storageData.OnStorageChange += RebuildList;
@@ -45,6 +49,8 @@ namespace ArcCreate.Selection.Interface
             backToPackListButton.onClick.AddListener(BackToPackList);
             allSongsPack.onClick.AddListener(SelectAllSongsPack);
             remotePack.onClick.AddListener(SwitchToRemoteScene);
+            loadChartsPack.onClick.AddListener(OpenChartPicker);
+            
 
             if (storageData.IsLoaded)
             {
@@ -63,6 +69,7 @@ namespace ArcCreate.Selection.Interface
             backToPackListButton.onClick.RemoveListener(BackToPackList);
             allSongsPack.onClick.RemoveListener(SelectAllSongsPack);
             remotePack.onClick.RemoveListener(SwitchToRemoteScene);
+            loadChartsPack.onClick.RemoveListener(OpenChartPicker);
         }
 
         private void SelectAllSongsPack()
@@ -75,6 +82,11 @@ namespace ArcCreate.Selection.Interface
             Services.Select.ClearSelection();
             SceneTransitionManager.Instance.SetTransition(new ShutterTransition(1000));
             SceneTransitionManager.Instance.SwitchScene(SceneNames.RemoteScene).Forget();
+        }
+
+        private void OpenChartPicker()
+        {
+            fileImportManager.ImportNewArcPkg();
         }
 
         private void OnSelectedPack(PackStorage pack)
