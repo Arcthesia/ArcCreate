@@ -119,7 +119,6 @@ namespace ArcCreate.Gameplay.Particle
         public void PlayTextParticle(Vector3 worldPosition, JudgementResult result)
         {
             Material mat = PureMaterial;
-            worldPosition.y = worldPosition.y + Values.TextParticleYOffset;
 
             if (result.IsPure())
             {
@@ -135,6 +134,7 @@ namespace ArcCreate.Gameplay.Particle
             }
 
             Vector2 screenPos = ConvertToScreen(worldPosition);
+            screenPos.y += Values.TextParticleYOffset;
             Particle ps = textParticlePool.Get();
             ps.transform.localPosition = screenPos;
             ps.Stop();

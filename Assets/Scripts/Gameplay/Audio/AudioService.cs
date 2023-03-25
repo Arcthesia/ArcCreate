@@ -87,9 +87,11 @@ namespace ArcCreate.Gameplay.Audio
 
         public bool IsPlaying { get => audioSource.isPlaying; }
 
-        public bool IsPlayingAndNotStationary { get => audioSource.isPlaying && !isStationary; }
+        public bool IsPlayingAndNotStationary { get => (audioSource.isPlaying && !isStationary) || IsRendering; }
 
         public bool IsLoaded => audioSource.clip != null;
+        
+        public bool IsRendering { get; set; }
 
         public AudioClip AudioClip
         {

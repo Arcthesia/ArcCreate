@@ -29,6 +29,7 @@ namespace ArcCreate.Selection.Interface
 
         public void BackToPackList()
         {
+            Services.Select.ClearSelection();
             packListAnimator.Show();
             levelListAnimator.Hide();
             packListCanvasGroup.interactable = true;
@@ -69,6 +70,7 @@ namespace ArcCreate.Selection.Interface
 
         private void SwitchToRemoteScene()
         {
+            Services.Select.ClearSelection();
             SceneTransitionManager.Instance.SetTransition(new ShutterTransition(1000));
             SceneTransitionManager.Instance.SwitchScene(SceneNames.RemoteScene).Forget();
         }
@@ -80,6 +82,7 @@ namespace ArcCreate.Selection.Interface
                 return;
             }
 
+            Services.Select.ClearSelection();
             packListAnimator.Hide();
             levelListAnimator.Show();
             packListCanvasGroup.interactable = false;

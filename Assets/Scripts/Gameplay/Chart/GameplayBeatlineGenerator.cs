@@ -26,7 +26,7 @@ namespace ArcCreate.Gameplay.Chart
                 if (firstTiming.Bpm <= 10000)
                 {
                     float distanceBetweenTwoLine =
-                        firstTiming.Bpm == 0 ?
+                        firstTiming.Bpm * firstTiming.Divisor == 0 ?
                         float.MaxValue :
                         60000f / Mathf.Abs(firstTiming.Bpm) * firstTiming.Divisor;
                     distanceBetweenTwoLine = Mathf.Max(distanceBetweenTwoLine, 1);
@@ -56,7 +56,7 @@ namespace ArcCreate.Gameplay.Chart
                 }
 
                 float distanceBetweenTwoLine =
-                    currentTiming.Bpm == 0 ?
+                    currentTiming.Bpm * currentTiming.Divisor == 0 ?
                     float.MaxValue :
                     60000f / Mathf.Abs(currentTiming.Bpm) * currentTiming.Divisor;
                 distanceBetweenTwoLine = Mathf.Max(distanceBetweenTwoLine, 1);
@@ -84,7 +84,7 @@ namespace ArcCreate.Gameplay.Chart
                 if (lastTiming.Bpm <= 10000)
                 {
                     float distanceBetweenTwoLine =
-                        lastTiming.Bpm == 0 ?
+                        lastTiming.Bpm * lastTiming.Divisor == 0 ?
                         float.MaxValue :
                         60000f / Mathf.Abs(lastTiming.Bpm) * lastTiming.Divisor;
                     distanceBetweenTwoLine = Mathf.Max(distanceBetweenTwoLine, 1);

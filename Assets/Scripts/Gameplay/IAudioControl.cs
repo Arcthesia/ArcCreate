@@ -36,6 +36,8 @@ namespace ArcCreate.Gameplay
 
         bool IsPlayingAndNotStationary { get; }
 
+        bool IsRendering { get; set; }
+
         AudioClip TapHitsoundClip { get; }
 
         AudioClip ArcHitsoundClip { get; }

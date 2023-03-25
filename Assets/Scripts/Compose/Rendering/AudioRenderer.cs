@@ -68,13 +68,20 @@ namespace ArcCreate.Compose.Rendering
 
             foreach (ArcTap at in arctaps)
             {
-                if (sfxSound.ContainsKey(at.Sfx))
+                if (sfxAudio.ContainsKey(at.Sfx))
                 {
-                    sfxSound[at.Sfx].Add(at);
+                    if (sfxSound.ContainsKey(at.Sfx))
+                    {
+                        sfxSound[at.Sfx].Add(at);
+                    }
+                    else if (!string.IsNullOrEmpty(at.Sfx) && at.Sfx != "none")
+                    {
+                        sfxSound.Add(at.Sfx, new List<Note> { at });
+                    }
                 }
-                else if (!string.IsNullOrEmpty(at.Sfx) && at.Sfx != "none")
+                else
                 {
-                    sfxSound.Add(at.Sfx, new List<Note> { at });
+                    arcSound.Add(at);
                 }
             }
 
@@ -175,9 +182,14 @@ namespace ArcCreate.Compose.Rendering
 
             foreach (KeyValuePair<string, List<Note>> sound in sfxSound)
             {
+                if (!sfxAudio.TryGetValue(sound.Key, out AudioClip clip))
+                {
+                    clip = arcAudio;
+                }
+
                 foreach (Note n in sound.Value)
                 {
-                    int start = TimingToSampleIndex(n.Timing, sfxAudio[sound.Key].channels, sfxAudio[sound.Key].frequency);
+                    int start = TimingToSampleIndex(n.Timing, clip.channels, clip.frequency);
                     for (int i = 0; i < sfx[sound.Key].Length; i++)
                     {
                         if (start + i < sfxSamples[sound.Key].Length)

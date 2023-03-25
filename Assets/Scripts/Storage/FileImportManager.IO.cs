@@ -177,6 +177,7 @@ namespace ArcCreate.Storage
                     {
                         toDelete.Add(conflict);
                         toStore.Add(replaceWith);
+                        replaceWith.IsDefaultAsset = conflict.IsDefaultAsset;
                     }
                     else
                     {

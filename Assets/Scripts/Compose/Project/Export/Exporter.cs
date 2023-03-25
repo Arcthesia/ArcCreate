@@ -104,6 +104,7 @@ namespace ArcCreate.Compose.Project
 
         private void WriteFileToZip(ZipArchive zip, string sourcePath, string targetPath)
         {
+            targetPath = targetPath.Replace("\\", "/");
             ZipArchiveEntry entry = zip.CreateEntry(targetPath);
             using (Stream entryStream = entry.Open())
             {

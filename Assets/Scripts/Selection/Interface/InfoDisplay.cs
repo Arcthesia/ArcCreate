@@ -23,6 +23,8 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private TMP_Text score;
         [SerializeField] private TMP_Text charter;
         [SerializeField] private Button switchDiffButton;
+        [SerializeField] private Button nextDiffButton;
+        [SerializeField] private Button nextNextDiffButton;
 
         [Header("Difficulty")]
         [SerializeField] private TMP_Text currDiffName;
@@ -58,6 +60,8 @@ namespace ArcCreate.Selection.Interface
             storage.SelectedChart.OnValueChange += OnChartChange;
             storage.OnStorageChange += OnStorageChange;
             switchDiffButton.onClick.AddListener(SwitchDifficulty);
+            nextDiffButton.onClick.AddListener(SwitchDifficulty);
+            nextNextDiffButton.onClick.AddListener(SwitchNextDifficulty);
             storage.OnSwitchToGameplaySceneException += OnGameplayException;
 
             if (storage.IsLoaded)
@@ -71,6 +75,8 @@ namespace ArcCreate.Selection.Interface
             storage.SelectedChart.OnValueChange -= OnChartChange;
             storage.OnStorageChange -= OnStorageChange;
             switchDiffButton.onClick.AddListener(SwitchDifficulty);
+            nextDiffButton.onClick.RemoveListener(SwitchDifficulty);
+            nextNextDiffButton.onClick.RemoveListener(SwitchNextDifficulty);
             storage.OnSwitchToGameplaySceneException -= OnGameplayException;
             cts.Cancel();
         }
@@ -214,6 +220,16 @@ namespace ArcCreate.Selection.Interface
 
         private void SwitchDifficulty()
         {
+            ChangeDifficulty(distance: 1);
+        }
+
+        private void SwitchNextDifficulty()
+        {
+            ChangeDifficulty(distance: 2);
+        }
+
+        private void ChangeDifficulty(int distance)
+        {
             var (level, chart) = storage.SelectedChart.Value;
             if (level == null)
             {
@@ -236,7 +252,7 @@ namespace ArcCreate.Selection.Interface
                 }
             }
 
-            ChartSettings next = level.Settings.Charts[(indexOfCurrentChart + 1) % level.Settings.Charts.Count];
+            ChartSettings next = level.Settings.Charts[(indexOfCurrentChart + distance) % level.Settings.Charts.Count];
             storage.SelectedChart.Value = (level, next);
         }
     }

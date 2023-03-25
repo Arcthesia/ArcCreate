@@ -95,6 +95,8 @@ namespace ArcCreate.Gameplay
             {
                 Settings.InputMode.Value = (int)InputMode.Touch;
             }
+            
+            Time.timeScale = 1;
         }
 
         private async UniTask ImportTestChartAndroid(string path)
