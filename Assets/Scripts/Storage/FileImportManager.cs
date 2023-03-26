@@ -5,7 +5,9 @@ using System.Text;
 using ArcCreate.Storage.Data;
 using ArcCreate.Utility.Animation;
 using Cysharp.Threading.Tasks;
+#if UNITY_IOS || UNITY_ANDROID
 using NativeFilePickerNamespace;
+#endif
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -176,13 +178,13 @@ namespace ArcCreate.Storage
 
         private void ImportPackageFromFilePicker()
         {
-#if UNITY_EDITOR || UNITY_STANDALONE
-            string[] args = new string[] { ".arcpkg" };
-#elif UNITY_IOS
+#if UNITY_IOS
             string[] args = new string[] { ".arcpkg" , "public.data", "public.archive"};
 #elif UNITY_ANDROID
-            string[] args = new string[] { ".arcpkg" , "image/*", "application/*"};
+            string[] args = new string[] { ".arcpkg", "image/*", "application/*" };
 #endif
+
+#if UNITY_IOS || UNITY_ANDROID
             try
             {
                 if (NativeFilePicker.IsFilePickerBusy())
@@ -211,6 +213,7 @@ namespace ArcCreate.Storage
                 DisplayError("Package", e);
                 Debug.LogError(e);
             }
+#endif
         }
 
         private void CheckPackageImport(bool focus)

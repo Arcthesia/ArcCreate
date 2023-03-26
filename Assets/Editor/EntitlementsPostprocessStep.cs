@@ -34,6 +34,8 @@ public class EntitlementsPostprocessStep : MonoBehaviour
 
         PlistElementDict rootDict = plist.root;
 
+        rootDict.SetString("Appearance", "Dark");
+        rootDict.SetString("UIUserInterfaceStyle", "Dark");
         PlistElementDict nsAppTransportSecurity = rootDict.CreateDict("NSAppTransportSecurity");
         nsAppTransportSecurity.SetBoolean("NSAllowsArbitraryLoads", true);
         nsAppTransportSecurity.SetBoolean("NSAllowsLocalNetworking", true);
