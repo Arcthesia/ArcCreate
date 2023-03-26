@@ -17,6 +17,10 @@ namespace ArcCreate.Gameplay.Judgement.Input
             for (int i = 0; i < touches.Count; i++)
             {
                 var touch = touches[i];
+                if (touch.phase == UnityEngine.InputSystem.TouchPhase.None)
+                {
+                    continue;
+                }
 
                 TouchInput input = new TouchInput(touch, GetCameraRay(touch.screenPosition));
                 CurrentInputs.Add(input);

@@ -67,11 +67,15 @@ namespace ArcCreate.Storage
                 }
 
                 // Hash should now be unique. Copy the file (unless a file with the same content already exists).
-                path = Path.Combine(StoragePath, path);
+                string fullPath = Path.Combine(StoragePath, path);
                 if (shouldStoreFile)
                 {
-                    Directory.CreateDirectory(Path.GetDirectoryName(path));
-                    File.Copy(filePath, path);
+                    if (!Directory.Exists(Path.GetDirectoryName(fullPath)))
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+                    }
+
+                    File.Copy(filePath, fullPath);
                 }
 
                 // Store file content into DB
@@ -88,7 +92,7 @@ namespace ArcCreate.Storage
 
         public static string GetFilePath(string virtualPath)
         {
-            return Collection.FindById(virtualPath)?.RealPath;
+            return Path.Combine(StoragePath, Collection.FindById(virtualPath)?.RealPath);
         }
 
         public static void DeleteReference(string referenceId)
