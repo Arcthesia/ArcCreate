@@ -92,7 +92,13 @@ namespace ArcCreate.Storage
 
         public static string GetFilePath(string virtualPath)
         {
-            return Path.Combine(StoragePath, Collection.FindById(virtualPath)?.RealPath);
+            string realPath = Collection.FindById(virtualPath)?.RealPath;
+            if (realPath == null)
+            {
+                return null;
+            }
+
+            return Path.Combine(StoragePath, realPath);
         }
 
         public static void DeleteReference(string referenceId)

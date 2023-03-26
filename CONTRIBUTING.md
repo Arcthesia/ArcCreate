@@ -1,6 +1,6 @@
 ## Contributing to ArcCreate
 
-This document covers guidelines for contributing code to ArcCreate, as well as a brief explanation of the architecture to help you start exploring the codebase.
+This document covers guidelines for contributing code to ArcCreate.
 For translation contributions, refer to [TRANSLATING.md](TRANSLATING.md)
 
 ### General guidelines
@@ -31,14 +31,6 @@ The reason I'm enforcing this is that I have massive skill issue in understandin
 
 Note that you can skip writing documentation for private members, and members that are very obvious what they are (for example, the `Timing` property of a note). Also if you anticipate that a class will not be used in too many places, not writing documentation for it is also acceptable.
 
-#### Write tests when necessary
-
-If you don't even know what unit test is, they're an automated method to test codes. Essentially you write code to test your code. All test code of this project is included in [/Assets/Tests/](/Assets/Tests/).
-
-You can also have a look at [Unity's documentation on Unity Test Framework](https://docs.unity3d.com/Packages/com.unity.test-framework@1.3/manual/index.html) for more details. This project also uses NSubstitute for mocking dependency. You can read more about it [here](https://nsubstitute.github.io).
-
-If you're writing a complex pieces of code, and you want to make sure that it functions properly, then writing unit tests might be a good idea. However it's completely fine if you don't write any automated test and resort to manual testing, just make sure your code functions properly.
-
 #### Discuss first before making major changes
 
 If you want to make any major changes to the application, such as addition of entirely new features, or major refactoring, make sure to discuss with me before doing anything. This helps both you and me from wasting each other times, and I can offer some advices if necessary. For small changes feel free to open a PR without discussing beforehands.
@@ -49,7 +41,7 @@ This project makes no use of paid assets except for NativeAudio. Due to licensin
 
 The codebase is setup so that NativeAudio will only be included when building for Android and iOS, and also if the [scripting define symbol](https://docs.unity3d.com/2019.4/Documentation/Manual/PlatformDependentCompilation.html) `USE_NATIVE_AUDIO` is defined. Therefore, if you don't have the asset yourself, everything should still function normally.
 
-If you own NativeAudio and would like to use it in your own project, first import and move the plugin to `Assets/Plugins/Native Audio`, be careful not to overwrite any file (especially `E7.NativeAudio.asmdef.meta`). Then create the file `Assets/csc.rsp` and write `-define:USE_NATIVE_AUDIO` in the file, save it and then reimport any script in the Unity Editor.
+If you own NativeAudio and would like to use it in the editor to test things out locally, first import and move the plugin to `Assets/Plugins/Native Audio`, be careful not to overwrite any file (especially `E7.NativeAudio.asmdef.meta`). Then create the file `Assets/csc.rsp` and write `-define:USE_NATIVE_AUDIO` in the file, save it and then reimport any script in the Unity Editor.
 
 ### Optimization guidelines
 

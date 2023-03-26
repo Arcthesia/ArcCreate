@@ -4,13 +4,30 @@
 
 Fast and powerful .aff editor made with Unity.
 
-Download the latest nightly build: https://nightly.link/0thElement/ArcCreate/workflows/build/master
+### Support us:
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Q5Q1JE1B1)
 
+### Join our discord server:
+
+[![Join the Discord](https://discord.com/api/guilds/1083452023250354206/widget.png?style=banner4)](https://discord.gg/x5AqMQkyck)
+
 # Getting started
 
+### Installation
+
+ArcCreate is available on Windows, MacOS, Linux, Android and iOS.
+
+Download the latest nightly build: https://nightly.link/0thElement/ArcCreate/workflows/build/master
+
+Install on iOS through TestFlight: https://testflight.apple.com/join/O3KJcYgN
+
+Check for available builds on the latest development branch at: https://github.com/0thElement/ArcCreate/actions (Github Account is required for downloading)
+
+### Building
+
 This project was made with Unity 2019.4.34f1. You can download the exact version from the [official Download Archive here](https://unity.com/releases/editor/archive).
+
 # Project status
 
 ### Gameplay
@@ -52,6 +69,7 @@ This project was licensed under GPL-3.0 license (see [LICENSE](LICENSE)).
 - `Assets/Plugins/DynamicPanels`: https://github.com/yasirkula/UnityDynamicPanels
 - `Assets/Plugins/Graphy`: https://github.com/Tayx94/graphy/
 - `Assets/Plugins/MaterialIcons`: https://fonts.google.com/icons for the icons themselves and https://github.com/convalise/unity-material-icons/ for packaging them for Unity.
+- `Assets/Plugins/NativeFilePicker`: https://github.com/yasirkula/UnityNativeFilePicker
 - `Assets/Plugins/StandaloneFileBrowser`: https://github.com/gkngkc/UnityStandaloneFileBrowser
 - `Assets/Plugins/UIGradient`: https://github.com/azixMcAze/Unity-UIGradient
 - `Assets/Plugins/YamlDotNet`: https://github.com/aaubry/YamlDotNet
