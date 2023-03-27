@@ -84,7 +84,6 @@ namespace ArcCreate.Gameplay
             }
 
             Settings.InputMode.Value = (int)InputMode.Mouse;
-            Services.Judgement.SetDebugDisplayMode(true);
             Services.Scenecontrol.WaitForSceneLoad();
         }
 
@@ -97,6 +96,7 @@ namespace ArcCreate.Gameplay
             }
 
             Time.timeScale = 1;
+            Services.Judgement.SetDebugDisplayMode(Settings.ShowGameplayDebug.Value);
         }
 
         private async UniTask ImportTestChartAndroid(string path)

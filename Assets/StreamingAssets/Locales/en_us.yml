@@ -566,6 +566,7 @@ Remote:
     StopSession: Stop session
     StartNewSession: Start new session
     ManualIP: Manually set up connection
+    ReturnToSelect: Return to Song Select
   Control:
     Name: Control
     Sync:
@@ -691,6 +692,8 @@ Gameplay:
         LimitFramerateDetail: Limit display framerate to 60 FPS to preserve battery life. Might increase latency.
         ShowFPS: Show FPS
         ShowFPSDetail: Toggle FPS display.
+        ShowDebug: Show debug information
+        ShowDebugDetail: Display debug information during gameplay (advanced).
       FrPmPosition:
         middle: Middle
         infopanel: Info panel

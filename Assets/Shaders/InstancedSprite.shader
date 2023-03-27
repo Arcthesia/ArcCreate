@@ -4,7 +4,6 @@ Shader "Gameplay/InstancedSprite"
 	{
 		_MainTex ("Sprite Texture", 2D) = "white" {}
 		_Color ("Tint", Color) = (1,1,1,1)
-		[MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
 	}
 
 	SubShader
@@ -29,7 +28,6 @@ Shader "Gameplay/InstancedSprite"
 		CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
-			#pragma multi_compile _ PIXELSNAP_ON
 			#pragma multi_compile_instancing
 			#include "UnityCG.cginc"
 			
@@ -62,33 +60,15 @@ Shader "Gameplay/InstancedSprite"
 				OUT.vertex = UnityObjectToClipPos(IN.vertex);
 				OUT.texcoord = IN.texcoord;
 				OUT.color = IN.color * _Properties[instanceID].color;
-				#ifdef PIXELSNAP_ON
-				OUT.vertex = UnityPixelSnap (OUT.vertex);
-				#endif
-
 				return OUT;
 			}
 
 			sampler2D _MainTex;
-			sampler2D _AlphaTex;
-			float _AlphaSplitEnabled;
-			float4 _Color;
+			half4 _Color;
 
-			fixed4 SampleSpriteTexture (float2 uv)
+			half4 frag(v2f IN) : SV_Target
 			{
-				fixed4 color = tex2D (_MainTex, uv);
-
-#if UNITY_TEXTURE_ALPHASPLIT_ALLOWED
-				if (_AlphaSplitEnabled)
-					color.a = tex2D (_AlphaTex, uv).r;
-#endif //UNITY_TEXTURE_ALPHASPLIT_ALLOWED
-
-				return color * _Color;
-			}
-
-			fixed4 frag(v2f IN) : SV_Target
-			{
-				fixed4 c = SampleSpriteTexture (IN.texcoord) * IN.color;
+				half4 c = tex2D(_MainTex, IN.texcoord) * IN.color * _Color;
 				return c;
 			}
 		ENDCG

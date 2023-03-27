@@ -179,7 +179,7 @@ namespace ArcCreate.Storage
         private void ImportPackageFromFilePicker()
         {
 #if UNITY_IOS
-            string[] args = new string[] { ".arcpkg" , "public.data", "public.archive"};
+            string[] args = new string[] { ".arcpkg", "public.data", "public.archive" };
 #elif UNITY_ANDROID
             string[] args = new string[] { ".arcpkg", "image/*", "application/*" };
 #endif

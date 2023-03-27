@@ -11,7 +11,6 @@ namespace ArcCreate.Gameplay.Judgement
         [SerializeField] private Camera gameplayCamera;
         [SerializeField] private Transform skyInput;
         [SerializeField] private JudgementDebug debug;
-        [SerializeField] private GameObject hud;
         private readonly UnorderedList<LaneTapJudgementRequest> laneTapRequests = new UnorderedList<LaneTapJudgementRequest>(32);
         private readonly UnorderedList<LaneHoldJudgementRequest> laneHoldRequests = new UnorderedList<LaneHoldJudgementRequest>(32);
         private readonly UnorderedList<ArcJudgementRequest> arcRequests = new UnorderedList<ArcJudgementRequest>(32);
@@ -35,7 +34,6 @@ namespace ArcCreate.Gameplay.Judgement
             }
 
             debug.gameObject.SetActive(display);
-            hud.SetActive(!display);
         }
 
         public void Request(LaneTapJudgementRequest request)

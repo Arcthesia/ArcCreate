@@ -42,7 +42,6 @@
 				int selected;
 			};
 			
-			int _Selected; 
 			sampler2D _MainTex;
 			
 			StructuredBuffer<Properties> _Properties;

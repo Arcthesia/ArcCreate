@@ -14,6 +14,7 @@ namespace ArcCreate
         public static readonly IntSetting FrPmIndicatorPosition = new IntSetting("FrPmIndicatorPosition", 0);
         public static readonly IntSetting LateEarlyTextPosition = new IntSetting("LateEarlyTextPosition", 0);
         public static readonly IntSetting ViewportAspectRatioSetting = new IntSetting("ViewportAspectRatioSetting", 0);
+        public static readonly BoolSetting ShowGameplayDebug = new BoolSetting("ShowGameplayDebug", false);
         public static readonly IntSetting InputMode = new IntSetting("Gameplay.InputMode", 0);
 
         // Audio
@@ -26,12 +27,6 @@ namespace ArcCreate
         public static readonly BoolSetting VSync = new BoolSetting("EnableVSync", false);
         public static readonly BoolSetting LimitFrameRate = new BoolSetting("LimitFrameRate", false);
         public static readonly BoolSetting ShowFPSCounter = new BoolSetting("ShowFrameCounter", false);
-
-        // Remote
-        public static readonly IntSetting RemoteDroprate = new IntSetting("Remote.DropRate", 150);
-        public static readonly IntSetting RemoteOffset = new IntSetting("Remote.GlobalAudioOffset", 0);
-        public static readonly FloatSetting RemoteMusicVolume = new FloatSetting("Remote.MusicVolume", 1);
-        public static readonly FloatSetting RemoteEffectVolume = new FloatSetting("Remote.EffectVolume", 0.2f);
 
         // Input
         public static readonly IntSetting GridSlot = new IntSetting("GridSlot", 0);

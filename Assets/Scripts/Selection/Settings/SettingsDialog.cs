@@ -35,6 +35,7 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private TMP_Text lateEarlyPositionText;
         [SerializeField] private Toggle limitFrameRateToggle;
         [SerializeField] private Toggle showFpsToggle;
+        [SerializeField] private Toggle showDebug;
 
         protected override void Awake()
         {
@@ -53,6 +54,7 @@ namespace ArcCreate.Selection.Interface
             changeLateEarlyPositionButton.onClick.AddListener(OnChangeLateEarlyPositionButton);
             limitFrameRateToggle.onValueChanged.AddListener(OnLimitFrameRateToggle);
             showFpsToggle.onValueChanged.AddListener(OnShowFpsToggle);
+            showDebug.onValueChanged.AddListener(OnShowDebugToggle);
 
             Settings.DropRate.OnValueChanged.AddListener(OnDropRateSettings);
             Settings.ShowEarlyLatePure.OnValueChanged.AddListener(OnShowEarlyLatePureSettings);
@@ -64,6 +66,7 @@ namespace ArcCreate.Selection.Interface
             Settings.LateEarlyTextPosition.OnValueChanged.AddListener(OnLateEarlyTextPositionSettings);
             Settings.LimitFrameRate.OnValueChanged.AddListener(OnLimitFrameRateSettings);
             Settings.ShowFPSCounter.OnValueChanged.AddListener(OnShowFPSCounterSettings);
+            Settings.ShowGameplayDebug.OnValueChanged.AddListener(OnShowDebugSettings);
 
             OnDropRateSettings(Settings.DropRate.Value);
             OnShowEarlyLatePureSettings(Settings.ShowEarlyLatePure.Value);
@@ -75,6 +78,7 @@ namespace ArcCreate.Selection.Interface
             OnLateEarlyTextPositionSettings(Settings.LateEarlyTextPosition.Value);
             OnLimitFrameRateSettings(Settings.LimitFrameRate.Value);
             OnShowFPSCounterSettings(Settings.ShowFPSCounter.Value);
+            OnShowDebugSettings(Settings.ShowGameplayDebug.Value);
 
             // setupOffsetButton.onClick.AddListener(setupOffsetDialog.Show);
         }
@@ -163,6 +167,11 @@ namespace ArcCreate.Selection.Interface
             showFpsToggle.SetIsOnWithoutNotify(value);
         }
 
+        private void OnShowDebugSettings(bool value)
+        {
+            showDebug.isOn = value;
+        }
+
         private void OnDecreaseSpeedButton()
         {
             Settings.DropRate.Value = (int)Mathf.Clamp(Settings.DropRate.Value - (Constants.DropRateScalar / 10), Constants.MinDropRate, Constants.MaxDropRate);
@@ -231,6 +240,11 @@ namespace ArcCreate.Selection.Interface
         private void OnShowFpsToggle(bool value)
         {
             Settings.ShowFPSCounter.Value = value;
+        }
+
+        private void OnShowDebugToggle(bool value)
+        {
+            Settings.ShowGameplayDebug.Value = value;
         }
     }
 }

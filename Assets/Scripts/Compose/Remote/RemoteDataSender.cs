@@ -22,12 +22,6 @@ namespace ArcCreate.Compose.Remote
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private Marker remoteCurrentTiming;
 
-        [Header("Fields")]
-        [SerializeField] private TMP_InputField offsetField;
-        [SerializeField] private TMP_InputField speedField;
-        [SerializeField] private TMP_InputField musicVolumeField;
-        [SerializeField] private TMP_InputField effectVolumeField;
-
         [Header("Sync Buttons")]
         [SerializeField] private Button syncAllButton;
         [SerializeField] private Button syncChartButton;
@@ -134,11 +128,6 @@ namespace ArcCreate.Compose.Remote
             showLogToggle.onValueChanged.AddListener(SendShowLog);
             showDebugToggle.onValueChanged.AddListener(SendShowDebug);
 
-            offsetField.onSubmit.AddListener(OnOffsetField);
-            speedField.onSubmit.AddListener(OnSpeedField);
-            musicVolumeField.onSubmit.AddListener(OnMusicVolumeField);
-            effectVolumeField.onSubmit.AddListener(OnEffectVolumeField);
-
             syncAllButton.onClick.AddListener(SendAll);
             syncChartButton.onClick.AddListener(SendChart);
             syncAudioButton.onClick.AddListener(SendAudio);
@@ -158,11 +147,6 @@ namespace ArcCreate.Compose.Remote
             showLogToggle.onValueChanged.RemoveListener(SendShowLog);
             showDebugToggle.onValueChanged.RemoveListener(SendShowDebug);
 
-            offsetField.onSubmit.RemoveListener(OnOffsetField);
-            speedField.onSubmit.RemoveListener(OnSpeedField);
-            musicVolumeField.onSubmit.RemoveListener(OnMusicVolumeField);
-            effectVolumeField.onSubmit.RemoveListener(OnEffectVolumeField);
-
             syncAllButton.onClick.RemoveListener(SendAll);
             syncChartButton.onClick.RemoveListener(SendChart);
             syncAudioButton.onClick.RemoveListener(SendAudio);
@@ -179,53 +163,6 @@ namespace ArcCreate.Compose.Remote
         private void OnDestroy()
         {
             StopListeningForEvents();
-        }
-
-        private void OnSpeedField(string val)
-        {
-            if (Evaluator.TryFloat(val, out float speed))
-            {
-                speed = Mathf.Max(speed, 0.1f);
-                Settings.RemoteDroprate.Value = Mathf.RoundToInt(speed * Utility.Constants.DropRateScalar);
-                SendSpeed();
-            }
-
-            speedField.SetTextWithoutNotify((Settings.RemoteDroprate.Value / Utility.Constants.DropRateScalar).ToString());
-        }
-
-        private void OnOffsetField(string val)
-        {
-            if (Evaluator.TryInt(val, out int offset))
-            {
-                Settings.RemoteOffset.Value = offset;
-                SendOffset();
-            }
-
-            offsetField.SetTextWithoutNotify(Settings.RemoteOffset.Value.ToString());
-        }
-
-        private void OnMusicVolumeField(string val)
-        {
-            if (Evaluator.TryFloat(val, out float volume))
-            {
-                volume = Mathf.Clamp(volume, 0, 1);
-                Settings.RemoteMusicVolume.Value = volume;
-                SendMusicVolume();
-            }
-
-            musicVolumeField.SetTextWithoutNotify(Settings.RemoteMusicVolume.Value.ToString());
-        }
-
-        private void OnEffectVolumeField(string val)
-        {
-            if (Evaluator.TryFloat(val, out float volume))
-            {
-                volume = Mathf.Clamp(volume, 0, 1);
-                Settings.RemoteEffectVolume.Value = volume;
-                SendEffectVolume();
-            }
-
-            effectVolumeField.SetTextWithoutNotify(Settings.RemoteEffectVolume.Value.ToString());
         }
 
         private void SendTiming(Marker marker, int timing)
@@ -272,30 +209,6 @@ namespace ArcCreate.Compose.Remote
             channel?.SendMessage(RemoteControl.Background, FromBool(useDefault));
         }
 
-        private void SendSpeed()
-        {
-            int dr = Settings.RemoteDroprate.Value;
-            channel?.SendMessage(RemoteControl.Speed, FromInt(dr));
-        }
-
-        private void SendOffset()
-        {
-            int offset = Settings.RemoteOffset.Value;
-            channel?.SendMessage(RemoteControl.GlobalOffset, FromInt(offset));
-        }
-
-        private void SendMusicVolume()
-        {
-            float volume = Settings.RemoteMusicVolume.Value;
-            channel?.SendMessage(RemoteControl.MusicVolume, FromFloat(volume));
-        }
-
-        private void SendEffectVolume()
-        {
-            float volume = Settings.RemoteEffectVolume.Value;
-            channel?.SendMessage(RemoteControl.EffectVolume, FromFloat(volume));
-        }
-
         private void SendShowLog(bool val)
         {
             channel?.SendMessage(RemoteControl.ShowLog, FromBool(val));
@@ -330,10 +243,6 @@ namespace ArcCreate.Compose.Remote
             string msg = $"{ext},{useDefaultJacket},{useDefaultBg},{chartPath}";
 
             channel.SendMessage(RemoteControl.ReloadAllFiles, FromStringASCII(msg));
-            SendSpeed();
-            SendOffset();
-            SendMusicVolume();
-            SendEffectVolume();
         }
 
         private void SendMetadata()
@@ -365,14 +274,6 @@ namespace ArcCreate.Compose.Remote
         private byte[] FromStringASCII(string val)
         {
             return Encoding.ASCII.GetBytes(val);
-        }
-
-        private void Awake()
-        {
-            speedField.SetTextWithoutNotify((Settings.RemoteDroprate.Value / Utility.Constants.DropRateScalar).ToString());
-            offsetField.SetTextWithoutNotify(Settings.RemoteOffset.Value.ToString());
-            musicVolumeField.SetTextWithoutNotify(Settings.RemoteMusicVolume.Value.ToString());
-            effectVolumeField.SetTextWithoutNotify(Settings.RemoteEffectVolume.Value.ToString());
         }
     }
 }

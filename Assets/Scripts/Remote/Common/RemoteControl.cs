@@ -22,11 +22,5 @@ namespace ArcCreate.Remote.Common
         Background = 20,
         Metadata = 21,
         Scenecontrol = 22,
-
-        // Settings
-        Speed = 32,
-        GlobalOffset = 33,
-        MusicVolume = 34,
-        EffectVolume = 35,
     }
 }
