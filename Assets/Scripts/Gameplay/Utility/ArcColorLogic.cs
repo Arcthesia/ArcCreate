@@ -21,6 +21,7 @@ namespace ArcCreate.Gameplay
         private bool wrongFingerHitThisFrame = false;
         private bool existsArcWithinRangeThisFrame = false;
         private bool isAssigningThisFrame = false;
+        private bool assignedFingerExistsThisFrame = false;
         private int lockUntil = int.MinValue;
         private int graceUntil = int.MinValue;
         private float currentRedArcValue = 0;
@@ -154,6 +155,7 @@ namespace ArcCreate.Gameplay
         {
             if (fingerId == AssignedFingerId)
             {
+                assignedFingerExistsThisFrame = true;
                 ResetAssignedFinger();
 
                 if (existsArcWithinRangeThisFrame)
@@ -171,6 +173,11 @@ namespace ArcCreate.Gameplay
         /// <param name="arcJudgeInterval">The judgement interval of an arc of this color.</param>
         public void FingerHit(int fingerId, float distance, float arcJudgeInterval)
         {
+            if (fingerId == assignedFingerId)
+            {
+                assignedFingerExistsThisFrame = true;
+            }
+
             if (IsFingerAssigned)
             {
                 if (!IsGraceActive && assignedFingerMissedThisFrame)
@@ -226,6 +233,7 @@ namespace ArcCreate.Gameplay
         {
             if (fingerId == AssignedFingerId)
             {
+                assignedFingerExistsThisFrame = true;
                 assignedFingerMissedThisFrame = true;
                 if (wrongFingerHitThisFrame)
                 {
@@ -287,6 +295,13 @@ namespace ArcCreate.Gameplay
             assignedFingerMissedThisFrame = false;
             existsArcWithinRangeThisFrame = false;
             isAssigningThisFrame = false;
+
+            if (!assignedFingerExistsThisFrame)
+            {
+                ResetAssignedFinger();
+            }
+
+            assignedFingerExistsThisFrame = false;
 
             float lockVal = lockUntil == int.MinValue ? 0 : (float)(lockUntil - frameTiming) / Values.ArcLockDuration;
             float graceVal = graceUntil == int.MinValue ? 0 : (float)(graceUntil - frameTiming) / Values.ArcGraceDuration;

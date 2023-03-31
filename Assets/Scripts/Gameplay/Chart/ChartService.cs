@@ -65,6 +65,8 @@ namespace ArcCreate.Gameplay.Chart
 
             Services.Score.ResetScoreTo(currentCombo, totalCombo);
             Services.Judgement.ResetJudge();
+            Services.Scenecontrol.UpdateScenecontrol(timing);
+            Services.Camera.UpdateCamera(timing);
         }
 
         public IEnumerable<T> FindByTiming<T>(int from, int to)
@@ -176,7 +178,13 @@ namespace ArcCreate.Gameplay.Chart
             for (int i = 0; i < timingGroups.Count; i++)
             {
                 TimingGroup tg = timingGroups[i];
+                if (!tg.GroupProperties.Visible || !tg.IsVisible)
+                {
+                    continue;
+                }
+
                 IEnumerable<Note> groupNotes = tg.GetRenderingNotes();
+
                 foreach (Note note in groupNotes)
                 {
                     yield return note;

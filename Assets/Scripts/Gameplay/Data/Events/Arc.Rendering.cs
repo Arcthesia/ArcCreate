@@ -104,9 +104,9 @@ namespace ArcCreate.Gameplay.Data
 
             RecalculateFloorPosition();
             RecalculateJudgeTimings();
-            RebuildCollider();
             ReloadSkin();
             RebuildSegments();
+            RebuildCollider();
         }
 
         public void ReloadSkin()

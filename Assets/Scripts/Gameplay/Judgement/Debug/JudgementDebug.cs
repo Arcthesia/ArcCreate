@@ -66,13 +66,11 @@ namespace ArcCreate.Gameplay.Judgement
 
         public void ShowInputLock(int color, float v)
         {
-            if (color < 0 || color >= lockIndicator.Length)
+            if (color >= 0 && color < lockIndicator.Length)
             {
-                return;
+                lockedObject[color].SetActive(v > Mathf.Epsilon);
+                lockIndicator[color].value = v;
             }
-
-            lockedObject[color].SetActive(v > Mathf.Epsilon);
-            lockIndicator[color].value = v;
         }
 
         public void ShowGrace(float v)
@@ -90,8 +88,11 @@ namespace ArcCreate.Gameplay.Judgement
                 AddLine(color, origin, pos, assignedFingerColor, Assigned);
             }
 
-            assignedIndicator[color].gameObject.SetActive(fingerId != ArcColorLogic.UnassignedFingerId);
-            assignedIndicator[color].text = fingerId.ToString();
+            if (color >= 0 && color < assignedIndicator.Length)
+            {
+                assignedIndicator[color].gameObject.SetActive(fingerId != ArcColorLogic.UnassignedFingerId);
+                assignedIndicator[color].text = fingerId.ToString();
+            }
         }
 
         public void ShowFingerMiss(int color, int fingerId)

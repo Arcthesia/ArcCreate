@@ -106,6 +106,7 @@ namespace ArcCreate.Storage
 
             SelectedPack.SetValueWithoutNotify(GetLastSelectedPack());
             SelectedChart.SetValueWithoutNotify(GetLastSelectedChart(SelectedPack.Value?.Identifier));
+
             OnStorageChange?.Invoke();
             IsTransitioning = false;
         }

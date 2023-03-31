@@ -175,7 +175,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
             for (int inpIndex = 0; inpIndex < CurrentInputs.Count; inpIndex++)
             {
                 TouchInput input = CurrentInputs[inpIndex];
-                if (input.Phase == UnityEngine.InputSystem.TouchPhase.Ended)
+                if (input.Phase == UnityEngine.InputSystem.TouchPhase.Ended || input.Phase == UnityEngine.InputSystem.TouchPhase.Canceled)
                 {
                     for (int c = 0; c <= ArcColorLogic.MaxColor; c++)
                     {
@@ -242,7 +242,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
             {
                 TouchInput input = CurrentInputs[inpIndex];
 
-                if (input.Phase == UnityEngine.InputSystem.TouchPhase.Ended)
+                if (input.Phase == UnityEngine.InputSystem.TouchPhase.Ended || input.Phase == UnityEngine.InputSystem.TouchPhase.Canceled)
                 {
                     continue;
                 }

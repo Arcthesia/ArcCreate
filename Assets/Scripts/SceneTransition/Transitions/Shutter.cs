@@ -82,17 +82,18 @@ namespace ArcCreate.SceneTransition
 
         private void Awake()
         {
-            StartLoadingExternalAudio().Forget();
+            Startup().Forget();
             Instance = this;
         }
 
-        private async UniTask StartLoadingExternalAudio()
+        private async UniTask Startup()
         {
             ExternalCloseAudio = new ExternalAudioClip(closeAudio, "AudioClips");
             ExternalOpenAudio = new ExternalAudioClip(openAudio, "AudioClips");
             ExternalStartAudio = new ExternalAudioClip(startAudio, "AudioClips");
 
             await UniTask.WhenAll(ExternalCloseAudio.Load(), ExternalOpenAudio.Load(), ExternalStartAudio.Load());
+            await UniTask.DelayFrame(2);
             gameObject.SetActive(false);
         }
 

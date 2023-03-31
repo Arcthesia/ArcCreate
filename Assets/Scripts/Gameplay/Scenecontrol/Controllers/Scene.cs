@@ -425,7 +425,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 c.Canvas.worldCamera = Services.Camera.GameplayCamera;
             }
 
-            c.SerializedType = $"canvas.{worldSpace}";
+            c.SerializedType = $"canvas.{(worldSpace ? "true" : "false")}";
             c.Start();
             Services.Scenecontrol.AddReferencedController(c);
             return c;
@@ -521,13 +521,14 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
 
             bool copy = type[0] == '$';
+            if (copy)
+            {
+                type = type.Substring(1);
+            }
+
             string def = string.Empty;
             string arg = string.Empty;
             StringParser parser = new StringParser(type);
-            if (copy)
-            {
-                parser.Skip(1);
-            }
 
             if (type.Contains("."))
             {
@@ -669,7 +670,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     string[] imgsplit = arg.Split(',');
                     return CreateImage(imgsplit[0], imgsplit[1], imgsplit[2], new XY(float.Parse(imgsplit[3]), float.Parse(imgsplit[4])));
                 case "canvas":
-                    bool worldSpace = bool.Parse(def);
+                    bool worldSpace = def.ToLower() == "true";
                     return CreateCanvas(worldSpace);
                 case "sprite":
                     string[] spriteSplit = arg.Split(',');

@@ -7,7 +7,7 @@ namespace ArcCreate.Compose.Navigation
     {
         [SerializeField] private TMP_Text text;
         [SerializeField] private float baseHeight;
-        private RectTransform rect;
+        [SerializeField] private RectTransform rect;
 
         public float BaseHeight => baseHeight;
 
@@ -25,11 +25,6 @@ namespace ArcCreate.Compose.Navigation
         public void SetText(string i18nName)
         {
             text.text = I18n.S(i18nName);
-        }
-
-        private void Awake()
-        {
-            rect = GetComponent<RectTransform>();
         }
     }
 }

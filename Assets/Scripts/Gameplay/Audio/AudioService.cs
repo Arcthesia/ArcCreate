@@ -248,6 +248,7 @@ namespace ArcCreate.Gameplay.Audio
             }
 
             audioTiming = timing;
+            updatePace = 1;
 
             if (resetJudge)
             {

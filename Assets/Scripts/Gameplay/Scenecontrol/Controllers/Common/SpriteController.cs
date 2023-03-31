@@ -317,6 +317,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
             var c = Instantiate(gameObject, transform.parent).GetComponent<SpriteController>();
             c.spriteRenderer.material = Instantiate(c.spriteRenderer.material);
             c.IsPersistent = false;
+            c.SerializedType = SerializedType;
+            if (c.SerializedType[0] != '$')
+            {
+                c.SerializedType = "$" + c.SerializedType;
+            }
 
             Controller[] children = GetChildren();
             int i = 0;
@@ -359,6 +364,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public void UpdateTexture(Vector2 offset, Vector2 scale)
         {
             Vector4 modifyVec = new Vector4(offset.x, offset.y, scale.x, scale.y);
+            mpb = mpb ?? new MaterialPropertyBlock();
             spriteRenderer.GetPropertyBlock(mpb);
             mpb.SetVector(TextureModifyShaderId, modifyVec);
             spriteRenderer.SetPropertyBlock(mpb);

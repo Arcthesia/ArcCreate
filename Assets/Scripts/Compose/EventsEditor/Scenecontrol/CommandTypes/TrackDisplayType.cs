@@ -39,6 +39,10 @@ namespace ArcCreate.Compose.EventsEditor
 
             var track = Services.Gameplay.Scenecontrol.Scene.Track;
             track.ColorA *= trackAlphaFactor;
+            track.ExtraL.ColorA *= trackAlphaFactor;
+            track.ExtraR.ColorA *= trackAlphaFactor;
+            track.EdgeExtraL.ColorA *= trackAlphaFactor;
+            track.EdgeExtraR.ColorA *= trackAlphaFactor;
 
             foreach (var obj in track.GetComponentsInChildren<SpriteController>())
             {

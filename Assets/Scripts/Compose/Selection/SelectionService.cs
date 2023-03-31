@@ -46,7 +46,7 @@ namespace ArcCreate.Compose.Selection
             }
         }
 
-        [EditorAction("Single", false, "<mouse1>")]
+        [EditorAction("Single", false, "<u-mouse1>")]
         [RequireGameplayLoaded]
         public async UniTask SelectSingle()
         {
@@ -56,7 +56,6 @@ namespace ArcCreate.Compose.Selection
             if (EventSystem.current.currentSelectedGameObject != null
              || !Services.Cursor.IsCursorAboveViewport
              || inspectorMenu.IsCursorHovering
-             || (Values.CreateNoteMode.Value != CreateNoteMode.Idle && Services.Cursor.IsHittingLane)
              || RangeSelected)
             {
                 return;
@@ -371,6 +370,7 @@ namespace ArcCreate.Compose.Selection
         private void Awake()
         {
             RequireSelectionAttribute.Selection = selectedNotes;
+            RequireNoSelectionAttribute.Selection = selectedNotes;
             rangeSelectPreview.OnEndEdit += SelectNotesBetweenRange;
         }
 
@@ -384,6 +384,13 @@ namespace ArcCreate.Compose.Selection
             public static HashSet<Note> Selection { get; set; }
 
             public override bool CheckRequirement() => Selection.Count > 0;
+        }
+
+        internal class RequireNoSelectionAttribute : ContextRequirementAttribute
+        {
+            public static HashSet<Note> Selection { get; set; }
+
+            public override bool CheckRequirement() => Selection.Count == 0;
         }
     }
 }

@@ -274,13 +274,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
             name = name.ToLower();
             var (trackSprite, extraLaneSprite) = Services.Skin.GetTrackSprite(name);
             SpriteRenderer.sprite = trackSprite;
-            EdgeExtraL.SpriteRenderer.sprite = trackSprite;
-            EdgeExtraR.SpriteRenderer.sprite = trackSprite;
+            edgeExtraL.SpriteRenderer.sprite = trackSprite;
+            edgeExtraR.SpriteRenderer.sprite = trackSprite;
 
-            if (ExtraL != null && ExtraR != null)
+            if (extraL != null && extraR != null)
             {
-                ExtraL.SpriteRenderer.sprite = extraLaneSprite;
-                ExtraR.SpriteRenderer.sprite = extraLaneSprite;
+                extraL.SpriteRenderer.sprite = extraLaneSprite;
+                extraR.SpriteRenderer.sprite = extraLaneSprite;
             }
 
             CustomSkin = name;

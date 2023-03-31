@@ -58,7 +58,10 @@ namespace ArcCreate.Gameplay.Audio
             await transition.StartTransition();
             Services.Audio.AudioTiming = 0;
             await transition.EndTransition();
-            Services.Audio.PlayWithDelay(0, 200);
+            if (!pauseScreen.activeInHierarchy)
+            {
+                Services.Audio.PlayWithDelay(0, 200);
+            }
 
             await DisablePauseButton();
         }

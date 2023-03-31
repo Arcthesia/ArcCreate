@@ -99,7 +99,8 @@ namespace ArcCreate.Gameplay.Chart
         private bool IsChained(Arc first, Arc second)
         {
             return
-                Mathf.Abs(first.EndTiming - second.Timing) <= 1
+                !ReferenceEquals(first, second)
+             && Mathf.Abs(first.EndTiming - second.Timing) <= 1
              && first.XEnd == second.XStart
              && first.YEnd == second.YStart
              && first.IsTrace == second.IsTrace;
