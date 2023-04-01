@@ -8,12 +8,13 @@ namespace ArcCreate.Compose.Navigation
     {
         [SerializeField] private TMP_Text text;
         [SerializeField] private Button button;
+        [SerializeField] private RectTransform rect;
         private IAction action;
         private ContextMenu menu;
 
         public float Width { get; private set; }
 
-        public RectTransform Rect { get; private set; }
+        public RectTransform Rect => rect;
 
         public void Setup(IAction action, ContextMenu menu)
         {
@@ -36,7 +37,6 @@ namespace ArcCreate.Compose.Navigation
         private void Awake()
         {
             button.onClick.AddListener(OnClick);
-            Rect = GetComponent<RectTransform>();
         }
 
         private void OnDestroy()

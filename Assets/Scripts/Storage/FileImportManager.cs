@@ -219,6 +219,11 @@ namespace ArcCreate.Storage
         private void CheckPackageImport(bool focus)
         {
 #if UNITY_ANDROID
+            if (Application.platform != RuntimePlatform.Android)
+            {
+                return;
+            }
+
             try
             {
                 var jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");

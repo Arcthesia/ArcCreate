@@ -17,6 +17,7 @@ namespace ArcCreate.Compose.Editing
     public class Measurer : MonoBehaviour
     {
         [SerializeField] private RectTransform rect;
+        [SerializeField] private RectTransform parentRect;
         [SerializeField] private Vector2 delta;
         [SerializeField] private Button timingButton;
         [SerializeField] private Button positionButton;
@@ -27,10 +28,12 @@ namespace ArcCreate.Compose.Editing
         [SerializeField] private TMP_Text positionText;
         [SerializeField] private TMP_Text xText;
         [SerializeField] private TMP_Text yText;
+
         private readonly List<Arc> selectedArcs = new List<Arc>();
         private int currentTiming;
         private float currentX;
         private float currentY;
+        private bool actionButtonPressed;
 
         [EditorAction("Start", true, "e")]
         [RequireGameplayLoaded]
@@ -71,6 +74,8 @@ namespace ArcCreate.Compose.Editing
                     }
                 }
 
+                _ = confirm.WasExecuted;
+                _ = cancel.WasExecuted;
                 await Services.Cursor.RequestTimingSelection(confirm, cancel, UpdateWindow);
                 await UniTask.NextFrame();
                 _ = close.WasExecuted;
@@ -102,8 +107,9 @@ namespace ArcCreate.Compose.Editing
                         break;
                     }
 
-                    if (close.WasExecuted && EventSystem.current.currentSelectedGameObject == null)
+                    if ((close.WasExecuted && EventSystem.current.currentSelectedGameObject == null) || actionButtonPressed)
                     {
+                        actionButtonPressed = false;
                         rect.gameObject.SetActive(false);
                         return;
                     }
@@ -159,7 +165,8 @@ namespace ArcCreate.Compose.Editing
             }
 
             Vector2 mousePos = Mouse.current.position.ReadValue();
-            rect.anchoredPosition = mousePos + delta;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, mousePos, null, out Vector2 rectPos);
+            rect.anchoredPosition = rectPos + delta;
         }
 
         private void Awake()
@@ -185,6 +192,7 @@ namespace ArcCreate.Compose.Editing
                 GUIUtility.systemCopyBuffer = currentTiming.ToString();
                 CloseMeasurer();
                 Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.Measurer.CopyTiming"));
+                actionButtonPressed = true;
             }
         }
 
@@ -195,6 +203,7 @@ namespace ArcCreate.Compose.Editing
                 GUIUtility.systemCopyBuffer = $"{currentX},{currentY}";
                 CloseMeasurer();
                 Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.Measurer.CopyPosition"));
+                actionButtonPressed = true;
             }
         }
 
@@ -205,6 +214,7 @@ namespace ArcCreate.Compose.Editing
                 GUIUtility.systemCopyBuffer = currentX.ToString();
                 CloseMeasurer();
                 Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.Measurer.CopyX"));
+                actionButtonPressed = true;
             }
         }
 
@@ -215,6 +225,7 @@ namespace ArcCreate.Compose.Editing
                 GUIUtility.systemCopyBuffer = currentY.ToString();
                 CloseMeasurer();
                 Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.Measurer.CopyY"));
+                actionButtonPressed = true;
             }
         }
     }

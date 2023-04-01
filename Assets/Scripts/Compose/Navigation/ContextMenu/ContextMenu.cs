@@ -111,8 +111,8 @@ namespace ArcCreate.Compose.Navigation
 
         private void Awake()
         {
-            buttonPool = Pools.New<ContextMenuButton>(contextButtonPrefab.name, contextButtonPrefab, parent, 10);
-            categoryPool = Pools.New<ContextMenuCategory>(contextCategoryPrefab.name, contextCategoryPrefab, parent, 5);
+            buttonPool = Pools.New<ContextMenuButton>(contextButtonPrefab.name, contextButtonPrefab, parent, 30);
+            categoryPool = Pools.New<ContextMenuCategory>(contextCategoryPrefab.name, contextCategoryPrefab, parent, 10);
             rect = GetComponent<RectTransform>();
             rect.anchorMin = new Vector2(0.5f, 0.5f);
             rect.anchorMax = new Vector2(0.5f, 0.5f);

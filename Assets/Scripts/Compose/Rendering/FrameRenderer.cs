@@ -150,6 +150,8 @@ namespace ArcCreate.Compose.Rendering
                         break;
                     }
 
+                    Time.timeScale = 1;
+                    await UniTask.Yield(PlayerLoopTiming.PostLateUpdate);
                     foreach (var cam in cameras)
                     {
                         cam.targetTexture = renderTexture;
@@ -172,9 +174,6 @@ namespace ArcCreate.Compose.Rendering
 
                     Profiler.EndSample();
 
-                    Time.timeScale = 1;
-                    await UniTask.Yield(PlayerLoopTiming.LastPostLateUpdate);
-
                     float time = Time.time - unityStartTime + startRenderingTime;
                     if ((time * 1000 > Services.Gameplay.Audio.AudioLength || time > endRenderingTime) && shouldUpdateTiming)
                     {
@@ -192,8 +191,11 @@ namespace ArcCreate.Compose.Rendering
 
                     TimeSpan elapsed = DateTime.Now - startAt;
                     double speed = (time - startRenderingTime + bonusDuration) / elapsed.TotalSeconds;
-                    TimeSpan eta = TimeSpan.FromSeconds((endRenderingTime - time + bonusDuration) / speed);
-                    onETA.Invoke(elapsed, eta);
+                    if (speed > Mathf.Epsilon)
+                    {
+                        TimeSpan eta = TimeSpan.FromSeconds((endRenderingTime - time + bonusDuration) / speed);
+                        onETA.Invoke(elapsed, eta);
+                    }
                 }
             }
             catch (Exception e)
@@ -206,8 +208,10 @@ namespace ArcCreate.Compose.Rendering
             }
             finally
             {
-                ffmpegProcess.Dispose();
-                ffmpegWriter.Dispose();
+                ffmpegProcess?.StandardInput.BaseStream.Close();
+                ffmpegProcess?.WaitForExit();
+                ffmpegProcess?.Dispose();
+                ffmpegWriter?.Dispose();
 
                 // Weird bug occurs if you remove this. I encourage everyone reading this source code to try it out lol.
                 await UniTask.DelayFrame(60);
