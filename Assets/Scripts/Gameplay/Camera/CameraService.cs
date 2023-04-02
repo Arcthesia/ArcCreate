@@ -55,14 +55,26 @@ namespace ArcCreate.Gameplay.GameplayCamera
 
         public Camera[] RenderingCameras { get; private set; }
 
-        private bool Is16By9
-            => 1.77777779f - (1f * backgroundCamera.pixelWidth / backgroundCamera.pixelHeight) < 0.1f;
+        /// <summary>
+        /// Gets 0 on 16:9, 1 on 4:3 (16:12), value is unclamped, use with Mathf.Clerp().
+        /// </summary>
+        private float AspectAdjustment
+        {
+            get
+            {
+                float height = backgroundCamera.pixelHeight / (backgroundCamera.pixelWidth / 16f);
+                return (height - 9) / 3f;
+            }
+        }
 
         private Vector3 ResetPosition
-            => new Vector3(0f, Values.CameraY, Is16By9 ? Values.CameraZ : Values.CameraZTablet);
+            => new Vector3(0f, Values.CameraY, Mathf.Lerp(Values.CameraZ, Values.CameraZTablet, AspectAdjustment));
 
         private Vector3 ResetRotation
-            => new Vector3(Is16By9 ? Values.CameraRotX : Values.CameraRotXTablet, 180f, 0f);
+            => new Vector3(Mathf.Lerp(Values.CameraRotX, Values.CameraRotXTablet, AspectAdjustment), 180f, 0f);
+
+        private float ResetFOV
+            => Mathf.Lerp(50, 65, AspectAdjustment);
 
         public void Load(List<CameraEvent> cameras)
         {
@@ -148,14 +160,17 @@ namespace ArcCreate.Gameplay.GameplayCamera
             }
 
             skyInputLabel.localPosition = new Vector3(
-                Is16By9 ? Values.SkyInputLabelX : Values.SkyInputLabelXTablet,
+                Mathf.LerpUnclamped(Values.SkyInputLabelX, Values.SkyInputLabelXTablet, AspectAdjustment),
                 skyInputLabel.localPosition.y,
                 skyInputLabel.localPosition.z);
 
             Vector3 prevPosition = backgroundCamera.transform.localPosition;
             Vector3 position = ResetPosition + translationExternal;
+            Quaternion lookAtRotation = Quaternion.LookRotation(
+                new Vector3(0, -5.5f, -20) - ResetPosition,
+                new Vector3(currentTilt, 1 - currentTilt, 0)) * Quaternion.Inverse(Quaternion.Euler(ResetRotation));
+            float fov = ResetFOV + fieldOfViewExternal;
             Vector3 rotation = ResetRotation;
-            float fov = Is16By9 ? 50 : 65 + fieldOfViewExternal;
             backgroundCamera.fieldOfView = fov;
             overlayCamera.fieldOfView = fov;
 
@@ -187,7 +202,7 @@ namespace ArcCreate.Gameplay.GameplayCamera
             else
             {
                 backgroundCamera.transform.localPosition = position;
-                backgroundCamera.transform.localRotation = Quaternion.Euler(0f, 0f, rotation.z) * Quaternion.Euler(rotation.x, rotation.y, 0f) * rotationExternal;
+                backgroundCamera.transform.localRotation = lookAtRotation * rotationExternal * Quaternion.Euler(0f, 0f, rotation.z) * Quaternion.Euler(rotation.x, rotation.y, 0f);
             }
 
             UpdateCameraTilt();
@@ -195,18 +210,9 @@ namespace ArcCreate.Gameplay.GameplayCamera
 
         private void UpdateBackgroundCanvas()
         {
-            if (Is16By9)
-            {
-                backgroundRect.pivot = new Vector2(0.5f, 0.87f);
-                backgroundRect.anchorMin = new Vector2(0.5f, 1f);
-                backgroundRect.anchorMax = new Vector2(0.5f, 1f);
-            }
-            else
-            {
-                backgroundRect.pivot = new Vector2(0.5f, 0.5f);
-                backgroundRect.anchorMin = new Vector2(0.5f, 0.5f);
-                backgroundRect.anchorMax = new Vector2(0.5f, 0.5f);
-            }
+            backgroundRect.pivot = new Vector2(0.5f, Mathf.Lerp(0.87f, 0.5f, AspectAdjustment));
+            backgroundRect.anchorMin = new Vector2(0.5f, Mathf.Lerp(1f, 0.5f, AspectAdjustment));
+            backgroundRect.anchorMax = new Vector2(0.5f, Mathf.Lerp(1f, 0.5f, AspectAdjustment));
         }
 
         private void UpdateCameraTilt()
@@ -230,9 +236,6 @@ namespace ArcCreate.Gameplay.GameplayCamera
             }
 
             currentTilt *= tiltFactorExternal;
-            backgroundCamera.transform.LookAt(
-                backgroundCamera.transform.localPosition - ResetPosition + new Vector3(0, -5.5f, -20),
-                new Vector3(currentTilt, 1 - currentTilt, 0));
             currentArcPos = 0;
         }
 
