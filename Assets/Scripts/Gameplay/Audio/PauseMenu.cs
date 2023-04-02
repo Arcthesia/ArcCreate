@@ -31,7 +31,8 @@ namespace ArcCreate.Gameplay.Audio
 
         private void OnPauseButton()
         {
-            if (Values.EnablePauseMenu && Services.Audio.IsPlayingAndNotStationary)
+            // Hacky but whatever
+            if (Values.EnablePauseMenu && (Services.Audio.IsPlayingAndNotStationary || (Services.Audio.AudioTiming >= Services.Audio.AudioLength - 1000)))
             {
                 pauseScreen.SetActive(true);
                 Services.Audio.Pause();
