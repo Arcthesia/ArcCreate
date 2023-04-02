@@ -294,7 +294,14 @@ namespace ArcCreate.Storage
 
             if (lv == null)
             {
-                return (null, null);
+                if (SelectedPack.Value != null)
+                {
+                    lv = SelectedPack.Value.Levels.First();
+                }
+                else
+                {
+                    lv = GetAllLevels().First();
+                }
             }
 
             if (SelectedChart.Value.chart != null)

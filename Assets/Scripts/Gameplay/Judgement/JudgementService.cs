@@ -2,7 +2,6 @@ using ArcCreate.Gameplay.Judgement.Input;
 using ArcCreate.Utility;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.EnhancedTouch;
 
 namespace ArcCreate.Gameplay.Judgement
 {
@@ -83,6 +82,11 @@ namespace ArcCreate.Gameplay.Judgement
             inputHandler.HandleArcRequests(currentTiming, arcRequests);
         }
 
+        public void RefreshInputHandler()
+        {
+            OnInputModeChange(Settings.InputMode.Value);
+        }
+
         private void PruneExpiredRequests(int currentTiming)
         {
             for (int i = laneTapRequests.Count - 1; i >= 0; i--)
@@ -131,7 +135,6 @@ namespace ArcCreate.Gameplay.Judgement
             Settings.InputMode.OnValueChanged.AddListener(OnInputModeChange);
             OnInputModeChange(Settings.InputMode.Value);
             InputSystem.pollingFrequency = 240;
-            EnhancedTouchSupport.Enable();
 
             Values.LaneScreenHitboxBase =
                 (gameplayCamera.WorldToScreenPoint(Vector3.zero).x

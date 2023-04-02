@@ -55,5 +55,7 @@ namespace ArcCreate.Gameplay.Judgement
         /// Reset judgement state.
         /// </summary>
         void ResetJudge();
+
+        void RefreshInputHandler();
     }
 }

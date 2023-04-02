@@ -636,6 +636,10 @@ Gameplay:
       Cancel: Cancel
       Done: Done
     List:
+      RemoteTestplay: Remote Testplay
+      Import: Import package
+      Community: Community
+      AllSongs: All Songs
       OtherDifficulties: Other difficulties
     Info:
       Undefined:

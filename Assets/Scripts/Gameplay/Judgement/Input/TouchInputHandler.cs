@@ -2,12 +2,26 @@ using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility;
 using UnityEngine;
+using UnityEngine.InputSystem.EnhancedTouch;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 namespace ArcCreate.Gameplay.Judgement.Input
 {
     public class TouchInputHandler : IInputHandler
     {
+        private readonly int maxFilteredTouchId;
+
+        public TouchInputHandler()
+        {
+            EnhancedTouchSupport.Enable();
+            var touches = Touch.activeTouches;
+            maxFilteredTouchId = int.MinValue;
+            foreach (var touch in touches)
+            {
+                maxFilteredTouchId = Mathf.Max(maxFilteredTouchId, touch.touchId);
+            }
+        }
+
         protected List<TouchInput> CurrentInputs { get; } = new List<TouchInput>(10);
 
         public virtual void PollInput()
@@ -17,7 +31,8 @@ namespace ArcCreate.Gameplay.Judgement.Input
             for (int i = 0; i < touches.Count; i++)
             {
                 var touch = touches[i];
-                if (touch.phase == UnityEngine.InputSystem.TouchPhase.None)
+                if (touch.phase == UnityEngine.InputSystem.TouchPhase.None
+                 || touch.touchId <= maxFilteredTouchId)
                 {
                     continue;
                 }
@@ -95,7 +110,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
                     Vector3 deltaToNote = screenPosition - input.ScreenPos;
                     float distanceToNote = deltaToNote.sqrMagnitude;
 
-                    if (ArcTapCollide(input.ScreenPos, screenPosition)
+                    if (ArcTapCollide(input, screenPosition, worldPosition)
                     && (timingDifference < minTimingDifference || distanceToNote <= minPositionDifference))
                     {
                         minTimingDifference = timingDifference;
@@ -223,7 +238,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
                     Vector3 screenPosition1 = Services.Camera.GameplayCamera.WorldToScreenPoint(worldPosition1);
                     Vector3 screenPosition2 = Services.Camera.GameplayCamera.WorldToScreenPoint(worldPosition2);
 
-                    if (ArcHitboxCollide(screenPosition1, screenPosition2))
+                    if (ArcHitboxCollide(screenPosition1, screenPosition2, worldPosition1, worldPosition2))
                     {
                         graceActive = true;
                         break;
@@ -322,43 +337,43 @@ namespace ArcCreate.Gameplay.Judgement.Input
 
             Vector3 arcScreenPos = Services.Camera.GameplayCamera.WorldToScreenPoint(arcWorldPosition);
             Vector3 touchScreenPos = Services.Camera.GameplayCamera.WorldToScreenPoint(touch.VerticalPos);
-            return ArcHitboxCollide(arcScreenPos, touchScreenPos);
+            return ArcHitboxCollide(arcScreenPos, touchScreenPos, touch.VerticalPos, arcWorldPosition);
         }
 
-        private bool ArcHitboxCollide(Vector3 screenPosition1, Vector3 screenPosition2)
+        private bool ArcHitboxCollide(Vector3 screenPosition1, Vector3 screenPosition2, Vector3 worldPosition1, Vector3 worldPosition2)
         {
             float dx = Mathf.Abs(screenPosition1.x - screenPosition2.x);
             float dy = Mathf.Abs(screenPosition1.y - screenPosition2.y);
+            bool screenCollide = dx <= Values.LaneScreenHitbox * 2 * Values.ArcHitboxX / Values.LaneWidth
+                              && dy <= Values.LaneScreenHitbox * 2 * Values.ArcHitboxY / Values.LaneWidth;
 
-            return dx <= Values.LaneScreenHitbox * 2 * Values.ArcHitboxX / Values.LaneWidth
-                && dy <= Values.LaneScreenHitbox * 2 * Values.ArcHitboxY / Values.LaneWidth;
+            float dWx = Mathf.Abs(worldPosition1.x - worldPosition2.x);
+            float dWy = Mathf.Abs(worldPosition1.y - worldPosition2.y);
+            bool worldCollide = dWx <= Values.ArcHitboxX && dWy <= Values.ArcHitboxY;
+            return worldCollide || screenCollide;
         }
 
-        private bool ArcTapCollide(Vector3 screenPosition1, Vector3 screenPosition2)
+        private bool ArcTapCollide(TouchInput input, Vector3 screenPosition, Vector3 worldPosition)
         {
-            float dx = Mathf.Abs(screenPosition1.x - screenPosition2.x);
-            float dy = Mathf.Abs(screenPosition1.y - screenPosition2.y);
+            float dSx = Mathf.Abs(input.ScreenPos.x - screenPosition.x);
+            float dSy = input.ScreenPos.y - screenPosition.y;
+            bool screenCollide = dSx <= Values.LaneScreenHitbox * 2 * Values.ArcTapHitboxX / Values.LaneWidth
+                              && (dSy >= -Values.LaneScreenHitbox * 2 * Values.ArcTapHitboxYDown / Values.LaneWidth
+                                  || dSy <= Values.LaneScreenHitbox * 2 * Values.ArcTapHitboxYUp / Values.LaneWidth);
 
-            float lscr = Values.LaneScreenHitbox;
-
-            return dx <= Values.LaneScreenHitbox * 2 * Values.ArcTapHitboxX / Values.LaneWidth
-                && dy <= Values.LaneScreenHitbox * 2 * Values.ArcTapHitboxY / Values.LaneWidth;
+            float dWx = Mathf.Abs(input.VerticalPos.x - worldPosition.x);
+            float dWy = input.VerticalPos.y - worldPosition.y;
+            bool worldCollide = dWx <= Values.ArcTapHitboxX
+                             && (dWy >= -Values.ArcTapHitboxYDown || dWy <= Values.ArcTapHitboxYUp);
+            return worldCollide || screenCollide;
         }
 
         private bool LaneCollide(TouchInput input, Vector3 screenPosition, int lane)
         {
-            if (input.Lane == lane)
-            {
-                return true;
-            }
-
-            if (Mathf.Abs(input.ScreenPos.x - screenPosition.x) <= Values.LaneScreenHitbox
-             && Mathf.Abs(input.ScreenPos.y - screenPosition.y) <= Values.LaneScreenHitbox)
-            {
-                return true;
-            }
-
-            return false;
+            bool worldCollide = input.Lane == lane;
+            bool screenCollide = Mathf.Abs(input.ScreenPos.x - screenPosition.x) <= Values.LaneScreenHitbox
+                              && Mathf.Abs(input.ScreenPos.y - screenPosition.y) <= Values.LaneScreenHitbox;
+            return worldCollide || screenCollide;
         }
     }
 }

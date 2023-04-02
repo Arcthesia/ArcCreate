@@ -31,7 +31,7 @@ namespace ArcCreate.Gameplay.Audio
 
         private void OnPauseButton()
         {
-            if (Values.EnablePauseMenu)
+            if (Values.EnablePauseMenu && Services.Audio.IsPlayingAndNotStationary)
             {
                 pauseScreen.SetActive(true);
                 Services.Audio.Pause();
@@ -42,12 +42,14 @@ namespace ArcCreate.Gameplay.Audio
         {
             pauseScreen.SetActive(false);
             Services.Audio.ResumeWithDelay(200, false);
+            Services.Judgement.RefreshInputHandler();
             DisablePauseButton().Forget();
         }
 
         private void OnRetryButton()
         {
             pauseScreen.SetActive(false);
+            Services.Judgement.RefreshInputHandler();
             StartRetry().Forget();
         }
 

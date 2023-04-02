@@ -62,10 +62,11 @@ namespace ArcCreate.Gameplay
         public const int ArcGraceDuration = 600;
         public const int ArcRedFlashCycle = 500;
         public const float ComboLostFlashDuration = 0.1f;
-        public const float ArcHitboxX = 1.955f;
-        public const float ArcHitboxY = 1.8f;
-        public const float ArcTapHitboxX = 2.975f;
-        public const float ArcTapHitboxY = 2.25f;
+        public const float ArcHitboxX = 1.9f;
+        public const float ArcHitboxY = 2.5f;
+        public const float ArcTapHitboxX = 3.02f;
+        public const float ArcTapHitboxYDown = 3.1f;
+        public const float ArcTapHitboxYUp = 2.5f;
         public const float MinLongNoteTimeIncrement = 0.1f;
 
         // Camera

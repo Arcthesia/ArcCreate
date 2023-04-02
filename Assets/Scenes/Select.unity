@@ -3366,6 +3366,7 @@ GameObject:
   - component: {fileID: 277860294}
   - component: {fileID: 277860296}
   - component: {fileID: 277860295}
+  - component: {fileID: 277860297}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -3489,6 +3490,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 277860293}
   m_CullTransparentMesh: 0
+--- !u!114 &277860297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277860293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32ed771c5ecb9c0b803c7385241b686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: Gameplay.Selection.List.Community
+  readIdFromContent: 0
 --- !u!1 &285204899
 GameObject:
   m_ObjectHideFlags: 0
@@ -6836,6 +6851,7 @@ GameObject:
   - component: {fileID: 602321714}
   - component: {fileID: 602321716}
   - component: {fileID: 602321715}
+  - component: {fileID: 602321717}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -6881,7 +6897,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Install Charts
+  m_text: Import package
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 41ceab91f4e8eea15bdc790d32319be5, type: 2}
   m_sharedMaterial: {fileID: -3874562187620930737, guid: 41ceab91f4e8eea15bdc790d32319be5,
@@ -6959,6 +6975,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 602321713}
   m_CullTransparentMesh: 0
+--- !u!114 &602321717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602321713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32ed771c5ecb9c0b803c7385241b686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: Gameplay.Selection.List.Import
+  readIdFromContent: 0
 --- !u!1 &609013828
 GameObject:
   m_ObjectHideFlags: 0
@@ -9137,6 +9167,7 @@ GameObject:
   - component: {fileID: 746755682}
   - component: {fileID: 746755684}
   - component: {fileID: 746755683}
+  - component: {fileID: 746755685}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -9260,6 +9291,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 746755681}
   m_CullTransparentMesh: 0
+--- !u!114 &746755685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 746755681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32ed771c5ecb9c0b803c7385241b686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: Gameplay.Selection.List.AllSongs
+  readIdFromContent: 0
 --- !u!1 &762005370
 GameObject:
   m_ObjectHideFlags: 0
@@ -9870,7 +9915,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 512036301}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9999895
+  m_Size: 0.85185194
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -19787,7 +19832,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 540.00006}
+  m_AnchoredPosition: {x: 0, y: 540.0001}
   m_SizeDelta: {x: 0, y: 700}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1961179716
@@ -20943,6 +20988,7 @@ GameObject:
   - component: {fileID: 2062781611}
   - component: {fileID: 2062781613}
   - component: {fileID: 2062781612}
+  - component: {fileID: 2062781614}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -21066,6 +21112,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2062781610}
   m_CullTransparentMesh: 0
+--- !u!114 &2062781614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2062781610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32ed771c5ecb9c0b803c7385241b686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: Gameplay.Selection.List.RemoteTestplay
+  readIdFromContent: 0
 --- !u!1 &2067245648
 GameObject:
   m_ObjectHideFlags: 0
