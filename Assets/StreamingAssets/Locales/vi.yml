@@ -1,0 +1,743 @@
+Format:
+  # Exception messages while parsing chart files
+  Exception:
+    Message: |-
+      An exception occured while reading the chart file {File}
+      At: line {LineNumber}
+      While parsing event of type: {EventType}
+      With the following: "{Content}".
+      {Reason}
+    MessageUnknownReason: |-
+      An unknown error occurred while reading the chart file {File}
+      At: line {LineNumber}
+      While parsing event of type: {EventType}
+      With the followng "{Content}".
+    ArcColorNegative: |-
+      Arc color id can not be negative.
+    AudioOffsetInvalid: |-
+      Invalid audio offset definition.
+    TimingPointDensityFactorInvalid: |-
+      Invalid timing point density factor definition.
+    BaseTimingInvalid: |-
+      Invalid base timing definition. Ensure your chart file starts with a timing event at 0ms.
+    IncludeReferencedMultipleTimes: |-
+      A chart file was already included but is being referenced again.
+    IncludeAReferencedFragment: |-
+      A chart file was already referenced as a fragment but is being included again.
+    TimingGroupPairInvalid: |-
+      Invalid timing group symbol pairing. Make sure to enclose timing group definitions properly with "};".
+    DivisorNegative: |-
+      Divisor property of timing event can not be negative.
+    BaseBPMZero: |-
+      Base BPM can not be zero.
+    DurationNegative: |-
+      Duration of this event type can not be negative.
+    DurationZero: |-
+      Duration of this event type can not be zero.
+    ArcTapOutOfRange: |-
+      ArcTap is outside the timing range of its parent Arc.
+    TimingGroupPropertiesInvalid: |-
+      Invalid timing group properties definition.
+    SymbolError: |-
+      Possibly wrong syntax.
+      Exception: {Exception}
+      Stack trace:
+      {StackTrace}
+
+Compose:
+  # Exception messages within the editor
+  Exception:
+    FileDoesNotExist: |-
+      Trying to read file located at {Path} but it does not exist. The file might have been deleted.
+    LoadImage: |-
+      An error occured while trying to load the image located at {Path}.
+      {Error}
+    LoadProject: |-
+      An error occured while trying to load the project file located at {Path}.
+      The file could have been saved incorrectly.
+      You can try modifying it manually, or you can delete the file and create a new project.
+      {Error}
+    ChartFileAlreadyExists: |-
+      Chart is already included in the project
+    InvalidChartFile: |-
+      The provided chart file name is invalid
+    NoChartIncluded: |-
+      Invalid project file: No chart is included within this project.
+    InvalidGroupProperties: |-
+      Invalid timing group properties. {Message}
+    InstructionLimit: |-
+      Lua script execution has been aborted: The instruction count limit of {0} was reached.
+    InvalidBaseBPM: |-
+      Invalid base bpm value: {0}
+    CreateSkyNoteNoValidArc: |-
+      Can not create sky note here. Sky notes must be placed on traces.
+    Navigation:
+      ParseKeybind: |-
+        An exception occured while parsing the keybind: "{0}".
+      ParseWhitespace: |-
+        Invalid keybind: a keystroke can not be a whitespace.
+      InvalidKeystroke: |-
+        Invalid keystroke: The keystroke "{0}" does not follow the correct format.
+      InvalidKey: |-
+        Invalid key: The string "{0}" does not match any key.
+      InvalidModifier: |-
+        Invalid modifier: The string "{0}" does not match any modifier key.
+      TooManyModifiers: |-
+        Invalid keystroke: The keystroke "{0}" has too many modifiers (maximum is 2).
+      InvalidActionPath: |-
+        Invalid action path: The string "{0}" does not match any action.
+    Scenecontrol: |-
+      Error occured while executing scenecontrol event of type {Type}: {Message}
+      {StackTrace}
+    LuaScript: |-
+      Error occured while executing lua script {Path}: {Message}
+      {StackTrace}
+    Render:
+      FFmpeg:
+        NotFound: |-
+          Could not find any FFmpeg executable.
+          Please confirm that the configured path {0} is correct.
+        Start: |-
+          Error occured while starting FFmpeg at {Path}: {Message}
+          {StackTrace}
+        Write: |-
+          Error occured while writing to FFmpeg process: {Message}
+          {StackTrace}
+      Audio:
+        IncompatibleSfx: |-
+          The audio clip {Sfx} is incompatible for rendering.
+          Expected channel count of {ExpectedChannels} and frequency of {ExpectedFrequency}, but the clip's channel count is {Channels} and its frequency is {Frequency}.
+          
+  # Notification messages
+  Notify:
+    GameplayLoaded: Gameplay scene loaded successfully
+    FreeCameraEditHelp: |-
+      Khởi động máy quay tự do (Giữ để xem thêm)
+      
+      WASD: Tiến/Trái/Lùi/Phải
+      Space: Đi lên
+      Shift: Đi xuống
+      IJKL: Xoay lên/trái/xuống/phải
+      U: Lăn trái
+      O: Lăn phải
+      Esc: Hủy
+      Enter: Xác nhận
+    EmmyLuaGenerated: |-
+      EmmyLua template for scenecontrol generated at the current project's folder
+      Use VsCode with the extension tangzx.emmylua to get autocompletion
+    Actions:
+      CannotMirror: Không thể đảo ngược bất kì nốt nào.
+      NoDragRange: Không thể di chuyển nốt timing đã chọn. Hãy thử kéo riêng từng nốt.
+    History:
+      Execute: |-
+        Đã thi hành lệnh: {Name}
+      Undo: |-
+        Hoàn tác lệnh: {Name}
+      Redo: |-
+        Làm lại lệnh: {Name}
+      # {Name} above will be replaced with these entries
+      AddTiming: Thêm timing event
+      EditTiming: Chỉnh sửa timing event
+      RemoveTiming: Xóa timing event
+      AddCamera: Thêm camera event
+      EditCamera: Sửa camera event
+      RemoveCamera: Xóa camera event
+      AddScenecontrol: Thêm scenecontrol event
+      EditScenecontrol: Sửa scenecontrol event
+      RemoveScenecontrol: Xóa scenecontrol event
+      EditValue: Sửa giá trị của nốt đã chọn
+      EditArc: Sửa giá trị của arc
+      CreateNote:
+        Tap: Tạo nốt nhấn
+        Hold: Tạo nốt giữ
+        Arc: Tạo arc
+        ArcTap: Tạo sky note
+        Trace: Tạo trace note
+      DeleteNotes: Xóa notes
+      Cut: Cắt notes
+      Paste: Dán notes
+      Mirror:
+        Vertical: Đảo ngược nốt chiều ngang
+        Horizontal: Đảo ngược nốt chiều dọc
+      Drag:
+        Timing: Drag notes timing
+        Position: Drag notes position
+    Clipboard:
+      Copy: Copied {0} notes
+      Cut: Cut {0} notes
+      NamedCopy: Copied {0} notes to named clipboard "{1}"
+      NamedCut: Cut {0} notes to named clipboard "{1}"
+    GroupTable:
+      AddGroup: Added timing group {Number}
+      EditGroup: Edited timing group {Number}
+      RemoveGroup: Removed timing group {Number}
+    Project:
+      NewProject: |-
+        Created new project
+        at: {Path}
+      OpenProject: |-
+        Opened project
+        at: {Path}
+      SaveProject: |-
+        Saved project
+        at: {Path}
+      OpenChart: Opened chart file {Path}
+      CreateChart: Created chart file {Path}
+      RemoveChart: Removed chart file {Path} from project
+    Inspector:
+      InvalidParamameter: Invalid parameter
+    Measurer:
+      CopyTiming: Copied cursor timing
+      CopyPosition: Copied arc's position
+      CopyX: Copied arc's x coordinate
+      CopyY: Copied arc's y coordinate
+    Export:
+      Render:
+        Cancelled: Đã hủy Render
+        Complete: Render thành công
+      Package:
+        Complete: Exported package to {0}
+  # Dialog boxes
+  Dialog:
+    RemoveGroup:
+      Title: Xóa timing group
+      Content: |-
+        Bạn có chắc bạn muốn xóa timing group này và mọi thứ bên trong? (một đi không trở lại)
+      Yes: Xóa
+      No: Hủy
+    RemoveChart:
+      Title: Xóa chart file
+      Content: |-
+        Bạn có chắc bạn muốn xóa chart file này khỏi project?
+
+        File sẽ không bị xóa và có thể thêm lại vào project sau, nhưng bất kì thông tin nào đi kèm với nó sẽ bị mất.
+      Yes: Xóa
+      No: Hủy
+    UnsavedChanges:
+      Title: Thay đổi chưa lưu
+      Content: |-
+        Bạn quên chưa lưu kìa :v. Bạn có muốn lưu không?
+      Yes: Lưu thay đổi
+      No: Bỏ thay đổi
+      Cancel: Hủy
+  Navigation:
+    KeybindOverride: Thay đổi phím cho tác vụ {0}
+    # Texts that appear on the context menu (right-click menu)
+    Actions:
+      Camera:
+        Name: Camera
+        FreeCamera:
+          Name: Khởi động camera tự do
+      Grid:
+        Name: Lưới
+        Toggle: Hiển thị lưới
+      Display:
+        Name: Hiển thị
+        FullScreen: Toàn màn hình
+      Selection:
+        Name: Selection
+        Clear: Clear selection
+        RangeSelect:
+          Name: Chọn các nốt giữa một khoảng
+      Measure:
+        Name: Measure
+        Start:
+          Name: Open measurer
+      Clipboard:
+        Name: Bộ nhớ tạm
+        Copy: Sao chép
+        Cut: Cắt
+        Paste:
+          Name: Dán
+          Cancel: Bỏ dán
+        NamedPaste:
+          Name: Dán
+          Cancel: Bỏ dán
+        Clear: Dọn bộ nhớ tạm
+      Delete:
+        Name: Xóa
+        Execute: Xóa notes
+      Mirror:
+        Name: Đảo ngược
+        Horizontal: Đảo ngược ngang
+        HorizontalNoColorSwitch: Đảo ngược ngang (bỏ qua màu)
+        Vertical: Đảo ngược dọc
+  Grid:
+    # Please modify the comment lines only (lines beginning with '--')
+    DefaultScript: |-
+      -- This is a lua script
+
+      -- Set the collider area with four values
+      -- (corner1.x, corner2.x, corner1.y, corner2.y)
+      grid.setCollider(-0.5, 1.5, -0.2, 1)
+
+      -- Set the grid's background color
+      grid.setPanelColor(rgba(255, 255, 255, 16))
+      
+      -- Draw lines with four values
+      -- (point1.x, point2.x, point1.y, point2.y)
+      grid.drawLine(-0.5, 1.5, -0.2, -0.2, defaultColor)
+
+      -- You can also use for loops
+      for x = -0.5, 1.5, 0.125 do
+        grid.drawLine(x, x, -0.2, 1, defaultColor)
+      end
+
+      for y = 0, 1, 0.25 do
+        grid.drawLine(-0.5, 1.5, y, y, defaultColor)
+      end
+  # Texts that appear on the editor UI
+  UI:
+    Common:
+      Confirm: Xác nhận
+      Cancel: Hủy
+      Close: Đóng
+      NotRequired: (không yêu cầu)
+      Extension: Tiện ích mở rộng
+    Placeholder:
+      Text: Trống không...
+      File: Không tệp nào được chọn...
+      Image: Không hình nào được chọn...
+      Property: No property...
+      ImagePrompt: Nhấn để chọn hình
+    PanelNames:
+      Toolbox: Toolbox
+      Gameplay: Gameplay
+      Timeline: Timeline
+      Project: Project
+      Events: Events
+      Remote: Remote
+      Export: Export
+      Settings: Settings
+    # Top bar of the UI
+    Top:
+      Label:
+        New: Mới
+        Open: Mở
+        Save: Lưu
+        InputMode: Input Mode
+        FullScreen: Toàn màn hình
+        ToggleFullScreenHint: Nhấn F11 để mở toàn màn hình.
+        Chart: Chart
+    # Project panel
+    Project:
+      Label:
+        NewChart: New Chart
+        NewProject: New Project
+        ProjectFile: Project File
+        ChartFile: Chart file
+        Information: Information
+        Gameplay: Gameplay
+        Title: Title
+        Composer: Composer
+        Illustrator: Illustrator
+        Charter: Charter
+        Alias: Alias
+        BPM: BPM
+        BaseBPM: Base BPM
+        BPMText: BPM Text
+        SyncBaseBPM: Sync
+        ChartOffset: Chart Offset
+        TimingPointDensityFactor: Judge Density
+        ChartConstant: Chart Constant
+        DifficultyName: Difficulty Name
+        DifficultyColor: Difficulty Color
+        Files: Files
+        Audio: Audio
+        JacketArt: Jacket Art
+        Background: Background
+        Video: Video
+        Skin: Skin
+        Side: Side
+        Note: Note
+        Particle: Particle
+        Accent: Accent
+        Track: Track
+        SingleLine: Single Line
+        Colors: Colors
+        TraceBody: Trace Body
+        Shadow: Shadow
+        ArcColors: Arc Colors
+        Blue: Blue (0)
+        Red: Red (1)
+        Green: Green (2)
+        Custom: Custom ({0})
+        AddArcColor: Add arc color
+        NoProjectLoaded: |-
+          No project loaded.
+          Create or open a new project
+        Shutter: Shutter
+        ShowShutter: Show shutter
+        HideShutter: Hide shutter
+        PreviewSegment: Preview segment
+      Options:
+        Inherit: Inherit
+        Light: Light
+        Conflict: Conflict
+        Colorless: Colorless
+        MiraiLight: Mirai Light
+        MiraiConflict: Mirai Conflict
+        Dynamix: Dynamix
+        Black: Black
+        Nijuusei: Nijuusei
+        Rei: Rei
+        DarkVs: DarkVs
+        Tempest: Tempest
+        Finale: Finale
+        Pentiment: Pentiment
+        Arcana: Arcana
+        None: None
+        Neo: Neo
+        Past: Past
+        Present: Present
+        Future: Future
+        Beyond: Beyond
+    Timeline:
+      Label:
+        Offset: Offset
+        TimingGroup: Group
+        Density: Density
+    # Events editor panel
+    EventsEditor:
+      Label:
+        Group: Group
+        Events: Events
+      Actions:
+        AddGroup: Add group
+        DeleteGroup: Delete group
+        AddEvent: Add event
+        DeleteEvent: Delete event
+        AutoReload: Reload automatically
+        GenerateEmmyLua: Generate EmmyLua
+        Reload: Reload
+        FreeCamera: Free camera
+      CameraView:
+        Default: Default view
+        Stationary: Stationary view
+        ZoomedOut: Zoomed out view
+        BirdsEye1: Bird's-eye view 1
+        BirdsEye2: Bird's-eye view 2
+      Mode:
+        Timing: Timing
+        Camera: Camera
+        Scenecontrol: Scene
+    # Export panel
+    Export:
+      Render:
+        Name: Render video
+        Description: |-
+          Automatically export chart view video.
+          Requires FFmpeg to be installed.
+        ConfigureFFmpeg: Configure FFmpeg executable path
+        Settings:
+          Name: Settings
+          From: From
+          To: To
+          Quality: Quality
+          FPS: FPS
+          Width: Width
+          Height: Height
+          Size: Size
+          ShowShutter: Show shutter
+        Start: Start rendering
+        Cancel: Cancel rendering
+        Status: |-
+          Rendering video. This will take a while.
+          Elapsed: {0}
+          Remaining: {1}
+      Package:
+        Name: Export package
+        Description: |-
+          Export a .arcpkg package file to share to other players.
+        Publisher: Publisher
+        Package: Package
+        Version: Version
+        BlankField: Please enter both publisher and package name information
+        Identifier: "Your package identifier is: {0}"
+        Export: Export
+    # Editor settings panel
+    Settings:
+      Label:
+        Locale:
+          Name: Localization
+          Language: Ngôn ngữ
+          Reload: Tải lại ngôn ngữ
+          CheckMissing: Check missing entries
+        Gameplay:
+          Name: Gameplay
+          Speed: Speed
+          AspectRatio: Aspect Ratio
+        Grid:
+          Name: Grid
+          Slot: Slot
+          UseDefault: Use default
+          FromLane: From lane
+          ToLane: To lane
+          ScaleGrid: Scale with sky input
+          Gridline: Define gridlines
+          Script: Lua script
+        AudioVolume:
+          Name: Audio volume
+          Music: Music
+          Effect: Effect
+          GlobalOffset: Global offset
+        Display:
+          Name: Display
+          Vsync: Vsync
+          Framerate: Framerate
+          ShowCounter: Show framerate
+        Input:
+          Name: Input
+          ReloadKeybinds: Reload keybinds
+        ScrollSensitivity:
+          Name: Scroll sensitivity
+          Vertical: Vertical
+          Horizontal: Horizontal
+          Timeline: Timeline
+        TrackScrolling:
+          Name: Track scrolling
+          Threshold: Threshold
+          MaxMovement: Max movement
+        Credits:
+          Name: Credits
+          View: See credits
+    # Toolbox panel
+    Toolbox:
+      Pallete:
+        Name: Pallete
+        Arc: Arc
+        Trace: Trace
+        Tap: Tap
+        Hold: Hold
+        Arctap: Sky
+        Easing: Easing
+      Macros: Macros
+    # Inspector window
+    Inspector:
+      Name: Inspector
+      Timing: Timing
+      StartTiming: Start
+      EndTiming: End
+      Lane: Lane
+      StartPos: From
+      EndPos: To
+      Sfx: Sfx
+      Group: Group
+      Mixed: Mixed
+      Arc: Arc
+      Trace: Trace
+      Actions:
+        SelectArc: Select parent arc
+        SelectArctap: Select sky notes
+
+Remote:
+  Exception:
+    InvalidIP: Địa chỉ IP không hợp lệ
+  State:
+    Listening: |-
+      Đang lắng nghe tín hiệu...
+      <size=20>
+      Trên ArcCreate cho máy tính, mở tab "Remote" và nhấn "Start broadcasting" để bắt đầu.</size>
+    ManualIP: |-
+      Đang chờ kết nối từ máy tính.
+      <size=20>
+      Trên ArcCreate cho máy tính, mở tab "Remote" và nhập địa chỉ IP: {0}.</size>
+    Found: |-
+      Đã nhận được kết nối từ các thiết bị sau.
+      Chọn một thiết bị để tiếp tục.
+    TargetDisconnected:
+      Compose: Đối tượng ngắt kết nối. Đang dừng kết nối.
+      Gameplay: Đối tượng ngắt kết nối. Bạn có muốn bắt đầu một phiên mới không?
+    Receiving:
+      Đang nhận dữ liệu ({0})
+  Description:
+    Idle: |-
+      Không có thiết bị nào được kết nối.
+      Bắt đầu phát sóng để tìm thiết bị. Hãy chắc chắn rằng thiết bị này và thiết bị kết nối tới ở trong cùng một mạng nội bộ, và thiết bị kết nối tới đang lắng nghe tín hiệu.
+    Broadcasting: |-
+      Mã phát sóng: {0}.
+      Chọn lựa chọn với mã này trên thiết bị kết nối để bắt đầu một phiên hoạt động.
+    Connected: |-
+      Đã kết nối với thiết bị tại: {0}:{1}
+  Actions:
+    Broadcast: Bắt đầu phát sóng
+    AbortBroadcast: Dừng phát sóng
+    BroadcastAgain: Phát sóng lại
+    StopSession: Dừng phiên hoạt động
+    StartNewSession: Bắt đầu một phiên chơi mới
+    ManualIP: Thiết lập kết nối thủ công
+    ReturnToSelect: Trở lại mục chọn bài
+  Control:
+    Name: Control
+    Sync:
+      Name: Sync data
+      AllFiles: All files
+      Chart: Chart
+      Audio: Audio
+      Jacket: Jacket
+      Background: Background
+      Metadata: Metadata
+    Settings:
+      Name: Settings
+      Offset: Device offset
+      Speed: Device speed
+      MusicVolume: Music volume
+      EffectVolume: Effect volume
+    StartTiming: Play from timing
+    EndTiming: Play to timing      
+    Loop: Loop playback
+    ShowLog: Show log
+    ShowDebug: Show debug information
+    ManualIP: Enter IP Manually
+  Window:
+    Name: Remote
+    SyncChart: Sync chart
+    SyncTiming: Sync timing
+
+Gameplay:
+  Exception:
+    LoadAudio: |-
+      Gặp lỗi khi cố gắng tải tệp âm thanh nằm ở {Path}.
+      {Error}
+    Chart: |-
+      Gặp lỗi khi cố gắng tải chart nằm ở {Path}.
+      {Error}
+    Skin: |-
+      Gặp lỗi khi cố gắng tải tệp hình ảnh nằm ở {Path}.
+      {Error}
+    Scenecontrol: |-
+      Gặp lỗi khi cố gắng tải sencecontrol json nằm ở {Path}.
+      {Error}
+    ScenecontrolSprite: |-
+      Gặp lỗi khi cố gắng tải sencecontrol sprite nằm ở {Path}.
+      {Error}
+    Load: |-
+      Gặp lỗi khi cố gắng tải chart {Identifier}, {ChartPath}
+      Lỗi: {Message}
+      Theo dấu:
+      {StackTrace}
+  HUD:
+    Play: Resume
+    Retry: Retry
+    Return: Quit
+  Selection:
+    SelectStatus:
+      Singular: |-
+        Đã chọn {0} asset
+      Plural: |-
+        Đã chọn {0} asset
+    DeleteConfirmation: |-
+      Bạn có chắc bạn muốn xóa những assets này?
+      Điểm của bạn sẽ không bị xóa.
+    CannotDeleteDefault: |-
+      Những assets mặc định không thể bị xóa.
+    Action:
+      Delete: Xóa
+      Cancel: Hủy bỏ
+      Done: Xong
+    List:
+      RemoteTestplay: Chơi thử từ xa
+      Import: Nhập gói màn chơi
+      Community: Cộng đồng
+      AllSongs: Tất cả bài hát
+      OtherDifficulties: Các độ khó khác
+    Info:
+      Undefined:
+        Title: Không tên
+        Composer: Không khả dụng
+        Charter: Không rõ
+      Charter: 'Charter: {0}'
+    Sort:
+      addeddate: "Sắp xếp: Ngày thêm"
+      charter: "Sắp xếp: Charter"
+      composer: "Sắp xếp: Nhạc sĩ"
+      difficulty: "Sắp xếp: Độ khó"
+      grade: "Sắp xếp: Thành tích"
+      playcount: "Sắp xếp: Lượt chơi"
+      score: "Sắp xếp: Điểm"
+      title: "Sắp xếp: Tên màn"
+    Group:
+      none: "Nhóm: không"
+      difficulty: "Nhóm: Độ khó"
+      grade: "Nhóm: Điểm"
+    Settings:
+      Name: Cài đặt
+      Language: Ngôn ngữ
+      Gameplay:
+        Name: Trò chơi
+        Speed: Tốc độ
+        SpeedDetail: |-
+          Thay đổi tốc độ nốt tiếp cận khu vực chơi.
+        EarlyLatePureDisplay: Hiển thị Early/Late pure
+        EarlyLatePureDisplayDetail: |-
+          Nếu bạn muốn biết mình nhấn sớm hay muộn trên nốt "pure".
+      Audio:
+        Name: Âm thanh
+        Offset: Độ trễ
+        OffsetDetail: |-
+          Chỉnh độ đồng bộ của nhạc.
+          Tăng nếu bạn bấm LATE, hoặc giảm nếu bạn bấm EARLY.
+        Calibrate: Hiệu chuẩn
+        MusicAudio: Âm lượng nhạc
+        MusicAudioDetail: |-
+          Âm lượng của nhạc trong lúc chơi.
+        EffectAudio: Âm lượng hiệu ứng
+        EffectAudioDetail: |-
+          Âm lượng của tiếng nốt trong lúc chơi.
+      Visual:
+        Name: Hiệu ứng
+        Colorblind: Chế độ mù màu
+        ColorblindDetail: Sử dụng màu khác cho arcs.
+        FrPmDisplay: Hiện FR/PM
+        FrPmDisplayDetail: Chỉnh vị trí hiển thị FR/PM.
+        MaxDisplay: Hiện điểm tối đa
+        MaxDisplayDetail: Hiện điểm tối đa :).
+        EarlyLateDisplay: Hiện Early/Late
+        EarlyLateDisplayDetail: Cho bạn biết mình bấm sớm hay muộn và vị trí hiện
+        LimitFramerate: Giới hạn khung hình
+        LimitFramerateDetail: Giới hạn khung hình xuống 60 FPS để tiết kiệm pin. Có thể tăng độ trễ.
+        ShowFPS: Hiện FPS
+        ShowFPSDetail: Cho bạn thấy FPS hiện tại.
+        ShowDebug: Hiện thông tin gỡ lỗi
+        ShowDebugDetail: Hiện thông tin gỡ lỗi trong lúc chơi (Đừng bật trừ khi cần thiết).
+      FrPmPosition:
+        middle: Giữa
+        infopanel: Info panel
+        off: Off
+      EarlyLateTextPosition:
+        middle: Giữa
+        bottom: Đáy
+        top: Trên
+
+Shutter:
+  Composer: Nhạc
+  Illustrator: Minh họa
+  Charter: Charter
+  Alias: as
+    
+Storage:
+  Confirm: Xác nhận
+  ImportErrors: |-
+    Những asset sau đây chưa thêm được:
+  ImportSummary: |-
+    Thêm thành công những asset sau:
+  NoAssetImported: |-
+    Không asset nào được thêm.
+  ImportConflict:
+    Message: |-
+      Bạn đang cố gắng thêm một phiên bản cũ.
+      Bạn muốn giữ lại bản nào?
+    ReplaceAsset:
+      Thay thế bằng cách nhập asset mới
+    KeepOriginal:
+      Giữ lại asset cũ
+    Identifier: "Identifier: {0}"
+    Version: "Phiên bản: {0}"
+  Loading:
+    Message: 'Đang tải: {0}...'
+    Archive: Đang giải nén
+    ValidatePackage: Xác thực tài nguyên
+    CheckConflict: Kiểm tra xung đột
+    DeleteAsset: Đang xóa asset {0}
+    StoreAsset: Đang trữ asset {0}
+    Finalizing: Kết thúc tiến trình
