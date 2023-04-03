@@ -19,10 +19,10 @@ namespace ArcCreate.Data
                 return Charts[0];
             }
 
-            return GetClosestDifficultyToConstant(selectedChart.ChartConstant);
+            return GetClosestDifficultyToConstant(selectedChart.ChartConstant, selectedChart.ChartPath);
         }
 
-        public ChartSettings GetClosestDifficultyToConstant(double constant)
+        public ChartSettings GetClosestDifficultyToConstant(double constant, string chartPath)
         {
             double minCcDiff = double.MaxValue;
             ChartSettings result = null;
@@ -33,6 +33,11 @@ namespace ArcCreate.Data
                 {
                     result = chart;
                     minCcDiff = ccDiff;
+                }
+
+                if (ccDiff == minCcDiff && chartPath == chart.ChartPath)
+                {
+                    result = chart;
                 }
             }
 

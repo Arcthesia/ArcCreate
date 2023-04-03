@@ -64,6 +64,11 @@ namespace ArcCreate.Selection.Interface
             visibleChart = data.ChartToDisplay;
 
             UpdateSelectedStateImmediate(InterfaceUtility.AreTheSame(level, storage.SelectedChart.Value.level));
+            if (isSelected)
+            {
+                visibleChart = storage.SelectedChart.Value.chart;
+            }
+
             difficultyCellPool = difficultyCellPool == null || difficultyCellPool.IsDestroyed ? Pools.Get<DifficultyCell>("DifficultyCell") : difficultyCellPool;
             SetInfo();
         }

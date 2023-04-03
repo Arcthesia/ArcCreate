@@ -95,6 +95,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public void UpdateScenecontrol(int currentTiming)
         {
+            foreach (var c in referencedControllers)
+            {
+                c.UpdateController(currentTiming);
+            }
+
+            Services.Score.ClearJudgementsThisFrame();
+
             if (!Services.Audio.IsPlayingAndNotStationary)
             {
                 return;
@@ -120,11 +127,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
             float speed = Services.Audio.IsPlaying ? bpm / Values.BaseBpm : 0;
             float glowAlpha = Mathf.Lerp(0.75f, 1, count / beatDuration);
 
-            foreach (var c in referencedControllers)
-            {
-                c.UpdateController(currentTiming);
-            }
-
             trackOffset += Time.deltaTime * speed * 6;
             trackSprite.material.SetFloat(OffsetShaderId, trackOffset);
             singleLineOffset += (speed >= 0) ? (Time.deltaTime * speed * 6) : (Time.deltaTime * 0.6f);
@@ -132,8 +134,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
             singleLineR.material.SetFloat(OffsetShaderId, singleLineOffset);
             skyInputLine.ApplyGlow(glowAlpha);
             skyInputLabel.ApplyGlow(glowAlpha);
-
-            Services.Score.ClearJudgementsThisFrame();
         }
 
         public void Clean()

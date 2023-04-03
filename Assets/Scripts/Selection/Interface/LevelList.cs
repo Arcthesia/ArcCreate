@@ -124,7 +124,9 @@ namespace ArcCreate.Selection.Interface
         private void OnSelectedChart((LevelStorage, ChartSettings) obj)
         {
             var (level, chart) = obj;
-            if (!chart.IsSameDifficulty(currentChart) || storageData.SelectedPack.Value != currentPack)
+            bool chartChanged = !chart.IsSameDifficulty(currentChart, false);
+            bool packChanged = storageData.SelectedPack.Value != currentPack;
+            if (chartChanged || packChanged)
             {
                 RebuildList();
             }

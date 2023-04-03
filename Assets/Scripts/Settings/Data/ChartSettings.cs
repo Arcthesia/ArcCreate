@@ -75,17 +75,17 @@ namespace ArcCreate.Data
             };
         }
 
-        public bool IsSameDifficulty(ChartSettings other)
+        public bool IsSameDifficulty(ChartSettings other, bool parseDifficutyName = true)
         {
             if (other == null)
             {
                 return false;
             }
 
-            return IsSameDifficulty(other.ChartPath, other.Difficulty);
+            return IsSameDifficulty(other.ChartPath, other.Difficulty, parseDifficutyName);
         }
 
-        public bool IsSameDifficulty(string chartPath, string difficultyName)
+        public bool IsSameDifficulty(string chartPath, string difficultyName, bool parseDifficutyName = true)
         {
             int thisRightDot = ChartPath.LastIndexOf('.');
             int otherRightDot = chartPath.LastIndexOf('.');
@@ -110,6 +110,11 @@ namespace ArcCreate.Data
             if (isSame)
             {
                 return true;
+            }
+
+            if (!parseDifficutyName)
+            {
+                return false;
             }
 
             // The difficulty name check is only meant for custom chart file names.

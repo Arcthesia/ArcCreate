@@ -326,7 +326,7 @@ namespace ArcCreate.Storage
                     }
                 }
 
-                return (lv, lv.Settings.GetClosestDifficultyToConstant(cc));
+                return (lv, lv.Settings.GetClosestDifficultyToConstant(cc, string.Empty));
             }
         }
 
