@@ -184,7 +184,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public void WaitForSceneLoad()
         {
             IsLoaded = false;
-            scene.WaitForTasksComplete().ContinueWith(() => IsLoaded = true);
+            scene.WaitForTasksComplete().ContinueWith(() =>
+            {
+                IsLoaded = true;
+                UpdateScenecontrol(Services.Audio.ChartTiming);
+            });
         }
 
         public TMP_FontAsset GetFont(string font)

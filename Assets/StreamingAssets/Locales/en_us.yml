@@ -690,6 +690,8 @@ Gameplay:
         ColorblindDetail: Use alternate arc colors.
         FrPmDisplay: FR/PM display
         FrPmDisplayDetail: Adjust FR/PM indicator position.
+        MaxDisplay: Max indicator display
+        MaxDisplayDetail: Toggle max score indicator display.
         EarlyLateDisplay: Early/Late display
         EarlyLateDisplayDetail: Adjust early/late text position.
         LimitFramerate: Limit framerate

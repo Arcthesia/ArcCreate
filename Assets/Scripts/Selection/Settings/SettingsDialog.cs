@@ -33,6 +33,7 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private TMP_Text frPmDisplayPositionText;
         [SerializeField] private Button changeLateEarlyPositionButton;
         [SerializeField] private TMP_Text lateEarlyPositionText;
+        [SerializeField] private Toggle maxIndicatorToggle;
         [SerializeField] private Toggle limitFrameRateToggle;
         [SerializeField] private Toggle showFpsToggle;
         [SerializeField] private Toggle showDebug;
@@ -55,6 +56,7 @@ namespace ArcCreate.Selection.Interface
             limitFrameRateToggle.onValueChanged.AddListener(OnLimitFrameRateToggle);
             showFpsToggle.onValueChanged.AddListener(OnShowFpsToggle);
             showDebug.onValueChanged.AddListener(OnShowDebugToggle);
+            maxIndicatorToggle.onValueChanged.AddListener(OnMaxIndicatorToggle);
 
             Settings.DropRate.OnValueChanged.AddListener(OnDropRateSettings);
             Settings.ShowEarlyLatePure.OnValueChanged.AddListener(OnShowEarlyLatePureSettings);
@@ -67,6 +69,7 @@ namespace ArcCreate.Selection.Interface
             Settings.LimitFrameRate.OnValueChanged.AddListener(OnLimitFrameRateSettings);
             Settings.ShowFPSCounter.OnValueChanged.AddListener(OnShowFPSCounterSettings);
             Settings.ShowGameplayDebug.OnValueChanged.AddListener(OnShowDebugSettings);
+            Settings.EnableMaxIndicator.OnValueChanged.AddListener(OnMaxIndicatorSettings);
 
             OnDropRateSettings(Settings.DropRate.Value);
             OnShowEarlyLatePureSettings(Settings.ShowEarlyLatePure.Value);
@@ -79,6 +82,7 @@ namespace ArcCreate.Selection.Interface
             OnLimitFrameRateSettings(Settings.LimitFrameRate.Value);
             OnShowFPSCounterSettings(Settings.ShowFPSCounter.Value);
             OnShowDebugSettings(Settings.ShowGameplayDebug.Value);
+            OnMaxIndicatorSettings(Settings.EnableMaxIndicator.Value);
 
             // setupOffsetButton.onClick.AddListener(setupOffsetDialog.Show);
         }
@@ -100,6 +104,7 @@ namespace ArcCreate.Selection.Interface
             changeLateEarlyPositionButton.onClick.RemoveListener(OnChangeLateEarlyPositionButton);
             limitFrameRateToggle.onValueChanged.RemoveListener(OnLimitFrameRateToggle);
             showFpsToggle.onValueChanged.RemoveListener(OnShowFpsToggle);
+            maxIndicatorToggle.onValueChanged.AddListener(OnMaxIndicatorToggle);
 
             Settings.DropRate.OnValueChanged.RemoveListener(OnDropRateSettings);
             Settings.ShowEarlyLatePure.OnValueChanged.RemoveListener(OnShowEarlyLatePureSettings);
@@ -111,6 +116,7 @@ namespace ArcCreate.Selection.Interface
             Settings.LateEarlyTextPosition.OnValueChanged.RemoveListener(OnLateEarlyTextPositionSettings);
             Settings.LimitFrameRate.OnValueChanged.RemoveListener(OnLimitFrameRateSettings);
             Settings.ShowFPSCounter.OnValueChanged.RemoveListener(OnShowFPSCounterSettings);
+            Settings.EnableMaxIndicator.OnValueChanged.AddListener(OnMaxIndicatorSettings);
 
             // setupOffsetButton.onClick.RemoveListener(setupOffsetDialog.Show);
         }
@@ -169,7 +175,12 @@ namespace ArcCreate.Selection.Interface
 
         private void OnShowDebugSettings(bool value)
         {
-            showDebug.isOn = value;
+            showDebug.SetIsOnWithoutNotify(value);
+        }
+
+        private void OnMaxIndicatorSettings(bool value)
+        {
+            maxIndicatorToggle.SetIsOnWithoutNotify(value);
         }
 
         private void OnDecreaseSpeedButton()
@@ -245,6 +256,11 @@ namespace ArcCreate.Selection.Interface
         private void OnShowDebugToggle(bool value)
         {
             Settings.ShowGameplayDebug.Value = value;
+        }
+
+        private void OnMaxIndicatorToggle(bool value)
+        {
+            Settings.EnableMaxIndicator.Value = value;
         }
     }
 }

@@ -12,9 +12,17 @@ namespace ArcCreate.Gameplay.Score
         [SerializeField] private TMP_Text comboText;
         [SerializeField] private TMP_Text scoreText;
         [SerializeField] private Color comboLostColor;
+
+        [Header("Indicator")]
+        [SerializeField] private GameObject frIndicator;
+        [SerializeField] private GameObject pmIndicator;
+        [SerializeField] private GameObject maxIndicator;
+        [SerializeField] private Transform indicatorsContainer;
+        [SerializeField] private Transform[] indicatorParents;
         private readonly char[] scoreCharArray = new char[64];
         private readonly char[] comboCharArray = new char[64];
 
+        private readonly int[] judgeCounts = new int[7];
         private int currentCombo = 0;
         private int totalCombo = 1;
         private double currentScoreFull = 0;
@@ -29,9 +37,20 @@ namespace ArcCreate.Gameplay.Score
 
         private int CurrentScoreTotal => (int)System.Math.Round(currentScoreFull + currentScorePartial);
 
+        public int GetJudgementCount(JudgementResult type)
+        {
+            return judgeCounts[(int)type];
+        }
+
+        public void SetJudgementCount(JudgementResult type, int count)
+        {
+            judgeCounts[(int)type] = count;
+        }
+
         public void ProcessJudgement(JudgementResult result)
         {
             resultReceivedThisFrame.Add(result);
+            SetJudgementCount(result, GetJudgementCount(result) + 1);
 
             if (result.IsLost())
             {
@@ -41,6 +60,9 @@ namespace ArcCreate.Gameplay.Score
                     comboRedmix = 1;
                 }
 
+                frIndicator.SetActive(false);
+                pmIndicator.SetActive(false);
+                maxIndicator.SetActive(false);
                 return;
             }
 
@@ -54,6 +76,8 @@ namespace ArcCreate.Gameplay.Score
             if (result.IsFar())
             {
                 scoreToAdd = scorePerNote * Values.FarPenaltyMultipler;
+                pmIndicator.SetActive(false);
+                maxIndicator.SetActive(false);
             }
             else if (result.IsMax())
             {
@@ -62,6 +86,7 @@ namespace ArcCreate.Gameplay.Score
             else
             {
                 scoreToAdd = scorePerNote;
+                maxIndicator.SetActive(false);
             }
 
             pendingScoreEvents.Add(new ScoreEvent()
@@ -111,6 +136,11 @@ namespace ArcCreate.Gameplay.Score
             pendingScoreEvents.Clear();
             currentScorePartial = 0;
 
+            for (int i = 0; i < judgeCounts.Length; i++)
+            {
+                judgeCounts[i] = 0;
+            }
+
             if (totalCombo == 0)
             {
                 currentScoreFull = 0;
@@ -120,8 +150,12 @@ namespace ArcCreate.Gameplay.Score
             {
                 double scorePerNote = (double)Values.MaxScore / totalCombo;
                 currentScoreFull = (scorePerNote + 1) * currentCombo;
+                SetJudgementCount(JudgementResult.Max, currentCombo);
             }
 
+            frIndicator.SetActive(true);
+            pmIndicator.SetActive(true);
+            maxIndicator.SetActive(Settings.EnableMaxIndicator.Value);
             SetScore(CurrentScoreTotal);
         }
 
@@ -157,6 +191,48 @@ namespace ArcCreate.Gameplay.Score
                 comboColor.a = comboRedmix;
                 comboText.color = comboColor;
                 comboText.outlineColor = comboColor;
+            }
+        }
+
+        private void Awake()
+        {
+            Settings.EnableMaxIndicator.OnValueChanged.AddListener(OnEnableMaxIndicatorSettings);
+            Settings.FrPmIndicatorPosition.OnValueChanged.AddListener(OnFrPmPositionSettings);
+
+            OnEnableMaxIndicatorSettings(Settings.EnableMaxIndicator.Value);
+            OnFrPmPositionSettings(Settings.FrPmIndicatorPosition.Value);
+        }
+
+        private void OnDestroy()
+        {
+            Settings.EnableMaxIndicator.OnValueChanged.RemoveListener(OnEnableMaxIndicatorSettings);
+            Settings.FrPmIndicatorPosition.OnValueChanged.RemoveListener(OnFrPmPositionSettings);
+        }
+
+        private void OnEnableMaxIndicatorSettings(bool enable)
+        {
+            bool maxing = true;
+            for (int i = 0; i < judgeCounts.Length; i++)
+            {
+                if ((JudgementResult)i != JudgementResult.Max && judgeCounts[i] > 0)
+                {
+                    maxing = false;
+                }
+            }
+
+            maxIndicator.SetActive(enable && maxing);
+        }
+
+        private void OnFrPmPositionSettings(int pos)
+        {
+            var position = (FrPmPosition)pos;
+            if (position == FrPmPosition.Off)
+            {
+                indicatorsContainer.gameObject.SetActive(false);
+            }
+            else
+            {
+                indicatorsContainer.gameObject.SetActive(true);
             }
         }
     }

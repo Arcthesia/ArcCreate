@@ -98,8 +98,11 @@ namespace ArcCreate.Gameplay.Hitsound
                     finalSfx = finalSfx + ".wav";
                 }
 
-                string uri = fileAccess?.GetFileUri(finalSfx) ?? Path.Combine(parentUri, finalSfx);
-                loadTasks.Add(LoadCustomSfx(sfx, uri));
+                string uri = fileAccess == null ? Path.Combine(parentUri, finalSfx) : fileAccess.GetFileUri(finalSfx);
+                if (uri != null)
+                {
+                    loadTasks.Add(LoadCustomSfx(sfx, uri));
+                }
             }
 
             await UniTask.WhenAll(loadTasks);

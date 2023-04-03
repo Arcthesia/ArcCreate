@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Gameplay.Judgement;
@@ -141,13 +142,13 @@ namespace ArcCreate.Gameplay.Particle
             ps.ApplyMaterial(mat);
             ps.Play();
 
-            if (result.IsEarly())
+            if (result.IsEarly() && (result.IsFar() || Settings.ShowEarlyLatePure.Value))
             {
                 earlyLateText.SetText(Values.EarlyText);
                 earlyLateText.color = earlyColor;
                 lastEarlyLateRealTime = Time.time;
             }
-            else if (result.IsLate())
+            else if (result.IsLate() && (result.IsFar() || Settings.ShowEarlyLatePure.Value))
             {
                 earlyLateText.SetText(Values.LateText);
                 earlyLateText.color = lateColor;
@@ -247,7 +248,32 @@ namespace ArcCreate.Gameplay.Particle
             var particlePrefabRenderer = longNoteParticlePrefab.GetComponent<ParticleSystemRenderer>();
             longParticleTexture = new ExternalTexture(particlePrefabRenderer.material.mainTexture, "Particles");
 
+            Settings.LateEarlyTextPosition.OnValueChanged.AddListener(OnLateEarlyPositionSettings);
+            OnLateEarlyPositionSettings(Settings.LateEarlyTextPosition.Value);
+
             LoadExternalParticleSkin().Forget();
+        }
+
+        private void OnLateEarlyPositionSettings(int val)
+        {
+            EarlyLateTextPosition pos = (EarlyLateTextPosition)val;
+            float yAnchor = 0.5f;
+            switch (pos)
+            {
+                case EarlyLateTextPosition.Top:
+                    yAnchor = 0.9f;
+                    break;
+                case EarlyLateTextPosition.Bottom:
+                    yAnchor = 0.25f;
+                    break;
+                case EarlyLateTextPosition.Middle:
+                default:
+                    yAnchor = 0.5f;
+                    break;
+            }
+
+            earlyLateTransform.anchorMin = new Vector2(earlyLateTransform.anchorMin.x, yAnchor);
+            earlyLateTransform.anchorMax = new Vector2(earlyLateTransform.anchorMax.x, yAnchor);
         }
 
         private async UniTask LoadExternalParticleSkin()
@@ -279,6 +305,8 @@ namespace ArcCreate.Gameplay.Particle
             Destroy(PureMaterial);
             Destroy(FarMaterial);
             Destroy(LostMaterial);
+
+            Settings.LateEarlyTextPosition.OnValueChanged.RemoveListener(OnLateEarlyPositionSettings);
         }
 
         private Vector2 ConvertToScreen(Vector3 world)
