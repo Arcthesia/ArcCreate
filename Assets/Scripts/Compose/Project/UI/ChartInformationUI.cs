@@ -162,12 +162,13 @@ namespace ArcCreate.Compose.Project
 
         private void OnDensityFactor(string value)
         {
-            if (Evaluator.TryFloat(value, out float factor))
+            if (Evaluator.TryFloat(value, out float factor) && factor > 0)
             {
                 GameplayData.TimingPointDensityFactor.Value = factor;
-
                 Values.ProjectModified = true;
             }
+
+            timingPointDensityFactor.SetTextWithoutNotify(GameplayData.TimingPointDensityFactor.Value.ToString());
         }
 
         private void OnTitle(string value)

@@ -200,7 +200,8 @@ namespace ArcCreate.Gameplay.Judgement.Input
                         for (int i = requests.Count - 1; i >= 0; i--)
                         {
                             ArcJudgementRequest req = requests[i];
-                            if (currentTiming <= req.StartAtTiming)
+                            if (currentTiming >= req.StartAtTiming
+                             && currentTiming <= req.Arc.EndTiming)
                             {
                                 colorLogic.FingerLifted(input.Id, (float)req.Arc.TimeIncrement);
                                 set = true;

@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using ArcCreate.Gameplay;
 using ArcCreate.Utility;
@@ -21,6 +22,8 @@ namespace ArcCreate.Compose.Components
         [Header("Gameplay")]
         [SerializeField] private TMP_InputField speedField;
         [SerializeField] private TMP_Dropdown aspectRatioDropdown;
+        [SerializeField] private TMP_Dropdown indicatorPositionDropdown;
+        [SerializeField] private Toggle maxIndicatorToggle;
 
         [Header("Audio")]
         [SerializeField] private TMP_InputField musicAudioField;
@@ -65,6 +68,8 @@ namespace ArcCreate.Compose.Components
             speedField.onEndEdit.AddListener(OnSpeedField);
             densityField.onEndEdit.AddListener(OnDensityField);
             openCreditsButton.onClick.AddListener(creditsDialog.Open);
+            indicatorPositionDropdown.onValueChanged.AddListener(OnIndicatorPositionDropdown);
+            maxIndicatorToggle.onValueChanged.AddListener(OnMaxIndicatorToggle);
 
             Settings.InputMode.OnValueChanged.AddListener(OnSettingInputMode);
             Values.BeatlineDensity.OnValueChange += OnDensity;
@@ -83,6 +88,8 @@ namespace ArcCreate.Compose.Components
             inputModeDropdown.SetValueWithoutNotify(Settings.InputMode.Value);
             speedField.SetTextWithoutNotify((Settings.DropRate.Value / Constants.DropRateScalar).ToString("F1"));
             densityField.SetTextWithoutNotify(Values.BeatlineDensity.Value.ToString());
+            indicatorPositionDropdown.SetValueWithoutNotify(Settings.FrPmIndicatorPosition.Value);
+            maxIndicatorToggle.SetIsOnWithoutNotify(Settings.EnableMaxIndicator.Value);
         }
 
         private void OnDestroy()
@@ -105,9 +112,21 @@ namespace ArcCreate.Compose.Components
             speedField.onEndEdit.RemoveListener(OnSpeedField);
             densityField.onEndEdit.RemoveListener(OnDensityField);
             openCreditsButton.onClick.RemoveListener(creditsDialog.Open);
+            indicatorPositionDropdown.onValueChanged.RemoveListener(OnIndicatorPositionDropdown);
+            maxIndicatorToggle.onValueChanged.RemoveListener(OnMaxIndicatorToggle);
 
             Settings.InputMode.OnValueChanged.RemoveListener(OnSettingInputMode);
             Values.BeatlineDensity.OnValueChange -= OnDensity;
+        }
+
+        private void OnMaxIndicatorToggle(bool value)
+        {
+            Settings.EnableMaxIndicator.Value = value;
+        }
+
+        private void OnIndicatorPositionDropdown(int value)
+        {
+            Settings.FrPmIndicatorPosition.Value = value;
         }
 
         private void OnAspectRatioDropdown(int value)

@@ -11,7 +11,10 @@ namespace ArcCreate
         public static readonly IntSetting DropRate = new IntSetting("DropRate", 150);
         public static readonly BoolSetting ShowEarlyLatePure = new BoolSetting("ShowEarlyLate", true);
         public static readonly BoolSetting EnableColorblind = new BoolSetting("EnableColorblind", false);
-        public static readonly IntSetting FrPmIndicatorPosition = new IntSetting("FrPmIndicatorPosition", 0);
+        public static readonly IntSetting FrPmIndicatorPosition = new IntSetting(
+            "IndicatorPosition",
+            (int)(Application.isMobilePlatform ? FrPmPosition.Middle : FrPmPosition.Off));
+
         public static readonly BoolSetting EnableMaxIndicator = new BoolSetting("EnableMaxIndicator", false);
         public static readonly IntSetting LateEarlyTextPosition = new IntSetting("LateEarlyTextPosition", 0);
         public static readonly IntSetting ViewportAspectRatioSetting = new IntSetting("ViewportAspectRatioSetting", 0);

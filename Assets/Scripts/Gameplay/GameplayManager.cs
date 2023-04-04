@@ -84,8 +84,9 @@ namespace ArcCreate.Gameplay
                 ImportTestChart(path);
             }
 
-            Settings.InputMode.Value = (int)InputMode.Mouse;
+            Settings.InputMode.Value = (int)InputMode.Touch;
             Services.Scenecontrol.WaitForSceneLoad();
+            Services.Judgement.SetDebugDisplayMode(true);
         }
 
         protected override void OnSceneLoad()

@@ -214,6 +214,7 @@ namespace ArcCreate.Gameplay
                     {
                         minDistanceThisFrame = distance;
                         AssignedFingerId = fingerId;
+                        assignedFingerExistsThisFrame = true;
                         ResetRedArcValue();
                     }
 
@@ -296,7 +297,7 @@ namespace ArcCreate.Gameplay
             existsArcWithinRangeThisFrame = false;
             isAssigningThisFrame = false;
 
-            if (!assignedFingerExistsThisFrame)
+            if (!assignedFingerExistsThisFrame && IsFingerAssigned)
             {
                 ResetAssignedFinger();
             }

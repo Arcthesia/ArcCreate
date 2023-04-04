@@ -127,7 +127,7 @@ namespace ArcCreate.Compose.EventsEditor
 
         private void OnRemoveButton()
         {
-            if (Selected == null)
+            if (Selected == null || Selected.Timing == 0)
             {
                 return;
             }

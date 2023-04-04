@@ -467,6 +467,8 @@ Compose:
           Name: Gameplay
           Speed: Speed
           AspectRatio: Aspect Ratio
+          Indicator: Indicator
+          MaxIndicator: Enable max indicator
         Grid:
           Name: Grid
           Slot: Slot

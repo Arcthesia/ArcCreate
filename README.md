@@ -33,10 +33,11 @@ This project was made with Unity 2019.4.34f1. You can download the exact version
 ### Gameplay
 - [x] Gameplay rendering
 - [x] Gameplay judgement
-- [ ] Pause menu
+- [x] Pause menu
 - [x] Compiled scenecontrol support
 - [ ] Support for controller input
 - [x] Level selection menu
+- [ ] Custom gauge and partner
 - [ ] Result screen
 - [x] Import level from package file
 - [x] Settings menu

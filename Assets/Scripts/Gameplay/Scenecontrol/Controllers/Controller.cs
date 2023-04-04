@@ -688,6 +688,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 track.Lane3Alpha = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
                 track.Lane4Alpha = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
                 track.CustomSkin = (string)properties[offset++];
+                track.ApplySkin(track.CustomSkin);
                 track.EnableTrackModule = enable;
             }
         }

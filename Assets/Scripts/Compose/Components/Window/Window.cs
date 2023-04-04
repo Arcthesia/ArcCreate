@@ -80,13 +80,14 @@ namespace ArcCreate.Compose.Components
 
         private void OnDrag(Vector2 pos)
         {
-            Vector2 moveTo = positionStartDragAt + pos - mouseStartDragAt;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(parent, pos, null, out Vector2 screenPos);
+            Vector2 moveTo = positionStartDragAt + screenPos - mouseStartDragAt;
             AlignSelfToScreen(moveTo);
         }
 
         private void OnBeginDrag(Vector2 pos)
         {
-            mouseStartDragAt = pos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(parent, pos, null, out mouseStartDragAt);
             positionStartDragAt = rect.anchoredPosition;
         }
 
