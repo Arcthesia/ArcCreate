@@ -25,7 +25,7 @@ namespace ArcCreate.Gameplay.Data
         public float CalculateEndZPos(double currentFloorPosition)
             => ArcFormula.FloorPositionToZ(EndFloorPosition - currentFloorPosition);
 
-        public (Matrix4x4 body, Matrix4x4 shadow) GetMatrices(double floorPosition, Vector3 fallDirection, float baseZ)
+        public (Matrix4x4 body, Matrix4x4 shadow) GetMatrices(double floorPosition, Vector3 fallDirection, float baseZ, float baseY)
         {
             float startZ = ArcFormula.FloorPositionToZ(FloorPosition - floorPosition);
             float endZ = ArcFormula.FloorPositionToZ(EndFloorPosition - floorPosition);
@@ -44,7 +44,7 @@ namespace ArcCreate.Gameplay.Data
                 new Vector4(1, 0, 0, 0),
                 new Vector4(0, 1, 0, 0),
                 new Vector4(dir.x, 0, dir.z, 0),
-                new Vector4(startPos.x, 0, startPos.z, 1));
+                new Vector4(startPos.x, -baseY, startPos.z, 1));
 
             return (bodyMatrix, shadowMatrix);
         }

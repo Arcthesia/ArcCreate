@@ -226,7 +226,7 @@ namespace ArcCreate.Gameplay.Data
                     Color = color,
                 };
 
-                var (bodyMatrix, shadowMatrix) = segment.GetMatrices(currentFloorPosition, groupProperties.FallDirection, z);
+                var (bodyMatrix, shadowMatrix) = segment.GetMatrices(currentFloorPosition, groupProperties.FallDirection, z, pos.y);
                 if (IsTrace)
                 {
                     Services.Render.DrawTraceSegment(matrix * bodyMatrix, properties);

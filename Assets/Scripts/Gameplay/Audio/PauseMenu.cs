@@ -1,3 +1,4 @@
+using System;
 using ArcCreate.SceneTransition;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -19,6 +20,7 @@ namespace ArcCreate.Gameplay.Audio
             playButton.onClick.AddListener(OnPlayButton);
             retryButton.onClick.AddListener(OnRetryButton);
             returnButton.onClick.AddListener(OnReturnButton);
+            Application.focusChanged += OnFocusChange;
         }
 
         private void OnDestroy()
@@ -27,6 +29,15 @@ namespace ArcCreate.Gameplay.Audio
             playButton.onClick.RemoveListener(OnPlayButton);
             retryButton.onClick.RemoveListener(OnRetryButton);
             returnButton.onClick.RemoveListener(OnReturnButton);
+            Application.focusChanged -= OnFocusChange;
+        }
+
+        private void OnFocusChange(bool focused)
+        {
+            if (!focused)
+            {
+                OnPauseButton();
+            }
         }
 
         private void OnPauseButton()

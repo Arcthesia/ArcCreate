@@ -57,8 +57,6 @@
 				UNITY_SETUP_INSTANCE_ID(v);
 				v2f o;
 				o.worldpos = mul(unity_ObjectToWorld, v.vertex);
-				v.vertex.y -= o.worldpos.y;
-				o.worldpos.y = 0;
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				o.instanceID = instanceID;
