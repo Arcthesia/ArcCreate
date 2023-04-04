@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using ArcCreate.Gameplay;
 using ArcCreate.Gameplay.Chart;
@@ -17,44 +16,109 @@ namespace ArcCreate.Compose.Grid
         [SerializeField] private MeshCollider laneCollider;
         private BeatlineDisplay beatlineDisplay;
         private TimingGroup tg = null;
-        private readonly List<int> timingList = new List<int>();
+        private readonly List<Beatline> beatlineList = new List<Beatline>();
 
         public int MoveTimingBackward(int sourceTiming)
         {
-            int index = timingList.BisectLeft(sourceTiming);
+            int index = beatlineList.BisectLeft(sourceTiming, b => b.Timing);
             index -= 1;
-            if (index < 0 || index >= timingList.Count)
+            if (index < 0 || index >= beatlineList.Count)
             {
                 return sourceTiming;
             }
 
-            return timingList[index];
+            return beatlineList[index].Timing;
         }
 
         public int MoveTimingForward(int sourceTiming)
         {
-            int index = timingList.BisectRight(sourceTiming);
-            if (index < 0 || index >= timingList.Count)
+            int index = beatlineList.BisectRight(sourceTiming, b => b.Timing);
+            if (index < 0 || index >= beatlineList.Count)
             {
                 return sourceTiming;
             }
 
-            return timingList[index];
+            return beatlineList[index].Timing;
+        }
+
+        public int MoveTimingBackwardByBeat(int sourceTiming)
+        {
+            int index = beatlineList.BisectLeft(sourceTiming, b => b.Timing);
+            index -= 1;
+            if (index < 0 || index >= beatlineList.Count)
+            {
+                return sourceTiming;
+            }
+
+            Color match = default;
+            foreach (var settings in beatlineColorSettings)
+            {
+                if (settings.Density == 1)
+                {
+                    match = settings.Color;
+                }
+            }
+
+            while (index > 0 && beatlineList[index].Color != match)
+            {
+                index -= 1;
+            }
+
+            if (beatlineList[index].Color == match)
+            {
+                return beatlineList[index].Timing;
+            }
+            else
+            {
+                return sourceTiming;
+            }
+        }
+
+        public int MoveTimingForwardByBeat(int sourceTiming)
+        {
+            int index = beatlineList.BisectRight(sourceTiming, b => b.Timing);
+            if (index < 0 || index >= beatlineList.Count)
+            {
+                return sourceTiming;
+            }
+
+            Color match = default;
+            foreach (var settings in beatlineColorSettings)
+            {
+                if (settings.Density == 1)
+                {
+                    match = settings.Color;
+                }
+            }
+
+            while (index > 0 && beatlineList[index].Color != match)
+            {
+                index += 1;
+            }
+
+            if (beatlineList[index].Color == match)
+            {
+                return beatlineList[index].Timing;
+            }
+            else
+            {
+                return sourceTiming;
+            }
         }
 
         public int SnapToTimingGrid(int sourceTiming)
         {
-            int indexMid = timingList.BisectLeft(sourceTiming);
+            int indexMid = beatlineList.BisectLeft(sourceTiming, b => b.Timing);
             int indexLeft = indexMid - 1;
-            int indexRight = timingList.BisectRight(sourceTiming);
+            int indexRight = beatlineList.BisectRight(sourceTiming, b => b.Timing);
 
-            indexLeft = Mathf.Clamp(indexLeft, 0, timingList.Count);
-            indexMid = Mathf.Clamp(indexMid, 0, timingList.Count);
-            indexRight = Mathf.Clamp(indexRight, 0, timingList.Count);
+            indexLeft = Mathf.Clamp(indexLeft, 0, beatlineList.Count);
+            indexMid = Mathf.Clamp(indexMid, 0, beatlineList.Count);
+            indexRight = Mathf.Clamp(indexRight, 0, beatlineList.Count);
 
-            int timingLeft = timingList[indexLeft];
-            int timingMid = timingList[indexMid];
-            int timingRight = timingList[indexRight];
+            int timingLeft = beatlineList[indexLeft].Timing;
+            int timingMid = beatlineList[indexMid].Timing;
+            int timingRight = beatlineList[indexRight].Timing;
 
             int diffLeft = Mathf.Abs(sourceTiming - timingLeft);
             int diffMid = Mathf.Abs(sourceTiming - timingMid);
@@ -171,13 +235,13 @@ namespace ArcCreate.Compose.Grid
 
             var beatlines = beatlineDisplay.LoadFromTimingGroup(tg, length);
 
-            timingList.Clear();
+            beatlineList.Clear();
             foreach (var beatline in beatlines)
             {
-                timingList.Add(beatline.Timing);
+                beatlineList.Add(beatline);
             }
 
-            timingList.Sort();
+            beatlineList.Sort((a, b) => a.Timing.CompareTo(b.Timing));
         }
     }
 }

@@ -13,6 +13,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
 
         public TouchInputHandler()
         {
+            EnhancedTouchSupport.Disable();
             EnhancedTouchSupport.Enable();
             var touches = Touch.activeTouches;
             maxFilteredTouchId = int.MinValue;

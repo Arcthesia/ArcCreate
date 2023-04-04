@@ -39,6 +39,20 @@ namespace ArcCreate.Compose.Grid
         int MoveTimingForward(int sourceTiming);
 
         /// <summary>
+        /// Move backward on the timing grid from a timing point to the nearest beat.
+        /// </summary>
+        /// <param name="sourceTiming">The base timing point.</param>
+        /// <returns>The smallest timing point on the grid that's larger than the passed in value.</returns>
+        int MoveTimingBackwardByBeat(int sourceTiming);
+
+        /// <summary>
+        /// Move forward on the timing grid from a timing point to the nearest beat.
+        /// </summary>
+        /// <param name="sourceTiming">The base timing point.</param>
+        /// <returns>The smallest timing point on the grid that's larger than the passed in value.</returns>
+        int MoveTimingForwardByBeat(int sourceTiming);
+
+        /// <summary>
         /// Snap a point onto the vertical grid if the grid is enabled.
         /// or returns the passed in value as-is otherwise.
         /// </summary>

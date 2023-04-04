@@ -38,6 +38,10 @@ namespace ArcCreate.Compose.Grid
 
         public int MoveTimingForward(int sourceTiming) => timingGrid.MoveTimingForward(sourceTiming);
 
+        public int MoveTimingBackwardByBeat(int sourceTiming) => timingGrid.MoveTimingBackwardByBeat(sourceTiming);
+
+        public int MoveTimingForwardByBeat(int sourceTiming) => timingGrid.MoveTimingForwardByBeat(sourceTiming);
+
         public int SnapTimingToGrid(int sourceTiming) => timingGrid.SnapToTimingGrid(sourceTiming);
 
         public int SnapTimingToGridIfGridIsEnabled(int sourceTiming) => IsGridEnabled ? SnapTimingToGrid(sourceTiming) : sourceTiming;

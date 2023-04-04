@@ -1,4 +1,3 @@
-using System;
 using ArcCreate.Utility;
 using TMPro;
 using UnityEngine;

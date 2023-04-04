@@ -228,7 +228,8 @@ namespace ArcCreate.Gameplay.GameplayCamera
             if (Mathf.Abs(delta) >= 0.001f)
             {
                 float speed = Values.CameraTiltSpeed;
-                currentTilt += speed * delta * Time.deltaTime;
+                float deltaTime = Mathf.Min(Time.deltaTime, 0.1f);
+                currentTilt += speed * delta * deltaTime;
             }
             else
             {

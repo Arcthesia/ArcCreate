@@ -24,6 +24,8 @@ namespace ArcCreate.Gameplay.Chart
 
         public double FloorPosition => floorPosition;
 
+        public Color Color => color;
+
         public void AssignInstance(BeatlineBehaviour behaviour)
         {
             instance = behaviour;

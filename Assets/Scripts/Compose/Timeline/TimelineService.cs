@@ -1,4 +1,5 @@
 using ArcCreate.Compose.Navigation;
+using ArcCreate.Utility;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,6 +23,10 @@ namespace ArcCreate.Compose.Timeline
         [SerializeField] private Button playReturnButton;
         [SerializeField] private GameObject playReturnHighlight;
         [SerializeField] private Button stopButton;
+
+        [Header("Timing navigation")]
+        [SerializeField] private int rapidStartingCount = 20;
+        [SerializeField] private int rapidDecreaseRate = 5;
 
         private bool shouldFocusWaveformView = false;
 
@@ -67,6 +72,88 @@ namespace ArcCreate.Compose.Timeline
                     Services.Gameplay.Audio.SetReturnOnPause(false);
                     Pause();
                     return;
+                }
+
+                await UniTask.NextFrame();
+            }
+        }
+
+        [EditorAction("ScrollBackOneTick", false, "j")]
+        [SubAction("Stop", false, "<u-j>")]
+        public async UniTask ScrollBackOneTick(EditorAction action)
+        {
+            SubAction stop = action.GetSubAction("Stop");
+            RapidAction rapidAction = new RapidAction(rapidStartingCount, rapidDecreaseRate);
+
+            while (!stop.WasExecuted)
+            {
+                if (rapidAction.ShouldExecute())
+                {
+                    int timing = Services.Gameplay.Audio.ChartTiming;
+                    int snap = Services.Grid.MoveTimingBackward(timing);
+                    snap = Mathf.Clamp(snap, timing - Settings.TrackScrollMaxMovement.Value, timing + Settings.TrackScrollMaxMovement.Value);
+                    Services.Gameplay.Audio.ChartTiming = snap;
+                }
+
+                await UniTask.NextFrame();
+            }
+        }
+
+        [EditorAction("ScrollForwardOneTick", false, "k")]
+        [SubAction("Stop", false, "<u-k>")]
+        public async UniTask ScrollForwardOneTick(EditorAction action)
+        {
+            SubAction stop = action.GetSubAction("Stop");
+            RapidAction rapidAction = new RapidAction(rapidStartingCount, rapidDecreaseRate);
+
+            while (!stop.WasExecuted)
+            {
+                if (rapidAction.ShouldExecute())
+                {
+                    int timing = Services.Gameplay.Audio.ChartTiming;
+                    int snap = Services.Grid.MoveTimingForward(timing);
+                    snap = Mathf.Clamp(snap, timing - Settings.TrackScrollMaxMovement.Value, timing + Settings.TrackScrollMaxMovement.Value);
+                    Services.Gameplay.Audio.ChartTiming = snap;
+                }
+
+                await UniTask.NextFrame();
+            }
+        }
+
+        [EditorAction("ScrollBackwardOneBeat", false, "h")]
+        [SubAction("Stop", false, "<u-h>")]
+        public async UniTask ScrollBackwardOneBeat(EditorAction action)
+        {
+            SubAction stop = action.GetSubAction("Stop");
+            RapidAction rapidAction = new RapidAction(rapidStartingCount, rapidDecreaseRate);
+
+            while (!stop.WasExecuted)
+            {
+                if (rapidAction.ShouldExecute())
+                {
+                    int timing = Services.Gameplay.Audio.ChartTiming;
+                    int snap = Services.Grid.MoveTimingBackwardByBeat(timing);
+                    Services.Gameplay.Audio.ChartTiming = snap;
+                }
+
+                await UniTask.NextFrame();
+            }
+        }
+
+        [EditorAction("ScrollForwardOneBeat", false, "l")]
+        [SubAction("Stop", false, "<u-l>")]
+        public async UniTask ScrollForwardOneBeat(EditorAction action)
+        {
+            SubAction stop = action.GetSubAction("Stop");
+            RapidAction rapidAction = new RapidAction(rapidStartingCount, rapidDecreaseRate);
+
+            while (!stop.WasExecuted)
+            {
+                if (rapidAction.ShouldExecute())
+                {
+                    int timing = Services.Gameplay.Audio.ChartTiming;
+                    int snap = Services.Grid.MoveTimingForwardByBeat(timing);
+                    Services.Gameplay.Audio.ChartTiming = snap;
                 }
 
                 await UniTask.NextFrame();
