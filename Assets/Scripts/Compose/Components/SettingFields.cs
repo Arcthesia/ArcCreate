@@ -44,6 +44,12 @@ namespace ArcCreate.Compose.Components
         [SerializeField] private TMP_InputField trackThresholdField;
         [SerializeField] private TMP_InputField trackMaxTimingField;
 
+        [Header("Saving")]
+        [SerializeField] private Toggle shouldAutosave;
+        [SerializeField] private TMP_InputField autosaveInterval;
+        [SerializeField] private Toggle shouldSaveBackup;
+        [SerializeField] private TMP_InputField backupCount;
+
         [Header("Credits")]
         [SerializeField] private Button openCreditsButton;
         [SerializeField] private Dialog creditsDialog;
@@ -70,6 +76,10 @@ namespace ArcCreate.Compose.Components
             openCreditsButton.onClick.AddListener(creditsDialog.Open);
             indicatorPositionDropdown.onValueChanged.AddListener(OnIndicatorPositionDropdown);
             maxIndicatorToggle.onValueChanged.AddListener(OnMaxIndicatorToggle);
+            shouldAutosave.onValueChanged.AddListener(OnAutosaveToggle);
+            autosaveInterval.onEndEdit.AddListener(OnAutosaveIntervalField);
+            shouldSaveBackup.onValueChanged.AddListener(OnBackupToggle);
+            backupCount.onEndEdit.AddListener(OnBackupCountField);
 
             Settings.InputMode.OnValueChanged.AddListener(OnSettingInputMode);
             Values.BeatlineDensity.OnValueChange += OnDensity;
@@ -90,6 +100,12 @@ namespace ArcCreate.Compose.Components
             densityField.SetTextWithoutNotify(Values.BeatlineDensity.Value.ToString());
             indicatorPositionDropdown.SetValueWithoutNotify(Settings.FrPmIndicatorPosition.Value);
             maxIndicatorToggle.SetIsOnWithoutNotify(Settings.EnableMaxIndicator.Value);
+            shouldAutosave.SetIsOnWithoutNotify(Settings.ShouldAutosave.Value);
+            autosaveInterval.SetTextWithoutNotify(Settings.AutosaveInterval.Value.ToString());
+            shouldSaveBackup.SetIsOnWithoutNotify(Settings.ShouldBackup.Value);
+            backupCount.SetTextWithoutNotify(Settings.BackupCount.Value.ToString());
+            shouldAutosave.interactable = Settings.ShouldAutosave.Value;
+            backupCount.interactable = Settings.ShouldBackup.Value;
         }
 
         private void OnDestroy()
@@ -114,6 +130,10 @@ namespace ArcCreate.Compose.Components
             openCreditsButton.onClick.RemoveListener(creditsDialog.Open);
             indicatorPositionDropdown.onValueChanged.RemoveListener(OnIndicatorPositionDropdown);
             maxIndicatorToggle.onValueChanged.RemoveListener(OnMaxIndicatorToggle);
+            shouldAutosave.onValueChanged.RemoveListener(OnAutosaveToggle);
+            autosaveInterval.onEndEdit.RemoveListener(OnAutosaveIntervalField);
+            shouldSaveBackup.onValueChanged.RemoveListener(OnBackupToggle);
+            backupCount.onEndEdit.RemoveListener(OnBackupCountField);
 
             Settings.InputMode.OnValueChanged.RemoveListener(OnSettingInputMode);
             Values.BeatlineDensity.OnValueChange -= OnDensity;
@@ -285,6 +305,40 @@ namespace ArcCreate.Compose.Components
         private void OnDensity(float density)
         {
             densityField.SetTextWithoutNotify(Values.BeatlineDensity.Value.ToString());
+        }
+
+        private void OnBackupToggle(bool on)
+        {
+            Settings.ShouldBackup.Value = on;
+            backupCount.interactable = on;
+        }
+
+        private void OnAutosaveToggle(bool on)
+        {
+            Settings.ShouldAutosave.Value = on;
+            autosaveInterval.interactable = on;
+        }
+
+        private void OnAutosaveIntervalField(string value)
+        {
+            if (Evaluator.TryInt(value, out int seconds))
+            {
+                seconds = Mathf.Max(seconds, 60);
+                Settings.AutosaveInterval.Value = seconds;
+            }
+
+            autosaveInterval.SetTextWithoutNotify(Settings.AutosaveInterval.Value.ToString());
+        }
+
+        private void OnBackupCountField(string value)
+        {
+            if (Evaluator.TryInt(value, out int count))
+            {
+                count = Mathf.Max(count, 1);
+                Settings.BackupCount.Value = count;
+            }
+
+            backupCount.SetTextWithoutNotify(Settings.BackupCount.Value.ToString());
         }
     }
 }

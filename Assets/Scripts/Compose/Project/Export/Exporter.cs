@@ -98,6 +98,11 @@ namespace ArcCreate.Compose.Project
 
             foreach (DirectoryInfo dir in projectDir.EnumerateDirectories())
             {
+                if (dir.Name[0] == '.')
+                {
+                    continue;
+                }
+
                 WriteDirectoryToZip(dir, zip, Path.Combine(subdir, dir.Name), blockedPaths);
             }
         }

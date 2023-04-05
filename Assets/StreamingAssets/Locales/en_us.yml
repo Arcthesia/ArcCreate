@@ -491,6 +491,12 @@ Compose:
         Input:
           Name: Input
           ReloadKeybinds: Reload keybinds
+        Files:
+          Name: Files
+          Backup: Create backup on save
+          BackupCount: Backups count
+          Autosave: Enable autosaving
+          AutosaveInterval: Autosave interval (seconds)
         ScrollSensitivity:
           Name: Scroll sensitivity
           Vertical: Vertical

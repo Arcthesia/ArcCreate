@@ -68,16 +68,23 @@ namespace ArcCreate
         public static readonly StringSetting FFmpegPath = new StringSetting("RenderPreferences.FFmpegPath", "ffmpeg");
         public static readonly BoolSetting EnableEasterEggs = new BoolSetting("Fun.EasterEggs", Application.isEditor);
 
+        // Selection
         public static readonly StringSetting SelectionGroupStrategy = new StringSetting("Selection.Group", "none");
         public static readonly StringSetting SelectionSortStrategy = new StringSetting("Selection.Sort", "title");
+
+        // Editor
+        public static readonly BoolSetting ShouldAutosave = new BoolSetting("Editor.Autosave.Enable", true);
+        public static readonly IntSetting AutosaveInterval = new IntSetting("Editor.Autosave.Interval", 300);
+        public static readonly BoolSetting ShouldBackup = new BoolSetting("Editor.Backup.Enable", true);
+        public static readonly IntSetting BackupCount = new IntSetting("Editor.Backup.Count", 10);
 
         [RuntimeInitializeOnLoadMethod]
         public static void OnInitialize()
         {
             if (Application.isMobilePlatform)
             {
-                LimitFrameRate.OnValueChanged.AddListener((value) => Application.targetFrameRate = value ? 60 : Screen.currentResolution.refreshRate * 2);
-                Application.targetFrameRate = LimitFrameRate.Value ? 60 : Screen.currentResolution.refreshRate * 2;
+                LimitFrameRate.OnValueChanged.AddListener((value) => Application.targetFrameRate = value ? 60 : Screen.currentResolution.refreshRate);
+                Application.targetFrameRate = LimitFrameRate.Value ? 60 : Screen.currentResolution.refreshRate;
 
                 QualitySettings.vSyncCount = 0;
             }

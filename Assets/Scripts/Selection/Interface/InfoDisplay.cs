@@ -108,7 +108,7 @@ namespace ArcCreate.Selection.Interface
 
             title.text = string.IsNullOrEmpty(chart.Title) ? I18n.S("Gameplay.Selection.Info.Undefined.Title") : chart.Title;
             composer.text = string.IsNullOrEmpty(chart.Composer) ? I18n.S("Gameplay.Selection.Info.Undefined.Composer") : chart.Composer;
-            bpm.text = string.IsNullOrEmpty(chart.BpmText) ? "BPM: " + chart.BaseBpm.ToString() : chart.BpmText;
+            bpm.text = string.IsNullOrEmpty(chart.BpmText) ? "BPM: " + chart.BaseBpm.ToString() : "BPM: " + chart.BpmText;
             score.text = "Coming soon";
             charter.text = string.IsNullOrEmpty(chart.Charter) ? I18n.S("Gameplay.Selection.Info.Undefined.Charter") : I18n.S("Gameplay.Selection.Info.Charter", chart.Charter);
 

@@ -22,7 +22,7 @@ namespace ArcCreate.Storage
                 return null;
             }
 
-            return "file:///" + Uri.EscapeUriString(level.GetRealPath(path).Replace("\\", "/"));
+            return "file:///" + Uri.EscapeUriString(realPath.Replace("\\", "/"));
         }
 
         public string GetPath(string path)

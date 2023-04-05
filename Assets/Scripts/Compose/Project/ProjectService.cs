@@ -32,6 +32,7 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private NewChartDialog newChartDialog;
         [SerializeField] private List<Color> defaultDifficultyColors;
         [SerializeField] private List<string> defaultDifficultyNames;
+        private AutosaveHelper autosaveHelper;
 
         public event Action<ChartSettings> OnChartLoad;
 
@@ -228,6 +229,8 @@ namespace ArcCreate.Compose.Project
             openFolderButton.onClick.AddListener(OpenProjectFolder);
             toggleInteractiveCanvas.interactable = false;
             noProjectLoadedHint.SetActive(true);
+            Settings.AutosaveInterval.OnValueChanged.AddListener(OnAutosaveIntervalChange);
+            Settings.ShouldAutosave.OnValueChanged.AddListener(OnShouldAutosaveChange);
         }
 
         private void OnDestroy()
@@ -236,11 +239,25 @@ namespace ArcCreate.Compose.Project
             openProjectButton.onClick.RemoveListener(StartOpeningProject);
             saveProjectButton.onClick.RemoveListener(SaveProject);
             openFolderButton.onClick.RemoveListener(OpenProjectFolder);
+            Settings.AutosaveInterval.OnValueChanged.RemoveListener(OnAutosaveIntervalChange);
+            Settings.ShouldAutosave.OnValueChanged.RemoveListener(OnShouldAutosaveChange);
+        }
+
+        private void OnShouldAutosaveChange(bool arg0) => OnAutosaveIntervalChange(Settings.AutosaveInterval.Value);
+
+        private void OnAutosaveIntervalChange(int value)
+        {
+            autosaveHelper?.Dispose();
+            autosaveHelper = null;
+            if (Settings.ShouldAutosave.Value)
+            {
+                autosaveHelper = new AutosaveHelper(this, value);
+            }
         }
 
         private void OpenProject(string path)
         {
-            ProjectSettings project = Deserialize(path);
+            ProjectSettings project = DeserializeProject(path);
             project.Path = path;
             CurrentProject = project;
 
@@ -290,7 +307,7 @@ namespace ArcCreate.Compose.Project
                 }));
         }
 
-        private ProjectSettings Deserialize(string path)
+        private ProjectSettings DeserializeProject(string path)
         {
             try
             {
@@ -388,6 +405,13 @@ namespace ArcCreate.Compose.Project
                 {
                     { "Path", chart.ChartPath },
                 }));
+
+            autosaveHelper?.Dispose();
+            autosaveHelper = null;
+            if (Settings.ShouldAutosave.Value)
+            {
+                autosaveHelper = new AutosaveHelper(this, Settings.AutosaveInterval.Value);
+            }
         }
 
         private void SerializeChart(ProjectSettings projectSettings)
@@ -398,6 +422,14 @@ namespace ArcCreate.Compose.Project
                 gameplayData.AudioOffset.Value,
                 gameplayData.TimingPointDensityFactor.Value,
                 chartData);
+
+            if (Settings.ShouldBackup.Value)
+            {
+                new BackupHelper(projectSettings.Path).Serialize(
+                    gameplayData.AudioOffset.Value,
+                    gameplayData.TimingPointDensityFactor.Value,
+                    chartData);
+            }
 
             string scJson = Services.Gameplay.Scenecontrol.Export();
             if (scJson != "[]")
