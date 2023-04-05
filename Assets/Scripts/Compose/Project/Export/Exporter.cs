@@ -98,7 +98,7 @@ namespace ArcCreate.Compose.Project
 
             foreach (DirectoryInfo dir in projectDir.EnumerateDirectories())
             {
-                if (dir.Name[0] == '.')
+                if (dir.Name[0] == '.' || dir.Name == "Arcade")
                 {
                     continue;
                 }

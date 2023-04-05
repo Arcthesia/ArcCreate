@@ -91,6 +91,9 @@ namespace ArcCreate.Compose.EventsEditor
             SubAction confirm = action.GetSubAction("Confirm");
 
             CameraEvent target = Selected;
+
+            int index = IndexOf(target);
+            CameraEvent nextToTarget = (index >= 0 && index < Data.Count - 1) ? Data[index + 1] : null;
             Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.FreeCameraEditHelp"));
 
             Keyboard keyboard = InputSystem.GetDevice<Keyboard>();
@@ -205,9 +208,22 @@ namespace ArcCreate.Compose.EventsEditor
 
                     CameraEvent newValue = target.Clone() as CameraEvent;
                     target.Assign(oldValue);
-                    Services.History.AddCommand(new EventCommand(
-                        name: I18n.S("Compose.Notify.History.EditCamera"),
-                        update: new List<(ArcEvent instance, ArcEvent newValue)> { (target, newValue) }));
+
+                    if (nextToTarget != null)
+                    {
+                        CameraEvent newValueForNext = nextToTarget.Clone() as CameraEvent;
+                        newValueForNext.Move -= newValue.Move - oldValue.Move;
+                        newValueForNext.Rotate -= newValue.Rotate - oldValue.Rotate;
+                        Services.History.AddCommand(new EventCommand(
+                            name: I18n.S("Compose.Notify.History.EditCamera"),
+                            update: new List<(ArcEvent instance, ArcEvent newValue)> { (target, newValue), (nextToTarget, newValueForNext) }));
+                    }
+                    else
+                    {
+                        Services.History.AddCommand(new EventCommand(
+                            name: I18n.S("Compose.Notify.History.EditCamera"),
+                            update: new List<(ArcEvent instance, ArcEvent newValue)> { (target, newValue) }));
+                    }
 
                     freeCameraButtonImage.color = normalColor;
                     return;
