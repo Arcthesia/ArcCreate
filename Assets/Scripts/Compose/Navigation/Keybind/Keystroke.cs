@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace ArcCreate.Compose.Navigation
@@ -7,46 +8,52 @@ namespace ArcCreate.Compose.Navigation
     /// </summary>
     public struct Keystroke
     {
-        public string Modifier1;
-        public string Modifier2;
-        public string Key;
+        public KeyCode[] Modifiers;
+        public KeyCode Key;
         public bool ActuateOnRelease;
         public bool ActuateOnHold;
-        public bool IsMouse;
 
-        public InputAction ToAction(string name)
+        public Keystroke(KeyCode key, bool actuateOnHold, bool actuateOnRelease)
         {
-            InputAction action = new InputAction(name: name);
+            Modifiers = new KeyCode[0];
+            Key = key;
+            ActuateOnHold = actuateOnHold;
+            ActuateOnRelease = actuateOnRelease;
+        }
 
-            if (Modifier1 != null && Modifier2 != null)
-            {
-                action.AddCompositeBinding("ButtonWithTwoModifiers")
-                    .With("Modifier1", "<Keyboard>/left" + Modifier1)
-                    .With("Modifier1", "<Keyboard>/right" + Modifier1)
-                    .With("Modifier2", "<Keyboard>/left" + Modifier2)
-                    .With("Modifier2", "<Keyboard>/right" + Modifier2)
-                    .With("Button", Key);
-            }
-            else if (Modifier1 != null)
-            {
-                action.AddCompositeBinding("ButtonWithOneModifier")
-                    .With("Modifier", "<Keyboard>/left" + Modifier1)
-                    .With("Modifier", "<Keyboard>/right" + Modifier1)
-                    .With("Button", Key);
-            }
-            else if (Modifier2 != null)
-            {
-                action.AddCompositeBinding("ButtonWithOneModifier")
-                    .With("Modifier", "<Keyboard>/left" + Modifier2)
-                    .With("Modifier", "<Keyboard>/right" + Modifier2)
-                    .With("Button", Key);
-            }
-            else
-            {
-                action.AddBinding(Key);
-            }
+        public Keystroke(KeyCode[] modifiers, KeyCode key, bool actuateOnHold, bool actuateOnRelease)
+        {
+            Modifiers = modifiers;
+            Key = key;
+            ActuateOnHold = actuateOnHold;
+            ActuateOnRelease = actuateOnRelease;
+        }
 
-            return action;
+        public bool WasExecuted
+        {
+            get
+            {
+                foreach (var mod in Modifiers)
+                {
+                    if (!Input.GetKey(mod))
+                    {
+                        return false;
+                    }
+                }
+
+                if (ActuateOnHold)
+                {
+                    return Input.GetKey(Key);
+                }
+                else if (ActuateOnRelease)
+                {
+                    return Input.GetKeyUp(Key);
+                }
+                else
+                {
+                    return Input.GetKeyDown(Key);
+                }
+            }
         }
     }
 }

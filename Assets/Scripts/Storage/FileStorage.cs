@@ -104,6 +104,10 @@ namespace ArcCreate.Storage
         public static void DeleteReference(string referenceId)
         {
             FileReference reference = Collection.FindById(referenceId);
+            if (reference == null)
+            {
+                return;
+            }
 
             // Find other references pointing to the same file
             IEnumerable<FileReference> sameRealPath = Collection.Find(Query.EQ("RealPath", reference.RealPath));

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -52,7 +53,7 @@ namespace ArcCreate.Gameplay.Audio
         /// </summary>
         private int onPauseReturnTo = 0;
         private bool isStationary;
-        private float updatePace;
+        private float updatePace = 1;
 
         public AudioSource AudioSource => audioSource;
 
@@ -129,7 +130,7 @@ namespace ArcCreate.Gameplay.Audio
 
             if (stationaryBeforeStart)
             {
-                dspTime = System.Math.Max(dspTime, dspStartPlayingTime);
+                dspTime = Math.Max(dspTime, dspStartPlayingTime);
             }
 
             int timePassedSinceAudioStart = Mathf.RoundToInt((float)((dspTime - dspStartPlayingTime) * 1000));
@@ -143,7 +144,13 @@ namespace ArcCreate.Gameplay.Audio
 
             if (lastDspTiming != newDspTiming)
             {
-                updatePace = 1 + (Mathf.Sign(newDspTiming - newTiming) * 0.05f);
+                float difference = (newDspTiming - newTiming) / 1000f;
+                if (difference >= 1 / 60f)
+                {
+                    audioTiming = newDspTiming;
+                }
+
+                updatePace = 1 + (Tanh(difference) * 0.5f);
             }
 
             timingSlider.value = (float)audioTiming / AudioLength;
@@ -304,6 +311,12 @@ namespace ArcCreate.Gameplay.Audio
         private void OnMusicAudioSettings(float volume)
         {
             audioSource.volume = Mathf.Clamp(volume, 0, 1);
+        }
+
+        private float Tanh(float v)
+        {
+            float exp2v = Mathf.Exp(v * 2);
+            return (exp2v - 1) / (exp2v + 1);
         }
     }
 }

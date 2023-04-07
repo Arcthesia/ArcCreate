@@ -82,8 +82,6 @@ Compose:
         Tecla no válida: la cadena "{0}" no coincide con ninguna tecla.
       InvalidModifier: |-
         Modificador no válido: la cadena "{0}" no coincide con ningúna tecla modificadora.
-      TooManyModifiers: |-
-        Pulsación de teclas no válida: la pulsación de teclas "{0}" tiene demasiados modicadores (máximo es 2).
       InvalidActionPath: |-
         Ruta de acción no válida: la cadena "{0}" no coincide con ninguna acción.
     Scenecontrol: |-

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
+using UnityEngine;
 
 namespace ArcCreate.Compose.Navigation
 {
@@ -65,7 +67,7 @@ namespace ArcCreate.Compose.Navigation
                     return false;
                 }
 
-                if (!TryGetKeyString(keystrokeString, out string k))
+                if (!TryGetKeyCode(keystrokeString, out KeyCode k))
                 {
                     keystroke = default;
                     reason = I18n.S("Compose.Exception.Navigation.InvalidKey", keystrokeString);
@@ -74,14 +76,7 @@ namespace ArcCreate.Compose.Navigation
 
                 bool isShift = IsShiftedKey.Contains(keystrokeString) || char.IsUpper(keystrokeString[0]);
 
-                keystroke = new Keystroke()
-                {
-                    Modifier1 = isShift ? "Shift" : null,
-                    Modifier2 = null,
-                    ActuateOnRelease = false,
-                    Key = k,
-                };
-
+                keystroke = isShift ? new Keystroke(new KeyCode[] { KeyCode.LeftShift }, k, false, false) : new Keystroke(k, false, false);
                 reason = null;
                 return true;
             }
@@ -99,12 +94,9 @@ namespace ArcCreate.Compose.Navigation
             string key = matches[0].Groups[2].Value;
             string keyLower = key.ToLower();
 
-            if (TryGetKeyString(keyLower, out string keystring))
+            if (TryGetKeyCode(keyLower, out KeyCode keycode))
             {
-                keystroke = new Keystroke()
-                {
-                    Key = keystring,
-                };
+                keystroke = new Keystroke(keycode, false, false);
             }
             else
             {
@@ -113,66 +105,64 @@ namespace ArcCreate.Compose.Navigation
                 return false;
             }
 
-            HashSet<string> mappedMods = new HashSet<string>();
+            HashSet<KeyCode> modifierKeyCodes = new HashSet<KeyCode>();
 
             if (IsShiftedKey.Contains(key) || (key.Length == 1 && char.IsUpper(key[0])))
             {
-                mappedMods.Add("Shift");
+                modifierKeyCodes.Add(KeyCode.LeftShift);
             }
 
             string[] modifiers = modifiersString.Split('-');
             for (int i = 0; i < modifiers.Length - 1; i++)
             {
                 string mod = modifiers[i].ToLower();
-                if (!ModMap.ContainsKey(mod))
+
+                bool duplicateException = false;
+                if (mod == "u")
                 {
-                    keystroke = default;
-                    reason = I18n.S("Compose.Exception.Navigation.InvalidModifier", mod);
-                    return false;
+                    if (keystroke.ActuateOnRelease)
+                    {
+                        duplicateException = true;
+                    }
+
+                    keystroke.ActuateOnRelease = true;
+                }
+                else if (mod == "h")
+                {
+                    if (keystroke.ActuateOnHold)
+                    {
+                        duplicateException = true;
+                    }
+
+                    keystroke.ActuateOnHold = true;
+                }
+                else
+                {
+                    if (!ModMap.ContainsKey(mod))
+                    {
+                        keystroke = default;
+                        reason = I18n.S("Compose.Exception.Navigation.InvalidModifier", mod);
+                        return false;
+                    }
+
+                    KeyCode mappedMod = ModMap[mod];
+                    if (modifierKeyCodes.Contains(mappedMod))
+                    {
+                        duplicateException = true;
+                    }
+
+                    modifierKeyCodes.Add(mappedMod);
                 }
 
-                string mappedMod = ModMap[mod];
-                if (mappedMods.Contains(mappedMod))
+                if (duplicateException)
                 {
                     keystroke = default;
                     reason = I18n.S("Compose.Exception.Navigation.DuplicateModifier", mod);
                     return false;
                 }
-
-                mappedMods.Add(mappedMod);
             }
 
-            if (mappedMods.Contains("u"))
-            {
-                keystroke.ActuateOnRelease = true;
-                mappedMods.Remove("u");
-            }
-
-            if (mappedMods.Contains("h"))
-            {
-                keystroke.ActuateOnHold = true;
-                mappedMods.Remove("h");
-            }
-
-            if (mappedMods.Count > 2)
-            {
-                keystroke = default;
-                reason = I18n.S("Compose.Exception.Navigation.TooManyModifiers", keystrokeString);
-                return false;
-            }
-
-            foreach (var modifier in mappedMods)
-            {
-                if (keystroke.Modifier1 == null)
-                {
-                    keystroke.Modifier1 = modifier;
-                }
-                else
-                {
-                    keystroke.Modifier2 = modifier;
-                }
-            }
-
+            keystroke.Modifiers = modifierKeyCodes.ToArray();
             reason = null;
             return true;
         }

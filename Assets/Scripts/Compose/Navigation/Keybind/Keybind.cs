@@ -1,6 +1,3 @@
-using Cysharp.Threading.Tasks;
-using UnityEngine.InputSystem;
-
 namespace ArcCreate.Compose.Navigation
 {
     public enum KeybindResponse
@@ -27,156 +24,48 @@ namespace ArcCreate.Compose.Navigation
     public class Keybind
     {
         private int index = 0;
-        private bool isFinalKeyHeld = false;
 
         public Keybind(Keystroke[] keystrokes, IAction action)
         {
-            InputActions = new InputAction[keystrokes.Length];
             Keystrokes = keystrokes;
-
             Action = action;
-
-            for (int i = 0; i < keystrokes.Length; i++)
-            {
-                Keystroke keystroke = keystrokes[i];
-                InputAction inputAction = keystroke.ToAction(action.Id);
-                InputActions[i] = inputAction;
-
-                if (i == keystrokes.Length - 1 && keystroke.ActuateOnHold)
-                {
-                    inputAction.performed += OnFinalKeystrokeDown;
-                    inputAction.canceled += OnFinalKeystrokeUp;
-                }
-                else if (keystroke.ActuateOnRelease)
-                {
-                    inputAction.canceled += OnKeystroke;
-                }
-                else
-                {
-                    inputAction.performed += OnKeystroke;
-                }
-
-                inputAction.Enable();
-            }
         }
 
         public IAction Action { get; set; }
 
-        public InputAction[] InputActions { get; private set; }
-
         public Keystroke[] Keystrokes { get; private set; }
-
-        public void Destroy()
-        {
-            for (int i = 0; i < Keystrokes.Length; i++)
-            {
-                Keystroke keystroke = Keystrokes[i];
-                InputAction inputAction = InputActions[i];
-
-                if (i == Keystrokes.Length - 1 && keystroke.ActuateOnHold)
-                {
-                    inputAction.performed -= OnFinalKeystrokeDown;
-                    inputAction.canceled -= OnFinalKeystrokeUp;
-                }
-                else if (keystroke.ActuateOnRelease)
-                {
-                    inputAction.canceled -= OnKeystroke;
-                }
-                else
-                {
-                    inputAction.performed -= OnKeystroke;
-                }
-
-                inputAction.Disable();
-            }
-        }
 
         public void Reset()
         {
             index = 0;
         }
 
-        private void OnKeystroke(InputAction.CallbackContext obj)
+        public KeybindState CheckKeybind()
         {
-            if (ReferenceEquals(obj.action, InputActions[index]))
+            Keystroke current = Keystrokes[index];
+            if (current.WasExecuted)
             {
-                if (BlockUnwantedModifier(index))
+                if (index == Keystrokes.Length - 1)
                 {
-                    return;
+                    Reset();
+                    return KeybindState.Complete;
                 }
-
-                index++;
-                if (index >= InputActions.Length)
+                else
                 {
-                    index = 0;
-                    if (Services.Navigation.ShouldExecute(Action))
-                    {
-                        Action.Execute();
-                    }
+                    index += 1;
+                    return KeybindState.InProgress;
                 }
             }
-            else
-            {
-                index = 0;
-            }
+
+            Reset();
+            return KeybindState.Invalid;
         }
 
-        private void OnFinalKeystrokeDown(InputAction.CallbackContext obj)
+        public void Execute()
         {
-            if (index == InputActions.Length - 1)
-            {
-                if (BlockUnwantedModifier(index))
-                {
-                    return;
-                }
-
-                index = 0;
-                isFinalKeyHeld = true;
-                if (Services.Navigation.ShouldExecute(Action))
-                {
-                    StartRepeatedExecution().Forget();
-                }
-            }
-            else
-            {
-                index = 0;
-            }
-        }
-
-        private void OnFinalKeystrokeUp(InputAction.CallbackContext obj)
-        {
-            isFinalKeyHeld = false;
-        }
-
-        private bool BlockUnwantedModifier(int index)
-        {
-            Keyboard keyboard = Keyboard.current;
-            Keystroke keystroke = Keystrokes[index];
-
-            if (keyboard.ctrlKey.isPressed && keystroke.Modifier1 != "Ctrl" && keystroke.Modifier2 != "Ctrl")
-            {
-                return true;
-            }
-
-            if (keyboard.shiftKey.isPressed && keystroke.Modifier1 != "Shift" && keystroke.Modifier2 != "Shift")
-            {
-                return true;
-            }
-
-            if (keyboard.altKey.isPressed && keystroke.Modifier1 != "Alt" && keystroke.Modifier2 != "Alt")
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        private async UniTask StartRepeatedExecution()
-        {
-            while (isFinalKeyHeld)
+            if (Services.Navigation.ShouldExecute(Action))
             {
                 Action.Execute();
-                await UniTask.NextFrame();
             }
         }
     }

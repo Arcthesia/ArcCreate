@@ -11,7 +11,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.Utilities;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using YamlDotNet.RepresentationModel;
 
 namespace ArcCreate.Compose.Navigation
@@ -22,6 +21,7 @@ namespace ArcCreate.Compose.Navigation
         private readonly List<IAction> allActions = new List<IAction>();
         private readonly List<Keybind> keybinds = new List<Keybind>();
         private readonly Dictionary<Type, object> instances = new Dictionary<Type, object>();
+        private readonly List<Keybind> activatingKeybinds = new List<Keybind>();
 
         // Last action in the list is considered top-priority, and only it will have sub-actions processed.
         // A stack was not used because lower-priority actions might exit early.
@@ -43,11 +43,6 @@ namespace ArcCreate.Compose.Navigation
 
         public void ReloadHotkeys()
         {
-            foreach (var keybind in keybinds)
-            {
-                keybind.Destroy();
-            }
-
             keybinds.Clear();
 
             Dictionary<string, List<string>> keybindOverrides = new Dictionary<string, List<string>>();
@@ -188,13 +183,13 @@ namespace ArcCreate.Compose.Navigation
             ReloadHotkeys();
         }
 
+        private void Update()
+        {
+            CheckKeybind();
+        }
+
         private void OnDestroy()
         {
-            foreach (var keybind in keybinds)
-            {
-                keybind.Destroy();
-            }
-
             keybinds.Clear();
         }
 
@@ -351,7 +346,6 @@ namespace ArcCreate.Compose.Navigation
                 if (valid)
                 {
                     CompositeAction action = new CompositeAction(keybindString, actions);
-
                     if (string.IsNullOrEmpty(keybindString))
                     {
                         continue;
@@ -365,6 +359,52 @@ namespace ArcCreate.Compose.Navigation
                     {
                         Debug.LogWarning(reason);
                     }
+                }
+            }
+        }
+
+        private void CheckKeybind()
+        {
+            activatingKeybinds.Clear();
+            for (int i = 0; i < keybinds.Count; i++)
+            {
+                Keybind keybind = keybinds[i];
+                KeybindState state = keybind.CheckKeybind();
+                switch (state)
+                {
+                    case KeybindState.Complete:
+                        activatingKeybinds.Add(keybind);
+                        break;
+                }
+            }
+
+            for (int i = 0; i < activatingKeybinds.Count; i++)
+            {
+                Keybind keybind = activatingKeybinds[i];
+                Keystroke lastKeystroke = keybind.Keystrokes[keybind.Keystrokes.Length - 1];
+                int complexity = lastKeystroke.Modifiers.Length;
+                KeyCode key = lastKeystroke.Key;
+                bool isMaxComplexity = true;
+
+                for (int j = 0; j < activatingKeybinds.Count; j++)
+                {
+                    Keybind otherKeybind = activatingKeybinds[j];
+                    Keystroke otherLastKeystroke = otherKeybind.Keystrokes[otherKeybind.Keystrokes.Length - 1];
+                    if (i == j || lastKeystroke.Key != otherLastKeystroke.Key)
+                    {
+                        continue;
+                    }
+
+                    int otherComplexity = otherLastKeystroke.Modifiers.Length;
+                    if (complexity < otherComplexity)
+                    {
+                        isMaxComplexity = false;
+                    }
+                }
+
+                if (isMaxComplexity)
+                {
+                    keybind.Execute();
                 }
             }
         }

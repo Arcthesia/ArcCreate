@@ -56,7 +56,10 @@ namespace ArcCreate.Selection.Select
         {
             foreach (var st in storageUnits)
             {
-                st.Delete();
+                if (!st.IsDefaultAsset)
+                {
+                    st.Delete();
+                }
             }
 
             storageUnits.Clear();

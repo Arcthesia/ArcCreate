@@ -49,7 +49,7 @@ namespace ArcCreate.Compose.Editing
             }
             else
             {
-                Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.Mirror.CannotMirror"));
+                Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.Mirror.Actions.CannotMirror"));
             }
         }
 

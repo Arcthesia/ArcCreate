@@ -25,7 +25,7 @@ namespace ArcCreate.Compose.Editing
         private LongNote targetLong;
 
         [EditorAction("Timing", false, "<a-mouse1>")]
-        [SubAction("Confirm", false, "<a-u-mouse1>")]
+        [SubAction("Confirm", false, "<u-mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
         [SelectionService.RequireSelection]
         [WhitelistScopes(typeof(GridService), typeof(TimelineService))]
@@ -164,7 +164,7 @@ namespace ArcCreate.Compose.Editing
         }
 
         [EditorAction("Position", false, "<s-mouse1>")]
-        [SubAction("Confirm", false, "<s-u-mouse1>")]
+        [SubAction("Confirm", false, "<u-mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
         [SelectionService.RequireSelection]
         [WhitelistScopes(typeof(GridService), typeof(TimelineService))]

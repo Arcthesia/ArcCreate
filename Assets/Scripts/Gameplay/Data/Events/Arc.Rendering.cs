@@ -467,12 +467,11 @@ namespace ArcCreate.Gameplay.Data
             {
                 if (IsFirstArcOfGroup && !IsTrace)
                 {
-                    float approach = 1 - (Mathf.Abs(z) / Values.TrackLengthForward);
+                    float approach = Mathf.Clamp(1 - (Mathf.Abs(z) / Values.TrackLengthForward), 0, 1);
                     Vector3 capPos = -(fallDirection * z);
                     Vector4 color = new Color(1, 1, 1, IsTrace ? 0 : approach);
-                    Vector3 scale = Vector3.one;
                     float size = Values.ArcCapSize + (Values.ArcCapSizeAdditionMax * (1 - approach));
-                    scale = new Vector3(size, size, 1);
+                    Vector3 scale = new Vector3(size, size, 1);
                     return (true, Matrix4x4.TRS(capPos, Quaternion.identity, scale), color);
                 }
                 else

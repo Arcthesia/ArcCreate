@@ -82,8 +82,6 @@ Compose:
         Invalid key: The string "{0}" does not match any key.
       InvalidModifier: |-
         Invalid modifier: The string "{0}" does not match any modifier key.
-      TooManyModifiers: |-
-        Invalid keystroke: The keystroke "{0}" has too many modifiers (maximum is 2).
       InvalidActionPath: |-
         Invalid action path: The string "{0}" does not match any action.
     Scenecontrol: |-

@@ -360,14 +360,15 @@ namespace ArcCreate.Gameplay.Judgement.Input
             float dSx = Mathf.Abs(input.ScreenPos.x - screenPosition.x);
             float dSy = input.ScreenPos.y - screenPosition.y;
             bool screenCollide = dSx <= Values.LaneScreenHitbox * 2 * Values.ArcTapHitboxX / Values.LaneWidth
-                              && (dSy >= -Values.LaneScreenHitbox * 2 * Values.ArcTapHitboxYDown / Values.LaneWidth
-                                  || dSy <= Values.LaneScreenHitbox * 2 * Values.ArcTapHitboxYUp / Values.LaneWidth);
+                              && dSy >= -Values.LaneScreenHitbox * 2 * Values.ArcTapHitboxYDown / Values.LaneWidth
+                              && dSy <= Values.LaneScreenHitbox * 2 * Values.ArcTapHitboxYUp / Values.LaneWidth;
 
             float dWx = Mathf.Abs(input.VerticalPos.x - worldPosition.x);
             float dWy = input.VerticalPos.y - worldPosition.y;
             bool worldCollide = dWx <= Values.ArcTapHitboxX
-                             && (dWy >= -Values.ArcTapHitboxYDown || dWy <= Values.ArcTapHitboxYUp);
-            return worldCollide || screenCollide;
+                             && dWy >= -Values.ArcTapHitboxYDown
+                             && dWy <= Values.ArcTapHitboxYUp;
+            return worldCollide;
         }
 
         private bool LaneCollide(TouchInput input, Vector3 screenPosition, int lane)

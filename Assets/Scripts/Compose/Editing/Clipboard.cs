@@ -148,66 +148,65 @@ namespace ArcCreate.Compose.Editing
             Services.Gameplay.Chart.EnableColliderGeneration = false;
             Services.Gameplay.Chart.EnableArcRebuildSegment = false;
 
-            var request = Services.Cursor.RequestTimingSelection(
+            var (success, timing) = await Services.Cursor.RequestTimingSelection(
                 confirm,
                 cancel,
                 update: t =>
                 {
+                    bool mirrored = mirror.WasExecuted;
                     ApplyTimingToPastingNotes(t, newNotes, anchorNote);
-                    Services.Gameplay.Chart.UpdateEvents(newNotes);
-                }).ContinueWith(tuple =>
+                    if (mirrored)
                     {
-                        bool success = tuple.wasSuccessful;
-                        int timing = tuple.timing;
-                        if (success)
-                        {
-                            Services.Gameplay.Chart.EnableColliderGeneration = true;
-                            Services.Gameplay.Chart.EnableArcRebuildSegment = true;
-                            ApplyTimingToPastingNotes(timing, newNotes, anchorNote);
-                            Services.Gameplay.Chart.UpdateEvents(newNotes);
+                        Services.Gameplay.Chart.EnableArcRebuildSegment = true;
+                        Mirror.MirrorHorizontal(newNotes, true);
+                    }
 
-                            List<Arc> extraArc = new List<Arc>();
-                            foreach (var note in newNotes)
-                            {
-                                if (note is ArcTap at && (at.Timing < at.Arc.Timing || at.Timing > at.Arc.EndTiming))
-                                {
-                                    Arc newArc = at.Arc.Clone() as Arc;
-                                    at.Arc = newArc;
-                                    newArc.Timing = newArc.Timing - minTiming + timing;
-                                    newArc.EndTiming = newArc.EndTiming - minTiming + timing;
-                                    extraArc.Add(newArc);
-                                }
-                            }
+                    Services.Gameplay.Chart.UpdateEvents(newNotes);
 
-                            if (extraArc.Count > 0)
-                            {
-                                command.Undo();
-                                newNotes.AddRange(extraArc);
-                                command = new EventCommand(
-                                    name: I18n.S("Compose.Notify.History.Paste"),
-                                    add: newNotes);
+                    if (mirrored)
+                    {
+                        Services.Gameplay.Chart.EnableArcRebuildSegment = false;
+                    }
+                });
 
-                                command.Execute();
-                            }
-
-                            Services.History.AddCommandWithoutExecuting(command);
-                        }
-                        else
-                        {
-                            Services.Gameplay.Chart.EnableColliderGeneration = true;
-                            Services.Gameplay.Chart.EnableArcRebuildSegment = true;
-                            command.Undo();
-                        }
-                    });
-
-            while (request.Status == UniTaskStatus.Pending)
+            if (success)
             {
-                if (mirror.WasExecuted)
+                Services.Gameplay.Chart.EnableColliderGeneration = true;
+                Services.Gameplay.Chart.EnableArcRebuildSegment = true;
+                ApplyTimingToPastingNotes(timing, newNotes, anchorNote);
+                Services.Gameplay.Chart.UpdateEvents(newNotes);
+
+                List<Arc> extraArc = new List<Arc>();
+                foreach (var note in newNotes)
                 {
-                    Mirror.MirrorHorizontal(newNotes, true);
+                    if (note is ArcTap at && (at.Timing < at.Arc.Timing || at.Timing > at.Arc.EndTiming))
+                    {
+                        Arc newArc = at.Arc.Clone() as Arc;
+                        at.Arc = newArc;
+                        newArc.Timing = newArc.Timing - minTiming + timing;
+                        newArc.EndTiming = newArc.EndTiming - minTiming + timing;
+                        extraArc.Add(newArc);
+                    }
                 }
 
-                await UniTask.NextFrame();
+                if (extraArc.Count > 0)
+                {
+                    command.Undo();
+                    newNotes.AddRange(extraArc);
+                    command = new EventCommand(
+                        name: I18n.S("Compose.Notify.History.Paste"),
+                        add: newNotes);
+
+                    command.Execute();
+                }
+
+                Services.History.AddCommandWithoutExecuting(command);
+            }
+            else
+            {
+                Services.Gameplay.Chart.EnableColliderGeneration = true;
+                Services.Gameplay.Chart.EnableArcRebuildSegment = true;
+                command.Undo();
             }
         }
 
