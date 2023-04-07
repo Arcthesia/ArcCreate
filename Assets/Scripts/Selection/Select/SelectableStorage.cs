@@ -1,5 +1,6 @@
 using System.Threading;
 using ArcCreate.Storage.Data;
+using ArcCreate.Utility.InfiniteScroll;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
@@ -8,15 +9,17 @@ using UnityEngine.UI;
 
 namespace ArcCreate.Selection.Select
 {
-    public class SelectableStorage : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler, IPointerClickHandler
+    public class SelectableStorage : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndDragHandler, IPointerExitHandler, IPointerClickHandler
     {
         [SerializeField] private Graphic selectedIndicator;
         [SerializeField] private Color defaultColor;
         [SerializeField] private int holdDurationMs = 1000;
         [SerializeField] private int blockClickDurationMs = 200;
+        [SerializeField] private float dragCancelThreshold = 50;
         private CancellationTokenSource cts = new CancellationTokenSource();
         private bool selected;
         private bool blockClick;
+        private InfiniteScroll scroll;
 
         private IStorageUnit storageUnit;
 
@@ -50,11 +53,13 @@ namespace ArcCreate.Selection.Select
             cts = new CancellationTokenSource();
         }
 
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            StartBlockClicking(cts.Token).Forget();
+        }
+
         public void OnPointerUp(PointerEventData eventData)
         {
-            cts.Cancel();
-            cts.Dispose();
-            cts = new CancellationTokenSource();
             StartBlockClicking(cts.Token).Forget();
         }
 
@@ -88,7 +93,20 @@ namespace ArcCreate.Selection.Select
 
         private async UniTask StartHoldDetection(CancellationToken ct)
         {
-            bool cancelled = await UniTask.Delay(holdDurationMs, cancellationToken: ct).SuppressCancellationThrow();
+            float startScrollValue = scroll.Value;
+            UniTask<bool> waitTask = UniTask.Delay(holdDurationMs, cancellationToken: ct).SuppressCancellationThrow();
+
+            while (waitTask.Status == UniTaskStatus.Pending)
+            {
+                await UniTask.NextFrame();
+            }
+
+            if (Mathf.Abs(scroll.Value - startScrollValue) >= dragCancelThreshold)
+            {
+                return;
+            }
+
+            bool cancelled = await waitTask;
             if (!cancelled)
             {
                 blockClick = true;
@@ -99,11 +117,8 @@ namespace ArcCreate.Selection.Select
 
         private async UniTask StartBlockClicking(CancellationToken ct)
         {
-            bool cancelled = await UniTask.Delay(blockClickDurationMs, cancellationToken: ct).SuppressCancellationThrow();
-            if (!cancelled)
-            {
-                blockClick = false;
-            }
+            await UniTask.Delay(blockClickDurationMs, cancellationToken: ct).SuppressCancellationThrow();
+            blockClick = false;
         }
 
         private void ShowAnimation()
@@ -145,6 +160,7 @@ namespace ArcCreate.Selection.Select
             enabled = storageUnit != null;
             SetSelected(storageUnit != null && Services.Select.IsStorageSelected(storageUnit));
             Services.Select.OnClear += DeselectSelf;
+            scroll = GetComponentInParent<InfiniteScroll>();
         }
 
         private void OnDestroy()

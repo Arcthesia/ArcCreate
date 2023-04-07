@@ -666,6 +666,7 @@ Gameplay:
       none: "Group: None"
       difficulty: "Group: Difficulty"
       grade: "Group: Grade"
+      charter: "Group: Charter"
     Settings:
       Name: Settings
       Language: Language

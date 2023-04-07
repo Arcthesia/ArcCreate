@@ -159,7 +159,7 @@ MonoBehaviour:
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
   holdDurationMs: 1000
   blockClickDurationMs: 200
-  clickToSelectIfAnySelected: 0
+  dragCancelThreshold: 200
 --- !u!1 &1483191255150241301
 GameObject:
   m_ObjectHideFlags: 0

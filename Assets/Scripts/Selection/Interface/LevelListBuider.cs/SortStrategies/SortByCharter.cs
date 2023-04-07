@@ -15,7 +15,7 @@ namespace ArcCreate.Selection.Interface
             }
 
             return cells
-                .OrderBy(cell => cell.ChartToDisplay.Charter)
+                .OrderBy(cell => cell.LevelStorage.Identifier)
                 .ToList();
         }
     }

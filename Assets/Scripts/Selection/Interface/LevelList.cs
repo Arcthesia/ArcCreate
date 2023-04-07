@@ -155,6 +155,9 @@ namespace ArcCreate.Selection.Interface
                 case GroupByDifficulty.Typename:
                     groupStrategy = new GroupByDifficulty();
                     break;
+                case GroupByCharter.Typename:
+                    groupStrategy = new GroupByCharter();
+                    break;
                 default:
                     groupStrategy = new NoGroup();
                     break;
