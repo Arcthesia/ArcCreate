@@ -57,7 +57,7 @@ namespace ArcCreate.Gameplay
         {
             backgroundCamera.rect = rect;
             overlayCamera.rect = rect;
-            Values.ScreenSize = backgroundCamera.pixelWidth;
+            Values.ScreenSize = new Vector2(backgroundCamera.pixelWidth, backgroundCamera.pixelHeight);
         }
 
         public void SetCameraEnabled(bool enable)

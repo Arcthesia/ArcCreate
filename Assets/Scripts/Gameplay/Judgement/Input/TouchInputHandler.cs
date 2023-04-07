@@ -346,8 +346,8 @@ namespace ArcCreate.Gameplay.Judgement.Input
         {
             float dx = Mathf.Abs(screenPosition1.x - screenPosition2.x);
             float dy = Mathf.Abs(screenPosition1.y - screenPosition2.y);
-            bool screenCollide = dx <= Values.LaneScreenHitbox * 2 * Values.ArcHitboxX / Values.LaneWidth
-                              && dy <= Values.LaneScreenHitbox * 2 * Values.ArcHitboxY / Values.LaneWidth;
+            bool screenCollide = dx <= Values.LaneScreenHitboxHorizontal * 2 * Values.ArcHitboxX / Values.LaneWidth
+                              && dy <= Values.LaneScreenHitboxVertical * 2 * Values.ArcHitboxY / Values.LaneWidth;
 
             float dWx = Mathf.Abs(worldPosition1.x - worldPosition2.x);
             float dWy = Mathf.Abs(worldPosition1.y - worldPosition2.y);
@@ -359,9 +359,9 @@ namespace ArcCreate.Gameplay.Judgement.Input
         {
             float dSx = Mathf.Abs(input.ScreenPos.x - screenPosition.x);
             float dSy = input.ScreenPos.y - screenPosition.y;
-            bool screenCollide = dSx <= Values.LaneScreenHitbox * 2 * Values.ArcTapHitboxX / Values.LaneWidth
-                              && dSy >= -Values.LaneScreenHitbox * 2 * Values.ArcTapHitboxYDown / Values.LaneWidth
-                              && dSy <= Values.LaneScreenHitbox * 2 * Values.ArcTapHitboxYUp / Values.LaneWidth;
+            bool screenCollide = dSx <= Values.LaneScreenHitboxHorizontal * 2 * Values.ArcTapHitboxX / Values.LaneWidth
+                              && dSy >= -Values.LaneScreenHitboxVertical * 2 * Values.ArcTapHitboxYDown / Values.LaneWidth
+                              && dSy <= Values.LaneScreenHitboxVertical * 2 * Values.ArcTapHitboxYUp / Values.LaneWidth;
 
             float dWx = Mathf.Abs(input.VerticalPos.x - worldPosition.x);
             float dWy = input.VerticalPos.y - worldPosition.y;
@@ -374,8 +374,8 @@ namespace ArcCreate.Gameplay.Judgement.Input
         private bool LaneCollide(TouchInput input, Vector3 screenPosition, int lane)
         {
             bool worldCollide = input.Lane == lane;
-            bool screenCollide = Mathf.Abs(input.ScreenPos.x - screenPosition.x) <= Values.LaneScreenHitbox
-                              && Mathf.Abs(input.ScreenPos.y - screenPosition.y) <= Values.LaneScreenHitbox;
+            bool screenCollide = Mathf.Abs(input.ScreenPos.x - screenPosition.x) <= Values.LaneScreenHitboxHorizontal
+                              && Mathf.Abs(input.ScreenPos.y - screenPosition.y) <= Values.LaneScreenHitboxVertical;
             return worldCollide || screenCollide;
         }
     }

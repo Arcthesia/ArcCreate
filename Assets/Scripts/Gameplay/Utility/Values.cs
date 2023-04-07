@@ -25,7 +25,7 @@ namespace ArcCreate.Gameplay
         public const int FarJudgeWindow = 100;
         public const int PureJudgeWindow = 50;
         public const int MaxJudgeWindow = 25;
-        public const int HoldLostLateJudgeWindow = 500;
+        public const int HoldLostLateJudgeWindow = 240;
 
         // Visual
         public const int HoldFlashCycle = 4;
@@ -115,13 +115,15 @@ namespace ArcCreate.Gameplay
 
         public static bool EnableArcRebuildSegment { get; set; } = true;
 
-        public static float LaneScreenHitboxBase { get; set; } = 1;
+        public static Vector2 LaneScreenHitboxBase { get; set; } = Vector2.one;
 
-        public static float ScreenSizeBase { get; set; } = 1;
+        public static Vector2 ScreenSizeBase { get; set; } = Vector2.one;
 
-        public static float ScreenSize { get; set; } = 1;
+        public static Vector2 ScreenSize { get; set; } = Vector2.one;
 
-        public static float LaneScreenHitbox => LaneScreenHitboxBase * ScreenSize / ScreenSizeBase;
+        public static float LaneScreenHitboxHorizontal => LaneScreenHitboxBase.x * ScreenSize.x / ScreenSizeBase.x;
+
+        public static float LaneScreenHitboxVertical => LaneScreenHitboxBase.y * ScreenSize.y / ScreenSizeBase.y;
 
         public static bool EnablePauseMenu { get; internal set; } = true;
     }

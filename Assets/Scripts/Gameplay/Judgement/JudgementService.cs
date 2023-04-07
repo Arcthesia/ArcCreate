@@ -136,13 +136,19 @@ namespace ArcCreate.Gameplay.Judgement
             OnInputModeChange(Settings.InputMode.Value);
             InputSystem.pollingFrequency = 240;
 
-            Values.LaneScreenHitboxBase =
+            float laneScreenHitboxBaseX =
                 (gameplayCamera.WorldToScreenPoint(Vector3.zero).x
                - gameplayCamera.WorldToScreenPoint(new Vector3(Values.LaneWidth, 0, 0)).x)
                / 2;
 
-            Values.ScreenSizeBase = gameplayCamera.pixelWidth;
-            Values.ScreenSize = gameplayCamera.pixelWidth;
+            float laneScreenHitboxBaseY =
+                (gameplayCamera.WorldToScreenPoint(Vector3.zero).y
+               - gameplayCamera.WorldToScreenPoint(new Vector3(0, Values.LaneWidth, 0)).x)
+               / 2;
+
+            Values.LaneScreenHitboxBase = new Vector2(laneScreenHitboxBaseX, laneScreenHitboxBaseY);
+            Values.ScreenSizeBase = new Vector2(gameplayCamera.pixelWidth, gameplayCamera.pixelHeight);
+            Values.ScreenSize = new Vector2(gameplayCamera.pixelWidth, gameplayCamera.pixelHeight);
         }
 
         private void OnDestroy()
