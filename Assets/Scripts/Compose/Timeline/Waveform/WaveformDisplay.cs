@@ -3,7 +3,6 @@ using ArcCreate.Compose.Components;
 using ArcCreate.Gameplay;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Timeline
@@ -26,7 +25,6 @@ namespace ArcCreate.Compose.Timeline
         private float targetViewToSecond;
         private float minViewLengthOfClip;
         [SerializeField] private AudioClip clip;
-        private Keyboard keyboard;
 
         private readonly int fromSampleShaderId = Shader.PropertyToID("_FromSample");
         private readonly int toSampleShaderId = Shader.PropertyToID("_ToSample");
@@ -65,10 +63,10 @@ namespace ArcCreate.Compose.Timeline
             float scrollDir = Mathf.Sign(scrollDelta.y);
             float scrollSensitivity = Settings.ScrollSensitivityTimeline.Value;
 
-            int interation = keyboard.shiftKey.isPressed ? 5 : 1;
+            int interation = (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) ? 5 : 1;
             for (int i = 0; i < interation; i++)
             {
-                if (keyboard.ctrlKey.isPressed)
+                if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
                 {
                     float pivotSecond = Mathf.Lerp(targetViewFromSecond, targetViewToSecond, scrollPivot);
                     float oldViewSize = targetViewToSecond - targetViewFromSecond;
@@ -180,7 +178,6 @@ namespace ArcCreate.Compose.Timeline
             viewToSecond = 0;
             image.enabled = false;
             gameplayData.AudioClip.OnValueChange += OnClipLoad;
-            keyboard = InputSystem.GetDevice<Keyboard>();
             slider.OnValueChanged += OnSlider;
         }
 

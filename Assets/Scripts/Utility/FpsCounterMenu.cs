@@ -18,7 +18,6 @@ namespace ArcCreate.Utility
         private void OnSettings(bool on)
         {
             gameObject.SetActive(on);
-            Debug.Log($"Fps counter: {on}");
         }
     }
 }

@@ -105,8 +105,6 @@ namespace ArcCreate.Gameplay
 
         public static Color[] DefaultDifficultyColors { get; set; } = new Color[] { };
 
-        public static bool ShouldUpdateInputSystem { get; set; } = true; // no idea where else to put it
-
         public static float LaneFrom { get; set; } = 1;
 
         public static float LaneTo { get; set; } = 4;

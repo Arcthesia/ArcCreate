@@ -1,7 +1,6 @@
 using ArcCreate.Gameplay.Judgement.Input;
 using ArcCreate.Utility;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace ArcCreate.Gameplay.Judgement
 {
@@ -61,7 +60,7 @@ namespace ArcCreate.Gameplay.Judgement
             laneHoldRequests.Clear();
             arcRequests.Clear();
             arcTapRequests.Clear();
-            inputHandler.ResetJudge();
+            inputHandler?.ResetJudge();
         }
 
         public void ProcessInput(int currentTiming)
@@ -134,7 +133,6 @@ namespace ArcCreate.Gameplay.Judgement
         {
             Settings.InputMode.OnValueChanged.AddListener(OnInputModeChange);
             OnInputModeChange(Settings.InputMode.Value);
-            InputSystem.pollingFrequency = 240;
 
             float laneScreenHitboxBaseX =
                 (gameplayCamera.WorldToScreenPoint(Vector3.zero).x
@@ -154,7 +152,6 @@ namespace ArcCreate.Gameplay.Judgement
         private void OnDestroy()
         {
             Settings.InputMode.OnValueChanged.RemoveListener(OnInputModeChange);
-            InputSystem.pollingFrequency = 60;
         }
 
         private void OnInputModeChange(int modeNum)

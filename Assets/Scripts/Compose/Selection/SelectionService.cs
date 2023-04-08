@@ -7,7 +7,6 @@ using ArcCreate.Gameplay.Data;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 
 namespace ArcCreate.Compose.Selection
 {
@@ -237,7 +236,7 @@ namespace ArcCreate.Compose.Selection
             }
 
             Camera gameplayCamera = Services.Gameplay.Camera.GameplayCamera;
-            Vector2 mousePosition = Mouse.current.position.ReadValue();
+            Vector2 mousePosition = Input.mousePosition;
             Ray ray = gameplayCamera.ScreenPointToRay(mousePosition);
 
             int amount = Physics.RaycastNonAlloc(ray, hitResults, 99999, gameplayLayer);

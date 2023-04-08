@@ -2,43 +2,22 @@ using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility;
 using UnityEngine;
-using UnityEngine.InputSystem.EnhancedTouch;
-using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 namespace ArcCreate.Gameplay.Judgement.Input
 {
     public class TouchInputHandler : IInputHandler
     {
-        private readonly int maxFilteredTouchId;
-
-        public TouchInputHandler()
-        {
-            EnhancedTouchSupport.Disable();
-            EnhancedTouchSupport.Enable();
-            var touches = Touch.activeTouches;
-            maxFilteredTouchId = int.MinValue;
-            foreach (var touch in touches)
-            {
-                maxFilteredTouchId = Mathf.Max(maxFilteredTouchId, touch.touchId);
-            }
-        }
-
         protected List<TouchInput> CurrentInputs { get; } = new List<TouchInput>(10);
 
         public virtual void PollInput()
         {
-            var touches = Touch.activeTouches;
             CurrentInputs.Clear();
-            for (int i = 0; i < touches.Count; i++)
+            int count = UnityEngine.Input.touchCount;
+            for (int i = 0; i < count; i++)
             {
-                var touch = touches[i];
-                if (touch.phase == UnityEngine.InputSystem.TouchPhase.None
-                 || touch.touchId <= maxFilteredTouchId)
-                {
-                    continue;
-                }
+                var touch = UnityEngine.Input.GetTouch(i);
 
-                TouchInput input = new TouchInput(touch, GetCameraRay(touch.screenPosition));
+                TouchInput input = new TouchInput(touch, GetCameraRay(touch.position));
                 CurrentInputs.Add(input);
 
                 Services.InputFeedback.LaneFeedback(input.Lane);
@@ -166,7 +145,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
         {
             ArcColorLogic.NewFrame(currentTiming);
 
-            // Notify if arcs exists
+            // Notify if arcs & fingers exists
             for (int c = 0; c <= ArcColorLogic.MaxColor; c++)
             {
                 ArcColorLogic color = ArcColorLogic.Get(c);
@@ -185,13 +164,18 @@ namespace ArcCreate.Gameplay.Judgement.Input
                 }
 
                 color.ExistsArcWithinRange(arcOfColorExists);
+                for (int inpIndex = 0; inpIndex < CurrentInputs.Count; inpIndex++)
+                {
+                    TouchInput input = CurrentInputs[inpIndex];
+                    color.FingerExists(input.Id);
+                }
             }
 
             // Process finger lifting
             for (int inpIndex = 0; inpIndex < CurrentInputs.Count; inpIndex++)
             {
                 TouchInput input = CurrentInputs[inpIndex];
-                if (input.Phase == UnityEngine.InputSystem.TouchPhase.Ended || input.Phase == UnityEngine.InputSystem.TouchPhase.Canceled)
+                if (input.Phase == TouchPhase.Ended || input.Phase == TouchPhase.Canceled)
                 {
                     for (int c = 0; c <= ArcColorLogic.MaxColor; c++)
                     {
@@ -259,7 +243,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
             {
                 TouchInput input = CurrentInputs[inpIndex];
 
-                if (input.Phase == UnityEngine.InputSystem.TouchPhase.Ended || input.Phase == UnityEngine.InputSystem.TouchPhase.Canceled)
+                if (input.Phase == TouchPhase.Ended || input.Phase == TouchPhase.Canceled)
                 {
                     continue;
                 }

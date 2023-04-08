@@ -19,6 +19,8 @@ namespace ArcCreate.Storage
     {
         private static readonly LRUCache<string, Incompletable<Texture>> JacketCache = new LRUCache<string, Incompletable<Texture>>(50, DestroyCache);
         private static readonly LRUCache<string, Incompletable<AudioClip>> AudioClipCache = new LRUCache<string, Incompletable<AudioClip>>(10, DestroyCache);
+        private static readonly HashSet<UnityEngine.Object> PersistentCache = new HashSet<UnityEngine.Object>();
+        private static readonly HashSet<UnityEngine.Object> QueuedForDelete = new HashSet<UnityEngine.Object>();
         [SerializeField] private Texture defaultJacket;
         [SerializeField] private GameplayData gameplayData;
 
@@ -116,12 +118,12 @@ namespace ArcCreate.Storage
             OnOpenFilePicker?.Invoke();
         }
 
-        public async UniTask AssignTexture(RawImage jacket, IStorageUnit level, string jacketPath)
+        public async UniTask AssignTexture(RawImage image, IStorageUnit storage, string jacketPath)
         {
-            jacketPath = level.GetRealPath(jacketPath);
+            jacketPath = storage.GetRealPath(jacketPath);
             if (jacketPath == null)
             {
-                jacket.texture = defaultJacket;
+                image.texture = defaultJacket;
                 return;
             }
 
@@ -135,7 +137,7 @@ namespace ArcCreate.Storage
 
                 if (cachedTexture.IsSuccess)
                 {
-                    jacket.texture = cachedTexture.Value;
+                    image.texture = cachedTexture.Value;
                 }
 
                 return;
@@ -151,7 +153,7 @@ namespace ArcCreate.Storage
                 if (string.IsNullOrEmpty(req.error))
                 {
                     Texture2D texture = DownloadHandlerTexture.GetContent(req);
-                    jacket.texture = texture;
+                    image.texture = texture;
                     loading.Value = texture;
                     loading.IsSuccess = true;
                 }
@@ -159,6 +161,21 @@ namespace ArcCreate.Storage
                 {
                     loading.IsSuccess = false;
                 }
+            }
+        }
+
+        public void EnsurePersistent(UnityEngine.Object obj)
+        {
+            PersistentCache.Add(obj);
+        }
+
+        public void ReleasePersistent(UnityEngine.Object obj)
+        {
+            PersistentCache.Remove(obj);
+            if (QueuedForDelete.Contains(obj))
+            {
+                Destroy(obj);
+                QueuedForDelete.Remove(obj);
             }
         }
 
@@ -344,7 +361,14 @@ namespace ArcCreate.Storage
         private static void DestroyCache<T>(Incompletable<T> obj)
             where T : UnityEngine.Object
         {
-            Destroy(obj.Value);
+            if (!PersistentCache.Contains(obj.Value))
+            {
+                Destroy(obj.Value);
+            }
+            else
+            {
+                QueuedForDelete.Add(obj.Value);
+            }
         }
 
         private class Incompletable<T>

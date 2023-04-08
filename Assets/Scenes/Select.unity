@@ -10187,7 +10187,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 512036301}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99999833
+  m_Size: 0.9997135
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -11847,7 +11847,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -7.500122, y: -80}
+  m_AnchoredPosition: {x: -7.5, y: -79.99991}
   m_SizeDelta: {x: -75, y: 110}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &954380778
@@ -15863,7 +15863,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -7.500122, y: -250}
+  m_AnchoredPosition: {x: -7.5, y: -249.99998}
   m_SizeDelta: {x: -75, y: 110}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &1467990470
@@ -15939,6 +15939,7 @@ MonoBehaviour:
   increateSpeedButton: {fileID: 545818}
   noteSpeedText: {fileID: 1663782049}
   earlyLatePureToggle: {fileID: 871981726}
+  useClassicTouchToggle: {fileID: 0}
   increaseNoteVolumeButton: {fileID: 1489924898}
   decreaseNoteVolumeButton: {fileID: 1375162536}
   noteVolumeText: {fileID: 1967423850}
@@ -18225,7 +18226,7 @@ MonoBehaviour:
   spacing: 30
   axis: 1
   useTwoStageLoading: 1
-  maxVelocityForSecondStage: 1000
+  maxVelocityForSecondStage: 999999
 --- !u!114 &1709904905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20218,7 +20219,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 540.0002}
+  m_AnchoredPosition: {x: 0, y: 540.00006}
   m_SizeDelta: {x: 0, y: 700}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1961179716

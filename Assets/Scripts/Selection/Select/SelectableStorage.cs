@@ -32,9 +32,7 @@ namespace ArcCreate.Selection.Select
                 enabled = storageUnit != null;
                 SetSelected(value != null && Services.Select.IsStorageSelected(value));
                 SetStateImmediate(selected);
-                cts.Cancel();
-                cts.Dispose();
-                cts = new CancellationTokenSource();
+                Cancel();
             }
         }
 
@@ -42,19 +40,12 @@ namespace ArcCreate.Selection.Select
         {
             if (!selected)
             {
-                cts.Cancel();
-                cts.Dispose();
-                cts = new CancellationTokenSource();
+                Cancel();
                 StartHoldDetection(cts.Token).Forget();
             }
         }
 
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            cts.Cancel();
-            cts.Dispose();
-            cts = new CancellationTokenSource();
-        }
+        public void OnPointerExit(PointerEventData eventData) => Cancel();
 
         public void OnEndDrag(PointerEventData eventData)
         {
@@ -170,6 +161,15 @@ namespace ArcCreate.Selection.Select
         {
             cts.Cancel();
             Services.Select.OnClear -= DeselectSelf;
+        }
+
+        private void OnDisable() => Cancel();
+
+        private void Cancel()
+        {
+            cts.Cancel();
+            cts.Dispose();
+            cts = new CancellationTokenSource();
         }
     }
 }

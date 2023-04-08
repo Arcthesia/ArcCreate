@@ -8,7 +8,6 @@ using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Editing
@@ -164,7 +163,7 @@ namespace ArcCreate.Compose.Editing
                 yText.text = currentY.ToString();
             }
 
-            Vector2 mousePos = Mouse.current.position.ReadValue();
+            Vector2 mousePos = Input.mousePosition;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, mousePos, null, out Vector2 rectPos);
             rect.anchoredPosition = rectPos + delta;
         }

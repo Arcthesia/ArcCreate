@@ -3,7 +3,6 @@ using ArcCreate.SceneTransition;
 using ArcCreate.Storage;
 using ArcCreate.Storage.Data;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace ArcCreate.Selection
 {
@@ -15,11 +14,6 @@ namespace ArcCreate.Selection
         {
             storageData.SelectedPack.OnValueChange += OnPackChange;
             storageData.SelectedChart.OnValueChange += OnChartChange;
-        }
-
-        private void Update()
-        {
-            InputSystem.Update();
         }
 
         private void OnDestroy()

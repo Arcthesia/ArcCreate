@@ -9,7 +9,6 @@ using ArcCreate.SceneTransition;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace ArcCreate.Remote.Gameplay
@@ -167,20 +166,11 @@ namespace ArcCreate.Remote.Gameplay
 
         private void UseGameplay(IGameplayControl gameplay)
         {
-            gameplay.ShouldUpdateInputSystem = true;
             gameplay.Chart.EnableColliderGeneration = false;
             remoteGameplayControl.SetGameplay(gameplay);
             Debug.Log(I18n.S("Compose.Notify.GameplayLoaded"));
 
             StartListeningForBroadcast();
-        }
-
-        private void Update()
-        {
-            if (gameplay == null || !gameplay.IsLoaded)
-            {
-                InputSystem.Update();
-            }
         }
 
         private void OnDestroy()

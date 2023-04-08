@@ -3,10 +3,9 @@
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.kyub.emojisearch": "https://gitlab-ci-token:glpat-c6ymx9eBXkdQhFhCMaLg@gitlab.com/KyubInteractive/kyublibs.git#com.kyub.emojisearch-1.1.5",
     "com.unity.2d.sprite": "1.0.0",
-    "com.unity.burst": "1.4.11",
     "com.unity.ide.visualstudio": "2.0.12",
     "com.unity.ide.vscode": "1.2.4",
-    "com.unity.inputsystem": "1.4.4",
+    "com.unity.nuget.newtonsoft-json": "3.0.1",
     "com.unity.postprocessing": "3.1.1",
     "com.unity.test-framework": "1.1.29",
     "com.unity.textmeshpro": "2.1.6",
@@ -43,7 +42,6 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0",
-    "com.unity.nuget.newtonsoft-json": "3.0.1"
+    "com.unity.modules.xr": "1.0.0"
   }
 }

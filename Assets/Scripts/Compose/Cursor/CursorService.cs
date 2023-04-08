@@ -5,7 +5,6 @@ using ArcCreate.Utility.Extension;
 using ArcCreate.Utility.Parser;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace ArcCreate.Compose.Cursor
 {
@@ -177,8 +176,7 @@ namespace ArcCreate.Compose.Cursor
         public void ForceUpdateLaneCursor()
         {
             Camera gameplayCamera = Services.Gameplay.Camera.GameplayCamera;
-            Mouse mouse = Mouse.current;
-            Vector2 mousePosition = mouse.position.ReadValue();
+            Vector2 mousePosition = Input.mousePosition;
             Ray ray = gameplayCamera.ScreenPointToRay(mousePosition);
             bool isCursorHoveringOnTrack = laneCollider.Raycast(ray, out RaycastHit laneHit, 120);
             isHittingLane = isLaneCursorEnabled && isCursorHoveringOnTrack;
@@ -192,9 +190,8 @@ namespace ArcCreate.Compose.Cursor
         {
             if (Services.Gameplay?.IsLoaded ?? false)
             {
-                Mouse mouse = Mouse.current;
                 Camera gameplayCamera = Services.Gameplay.Camera.GameplayCamera;
-                Vector2 mousePosition = mouse.position.ReadValue();
+                Vector2 mousePosition = Input.mousePosition;
                 isCursorAboveViewport = !Dialog.IsAnyOpen && RectTransformUtility.RectangleContainsScreenPoint(gameplayViewport, mousePosition, editorCamera);
                 if (!isCursorAboveViewport)
                 {
@@ -240,8 +237,7 @@ namespace ArcCreate.Compose.Cursor
 
         private void CheckScroll()
         {
-            Mouse mouse = Mouse.current;
-            float scrollY = mouse.scroll.ReadValue().y;
+            float scrollY = Input.mouseScrollDelta.y;
             if (scrollY == 0 || Mathf.Abs(scrollY) < Settings.TrackScrollThreshold.Value)
             {
                 return;
@@ -348,15 +344,6 @@ namespace ArcCreate.Compose.Cursor
             bool typedValueConfirmed = false;
             RequireTypingAttribute.IsTyping = true;
 
-            void OnType(char c)
-            {
-                if (isValidTypedChar.Invoke(c))
-                {
-                    typedValue += c;
-                    Services.Popups.Notify(Popups.Severity.Info, typedValue);
-                }
-            }
-
             void RemoveDigit()
             {
                 typedValue = typedValue.Remove(typedValue.Length - 1, 1);
@@ -378,7 +365,7 @@ namespace ArcCreate.Compose.Cursor
                 }
             }
 
-            Keyboard.current.onTextInput += OnType;
+            // Keyboard.current.onTextInput += OnType;
             onRemoveDigit += RemoveDigit;
             onTypedValueConfirm += ConfirmTypedValue;
             onClipboard += PasteClipboard;
@@ -426,15 +413,64 @@ namespace ArcCreate.Compose.Cursor
                     break;
                 }
 
+                if (Input.anyKeyDown)
+                {
+                    foreach (KeyCode k in Enum.GetValues(typeof(KeyCode)))
+                    {
+                        if (Input.GetKeyDown(k)
+                        && ConvertKeyCodeToChar(k, out char c))
+                        {
+                            if (isValidTypedChar.Invoke(c))
+                            {
+                                typedValue += c;
+                                Services.Popups.Notify(Popups.Severity.Info, typedValue);
+                            }
+                        }
+                    }
+                }
+
                 await UniTask.NextFrame();
             }
 
             RequireTypingAttribute.IsTyping = false;
-            Keyboard.current.onTextInput -= OnType;
             onRemoveDigit -= RemoveDigit;
             onTypedValueConfirm -= ConfirmTypedValue;
             onClipboard -= PasteClipboard;
             return (wasSuccessful, result);
+        }
+
+        private bool ConvertKeyCodeToChar(KeyCode k, out char c)
+        {
+            c = default;
+            string str = k.ToString().ToLower();
+
+            switch (k)
+            {
+                case KeyCode.Comma:
+                    c = ',';
+                    return true;
+                case KeyCode.Period:
+                    c = '.';
+                    return true;
+            }
+
+            if (str.StartsWith("alpha"))
+            {
+                str = str.Substring("alpha".Length);
+            }
+
+            if (str.StartsWith("keypad"))
+            {
+                str = str.Substring("keypad".Length);
+            }
+
+            if (str.Length == 1)
+            {
+                c = str[0];
+                return true;
+            }
+
+            return false;
         }
 
         private class RequireTypingAttribute : ContextRequirementAttribute

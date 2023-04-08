@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -155,7 +156,6 @@ namespace ArcCreate.Gameplay
         {
             if (fingerId == AssignedFingerId)
             {
-                assignedFingerExistsThisFrame = true;
                 ResetAssignedFinger();
 
                 if (existsArcWithinRangeThisFrame)
@@ -173,11 +173,6 @@ namespace ArcCreate.Gameplay
         /// <param name="arcJudgeInterval">The judgement interval of an arc of this color.</param>
         public void FingerHit(int fingerId, float distance, float arcJudgeInterval)
         {
-            if (fingerId == assignedFingerId)
-            {
-                assignedFingerExistsThisFrame = true;
-            }
-
             if (IsFingerAssigned)
             {
                 if (!IsGraceActive && assignedFingerMissedThisFrame)
@@ -234,7 +229,6 @@ namespace ArcCreate.Gameplay
         {
             if (fingerId == AssignedFingerId)
             {
-                assignedFingerExistsThisFrame = true;
                 assignedFingerMissedThisFrame = true;
                 if (wrongFingerHitThisFrame)
                 {
@@ -260,6 +254,19 @@ namespace ArcCreate.Gameplay
 
             Services.Judgement.Debug.ShowExistsArc(Color, exists);
             existsArcWithinRangeThisFrame = exists;
+        }
+
+        /// <summary>
+        /// Notify whether or not a finger exist this frame.
+        /// It's important that this method is called BEFORE any finger state notifying methods.
+        /// </summary>
+        /// <param name="id">The finger id.</param>
+        public void FingerExists(int id)
+        {
+            if (id == assignedFingerId)
+            {
+                assignedFingerExistsThisFrame = true;
+            }
         }
 
         /// <summary>

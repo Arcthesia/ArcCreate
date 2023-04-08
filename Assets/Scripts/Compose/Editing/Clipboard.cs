@@ -5,7 +5,7 @@ using ArcCreate.Compose.Navigation;
 using ArcCreate.Compose.Selection;
 using ArcCreate.Gameplay.Data;
 using Cysharp.Threading.Tasks;
-using UnityEngine.InputSystem;
+using UnityEngine;
 
 namespace ArcCreate.Compose.Editing
 {
@@ -13,7 +13,7 @@ namespace ArcCreate.Compose.Editing
     public class Clipboard
     {
         private HashSet<Note> defaultClipboard = null;
-        private readonly Dictionary<string, HashSet<Note>> namedClipboards = new Dictionary<string, HashSet<Note>>();
+        private readonly Dictionary<KeyCode, HashSet<Note>> namedClipboards = new Dictionary<KeyCode, HashSet<Note>>();
 
         [EditorAction("Copy", true, "<c-c>")]
         [SelectionService.RequireSelection]
@@ -32,10 +32,7 @@ namespace ArcCreate.Compose.Editing
         {
             defaultClipboard = MakeClipboard(Services.Selection.SelectedNotes);
             RequireClipboardAttribute.ClipboardAvailable = true;
-
-            Services.History.AddCommand(new EventCommand(
-                name: I18n.S("Compose.Notify.History.Cut"),
-                remove: defaultClipboard));
+            Services.Navigation.StartAction("Delete.Execute");
 
             Services.Popups.Notify(
                 Popups.Severity.Info,
@@ -68,7 +65,7 @@ namespace ArcCreate.Compose.Editing
         [SelectionService.RequireSelection]
         public async UniTask NamedCopy()
         {
-            string name = await GetKeyboardInput();
+            KeyCode name = await GetKeyboardInput();
             var clipboard = MakeClipboard(Services.Selection.SelectedNotes);
             if (!namedClipboards.ContainsKey(name))
             {
@@ -88,7 +85,7 @@ namespace ArcCreate.Compose.Editing
         [SelectionService.RequireSelection]
         public async UniTask NamedCut()
         {
-            string name = await GetKeyboardInput();
+            KeyCode name = await GetKeyboardInput();
             var clipboard = MakeClipboard(Services.Selection.SelectedNotes);
             if (!namedClipboards.ContainsKey(name))
             {
@@ -115,7 +112,7 @@ namespace ArcCreate.Compose.Editing
         [WhitelistScopes(typeof(Grid.GridService), typeof(Timeline.TimelineService))]
         public async UniTask NamedPaste(EditorAction action)
         {
-            string name = await GetKeyboardInput();
+            KeyCode name = await GetKeyboardInput();
             if (namedClipboards.TryGetValue(name, out var notes))
             {
                 SubAction confirm = action.GetSubAction("Confirm");
@@ -210,24 +207,22 @@ namespace ArcCreate.Compose.Editing
             }
         }
 
-        private async UniTask<string> GetKeyboardInput()
+        private async UniTask<KeyCode> GetKeyboardInput()
         {
-            string res = string.Empty;
-            bool typed = false;
-            void OnType(char c)
-            {
-                res += c;
-                typed = true;
-            }
-
-            Keyboard.current.onTextInput += OnType;
-            while (!typed)
+            while (!Input.anyKeyDown)
             {
                 await UniTask.NextFrame();
             }
 
-            Keyboard.current.onTextInput -= OnType;
-            return res;
+            foreach (KeyCode k in System.Enum.GetValues(typeof(KeyCode)))
+            {
+                if (Input.GetKeyDown(k))
+                {
+                    return k;
+                }
+            }
+
+            return KeyCode.None;
         }
 
         private void ApplyTimingToPastingNotes(int timing, List<Note> notes, Note anchorNote)

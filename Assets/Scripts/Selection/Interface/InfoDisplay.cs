@@ -119,6 +119,12 @@ namespace ArcCreate.Selection.Interface
             shutterAlias.Value = chart.Alias;
 
             string sideString = (chart.Skin?.Side ?? "").ToLower();
+
+            if (jacket.texture != null)
+            {
+                storage.ReleasePersistent(jacket.texture);
+            }
+
             storage.AssignTexture(jacket, level, chart.JacketPath).ContinueWith(() =>
             {
                 if (jacketSprite != null)
@@ -127,6 +133,7 @@ namespace ArcCreate.Selection.Interface
                 }
 
                 Texture texture = jacket.texture;
+                storage.EnsurePersistent(texture);
                 jacketSprite = Sprite.Create(texture as Texture2D, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
                 shutterJacketSprite.Value = jacketSprite;
             });

@@ -8,7 +8,6 @@ using ArcCreate.Gameplay.Skin;
 using ArcCreate.SceneTransition;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Networking;
 
 namespace ArcCreate.Gameplay
@@ -28,12 +27,6 @@ namespace ArcCreate.Gameplay
         [SerializeField] private Camera backgroundCamera;
         [SerializeField] private Camera overlayCamera;
         [SerializeField] private string testPlayChartFileName = "test_chart.aff";
-
-        public bool ShouldUpdateInputSystem
-        {
-            get => Values.ShouldUpdateInputSystem;
-            set => Values.ShouldUpdateInputSystem = value;
-        }
 
         public IChartControl Chart => chartService;
 
@@ -84,7 +77,7 @@ namespace ArcCreate.Gameplay
                 ImportTestChart(path);
             }
 
-            Settings.InputMode.Value = (int)InputMode.Touch;
+            Settings.InputMode.Value = (int)InputMode.Mouse;
             Services.Scenecontrol.WaitForSceneLoad();
         }
 
@@ -136,12 +129,6 @@ namespace ArcCreate.Gameplay
         {
             if (!IsLoaded)
             {
-                // Make sure InputSystem is always updated.
-                if (Values.ShouldUpdateInputSystem)
-                {
-                    InputSystem.Update();
-                }
-
                 return;
             }
 
@@ -152,13 +139,6 @@ namespace ArcCreate.Gameplay
             int currentTiming = Services.Audio.ChartTiming;
 
             Services.Chart.UpdateChartJudgement(currentTiming);
-
-            // Update InputSystem as late as possible to minimize delay.
-            if (Values.ShouldUpdateInputSystem)
-            {
-                InputSystem.Update();
-            }
-
             Services.Judgement.ProcessInput(currentTiming);
             Services.Chart.UpdateChartRender(currentTiming);
             Services.Score.UpdateDisplay(currentTiming);

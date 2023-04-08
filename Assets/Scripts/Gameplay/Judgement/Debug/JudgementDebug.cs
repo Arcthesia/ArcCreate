@@ -4,7 +4,6 @@ using ArcCreate.Gameplay.Judgement.Input;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 namespace ArcCreate.Gameplay.Judgement
 {
@@ -22,7 +21,6 @@ namespace ArcCreate.Gameplay.Judgement
         [SerializeField] private RectTransform[] lineOrigins;
         [SerializeField] private TMP_Text[] assignedIndicator;
         [SerializeField] private Camera uiCamera;
-        [SerializeField] private TMP_Text touchesInfo;
 
         [Header("Color")]
         [SerializeField] private Color assignedFingerColor;
@@ -36,32 +34,6 @@ namespace ArcCreate.Gameplay.Judgement
         public void SetTouchState(List<TouchInput> touches)
         {
             this.touches = touches;
-
-            var touchArray = Touch.activeTouches;
-            StringBuilder sb = new StringBuilder();
-            sb.Append($"Touches: {touchArray.Count}");
-
-            for (int i = 0; i < touchArray.Count; i++)
-            {
-                Touch touch = touchArray[i];
-                sb.Append($"\n- {i}({touch.touchId}): {touch.phase}");
-                if (touch.valid)
-                {
-                    sb.Append(" valid");
-                }
-
-                if (touch.inProgress)
-                {
-                    sb.Append(" inProgress");
-                }
-
-                if (touch.isInProgress)
-                {
-                    sb.Append(" isInProgress");
-                }
-            }
-
-            touchesInfo.text = sb.ToString();
         }
 
         public void ShowInputLock(int color, float v)

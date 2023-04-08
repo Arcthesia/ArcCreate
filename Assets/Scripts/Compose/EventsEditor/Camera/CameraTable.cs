@@ -9,7 +9,6 @@ using ArcCreate.Gameplay.Data;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace ArcCreate.Compose.EventsEditor
@@ -96,7 +95,6 @@ namespace ArcCreate.Compose.EventsEditor
             CameraEvent nextToTarget = (index >= 0 && index < Data.Count - 1) ? Data[index + 1] : null;
             Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.FreeCameraEditHelp"));
 
-            Keyboard keyboard = InputSystem.GetDevice<Keyboard>();
             Camera cam = Services.Gameplay.Camera.GameplayCamera;
             CameraEvent oldValue = target.Clone() as CameraEvent;
 

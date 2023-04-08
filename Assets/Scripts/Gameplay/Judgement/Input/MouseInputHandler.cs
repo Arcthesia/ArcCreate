@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
-using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 
 namespace ArcCreate.Gameplay.Judgement.Input
 {
@@ -8,23 +6,23 @@ namespace ArcCreate.Gameplay.Judgement.Input
     {
         public override void PollInput()
         {
-            Mouse mouse = Mouse.current;
-            Vector2 mousePosition = mouse.position.ReadValue();
+            Vector2 mousePosition = UnityEngine.Input.mousePosition;
             CurrentInputs.Clear();
 
             TouchInput input;
-            bool isPressed = mouse.leftButton.isPressed;
-            if (mouse.leftButton.wasPressedThisFrame)
+            if (UnityEngine.Input.GetMouseButtonDown(0))
             {
                 input = new TouchInput(0, mousePosition, true, TouchPhase.Began, GetCameraRay(mousePosition));
             }
-            else if (mouse.leftButton.wasReleasedThisFrame)
+            else if (UnityEngine.Input.GetMouseButtonUp(0))
             {
                 input = new TouchInput(0, mousePosition, false, TouchPhase.Ended, GetCameraRay(mousePosition));
             }
-            else if (mouse.leftButton.isPressed)
+            else if (UnityEngine.Input.GetMouseButton(0))
             {
                 input = new TouchInput(0, mousePosition, false, TouchPhase.Moved, GetCameraRay(mousePosition));
+                Services.InputFeedback.LaneFeedback(input.Lane);
+                Services.InputFeedback.FloatlineFeedback(input.VerticalPos.y);
             }
             else
             {
@@ -32,12 +30,6 @@ namespace ArcCreate.Gameplay.Judgement.Input
             }
 
             CurrentInputs.Add(input);
-            if (mouse.leftButton.isPressed)
-            {
-                Services.InputFeedback.LaneFeedback(input.Lane);
-                Services.InputFeedback.FloatlineFeedback(input.VerticalPos.y);
-            }
-
             Services.Judgement.Debug.SetTouchState(CurrentInputs);
         }
     }

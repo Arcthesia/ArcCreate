@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.Compose.Grid;
@@ -10,7 +9,6 @@ using ArcCreate.Gameplay;
 using ArcCreate.Gameplay.Data;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace ArcCreate.Compose.Editing
 {
@@ -174,7 +172,7 @@ namespace ArcCreate.Compose.Editing
             SubAction cancel = action.GetSubAction("Cancel");
             HashSet<Note> selection = Services.Selection.SelectedNotes;
 
-            Vector2 mousePos = Mouse.current.position.ReadValue();
+            Vector2 mousePos = Input.mousePosition;
             int closestTiming = 0;
             float closestDist = float.MaxValue;
             foreach (var note in selection)

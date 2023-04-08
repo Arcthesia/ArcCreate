@@ -1,4 +1,3 @@
-using System;
 using ArcCreate.SceneTransition;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -9,6 +8,8 @@ namespace ArcCreate.Gameplay.Audio
     public class PauseMenu : MonoBehaviour
     {
         [SerializeField] private Button pauseButton;
+        [SerializeField] private RectTransform pauseButtonRect;
+        [SerializeField] private Camera uiCamera;
         [SerializeField] private GameObject pauseScreen;
         [SerializeField] private Button playButton;
         [SerializeField] private Button retryButton;
@@ -43,8 +44,19 @@ namespace ArcCreate.Gameplay.Audio
         private void OnPauseButton()
         {
             // Hacky but whatever
-            if (Values.EnablePauseMenu && (Services.Audio.IsPlayingAndNotStationary || (Services.Audio.AudioTiming >= Services.Audio.AudioLength - 1000)))
+            if (Values.EnablePauseMenu
+            && (Services.Audio.IsPlayingAndNotStationary || (Services.Audio.AudioTiming >= Services.Audio.AudioLength - 1000)))
             {
+                int touchCount = Input.touchCount;
+                for (int i = 0; i < touchCount; i++)
+                {
+                    var touch = Input.GetTouch(i);
+                    if (!RectTransformUtility.RectangleContainsScreenPoint(pauseButtonRect, touch.position, uiCamera))
+                    {
+                        return;
+                    }
+                }
+
                 pauseScreen.SetActive(true);
                 Services.Audio.Pause();
             }

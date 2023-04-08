@@ -34,26 +34,12 @@ namespace ArcCreate
 
         // Input
         public static readonly IntSetting GridSlot = new IntSetting("GridSlot", 0);
-        public static readonly FloatSetting ScrollSensitivityVertical =
-            new FloatSetting(
-                "ScrollSensitivity.Vertical",
-                Application.platform == RuntimePlatform.LinuxPlayer
-                || Application.platform == RuntimePlatform.LinuxEditor ? -1000 : 10);
+        public static readonly FloatSetting ScrollSensitivityVertical = new FloatSetting("Scroll.Vertical", 200);
+        public static readonly FloatSetting ScrollSensitivityHorizontal = new FloatSetting("Scroll.Hozirontal", 100);
+        public static readonly FloatSetting ScrollSensitivityTimeline = new FloatSetting("Scroll.Timeline", 0.2f);
 
-        public static readonly FloatSetting ScrollSensitivityHorizontal =
-            new FloatSetting(
-                "ScrollSensitivity.Horizontal",
-                Application.platform == RuntimePlatform.LinuxPlayer
-                || Application.platform == RuntimePlatform.LinuxEditor ? 500 : -5);
-
-        public static readonly FloatSetting ScrollSensitivityTimeline =
-            new FloatSetting(
-                "ScrollSensitivity.Timeline",
-                Application.platform == RuntimePlatform.LinuxPlayer
-                || Application.platform == RuntimePlatform.LinuxEditor ? -0.4f : 0.4f);
-
-        public static readonly FloatSetting TrackScrollThreshold = new FloatSetting("ScrollSensitivity.TrackThreshold", 1);
-        public static readonly IntSetting TrackScrollMaxMovement = new IntSetting("ScrollSensitivity.MaxTiming", 200);
+        public static readonly FloatSetting TrackScrollThreshold = new FloatSetting("Scroll.TrackThreshold", 0.2f);
+        public static readonly IntSetting TrackScrollMaxMovement = new IntSetting("Scroll.MaxTiming", 200);
         public static readonly FloatSetting CameraSensitivity = new FloatSetting("CameraSensitivity", 10);
         public static readonly FloatSetting GridBpmLimit = new FloatSetting("GridBpmLimit", 1000);
         public static readonly BoolSetting ScenecontrolAutoRebuild = new BoolSetting("ScenecontrolAutoRebuild", false);

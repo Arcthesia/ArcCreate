@@ -9,7 +9,6 @@ using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.Utilities;
 using UnityEngine.SceneManagement;
 using YamlDotNet.RepresentationModel;
 
@@ -43,7 +42,9 @@ namespace ArcCreate.Compose.Navigation
 
         public void ReloadHotkeys()
         {
+            allActions.Clear();
             keybinds.Clear();
+            activatingKeybinds.Clear();
 
             Dictionary<string, List<string>> keybindOverrides = new Dictionary<string, List<string>>();
             Dictionary<string, List<string>> keybindActions = new Dictionary<string, List<string>>();
@@ -149,7 +150,9 @@ namespace ArcCreate.Compose.Navigation
             {
                 case EditorAction editorAction:
                     bool whitelisted = true;
-                    if (currentAction != null && !currentAction.Whitelist.Contains(editorAction.Scope.Type))
+                    if (currentAction != null
+                    && !currentAction.WhitelistAll
+                    && !currentAction.Whitelist.Contains(editorAction.Scope.Type))
                     {
                         whitelisted = false;
                     }
@@ -277,6 +280,7 @@ namespace ArcCreate.Compose.Navigation
                         shouldDisplayOnContextMenu: editorAction.ShouldDisplayOnContextMenu,
                         contextRequirements: contextRequirements?.Cast<IContextRequirement>().ToList() ?? new List<IContextRequirement>(),
                         whitelist: whitelist?.Scopes.ToList() ?? new List<Type>(),
+                        whitelistAll: whitelist?.All ?? false,
                         scope: new EditorScope(type, scopeId, instance),
                         method: method,
                         subActions: subActionInstances);

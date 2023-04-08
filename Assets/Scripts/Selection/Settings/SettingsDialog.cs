@@ -1,3 +1,4 @@
+using System;
 using ArcCreate.Utility;
 using TMPro;
 using UnityEngine;
@@ -115,7 +116,7 @@ namespace ArcCreate.Selection.Interface
             Settings.LateEarlyTextPosition.OnValueChanged.RemoveListener(OnLateEarlyTextPositionSettings);
             Settings.LimitFrameRate.OnValueChanged.RemoveListener(OnLimitFrameRateSettings);
             Settings.ShowFPSCounter.OnValueChanged.RemoveListener(OnShowFPSCounterSettings);
-            Settings.EnableMaxIndicator.OnValueChanged.AddListener(OnMaxIndicatorSettings);
+            Settings.EnableMaxIndicator.OnValueChanged.RemoveListener(OnMaxIndicatorSettings);
 
             // setupOffsetButton.onClick.RemoveListener(setupOffsetDialog.Show);
         }

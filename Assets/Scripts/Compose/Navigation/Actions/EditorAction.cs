@@ -11,6 +11,7 @@ namespace ArcCreate.Compose.Navigation
             bool shouldDisplayOnContextMenu,
             List<IContextRequirement> contextRequirements,
             List<Type> whitelist,
+            bool whitelistAll,
             EditorScope scope,
             MethodInfo method,
             List<SubAction> subActions)
@@ -19,6 +20,7 @@ namespace ArcCreate.Compose.Navigation
             ShouldDisplayOnContextMenu = shouldDisplayOnContextMenu;
             ContextRequirements = contextRequirements;
             Whitelist = whitelist;
+            WhitelistAll = whitelistAll;
             Scope = scope;
             Method = method;
             SubActions = subActions;
@@ -54,6 +56,8 @@ namespace ArcCreate.Compose.Navigation
         public List<IContextRequirement> ContextRequirements { get; private set; }
 
         public List<Type> Whitelist { get; private set; }
+
+        public bool WhitelistAll { get; private set; }
 
         public EditorScope Scope { get; private set; }
 

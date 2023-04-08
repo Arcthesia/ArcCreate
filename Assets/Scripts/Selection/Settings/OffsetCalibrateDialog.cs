@@ -3,7 +3,6 @@ using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 namespace ArcCreate.Selection.Interface
 {
@@ -73,10 +72,11 @@ namespace ArcCreate.Selection.Interface
 
             while (AudioSettings.dspTime <= dspEndTime)
             {
-                var touches = Touch.activeTouches;
-                foreach (var touch in touches)
+                int touchCount = Input.touchCount;
+                for (int t = 0; t < touchCount; t++)
                 {
-                    if (touch.began)
+                    var touch = Input.GetTouch(t);
+                    if (touch.phase == TouchPhase.Began)
                     {
                         int timing = Mathf.RoundToInt((float)(AudioSettings.dspTime - dspStartTime) * 1000);
                         int minDiff = int.MaxValue;

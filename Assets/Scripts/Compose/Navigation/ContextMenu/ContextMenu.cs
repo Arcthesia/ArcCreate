@@ -2,7 +2,6 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 
 namespace ArcCreate.Compose.Navigation
 {
@@ -25,6 +24,7 @@ namespace ArcCreate.Compose.Navigation
 
         [EditorAction("Open", false, "<mouse2>")]
         [SubAction("Close", false, "<u-mouse1>", "<mouse2><u-mouse2>", "<u-mouse3>", "<esc>")]
+        [WhitelistScopes(all: true)]
         public async UniTask OpenContextMenu(EditorAction action)
         {
             SubAction close = action.GetSubAction("Close");
@@ -88,7 +88,7 @@ namespace ArcCreate.Compose.Navigation
 
         private void AlignToCursor(float rectHeight)
         {
-            Vector2 mousePosition = Mouse.current.position.ReadValue();
+            Vector2 mousePosition = Input.mousePosition;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, mousePosition, null, out Vector2 position);
 
             float canvasWidth = canvasRect.rect.width;

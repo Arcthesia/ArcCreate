@@ -3,7 +3,6 @@ using ArcCreate.Gameplay;
 using ArcCreate.SceneTransition;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace ArcCreate.Compose
 {
@@ -51,16 +50,10 @@ namespace ArcCreate.Compose
         private void UseGameplay(IGameplayControl gameplay)
         {
             Services.Gameplay = gameplay ?? throw new System.Exception("Could not load gameplay scene");
-            gameplay.ShouldUpdateInputSystem = false;
             gameplay.EnablePauseMenu = false;
             gameplay.Chart.EnableColliderGeneration = true;
             Shutter.Instance.SetTargetCamera(gameplay.Camera.UICamera, "Topmost");
             Debug.Log(I18n.S("Compose.Notify.GameplayLoaded"));
-        }
-
-        private void Update()
-        {
-            InputSystem.Update();
         }
 
         private void OnLog(string condition, string stackTrace, LogType type)

@@ -1,5 +1,4 @@
 using UnityEngine;
-using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 namespace ArcCreate.Gameplay.Judgement.Input
 {
@@ -10,13 +9,13 @@ namespace ArcCreate.Gameplay.Judgement.Input
         public Vector3 ScreenPos;
         public Vector3 VerticalPos;
         public bool IsTap;
-        public UnityEngine.InputSystem.TouchPhase Phase;
+        public TouchPhase Phase;
 
         public TouchInput(Touch touch, Ray cameraRay)
         {
-            Id = touch.touchId;
-            ScreenPos = new Vector3(touch.screenPosition.x, touch.screenPosition.y);
-            IsTap = touch.began;
+            Id = touch.fingerId;
+            ScreenPos = new Vector3(touch.position.x, touch.position.y);
+            IsTap = touch.phase == TouchPhase.Began;
             Phase = touch.phase;
 
             (int lane, float vx, float vy) = Projection.CastRayOntoPlayfield(cameraRay);
@@ -24,7 +23,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
             Lane = lane;
         }
 
-        public TouchInput(int id, Vector3 screenPos, bool isTap, UnityEngine.InputSystem.TouchPhase phase, Ray cameraRay)
+        public TouchInput(int id, Vector3 screenPos, bool isTap, TouchPhase phase, Ray cameraRay)
         {
             Id = id;
             ScreenPos = screenPos;
