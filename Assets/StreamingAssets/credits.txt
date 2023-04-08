@@ -12,6 +12,7 @@ yojohanshinwataikei
 <size=33><b>Localization</b></size>
 Japanese: rassvet2
 Spanish: Alaiskai
+Vietnamese: Himori
 
 <size=33><b>Quality Assurance</b></size>
 ZydeKun

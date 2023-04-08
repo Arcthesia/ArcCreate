@@ -85,12 +85,27 @@ Compose:
       InvalidActionPath: |-
         Ruta de acción no válida: la cadena "{0}" no coincide con ninguna acción.
     Scenecontrol: |-
-      Ha ocurrido un error mientras se ejecutaba evento de escena de tipo {Type}: {Message}
+      Ha ocurrido un error mientras se ejecutaba evento de control de escena de tipo {Type}: {Message}
       {StackTrace}
     LuaScript: |-
       Ha ocurrido un error mientras se ejecutada el script Lua {Path}: {Message}
       {StackTrace}
-      
+    Render:
+      FFmpeg:
+        NotFound: |-
+          No se ha podido encontrar ningún ejecutable FFmpeg.
+          Por favor, asegúrate de que la ruta configurada {0} es correcta.
+        Start: |-
+          Ha ocurrido un error mientras se iniciaba FFmpeg en {Path}: {Message}
+          {StackTrace}
+        Write: |-
+          Ha ocurrido un error mientras se estaba escribiendo en el proceso FFmpeg: {Message}
+          {StackTrace}
+      Audio:
+        IncompatibleSfx: |-
+          El clip de audio {Sfx} es incompatible para la renderización.
+          Número esperado de canales {ExpectedChannels} y de frecuencia de {ExpectedFrequency}, pero el número de canales de clip es {Channels} y su frecuencia es {Frequency}.
+            
   # Notification messages
   Notify:
     GameplayLoaded: Escena de juego cargada con éxito
@@ -125,9 +140,9 @@ Compose:
       AddCamera: Añadir evento de cámara
       EditCamera: Editar evento de cámara
       RemoveCamera: Quitar evento de cámara
-      AddScenecontrol: Añadir evento de escena
-      EditScenecontrol: Editar evento de escena
-      RemoveScenecontrol: Quitar evento de escena
+      AddScenecontrol: Añadir evento de control de escena
+      EditScenecontrol: Editar evento de control de escena
+      RemoveScenecontrol: Quitar evento de control de escena
       EditValue: Editar valores de las notas seleccionadas
       EditArc: Editar valores del arco
       CreateNote:
@@ -174,6 +189,12 @@ Compose:
       CopyPosition: Posición del arco copiado
       CopyX: Coordenada X del arco copiada
       CopyY: Coordenada Y del arco copiada
+    Export:
+      Render:
+        Cancelled: Renderizado cancelado
+        Complete: Renderizado completado
+      Package:
+        Complete: Paquete exportado a {0}  
   # Dialog boxes
   Dialog:
     RemoveGroup:
@@ -273,10 +294,10 @@ Compose:
       Extension: Extensión
     Placeholder:
       Text: Vacío...
-      File: No se ha seleccionado archivo...
-      Image: No se ha seleccionado imagen...
+      File: <size=10>No se ha seleccionado archivo...</size>
+      Image: <size=10>No se ha seleccionado imagen...</size>
       Property: Sin propiedad...
-      ImagePrompt: Click para seleccionar imagen
+      ImagePrompt: <size=10>Click para seleccionar imagen</size>
     PanelNames:
       Toolbox: <size=10>Herramientas</size>
       Gameplay: Juego
@@ -304,12 +325,15 @@ Compose:
         ProjectFile: <size=10>Archivo de Proyecto</size>
         ChartFile: Archivo de Mapa
         Information: Información
+        Gameplay: Juego
         Title: Título
         Composer: Compositor
         Illustrator: Ilustrador
         Charter: Creador
+        Alias: Alias
         BPM: BPM
         BaseBPM: BPM Base
+        BPMText: Texto de BPM
         SyncBaseBPM: Sinc.
         ChartOffset: <size=9>Desplazamiento de mapa</size>
         TimingPointDensityFactor: Densidad de Juicio
@@ -340,8 +364,12 @@ Compose:
         NoProjectLoaded: |-
           Proyecto no cargado.
           Crea o abre un nuevo proyecto
+        Shutter: Obturador
+        ShowShutter: Mostrar obturador
+        HideShutter: Ocultar obturador
+        PreviewSegment: <size=9>Segmento de vista previa</size>
       Options:
-        Inherit: Inherit
+        Inherit: Legado
         Light: Luz
         Conflict: Conflicto
         Colorless: Incoloro
@@ -376,11 +404,11 @@ Compose:
         AddGroup: Añadir grupo
         DeleteGroup: Eliminar grupo
         AddEvent: <size=10>Añadir evento</size>
-        DeleteEvent: <size=10>Eliminar evento</size>
+        DeleteEvent: <size=9.6>Eliminar evento</size>
         AutoReload: <size=10>Recargar automáticamente</size>
         GenerateEmmyLua: Generar EmmyLua
         Reload: Recargar
-        FreeCamera: Cámara libre
+        FreeCamera: <size=10>Cámara libre<size=10>
       CameraView:
         Default: Vista predeterminada
         Stationary: Vista estacionaria
@@ -390,7 +418,41 @@ Compose:
       Mode:
         Timing: Tiempo
         Camera: Cámara
-        Scenecontrol: Escena
+        Scenecontrol: <size=8.4>Control de escena</size>
+    # Export panel
+    Export:
+      Render:
+        Name: Renderizar vídeo
+        Description: |-
+          Automáticamente exportas un vídeo de la vista del mapa.
+          Requiere FFmpeg instalado.
+        ConfigureFFmpeg: Configurar ruta del ejecutable FFmpeg
+        Settings:
+          Name: Ajustes
+          From: De
+          To: A
+          Quality: Calidad
+          FPS: FPS
+          Width: Ancho
+          Height: Alto
+          Size: Tamaño
+          ShowShutter: Mostrar obturador
+        Start: Iniciar renderización
+        Cancel: Cancelar renderización
+        Status: |-
+          Renderizando vídeo. Esto llevará un tiempo.
+          Transcurrido: {0}
+          Restante: {1}
+      Package:
+        Name: Exportar paquete
+        Description: |-
+          Exporta un archivo de paquete .arcpkg para compartirlo con otros jugadores.
+        Publisher: Editor
+        Package: Paquete
+        Version: Versión
+        BlankField: Por favor, introduce la información del editor y del nombre del paquete
+        Identifier: "Tu identificador de paquete es: {0}"
+        Export: Exportar    
     # Editor settings panel
     Settings:
       Label:
@@ -419,7 +481,7 @@ Compose:
           GlobalOffset: <size=8>Desplazamiento global</size>
         Display:
           Name: Pantalla
-          Vsync: <size=10>Sinc. vertical</size>
+          Vsync: VSync
           Framerate: <size=8.5>Frecuencia de imagen</size>
           ShowCounter: Mostrar frecuencia de imagen
         Input:
@@ -433,7 +495,7 @@ Compose:
         TrackScrolling:
           Name: Desplazamiento de pista
           Threshold: Umbral
-          MaxMovement: <size=8>Movimiento máximo</size>
+          MaxMovement: <size=9>Movimiento máximo</size>
         Credits:
           Name: Créditos
           View: Ver créditos
@@ -443,8 +505,8 @@ Compose:
         Name: Paleta
         Arc: Arco
         Trace: Trazado
-        Tap: <size=9>Nota Tap</size>
-        Hold:  <size=9>Nota Hold</size>
+        Tap: Tap
+        Hold:  Hold
         Arctap: <size=9>Nota flotante</size>
         Easing: Aceleración
       Macros: Macros
@@ -499,7 +561,7 @@ Remote:
     Broadcast: Empezar transmisión
     AbortBroadcast: <size=10>Parar transmisión</size>
     BroadcastAgain: <size=10>Transmitir de nuevo</size>
-    StopSession: Detener sesión
+    StopSession: Finalizar sesión
     StartNewSession: Iniciar nueva sesión
     ManualIP: Configurar conexión manualmente
   Control:
@@ -516,15 +578,18 @@ Remote:
       Name: Ajustes del dispositivo
       Offset: <size=11>Desplazamiento</size>
       Speed: <size=12>Velocidad</size>
+      MusicVolume: <size=9.5>Volumen de música</size>
+      EffectVolume: <size=9.5>Volumen de efectos</size>
     StartTiming: Reproducir desde tiempo
     EndTiming: Reproducir hasta tiempo      
     Loop: Reproducir en bucle
     ShowLog: Mostrar registro
     ShowDebug: Mostrar información de depuración
+    ManualIP: Introducir IP manualmente
   Window:
     Name: Remoto
-    SyncChart: Sincronizar mapa
-    SyncTiming: Sincronizar tiempo
+    SyncChart: <size=8.5>Sincronizar mapa</size>
+    SyncTiming: <size=8.5>Sincronizar tiempo</size>
 
 Gameplay:
   Exception:
@@ -538,9 +603,130 @@ Gameplay:
       Ha ocurrido un error mientras se intentaba cargar la imagen localizada en {Path}.
       {Error}
     Scenecontrol: |-
-      Ha ocurrido un error mientras se intentaba cargar la escena json localizada en {Path}.
+      Ha ocurrido un error mientras se intentaba cargar el control de escena json localizado en {Path}.
       {Error}  
+    ScenecontrolSprite: |-
+      Ha ocurrido un error mientras se intentaba cargar el sprite de control de escena localizado en {Path}.
+      {Error}
+    Load: |-
+      Ha ocurrido un error desconocido al intentar cargar el mapa {Identifier}, {ChartPath}
+      Error: {Message}
+      Stack trace:
+      {StackTrace}  
   HUD:
-    Play: Jugar
+    Play: Reanudar
     Retry: Reintentar
-    Return: Volver
+    Return: Salir
+  Selection:
+    SelectStatus:
+      Singular: |-
+        {0} activo seleccionado
+      Plural: |-
+        {0} activos seleccionados
+    DeleteConfirmation: |-
+      ¿Estás seguro de que deseas eliminar los siguientes activos?
+      Tu puntuación no será eliminada.
+    CannotDeleteDefault: |-
+      Los activos predeterminados no pueden ser eliminados.
+    Action:
+      Delete: Eliminar
+      Cancel: Cancelar
+      Done: Listo
+    List:
+      OtherDifficulties: Otras dificultades
+    Info:
+      Undefined:
+        Title: Sin nombre
+        Composer: N/A
+        Charter: Desconocido
+      Charter: 'Creador: {0}'
+    Sort:
+      addeddate: "Ordenar: Fecha añadido"
+      charter: "Ordenar: Creador"
+      composer: "Ordenar: Compositor"
+      difficulty: "Ordenar: Dificultad"
+      grade: "Ordenar: Calificación"
+      playcount: "Ordenar: Veces jugado"
+      score: "Ordenar: Puntuación"
+      title: "Ordenar: Título"
+    Group:
+      none: "Grupo: Ninguno"
+      difficulty: "Grupo: Dificultad"
+      grade: "Grupo: Calificación"
+    Settings:
+      Name: Ajustes
+      Language: Idioma
+      Gameplay:
+        Name: Juego
+        Speed: Velocidad
+        SpeedDetail: |-
+          Ajusta la velocidad a la que las notas se aproximan al área de juicio.
+        EarlyLatePureDisplay: Visualizar Early/Late Pure
+        EarlyLatePureDisplayDetail: |-
+          Cambiar si quieres mostrar o no los juicios Early/Late Pure
+      Audio:
+        Name: Audio
+        Offset: Offset
+        OffsetDetail: |-
+          Ajusta la sincronización de la música.
+          Aumentar si estás obteniendo LATE, o disminuir si estás obteniendo EARLY.
+        Calibrate: Calibrar
+        MusicAudio: Volumen de música
+        MusicAudioDetail: |-
+          Cambia el volumen de la música durante el juego.
+        EffectAudio: Volumen de efectos
+        EffectAudioDetail: |-
+          Cambia el volumen de los sonidos de golpe durante el juego.
+      Visual:
+        Name: Visual
+        Colorblind: Modo daltónico
+        ColorblindDetail: Usar colores alternativos en arcos.
+        FrPmDisplay: Visualizar FR/PM
+        FrPmDisplayDetail: Ajustar la posición del indicador FR/PM.
+        EarlyLateDisplay: Early/Late display
+        EarlyLateDisplayDetail: Adjust early/late text position.
+        LimitFramerate: Limitar velocidad de fotogramas
+        LimitFramerateDetail: Limitar velocidad de fotogramas a 60 FPS para preservar la duración de la batería. Podría aumentar la latencia.
+        ShowFPS: Mostrar FPS
+        ShowFPSDetail: Activar visualización de FPS.
+      FrPmPosition:
+        middle: En medio
+        infopanel: Panel de info
+        off: Apagado
+      EarlyLateTextPosition:
+        middle: En medio
+        bottom: Abajo
+        top: Arriba
+
+Shutter:
+  Composer: Música
+  Illustrator: Ilustración
+  Charter: Creador
+  Alias: como
+    
+Storage:
+  Confirm: Confirmar
+  ImportErrors: |-
+    Los siguientes activos no pudieron ser importados:
+  ImportSummary: |-
+    Importados satisfactoriamente los siguientes activos:
+  NoAssetImported: |-
+    Ningún activo fue importado.
+  ImportConflict:
+    Message: |-
+      Estás intentando importar una versión anterior de un activo.
+      ¿Qué versión deseas mantener?
+    ReplaceAsset:
+      Reemplazar con el activo importado
+    KeepOriginal:
+      Mantener el activo original
+    Identifier: "Identificador: {0}"
+    Version: "Versión: {0}"
+  Loading:
+    Message: 'Cargando: {0}...'
+    Archive: Descomprimiendo archivo
+    ValidatePackage: Validando paquete
+    CheckConflict: Comprobando conflictos...
+    DeleteAsset: Eliminando activo {0}
+    StoreAsset: Almacenando activo {0}
+    Finalizing: Finalizando  
