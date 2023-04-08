@@ -50,9 +50,6 @@ namespace ArcCreate.Compose.Selection
         [RequireGameplayLoaded]
         public async UniTask SelectSingle()
         {
-            selectMeshBuilder.RefreshCollider();
-            await UniTask.NextFrame();
-
             if (EventSystem.current.currentSelectedGameObject != null
              || !Services.Cursor.IsCursorAboveViewport
              || inspectorMenu.IsCursorHovering
@@ -61,6 +58,8 @@ namespace ArcCreate.Compose.Selection
                 return;
             }
 
+            selectMeshBuilder.RefreshCollider();
+            await UniTask.NextFrame();
             if (TryGetNoteUnderCursor(out Note note, SelectionMode.Any))
             {
                 ClearSelection();
@@ -107,7 +106,7 @@ namespace ArcCreate.Compose.Selection
             OnSelectionChange?.Invoke(selectedNotes);
         }
 
-        [EditorAction("Toggle", false, "<c-mouse1>")]
+        [EditorAction("Toggle", false, "<c-u-mouse1>")]
         [RequireGameplayLoaded]
         public async UniTask ToggleNoteSelection()
         {
@@ -176,27 +175,6 @@ namespace ArcCreate.Compose.Selection
             SelectNotesBetweenRange(from, to);
             rangeSelected = true;
             rangeSelectPreview.gameObject.SetActive(true);
-        }
-
-        public bool TrySelectNoteBlockNoteCreation()
-        {
-            if (EventSystem.current.currentSelectedGameObject != null
-             || !Services.Cursor.IsCursorAboveViewport
-             || RangeSelected)
-            {
-                return false;
-            }
-
-            if (TryGetNoteUnderCursor(out Note note, SelectionMode.Any))
-            {
-                ClearSelection();
-                AddNoteToSelection(note);
-                UpdateInspector();
-                OnSelectionChange?.Invoke(selectedNotes);
-                return true;
-            }
-
-            return false;
         }
 
         public void AddNoteToSelection(Note note)

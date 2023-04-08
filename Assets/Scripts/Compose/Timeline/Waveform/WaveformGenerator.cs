@@ -16,15 +16,35 @@ namespace ArcCreate.Compose.Timeline
             int sampleCount = clip.samples * clip.channels;
             int maxSize = SystemInfo.maxTextureSize;
 
-            int samplePixelCount = Mathf.CeilToInt(sampleCount / AverageSampleCount / 4f);
-            int width = Mathf.Min(samplePixelCount, maxSize);
-            int height = (samplePixelCount + width - 1) / width;
-
-            Texture2D texture = new Texture2D(width, height, TextureFormat.RGBA32, false, true)
+            Texture2D texture = null;
+            int width = 0;
+            int height = 0;
+            while (maxSize > 1024)
             {
-                filterMode = FilterMode.Point,
-                wrapMode = TextureWrapMode.Clamp,
-            };
+                int samplePixelCount = Mathf.CeilToInt(sampleCount / AverageSampleCount / 4f);
+                width = Mathf.Min(samplePixelCount, maxSize);
+                height = (samplePixelCount + width - 1) / width;
+
+                try
+                {
+                    texture = new Texture2D(width, height, TextureFormat.RGBA32, false, true)
+                    {
+                        filterMode = FilterMode.Point,
+                        wrapMode = TextureWrapMode.Clamp,
+                    };
+
+                    break;
+                }
+                catch
+                {
+                    maxSize /= 2;
+                }
+            }
+
+            if (texture == null)
+            {
+                throw new System.Exception("Could not create waveform texture, no suitable texture size found");
+            }
 
             float[] samples = new float[sampleCount];
             clip.GetData(samples, 0);

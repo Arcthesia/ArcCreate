@@ -32,6 +32,9 @@ namespace ArcCreate.Selection.Select
                 enabled = storageUnit != null;
                 SetSelected(value != null && Services.Select.IsStorageSelected(value));
                 SetStateImmediate(selected);
+                cts.Cancel();
+                cts.Dispose();
+                cts = new CancellationTokenSource();
             }
         }
 

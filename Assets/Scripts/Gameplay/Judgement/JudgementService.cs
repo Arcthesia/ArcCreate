@@ -142,8 +142,8 @@ namespace ArcCreate.Gameplay.Judgement
                / 2;
 
             float laneScreenHitboxBaseY =
-                (gameplayCamera.WorldToScreenPoint(Vector3.zero).y
-               - gameplayCamera.WorldToScreenPoint(new Vector3(0, Values.LaneWidth, 0)).x)
+                (gameplayCamera.WorldToScreenPoint(new Vector3(0, Values.LaneWidth, 0)).x
+               - gameplayCamera.WorldToScreenPoint(Vector3.zero).y)
                / 2;
 
             Values.LaneScreenHitboxBase = new Vector2(laneScreenHitboxBaseX, laneScreenHitboxBaseY);

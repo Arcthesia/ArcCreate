@@ -27,8 +27,13 @@ namespace ArcCreate.Compose.Editing
         [WhitelistScopes(typeof(Timeline.TimelineService), typeof(Grid.GridService), typeof(Cursor.CursorService))]
         public async UniTask StartCreatingNote(EditorAction action)
         {
+            int selectionSize = Services.Selection.SelectedNotes.Count;
+            await UniTask.NextFrame();
+            await UniTask.NextFrame();
+            bool selectionChanged = Services.Selection.SelectedNotes.Count != selectionSize;
+
             if (!Services.Cursor.IsHittingLane
-             || Services.Selection.TrySelectNoteBlockNoteCreation())
+             || selectionChanged)
             {
                 return;
             }

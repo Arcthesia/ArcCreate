@@ -368,7 +368,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
             bool worldCollide = dWx <= Values.ArcTapHitboxX
                              && dWy >= -Values.ArcTapHitboxYDown
                              && dWy <= Values.ArcTapHitboxYUp;
-            return worldCollide;
+            return worldCollide || screenCollide;
         }
 
         private bool LaneCollide(TouchInput input, Vector3 screenPosition, int lane)

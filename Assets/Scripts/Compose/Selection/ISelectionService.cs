@@ -21,11 +21,5 @@ namespace ArcCreate.Compose.Selection
         /// </summary>
         /// <param name="notes">The note to select.</param>
         void SetSelection(IEnumerable<Note> notes);
-
-        /// <summary>
-        /// don't question it.
-        /// </summary>
-        /// <returns>Whether or not to block note creation.</returns>
-        bool TrySelectNoteBlockNoteCreation();
     }
 }

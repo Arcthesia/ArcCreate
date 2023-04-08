@@ -344,6 +344,7 @@ namespace ArcCreate.Gameplay.Skin
             if (color < 0 || color >= redArcValues.Count)
             {
                 unknownRedArcValue = value;
+                return;
             }
 
             redArcValues[color] = value;
