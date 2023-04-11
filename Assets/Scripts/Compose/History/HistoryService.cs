@@ -41,7 +41,7 @@ namespace ArcCreate.Compose.History
             Notify("Compose.Notify.History.Execute", command);
         }
 
-        [EditorAction(null, false, "<c-y>", "<c-Z>")]
+        [EditorAction("Redo", false, "<c-y>", "<c-Z>")]
         [RequireRedoStack]
         public void Redo()
         {
@@ -58,7 +58,7 @@ namespace ArcCreate.Compose.History
             Notify("Compose.Notify.History.Redo", cmd);
         }
 
-        [EditorAction(null, false, "<c-z>")]
+        [EditorAction("Undo", false, "<c-z>")]
         [RequireUndoStack]
         public void Undo()
         {

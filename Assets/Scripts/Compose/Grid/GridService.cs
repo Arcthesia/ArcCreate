@@ -52,7 +52,7 @@ namespace ArcCreate.Compose.Grid
 
         [EditorAction("Toggle", true)]
         [RequireGameplayLoaded]
-        public void SetSlot()
+        public void Toggle()
         {
             IsGridEnabled = !IsGridEnabled;
         }

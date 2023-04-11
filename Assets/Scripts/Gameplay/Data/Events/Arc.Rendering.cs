@@ -45,7 +45,8 @@ namespace ArcCreate.Gameplay.Data
 
         public Arc PreviousArc { get; set; }
 
-        public float SegmentLength => ArcFormula.CalculateArcSegmentLength(EndTiming - Timing);
+        public float SegmentLength
+            => ArcFormula.CalculateArcSegmentLength(EndTiming - Timing, TimingGroupInstance.GroupProperties.ArcResolution);
 
         public bool ShouldDrawHeightIndicator => !IsTrace && (YStart != YEnd || IsFirstArcOfGroup);
 
@@ -230,16 +231,22 @@ namespace ArcCreate.Gameplay.Data
                 if (IsTrace)
                 {
                     Services.Render.DrawTraceSegment(matrix * bodyMatrix, properties);
-                    Services.Render.DrawTraceShadow(matrix * shadowMatrix, shadowProperties);
+                    if (!groupProperties.NoShadow)
+                    {
+                        Services.Render.DrawTraceShadow(matrix * shadowMatrix, shadowProperties);
+                    }
                 }
                 else
                 {
                     Services.Render.DrawArcSegment(Color, highlight, matrix * bodyMatrix, properties);
-                    Services.Render.DrawArcShadow(matrix * shadowMatrix, shadowProperties);
+                    if (!groupProperties.NoShadow)
+                    {
+                        Services.Render.DrawArcShadow(matrix * shadowMatrix, shadowProperties);
+                    }
                 }
             }
 
-            if ((clipToTiming <= Timing || groupProperties.NoClip) && ShouldDrawHeightIndicator)
+            if (!groupProperties.NoHeightIndicator && (clipToTiming <= Timing || groupProperties.NoClip) && ShouldDrawHeightIndicator)
             {
                 SpriteRenderProperties heightIndicatorProperties = new SpriteRenderProperties
                 {
@@ -251,7 +258,7 @@ namespace ArcCreate.Gameplay.Data
                 Services.Render.DrawHeightIndicator(matrix * heightIndicatorMatrix, heightIndicatorProperties);
             }
 
-            if ((clipToTiming <= Timing || groupProperties.NoClip) && IsFirstArcOfGroup)
+            if (!groupProperties.NoHead && (clipToTiming <= Timing || groupProperties.NoClip) && IsFirstArcOfGroup)
             {
                 ArcRenderProperties properties = new ArcRenderProperties
                 {
@@ -270,7 +277,7 @@ namespace ArcCreate.Gameplay.Data
                 }
             }
 
-            if (shouldDrawArcCap)
+            if (!groupProperties.NoArcCap && shouldDrawArcCap)
             {
                 SpriteRenderProperties arccapProperties = new SpriteRenderProperties
                 {

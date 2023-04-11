@@ -203,9 +203,9 @@ namespace ArcCreate.Gameplay
             return Mathf.Min(Mathf.RoundToInt(arcJudgeInterval * 4), 1000);
         }
 
-        public static float CalculateArcSegmentLength(int duration)
+        public static float CalculateArcSegmentLength(int duration, float arcResolution)
         {
-            float length = Values.ArcSegmentLength;
+            float length = Values.ArcSegmentLength / arcResolution;
             return duration < 1000 ? length : length * 2;
         }
     }

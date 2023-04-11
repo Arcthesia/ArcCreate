@@ -45,10 +45,10 @@ namespace ArcCreate.Compose.Editing
 
         [EditorAction("ArcAlt", false, "<a-a>")]
         [RequireGameplayLoaded]
-        [SubAction("ConfirmColor", false, "<a-u-a>")]
-        [SubAction("Blue", false, "`")]
-        [SubAction("Red", false, "1")]
-        [SubAction("Green", false, "2")]
+        [SubAction("ConfirmColor", false, "<u-a>")]
+        [SubAction("Blue", false, "1")]
+        [SubAction("Red", false, "2")]
+        [SubAction("Green", false, "3")]
         public UniTask SwitchToArcAlt(EditorAction action)
         {
             return ArcAction(action, !creatingArc);

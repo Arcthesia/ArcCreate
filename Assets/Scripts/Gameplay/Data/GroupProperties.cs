@@ -14,8 +14,13 @@ namespace ArcCreate.Gameplay.Data
             FadingHolds = false;
             NoInput = false;
             NoClip = false;
+            NoHeightIndicator = false;
+            NoHead = false;
+            NoShadow = false;
+            NoArcCap = false;
             AngleX = 0;
             AngleY = 0;
+            ArcResolution = 1;
             Editable = true;
         }
 
@@ -27,8 +32,13 @@ namespace ArcCreate.Gameplay.Data
             FadingHolds = raw.FadingHolds;
             NoInput = raw.NoInput;
             NoClip = raw.NoClip;
+            NoHeightIndicator = raw.NoHeightIndicator;
+            NoHead = raw.NoHead;
+            NoShadow = raw.NoShadow;
+            NoArcCap = raw.NoArcCap;
             AngleX = raw.AngleX;
             AngleY = raw.AngleY;
+            ArcResolution = raw.ArcResolution;
             Editable = raw.Editable;
         }
 
@@ -50,11 +60,21 @@ namespace ArcCreate.Gameplay.Data
 
         public bool NoClip { get; set; } = false;
 
+        public bool NoHeightIndicator { get; set; } = false;
+
+        public bool NoHead { get; set; } = false;
+
+        public bool NoShadow { get; set; } = false;
+
+        public bool NoArcCap { get; set; } = false;
+
         public bool FadingHolds { get; set; } = false;
 
         public float AngleX { get; set; } = 0;
 
         public float AngleY { get; set; } = 0;
+
+        public float ArcResolution { get; set; } = 0;
 
         public float SCAngleX { get; set; } = 0;
 
@@ -87,9 +107,14 @@ namespace ArcCreate.Gameplay.Data
                 Side = (SideOverride)(int)SkinOverride,
                 FadingHolds = FadingHolds,
                 NoInput = NoInput,
+                NoHeightIndicator = NoHeightIndicator,
+                NoHead = NoHead,
+                NoShadow = NoShadow,
                 NoClip = NoClip,
+                NoArcCap = NoArcCap,
                 AngleX = AngleX,
                 AngleY = AngleY,
+                ArcResolution = ArcResolution,
             };
         }
     }

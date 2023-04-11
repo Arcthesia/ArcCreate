@@ -12,8 +12,13 @@ namespace ArcCreate.ChartFormat
             NoInput = false;
             NoClip = false;
             FadingHolds = false;
+            NoHeightIndicator = false;
+            NoShadow = false;
+            NoArcCap = false;
+            NoHead = false;
             AngleX = 0;
             AngleY = 0;
+            ArcResolution = 1;
             Side = SideOverride.None;
         }
 
@@ -49,6 +54,11 @@ namespace ArcCreate.ChartFormat
                             valid = Evaluator.TryFloat(value, out val);
                             AngleY = valid ? val : 0;
                             break;
+                        case "arcresolution":
+                            valid = Evaluator.TryFloat(value, out val);
+                            val = UnityEngine.Mathf.Clamp(val, 0, 10);
+                            ArcResolution = valid ? val : 1;
+                            break;
                         default:
                             throw new ChartFormatException(
                                 RawEventType.TimingGroup,
@@ -67,6 +77,18 @@ namespace ArcCreate.ChartFormat
                             break;
                         case "noclip":
                             NoClip = true;
+                            break;
+                        case "noheightindicator":
+                            NoHeightIndicator = true;
+                            break;
+                        case "nohead":
+                            NoHead = true;
+                            break;
+                        case "noshadow":
+                            NoShadow = true;
+                            break;
+                        case "noarccap":
+                            NoArcCap = true;
                             break;
                         case "light":
                             Side = SideOverride.Light;
@@ -95,7 +117,17 @@ namespace ArcCreate.ChartFormat
 
         public bool NoClip { get; set; } = false;
 
+        public bool NoHeightIndicator { get; set; } = false;
+
+        public bool NoShadow { get; set; } = false;
+
+        public bool NoHead { get; set; } = false;
+
+        public bool NoArcCap { get; set; } = false;
+
         public bool FadingHolds { get; set; } = false;
+
+        public float ArcResolution { get; set; } = 1;
 
         public float AngleX { get; set; } = 0;
 
@@ -137,6 +169,26 @@ namespace ArcCreate.ChartFormat
                 opts.Add("noclip");
             }
 
+            if (NoHeightIndicator)
+            {
+                opts.Add("noheightindicator");
+            }
+
+            if (NoHead)
+            {
+                opts.Add("nohead");
+            }
+
+            if (NoShadow)
+            {
+                opts.Add("noshadow");
+            }
+
+            if (NoArcCap)
+            {
+                opts.Add("noarccap");
+            }
+
             if (FadingHolds)
             {
                 opts.Add("fadingholds");
@@ -150,6 +202,11 @@ namespace ArcCreate.ChartFormat
             if (AngleY != 0)
             {
                 opts.Add($"angley={AngleY:f2}");
+            }
+
+            if (ArcResolution != 1)
+            {
+                opts.Add($"arcresolution={ArcResolution:f1}");
             }
 
             if (Side != SideOverride.None)

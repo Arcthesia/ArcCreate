@@ -14,6 +14,7 @@ namespace ArcCreate.Compose.Grid
         {
             try
             {
+                UserData.RegisterAssembly();
                 LuaRunner.RunScript(settings, this, instructionLimit);
             }
             catch (InstructionLimitReachedException e)

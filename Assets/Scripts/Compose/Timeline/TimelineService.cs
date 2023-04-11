@@ -36,7 +36,7 @@ namespace ArcCreate.Compose.Timeline
 
         private bool IsPlaying => Services.Gameplay?.Audio.IsPlaying ?? false;
 
-        [EditorAction(null, false, "q")]
+        [EditorAction("TogglePlay", false, "q")]
         [RequireGameplayLoaded]
         public void TogglePlay()
         {
