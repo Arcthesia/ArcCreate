@@ -64,7 +64,6 @@ namespace ArcCreate.Compose.Rendering
             arcSound.AddRange(Services.Gameplay.Chart.GetAll<Arc>().Where((n) => n.Timing >= startRange && n.Timing <= endRange && n.Timing < n.EndTiming && !n.IsTrace && !n.NoInput));
 
             IEnumerable<ArcTap> arctaps = Services.Gameplay.Chart.GetAll<ArcTap>().Where((n) => n.Timing >= startRange && n.Timing <= endRange && !n.NoInput);
-            arcSound.AddRange(arctaps.Where(at => !sfxAudio.ContainsKey(at.Sfx)));
 
             foreach (ArcTap at in arctaps)
             {

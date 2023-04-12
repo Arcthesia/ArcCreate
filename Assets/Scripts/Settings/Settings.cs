@@ -63,6 +63,7 @@ namespace ArcCreate
         public static readonly IntSetting AutosaveInterval = new IntSetting("Editor.Autosave.Interval", 300);
         public static readonly BoolSetting ShouldBackup = new BoolSetting("Editor.Backup.Enable", true);
         public static readonly IntSetting BackupCount = new IntSetting("Editor.Backup.Count", 10);
+        public static readonly BoolSetting SyncToDSPTime = new BoolSetting("Editor.SyncToDSPTime", false);
 
         [RuntimeInitializeOnLoadMethod]
         public static void OnInitialize()

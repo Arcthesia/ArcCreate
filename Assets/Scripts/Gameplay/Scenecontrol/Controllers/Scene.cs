@@ -591,6 +591,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
+        public ValueChannel GetSkyInputYChannel()
+        {
+            return skyInputLine.TranslationY;
+        }
+
         [MoonSharpHidden]
         private Controller GetBaseControlerFromTypeName(string def, string arg)
         {

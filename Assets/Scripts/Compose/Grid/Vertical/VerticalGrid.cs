@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using ArcCreate.Gameplay.Scenecontrol;
 using ArcCreate.Utility.Extension;
 using UnityEngine;
 
@@ -25,18 +26,21 @@ namespace ArcCreate.Compose.Grid
         private List<Vector2> cachedIntersections;
         private readonly List<MeshFilter> areaMeshes = new List<MeshFilter>();
         private float snapTolerance;
+        private bool scaleGridToSkyInput;
+        private float verticalScale = 1;
 
         public static Color DefaultLineColor { get; private set; }
 
         public static Color DefaultPanelColor { get; private set; }
 
-        public void LoadGridSettings(Rect area, Color panelColor, float snapTolerance, List<Line> lines, List<Area> areas)
+        public void LoadGridSettings(Rect area, Color panelColor, float snapTolerance, List<Line> lines, List<Area> areas, bool scaleGridToSkyInput)
         {
             this.lines = lines.Where(def => def.Interactable).ToList();
             decorativeLines = lines.Where(def => !def.Interactable).ToList();
             cachedIntersections = VerticalGridHelper.PrecalculateIntersections(this.lines);
 
             this.snapTolerance = snapTolerance;
+            this.scaleGridToSkyInput = scaleGridToSkyInput;
 
             MaterialPropertyBlock mpb = new MaterialPropertyBlock();
             int shaderId = Shader.PropertyToID("_Color");
@@ -52,13 +56,15 @@ namespace ArcCreate.Compose.Grid
         public void SetGridEnabled(bool enabled)
         {
             gridParent.gameObject.SetActive(enabled);
+            this.enabled = enabled;
         }
 
         public Vector2 SnapToVerticalGrid(Vector2 point)
         {
+            point.y /= verticalScale;
             Vector2 snap = VerticalGridHelper.SnapPoint(lines, cachedIntersections, point, snapTolerance);
             snap.x = Mathf.Round(snap.x * 1000) / 1000;
-            snap.y = Mathf.Round(snap.y * 1000) / 1000;
+            snap.y = Mathf.Round(snap.y * 1000) / 1000 * verticalScale;
             return snap;
         }
 
@@ -131,6 +137,22 @@ namespace ArcCreate.Compose.Grid
             line.DrawLine(def.Start, def.End);
             line.startColor = def.Color;
             line.endColor = def.Color;
+        }
+
+        private void Update()
+        {
+            if (scaleGridToSkyInput)
+            {
+                ValueChannel skyInputY = Services.Gameplay.Scenecontrol.Scene.GetSkyInputYChannel();
+                int timing = Services.Gameplay.Chart.GetTimingGroup(Values.EditingTimingGroup.Value)
+                    .GetTimingFromZPosition(verticalCollider.transform.localPosition.z);
+                verticalScale = skyInputY.ValueAt(timing) / Gameplay.Values.ArcY1;
+                verticalCollider.transform.localScale = new Vector3(1, verticalScale, 1);
+            }
+            else
+            {
+                verticalScale = 1;
+            }
         }
     }
 }

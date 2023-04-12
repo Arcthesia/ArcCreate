@@ -21,18 +21,23 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [SerializeField] private SpriteRenderer singleLineR;
         [SerializeField] private GlowingSprite skyInputLine;
         [SerializeField] private GlowingSprite skyInputLabel;
+        [SerializeField] private SpriteRenderer laneExtraL;
+        [SerializeField] private SpriteRenderer laneExtraR;
         private List<ScenecontrolEvent> events = new List<ScenecontrolEvent>();
         private readonly List<ISceneController> referencedControllers = new List<ISceneController>();
         private float trackOffset = 0;
         private float singleLineOffset = 0;
         private float count = 0;
         private int loopSwitch = 1;
+        private readonly Context context = new Context();
 
         public List<ScenecontrolEvent> Events => events;
 
         public Scene Scene => scene;
 
         public PostProcessing PostProcessing => postProcessing;
+
+        public Context Context => context;
 
         public string ScenecontrolFolder { get; set; }
 
@@ -95,6 +100,9 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public void UpdateScenecontrol(int currentTiming)
         {
+            Values.LaneFrom = laneExtraL.color.a > Mathf.Epsilon ? 0 : 1;
+            Values.LaneTo = laneExtraR.color.a > Mathf.Epsilon ? 5 : 4;
+
             foreach (var c in referencedControllers)
             {
                 c.UpdateController(currentTiming);
@@ -166,9 +174,9 @@ namespace ArcCreate.Gameplay.Scenecontrol
             var deserialization = new ScenecontrolDeserialization(scene, postProcessing, units);
             foreach (var unit in deserialization.Result)
             {
-                if (unit is Controller c)
+                if (unit is ISceneController c)
                 {
-                    referencedControllers.Add(c);
+                    AddReferencedController(c);
                 }
             }
         }

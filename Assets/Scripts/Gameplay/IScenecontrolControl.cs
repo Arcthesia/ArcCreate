@@ -11,6 +11,8 @@ namespace ArcCreate.Gameplay
 
         PostProcessing PostProcessing { get; }
 
+        Context Context { get; }
+
         string ScenecontrolFolder { get; set; }
 
         void Clean();

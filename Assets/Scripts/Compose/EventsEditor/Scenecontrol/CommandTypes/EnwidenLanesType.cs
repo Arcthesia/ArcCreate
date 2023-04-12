@@ -38,6 +38,7 @@ namespace ArcCreate.Compose.EventsEditor
             ValueChannel alpha = 1 - enwidenLaneFactor;
 
             var track = Services.Gameplay.Scenecontrol.Scene.Track;
+            var context = Services.Gameplay.Scenecontrol.Context;
             track.ExtraL.Active = new ConstantChannel(1);
             track.ExtraR.Active = new ConstantChannel(1);
             track.CriticalLine0.Active = new ConstantChannel(1);
@@ -59,6 +60,9 @@ namespace ArcCreate.Compose.EventsEditor
             track.ExtraR.TranslationY += posY;
             track.ExtraR.ColorA *= enwidenLaneFactor;
             track.EdgeExtraR.ColorA *= enwidenLaneFactor;
+
+            context.LaneTo += enwidenLaneFactor;
+            context.LaneFrom -= enwidenLaneFactor;
 
             beatline.ScaleX *= (enwidenLaneFactor * 0.5f) + 1;
         }

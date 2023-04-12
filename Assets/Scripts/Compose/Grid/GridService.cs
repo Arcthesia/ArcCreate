@@ -111,8 +111,16 @@ namespace ArcCreate.Compose.Grid
         {
             GridSettings settings = GridSettings.GetSlot(slot);
             IVerticalGridSettings vertical = settings.GetVerticalSettings(DefaultGridScript);
-            verticalGrid.LoadGridSettings(vertical.ColliderArea, vertical.PanelColor, vertical.SnapTolerance, vertical.Lines, vertical.Areas);
-            timingGrid.LoadGridSettings(settings.FromLane.Value, settings.ToLane.Value);
+            verticalGrid.LoadGridSettings(
+                vertical.ColliderArea,
+                vertical.PanelColor,
+                vertical.SnapTolerance,
+                vertical.Lines,
+                vertical.Areas,
+                settings.ScaleGridToSkyInput.Value);
+            timingGrid.LoadGridSettings(
+                settings.FromLane.Value,
+                settings.ToLane.Value);
 
             useDefaultToggle.SetIsOnWithoutNotify(settings.UseDefaultSettings.Value);
             fromLaneField.SetTextWithoutNotify(settings.FromLane.Value.ToString());

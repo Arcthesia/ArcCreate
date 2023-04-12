@@ -292,6 +292,16 @@ namespace ArcCreate.Compose.Cursor
             float maxLane = 8.5f;
 
             Vector2 snapped = Services.Grid.SnapPointToGridIfEnabled(hit.point);
+            float verticalScale = verticalCollider.transform.localScale.y;
+
+            selectingVerticalPoint = new Vector2(
+                Gameplay.ArcFormula.WorldXToArc(snapped.x),
+                Gameplay.ArcFormula.WorldYToArc(snapped.y));
+
+            if (verticalScale > Mathf.Epsilon)
+            {
+                snapped.y /= verticalScale;
+            }
 
             cursorVerticalX.DrawLine(
                 from: new Vector3(snapped.x, 0, 0),
@@ -300,11 +310,8 @@ namespace ArcCreate.Compose.Cursor
             cursorVerticalY.DrawLine(
                 from: new Vector3(minLane, snapped.y, 0),
                 to: new Vector3(maxLane, snapped.y, 0));
-
-            selectingVerticalPoint = new Vector2(
-                Gameplay.ArcFormula.WorldXToArc(snapped.x),
-                Gameplay.ArcFormula.WorldYToArc(snapped.y));
             cursorWorldPosition.x = snapped.x;
+
             cursorWorldPosition.y = snapped.y;
             cursorWorldPosition.z = hit.point.z;
         }

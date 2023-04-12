@@ -29,6 +29,7 @@ namespace ArcCreate.Compose.Components
         [SerializeField] private TMP_InputField musicAudioField;
         [SerializeField] private TMP_InputField effectAudioField;
         [SerializeField] private TMP_InputField globalOffsetField;
+        [SerializeField] private Toggle syncToDspTime;
 
         [Header("Display")]
         [SerializeField] private TMP_InputField framerateField;
@@ -80,6 +81,7 @@ namespace ArcCreate.Compose.Components
             autosaveInterval.onEndEdit.AddListener(OnAutosaveIntervalField);
             shouldSaveBackup.onValueChanged.AddListener(OnBackupToggle);
             backupCount.onEndEdit.AddListener(OnBackupCountField);
+            syncToDspTime.onValueChanged.AddListener(OnSyncToDspField);
 
             Settings.InputMode.OnValueChanged.AddListener(OnSettingInputMode);
             Values.BeatlineDensity.OnValueChange += OnDensity;
@@ -106,6 +108,7 @@ namespace ArcCreate.Compose.Components
             backupCount.SetTextWithoutNotify(Settings.BackupCount.Value.ToString());
             shouldAutosave.interactable = Settings.ShouldAutosave.Value;
             backupCount.interactable = Settings.ShouldBackup.Value;
+            syncToDspTime.isOn = Settings.SyncToDSPTime.Value;
         }
 
         private void OnDestroy()
@@ -134,9 +137,15 @@ namespace ArcCreate.Compose.Components
             autosaveInterval.onEndEdit.RemoveListener(OnAutosaveIntervalField);
             shouldSaveBackup.onValueChanged.RemoveListener(OnBackupToggle);
             backupCount.onEndEdit.RemoveListener(OnBackupCountField);
+            syncToDspTime.onValueChanged.RemoveListener(OnSyncToDspField);
 
             Settings.InputMode.OnValueChanged.RemoveListener(OnSettingInputMode);
             Values.BeatlineDensity.OnValueChange -= OnDensity;
+        }
+
+        private void OnSyncToDspField(bool value)
+        {
+            Settings.SyncToDSPTime.Value = value;
         }
 
         private void OnMaxIndicatorToggle(bool value)

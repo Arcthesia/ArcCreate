@@ -19,7 +19,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
             deserialized = new ISerializableUnit[serializedUnits.Count];
             for (int i = 0; i < serializedUnits.Count; i++)
             {
-                SerializedUnit unit = serializedUnits[i];
                 deserialized[i] = GetUnitFromId(i);
             }
         }
@@ -29,7 +28,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public ISerializableUnit GetUnitFromId(int id)
         {
             SerializedUnit serializedChannel = serializedUnits[id];
-
             ISerializableUnit result = GetUnitFromType(serializedChannel.Type);
             result.DeserializeProperties(serializedChannel.Properties, this);
             return result;
@@ -55,6 +53,9 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             switch (type)
             {
+                case "context":
+                    return Services.Scenecontrol.Context;
+
                 // Channels
                 case "channel.key":
                     return new KeyChannel();

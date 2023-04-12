@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using ArcCreate.Compose.Navigation;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Gameplay.Scenecontrol;
 using ArcCreate.Utility.Lua;
@@ -11,6 +12,9 @@ using UnityEngine;
 
 namespace ArcCreate.Compose.EventsEditor
 {
+#if UNITY_EDITOR
+    [EditorScope("TestLua")]
+#endif
     public class ScenecontrolLuaEnvironment : IScriptSetup
     {
         public const int InstructionLimit = int.MaxValue;
@@ -24,6 +28,22 @@ namespace ArcCreate.Compose.EventsEditor
             LuaArithmetic.SetupForBaseType<ValueChannel>();
         }
 
+#if UNITY_EDITOR
+        public ScenecontrolLuaEnvironment()
+        {
+        }
+
+        [EditorAction("TestReimport", true)]
+        public void TestReimport()
+        {
+            string scJson = Services.Gameplay.Scenecontrol.Export();
+            Debug.Log(scJson);
+            Services.Gameplay.Scenecontrol.Clean();
+            Services.Gameplay.Scenecontrol.Import(scJson);
+            Services.Gameplay.Scenecontrol.WaitForSceneLoad();
+        }
+#endif
+
         public void SetupScript(Script script)
         {
             script.Globals["Channel"] = new ValueChannelBuilder();
@@ -32,7 +52,7 @@ namespace ArcCreate.Compose.EventsEditor
             script.Globals["Trigger"] = new TriggerBuilder();
             script.Globals["TriggerChannel"] = new TriggerChannelBuilder();
             script.Globals["Scene"] = Services.Gameplay.Scenecontrol.Scene;
-            script.Globals["Context"] = new Context();
+            script.Globals["Context"] = Services.Gameplay.Scenecontrol.Context;
             script.Globals["PostProcessing"] = Services.Gameplay.Scenecontrol.PostProcessing;
 
             script.Globals["addScenecontrol"] = (Action<string, DynValue, DynValue>)AddScenecontrol;

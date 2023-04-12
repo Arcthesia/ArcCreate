@@ -41,6 +41,9 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             switch (unit)
             {
+                case Context context:
+                    return "context";
+
                 // Channels
                 case KeyChannel key:
                     return "channel.key";

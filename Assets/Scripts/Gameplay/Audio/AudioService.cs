@@ -119,42 +119,49 @@ namespace ArcCreate.Gameplay.Audio
 
         public void UpdateTime()
         {
-            double dspTime = AudioSettings.dspTime;
-
             if (!IsPlaying)
             {
                 return;
             }
 
-            isStationary = stationaryBeforeStart && dspTime <= dspStartPlayingTime;
-
-            if (stationaryBeforeStart)
+            if (Application.isMobilePlatform || Settings.SyncToDSPTime.Value)
             {
-                dspTime = Math.Max(dspTime, dspStartPlayingTime);
-            }
+                double dspTime = AudioSettings.dspTime;
 
-            int timePassedSinceAudioStart = Mathf.RoundToInt((float)((dspTime - dspStartPlayingTime) * 1000));
-            int newDspTiming = timePassedSinceAudioStart + startTime - FullOffset;
+                isStationary = stationaryBeforeStart && dspTime <= dspStartPlayingTime;
 
-            int newTiming = audioTiming + Mathf.RoundToInt(Time.deltaTime * 1000 * updatePace);
-            if (dspTime > dspStartPlayingTime)
-            {
-                audioTiming = newTiming;
-            }
-
-            if (lastDspTiming != newDspTiming)
-            {
-                float difference = (newDspTiming - newTiming) / 1000f;
-                if (difference >= 1 / 60f)
+                if (stationaryBeforeStart)
                 {
-                    audioTiming = newDspTiming;
+                    dspTime = Math.Max(dspTime, dspStartPlayingTime);
                 }
 
-                updatePace = 1 + (Tanh(difference) * 0.5f);
-            }
+                int timePassedSinceAudioStart = Mathf.RoundToInt((float)((dspTime - dspStartPlayingTime) * 1000));
+                int newDspTiming = timePassedSinceAudioStart + startTime - FullOffset;
 
-            timingSlider.value = (float)audioTiming / AudioLength;
-            lastDspTiming = newDspTiming;
+                int newTiming = audioTiming + Mathf.RoundToInt(Time.deltaTime * 1000 * updatePace);
+                if (dspTime > dspStartPlayingTime)
+                {
+                    audioTiming = newTiming;
+                }
+
+                if (lastDspTiming != newDspTiming)
+                {
+                    float difference = (newDspTiming - newTiming) / 1000f;
+                    if (difference >= 1 / 60f)
+                    {
+                        audioTiming = newDspTiming;
+                    }
+
+                    updatePace = 1 + (Tanh(difference) * 0.5f);
+                }
+
+                timingSlider.value = (float)audioTiming / AudioLength;
+                lastDspTiming = newDspTiming;
+            }
+            else
+            {
+                audioTiming = Mathf.RoundToInt(AudioSource.time * 1000f);
+            }
         }
 
         public void PauseButtonPressed()
