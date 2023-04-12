@@ -42,14 +42,14 @@ namespace ArcCreate.Gameplay.Skin
         [SerializeField] private Color unknownArcLowColor;
 
         [Header("Arcs")]
-        [SerializeField] private Material baseArcMaterial;
-        [SerializeField] private Material baseArcHighlightMaterial;
+        [SerializeField] private Material arcMaterial;
+        [SerializeField] private Material arcHighlightMaterial;
         [SerializeField] private Material traceMaterial;
         [SerializeField] private Material shadowMaterial;
         [SerializeField] private Texture defaultHeightIndicator;
         [SerializeField] private Texture defaultArctapShadow;
-        private readonly List<Material> arcMaterials = new List<Material>();
-        private readonly List<Material> arcHighlightMaterials = new List<Material>();
+        private readonly List<Color> arcColors = new List<Color>();
+        private readonly List<Color> arcLowColors = new List<Color>();
         private readonly List<Color> arcHeightIndicatorColors = new List<Color>();
         private readonly List<float> redArcValues = new List<float>();
         private float unknownRedArcValue = 0;
@@ -66,8 +66,7 @@ namespace ArcCreate.Gameplay.Skin
         private string currentAccentOption;
         private string currentSingleLineOption;
 
-        private int highColorShaderId;
-        private int lowColorShaderId;
+        private int traceColorShaderId;
         private int shadowColorShaderId;
 
         private Color currentComboColor;
@@ -285,37 +284,25 @@ namespace ArcCreate.Gameplay.Skin
 
         public void SetTraceColor(Color color)
         {
-            traceMaterial.SetColor(highColorShaderId, color);
+            traceMaterial.SetColor(traceColorShaderId, color);
             Services.Render.SetTraceMaterial(traceMaterial);
         }
 
         public void SetArcColors(List<Color> arcs, List<Color> arcLows)
         {
-            arcMaterials.ForEach(Destroy);
-            arcHighlightMaterials.ForEach(Destroy);
-            arcMaterials.Clear();
-            arcHighlightMaterials.Clear();
+            arcColors.Clear();
+            arcLowColors.Clear();
             arcHeightIndicatorColors.Clear();
             redArcValues.Clear();
 
             int max = Mathf.Min(arcs.Count, arcLows.Count);
             for (int i = 0; i < max; i++)
             {
-                Material mat = Instantiate(baseArcMaterial);
-                mat.SetColor(highColorShaderId, arcs[i]);
-                mat.SetColor(lowColorShaderId, arcLows[i]);
-                arcMaterials.Add(mat);
-
-                Material hmat = Instantiate(baseArcHighlightMaterial);
-                hmat.SetColor(highColorShaderId, arcs[i]);
-                hmat.SetColor(lowColorShaderId, arcLows[i]);
-                arcHighlightMaterials.Add(hmat);
-
+                arcColors.Add(arcs[i]);
+                arcLowColors.Add(arcLows[i]);
                 arcHeightIndicatorColors.Add(arcs[i]);
                 redArcValues.Add(0);
             }
-
-            Services.Render.SetArcMaterials(arcMaterials, arcHighlightMaterials);
         }
 
         public void SetShadowColor(Color color)
@@ -350,15 +337,20 @@ namespace ArcCreate.Gameplay.Skin
             redArcValues[color] = value;
         }
 
+        public (Color high, Color low) GetArcColor(int colorId)
+        {
+            int i = Mathf.Clamp(colorId, 0, arcColors.Count - 1);
+            return (arcColors[i], arcLowColors[i]);
+        }
+
         private void Awake()
         {
-            highColorShaderId = Shader.PropertyToID("_Color");
-            lowColorShaderId = Shader.PropertyToID("_LowColor");
+            traceColorShaderId = Shader.PropertyToID("_TraceColor");
             shadowColorShaderId = Shader.PropertyToID("_ShadowColor");
             Settings.InputMode.OnValueChanged.AddListener(ReloadNoteSkin);
 
-            baseArcMaterial = Instantiate(baseArcMaterial);
-            baseArcHighlightMaterial = Instantiate(baseArcHighlightMaterial);
+            arcMaterial = Instantiate(arcMaterial);
+            arcHighlightMaterial = Instantiate(arcHighlightMaterial);
             traceMaterial = Instantiate(traceMaterial);
             shadowMaterial = Instantiate(shadowMaterial);
 
@@ -402,8 +394,8 @@ namespace ArcCreate.Gameplay.Skin
                 opt.RegisterExternalSkin();
             }
 
-            arcTexture = new ExternalTexture(baseArcMaterial.mainTexture, "Note");
-            arcTextureHighlight = new ExternalTexture(baseArcHighlightMaterial.mainTexture, "Note");
+            arcTexture = new ExternalTexture(arcMaterial.mainTexture, "Note");
+            arcTextureHighlight = new ExternalTexture(arcHighlightMaterial.mainTexture, "Note");
             arctapShadowTexture = new ExternalTexture(defaultArctapShadow, "Note");
             heightIndicatorTexture = new ExternalTexture(defaultHeightIndicator, "Note");
         }
@@ -446,20 +438,11 @@ namespace ArcCreate.Gameplay.Skin
             await heightIndicatorTexture.Load();
 
             traceMaterial.mainTexture = arcTexture.Value;
-            baseArcMaterial.mainTexture = arcTexture.Value;
-            baseArcHighlightMaterial.mainTexture = arcTextureHighlight.Value;
-
-            foreach (var mat in arcMaterials)
-            {
-                mat.mainTexture = arcTexture.Value;
-            }
-
-            foreach (var mat in arcHighlightMaterials)
-            {
-                mat.mainTexture = arcTextureHighlight.Value;
-            }
+            arcMaterial.mainTexture = arcTexture.Value;
+            arcHighlightMaterial.mainTexture = arcTextureHighlight.Value;
 
             Services.Render.SetTextures(heightIndicatorTexture.Value, arctapShadowTexture.Value);
+            Services.Render.SetArcMaterial(arcMaterial, arcHighlightMaterial);
             ResetTraceColors();
             ResetArcColors();
             ResetShadowColor();
@@ -480,8 +463,8 @@ namespace ArcCreate.Gameplay.Skin
         {
             Settings.InputMode.OnValueChanged.RemoveListener(ReloadNoteSkin);
 
-            Destroy(baseArcMaterial);
-            Destroy(baseArcHighlightMaterial);
+            Destroy(arcMaterial);
+            Destroy(arcHighlightMaterial);
             Destroy(traceMaterial);
             Destroy(shadowMaterial);
 

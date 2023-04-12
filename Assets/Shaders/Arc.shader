@@ -3,9 +3,8 @@
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
-		_Color ("Color", Color) = (1,1,1,1)
-		_LowColor ("LowColor", Color) = (1,1,1,1)
-		_RedColor ("RedColor", Color) = (1,1,1,1)
+		_Color ("Color", Color) = (1, 1, 1, 1)
+		_Properties ("Properties", Vector) = (0, 0, 0, 0)
 	}
 	SubShader
 	{
@@ -39,32 +38,26 @@
 				float4 vertex : SV_POSITION; 
 				float2 uv : TEXCOORD0;
 				float3 worldpos : TEXCOORD1;
-				uint instanceID : BLENDINDICES0;
+				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
-			struct Properties
-			{
-				float4 color;
-				float redValue;
-				int selected;
-			};
+			UNITY_INSTANCING_BUFFER_START(Props)
+                UNITY_DEFINE_INSTANCED_PROP(half4, _Color)
+                UNITY_DEFINE_INSTANCED_PROP(float4, _Properties)
+            UNITY_INSTANCING_BUFFER_END(Props)
 			
-			int _Selected;
-			float4 _RedColor;
-			float4 _Color, _LowColor;
-            float4 _MainTex_ST;
 			sampler2D _MainTex;
-			
-			StructuredBuffer<Properties> _Properties;
+            float4 _MainTex_ST;
 
-			v2f vert (appdata v, uint instanceID : SV_InstanceID)
+			v2f vert (appdata v)
 			{
-				UNITY_SETUP_INSTANCE_ID(v);
 				v2f o;
+				UNITY_SETUP_INSTANCE_ID(v);
+				UNITY_TRANSFER_INSTANCE_ID(v, o);
+
 				o.worldpos = mul(unity_ObjectToWorld, v.vertex);
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-				o.instanceID = instanceID;
 				return o;
 			}
 			
@@ -78,19 +71,17 @@
 
 			half4 frag (v2f i) : SV_Target
 			{
-				Properties properties = _Properties[i.instanceID];
-			    if(i.worldpos.z > 50 || i.worldpos.z < -100) discard;
-				float4 c = tex2D(_MainTex, i.uv); 
-				
-				float4 inColor = lerp(_LowColor, _Color, clamp((i.worldpos.y - 1) / 4.5f, 0, 1));
-				float4 color = lerp(inColor, _RedColor, properties.redValue);
+				UNITY_SETUP_INSTANCE_ID(i);
 
-				if(properties.selected == 1) 
+			    if(i.worldpos.z > 50 || i.worldpos.z < -100) discard;
+				half4 c = tex2D(_MainTex, i.uv); 
+				c *= UNITY_ACCESS_INSTANCED_PROP(Props, _Color);
+
+				if(UNITY_ACCESS_INSTANCED_PROP(Props, _Properties).x >= 0.5) 
 				{
-					color = Highlight(color);
+					c = Highlight(c);
 				}
 
-				c *= color * properties.color;  
 				c.a *= 0.9;
 				return c;
 			}

@@ -18,6 +18,10 @@ namespace ArcCreate.Gameplay.Chart
 
         protected RangeTree<Note> TimingTree => timingTree;
 
+        protected RangeTree<Note> FloorPositionTree => floorPositionTree;
+
+        protected List<Note> LastRenderingNotes => lastRenderingNotes;
+
         public override void UpdateJudgement(int timing, double floorPosition, GroupProperties groupProperties)
         {
             if (Notes.Count == 0 || groupProperties.NoInput)

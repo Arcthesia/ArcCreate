@@ -102,18 +102,8 @@ namespace ArcCreate.Gameplay.Data
             Color connectionColor = connectionLineColor;
             color.a *= alpha;
             connectionColor.a *= alpha;
-            NoteRenderProperties tapProperties = new NoteRenderProperties
-            {
-                Color = color,
-                Selected = IsSelected ? 1 : 0,
-            };
 
-            SpriteRenderProperties connectionProperties = new SpriteRenderProperties
-            {
-                Color = connectionColor,
-            };
-
-            Services.Render.DrawTap(texture, matrix, tapProperties);
+            Services.Render.DrawTap(texture, matrix, color, IsSelected);
 
             foreach (var arctap in ConnectedArcTaps)
             {
@@ -124,7 +114,7 @@ namespace ArcCreate.Gameplay.Data
                     pos: Vector3.zero,
                     q: Quaternion.LookRotation(direction, Vector3.up),
                     s: new Vector3(1, 1, direction.magnitude));
-                Services.Render.DrawConnectionLine(lineMatrix, connectionProperties);
+                Services.Render.DrawConnectionLine(lineMatrix, connectionColor);
             }
         }
 

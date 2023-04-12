@@ -477,10 +477,11 @@ Compose:
           Gridline: Define gridlines
           Script: Lua script
         AudioVolume:
-          Name: Audio volume
+          Name: Audio
           Music: Music
           Effect: Effect
           GlobalOffset: Global offset
+          SyncToDSPTime: Sync to DSP timing
         Display:
           Name: Display
           Vsync: Vsync

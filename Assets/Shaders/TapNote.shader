@@ -3,6 +3,8 @@
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {} 
+		_Color ("Color", Color) = (1, 1, 1, 1)
+		_Properties ("Properties", Vector) = (0, 0, 0, 0)
 	}
 	SubShader
 	{
@@ -33,18 +35,16 @@
 			{
 				float4 vertex : SV_POSITION;
 				float2 uv : TEXCOORD0;
-				uint instanceID : BLENDINDICES0;
+				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 			 
-			struct Properties
-			{
-				float4 color;
-				int selected;
-			};
+			UNITY_INSTANCING_BUFFER_START(Props)
+                UNITY_DEFINE_INSTANCED_PROP(half4, _Color)
+                UNITY_DEFINE_INSTANCED_PROP(float4, _Properties)
+            UNITY_INSTANCING_BUFFER_END(Props)
+
 			
 			sampler2D _MainTex;
-			
-			StructuredBuffer<Properties> _Properties;
 
 			half4 Selected(half4 c)
 			{
@@ -53,25 +53,27 @@
 				return half4(hsv2rgb(hsv),c.a);
 			}
 			 
-			v2f vert (appdata v, uint instanceID : SV_InstanceID)
+			v2f vert (appdata v)
 			{
-				UNITY_SETUP_INSTANCE_ID(v);
 				v2f o;
+				UNITY_SETUP_INSTANCE_ID(v);
+				UNITY_TRANSFER_INSTANCE_ID(v, o);
+				
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = v.uv;
-				o.instanceID = instanceID;
 				return o;
 			}
 			
 			half4 frag (v2f i) : SV_Target
 			{ 
-				Properties properties = _Properties[i.instanceID];
+				UNITY_SETUP_INSTANCE_ID(i);
+
 				half4 c = tex2D(_MainTex,i.uv);
-				if(properties.selected == 1) 
+				if(UNITY_ACCESS_INSTANCED_PROP(Props, _Properties).x >= 0.5) 
 				{
 					c = Selected(c);
 				}
-				return c * properties.color;
+				return c * UNITY_ACCESS_INSTANCED_PROP(Props, _Color);
 			}
 			ENDCG
 		}

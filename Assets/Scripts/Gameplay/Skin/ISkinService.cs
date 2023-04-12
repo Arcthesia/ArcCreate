@@ -34,5 +34,7 @@ namespace ArcCreate.Gameplay.Skin
         /// <param name="color">The color id.</param>
         /// <param name="value">The red arc value from 0 to 1.</param>
         void ApplyRedArcValue(int color, float value);
+
+        (Color high, Color low) GetArcColor(int colorId);
     }
 }

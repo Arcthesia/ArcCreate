@@ -172,14 +172,7 @@ namespace ArcCreate.Gameplay.Data
                 from = (float)((currentFloorPosition - FloorPosition) / (EndFloorPosition - FloorPosition));
             }
 
-            LongNoteRenderProperties properties = new LongNoteRenderProperties
-            {
-                From = from,
-                Color = color,
-                Selected = IsSelected ? 1 : 0,
-            };
-
-            Services.Render.DrawHold(texture, matrix, properties);
+            Services.Render.DrawHold(texture, matrix, color, IsSelected, from);
 
             if (currentTiming <= longParticleUntil && currentTiming <= EndTiming)
             {

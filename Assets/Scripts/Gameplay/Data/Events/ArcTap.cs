@@ -110,19 +110,8 @@ namespace ArcCreate.Gameplay.Data
             Color color = groupProperties.Color;
             color.a *= alpha;
 
-            NoteRenderProperties tapProperties = new NoteRenderProperties
-            {
-                Color = color,
-                Selected = IsSelected ? 1 : 0,
-            };
-
-            SpriteRenderProperties shadowProperties = new SpriteRenderProperties
-            {
-                Color = color,
-            };
-
-            Services.Render.DrawArcTap(isSfx, texture, matrix, tapProperties);
-            Services.Render.DrawArcTapShadow(shadowMatrix, shadowProperties);
+            Services.Render.DrawArcTap(isSfx, texture, matrix, color, IsSelected);
+            Services.Render.DrawArcTapShadow(shadowMatrix, color);
         }
 
         public int CompareTo(INote other)

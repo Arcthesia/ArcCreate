@@ -31,44 +31,26 @@ namespace ArcCreate.Gameplay.Render
         private readonly List<Material> generatedMaterials = new List<Material>();
 
         // Floor
-        private readonly Dictionary<Texture, InstancedRendererPool<NoteRenderProperties>> tapDrawers
-            = new Dictionary<Texture, InstancedRendererPool<NoteRenderProperties>>();
-
-        private readonly Dictionary<Texture, InstancedRendererPool<LongNoteRenderProperties>> holdDrawers
-            = new Dictionary<Texture, InstancedRendererPool<LongNoteRenderProperties>>();
-
-        private InstancedRendererPool<SpriteRenderProperties> connectionLineDrawer;
+        private readonly Dictionary<Texture, InstancedRendererPool> tapDrawers = new Dictionary<Texture, InstancedRendererPool>();
+        private readonly Dictionary<Texture, InstancedRendererPool> holdDrawers = new Dictionary<Texture, InstancedRendererPool>();
+        private InstancedRendererPool connectionLineDrawer;
 
         // Arc & trace
-        private readonly List<InstancedRendererPool<ArcRenderProperties>> arcSegmentDrawers
-            = new List<InstancedRendererPool<ArcRenderProperties>>();
-
-        private readonly List<InstancedRendererPool<ArcRenderProperties>> arcHeadDrawers
-            = new List<InstancedRendererPool<ArcRenderProperties>>();
-
-        private readonly List<InstancedRendererPool<ArcRenderProperties>> arcSegmentHighlightDrawers
-            = new List<InstancedRendererPool<ArcRenderProperties>>();
-
-        private readonly List<InstancedRendererPool<ArcRenderProperties>> arcHeadHighlightDrawers
-            = new List<InstancedRendererPool<ArcRenderProperties>>();
-
-        private readonly Dictionary<Texture, InstancedRendererPool<SpriteRenderProperties>> arcCapDrawers
-            = new Dictionary<Texture, InstancedRendererPool<SpriteRenderProperties>>();
-
-        private InstancedRendererPool<SpriteRenderProperties> arcShadowDrawer;
-        private InstancedRendererPool<ArcRenderProperties> traceSegmentDrawer;
-        private InstancedRendererPool<ArcRenderProperties> traceHeadDrawer;
-        private InstancedRendererPool<SpriteRenderProperties> traceShadowDrawer;
-        private InstancedRendererPool<SpriteRenderProperties> heightIndicatorDrawer;
+        private InstancedRendererPool arcSegmentDrawer;
+        private InstancedRendererPool arcHeadDrawer;
+        private InstancedRendererPool arcSegmentHighlightDrawer;
+        private InstancedRendererPool arcHeadHighlightDrawer;
+        private readonly Dictionary<Texture, InstancedRendererPool> arcCapDrawers = new Dictionary<Texture, InstancedRendererPool>();
+        private InstancedRendererPool arcShadowDrawer;
+        private InstancedRendererPool traceSegmentDrawer;
+        private InstancedRendererPool traceHeadDrawer;
+        private InstancedRendererPool traceShadowDrawer;
+        private InstancedRendererPool heightIndicatorDrawer;
 
         // Arctap
-        private readonly Dictionary<Texture, InstancedRendererPool<NoteRenderProperties>> arctapDrawers
-            = new Dictionary<Texture, InstancedRendererPool<NoteRenderProperties>>();
-
-        private readonly Dictionary<Texture, InstancedRendererPool<NoteRenderProperties>> arctapSfxDrawers
-            = new Dictionary<Texture, InstancedRendererPool<NoteRenderProperties>>();
-
-        private InstancedRendererPool<SpriteRenderProperties> arctapShadowDrawer;
+        private readonly Dictionary<Texture, InstancedRendererPool> arctapDrawers = new Dictionary<Texture, InstancedRendererPool>();
+        private readonly Dictionary<Texture, InstancedRendererPool> arctapSfxDrawers = new Dictionary<Texture, InstancedRendererPool>();
+        private InstancedRendererPool arctapShadowDrawer;
 
         public bool IsLoaded { get; private set; }
 
@@ -78,116 +60,117 @@ namespace ArcCreate.Gameplay.Render
 
         public Mesh ArcTapMesh => arctapMesh;
 
-        public void DrawTap(Texture texture, Matrix4x4 matrix, NoteRenderProperties properties)
+        public void DrawTap(Texture texture, Matrix4x4 matrix, Color color, bool selected)
         {
             if (!tapDrawers.ContainsKey(texture))
             {
                 Material newTap = Instantiate(baseTapMaterial);
                 newTap.mainTexture = texture;
                 generatedMaterials.Add(newTap);
-                tapDrawers.Add(texture, new InstancedRendererPool<NoteRenderProperties>(
+                tapDrawers.Add(texture, new InstancedRendererPool(
                     newTap,
                     tapMesh,
-                    Shader.PropertyToID("_Properties"),
-                    NoteRenderProperties.Size()));
+                    true));
             }
 
-            tapDrawers[texture].RegisterInstance(matrix, properties);
+            tapDrawers[texture].RegisterInstance(matrix, color, new Vector4(selected ? 1 : 0, 0, 0, 0));
         }
 
-        public void DrawHold(Texture texture, Matrix4x4 matrix, LongNoteRenderProperties properties)
+        public void DrawHold(Texture texture, Matrix4x4 matrix, Color color, bool selected, float from)
         {
             if (!holdDrawers.ContainsKey(texture))
             {
                 Material newHold = Instantiate(baseHoldMaterial);
                 newHold.mainTexture = texture;
                 generatedMaterials.Add(newHold);
-                holdDrawers.Add(texture, new InstancedRendererPool<LongNoteRenderProperties>(
+                holdDrawers.Add(texture, new InstancedRendererPool(
                     newHold,
                     holdMesh,
-                    Shader.PropertyToID("_Properties"),
-                    LongNoteRenderProperties.Size()));
+                    true));
             }
 
-            holdDrawers[texture].RegisterInstance(matrix, properties);
+            holdDrawers[texture].RegisterInstance(matrix, color, new Vector4(selected ? 1 : 0, from, 0, 0));
         }
 
-        public void DrawConnectionLine(Matrix4x4 matrix, SpriteRenderProperties properties)
+        public void DrawConnectionLine(Matrix4x4 matrix, Color color)
         {
-            connectionLineDrawer.RegisterInstance(matrix, properties);
+            connectionLineDrawer.RegisterInstance(matrix, color);
         }
 
-        public void DrawArcSegment(int colorId, bool highlight, Matrix4x4 matrix, ArcRenderProperties properties)
+        public void DrawArcSegment(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y)
         {
-            colorId = Mathf.Min(colorId, arcSegmentDrawers.Count - 1);
+            (Color high, Color low) = Services.Skin.GetArcColor(colorId);
+            color *= Color.Lerp(Color.Lerp(low, high, (y - 1) / 4.5f), Color.red, redValue);
+            Vector4 properties = new Vector4(selected ? 1 : 0, 0, 0, 0);
 
             if (highlight)
             {
-                arcSegmentHighlightDrawers[colorId].RegisterInstance(matrix, properties);
+                arcSegmentHighlightDrawer.RegisterInstance(matrix, color, properties);
             }
             else
             {
-                arcSegmentDrawers[colorId].RegisterInstance(matrix, properties);
+                arcSegmentDrawer.RegisterInstance(matrix, color, properties);
             }
         }
 
-        public void DrawTraceSegment(Matrix4x4 matrix, ArcRenderProperties properties)
+        public void DrawTraceSegment(Matrix4x4 matrix, Color color, bool selected)
         {
-            traceSegmentDrawer.RegisterInstance(matrix, properties);
+            traceSegmentDrawer.RegisterInstance(matrix, color, new Vector4(selected ? 1 : 0, 0, 0, 0));
         }
 
-        public void DrawArcShadow(Matrix4x4 matrix, SpriteRenderProperties properties)
+        public void DrawArcShadow(Matrix4x4 matrix, Color color)
         {
-            arcShadowDrawer.RegisterInstance(matrix, properties);
+            arcShadowDrawer.RegisterInstance(matrix, color);
         }
 
-        public void DrawTraceShadow(Matrix4x4 matrix, SpriteRenderProperties properties)
+        public void DrawTraceShadow(Matrix4x4 matrix, Color color)
         {
-            traceShadowDrawer.RegisterInstance(matrix, properties);
+            traceShadowDrawer.RegisterInstance(matrix, color);
         }
 
-        public void DrawArcHead(int colorId, bool highlight, Matrix4x4 matrix, ArcRenderProperties properties)
+        public void DrawArcHead(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y)
         {
-            colorId = Mathf.Min(colorId, arcHeadDrawers.Count - 1);
+            (Color high, Color low) = Services.Skin.GetArcColor(colorId);
+            color *= Color.Lerp(Color.Lerp(low, high, (y - 1) / 4.5f), Color.red, redValue);
+            Vector4 properties = new Vector4(selected ? 1 : 0, 0, 0, 0);
 
             if (highlight)
             {
-                arcHeadHighlightDrawers[colorId].RegisterInstance(matrix, properties);
+                arcHeadHighlightDrawer.RegisterInstance(matrix, color, properties);
             }
             else
             {
-                arcHeadDrawers[colorId].RegisterInstance(matrix, properties);
+                arcHeadDrawer.RegisterInstance(matrix, color, properties);
             }
         }
 
-        public void DrawTraceHead(Matrix4x4 matrix, ArcRenderProperties properties)
+        public void DrawTraceHead(Matrix4x4 matrix, Color color, bool selected)
         {
-            traceHeadDrawer.RegisterInstance(matrix, properties);
+            traceHeadDrawer.RegisterInstance(matrix, color, new Vector4(selected ? 1 : 0, 0, 0, 0));
         }
 
-        public void DrawArcCap(Texture texture, Matrix4x4 matrix, SpriteRenderProperties properties)
+        public void DrawArcCap(Texture texture, Matrix4x4 matrix, Color color)
         {
             if (!arcCapDrawers.ContainsKey(texture))
             {
                 Material newArcCap = Instantiate(baseArcCapMaterial);
                 newArcCap.mainTexture = texture;
                 generatedMaterials.Add(newArcCap);
-                arcCapDrawers.Add(texture, new InstancedRendererPool<SpriteRenderProperties>(
+                arcCapDrawers.Add(texture, new InstancedRendererPool(
                     newArcCap,
                     arcCapMesh,
-                    Shader.PropertyToID("_Properties"),
-                    SpriteRenderProperties.Size()));
+                    false));
             }
 
-            arcCapDrawers[texture].RegisterInstance(matrix, properties);
+            arcCapDrawers[texture].RegisterInstance(matrix, color);
         }
 
-        public void DrawHeightIndicator(Matrix4x4 matrix, SpriteRenderProperties properties)
+        public void DrawHeightIndicator(Matrix4x4 matrix, Color color)
         {
-            heightIndicatorDrawer.RegisterInstance(matrix, properties);
+            heightIndicatorDrawer.RegisterInstance(matrix, color);
         }
 
-        public void DrawArcTap(bool sfx, Texture texture, Matrix4x4 matrix, NoteRenderProperties properties)
+        public void DrawArcTap(bool sfx, Texture texture, Matrix4x4 matrix, Color color, bool selected)
         {
             var drawer = sfx ? arctapSfxDrawers : arctapDrawers;
             if (!drawer.ContainsKey(texture))
@@ -195,19 +178,18 @@ namespace ArcCreate.Gameplay.Render
                 Material newArctap = Instantiate(baseArctapMaterial);
                 newArctap.mainTexture = texture;
                 generatedMaterials.Add(newArctap);
-                drawer.Add(texture, new InstancedRendererPool<NoteRenderProperties>(
+                drawer.Add(texture, new InstancedRendererPool(
                     newArctap,
                     sfx ? arctapSfxMesh : arctapMesh,
-                    Shader.PropertyToID("_Properties"),
-                    NoteRenderProperties.Size()));
+                    true));
             }
 
-            drawer[texture].RegisterInstance(matrix, properties);
+            drawer[texture].RegisterInstance(matrix, color, new Vector4(selected ? 1 : 0, 0, 0, 0));
         }
 
-        public void DrawArcTapShadow(Matrix4x4 matrix, SpriteRenderProperties properties)
+        public void DrawArcTapShadow(Matrix4x4 matrix, Color color)
         {
-            arctapShadowDrawer.RegisterInstance(matrix, properties);
+            arctapShadowDrawer.RegisterInstance(matrix, color);
         }
 
         public void UpdateRenderers()
@@ -236,13 +218,8 @@ namespace ArcCreate.Gameplay.Render
                 pair.Value.Draw(notesCamera, layer);
             }
 
-            for (int i = 0; i < arcSegmentDrawers.Count; i++)
-            {
-                InstancedRendererPool<ArcRenderProperties> segment = arcSegmentDrawers[i];
-                InstancedRendererPool<ArcRenderProperties> segmentHighlight = arcSegmentHighlightDrawers[i];
-                segment.Draw(notesCamera, layer);
-                segmentHighlight.Draw(notesCamera, layer);
-            }
+            arcSegmentDrawer.Draw(notesCamera, layer);
+            arcSegmentHighlightDrawer.Draw(notesCamera, layer);
 
             foreach (var pair in arctapDrawers)
             {
@@ -254,30 +231,23 @@ namespace ArcCreate.Gameplay.Render
                 pair.Value.Draw(notesCamera, layer);
             }
 
-            for (int i = 0; i < arcHeadDrawers.Count; i++)
-            {
-                InstancedRendererPool<ArcRenderProperties> head = arcHeadDrawers[i];
-                InstancedRendererPool<ArcRenderProperties> headHighlight = arcHeadHighlightDrawers[i];
-                head.Draw(notesCamera, layer);
-                headHighlight.Draw(notesCamera, layer);
-            }
+            arcHeadDrawer.Draw(notesCamera, layer);
+            arcHeadHighlightDrawer.Draw(notesCamera, layer);
         }
 
         public void SetTraceMaterial(Material material)
         {
             traceSegmentDrawer?.Dispose();
-            traceSegmentDrawer = new InstancedRendererPool<ArcRenderProperties>(
+            traceSegmentDrawer = new InstancedRendererPool(
                 material,
                 ArcMeshGenerator.GetSegmentMesh(true),
-                Shader.PropertyToID("_Properties"),
-                ArcRenderProperties.Size());
+                true);
 
             traceHeadDrawer?.Dispose();
-            traceHeadDrawer = new InstancedRendererPool<ArcRenderProperties>(
+            traceHeadDrawer = new InstancedRendererPool(
                 material,
                 ArcMeshGenerator.GetHeadMesh(true),
-                Shader.PropertyToID("_Properties"),
-                ArcRenderProperties.Size());
+                true);
 
             UpdateLoadedState();
         }
@@ -285,94 +255,70 @@ namespace ArcCreate.Gameplay.Render
         public void SetShadowMaterial(Material material)
         {
             arcShadowDrawer?.Dispose();
-            arcShadowDrawer = new InstancedRendererPool<SpriteRenderProperties>(
+            arcShadowDrawer = new InstancedRendererPool(
                 material,
                 ArcMeshGenerator.GetShadowMesh(false),
-                Shader.PropertyToID("_Properties"),
-                SpriteRenderProperties.Size());
+                false);
 
             traceShadowDrawer?.Dispose();
-            traceShadowDrawer = new InstancedRendererPool<SpriteRenderProperties>(
+            traceShadowDrawer = new InstancedRendererPool(
                 material,
                 ArcMeshGenerator.GetShadowMesh(true),
-                Shader.PropertyToID("_Properties"),
-                SpriteRenderProperties.Size());
+                false);
 
             UpdateLoadedState();
         }
 
-        public void SetArcMaterials(List<Material> normal, List<Material> highlight)
+        public void SetArcMaterial(Material normal, Material highlight)
         {
-            for (int i = 0; i < arcSegmentDrawers.Count; i++)
-            {
-                arcSegmentDrawers[i].Dispose();
-                arcHeadDrawers[i].Dispose();
-            }
+            arcSegmentDrawer?.Dispose();
+            arcHeadDrawer?.Dispose();
+            arcSegmentHighlightDrawer?.Dispose();
+            arcHeadHighlightDrawer?.Dispose();
 
-            arcSegmentDrawers.Clear();
-            arcHeadDrawers.Clear();
+            arcSegmentDrawer = new InstancedRendererPool(
+                normal,
+                ArcMeshGenerator.GetSegmentMesh(false),
+                true);
 
-            for (int i = 0; i < normal.Count; i++)
-            {
-                arcSegmentDrawers.Add(new InstancedRendererPool<ArcRenderProperties>(
-                    normal[i],
-                    ArcMeshGenerator.GetSegmentMesh(false),
-                    Shader.PropertyToID("_Properties"),
-                    ArcRenderProperties.Size()));
+            arcHeadDrawer = new InstancedRendererPool(
+                normal,
+                ArcMeshGenerator.GetHeadMesh(false),
+                true);
 
-                arcHeadDrawers.Add(new InstancedRendererPool<ArcRenderProperties>(
-                    normal[i],
-                    ArcMeshGenerator.GetHeadMesh(false),
-                    Shader.PropertyToID("_Properties"),
-                    ArcRenderProperties.Size()));
-            }
+            arcSegmentHighlightDrawer = new InstancedRendererPool(
+                highlight,
+                ArcMeshGenerator.GetSegmentMesh(false),
+                true);
 
-            for (int i = 0; i < arcSegmentHighlightDrawers.Count; i++)
-            {
-                arcSegmentHighlightDrawers[i].Dispose();
-                arcHeadHighlightDrawers[i].Dispose();
-            }
-
-            arcSegmentHighlightDrawers.Clear();
-            arcHeadHighlightDrawers.Clear();
-
-            for (int i = 0; i < highlight.Count; i++)
-            {
-                arcSegmentHighlightDrawers.Add(new InstancedRendererPool<ArcRenderProperties>(
-                    highlight[i],
-                    ArcMeshGenerator.GetSegmentMesh(false),
-                    Shader.PropertyToID("_Properties"),
-                    ArcRenderProperties.Size()));
-
-                arcHeadHighlightDrawers.Add(new InstancedRendererPool<ArcRenderProperties>(
-                    highlight[i],
-                    ArcMeshGenerator.GetHeadMesh(false),
-                    Shader.PropertyToID("_Properties"),
-                    ArcRenderProperties.Size()));
-            }
+            arcHeadHighlightDrawer = new InstancedRendererPool(
+                highlight,
+                ArcMeshGenerator.GetHeadMesh(false),
+                true);
 
             UpdateLoadedState();
         }
 
         public void SetTextures(Texture heightIndicator, Texture arctapShadow)
         {
+            heightIndicatorDrawer?.Dispose();
+            arctapShadowDrawer?.Dispose();
+
             Material height = Instantiate(heightIndicatorMaterial);
             height.mainTexture = heightIndicator;
             generatedMaterials.Add(height);
-            heightIndicatorDrawer = new InstancedRendererPool<SpriteRenderProperties>(
+            heightIndicatorDrawer = new InstancedRendererPool(
                 height,
                 heightIndicatorMesh,
-                Shader.PropertyToID("_Properties"),
-                SpriteRenderProperties.Size());
+                false);
 
             Material shadow = Instantiate(arctapShadowMaterial);
             shadow.mainTexture = arctapShadow;
             generatedMaterials.Add(shadow);
-            arctapShadowDrawer = new InstancedRendererPool<SpriteRenderProperties>(
+            arctapShadowDrawer = new InstancedRendererPool(
                 shadow,
                 arctapShadowMesh,
-                Shader.PropertyToID("_Properties"),
-                SpriteRenderProperties.Size());
+                false);
 
             UpdateLoadedState();
         }
@@ -380,10 +326,10 @@ namespace ArcCreate.Gameplay.Render
         private void UpdateLoadedState()
         {
             IsLoaded = connectionLineDrawer != null
-                    && arcSegmentDrawers.Count > 0
-                    && arcHeadDrawers.Count > 0
-                    && arcSegmentHighlightDrawers.Count > 0
-                    && arcHeadHighlightDrawers.Count > 0
+                    && arcSegmentDrawer != null
+                    && arcHeadDrawer != null
+                    && arcSegmentHighlightDrawer != null
+                    && arcHeadHighlightDrawer != null
                     && traceSegmentDrawer != null
                     && traceHeadDrawer != null
                     && arcShadowDrawer != null
@@ -395,11 +341,10 @@ namespace ArcCreate.Gameplay.Render
 
         private void Awake()
         {
-            connectionLineDrawer = new InstancedRendererPool<SpriteRenderProperties>(
+            connectionLineDrawer = new InstancedRendererPool(
                 connectionLineMaterial,
                 connectionLineMesh,
-                Shader.PropertyToID("_Properties"),
-                SpriteRenderProperties.Size());
+                false);
 
             UpdateLoadedState();
         }
@@ -437,13 +382,8 @@ namespace ArcCreate.Gameplay.Render
                 pair.Value.Dispose();
             }
 
-            for (int i = 0; i < arcSegmentDrawers.Count; i++)
-            {
-                InstancedRendererPool<ArcRenderProperties> segment = arcSegmentDrawers[i];
-                InstancedRendererPool<ArcRenderProperties> segmentHighlight = arcSegmentHighlightDrawers[i];
-                segment.Dispose();
-                segmentHighlight.Dispose();
-            }
+            arcSegmentDrawer.Dispose();
+            arcSegmentHighlightDrawer.Dispose();
 
             foreach (var pair in arctapDrawers)
             {
@@ -455,13 +395,8 @@ namespace ArcCreate.Gameplay.Render
                 pair.Value.Dispose();
             }
 
-            for (int i = 0; i < arcHeadDrawers.Count; i++)
-            {
-                InstancedRendererPool<ArcRenderProperties> head = arcHeadDrawers[i];
-                InstancedRendererPool<ArcRenderProperties> headHighlight = arcHeadHighlightDrawers[i];
-                head.Dispose();
-                headHighlight.Dispose();
-            }
+            arcHeadDrawer.Dispose();
+            arcHeadHighlightDrawer.Dispose();
         }
     }
 }

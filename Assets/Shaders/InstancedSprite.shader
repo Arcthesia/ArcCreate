@@ -2,8 +2,9 @@ Shader "Gameplay/InstancedSprite"
 {
 	Properties
 	{
-		_Color ("Tint", Color) = (1,1,1,1)
+		_Tint ("Tint", Color) = (1,1,1,1)
 		_MainTex ("Sprite Texture", 2D) = "white" {}
+		_Color ("Color", Color) = (1, 1, 1, 1)
 	}
 
 	SubShader
@@ -44,33 +45,33 @@ Shader "Gameplay/InstancedSprite"
 				float4 vertex   : SV_POSITION;
 				float2 texcoord  : TEXCOORD0;
 				fixed4 color    : COLOR;
-				uint instanceID : BLENDINDICES0;
+				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 			
-			struct Properties
-			{
-				float4 color;
-			};
+			UNITY_INSTANCING_BUFFER_START(Props)
+                UNITY_DEFINE_INSTANCED_PROP(half4, _Color)
+            UNITY_INSTANCING_BUFFER_END(Props)
 			
-			StructuredBuffer<Properties> _Properties;
-
-			v2f vert (appdata_t IN, uint instanceID : SV_InstanceID)
+			v2f vert (appdata_t IN)
 			{
-				UNITY_SETUP_INSTANCE_ID(IN);
 				v2f OUT;
+				UNITY_SETUP_INSTANCE_ID(IN);
+				UNITY_TRANSFER_INSTANCE_ID(IN, OUT);
+				
 				OUT.vertex = UnityObjectToClipPos(IN.vertex);
 				OUT.texcoord = IN.texcoord;
 				OUT.color = IN.color;
-				OUT.instanceID = instanceID;
 				return OUT;
 			}
 
 			sampler2D _MainTex;
-			half4 _Color;
+			half4 _Tint;
 
 			half4 frag(v2f IN) : SV_Target
 			{
-				half4 c = tex2D(_MainTex, IN.texcoord) * _Properties[IN.instanceID].color * IN.color * _Color;
+				UNITY_SETUP_INSTANCE_ID(IN);
+
+				half4 c = tex2D(_MainTex, IN.texcoord) * UNITY_ACCESS_INSTANCED_PROP(Props, _Color) * IN.color * _Tint;
 				return c;
 			}
 		ENDCG

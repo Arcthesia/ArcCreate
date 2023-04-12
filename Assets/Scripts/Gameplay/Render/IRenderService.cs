@@ -13,37 +13,37 @@ namespace ArcCreate.Gameplay.Render
 
         Mesh ArcTapMesh { get; }
 
-        void DrawArcSegment(int colorId, bool highlight, Matrix4x4 matrix, ArcRenderProperties properties);
+        void DrawArcCap(Texture texture, Matrix4x4 matrix, Color color);
 
-        void DrawArcShadow(Matrix4x4 matrix, SpriteRenderProperties properties);
+        void DrawArcHead(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y);
 
-        void DrawTraceSegment(Matrix4x4 matrix, ArcRenderProperties properties);
+        void DrawArcSegment(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y);
 
-        void DrawTraceShadow(Matrix4x4 matrix, SpriteRenderProperties properties);
+        void DrawArcShadow(Matrix4x4 matrix, Color color);
 
-        void DrawArcHead(int colorId, bool highlight, Matrix4x4 matrix, ArcRenderProperties properties);
+        void DrawArcTap(bool sfx, Texture texture, Matrix4x4 matrix, Color color, bool selected);
 
-        void DrawTraceHead(Matrix4x4 matrix, ArcRenderProperties properties);
+        void DrawArcTapShadow(Matrix4x4 matrix, Color color);
 
-        void DrawArcCap(Texture texture, Matrix4x4 matrix, SpriteRenderProperties properties);
+        void DrawConnectionLine(Matrix4x4 matrix, Color color);
 
-        void DrawArcTap(bool sfx, Texture texture, Matrix4x4 matrix, NoteRenderProperties properties);
+        void DrawHeightIndicator(Matrix4x4 matrix, Color color);
 
-        void DrawArcTapShadow(Matrix4x4 matrix, SpriteRenderProperties properties);
+        void DrawHold(Texture texture, Matrix4x4 matrix, Color color, bool selected, float from);
 
-        void DrawConnectionLine(Matrix4x4 matrix, SpriteRenderProperties properties);
+        void DrawTap(Texture texture, Matrix4x4 matrix, Color color, bool selected);
 
-        void DrawHeightIndicator(Matrix4x4 matrix, SpriteRenderProperties properties);
+        void DrawTraceHead(Matrix4x4 matrix, Color color, bool selected);
 
-        void DrawHold(Texture texture, Matrix4x4 matrix, LongNoteRenderProperties properties);
+        void DrawTraceSegment(Matrix4x4 matrix, Color color, bool selected);
 
-        void DrawTap(Texture texture, Matrix4x4 matrix, NoteRenderProperties properties);
+        void DrawTraceShadow(Matrix4x4 matrix, Color color);
 
-        void SetTextures(Texture heightIndicator, Texture arctapShadow);
-
-        void SetArcMaterials(List<Material> normal, List<Material> highlight);
+        void SetArcMaterial(Material normal, Material highlight);
 
         void SetShadowMaterial(Material material);
+
+        void SetTextures(Texture heightIndicator, Texture arctapShadow);
 
         void SetTraceMaterial(Material material);
 

@@ -8,6 +8,7 @@ recharge-sp
 Alaiskai
 0thElement
 yojohanshinwataikei
+Exiony
 
 <size=33><b>Localization</b></size>
 Japanese: rassvet2

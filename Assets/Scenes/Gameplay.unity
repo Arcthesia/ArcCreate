@@ -7003,6 +7003,8 @@ MonoBehaviour:
   singleLineR: {fileID: 401828842}
   skyInputLine: {fileID: 658714737}
   skyInputLabel: {fileID: 1125645944}
+  laneExtraL: {fileID: 142010982}
+  laneExtraR: {fileID: 1830139708}
 --- !u!4 &1382682620
 Transform:
   m_ObjectHideFlags: 0
@@ -11164,8 +11166,8 @@ MonoBehaviour:
   - {r: 0.15686275, g: 0.78431374, b: 0.11764706, a: 0.8509804}
   unknownArcColor: {r: 1, g: 0.9607843, b: 0, a: 0.8509804}
   unknownArcLowColor: {r: 1, g: 0.79607844, b: 0, a: 0.8509804}
-  baseArcMaterial: {fileID: 2100000, guid: ba87602b6fc40b44da4bfc1f23fb0109, type: 2}
-  baseArcHighlightMaterial: {fileID: 2100000, guid: 6db1f26819575de42b1cc60e9f6c3408,
+  arcMaterial: {fileID: 2100000, guid: ba87602b6fc40b44da4bfc1f23fb0109, type: 2}
+  arcHighlightMaterial: {fileID: 2100000, guid: 6db1f26819575de42b1cc60e9f6c3408,
     type: 2}
   traceMaterial: {fileID: 2100000, guid: e8a954658a322b443b9862ee70e02a87, type: 2}
   shadowMaterial: {fileID: 2100000, guid: 3f9745785686b32738e24930481fb4ca, type: 2}
@@ -11416,7 +11418,7 @@ MonoBehaviour:
   gameplayData: {fileID: 11400000, guid: ae19a07671eb9dc748d6346649a697b7, type: 2}
   backgroundCamera: {fileID: 613949612}
   overlayCamera: {fileID: 2036585311}
-  testPlayChartFileName: test_arc.aff
+  testPlayChartFileName: test_hold.aff
 --- !u!1 &2141704179
 GameObject:
   m_ObjectHideFlags: 0

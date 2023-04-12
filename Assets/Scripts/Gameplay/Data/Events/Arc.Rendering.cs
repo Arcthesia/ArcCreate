@@ -20,6 +20,7 @@ namespace ArcCreate.Gameplay.Data
         private Mesh colliderMesh;
         private Texture arcCap;
         private Color heightIndicatorColor;
+        private Vector3 midPointPos;
         private readonly List<ArcSegmentData> segments = new List<ArcSegmentData>();
 
         // Avoid infinite recursion
@@ -55,6 +56,8 @@ namespace ArcCreate.Gameplay.Data
         public bool IsFirstArcOfGroup => PreviousArc == null;
 
         public bool IsFirstArcOfBranch => PreviousArc == null || PreviousArc.NextArc != this;
+
+        public float CurrentDepth { get; private set; }
 
         public override ArcEvent Clone()
         {
@@ -215,76 +218,46 @@ namespace ArcCreate.Gameplay.Data
                     continue;
                 }
 
-                ArcRenderProperties properties = new ArcRenderProperties
-                {
-                    Color = color,
-                    RedValue = redArcValue,
-                    Selected = IsSelected ? 1 : 0,
-                };
-
-                SpriteRenderProperties shadowProperties = new SpriteRenderProperties
-                {
-                    Color = color,
-                };
-
                 var (bodyMatrix, shadowMatrix) = segment.GetMatrices(currentFloorPosition, groupProperties.FallDirection, z, pos.y);
                 if (IsTrace)
                 {
-                    Services.Render.DrawTraceSegment(matrix * bodyMatrix, properties);
+                    Services.Render.DrawTraceSegment(matrix * bodyMatrix, color, IsSelected);
                     if (!groupProperties.NoShadow)
                     {
-                        Services.Render.DrawTraceShadow(matrix * shadowMatrix, shadowProperties);
+                        Services.Render.DrawTraceShadow(matrix * shadowMatrix, color);
                     }
                 }
                 else
                 {
-                    Services.Render.DrawArcSegment(Color, highlight, matrix * bodyMatrix, properties);
+                    Services.Render.DrawArcSegment(Color, highlight, matrix * bodyMatrix, color, IsSelected, redArcValue, basePos.y + segment.EndPosition.y);
                     if (!groupProperties.NoShadow)
                     {
-                        Services.Render.DrawArcShadow(matrix * shadowMatrix, shadowProperties);
+                        Services.Render.DrawArcShadow(matrix * shadowMatrix, color);
                     }
                 }
             }
 
             if (!groupProperties.NoHeightIndicator && (clipToTiming <= Timing || groupProperties.NoClip) && ShouldDrawHeightIndicator)
             {
-                SpriteRenderProperties heightIndicatorProperties = new SpriteRenderProperties
-                {
-                    Color = heightIndicatorColor * groupProperties.Color,
-                };
-
                 Matrix4x4 heightIndicatorMatrix = Matrix4x4.Scale(new Vector3(1, pos.y - (Values.TraceMeshOffset / 2), 1));
-
-                Services.Render.DrawHeightIndicator(matrix * heightIndicatorMatrix, heightIndicatorProperties);
+                Services.Render.DrawHeightIndicator(matrix * heightIndicatorMatrix, heightIndicatorColor * groupProperties.Color);
             }
 
             if (!groupProperties.NoHead && (clipToTiming <= Timing || groupProperties.NoClip) && IsFirstArcOfGroup)
             {
-                ArcRenderProperties properties = new ArcRenderProperties
-                {
-                    Color = color,
-                    RedValue = redArcValue,
-                    Selected = IsSelected ? 1 : 0,
-                };
-
                 if (IsTrace)
                 {
-                    Services.Render.DrawTraceHead(matrix, properties);
+                    Services.Render.DrawTraceHead(matrix, color, IsSelected);
                 }
                 else
                 {
-                    Services.Render.DrawArcHead(Color, highlight, matrix, properties);
+                    Services.Render.DrawArcHead(Color, highlight, matrix, color, IsSelected, redArcValue, basePos.y);
                 }
             }
 
             if (!groupProperties.NoArcCap && shouldDrawArcCap)
             {
-                SpriteRenderProperties arccapProperties = new SpriteRenderProperties
-                {
-                    Color = arcCapColor * groupProperties.Color,
-                };
-
-                Services.Render.DrawArcCap(arcCap, matrix * arcCapMatrix, arccapProperties);
+                Services.Render.DrawArcCap(arcCap, matrix * arcCapMatrix, arcCapColor * groupProperties.Color);
             }
 
             if (currentTiming <= longParticleUntil && currentTiming >= Timing && currentTiming <= EndTiming)
@@ -293,6 +266,14 @@ namespace ArcCreate.Gameplay.Data
                     firstArcOfBranch ?? this,
                     new Vector3(WorldXAt(currentTiming), WorldYAt(currentTiming), 0));
             }
+        }
+
+        public void RecalculateDepth(Vector3 camPos, float nearClipPlane, float farClipPlane, double currentFloorPosition)
+        {
+            Vector3 midPoint = midPointPos;
+            midPoint.z = ArcFormula.FloorPositionToZ(midPointPos.z - currentFloorPosition);
+            float dist = (camPos - midPoint).magnitude;
+            CurrentDepth = Mathf.InverseLerp(nearClipPlane, farClipPlane, dist);
         }
 
         public int CompareTo(INote other)
@@ -425,6 +406,9 @@ namespace ArcCreate.Gameplay.Data
                     segments[i] = segment;
                 }
             }
+
+            int midTiming = (Timing + EndTiming) / 2;
+            midPointPos = new Vector3(WorldXAt(midTiming), WorldYAt(midTiming), (float)TimingGroupInstance.GetFloorPosition(midTiming));
         }
 
         private (bool shouldDrawArcCap, Matrix4x4 arcCapMatrix, Vector4 arcCapColor) UpdateSegmentsAndArcCap(
