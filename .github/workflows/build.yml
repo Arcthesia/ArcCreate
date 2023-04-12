@@ -59,16 +59,16 @@ jobs:
           key: "${{secrets.DISCORD_WEBHOOK_KEY}}"
           payload: |
             {
-              "username": "Github",
-              "avatar_url": "https://i.imgur.com/XpJv9ci.png",
+              "username": "ArcCreate GitHub",
+              "avatar_url": "https://cdn.discordapp.com/attachments/532840940558221312/1084031545997791262/3_20230310011100.png",
               "embeds": [
                 {
                   "author": {
-                    "name": "Github Action",
-                    "icon_url": "https://i.imgur.com/XpJv9ci.png"
+                    "name": "New ArcCreate snapshot available",
+                    "icon_url": "https://cdn.discordapp.com/attachments/532840940558221312/1084031545997791262/3_20230310011100.png"
                   },
                   "title": "Build action completed: ${{ github.event.head_commit.message }}",
-                  "description": "[Download build from here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})",
+                  "description": "[Download build from GitHub](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) \n[Download build from nightly.link](https://nightly.link/${{ github.repository }}/actions/runs/${{ github.run_id }})",
                 }
               ]
             }
