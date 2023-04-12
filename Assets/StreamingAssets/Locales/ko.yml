@@ -1,0 +1,760 @@
+Format:
+  # 채보 파일 파싱 중에 나오는 에러 메시지들
+  Exception:
+    Message: |-
+      채보 파일({File})을 읽는 중 예외가 발생했습니다.
+      예외가 발생한 줄 번호: {LineNumber}
+      예외가 발생한 이벤트 타입: {EventType}
+      예외가 발생한 구문: "{Content}".
+      예외 텍스트: {Reason}
+    MessageUnknownReason: |-
+      채보 파일({File})을 읽는 중 알 수 없는 예외가 발생했습니다.
+      예외가 발생한 줄 번호: {LineNumber}
+      예외가 발생한 이벤트 타입: {EventType}
+      예외가 발생한 구문: "{Content}".
+    ArcColorNegative: |-
+      아크 색의 ID는 음수가 될 수 없습니다.
+    AudioOffsetInvalid: |-
+      오디오 오프셋의 값이 잘못되었습니다.
+    TimingPointDensityFactorInvalid: |-
+      판정 밀도의 값이 잘못 정의되었습니다.
+    BaseTimingInvalid: |-
+      올바르지 않은 기본 타이밍입니다. 모든 채보 파일은 0ms 시점에 타이밍 이벤트가 필요합니다.
+    IncludeReferencedMultipleTimes: |-
+      이미 전체 포함된 채보 파일을 다시 전체 포함시킬 수 없습니다.
+    IncludeAReferencedFragment: |-
+      이미 부분 포함된 채보 파일을 전체 포함시킬 수 없습니다.
+    TimingGroupPairInvalid: |-
+      타이밍 그룹 기호 매칭 실패. 모든 타이밍 그룹 정의는 "};"을 이용해서 끝내야 합니다.
+    DivisorNegative: |-
+      타이밍 이벤트의 "Divisor" 파라미터는 음수가 될 수 없습니다.
+    BaseBPMZero: |-
+      기본 BPM은 0이 될 수 없습니다.
+    DurationNegative: |-
+      이 이벤트는 음수 지속 시간을 가질 수 없습니다.
+    DurationZero: |-
+      이 이벤트는 0을 지속 시간으로 가질 수 없습니다.
+    ArcTapOutOfRange: |-
+      ArcTap의 타이밍 위치가 트레이스의 범위에서 벗어났습니다.
+    TimingGroupPropertiesInvalid: |-
+      타이밍 그룹 정의가 잘못되었습니다.
+    SymbolError: |-
+      구문이 잘못되었을 수 있습니다.
+      예외 종류: {Exception}
+      스택 트레이스:
+      {StackTrace}
+
+Compose:
+  # 에디터 상에서 나오는 에러 메시지들
+  Exception:
+    FileDoesNotExist: |-
+      {Path}에 파일이 존재하지 않습니다. 파일이 삭제되었을 수 있습니다.
+    LoadImage: |-
+      {Path}에 있는 이미지를 로딩하는 중에 에러가 발생했습니다.
+      에러 메시지: {Error}
+    LoadProject: |-
+      {Path}에 있는 프로젝트 파일을 로딩하는 중에 에러가 발생했습니다.
+      권한이 없거나, 프로젝트 파일이 잘못 저장되었을 수 있습니다.
+      프로젝트 파일을 직접 수정하여 다시 시도하거나, 새 프로젝트를 생성해주십시오.
+      에러 메시지: {Error}
+    ChartFileAlreadyExists: |-
+      해당 채보 파일은 이미 프로젝트에 추가된 상태입니다.
+    InvalidChartFile: |-
+      채보 파일 이름이 적절하지 않습니다.
+    NoChartIncluded: |-
+      프로젝트에 채보 파일이 포함되어 있지 않습니다.
+    InvalidGroupProperties: |-
+      타이밍 그룹 속성이 올바르지 않습니다. ({Message})
+    InstructionLimit: |-
+      Lua 스크립트 실행이 중단되었습니다. 실행할 수 있는 최대 명령 수({0}개)를 초과하였습니다.
+    InvalidBaseBPM: |-
+      적절하지 않은 기본 BPM 값({0})입니다.
+    CreateSkyNoteNoValidArc: |-
+      스카이 노트는 트레이스 노트 상에만 배치할 수 있습니다.
+    Navigation:
+      ParseKeybind: |-
+        키배치 파싱 도중에 다음과 같은 예외가 발생했습니다.
+        "{0}"
+      ParseWhitespace: |-
+        올바르지 않은 키바인드: 키 배치에 공백을 배정할 수 없습니다.
+      InvalidKeystroke: |-
+        올바르지 않은 키바인드: 키바인드 "{0}"의 형식이 올바르지 않습니다.
+      InvalidKey: |-
+        올바르지 않은 키: "{0}"에 대응하는 키가 없습니다.
+      InvalidModifier: |-
+        올바르지 않은 접두사: "{0}"에 대응하는 수식된 키가 없습니다.
+      InvalidActionPath: |-
+        올바르지 않은 액션 경로: "{0}"에 대응하는 액션이 없습니다.
+    Scenecontrol: |-
+      {Type} 타입의 씬 컨트롤 이벤트 실행 중 다음과 같은 오류가 발생했습니다. 
+      오류: {Message}
+      {StackTrace}
+    LuaScript: |-
+      {Path}에 있는 Lua 스크립트 실행 중 다음과 같은 오류가 발생했습니다.
+      오류: {Message}
+      {StackTrace}
+    Render:
+      FFmpeg:
+        NotFound: |-
+          FFmpeg 실행 파일을 찾지 못했습니다.
+          실행 파일이 정말 {0}에 있는지 확인해주십시오.
+        Start: |-
+          {Path}의 FFmpeg 수행 중 다음 에러가 발생했습니다.
+          에러 메시지:{Message}
+          {StackTrace}
+        Write: |-
+          FFmpeg 프로세스에 데이터를 쓰는 중 다음 에러가 발생했습니다.
+          에러 미시지: {Message}
+          {StackTrace}
+      Audio:
+        IncompatibleSfx: |-
+          오디오 클립 {Sfx}을(를) 렌더링할 수 없습니다.
+          채널 수 {ExpectedChannels} 및 주파수 {ExpectedFrequency}를 예상했지만, 채널 수 {Channels} 및 주파수 {Frequency}를 받았습니다.
+          
+  # Notification messages
+  Notify:
+    GameplayLoaded: 게임플레이 씬 성공적으로 로드됨
+    FreeCameraEditHelp: |-
+      자유 카메라 시작됨 (자세한 정보는 마우스를 올려보십시오)
+      
+      WASD: 카메라 이동 (전후좌우)
+      Space: 카메라 이동 (위)
+      Shift: 카메라 이동 (아래)
+      IJKL: 카메라 회전 (상하좌우)
+      U: 카메라 굴리기 (왼쪽)
+      O: 카메라 굴리기 (오른쪽)
+      Esc: 취소
+      Enter: 확인
+    EmmyLuaGenerated: |-
+      EmmyLua 템플릿이 현재 프로젝트 폴더 아래에 생성되었습니다
+      VS Code에서 tangzx.emmylua 확장 기능을 사용해 코드를 자동완성할 수 있습니다
+    Actions:
+      CannotMirror: 선택한 노트 중 반전 가능한 노트가 없습니다.
+      NoDragRange: 선택한 노트를 움직일 수 없습니다. 따로따로 시도해보십시오.
+    History:
+      Execute: |-
+        명령 실행됨 ({Name})
+      Undo: |-
+        명령 취소 ({Name})
+      Redo: |-
+        명령 재실행 ({Name})
+      # {Name} above will be replaced with these entries
+      AddTiming: 타이밍 이벤트 추가
+      EditTiming: 타이밍 이벤트 편집
+      RemoveTiming: 타이밍 이벤트 제거
+      AddCamera: 카메라 이벤트 추가
+      EditCamera: 카메라 이벤트 편집
+      RemoveCamera: 카메라 이벤트 제거
+      AddScenecontrol: 씬 제어 이벤트 추가
+      EditScenecontrol: 씬 제어 이벤트 편집
+      RemoveScenecontrol: 씬 제어 이벤트 제거
+      EditValue: 노트 속성값 수정
+      EditArc: 아크 속성값 수정
+      CreateNote:
+        Tap: 탭 노트 추가
+        Hold: 홀드 노트 추가
+        Arc: 아크 노트 추가
+        ArcTap: 스카이 노트 추가
+        Trace: 트레이스 노트 추가
+      DeleteNotes: 노트 삭제
+      Cut: 노트 잘라내기
+      Paste: 노트 붙여넣기
+      Mirror:
+        Vertical: 노트 세로 반전
+        Horizontal: 노트 가로 반전
+      Drag:
+        Timing: 노트 타이밍 옮기기
+        Position: 노트 위치 옮기기
+    Clipboard:
+      Copy: 노트 {0}개 복사
+      Cut: 노트 {0}개 잘라내기
+      NamedCopy: 복사한 노트 {0}개를 클립보드에 "{1}"로써 저장
+      NamedCut: 잘라낸 노트 {0}개를 클립보드에 "{1}"로써 저장
+    GroupTable:
+      AddGroup: '{Number}번 타이밍 그룹 추가'
+      EditGroup: '{Number}번 타이밍 그룹 편집'
+      RemoveGroup: '{Number}번 타이밍 그룹 제거'
+    Project:
+      NewProject: |-
+        새 프로젝트를 생성했습니다.
+        경로: {Path}
+      OpenProject: |-
+        프로젝트를 열었습니다.
+        경로: {Path}
+      SaveProject: |-
+        프로젝트를 저장했습니다.
+        경로: {Path}
+      OpenChart: '{Path}에 있는 채보 파일을 열었습니다'
+      CreateChart: '{Path}에 채보 파일을 생성했습니다'
+      RemoveChart: '{Path}에 있는 채보 파일을 프로젝트에서 제거했습니다'
+    Inspector:
+      InvalidParamameter: 유효하지 않은 파라미터
+    Measurer:
+      CopyTiming: 커서가 가리키는 시간을 복사했습니다
+      CopyPosition: 아크의 위치를 복사했습니다
+      CopyX: 아크의 X 좌표를 복사했습니다
+      CopyY: 아크의 Y 좌표를 복사했습니다
+    Export:
+      Render:
+        Cancelled: 렌더링 취소
+        Complete: 렌더링 완료
+      Package:
+        Complete: '{0}에 패키지 내보내기가 완료되었습니다'
+  # Dialog boxes
+  Dialog:
+    RemoveGroup:
+      Title: 타이밍 그룹 삭제
+      Content: |-
+        이 타이밍 그룹이 내용물을 포함하여 완전히 삭제됩니다. 정말로 삭제하시겠습니까? (되돌릴 수 없음)
+      Yes: 삭제
+      No: 취소
+    RemoveChart:
+      Title: 채보 파일 삭제
+      Content: |-
+        정말로 프로젝트에서 이 채보를 삭제하시겠습니까?
+
+        채보 파일은 삭제되지 않아 나중에 다시 프로젝트에 추가할 수 있지만, 채보 파일과 연관된 메타데이터는 프로젝트에서 삭제됩니다.
+      Yes: 삭제
+      No: 취소
+    UnsavedChanges:
+      Title: 저장하지 
+      Content: |-
+        저장하지 않은 변경 사항이 있습니다. 저장하시겠습니까?
+      Yes: 예
+      No: 아니오
+      Cancel: 취소
+  Navigation:
+    KeybindOverride: 액션 {0}에 배정된 단축키 덮어씌워짐
+    # Texts that appear on the context menu (right-click menu)
+    Actions:
+      Camera:
+        Name: 카메라
+        FreeCamera:
+          Name: 자유 카메라 시작
+      Grid:
+        Name: 눈금
+        Toggle: 눈금 켜기/끄기
+      Display:
+        Name: 디스플레이
+        FullScreen: 전체화면 켜기/끄기
+      Selection:
+        Name: 선택
+        Clear: 선택 전부 취소
+        RangeSelect:
+          Name: 범위 내 모든 노트 선택
+      Measure:
+        Name: 측정기
+        Start:
+          Name: 타이밍 측정기 열기
+      Clipboard:
+        Name: 클립보드
+        Copy: 복사
+        Cut: 잘라내기
+        Paste:
+          Name: 붙여넣기
+          Cancel: 붙여넣기 취소
+        NamedPaste:
+          Name: 붙여넣기
+          Cancel: 붙여넣기 취소
+        Clear: 클립보드 초기화
+      Delete:
+        Name: 삭제
+        Execute: 노트 삭제
+      Mirror:
+        Name: 노트 반전
+        Horizontal: 노트 가로 반전
+        HorizontalNoColorSwitch: 노트 가로 반전 (색 무시)
+        Vertical: 노트 세로 반전
+  Grid:
+    DefaultScript: |-
+      -- 이 스크립트는 Lua라고 하는 언어로 작성되었습니다.
+      
+      -- 격자판이 작용할 최대/최소 범위를 설정
+      -- (corner1.x, corner2.x, corner1.y, corner2.y)
+      grid.setCollider(-0.5, 1.5, -0.2, 1)
+      
+      -- 격자의 배경 색 설정
+      grid.setPanelColor(rgba(255, 255, 255, 16))
+      
+      -- 시작/끝점 x좌표, 시작/끝점 y좌표를 사용하여
+      -- 선을 그릴 수 있습니다
+      -- (point1.x, point2.x, point1.y, point2.y)
+      grid.drawLine(-0.5, 1.5, -0.2, -0.2, defaultColor)
+      
+      -- for과 같은 반복문도 사용 가능합니다
+      for x = -0.5, 1.5, 0.125 do
+        grid.drawLine(x, x, -0.2, 1, defaultColor)
+      end
+      
+      -- 직접 변수를 만들어서 사용할 수도 있습니다
+      -- RGBA 값이 224, 225, 204, 255에 해당하는
+      -- 색깔을 나타내는 변수를 만들었습니다
+      local lineColor = rgba(224, 225, 204, 255)
+      
+      for y = 0, 1, 0.25 do
+        grid.drawLine(-0.5, 1.5, y, y, lineColor)
+      end
+  # Texts that appear on the editor UI
+  UI:
+    Common:
+      Confirm: 확인
+      Cancel: 취소
+      Close: 닫기
+      NotRequired: (필수 아님)
+      Extension: 확장자
+    Placeholder:
+      Text: 빈 텍스트...
+      File: 파일 선택...
+      Image: 이미지 선택...
+      Property: No property...
+      ImagePrompt: 클릭하여 이미지 선택
+    PanelNames:
+      Toolbox: 도구
+      Gameplay: 게임플레이
+      Timeline: 타임라인
+      Project: 프로젝트
+      Events: 이벤트
+      Remote: 원격 플레이
+      Export: 내보내기
+      Settings: 설정
+    # Top bar of the UI
+    Top:
+      Label:
+        New: 새 프로젝트
+        Open: 열기
+        Save: 저장
+        InputMode: 입력 모드
+        FullScreen: 전체화면
+        ToggleFullScreenHint: F11 키로 전체화면 모드를 켜거나 끄세요.
+        Chart: 채보
+    # Project panel
+    Project:
+      Label:
+        NewChart: 새 채보
+        NewProject: 새 프로젝트
+        ProjectFile: 프로젝트 파일
+        ChartFile: 채보 파일
+        Information: 정보
+        Gameplay: 게임플레이
+        Title: 제목
+        Composer: 작곡가
+        Illustrator: 일러스트
+        Charter: 채보 아티스트
+        Alias: 명의
+        BPM: BPM
+        BaseBPM: 기본 BPM
+        BPMText: 표기 BPM
+        SyncBaseBPM: 싱크
+        ChartOffset: 채보 오프셋
+        TimingPointDensityFactor: 판정 밀도
+        ChartConstant: 세부 상수
+        DifficultyName: 난이도 이름
+        DifficultyColor: 난이도 색
+        Files: 첨부 파일
+        Audio: 오디오
+        JacketArt: 재킷 이미지
+        Background: 배경
+        Video: 배경 영상
+        Skin: 스킨
+        Side: 테마
+        Note: 노트 색
+        Particle: FX
+        Accent: 판정선
+        Track: 트랙
+        SingleLine: 장식
+        Colors: 색깔
+        TraceBody: 트레이스 색
+        Shadow: 그림자 색
+        ArcColors: 아크 색
+        Blue: 파랑 (0)
+        Red: 빨강 (1)
+        Green: 초록 (2)
+        Custom: 커스텀 ({0})
+        AddArcColor: 아크 색 추가
+        NoProjectLoaded: |-
+          프로젝트가 로드되지 않았습니다.
+          프로젝트를 열거나 새 프로젝트를 만드십시오.
+        Shutter: 셔터
+        ShowShutter: 셔터 보이기
+        HideShutter: 셔터 숨기기
+        PreviewSegment: 미리듣기 구간
+      Options: 
+        Inherit: 테마 상속
+        Light: Light
+        Conflict: Conflict
+        Colorless: Colorless
+        MiraiLight: Mirai Light
+        MiraiConflict: Mirai Conflict
+        Dynamix: Dynamix
+        Black: Black
+        Nijuusei: Nijuusei
+        Rei: Rei
+        DarkVs: DarkVs
+        Tempest: Tempest
+        Finale: Finale
+        Pentiment: Pentiment
+        Arcana: Arcana
+        None: None
+        Neo: Neo
+        Past: Past
+        Present: Present
+        Future: Future
+        Beyond: Beyond
+    Timeline: # This one isn't used right now, isn't it?
+      Label:
+        Offset: 오프셋
+        TimingGroup: 그룹
+        Density: 판정 밀도
+    # Events editor panel
+    EventsEditor:
+      Label:
+        Group: 그룹
+        Events: 이벤트
+      Actions:
+        AddGroup: 그룹 추가
+        DeleteGroup: 그룹 삭제
+        AddEvent: 이벤트 추가
+        DeleteEvent: 이벤트 삭제
+        AutoReload: 자동 리로드
+        GenerateEmmyLua: EmmyLua 템플릿 생성
+        Reload: 리로드
+        FreeCamera: 자유 카메라
+      CameraView:
+        Default: 기본 시점
+        Stationary: 고정 시점
+        ZoomedOut: 원거리 시점
+        BirdsEye1: 상단 시점
+        BirdsEye2: 상단 시점 2
+      Mode:
+        Timing: 타이밍
+        Camera: 카메라
+        Scenecontrol: 씬 제어
+    # Export panel
+    Export:
+      Render:
+        Name: 비디오 렌더링
+        Description: |-
+          채보 영상을 자동 생성합니다.
+          FFmpeg가 설치되어 있어야 합니다.
+        ConfigureFFmpeg: FFmpeg 실행 파일 경로
+        Settings:
+          Name: 설정
+          From: 시작 시간
+          To: 끝 시간
+          Quality: 품질
+          FPS: FPS
+          Width: 영상 너비
+          Height: 영상 높이
+          Size: 크기
+          ShowShutter: 셔터 포함
+        Start: 렌더링 시작
+        Cancel: 렌더링 취소
+        Status: |-
+          렌더링을 시작합니다. 시간이 다소 걸릴 수 있습니다.
+          경과 시간: {0}
+          남은 시간: {1}
+      Package:
+        Name: 패키지
+        Description: |-
+          다른 플레이어와 공유할 수 있는 .arcpkg 패키지 파일을 생성합니다.
+        Publisher: 배포자
+        Package: 패키지명
+        Version: 버전
+        BlankField: 배포자와 패키지명 항목을 채워주십시오
+        Identifier: "패키지 식별자는 {0}이(가) 됩니다"
+        Export: 내보내기
+    # Editor settings panel
+    Settings:
+      Label:
+        Locale:
+          Name: 로컬라이징
+          Language: 언어
+          Reload: 언어 리로드
+          CheckMissing: 누락된 항목 검사
+        Gameplay:
+          Name: 게임플레이
+          Speed: 보면 속도
+          AspectRatio: 화면 비율
+          Indicator: FR/PM 표시
+          MaxIndicator: 이론치도 같이 표시
+        Grid:
+          Name: 눈금
+          Slot: 슬롯
+          UseDefault: 기본 눈금 사용
+          FromLane: 왼쪽 끝 레인 
+          ToLane: 오른쪽 끝 레인
+          ScaleGrid: 스카이 입력에 맞추기
+          Gridline: 눈금선 정의
+          Script: Lua 스크립트
+        AudioVolume:
+          Name: 오디오 볼륨
+          Music: 음악
+          Effect: SFX
+          GlobalOffset: 전역 소리 오프셋
+        Display:
+          Name: 디스플레이
+          Vsync: Vsync
+          Framerate: FPS
+          ShowCounter: FPS 보이기
+        Input:
+          Name: 입력
+          ReloadKeybinds: 키배치 리로드
+        Files:
+          Name: 파일
+          Backup: 저장 시 백업 생성
+          BackupCount: 백업 개수
+          Autosave: 자동 저장 토글
+          AutosaveInterval: '자동 저장 간격 (단위: 초)'
+        ScrollSensitivity:
+          Name: 스크롤 감도
+          Vertical: 세로 감도
+          Horizontal: 가로 감도
+          Timeline: 타임라인 감도
+        TrackScrolling:
+          Name: 트랙 스크롤
+          Threshold: 스크롤 임계치
+          MaxMovement: 스크롤 속도
+        Credits:
+          Name: 크레딧
+          View: 크레딧 보기
+    # Toolbox panel
+    Toolbox:
+      Pallete:
+        Name: 팔레트
+        Arc: 아크
+        Trace: 트레이스
+        Tap: 탭
+        Hold: 홀드
+        Arctap: 스카이
+        Easing: 보간
+      Macros: 매크로
+    # Inspector window
+    Inspector:
+      Name: 값 조사 도구
+      Timing: 타이밍
+      StartTiming: 시작
+      EndTiming: 끝
+      Lane: 레인
+      StartPos: 시작점
+      EndPos: 끝점
+      Sfx: SFX
+      Group: 그룹
+      Mixed: 혼합됨
+      Arc: 아크
+      Trace: 트레이스
+      Actions:
+        SelectArc: 트레이스 노트 선택
+        SelectArctap: 스카이 노트 선택
+
+Remote:
+  Exception:
+    InvalidIP: 올바르지 않은 IP 주소입니다
+  State:
+    Listening: |-
+      데이터 전파 대기 중...
+      <size=20>
+      데스크톱 ArcCreate 클라이언트에서, "Remote" 탭을 열고 "데이터 전파"를 눌러 시작하십시오.</size>
+    ManualIP: |-
+      데스크톱 클라이언트로부터 연결 대기 중...
+      <size=20>
+      데스크톱 ArcCreate 클라이언트에서, "Remote" 탭을 열고 IP 주소 "{0}"를 입력하십시오.</size>
+    Found: |-
+      다음 디바이스에서 데이터 전파를 감지하였습니다.
+      디바이스를 선택하여 계속하십시오.
+    TargetDisconnected:
+      Compose: 대상이 연결을 종료했습니다. 연결을 종료합니다.
+      Gameplay: 대상이 접속을 해제하였습니다. 새 세션을 시작하시겠습니까?
+    Receiving:
+      데이터 수신 중 ({0})
+  Description:
+    Idle: |-
+      테스트 플레이할 대상과 연결되지 않았습니다.
+      데이터 전파를 시작해 플레이 대상을 탐색하십시오. 이 기기와 대상 기기가 같은 로컬 네트워크에 접속해 있고, 대상 기기가 데이터 전파를 기다리도록 설정하십시오.
+    Broadcasting: |-
+      데이터 송신 중 ({0})
+      연결된 클라이언트에서 이 값을 선택해 세션을 시작하십시오.
+    Connected: |-
+      연결되었습니다. 연결 주소: "{0}:{1}"
+  Actions:
+    Broadcast: 데이터 전파
+    AbortBroadcast: 데이터 전파 멈추기
+    BroadcastAgain: 데이터 전파 재개
+    StopSession: 세션 끝내기
+    StartNewSession: 새 세션 시작
+    ManualIP: 수동 연결
+    ReturnToSelect: 곡 선택 화면으로 가기
+  Control:
+    Name: 제어
+    Sync:
+      Name: 데이터 동기화
+      AllFiles: 모든 파일
+      Chart: 채보
+      Audio: 오디오
+      Jacket: 재킷 이미지
+      Background: 배경
+      Metadata: 메타데이터
+    Settings:
+      Name: 설정
+      Offset: 기기 오프셋
+      Speed: 기기 속도
+      MusicVolume: 음악 볼륨
+      EffectVolume: 효과음 볼륨
+    StartTiming: 시작 타이밍
+    EndTiming: 종료 타이밍 
+    Loop: 반복 재생
+    ShowLog: 로그 보이기
+    ShowDebug: 디버그 정보 보이기
+    ManualIP: IP 수동 입력
+  Window:
+    Name: 원격 동기화
+    SyncChart: 채보 동기화
+    SyncTiming: 타이밍 동기화
+
+Gameplay:
+  Exception:
+    LoadAudio: |-
+      {Path}에 있는 오디오 파일 로딩 중에 에러가 발생했습니다.
+      {Error}
+    Chart: |-
+      {Path}에 있는 채보 파일 로딩 중에 에러가 발생했습니다.
+      {Error}
+    Skin: |-
+      {Path}에 있는 이미지 로딩 중에 에러가 발생했습니다.
+      {Error}
+    Scenecontrol: |-
+      {Path}에 있는 SceneControl 파일 로딩 중에 에러가 발생했습니다.
+      {Error}
+    ScenecontrolSprite: |-
+      {Path}에 있는 SceneControl 스프라이트 로딩 중에 에러가 발생했습니다.
+      {Error}
+    Load: |-
+      채보를 로딩하는 중에 알 수 없는 에러가 발생했습니다. 
+      채보 식별자: {Identifier}, {ChartPath}
+      에러: {Message}
+      스택 트레이스:
+      {StackTrace}
+  HUD:
+    Play: 이어하기
+    Retry: 재시작
+    Return: 나가기
+  Selection:
+    SelectStatus:
+      Singular: |-
+        애셋 {0}개 선택됨
+      Plural: |-
+        애셋 {0}개 선택됨
+    DeleteConfirmation: |-
+      해당 애셋을 제거하시겠습니까? 기록은 사라지지 않습니다.
+    CannotDeleteDefault: |-
+      기본 애셋은 삭제할 수 없습니다.
+    Action:
+      Delete: 삭제
+      Cancel: 취소
+      Done: 완료
+    List:
+      RemoteTestplay: 원격 테스트 플레이
+      Import: 패키지 들여오기
+      Community: 커뮤니티
+      AllSongs: 모든 곡
+      OtherDifficulties: 타 난이도
+    Info:
+      Undefined:
+        Title: (이름 없음)
+        Composer: N/A
+        Charter: (알 수 없음)
+      Charter: '채보 아티스트: {0}'
+    Sort:
+      addeddate: "추가 순"
+      charter: "채보 제작자 순"
+      composer: "작곡가 순"
+      difficulty: "난이도 순"
+      grade: "달성도 순"
+      playcount: "플레이 횟수 순"
+      score: "점수 순"
+      title: "곡명 순"
+    Group:
+      none: " - "
+      difficulty: "난이도끼리 묶음"
+      grade: "달성도 단위 묶음"
+      charter: "채보 제작자별로 묶음"
+    Settings:
+      Name: 설정
+      Language: 언어
+      Gameplay:
+        Name: 게임플레이
+        Speed: 속도
+        SpeedDetail: |-
+          노트가 다가오는 속도를 조절합니다.
+        EarlyLatePureDisplay: 세부 판정 표시
+        EarlyLatePureDisplayDetail: |-
+          Early/Late Pure 판정의 표시 여부를 설정합니다.
+      Audio:
+        Name: 오디오
+        Offset: 오프셋
+        OffsetDetail: |-
+          악곡과 노트 간의 타이밍을 조절합니다.
+          LATE가 많으면 값을 더 크게, EARLY가 많으면 값을 더 작게 설정하면 됩니다.
+        Calibrate: 오프셋 설정
+        MusicAudio: 악곡 볼륨
+        MusicAudioDetail: |-
+          게임 중 들리는 악곡의 음량을 조절합니다.
+        EffectAudio: 효과음 볼륨
+        EffectAudioDetail: |-
+          게임 중 들리는 타격음의 음량을 조절합니다.
+      Visual:
+        Name: 비주얼
+        Colorblind: 색약 모드
+        ColorblindDetail: 아크의 색을 변경합니다.
+        FrPmDisplay: FR/PM 표시
+        FrPmDisplayDetail: FR/PM 마크의 표시 위치를 변경합니다.
+        MaxDisplay: 이론치 표시
+        MaxDisplayDetail: 이론치 마크의 표시 여부를 설정합니다.
+        EarlyLateDisplay: Early/Late 표시
+        EarlyLateDisplayDetail: Early/Late 판정의 표시 위치를 변경합니다.
+        LimitFramerate: 프레임 제한
+        LimitFramerateDetail: 최대 FPS를 60으로 설정합니다. 전력을 아낄 수 있으나, 레이턴시가 늘어날 수 있습니다.
+        ShowFPS: FPS 표시
+        ShowFPSDetail: FPS 표시 여부를 설정합니다.
+        ShowDebug: 디버그 정보 표시
+        ShowDebugDetail: 게임 중 디버그 정보 표시 여부를 설정합니다. (고급 옵션).
+      FrPmPosition:
+        middle: 중간
+        infopanel: 악곡 정보 패널
+        off: 끄기
+      EarlyLateTextPosition:
+        middle: 중간
+        bottom: 하단
+        top: 상단
+
+Shutter:
+  Composer: Music
+  Illustrator: Illustration
+  Charter: Note Design
+  Alias: as
+    
+Storage:
+  Confirm: 확인
+  ImportErrors: |-
+    다음 애셋을 들여오지 못했습니다.
+  ImportSummary: |-
+    다음 애셋을 성공적으로 들여왔습니다.
+  NoAssetImported: |-
+    들여온 애셋이 없습니다.
+  ImportConflict:
+    Message: |-
+      들여온 애셋의 오래된 버전을 들어오려 하는 것 같습니다.
+      어느 버전의 애셋을 보존하시겠습니까?
+    ReplaceAsset:
+      들여오는 애셋으로 덮어쓰기
+    KeepOriginal:
+      원래 애셋 보존하기
+    Identifier: "식별자: {0}"
+    Version: "버전: {0}"
+  Loading:
+    Message: '로딩: {0}...'
+    Archive: 아카이브 압축 해제 중...
+    ValidatePackage: 패키지 유효성 검증 중...
+    CheckConflict: 충돌 검사 중...
+    DeleteAsset: 애셋 삭제 중... ({0})
+    StoreAsset: 애셋 저장 중... ({0})
+    Finalizing: 마무리 작업 중...
