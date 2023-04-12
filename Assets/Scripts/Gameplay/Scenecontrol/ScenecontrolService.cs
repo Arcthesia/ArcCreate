@@ -100,8 +100,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public void UpdateScenecontrol(int currentTiming)
         {
-            Values.LaneFrom = laneExtraL.color.a > Mathf.Epsilon ? 0 : 1;
-            Values.LaneTo = laneExtraR.color.a > Mathf.Epsilon ? 5 : 4;
+            Values.LaneFrom = (laneExtraL.color.a > Mathf.Epsilon && laneExtraL.gameObject.activeInHierarchy) ? 0 : 1;
+            Values.LaneTo = (laneExtraR.color.a > Mathf.Epsilon && laneExtraR.gameObject.activeInHierarchy) ? 5 : 4;
 
             foreach (var c in referencedControllers)
             {

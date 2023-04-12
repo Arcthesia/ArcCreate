@@ -194,6 +194,11 @@ namespace ArcCreate.Gameplay.Render
 
         public void UpdateRenderers()
         {
+            if (!notesCamera.enabled || !notesCamera.gameObject.activeInHierarchy)
+            {
+                return;
+            }
+
             foreach (var pair in holdDrawers)
             {
                 pair.Value.Draw(notesCamera, layer);
