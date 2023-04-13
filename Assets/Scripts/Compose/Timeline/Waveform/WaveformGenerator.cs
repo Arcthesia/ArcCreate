@@ -14,7 +14,7 @@ namespace ArcCreate.Compose.Timeline
         public static Texture2D EncodeTexture(AudioClip clip)
         {
             int sampleCount = clip.samples * clip.channels;
-            int maxSize = SystemInfo.maxTextureSize;
+            int maxSize = 16384;
 
             Texture2D texture = null;
             int width = 0;

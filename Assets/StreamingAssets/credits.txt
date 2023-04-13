@@ -14,7 +14,6 @@ Exiony
 Japanese: rassvet2
 Spanish: Alaiskai
 Vietnamese: Himori
-Korean: C0MATOS3
 
 <size=33><b>Quality Assurance</b></size>
 ZydeKun

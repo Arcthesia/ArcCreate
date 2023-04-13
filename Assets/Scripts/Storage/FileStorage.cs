@@ -67,6 +67,7 @@ namespace ArcCreate.Storage
                 }
 
                 // Hash should now be unique. Copy the file (unless a file with the same content already exists).
+                path = AddDirectoryPrefix(path);
                 string fullPath = Path.Combine(StoragePath, path);
                 if (shouldStoreFile)
                 {
@@ -98,7 +99,13 @@ namespace ArcCreate.Storage
                 return null;
             }
 
-            return Path.Combine(StoragePath, realPath);
+            string path = Path.Combine(StoragePath, realPath);
+            if (!File.Exists(path))
+            {
+                path = Path.Combine(StoragePath, AddDirectoryPrefix(Path.GetFileName(path)));
+            }
+
+            return path;
         }
 
         public static void DeleteReference(string referenceId)
@@ -152,6 +159,35 @@ namespace ArcCreate.Storage
             Collection.Delete(reference.VirtualPath);
         }
 
+        [UnityEngine.RuntimeInitializeOnLoadMethod]
+        public static void MigrateToPrefixedPathStorage()
+        {
+            DirectoryInfo dir = new DirectoryInfo(StoragePath);
+            FileInfo[] files = dir.GetFiles();
+            for (int i = 0; i < files.Length; i++)
+            {
+                FileInfo file = files[i];
+                string oldPath = file.Name;
+                string newPath = AddDirectoryPrefix(oldPath);
+                string newFullPath = Path.Combine(StoragePath, newPath);
+
+                if (File.Exists(newFullPath))
+                {
+                    file.Delete();
+                    return;
+                }
+
+                string newFullPathDir = Path.GetDirectoryName(newFullPath);
+                if (!Directory.Exists(newFullPathDir))
+                {
+                    Directory.CreateDirectory(newFullPathDir);
+                }
+
+                File.Copy(file.FullName, newFullPath);
+                file.Delete();
+            }
+        }
+
         public static void Clear()
         {
             if (!Directory.Exists(StoragePath))
@@ -190,6 +226,11 @@ namespace ArcCreate.Storage
             {
                 return sha.ComputeHash(stream);
             }
+        }
+
+        private static string AddDirectoryPrefix(string path)
+        {
+            return Path.Combine(path.Substring(0, 1), path.Substring(1, 1), path);
         }
     }
 }
