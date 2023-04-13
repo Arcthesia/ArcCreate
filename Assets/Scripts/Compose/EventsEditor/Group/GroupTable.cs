@@ -21,7 +21,8 @@ namespace ArcCreate.Compose.EventsEditor
             set
             {
                 base.Selected = value;
-                removeButton.interactable = Selected?.GroupProperties.Editable ?? false;
+                removeButton.interactable = Selected?.GroupProperties.Editable ?? false
+                                         && Selected?.GroupNumber > 0;
             }
         }
 
@@ -63,7 +64,7 @@ namespace ArcCreate.Compose.EventsEditor
         private void OnEdittingTimingGroup(int group)
         {
             Selected = Services.Gameplay.Chart.GetTimingGroup(group);
-            SetData(Services.Gameplay.Chart.TimingGroups);
+            UpdateTable(Services.Gameplay.Chart.TimingGroups);
             editingTimingGroupField.SetValueWithoutNotify(Selected);
         }
 
@@ -130,9 +131,15 @@ namespace ArcCreate.Compose.EventsEditor
 
         private void OnChart()
         {
-            SetData(Services.Gameplay.Chart.TimingGroups);
+            UpdateTable(Services.Gameplay.Chart.TimingGroups);
             Selected = Services.Gameplay.Chart.TimingGroups.FirstOrDefault();
             Values.EditingTimingGroup.Value = 0;
+        }
+
+        private void UpdateTable(List<TimingGroup> groups)
+        {
+            SetData(groups);
+            removeButton.interactable = groups.Count > 1 && Selected?.GroupNumber > 0;
         }
     }
 }

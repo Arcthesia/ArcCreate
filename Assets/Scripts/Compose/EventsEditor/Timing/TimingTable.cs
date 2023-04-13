@@ -24,6 +24,7 @@ namespace ArcCreate.Compose.EventsEditor
             {
                 base.Selected = value;
                 marker.gameObject.SetActive(value != null);
+                removeButton.interactable = Selected?.Timing != 0;
                 UpdateMarker();
             }
         }
@@ -134,7 +135,7 @@ namespace ArcCreate.Compose.EventsEditor
 
             int index = IndexOf(Selected);
             Services.History.AddCommand(new EventCommand(
-                name: I18n.S("Compose.Notify.RemoveTiming"),
+                name: I18n.S("Compose.Notify.History.RemoveTiming"),
                 remove: new List<ArcEvent>() { Selected }));
             Selected = Data.Count == 0 ? null : Data[Mathf.Max(index - 1, 0)];
             Rebuild();

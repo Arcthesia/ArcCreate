@@ -71,9 +71,8 @@
 			{
 				UNITY_SETUP_INSTANCE_ID(i);
 
-				float4 properties = UNITY_ACCESS_INSTANCED_PROP(Props, _Properties);
-				float from = properties.y;
-				float highlight = properties.z;
+				float from = UNITY_ACCESS_INSTANCED_PROP(Props, _Properties).y;
+				float highlight = UNITY_ACCESS_INSTANCED_PROP(Props, _Properties).z;
 			    if(i.uv.y < from || i.worldpos.z > 50 || i.worldpos.z < -100) return 0;
 				i.uv.y = (i.uv.y - 1) * 1 / (1 - from) + 1;
 				i.uv.x = (i.uv.x + highlight) / 2;

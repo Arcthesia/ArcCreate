@@ -73,6 +73,12 @@ public static class I18n
     /// <returns>The translated and formatted string.</returns>
     public static string S(string key, params object[] args)
     {
+        for (int i = 0; i < args.Length; i++)
+        {
+            object arg = args[i];
+            args[i] = Regex.Unescape(args[i].ToString());
+        }
+
         return string.Format(S(key), args);
     }
 
@@ -85,7 +91,7 @@ public static class I18n
     public static string S(string key, Dictionary<string, object> args)
     {
         return Regex.Replace(S(key), @"{([^}]+)}", m =>
-            args.TryGetValue(m.Groups[1].Value, out var v) ? v.ToString() : "???");
+            args.TryGetValue(m.Groups[1].Value, out var v) ? Regex.Unescape(v.ToString()) : "???");
     }
 
     /// <summary>
@@ -148,6 +154,8 @@ public static class I18n
                 "en_us",
                 "es_es",
                 "ja_jp",
+                "vi",
+                "ko",
             };
         }
 
