@@ -18,6 +18,7 @@ namespace ArcCreate.Gameplay.Render
         [SerializeField] private Mesh connectionLineMesh;
         [SerializeField] private Mesh heightIndicatorMesh;
         [SerializeField] private Mesh arcCapMesh;
+        [SerializeField] private Mesh arcCapControllerMesh;
 
         [Header("Materials")]
         [SerializeField] private Material baseArctapMaterial;
@@ -131,7 +132,7 @@ namespace ArcCreate.Gameplay.Render
             traceHeadDrawer.RegisterInstance(matrix, color, new Vector4(selected ? 1 : 0, 0, 0, 0));
         }
 
-        public void DrawArcCap(Texture texture, Matrix4x4 matrix, Color color)
+        public void DrawArcCap(Texture texture, Matrix4x4 matrix, Color color, bool isController)
         {
             if (!arcCapDrawers.ContainsKey(texture))
             {
@@ -140,7 +141,7 @@ namespace ArcCreate.Gameplay.Render
                 generatedMaterials.Add(newArcCap);
                 arcCapDrawers.Add(texture, new InstancedRendererPool(
                     newArcCap,
-                    arcCapMesh,
+                    isController ? arcCapControllerMesh : arcCapMesh,
                     false));
             }
 

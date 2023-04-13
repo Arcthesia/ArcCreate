@@ -156,7 +156,16 @@ namespace ArcCreate.Gameplay.Data
             {
                 if (currentTiming >= Timing)
                 {
-                    alpha = Values.MissedHoldAlphaScalar;
+                    if (groupProperties.FadingHolds)
+                    {
+                        int lastHit = Mathf.Max(longParticleUntil, Timing);
+                        float t = (float)(currentTiming - lastHit - Values.FadingHoldsFadeDelay) / Values.FadingHoldsFadeDuration;
+                        alpha = Mathf.Lerp(1, Values.MissedHoldAlphaScalar, t);
+                    }
+                    else
+                    {
+                        alpha = Values.MissedHoldAlphaScalar;
+                    }
                 }
             }
 

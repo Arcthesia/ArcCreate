@@ -13,7 +13,7 @@ namespace ArcCreate.Gameplay.Render
 
         Mesh ArcTapMesh { get; }
 
-        void DrawArcCap(Texture texture, Matrix4x4 matrix, Color color);
+        void DrawArcCap(Texture texture, Matrix4x4 matrix, Color color, bool isController);
 
         void DrawArcHead(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y);
 

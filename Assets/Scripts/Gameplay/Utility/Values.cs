@@ -36,6 +36,8 @@ namespace ArcCreate.Gameplay
         public const float FlashHoldAlphaScalar = 0.85f;
         public const float MissedArcAlphaScalar = 0.75f;
         public const float MissedHoldAlphaScalar = 0.5f;
+        public const int FadingHoldsFadeDelay = 500;
+        public const int FadingHoldsFadeDuration = 500;
         public const float HoldLengthScalar = 1 / 3.79f;
         public const float ArcTapMiddleWorldXRange = 0.5f;
         public const float TraceMeshOffset = 0.15f;

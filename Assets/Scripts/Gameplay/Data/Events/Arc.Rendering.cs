@@ -11,6 +11,8 @@ namespace ArcCreate.Gameplay.Data
     /// </summary>
     public partial class Arc : LongNote, ILongNote, IArcJudgementReceiver
     {
+        private static bool isControllerMode = false;
+
         private bool highlight = false;
         private bool hasBeenHitOnce = false;
         private int flashCount = 0;
@@ -115,6 +117,8 @@ namespace ArcCreate.Gameplay.Data
 
         public void ReloadSkin()
         {
+            InputMode inputMode = (InputMode)Settings.InputMode.Value;
+            isControllerMode = inputMode == InputMode.AutoController || inputMode == InputMode.Controller;
             (arcCap, heightIndicatorColor) = Services.Skin.GetArcSkin(this);
         }
 
@@ -257,7 +261,7 @@ namespace ArcCreate.Gameplay.Data
 
             if (!groupProperties.NoArcCap && shouldDrawArcCap)
             {
-                Services.Render.DrawArcCap(arcCap, matrix * arcCapMatrix, arcCapColor * groupProperties.Color);
+                Services.Render.DrawArcCap(arcCap, matrix * arcCapMatrix, arcCapColor * groupProperties.Color, isControllerMode);
             }
 
             if (currentTiming <= longParticleUntil && currentTiming >= Timing && currentTiming <= EndTiming)
@@ -448,21 +452,37 @@ namespace ArcCreate.Gameplay.Data
                     }
 
                     Vector3 capPos = segment.StartPosition + (p * (segment.EndPosition - segment.StartPosition)) - (fallDirection * z);
-                    Vector3 scale = new Vector3(ArcCapSize, ArcCapSize, 1);
+                    Quaternion capRot = Quaternion.identity;
+                    if (isControllerMode)
+                    {
+                        Vector3 displacement = segment.EndPosition - segment.StartPosition;
+                        if (IsTrace || (Mathf.Approximately(displacement.x, 0) && Mathf.Approximately(displacement.y, 0)))
+                        {
+                            return (false, default, default);
+                        }
+
+                        displacement.z = 0;
+                        capRot = Quaternion.FromToRotation(Vector3.up, displacement);
+                    }
+
+                    Vector3 capScale = new Vector3(ArcCapSize, ArcCapSize, 1);
+
                     Vector4 color = new Vector4(1, 1, 1, IsTrace ? Values.TraceCapAlpha : Values.ArcCapAlpha);
-                    return (true, Matrix4x4.TRS(capPos, Quaternion.identity, scale), color);
+                    return (true, Matrix4x4.TRS(capPos, capRot, capScale), color);
                 }
             }
 
             if (currentTiming <= Timing)
             {
-                if (IsFirstArcOfGroup && !IsTrace)
+                if (IsFirstArcOfGroup && !IsTrace && !isControllerMode)
                 {
                     float approach = Mathf.Clamp(1 - (Mathf.Abs(z) / Values.TrackLengthForward), 0, 1);
-                    Vector3 capPos = -(fallDirection * z);
-                    Vector4 color = new Color(1, 1, 1, IsTrace ? 0 : approach);
                     float size = Values.ArcCapSize + (Values.ArcCapSizeAdditionMax * (1 - approach));
+
+                    Vector3 capPos = -(fallDirection * z);
                     Vector3 scale = new Vector3(size, size, 1);
+                    Vector4 color = new Color(1, 1, 1, IsTrace ? 0 : approach);
+
                     return (true, Matrix4x4.TRS(capPos, Quaternion.identity, scale), color);
                 }
                 else

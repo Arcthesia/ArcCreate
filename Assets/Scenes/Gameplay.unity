@@ -5766,6 +5766,8 @@ MonoBehaviour:
     type: 3}
   arcCapMesh: {fileID: 493887782182874744, guid: b0926c83bc12d7991a6b59bf9fa857c9,
     type: 3}
+  arcCapControllerMesh: {fileID: 5170878712198630681, guid: b0926c83bc12d7991a6b59bf9fa857c9,
+    type: 3}
   baseArctapMaterial: {fileID: 2100000, guid: b8b11a541f4411040bbe6d4e85e4b102, type: 2}
   baseTapMaterial: {fileID: 2100000, guid: d66683d78d3dadc76b0c95793e975dff, type: 2}
   baseHoldMaterial: {fileID: 2100000, guid: 66fd2013de69dd25c8fe8049972f5921, type: 2}
@@ -11167,8 +11169,6 @@ MonoBehaviour:
   unknownArcColor: {r: 1, g: 0.9607843, b: 0, a: 0.8509804}
   unknownArcLowColor: {r: 1, g: 0.79607844, b: 0, a: 0.8509804}
   arcMaterial: {fileID: 2100000, guid: ba87602b6fc40b44da4bfc1f23fb0109, type: 2}
-  arcHighlightMaterial: {fileID: 2100000, guid: 6db1f26819575de42b1cc60e9f6c3408,
-    type: 2}
   traceMaterial: {fileID: 2100000, guid: e8a954658a322b443b9862ee70e02a87, type: 2}
   shadowMaterial: {fileID: 2100000, guid: 3f9745785686b32738e24930481fb4ca, type: 2}
   defaultHeightIndicator: {fileID: 2800000, guid: b26045033a76d4d4bad7a4495682e1d7,
@@ -11418,7 +11418,7 @@ MonoBehaviour:
   gameplayData: {fileID: 11400000, guid: ae19a07671eb9dc748d6346649a697b7, type: 2}
   backgroundCamera: {fileID: 613949612}
   overlayCamera: {fileID: 2036585311}
-  testPlayChartFileName: test_hold.aff
+  testPlayChartFileName: test_arc.aff
 --- !u!1 &2141704179
 GameObject:
   m_ObjectHideFlags: 0
