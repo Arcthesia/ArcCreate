@@ -124,7 +124,7 @@ namespace ArcCreate.Compose.Timeline
 
                 timingEventsTiming.Add(curr.Timing);
 
-                if (Mathf.Approximately(curr.Bpm, 0) || curr.Bpm > Settings.GridBpmLimit.Value)
+                if (Mathf.Approximately(curr.Bpm, 0) || Mathf.Abs(curr.Bpm) > Settings.GridBpmLimit.Value)
                 {
                     continue;
                 }

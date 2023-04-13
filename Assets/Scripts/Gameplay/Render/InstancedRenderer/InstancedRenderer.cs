@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class InstancedRenderer
 {
-    public const int Population = 127;
+    public const int Population = 511;
     public static readonly int ColorShaderId = Shader.PropertyToID("_Color");
     public static readonly int PropertyShaderId = Shader.PropertyToID("_Properties");
 

@@ -122,7 +122,7 @@ namespace ArcCreate.Gameplay
             gameplayData.AudioClip.Value = testAudio;
             chartService.LoadChart(reader);
 
-            Audio.PlayWithDelay(0, 2000);
+            Audio.PlayWithDelay(0, Values.DelayBeforeAudioStart);
         }
 
         private void Update()

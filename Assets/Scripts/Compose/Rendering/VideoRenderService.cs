@@ -198,7 +198,6 @@ namespace ArcCreate.Compose.Rendering
             {
                 from = Mathf.Min(num1, num2);
                 to = Mathf.Max(num1, num2);
-                from = Mathf.Max(from, 0);
                 to = Mathf.Min(to, Mathf.RoundToInt((gameplayData.AudioClip.Value != null ? gameplayData.AudioClip.Value.length : 0) * 1000));
             }
 
@@ -273,7 +272,7 @@ namespace ArcCreate.Compose.Rendering
 
         private void OnClipChange(AudioClip clip)
         {
-            from = 0;
+            from = -2000;
             to = Mathf.RoundToInt(clip != null ? clip.length * 1000 : 0);
             renderRangeMarker.SetTiming(from, to);
             fromTimingField.text = from.ToString();

@@ -272,6 +272,7 @@ namespace ArcCreate.Storage
                     {
                         await new GameplayLoader(gameplayControl, gameplayData).Load(level, chart);
                         gameplay = gameplayControl;
+                        gameplay.Audio.AudioTiming = -Values.DelayBeforeAudioStart;
                     }
 
                     IsTransitioning = false;
@@ -281,7 +282,7 @@ namespace ArcCreate.Storage
                     OnSwitchToGameplaySceneException?.Invoke(e);
                     IsTransitioning = false;
                 })
-                .ContinueWith(() => gameplay?.Audio.PlayWithDelay(0, 2000));
+                .ContinueWith(() => gameplay?.Audio.PlayWithDelay(0, Values.DelayBeforeAudioStart));
         }
 
         public (LevelStorage level, ChartSettings chart) GetLastSelectedChart(string packId)

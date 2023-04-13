@@ -66,7 +66,7 @@
 			{
 				UNITY_SETUP_INSTANCE_ID(i);
 
-			    if (i.worldpos.z > 50 || i.worldpos.z < -100) discard;
+			    if (i.worldpos.z > 50 || i.worldpos.z < -100) return 0;
 				float4 c = _ShadowColor;
 				c *= UNITY_ACCESS_INSTANCED_PROP(Props, _Color);
 				c.a *= 0.7;

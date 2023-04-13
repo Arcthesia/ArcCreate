@@ -76,15 +76,16 @@
 			{
 				UNITY_SETUP_INSTANCE_ID(i);
 
-			    if(i.worldpos.z > 50 || i.worldpos.z < -100) discard;
-				half4 c = tex2D(_MainTex,i.uv) * _TraceColor; 
+			    if(i.worldpos.z > 50 || i.worldpos.z < -100) return 0;
+				half4 c = tex2D(_MainTex,i.uv); 
+				half4 traceColor = _TraceColor;
 				
 				if(UNITY_ACCESS_INSTANCED_PROP(Props, _Properties).x >= 0.5) 
 				{
-					c = Highlight(c);
+					traceColor = Highlight(traceColor);
 				}
 
-				return c * UNITY_ACCESS_INSTANCED_PROP(Props, _Color);
+				return c * traceColor * UNITY_ACCESS_INSTANCED_PROP(Props, _Color);
 			}
 			ENDCG
 		}

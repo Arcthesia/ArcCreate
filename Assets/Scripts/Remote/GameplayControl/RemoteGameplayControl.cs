@@ -74,7 +74,7 @@ namespace ArcCreate.Remote.Gameplay
                             Debug.Log($"Set timing to ({gameplay.Audio.AudioTiming})");
                             break;
                         case RemoteControl.Play:
-                            gameplay.Audio.PlayWithDelay(gameplay.Audio.AudioTiming, 200);
+                            gameplay.Audio.PlayWithDelay(gameplay.Audio.AudioTiming, Values.DelayBeforeAudioResume);
                             Debug.Log($"Playing audio");
                             break;
                         case RemoteControl.Pause:

@@ -32,7 +32,7 @@ namespace ArcCreate.Gameplay.Render
                     CreateNewRenderer();
                 }
 
-                RegisterInstance(matrix, property);
+                RegisterInstance(matrix, color, property);
             }
         }
 

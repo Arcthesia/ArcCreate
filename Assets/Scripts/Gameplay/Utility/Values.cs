@@ -83,19 +83,16 @@ namespace ArcCreate.Gameplay
         // Strings
         public const string EarlyText = "EARLY";
         public const string LateText = "LATE";
-        public const string TapPoolName = "tap";
-        public const string HoldPoolName = "hold";
-        public const string ArcTapPoolName = "arctap";
-        public const string ArcPoolName = "arc";
-        public const string ArcSegmentPoolName = "arcsegment";
-        public const string ConnectonLinePoolName = "connectionline";
         public const string BeatlinePoolName = "beatline";
-        public const string TextParticlePoolName = "textparticle";
         public const string TapParticlePoolName = "tapparticle";
         public const string LongParticlePoolName = "longparticle";
 
         // I sure hope no charter will make use of lane -2147483648
         public const int InvalidLane = int.MinValue;
+
+        public const int DelayBeforeAudioStart = 2000;
+
+        public const int DelayBeforeAudioResume = 200;
 
         public static int ChartAudioOffset { get; set; } = 0;
 

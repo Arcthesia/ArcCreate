@@ -65,7 +65,7 @@ namespace ArcCreate.Gameplay.Audio
         private void OnPlayButton()
         {
             pauseScreen.SetActive(false);
-            Services.Audio.ResumeWithDelay(200, false);
+            Services.Audio.ResumeWithDelay(Values.DelayBeforeAudioResume, false);
             Services.Judgement.RefreshInputHandler();
             DisablePauseButton().Forget();
         }
@@ -82,11 +82,11 @@ namespace ArcCreate.Gameplay.Audio
             ITransition transition = new ShutterTransition(500);
             transition.EnableGameObject();
             await transition.StartTransition();
-            Services.Audio.AudioTiming = 0;
+            Services.Audio.AudioTiming = -Values.DelayBeforeAudioStart;
             await transition.EndTransition();
             if (!pauseScreen.activeInHierarchy)
             {
-                Services.Audio.PlayWithDelay(0, 200);
+                Services.Audio.PlayWithDelay(0, Values.DelayBeforeAudioStart);
             }
 
             await DisablePauseButton();

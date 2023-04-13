@@ -284,22 +284,27 @@ namespace ArcCreate.Compose.Rendering
 
         private float[] GetSongSamples(AudioClip clip)
         {
-            float audioLength = (endTiming - startTiming) / 1000f;
-            if (showShutter)
+            int start = startTiming;
+            int offset = showShutter ? Shutter.FullSequenceMs : 0;
+            if (start < 0)
             {
-                audioLength += Shutter.FullSequenceMs / 1000f;
+                offset += -start;
+                start = 0;
             }
+
+            float audioLength = (endTiming - start) / 1000f;
+            audioLength += offset / 1000f;
 
             float[] samples = new float[(int)(audioLength * clip.frequency) * clip.channels];
 
-            int readOffset = (int)(startTiming / 1000f * clip.frequency);
+            int readOffset = (int)(start / 1000f * clip.frequency);
 
             clip.GetData(samples, readOffset);
 
             // shift forward
-            if (showShutter)
+            if (offset > 0)
             {
-                int shiftIndex = (int)(Shutter.FullSequenceMs / 1000f * clip.frequency) * clip.channels;
+                int shiftIndex = (int)(offset / 1000f * clip.frequency) * clip.channels;
                 for (int i = samples.Length - 1; i >= shiftIndex; i--)
                 {
                     samples[i] = samples[i - shiftIndex];

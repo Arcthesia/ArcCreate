@@ -110,7 +110,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
             Services.Score.ClearJudgementsThisFrame();
 
-            if (!Services.Audio.IsPlayingAndNotStationary)
+            if (!Services.Audio.IsPlayingAndNotStationary && !Services.Audio.IsRendering)
             {
                 return;
             }
@@ -132,7 +132,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 loopSwitch *= -1;
             }
 
-            float speed = Services.Audio.IsPlaying ? bpm / Values.BaseBpm : 0;
+            float speed = bpm / Values.BaseBpm;
             float glowAlpha = Mathf.Lerp(0.75f, 1, count / beatDuration);
 
             trackOffset += Time.deltaTime * speed * 6;
