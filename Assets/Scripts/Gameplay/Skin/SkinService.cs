@@ -43,7 +43,6 @@ namespace ArcCreate.Gameplay.Skin
 
         [Header("Arcs")]
         [SerializeField] private Material arcMaterial;
-        [SerializeField] private Material arcHighlightMaterial;
         [SerializeField] private Material traceMaterial;
         [SerializeField] private Material shadowMaterial;
         [SerializeField] private Texture defaultHeightIndicator;
@@ -54,7 +53,6 @@ namespace ArcCreate.Gameplay.Skin
         private readonly List<float> redArcValues = new List<float>();
         private float unknownRedArcValue = 0;
         private ExternalTexture arcTexture;
-        private ExternalTexture arcTextureHighlight;
         private ExternalTexture arctapShadowTexture;
         private ExternalTexture heightIndicatorTexture;
 
@@ -218,7 +216,7 @@ namespace ArcCreate.Gameplay.Skin
             }
         }
 
-        public (Texture normal, Texture highlight) GetHoldSkin(Hold note)
+        public Texture GetHoldSkin(Hold note)
         {
             switch (note.TimingGroupInstance.GroupProperties.SkinOverride)
             {
@@ -350,7 +348,6 @@ namespace ArcCreate.Gameplay.Skin
             Settings.InputMode.OnValueChanged.AddListener(ReloadNoteSkin);
 
             arcMaterial = Instantiate(arcMaterial);
-            arcHighlightMaterial = Instantiate(arcHighlightMaterial);
             traceMaterial = Instantiate(traceMaterial);
             shadowMaterial = Instantiate(shadowMaterial);
 
@@ -395,7 +392,6 @@ namespace ArcCreate.Gameplay.Skin
             }
 
             arcTexture = new ExternalTexture(arcMaterial.mainTexture, "Note");
-            arcTextureHighlight = new ExternalTexture(arcHighlightMaterial.mainTexture, "Note");
             arctapShadowTexture = new ExternalTexture(defaultArctapShadow, "Note");
             heightIndicatorTexture = new ExternalTexture(defaultHeightIndicator, "Note");
         }
@@ -433,16 +429,14 @@ namespace ArcCreate.Gameplay.Skin
             }
 
             await arcTexture.Load();
-            await arcTextureHighlight.Load();
             await arctapShadowTexture.Load();
             await heightIndicatorTexture.Load();
 
             traceMaterial.mainTexture = arcTexture.Value;
             arcMaterial.mainTexture = arcTexture.Value;
-            arcHighlightMaterial.mainTexture = arcTextureHighlight.Value;
 
             Services.Render.SetTextures(heightIndicatorTexture.Value, arctapShadowTexture.Value);
-            Services.Render.SetArcMaterial(arcMaterial, arcHighlightMaterial);
+            Services.Render.SetArcMaterial(arcMaterial);
             ResetTraceColors();
             ResetArcColors();
             ResetShadowColor();
@@ -464,7 +458,6 @@ namespace ArcCreate.Gameplay.Skin
             Settings.InputMode.OnValueChanged.RemoveListener(ReloadNoteSkin);
 
             Destroy(arcMaterial);
-            Destroy(arcHighlightMaterial);
             Destroy(traceMaterial);
             Destroy(shadowMaterial);
 
@@ -499,7 +492,6 @@ namespace ArcCreate.Gameplay.Skin
             }
 
             arcTexture.Unload();
-            arcTextureHighlight.Unload();
             arctapShadowTexture.Unload();
             heightIndicatorTexture.Unload();
         }

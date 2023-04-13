@@ -38,8 +38,6 @@ namespace ArcCreate.Gameplay.Render
         // Arc & trace
         private InstancedRendererPool arcSegmentDrawer;
         private InstancedRendererPool arcHeadDrawer;
-        private InstancedRendererPool arcSegmentHighlightDrawer;
-        private InstancedRendererPool arcHeadHighlightDrawer;
         private readonly Dictionary<Texture, InstancedRendererPool> arcCapDrawers = new Dictionary<Texture, InstancedRendererPool>();
         private InstancedRendererPool arcShadowDrawer;
         private InstancedRendererPool traceSegmentDrawer;
@@ -76,7 +74,7 @@ namespace ArcCreate.Gameplay.Render
             tapDrawers[texture].RegisterInstance(matrix, color, new Vector4(selected ? 1 : 0, 0, 0, 0));
         }
 
-        public void DrawHold(Texture texture, Matrix4x4 matrix, Color color, bool selected, float from)
+        public void DrawHold(Texture texture, Matrix4x4 matrix, Color color, bool selected, float from, bool highlight)
         {
             if (!holdDrawers.ContainsKey(texture))
             {
@@ -89,7 +87,7 @@ namespace ArcCreate.Gameplay.Render
                     true));
             }
 
-            holdDrawers[texture].RegisterInstance(matrix, color, new Vector4(selected ? 1 : 0, from, 0, 0));
+            holdDrawers[texture].RegisterInstance(matrix, color, new Vector4(selected ? 1 : 0, from, highlight ? 1 : 0, 0));
         }
 
         public void DrawConnectionLine(Matrix4x4 matrix, Color color)
@@ -101,16 +99,8 @@ namespace ArcCreate.Gameplay.Render
         {
             (Color high, Color low) = Services.Skin.GetArcColor(colorId);
             color *= Color.Lerp(Color.Lerp(low, high, (y - 1) / 4.5f), Color.red, redValue);
-            Vector4 properties = new Vector4(selected ? 1 : 0, 0, 0, 0);
-
-            if (highlight)
-            {
-                arcSegmentHighlightDrawer.RegisterInstance(matrix, color, properties);
-            }
-            else
-            {
-                arcSegmentDrawer.RegisterInstance(matrix, color, properties);
-            }
+            Vector4 properties = new Vector4(selected ? 1 : 0, highlight ? 1 : 0, 0, 0);
+            arcSegmentDrawer.RegisterInstance(matrix, color, properties);
         }
 
         public void DrawTraceSegment(Matrix4x4 matrix, Color color, bool selected)
@@ -132,16 +122,8 @@ namespace ArcCreate.Gameplay.Render
         {
             (Color high, Color low) = Services.Skin.GetArcColor(colorId);
             color *= Color.Lerp(Color.Lerp(low, high, (y - 1) / 4.5f), Color.red, redValue);
-            Vector4 properties = new Vector4(selected ? 1 : 0, 0, 0, 0);
-
-            if (highlight)
-            {
-                arcHeadHighlightDrawer.RegisterInstance(matrix, color, properties);
-            }
-            else
-            {
-                arcHeadDrawer.RegisterInstance(matrix, color, properties);
-            }
+            Vector4 properties = new Vector4(selected ? 1 : 0, highlight ? 1 : 0, 0, 0);
+            arcHeadDrawer.RegisterInstance(matrix, color, properties);
         }
 
         public void DrawTraceHead(Matrix4x4 matrix, Color color, bool selected)
@@ -224,7 +206,6 @@ namespace ArcCreate.Gameplay.Render
             }
 
             arcSegmentDrawer.Draw(notesCamera, layer);
-            arcSegmentHighlightDrawer.Draw(notesCamera, layer);
 
             foreach (var pair in arctapDrawers)
             {
@@ -237,7 +218,6 @@ namespace ArcCreate.Gameplay.Render
             }
 
             arcHeadDrawer.Draw(notesCamera, layer);
-            arcHeadHighlightDrawer.Draw(notesCamera, layer);
         }
 
         public void SetTraceMaterial(Material material)
@@ -274,30 +254,18 @@ namespace ArcCreate.Gameplay.Render
             UpdateLoadedState();
         }
 
-        public void SetArcMaterial(Material normal, Material highlight)
+        public void SetArcMaterial(Material material)
         {
             arcSegmentDrawer?.Dispose();
             arcHeadDrawer?.Dispose();
-            arcSegmentHighlightDrawer?.Dispose();
-            arcHeadHighlightDrawer?.Dispose();
 
             arcSegmentDrawer = new InstancedRendererPool(
-                normal,
+                material,
                 ArcMeshGenerator.GetSegmentMesh(false),
                 true);
 
             arcHeadDrawer = new InstancedRendererPool(
-                normal,
-                ArcMeshGenerator.GetHeadMesh(false),
-                true);
-
-            arcSegmentHighlightDrawer = new InstancedRendererPool(
-                highlight,
-                ArcMeshGenerator.GetSegmentMesh(false),
-                true);
-
-            arcHeadHighlightDrawer = new InstancedRendererPool(
-                highlight,
+                material,
                 ArcMeshGenerator.GetHeadMesh(false),
                 true);
 
@@ -333,8 +301,6 @@ namespace ArcCreate.Gameplay.Render
             IsLoaded = connectionLineDrawer != null
                     && arcSegmentDrawer != null
                     && arcHeadDrawer != null
-                    && arcSegmentHighlightDrawer != null
-                    && arcHeadHighlightDrawer != null
                     && traceSegmentDrawer != null
                     && traceHeadDrawer != null
                     && arcShadowDrawer != null
@@ -388,7 +354,6 @@ namespace ArcCreate.Gameplay.Render
             }
 
             arcSegmentDrawer.Dispose();
-            arcSegmentHighlightDrawer.Dispose();
 
             foreach (var pair in arctapDrawers)
             {
@@ -401,7 +366,6 @@ namespace ArcCreate.Gameplay.Render
             }
 
             arcHeadDrawer.Dispose();
-            arcHeadHighlightDrawer.Dispose();
         }
     }
 }

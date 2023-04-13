@@ -7,7 +7,7 @@ namespace ArcCreate.Gameplay.Skin
     {
         (Texture texture, Color connectionLineColor) GetTapSkin(Tap note);
 
-        (Texture normal, Texture highlight) GetHoldSkin(Hold note);
+        Texture GetHoldSkin(Hold note);
 
         Texture GetArcTapSkin(ArcTap note);
 

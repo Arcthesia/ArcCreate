@@ -11,13 +11,11 @@ namespace ArcCreate.Gameplay.Skin
     {
         [SerializeField] private Texture tapSkin;
         [SerializeField] private Texture holdSkin;
-        [SerializeField] private Texture holdHighlightSkin;
         [SerializeField] private Texture arcTapSkin;
         [SerializeField] private Texture arcCapSprite;
 
         public ExternalTexture TapSkin { get; private set; }
         public ExternalTexture HoldSkin { get; private set; }
-        public ExternalTexture HoldHighlightSkin { get; private set; }
         public ExternalTexture ArcCapSprite { get; private set; }
         public ExternalTexture ArcTapSkinTexture { get; private set; }
 
@@ -26,8 +24,8 @@ namespace ArcCreate.Gameplay.Skin
                ArcTapSkinTexture.Value :
                ArcTapSfxTexture.Value;
 
-        public override (Texture normal, Texture highlight) GetHoldSkin(Hold note)
-            => (HoldSkin.Value, HoldHighlightSkin.Value);
+        public override Texture GetHoldSkin(Hold note)
+            => HoldSkin.Value;
 
         public override (Texture texture, Color connectionLineColor) GetTapSkin(Tap note)
             => (TapSkin.Value, ConnectionLineColor);
@@ -42,7 +40,6 @@ namespace ArcCreate.Gameplay.Skin
             string subdir = System.IO.Path.Combine("Note", "Touch");
             TapSkin = new ExternalTexture(tapSkin, subdir);
             HoldSkin = new ExternalTexture(holdSkin, subdir);
-            HoldHighlightSkin = new ExternalTexture(holdHighlightSkin, subdir);
             ArcCapSprite = new ExternalTexture(arcCapSprite, subdir);
             ArcTapSkinTexture = new ExternalTexture(arcTapSkin, subdir);
         }
@@ -52,7 +49,6 @@ namespace ArcCreate.Gameplay.Skin
             await base.LoadExternalSkin();
             await TapSkin.Load();
             await HoldSkin.Load();
-            await HoldHighlightSkin.Load();
             await ArcCapSprite.Load();
             await ArcTapSkinTexture.Load();
         }
@@ -62,7 +58,6 @@ namespace ArcCreate.Gameplay.Skin
             base.UnloadExternalSkin();
             TapSkin.Unload();
             HoldSkin.Unload();
-            HoldHighlightSkin.Unload();
             ArcCapSprite.Unload();
             ArcTapSkinTexture.Unload();
         }

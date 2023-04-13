@@ -15,8 +15,7 @@ namespace ArcCreate.Gameplay.Data
         private int longParticleUntil = int.MinValue;
         private int numHoldJudgementRequestsSent = 0;
         private bool spawnedParticleThisFrame = false;
-        private Texture normalTexture;
-        private Texture highlightTexture;
+        private Texture texture;
 
         public int Lane { get; set; }
 
@@ -87,7 +86,7 @@ namespace ArcCreate.Gameplay.Data
 
         public void ReloadSkin()
         {
-            (normalTexture, highlightTexture) = Services.Skin.GetHoldSkin(this);
+            texture = Services.Skin.GetHoldSkin(this);
         }
 
         public override Mesh GetColliderMesh()
@@ -130,7 +129,7 @@ namespace ArcCreate.Gameplay.Data
 
         public void UpdateRender(int currentTiming, double currentFloorPosition, GroupProperties groupProperties)
         {
-            if (normalTexture == null || highlightTexture == null)
+            if (texture == null)
             {
                 ReloadSkin();
             }
@@ -144,7 +143,6 @@ namespace ArcCreate.Gameplay.Data
                              * Matrix4x4.TRS(pos, rot, scl)
                              * MatrixUtility.Shear(groupProperties.FallDirection * (z - endZ));
 
-            Texture texture = highlight ? highlightTexture : normalTexture;
             float alpha = 1;
             if (highlight)
             {
@@ -172,7 +170,7 @@ namespace ArcCreate.Gameplay.Data
                 from = (float)((currentFloorPosition - FloorPosition) / (EndFloorPosition - FloorPosition));
             }
 
-            Services.Render.DrawHold(texture, matrix, color, IsSelected, from);
+            Services.Render.DrawHold(texture, matrix, color, IsSelected, from, highlight);
 
             if (currentTiming <= longParticleUntil && currentTiming <= EndTiming)
             {

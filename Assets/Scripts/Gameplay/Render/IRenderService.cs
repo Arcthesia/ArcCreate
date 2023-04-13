@@ -29,7 +29,7 @@ namespace ArcCreate.Gameplay.Render
 
         void DrawHeightIndicator(Matrix4x4 matrix, Color color);
 
-        void DrawHold(Texture texture, Matrix4x4 matrix, Color color, bool selected, float from);
+        void DrawHold(Texture texture, Matrix4x4 matrix, Color color, bool selected, float from, bool highlight);
 
         void DrawTap(Texture texture, Matrix4x4 matrix, Color color, bool selected);
 
@@ -39,7 +39,7 @@ namespace ArcCreate.Gameplay.Render
 
         void DrawTraceShadow(Matrix4x4 matrix, Color color);
 
-        void SetArcMaterial(Material normal, Material highlight);
+        void SetArcMaterial(Material material);
 
         void SetShadowMaterial(Material material);
 

@@ -71,9 +71,12 @@
 			{
 				UNITY_SETUP_INSTANCE_ID(i);
 
-				float from = UNITY_ACCESS_INSTANCED_PROP(Props, _Properties).y;
+				float4 properties = UNITY_ACCESS_INSTANCED_PROP(Props, _Properties);
+				float from = properties.y;
+				float highlight = properties.z;
 			    if(i.uv.y < from || i.worldpos.z > 50 || i.worldpos.z < -100) return 0;
 				i.uv.y = (i.uv.y - 1) * 1 / (1 - from) + 1;
+				i.uv.x = (i.uv.x + highlight) / 2;
 
 				half4 c = half4(tex2D(_MainTex,i.uv).rgb, 1); 
 

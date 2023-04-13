@@ -28,7 +28,7 @@ namespace ArcCreate.Gameplay.Skin
             }
         }
 
-        public (Texture normal, Texture highlight) GetHoldSkin(Hold note)
+        public Texture GetHoldSkin(Hold note)
         {
             if (CurrentMode == InputMode.Controller
              || CurrentMode == InputMode.AutoController)

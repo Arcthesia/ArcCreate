@@ -13,8 +13,6 @@ namespace ArcCreate.Gameplay.Skin
         [SerializeField] private Texture tapSkinRight;
         [SerializeField] private Texture holdSkinLeft;
         [SerializeField] private Texture holdSkinRight;
-        [SerializeField] private Texture holdHighlightSkinLeft;
-        [SerializeField] private Texture holdHighlightSkinRight;
         [SerializeField] private Texture[] arcCapSprites;
         [SerializeField] private Texture arcTapSkinLeft;
         [SerializeField] private Texture arcTapSkinMiddle;
@@ -24,8 +22,6 @@ namespace ArcCreate.Gameplay.Skin
         public ExternalTexture TapSkinRight { get; private set; }
         public ExternalTexture HoldSkinLeft { get; private set; }
         public ExternalTexture HoldSkinRight { get; private set; }
-        public ExternalTexture HoldHighlightSkinLeft { get; private set; }
-        public ExternalTexture HoldHighlightSkinRight { get; private set; }
         public ExternalTexture[] ArcCapSprites { get; private set; }
         public ExternalTexture ArcTapSkinLeftTexture { get; private set; }
         public ExternalTexture ArcTapSkinMiddleTexture { get; private set; }
@@ -51,8 +47,8 @@ namespace ArcCreate.Gameplay.Skin
             return ArcTapSkinRightTexture.Value;
         }
 
-        public override (Texture normal, Texture highlight) GetHoldSkin(Hold note)
-            => (note.Lane <= 2) ? (HoldSkinLeft.Value, HoldHighlightSkinLeft.Value) : (HoldSkinRight.Value, HoldHighlightSkinRight.Value);
+        public override Texture GetHoldSkin(Hold note)
+            => (note.Lane <= 2) ? HoldSkinLeft.Value : HoldSkinRight.Value;
 
         public override (Texture texture, Color connectionLineColor) GetTapSkin(Tap note)
             => ((note.Lane <= 2) ? TapSkinLeft.Value : TapSkinRight.Value, ConnectionLineColor);
@@ -75,8 +71,6 @@ namespace ArcCreate.Gameplay.Skin
             TapSkinRight = new ExternalTexture(tapSkinRight, subdir);
             HoldSkinLeft = new ExternalTexture(holdSkinLeft, subdir);
             HoldSkinRight = new ExternalTexture(holdSkinRight, subdir);
-            HoldHighlightSkinLeft = new ExternalTexture(holdHighlightSkinLeft, subdir);
-            HoldHighlightSkinRight = new ExternalTexture(holdHighlightSkinRight, subdir);
             ArcCapSprites = new ExternalTexture[arcCapSprites.Length];
             for (int i = 0; i < ArcCapSprites.Length; i++)
             {
@@ -95,8 +89,6 @@ namespace ArcCreate.Gameplay.Skin
             await TapSkinRight.Load();
             await HoldSkinLeft.Load();
             await HoldSkinRight.Load();
-            await HoldHighlightSkinLeft.Load();
-            await HoldHighlightSkinRight.Load();
 
             for (int i = 0; i < ArcCapSprites.Length; i++)
             {
@@ -115,8 +107,6 @@ namespace ArcCreate.Gameplay.Skin
             TapSkinRight.Unload();
             HoldSkinLeft.Unload();
             HoldSkinRight.Unload();
-            HoldHighlightSkinLeft.Unload();
-            HoldHighlightSkinRight.Unload();
 
             for (int i = 0; i < ArcCapSprites.Length; i++)
             {

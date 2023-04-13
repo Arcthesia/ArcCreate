@@ -71,13 +71,17 @@
 
 			half4 frag (v2f i) : SV_Target
 			{
+				float4 properties = UNITY_ACCESS_INSTANCED_PROP(Props, _Properties);
 				UNITY_SETUP_INSTANCE_ID(i);
 
 			    if(i.worldpos.z > 50 || i.worldpos.z < -100) return 0;
+
+				float highlight = properties.y;
+				i.uv.x = (i.uv.x + highlight) / 2;
 				half4 c = tex2D(_MainTex, i.uv); 
 				c *= UNITY_ACCESS_INSTANCED_PROP(Props, _Color);
 
-				if(UNITY_ACCESS_INSTANCED_PROP(Props, _Properties).x >= 0.5) 
+				if(properties.x >= 0.5) 
 				{
 					c = Highlight(c);
 				}

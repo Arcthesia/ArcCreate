@@ -131,11 +131,8 @@ namespace ArcCreate.Gameplay
         /// Get the skin for a hold note.
         /// </summary>
         /// <param name="note">The note to get the skin for.</param>
-        /// <returns>A tuple of:<br/>
-        /// normal: The normal texture.<br/>
-        /// highlight: The highlighted texture.<br/>
-        /// </returns>
-        (Texture normal, Texture highlight) GetHoldSkin(Hold note);
+        /// <returns>The texture skin.</returns>
+        Texture GetHoldSkin(Hold note);
 
         /// <summary>
         /// Get the skin for a hold note.
