@@ -74,7 +74,7 @@ namespace ArcCreate.Gameplay.Audio
             set
             {
                 audioTiming = value;
-                timingSlider.value = (float)value / AudioLength;
+                timingSlider.value = Mathf.Clamp((float)value / AudioLength, 0, 1);
                 if (IsPlaying)
                 {
                     audioSource.Stop();
@@ -139,9 +139,13 @@ namespace ArcCreate.Gameplay.Audio
                 int timePassedSinceAudioStart = Mathf.RoundToInt((float)((dspTime - dspStartPlayingTime) * 1000));
                 int newDspTiming = timePassedSinceAudioStart + startTime - FullOffset;
                 int newTiming = audioTiming + Mathf.RoundToInt(Time.deltaTime * 1000 * updatePace);
-                audioTiming = newTiming;
 
-                if (lastDspTiming != newDspTiming)
+                if (!stationaryBeforeStart || dspTime > dspStartPlayingTime)
+                {
+                    audioTiming = newTiming;
+                }
+
+                if (dspTime > dspStartPlayingTime && lastDspTiming != newDspTiming)
                 {
                     float difference = (newDspTiming - newTiming) / 1000f;
                     if (difference >= 1 / 60f)
@@ -152,13 +156,14 @@ namespace ArcCreate.Gameplay.Audio
                     updatePace = 1 + (Tanh(difference) * 0.5f);
                 }
 
-                timingSlider.value = (float)audioTiming / AudioLength;
                 lastDspTiming = newDspTiming;
             }
             else
             {
                 audioTiming = Mathf.RoundToInt(AudioSource.time * 1000f);
             }
+
+            timingSlider.value = Mathf.Clamp((float)audioTiming / AudioLength, 0, 1);
         }
 
         public void PauseButtonPressed()
@@ -197,46 +202,46 @@ namespace ArcCreate.Gameplay.Audio
 
         public void PlayImmediately(int timing)
         {
-            Play(timing, 0);
             stationaryBeforeStart = false;
             returnOnPause = false;
+            Play(timing, 0);
         }
 
         public void PlayWithDelay(int timing, int delayMs)
         {
-            Play(timing, delayMs);
             stationaryBeforeStart = false;
             returnOnPause = false;
+            Play(timing, delayMs);
         }
 
         public void ResumeImmediately(bool resetJudge = true)
         {
-            Play(lastPausedTiming, 0, resetJudge);
             stationaryBeforeStart = true;
             returnOnPause = false;
+            Play(lastPausedTiming, 0, resetJudge);
         }
 
         public void ResumeWithDelay(int delayMs, bool resetJudge = true)
         {
-            Play(lastPausedTiming, delayMs, resetJudge);
             stationaryBeforeStart = true;
             returnOnPause = false;
+            Play(lastPausedTiming, delayMs, resetJudge);
         }
 
         public void ResumeReturnableImmediately()
         {
-            Play(lastPausedTiming);
             stationaryBeforeStart = true;
             returnOnPause = true;
             onPauseReturnTo = audioTiming;
+            Play(lastPausedTiming);
         }
 
         public void ResumeReturnableWithDelay(int delayMs)
         {
-            Play(lastPausedTiming, delayMs);
             stationaryBeforeStart = true;
             returnOnPause = true;
             onPauseReturnTo = audioTiming;
+            Play(lastPausedTiming, delayMs);
         }
 
         public void SetResumeAt(int timing)

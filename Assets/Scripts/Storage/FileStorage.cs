@@ -38,9 +38,9 @@ namespace ArcCreate.Storage
                 string path = correctHashPath;
 
                 // If file with same hash already exists
-                while (File.Exists(Path.Combine(StoragePath, path)))
+                while (File.Exists(Path.Combine(StoragePath, AddDirectoryPrefix(path))))
                 {
-                    using (FileStream sameHashStream = File.OpenRead(Path.Combine(StoragePath, hash + ext)))
+                    using (FileStream sameHashStream = File.OpenRead(Path.Combine(StoragePath, AddDirectoryPrefix(hash + ext))))
                     {
                         // Check if file contents are the same
                         if (stream.Length == sameHashStream.Length)
@@ -67,8 +67,7 @@ namespace ArcCreate.Storage
                 }
 
                 // Hash should now be unique. Copy the file (unless a file with the same content already exists).
-                path = AddDirectoryPrefix(path);
-                string fullPath = Path.Combine(StoragePath, path);
+                string fullPath = Path.Combine(StoragePath, AddDirectoryPrefix(path));
                 if (shouldStoreFile)
                 {
                     if (!Directory.Exists(Path.GetDirectoryName(fullPath)))
@@ -79,7 +78,7 @@ namespace ArcCreate.Storage
                     File.Copy(filePath, fullPath);
                 }
 
-                // Store file content into DB
+                // Store file reference into DB
                 Collection.Insert(new FileReference
                 {
                     VirtualPath = virtualPath,
@@ -99,13 +98,7 @@ namespace ArcCreate.Storage
                 return null;
             }
 
-            string path = Path.Combine(StoragePath, realPath);
-            if (!File.Exists(path))
-            {
-                path = Path.Combine(StoragePath, AddDirectoryPrefix(Path.GetFileName(path)));
-            }
-
-            return path;
+            return Path.Combine(StoragePath, AddDirectoryPrefix(Path.GetFileName(realPath)));
         }
 
         public static void DeleteReference(string referenceId)
@@ -138,9 +131,11 @@ namespace ArcCreate.Storage
                     }
 
                     // Replace deleted file with max hash file
-                    if (maxHash != reference.RealPath)
+                    string maxHashPath = Path.Combine(StoragePath, AddDirectoryPrefix(maxHash));
+                    if (maxHash != reference.RealPath && File.Exists(maxHashPath))
                     {
-                        File.Copy(maxHash, reference.RealPath, true);
+                        string path = Path.Combine(StoragePath, AddDirectoryPrefix(reference.RealPath));
+                        File.Copy(maxHashPath, path, true);
 
                         // Update references that uses maxHash to the new path
                         IEnumerable<FileReference> useMaxHashFiles = Collection.Find(Query.EQ("RealPath", maxHash));
@@ -152,7 +147,10 @@ namespace ArcCreate.Storage
                         Collection.UpsertBulk(useMaxHashFiles);
                     }
 
-                    File.Delete(maxHash);
+                    if (File.Exists(maxHashPath))
+                    {
+                        File.Delete(maxHashPath);
+                    }
                 }
             }
 
@@ -163,6 +161,11 @@ namespace ArcCreate.Storage
         public static void MigrateToPrefixedPathStorage()
         {
             DirectoryInfo dir = new DirectoryInfo(StoragePath);
+            if (!dir.Exists)
+            {
+                return;
+            }
+
             FileInfo[] files = dir.GetFiles();
             for (int i = 0; i < files.Length; i++)
             {

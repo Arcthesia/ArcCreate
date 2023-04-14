@@ -76,7 +76,7 @@ public static class I18n
         for (int i = 0; i < args.Length; i++)
         {
             object arg = args[i];
-            args[i] = Regex.Unescape(args[i].ToString());
+            args[i] = args[i].ToString().Replace(@"\", @"\\");
         }
 
         return string.Format(S(key), args);
@@ -91,7 +91,7 @@ public static class I18n
     public static string S(string key, Dictionary<string, object> args)
     {
         return Regex.Replace(S(key), @"{([^}]+)}", m =>
-            args.TryGetValue(m.Groups[1].Value, out var v) ? Regex.Unescape(v.ToString()) : "???");
+            args.TryGetValue(m.Groups[1].Value, out var v) ? v.ToString().Replace(@"\", @"\\") : "???");
     }
 
     /// <summary>

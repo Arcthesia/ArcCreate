@@ -13,6 +13,8 @@ namespace ArcCreate.Selection.Interface
 {
     public class PackList : MonoBehaviour
     {
+        private static bool lastWasInPackList = true;
+
         [SerializeField] private StorageData storageData;
         [SerializeField] private InfiniteScroll scroll;
         [SerializeField] private GameObject packCellPrefab;
@@ -35,6 +37,7 @@ namespace ArcCreate.Selection.Interface
             levelListAnimator.Hide();
             packListCanvasGroup.interactable = true;
             packListCanvasGroup.blocksRaycasts = true;
+            lastWasInPackList = true;
         }
 
         private void Awake()
@@ -53,7 +56,14 @@ namespace ArcCreate.Selection.Interface
                 RebuildList();
             }
 
-            BackToPackList();
+            if (lastWasInPackList)
+            {
+                BackToPackList();
+            }
+            else
+            {
+                OnSelectedPack(storageData.SelectedPack.Value);
+            }
         }
 
         private void OnDestroy()
@@ -97,6 +107,7 @@ namespace ArcCreate.Selection.Interface
             levelListAnimator.Show();
             packListCanvasGroup.interactable = false;
             packListCanvasGroup.blocksRaycasts = false;
+            lastWasInPackList = false;
         }
 
         private void RebuildList()

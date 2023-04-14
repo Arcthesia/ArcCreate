@@ -11,6 +11,8 @@ namespace ArcCreate.Selection.Interface
 {
     public class LevelList : MonoBehaviour
     {
+        private static bool lastWasInLevelList = false;
+
         [SerializeField] private StorageData storageData;
         [SerializeField] private InfiniteScroll scroll;
         [SerializeField] private RectTransform scrollRect;
@@ -54,7 +56,7 @@ namespace ArcCreate.Selection.Interface
 
             scroll.OnPointerEvent += KillTween;
 
-            if (storageData.IsLoaded)
+            if (storageData.IsLoaded && lastWasInLevelList)
             {
                 OnStorageChange();
             }
@@ -85,37 +87,35 @@ namespace ArcCreate.Selection.Interface
 
         private void OnSelectedPack(PackStorage pack)
         {
-            if (pack != currentPack)
+            lastWasInLevelList = true;
+            if (pack == null)
             {
-                if (pack == null)
-                {
-                    RebuildList();
-                    currentPack = pack;
-                    return;
-                }
+                RebuildList();
+                currentPack = pack;
+                return;
+            }
 
-                bool found = false;
-                foreach (var level in pack.Levels)
+            bool found = false;
+            foreach (var level in pack.Levels)
+            {
+                if (currentLevel != null && level.Id == currentLevel.Id)
                 {
-                    if (currentLevel != null && level.Id == currentLevel.Id)
-                    {
-                        found = true;
-                    }
+                    found = true;
                 }
+            }
 
-                if (!found)
+            if (!found)
+            {
+                var (level, chart) = storageData.GetLastSelectedChart(pack?.Identifier);
+                if (level != null && chart != null)
                 {
-                    var (level, chart) = storageData.GetLastSelectedChart(pack?.Identifier);
-                    if (level != null && chart != null)
-                    {
-                        currentLevel = level;
-                        storageData.SelectedChart.Value = (level, chart);
-                    }
+                    currentLevel = level;
+                    storageData.SelectedChart.Value = (level, chart);
                 }
-                else
-                {
-                    RebuildList();
-                }
+            }
+            else
+            {
+                RebuildList();
             }
 
             currentPack = pack;
@@ -206,6 +206,11 @@ namespace ArcCreate.Selection.Interface
 
         private void RebuildList()
         {
+            if (!lastWasInLevelList)
+            {
+                return;
+            }
+
             int prevCount = scroll.Data.Count;
             List<LevelStorage> levels = (storageData.SelectedPack.Value?.Levels ?? storageData.GetAllLevels())?.ToList();
             if (levels?.Count == 0)
