@@ -52,7 +52,7 @@ ParticleSystem:
   playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
-  useRigidbodyForVelocity: 1
+  useRigidbodyForVelocity: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -116,7 +116,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.5
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -660,13 +660,13 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 4
+    type: 12
     angle: 0
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 0
     donutRadius: 0.2
-    m_Position: {x: 0, y: 0, z: 0}
+    m_Position: {x: 0, y: 10, z: 0}
     m_Rotation: {x: -90, y: 0, z: 0}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
@@ -1600,7 +1600,7 @@ ParticleSystem:
     y:
       serializedVersion: 2
       minMaxState: 1
-      scalar: 30
+      scalar: 60
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -1608,21 +1608,21 @@ ParticleSystem:
         - serializedVersion: 3
           time: 0
           value: 1
-          inSlope: -5.751353
-          outSlope: -5.751353
-          tangentMode: 0
+          inSlope: 0
+          outSlope: -2
+          tangentMode: 69
           weightedMode: 0
           inWeight: 0
-          outWeight: 0.44754702
+          outWeight: 0.16239317
         - serializedVersion: 3
-          time: 0.055218153
-          value: 0.7179775
-          inSlope: -3.2786536
-          outSlope: -3.2786536
-          tangentMode: 0
+          time: 0.5
+          value: 0
+          inSlope: -2
+          outSlope: Infinity
+          tangentMode: 101
           weightedMode: 0
-          inWeight: 0.75628805
-          outWeight: 0.1172394
+          inWeight: 0.33333334
+          outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
           value: 0
@@ -4799,13 +4799,13 @@ ParticleSystemRenderer:
   m_SortingLayer: 6
   m_SortingOrder: 0
   m_RenderMode: 0
-  m_SortMode: 0
+  m_SortMode: 3
   m_MinParticleSize: 0.075
   m_MaxParticleSize: 0.075
   m_CameraVelocityScale: 0
   m_VelocityScale: 0
   m_LengthScale: 1
-  m_SortingFudge: -100
+  m_SortingFudge: 1
   m_NormalDirection: 0
   m_ShadowBias: 0
   m_RenderAlignment: 0

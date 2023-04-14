@@ -44,7 +44,6 @@ namespace ArcCreate.Gameplay
         public const float ArcMeshOffset = 0.9f;
         public const float TraceAlphaScalar = 0.4779405f;
         public const float ShortTraceAlphaScalar = TraceAlphaScalar * 0.5f;
-        public const float TextParticleYOffset = 60f;
         public const float ArcSegmentLength = 1000f / 14f;
         public const float ArcCapSize = 0.35f;
         public const float ArcCapSizeAdditionMax = 0.5f;
