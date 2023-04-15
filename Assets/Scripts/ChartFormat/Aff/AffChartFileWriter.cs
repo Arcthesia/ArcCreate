@@ -26,6 +26,37 @@ namespace ArcCreate.ChartFormat
             IEnumerable<(RawTimingGroup properties, IEnumerable<RawEvent> events)> groups)
         {
             this.stream = stream;
+            StartWritingToStream(audioOffset, density, groups);
+            this.stream.Close();
+        }
+
+        /// <summary>
+        /// Serialize the chart into a string.
+        /// </summary>
+        /// <param name="audioOffset">Global AudioOffset setting of the chart.</param>
+        /// <param name="density">Global TimingPointDensityFactor setting of the chart.</param>
+        /// <param name="groups">List of timing groups,
+        /// each being a RawTimingGroup property object, and an IEnumerable of events.</param>
+        /// <returns>The serialized chart.</returns>
+        public string WriteToString(
+            int audioOffset,
+            float density,
+            IEnumerable<(RawTimingGroup properties, IEnumerable<RawEvent> events)> groups)
+        {
+            var memoryStream = new MemoryStream();
+            stream = new StreamWriter(memoryStream);
+            StartWritingToStream(audioOffset, density, groups);
+            memoryStream.Position = 0;
+            string result = new StreamReader(memoryStream).ReadToEnd();
+            memoryStream.Close();
+            return result;
+        }
+
+        private void StartWritingToStream(
+            int audioOffset,
+            float density,
+            IEnumerable<(RawTimingGroup properties, IEnumerable<RawEvent> events)> groups)
+        {
             bool baseGroup = true;
             foreach (var (properties, events) in groups)
             {
@@ -51,8 +82,7 @@ namespace ArcCreate.ChartFormat
                 baseGroup = false;
             }
 
-            this.stream.Flush();
-            this.stream.Close();
+            stream.Flush();
         }
 
         private void WriteChartSettings(int audioOffset, float density)

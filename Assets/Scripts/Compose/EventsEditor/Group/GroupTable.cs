@@ -84,6 +84,7 @@ namespace ArcCreate.Compose.EventsEditor
                 {
                     { "Number", newTgNum },
                 }));
+            Values.OnEditAction?.Invoke();
         }
 
         private void OnRemoveButton()
@@ -127,6 +128,7 @@ namespace ArcCreate.Compose.EventsEditor
                 {
                     { "Number", num },
                 }));
+            Values.OnEditAction?.Invoke();
         }
 
         private void OnChart()

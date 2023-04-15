@@ -347,9 +347,14 @@ namespace ArcCreate.Compose.Project
             var baseGroup = Services.Gameplay.Chart.GetTimingGroup(0);
             TimingEvent baseTiming = baseGroup.Timings[0];
 
+            bool changed = baseTiming.Bpm != bpm;
             baseTiming.Bpm = bpm;
             GameplayData.OnChartTimingEdit -= OnChartTimingEdit;
-            Services.Gameplay.Chart.UpdateEvents(new List<TimingEvent> { baseTiming });
+            if (changed)
+            {
+                Services.Gameplay.Chart.UpdateEvents(new List<TimingEvent> { baseTiming });
+            }
+
             GameplayData.OnChartTimingEdit += OnChartTimingEdit;
         }
 

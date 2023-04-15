@@ -25,11 +25,6 @@ namespace ArcCreate.Storage
             return "file:///" + Uri.EscapeUriString(realPath.Replace("\\", "/"));
         }
 
-        public string GetPath(string path)
-        {
-            return level.GetRealPath(path);
-        }
-
         public string[] ReadFileByLines(string path)
         {
             return File.ReadAllLines(level.GetRealPath(path));

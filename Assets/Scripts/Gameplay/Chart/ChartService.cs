@@ -454,6 +454,11 @@ namespace ArcCreate.Gameplay.Chart
             }
         }
 
+        public void NotifyEdit()
+        {
+            gameplayData.NotifyChartEdit();
+        }
+
         private void Awake()
         {
             var beatlinePool = Pools.New<BeatlineBehaviour>(Values.BeatlinePoolName, beatlinePrefab, beatlineParent, beatlineCapacity);

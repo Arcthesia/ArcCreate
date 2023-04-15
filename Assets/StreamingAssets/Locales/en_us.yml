@@ -300,6 +300,7 @@ Compose:
       ImagePrompt: Click to select image
     PanelNames:
       Toolbox: Toolbox
+      RawEditor: Text
       Gameplay: Gameplay
       Timeline: Timeline
       Project: Project

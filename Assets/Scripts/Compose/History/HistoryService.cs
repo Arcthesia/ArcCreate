@@ -96,6 +96,7 @@ namespace ArcCreate.Compose.History
             redoButton.interactable = redoStack.Count > 0;
 
             Values.ProjectModified = true;
+            Values.OnEditAction?.Invoke();
         }
 
         private void Notify(string i18nKey, ICommand cmd)

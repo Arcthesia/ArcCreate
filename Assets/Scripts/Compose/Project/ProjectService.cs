@@ -30,6 +30,7 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private TMP_Text currentChartPath;
         [SerializeField] private NewProjectDialog newProjectDialog;
         [SerializeField] private NewChartDialog newChartDialog;
+        [SerializeField] private RawEditor rawEditor;
         [SerializeField] private List<Color> defaultDifficultyColors;
         [SerializeField] private List<string> defaultDifficultyNames;
         private AutosaveHelper autosaveHelper;
@@ -393,8 +394,9 @@ namespace ArcCreate.Compose.Project
                 }
             }
 
-            ChartReader reader = ChartReaderFactory.GetReader(new PhysicalFileAccess(), path);
+            rawEditor.LoadFromPath(path);
 
+            ChartReader reader = ChartReaderFactory.GetReader(new PhysicalFileAccess(), path);
             reader.Parse();
             gameplayData.LoadChart(reader, "file:///" + Path.GetDirectoryName(path));
             OnChartLoad?.Invoke(chart);

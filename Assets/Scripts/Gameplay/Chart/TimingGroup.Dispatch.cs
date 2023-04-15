@@ -86,6 +86,7 @@ namespace ArcCreate.Gameplay.Chart
         public void SetGroupProperties(GroupProperties prop)
         {
             groupProperties = prop;
+            Services.Chart.NotifyEdit();
         }
 
         /// <summary>
@@ -492,6 +493,7 @@ namespace ArcCreate.Gameplay.Chart
         public void SetProperties(RawTimingGroup prop)
         {
             groupProperties = new GroupProperties(prop);
+            Services.Chart.NotifyEdit();
         }
 
         private (

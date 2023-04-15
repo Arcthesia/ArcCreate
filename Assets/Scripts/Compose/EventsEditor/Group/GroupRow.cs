@@ -169,6 +169,7 @@ namespace ArcCreate.Compose.EventsEditor
                     {
                         { "Number", Reference.GroupNumber },
                     }));
+                Values.OnEditAction?.Invoke();
             }
             catch (ChartFormatException e)
             {

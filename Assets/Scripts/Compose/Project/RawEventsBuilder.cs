@@ -8,12 +8,15 @@ namespace ArcCreate.Compose.Project
 {
     public class RawEventsBuilder
     {
-        public List<(RawTimingGroup groups, IEnumerable<RawEvent> events)> GetEvents()
+        public List<(RawTimingGroup groups, IEnumerable<RawEvent> events)> GetEvents(string filterForFile = null, bool requireEditable = true)
         {
             List<(RawTimingGroup groups, IEnumerable<RawEvent> events)> list = new List<(RawTimingGroup groups, IEnumerable<RawEvent> events)>();
             foreach (TimingGroup tg in Services.Gameplay.Chart.TimingGroups)
             {
-                if (!tg.GroupProperties.Editable)
+                bool correctFile = filterForFile == null || tg.GroupProperties.FileName == filterForFile;
+                bool satisfyEditable = !requireEditable || tg.GroupProperties.Editable;
+                bool shouldProcess = correctFile && satisfyEditable;
+                if (!shouldProcess)
                 {
                     continue;
                 }

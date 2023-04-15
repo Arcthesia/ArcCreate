@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using ArcCreate.Gameplay.Data;
 
@@ -45,6 +46,8 @@ namespace ArcCreate.Compose
         public static State<ArcLineType> CreateArcTypeMode { get; } = new State<ArcLineType>(ArcLineType.S);
 
         public static State<int> CreateArcColorMode { get; } = new State<int>(0);
+
+        public static Action OnEditAction { get; set; }
 
         public static float LaneFromX { get; set; } = -8.5f;
 

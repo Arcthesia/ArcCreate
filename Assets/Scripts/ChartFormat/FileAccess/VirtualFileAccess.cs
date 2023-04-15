@@ -23,8 +23,6 @@ namespace ArcCreate.ChartFormat
             return "file:///" + Uri.EscapeUriString(path.Replace("\\", "/"));
         }
 
-        public string GetPath(string path) => path;
-
         public string[] ReadFileByLines(string path) => data;
 
         public StreamWriter WriteFile(string path) => streamWriter;

@@ -75,5 +75,11 @@ namespace ArcCreate.ChartFormat
             StreamWriter stream = fileAccess.WriteFile(Path.Combine(directory, file));
             writer.Write(stream, audioOffset, density, groups);
         }
+
+        public string WriteToString(string file, int audioOffset, float density, IEnumerable<(RawTimingGroup properties, IEnumerable<RawEvent> events)> groups)
+        {
+            IChartFileWriter writer = ChartFileWriterFactory.GetWriterFromFilename(file);
+            return writer.WriteToString(audioOffset, density, groups);
+        }
     }
 }

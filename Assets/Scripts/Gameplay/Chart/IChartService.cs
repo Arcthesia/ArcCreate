@@ -82,5 +82,7 @@ namespace ArcCreate.Gameplay.Chart
         /// </summary>
         /// <param name="currentTiming">The current audio timing.</param>
         void UpdateChartRender(int currentTiming);
+
+        void NotifyEdit();
     }
 }
