@@ -26,7 +26,7 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private RectTransform scrollHighlightParent;
         private Pool<LineHighlightComponent> lineHighlightPool;
         private Pool<ScrollHighlightComponent> scrollHighlightPool;
-
+        private string absoluteMainChartPath;
         private string currentMainChartPath;
         private string rawChartData;
         private bool reloadOnNextEnable;
@@ -39,10 +39,19 @@ namespace ArcCreate.Compose.Project
         private readonly ChartAnalyzer analyzer = new ChartAnalyzer();
         private bool analyzeOnNextEnable;
         private CancellationTokenSource cts = new CancellationTokenSource();
+        private bool loadFromPathOnNextEnable;
 
         public void LoadFromPath(string absoluteMainChartPath)
         {
+            this.absoluteMainChartPath = absoluteMainChartPath;
             currentMainChartPath = Path.GetFileName(absoluteMainChartPath);
+
+            if (!gameObject.activeInHierarchy)
+            {
+                loadFromPathOnNextEnable = true;
+                return;
+            }
+
             rawChartData = File.ReadAllText(absoluteMainChartPath);
             UpdateDisplay();
         }
@@ -103,6 +112,15 @@ namespace ArcCreate.Compose.Project
             {
                 ReloadEditor();
                 reloadOnNextEnable = false;
+                analyzeOnNextEnable = false;
+                loadFromPathOnNextEnable = false;
+            }
+
+            if (loadFromPathOnNextEnable)
+            {
+                LoadFromPath(absoluteMainChartPath);
+                loadFromPathOnNextEnable = false;
+                analyzeOnNextEnable = false;
             }
 
             if (analyzeOnNextEnable)
@@ -164,7 +182,6 @@ namespace ArcCreate.Compose.Project
             analyzer.Stop();
             analyzer.Start(rawChartData, currentMainChartPath);
             await UniTask.WaitUntil(() => analyzer.IsComplete, cancellationToken: ct).SuppressCancellationThrow();
-            ClearHighlights();
         }
 
         private void OnHorizontalScroll(float val)
@@ -195,7 +212,7 @@ namespace ArcCreate.Compose.Project
                 analyzer.Start(rawChartData, currentMainChartPath);
                 while (true)
                 {
-                    if (analyzer.PeekQueue(out ChartFault fault))
+                    if (analyzer.HasError)
                     {
                         return;
                     }
@@ -203,7 +220,6 @@ namespace ArcCreate.Compose.Project
                     if (analyzer.IsComplete)
                     {
                         ApplyChanges();
-                        ClearHighlights();
                         return;
                     }
                 }

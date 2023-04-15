@@ -129,7 +129,7 @@ namespace ArcCreate.ChartFormat
                         arcStr += "[";
                         for (int i = 0; i < arc.ArcTaps.Count; ++i)
                         {
-                            arcStr += $"arctap({arc.ArcTaps[i]})";
+                            arcStr += $"arctap({arc.ArcTaps[i].Timing})";
                             if (i != arc.ArcTaps.Count - 1)
                             {
                                 arcStr += ",";

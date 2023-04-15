@@ -21,5 +21,7 @@ namespace ArcCreate.Compose.Selection
         /// </summary>
         /// <param name="notes">The note to select.</param>
         void SetSelection(IEnumerable<Note> notes);
+
+        void RemoveFromSelection(IEnumerable<ArcEvent> events);
     }
 }

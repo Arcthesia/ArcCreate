@@ -8,6 +8,7 @@ namespace ArcCreate.Gameplay.Chart
     {
         public override void UpdateRender(int timing, double floorPosition, GroupProperties groupProperties)
         {
+            LastRenderingNotes.Clear();
             if (Notes.Count == 0 || !groupProperties.Visible)
             {
                 return;
@@ -22,7 +23,6 @@ namespace ArcCreate.Gameplay.Chart
             double renderTo = floorPosition + fpDistForward;
 
             var notesInRange = FloorPositionTree[renderFrom, renderTo];
-            LastRenderingNotes.Clear();
 
             // Update notes
             Camera cam = Services.Camera.GameplayCamera;

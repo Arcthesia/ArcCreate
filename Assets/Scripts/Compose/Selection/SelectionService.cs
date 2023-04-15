@@ -144,6 +144,25 @@ namespace ArcCreate.Compose.Selection
             OnSelectionChange?.Invoke(selectedNotes);
         }
 
+        public void RemoveFromSelection(IEnumerable<ArcEvent> events)
+        {
+            bool changed = false;
+            foreach (var ev in events)
+            {
+                if (ev is Note n && selectedNotes.Contains(n))
+                {
+                    selectedNotes.Remove(n);
+                    changed = true;
+                }
+            }
+
+            if (changed)
+            {
+                UpdateInspector();
+                OnSelectionChange?.Invoke(selectedNotes);
+            }
+        }
+
         [EditorAction("RangeSelect", true, "<c-r>")]
         [RequireGameplayLoaded]
         [SubAction("Confirm", false, "<mouse1>")]

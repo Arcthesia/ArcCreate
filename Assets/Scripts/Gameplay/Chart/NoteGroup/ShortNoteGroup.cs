@@ -46,6 +46,7 @@ namespace ArcCreate.Gameplay.Chart
 
         public override void UpdateRender(int timing, double floorPosition, GroupProperties groupProperties)
         {
+            lastRenderingNotes.Clear();
             if (Notes.Count == 0 || !groupProperties.Visible)
             {
                 return;
@@ -60,7 +61,6 @@ namespace ArcCreate.Gameplay.Chart
             double renderTo = floorPosition + fpDistForward;
 
             int renderIndex = floorPositionSearch.Bisect(renderFrom);
-            lastRenderingNotes.Clear();
 
             // Update notes
             while (renderIndex < floorPositionSearch.List.Count)

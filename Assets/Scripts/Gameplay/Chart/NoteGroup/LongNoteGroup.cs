@@ -44,6 +44,7 @@ namespace ArcCreate.Gameplay.Chart
 
         public override void UpdateRender(int timing, double floorPosition, GroupProperties groupProperties)
         {
+            lastRenderingNotes.Clear();
             if (Notes.Count == 0 || !groupProperties.Visible)
             {
                 return;
@@ -58,7 +59,6 @@ namespace ArcCreate.Gameplay.Chart
             double renderTo = floorPosition + fpDistForward;
 
             var notesInRange = floorPositionTree[renderFrom, renderTo];
-            lastRenderingNotes.Clear();
 
             // Update notes
             while (notesInRange.MoveNext())

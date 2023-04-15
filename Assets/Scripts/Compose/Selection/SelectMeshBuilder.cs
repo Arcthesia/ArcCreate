@@ -21,8 +21,11 @@ namespace ArcCreate.Compose.Selection
 
                 foreach (var note in Services.Gameplay.Chart.GetRenderingNotes())
                 {
-                    NoteCollider collider = colliderPool.Get();
-                    collider.AssignNote(note, timing);
+                    if (note.TimingGroupInstance.GroupProperties.Editable)
+                    {
+                        NoteCollider collider = colliderPool.Get();
+                        collider.AssignNote(note, timing);
+                    }
                 }
             }
 

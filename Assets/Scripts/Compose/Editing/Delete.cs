@@ -32,6 +32,8 @@ namespace ArcCreate.Compose.Editing
             Services.History.AddCommand(new EventCommand(
                 name: I18n.S("Compose.Notify.History.DeleteNotes"),
                 remove: list));
+
+            Services.Selection.RemoveFromSelection(list);
         }
     }
 }

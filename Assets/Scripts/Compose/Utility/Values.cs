@@ -7,6 +7,7 @@ namespace ArcCreate.Compose
     public static class Values
     {
         public const float EditorBeatlineThickness = 30f;
+        public const float TapOverlapWarningThreshold = 2f;
 
         // Extensions
         public const string ProjectExtension = ".arcproj";

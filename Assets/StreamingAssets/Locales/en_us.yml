@@ -40,6 +40,11 @@ Format:
       ArcTap is outside the timing range of its parent Arc.
     TimingGroupPropertiesInvalid: |-
       Invalid timing group properties definition.
+  Warning:
+    HoldTooShort:
+      Hold note's duration is shorter than 17ms.
+    TapJudgementOverlap:
+      Tap judgement overlaps with other notes.
 
 Compose:
   # Exception messages within the editor
