@@ -18,6 +18,8 @@
             }
         }
 
+        public int Pos => pos;
+
         public void Skip(int length)
         {
             pos += length;

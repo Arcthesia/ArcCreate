@@ -21,7 +21,7 @@ namespace Tests.Unit
         [TestCase(0, -1, 3)]
         public void ParseTiming(int timing, int bpm, int bpl)
         {
-            RawTiming e = reader.ParseTiming($"timing({timing},{bpm},{bpl});");
+            RawTiming e = reader.ParseTiming($"timing({timing},{bpm},{bpl});", 0);
 
             Assert.That(e.Timing, Is.EqualTo(timing));
             Assert.That(e.Bpm, Is.EqualTo(bpm));
@@ -36,7 +36,7 @@ namespace Tests.Unit
             Assert.That(
                 () =>
                 {
-                    RawTiming e = reader.ParseTiming($"timing({timing},{bpm},{bpl});");
+                    RawTiming e = reader.ParseTiming($"timing({timing},{bpm},{bpl});", 0);
                 },
                 Throws.Exception.TypeOf<ChartFormatException>());
         }
@@ -46,7 +46,7 @@ namespace Tests.Unit
         [TestCase(1000, 4)]
         public void ParseTap(int timing, int lane)
         {
-            RawTap e = reader.ParseTap($"({timing},{lane});");
+            RawTap e = reader.ParseTap($"({timing},{lane});", 0);
 
             Assert.That(e.Timing, Is.EqualTo(timing));
             Assert.That(e.Lane, Is.EqualTo(lane));
@@ -56,7 +56,7 @@ namespace Tests.Unit
         [TestCase(0, 1000, 0)]
         public void ParseHold(int timing, int endTiming, int lane)
         {
-            RawHold e = reader.ParseHold($"hold({timing},{endTiming},{lane});");
+            RawHold e = reader.ParseHold($"hold({timing},{endTiming},{lane});", 0);
 
             Assert.That(e.Timing, Is.EqualTo(timing));
             Assert.That(e.EndTiming, Is.EqualTo(endTiming));
@@ -70,7 +70,7 @@ namespace Tests.Unit
             Assert.That(
                 () =>
                 {
-                    RawHold e = reader.ParseHold($"hold({timing},{endTiming},{lane});");
+                    RawHold e = reader.ParseHold($"hold({timing},{endTiming},{lane});", 0);
                 }, Throws.Exception.TypeOf<ChartFormatException>());
         }
 
@@ -82,7 +82,7 @@ namespace Tests.Unit
         public void ParseArc(int timing, int endTiming, float xS, float xE, float yS, float yE, string type, int color, bool isTrace, string sfx)
         {
             RawArc e = reader.ParseArc(
-                $"arc({timing},{endTiming},{xS},{xE},{type},{yS},{yE},{color},{sfx},{(isTrace ? "true" : "false")});");
+                $"arc({timing},{endTiming},{xS},{xE},{type},{yS},{yE},{color},{sfx},{(isTrace ? "true" : "false")});", 0);
 
             Assert.That(e.Timing, Is.EqualTo(timing));
             Assert.That(e.EndTiming, Is.EqualTo(endTiming));
@@ -103,7 +103,7 @@ namespace Tests.Unit
                 () =>
                 {
                     RawArc e = reader.ParseArc(
-                        $"arc({timing},{endTiming},{xS},{xE},{type},{yS},{yE},{color},{sfx},{(isTrace ? "true" : "false")});");
+                        $"arc({timing},{endTiming},{xS},{xE},{type},{yS},{yE},{color},{sfx},{(isTrace ? "true" : "false")});", 0);
                 }, Throws.Exception.TypeOf<ChartFormatException>());
         }
 
@@ -122,7 +122,7 @@ namespace Tests.Unit
             arctapString = arctapString.Substring(0, arctapString.Length - 1);
 
             RawArc e = reader.ParseArc(
-                $"arc({start},{end},0,0,b,0,0,0,none,true)[{arctapString}];");
+                $"arc({start},{end},0,0,b,0,0,0,none,true)[{arctapString}];", 0);
 
             Assert.That(e.ArcTaps, Has.Count.EqualTo(timings.Length));
             for (int i = 0; i < timings.Length; i++)
@@ -147,7 +147,7 @@ namespace Tests.Unit
                     arctapString = arctapString.Substring(0, arctapString.Length - 1);
 
                     RawArc e = reader.ParseArc(
-                        $"arc({start},{end},0,0,b,0,0,0,none,true)[{arctapString}];");
+                        $"arc({start},{end},0,0,b,0,0,0,none,true)[{arctapString}];", 0);
                 }, Throws.Exception.TypeOf<ChartFormatException>());
         }
 
@@ -159,7 +159,7 @@ namespace Tests.Unit
         public void ParseCamera(int start, float x, float y, float z, float rx, float ry, float rz, string type, int duration)
         {
             RawCamera e = reader.ParseCamera(
-                $"camera({start},{x},{y},{z},{rx},{ry},{rz},{type},{duration});");
+                $"camera({start},{x},{y},{z},{rx},{ry},{rz},{type},{duration});", 0);
 
             Assert.That(e.Timing, Is.EqualTo(start));
             Assert.That(e.Move.x, Is.EqualTo(x));
@@ -179,7 +179,7 @@ namespace Tests.Unit
                 () =>
                 {
                     RawCamera e = reader.ParseCamera(
-                        $"camera({start},{x},{y},{z},{rx},{ry},{rz},{type},{duration});");
+                        $"camera({start},{x},{y},{z},{rx},{ry},{rz},{type},{duration});", 0);
                 }, Throws.Exception.TypeOf<ChartFormatException>());
         }
 
@@ -191,7 +191,7 @@ namespace Tests.Unit
         {
             string argString = string.Join(",", args.Select(o => (o is string) ? $"\"{o}\"" : o.ToString()));
             RawSceneControl e = reader.ParseSceneControl(
-                $"scenecontrol(0,test,{argString});");
+                $"scenecontrol(0,test,{argString});", 0);
 
             Assert.That(e.Timing, Is.EqualTo(0));
             Assert.That(e.SceneControlTypeName, Is.EqualTo("test"));
@@ -206,7 +206,7 @@ namespace Tests.Unit
         public void ParseSceneControlNoArgs()
         {
             RawSceneControl e = reader.ParseSceneControl(
-                $"scenecontrol(0,test);");
+                $"scenecontrol(0,test);", 0);
 
             Assert.That(e.Timing, Is.EqualTo(0));
             Assert.That(e.SceneControlTypeName, Is.EqualTo("test"));

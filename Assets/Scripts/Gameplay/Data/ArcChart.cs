@@ -74,9 +74,9 @@ namespace ArcCreate.Gameplay.Data
 
                         if (raw.ArcTaps != null)
                         {
-                            foreach (int t in raw.ArcTaps)
+                            foreach (RawArcTap t in raw.ArcTaps)
                             {
-                                ArcTap arctap = new ArcTap() { Timing = t, Arc = arc, TimingGroup = raw.TimingGroup };
+                                ArcTap arctap = new ArcTap() { Timing = t.Timing, Arc = arc, TimingGroup = raw.TimingGroup };
                                 TimingGroups[raw.TimingGroup].ArcTaps.Add(arctap);
                             }
                         }

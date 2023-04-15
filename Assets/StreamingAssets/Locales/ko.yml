@@ -7,11 +7,6 @@ Format:
       예외가 발생한 이벤트 타입: {EventType}
       예외가 발생한 구문: "{Content}".
       예외 텍스트: {Reason}
-    MessageUnknownReason: |-
-      채보 파일({File})을 읽는 중 알 수 없는 예외가 발생했습니다.
-      예외가 발생한 줄 번호: {LineNumber}
-      예외가 발생한 이벤트 타입: {EventType}
-      예외가 발생한 구문: "{Content}".
     ArcColorNegative: |-
       아크 색의 ID는 음수가 될 수 없습니다.
     AudioOffsetInvalid: |-
@@ -38,11 +33,6 @@ Format:
       ArcTap의 타이밍 위치가 트레이스의 범위에서 벗어났습니다.
     TimingGroupPropertiesInvalid: |-
       타이밍 그룹 정의가 잘못되었습니다.
-    SymbolError: |-
-      구문이 잘못되었을 수 있습니다.
-      예외 종류: {Exception}
-      스택 트레이스:
-      {StackTrace}
 
 Compose:
   # 에디터 상에서 나오는 에러 메시지들

@@ -7,5 +7,11 @@ namespace ArcCreate.ChartFormat
         public RawEventType Type { get; set; }
 
         public int TimingGroup { get; set; }
+
+        public int Line { get; set; }
+
+        public int CharacterStart { get; set; } = 0;
+
+        public int CharacterEnd { get; set; } = -1;
     }
 }

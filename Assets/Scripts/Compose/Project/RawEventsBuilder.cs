@@ -94,7 +94,12 @@ namespace ArcCreate.Compose.Project
                                 var ats = Services.Gameplay.Chart
                                     .GetAll<ArcTap>()
                                     .Where(at => at.Arc == arc)
-                                    .Select(at => at.Timing);
+                                    .Select(at => new RawArcTap
+                                    {
+                                        Type = RawEventType.ArcTap,
+                                        Timing = at.Timing,
+                                        TimingGroup = arc.TimingGroup,
+                                    });
                                 return new RawArc
                                 {
                                     Type = RawEventType.Arc,

@@ -1,5 +1,4 @@
 using ArcCreate.Gameplay.Data;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace ArcCreate.Compose.Popups
@@ -13,6 +12,7 @@ namespace ArcCreate.Compose.Popups
         [SerializeField] private ArcTypePickerWindow arcTypePickerWindow;
         [SerializeField] private ArcColorPickerWindow arcColorPickerWindow;
         [SerializeField] private TimingGroupPicker timingGroupPickerWindow;
+        [SerializeField] private Hint hint;
         [SerializeField] private AudioClip vineboom;
 
         public void CreateTextDialog(string title, string content, params ButtonSetting[] buttonSettings)
@@ -54,6 +54,11 @@ namespace ArcCreate.Compose.Popups
         public void PlayVineBoom()
         {
             AudioSource.PlayClipAtPoint(vineboom, Vector3.zero);
+        }
+
+        public void ShowHint(Vector2 screenPosition, Severity severity, string text, RectTransform rect, Camera camera)
+        {
+            hint.SetContent(screenPosition, severity, text, rect, camera);
         }
     }
 }

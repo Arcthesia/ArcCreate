@@ -7,11 +7,6 @@ Format:
       Mientras se analizaba evento de tipo: {EventType}
       Con el siguiente: "{Content}".
       {Reason}
-    MessageUnknownReason: |-
-      Ha ocurrido un error desconocido mientras se cargaba el archivo de mapa {File}
-      en: línea {LineNumber}
-      Mientras se analizaba evento de tipo: {EventType}
-      Con el siguiente "{Content}".
     ArcColorNegative: |-
       La ID del color del arco no puede ser negativa.
     AudioOffsetInvalid: |-
@@ -38,11 +33,6 @@ Format:
       La Nota Flotante está fuera del rango de tiempo de su Arco principal.
     TimingGroupPropertiesInvalid: |-
       Definición de las propìedades del grupo de tiempo no válida.
-    SymbolError: |-
-      Posible error de sintaxis.
-      Excepción: {Exception}
-      Montón de trazados:
-      {StackTrace}
 
 Compose:
   # Exception messages within the editor

@@ -59,5 +59,7 @@ namespace ArcCreate.Compose.Popups
         /// You have the geniuses at arcthesia to blame for this.
         /// </summary>
         void PlayVineBoom();
+
+        void ShowHint(Vector2 screenPosition, Severity severity, string text, RectTransform rect, Camera camera);
     }
 }

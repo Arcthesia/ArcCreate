@@ -7,11 +7,6 @@ Format:
       While parsing event of type: {EventType}
       With the following: "{Content}".
       {Reason}
-    MessageUnknownReason: |-
-      An unknown error occurred while reading the chart file {File}
-      At: line {LineNumber}
-      While parsing event of type: {EventType}
-      With the followng "{Content}".
     ArcColorNegative: |-
       Arc color id can not be negative.
     AudioOffsetInvalid: |-
@@ -38,11 +33,6 @@ Format:
       ArcTap is outside the timing range of its parent Arc.
     TimingGroupPropertiesInvalid: |-
       Invalid timing group properties definition.
-    SymbolError: |-
-      Possibly wrong syntax.
-      Exception: {Exception}
-      Stack trace:
-      {StackTrace}
 
 Compose:
   # Exception messages within the editor

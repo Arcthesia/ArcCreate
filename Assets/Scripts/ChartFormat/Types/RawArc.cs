@@ -22,6 +22,6 @@ namespace ArcCreate.ChartFormat
 
         public string Sfx { get; set; }
 
-        public List<int> ArcTaps { get; set; }
+        public List<RawArcTap> ArcTaps { get; set; }
     }
 }

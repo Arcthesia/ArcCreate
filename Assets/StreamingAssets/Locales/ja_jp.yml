@@ -35,11 +35,6 @@ Format:
       イベントタイプ: {EventType}
       処理中の行: "{Content}"
       {Reason}
-    MessageUnknownReason: |-
-      譜面ファイルを読み込み中に不明なエラーが発生しました。
-      ファイル: "{File}" {LineNumber}行目
-      イベントタイプ: {EventType}
-      処理中の行: "{Content}"
     ArcColorNegative: |-
       ArcのColorIDは負の値にできません。
     AudioOffsetInvalid: |-
@@ -66,10 +61,6 @@ Format:
       Skyが属しているArcの継続時間外にあります。
     TimingGroupPropertiesInvalid: |-
       TimingGroupのプロパティが正しくありません。
-    SymbolError: |-
-      構文エラー: {Exception}
-      スタックトレース:
-      {StackTrace}
 
 Compose:
   # Exception messages within the editor
