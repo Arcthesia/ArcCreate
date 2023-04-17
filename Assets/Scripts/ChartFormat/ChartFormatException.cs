@@ -8,7 +8,9 @@ namespace ArcCreate.ChartFormat
         public ChartFormatException(string reason, int startCharPos = 0, int endCharPos = -1)
             : base(reason)
         {
+            Type = RawEventType.Unknown;
             ShouldAbort = false;
+            Content = string.Empty;
             LineNumber = -1;
             Reason = reason;
             StartCharPos = startCharPos;
@@ -35,6 +37,8 @@ namespace ArcCreate.ChartFormat
                     { "Reason", reason },
                 }))
         {
+            Type = type;
+            Content = content;
             ShouldAbort = shouldAbort;
             LineNumber = line;
             Reason = reason;
@@ -51,5 +55,9 @@ namespace ArcCreate.ChartFormat
         public int EndCharPos { get; set; }
 
         public string Reason { get; set; }
+
+        public string Content { get; set; }
+
+        public RawEventType Type { get; set; }
     }
 }

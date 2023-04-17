@@ -24,12 +24,13 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private GameObject scrollHighlightPrefab;
         [SerializeField] private RectTransform lineHighlightParent;
         [SerializeField] private RectTransform scrollHighlightParent;
+
         private Pool<LineHighlightComponent> lineHighlightPool;
         private Pool<ScrollHighlightComponent> scrollHighlightPool;
+
         private string absoluteMainChartPath;
         private string currentMainChartPath;
         private string rawChartData;
-        private bool reloadOnNextEnable;
         private RectTransform inputRect;
         private RectTransform textRect;
         private RectTransform rect;
@@ -38,8 +39,11 @@ namespace ArcCreate.Compose.Project
 
         private readonly ChartAnalyzer analyzer = new ChartAnalyzer();
         private bool analyzeOnNextEnable;
-        private CancellationTokenSource cts = new CancellationTokenSource();
         private bool loadFromPathOnNextEnable;
+        private bool reloadOnNextEnable;
+        private bool applyChangeOnNextEndEdit;
+
+        private CancellationTokenSource cts = new CancellationTokenSource();
 
         public void LoadFromPath(string absoluteMainChartPath)
         {
@@ -200,8 +204,9 @@ namespace ArcCreate.Compose.Project
 
         private void OnEndEdit(string val)
         {
-            if (val != rawChartData)
+            if (applyChangeOnNextEndEdit)
             {
+                applyChangeOnNextEndEdit = false;
                 rawChartData = val;
                 cts.Cancel();
                 cts.Dispose();
@@ -230,6 +235,7 @@ namespace ArcCreate.Compose.Project
         {
             if (gameObject.activeInHierarchy && val != rawChartData)
             {
+                applyChangeOnNextEndEdit = true;
                 cts.Cancel();
                 cts.Dispose();
                 cts = new CancellationTokenSource();

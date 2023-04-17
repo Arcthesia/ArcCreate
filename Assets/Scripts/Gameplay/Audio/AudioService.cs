@@ -148,7 +148,7 @@ namespace ArcCreate.Gameplay.Audio
                 if (dspTime > dspStartPlayingTime && lastDspTiming != newDspTiming)
                 {
                     float difference = (newDspTiming - newTiming) / 1000f;
-                    if (difference >= 1 / 60f)
+                    if (difference >= 5 / 60f)
                     {
                         audioTiming = newDspTiming;
                     }

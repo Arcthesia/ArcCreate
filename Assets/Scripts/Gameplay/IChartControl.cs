@@ -68,5 +68,10 @@ namespace ArcCreate.Gameplay
         /// </summary>
         /// <returns>All notes that's rendered.</returns>
         IEnumerable<Note> GetRenderingNotes();
+
+        /// <summary>
+        /// Clear the currently playing chart.
+        /// </summary>
+        void Clear();
     }
 }

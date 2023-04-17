@@ -220,6 +220,18 @@ Compose:
       Yes: Save changes
       No: Discard changes
       Cancel: Cancel
+    LoadChartError:
+      Title: Error
+      Content: |-
+        There was an error loading the chart file {ChartPath}.
+        Either fix this in a separate text editor, or close this dialog and use the "<> {TabName}" panel.
+        
+        Details:
+        Line number: {LineNumber}
+        LineContent: "{Content}".
+        Event type: {EventType}
+        {Exception}
+      Confirm: Confirm
   Navigation:
     KeybindOverride: Overriding keybind for action {0}
     # Texts that appear on the context menu (right-click menu)

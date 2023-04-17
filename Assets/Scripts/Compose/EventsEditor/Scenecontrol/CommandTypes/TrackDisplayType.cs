@@ -34,8 +34,8 @@ namespace ArcCreate.Compose.EventsEditor
 
         private void SetupData()
         {
-            trackAlphaFactor = new KeyChannel().SetDefaultEasing("l").AddKey(0, 1);
-            darkenAlphaFactor = new KeyChannel().SetDefaultEasing("l").AddKey(0, 0);
+            trackAlphaFactor = new KeyChannel().SetDefaultEasing("l").AddKey(-999999, 1);
+            darkenAlphaFactor = new KeyChannel().SetDefaultEasing("l").AddKey(-999999, 0);
 
             var track = Services.Gameplay.Scenecontrol.Scene.Track;
             track.ColorA *= trackAlphaFactor;

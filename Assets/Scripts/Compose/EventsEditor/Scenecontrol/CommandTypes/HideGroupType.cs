@@ -19,7 +19,7 @@ namespace ArcCreate.Compose.EventsEditor
             ValueChannel channel = noteGroup.Active.Find("internal");
             if (channel == null)
             {
-                channel = new KeyChannel().SetDefaultEasing("cnsti").AddKey(0, 1);
+                channel = new KeyChannel().SetDefaultEasing("cnsti").AddKey(-999999, 1);
                 channel.Name = "internal";
                 noteGroup.Active *= channel;
             }

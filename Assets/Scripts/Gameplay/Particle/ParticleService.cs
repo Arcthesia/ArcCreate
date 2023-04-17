@@ -237,6 +237,7 @@ namespace ArcCreate.Gameplay.Particle
             else
             {
                 ParticleSchedule ps = playingArcParticles[reference];
+                ps.Particle.ApplyColor(color1, color2);
                 ps.Particle.transform.localPosition = screenPos;
                 playingArcParticles[reference] = new ParticleSchedule()
                 {

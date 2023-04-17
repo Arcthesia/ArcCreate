@@ -31,7 +31,7 @@ namespace ArcCreate.Compose.EventsEditor
 
         private void SetupData()
         {
-            enwidenLaneFactor = new KeyChannel().SetDefaultEasing("l").AddKey(0, 0);
+            enwidenLaneFactor = new KeyChannel().SetDefaultEasing("l").AddKey(-999999, 0);
             var beatline = Services.Gameplay.Scenecontrol.Scene.Beatlines;
 
             ValueChannel posY = -100 * (1 - enwidenLaneFactor);

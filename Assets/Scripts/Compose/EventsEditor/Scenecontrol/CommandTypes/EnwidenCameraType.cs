@@ -31,7 +31,7 @@ namespace ArcCreate.Compose.EventsEditor
 
         private void SetupData()
         {
-            enwidenCameraFactor = new KeyChannel().SetDefaultEasing("l").AddKey(0, 0);
+            enwidenCameraFactor = new KeyChannel().SetDefaultEasing("l").AddKey(-999999, 0);
 
             var camera = Services.Gameplay.Scenecontrol.Scene.GameplayCamera;
             var skyline = Services.Gameplay.Scenecontrol.Scene.SkyInputLine;

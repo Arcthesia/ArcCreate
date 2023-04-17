@@ -67,11 +67,6 @@ namespace ArcCreate.Gameplay.Chart
         void LoadChart(ChartReader chart);
 
         /// <summary>
-        /// Clear the chart.
-        /// </summary>
-        void Clear();
-
-        /// <summary>
         /// Update judgement of all notes in the chart.
         /// </summary>
         /// <param name="currentTiming">The current audio timing.</param>

@@ -122,7 +122,7 @@ namespace ArcCreate.ChartFormat
             {
                 throw new ChartFormatException(I18n.S(
                     "Format.Exception.UnknownException",
-                    new Dictionary<string, string>()
+                    new Dictionary<string, object>()
                     {
                         { "Exception", ex.Message },
                         { "StackTrace", ex.StackTrace },
