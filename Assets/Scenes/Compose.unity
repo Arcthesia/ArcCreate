@@ -73982,7 +73982,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1931281401}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.97329265
+  m_Size: 0.9732926
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -78402,7 +78402,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5612a8700f89519129746ffcce6f4687, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameplayData: {fileID: 11400000, guid: ae19a07671eb9dc748d6346649a697b7, type: 2}
   gameplayLayer:
     serializedVersion: 2
     m_Bits: 2048
@@ -86726,7 +86725,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 505154477}
   m_HandleRect: {fileID: 505154476}
   m_Direction: 2
-  m_Value: 1.0000015
+  m_Value: 1.000003
   m_Size: 0.9453073
   m_NumberOfSteps: 0
   m_OnValueChanged:

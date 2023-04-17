@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: colorless
   DefaultNoteOption: {fileID: 11400000, guid: 2be55caad14d6b4439594b1dce765220, type: 2}
-  DefaultParticleOption: {fileID: 11400000, guid: b79ef2fbba0553a40a67c4ea23783bdd,
+  DefaultParticleOption: {fileID: 11400000, guid: 9a7ffe8d412ca3a9fa0fe836c3f1ff05,
     type: 2}
   DefaultTrackOption: {fileID: 11400000, guid: 7d825bede67667a4fab04b98931e2bb7, type: 2}
   DefaultSingleLineOption: {fileID: 11400000, guid: 9cf1a968eccf9af48badfc3a2ed68683,

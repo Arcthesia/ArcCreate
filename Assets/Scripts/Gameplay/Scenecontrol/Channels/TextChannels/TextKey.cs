@@ -19,11 +19,17 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public void Deserialize(string str)
         {
-            string[] split = str.Split(',');
-            Timing = UnityEngine.Mathf.RoundToInt(float.Parse(split[0]));
-            Value = split[1].ToCharArray();
-            TransitionFrom = UnityEngine.Mathf.RoundToInt(float.Parse(split[2]));
-            EasingString = split[3];
+            int i = str.IndexOf(',');
+            int k = str.LastIndexOf(',');
+            int j = str.LastIndexOf(',', 0, k);
+            string timingString = str.Substring(0, i);
+            string valueString = str.Substring(i + 1, j - i - 1);
+            string fromString = str.Substring(j + 1, k - j - 1);
+            string easingString = str.Substring(k + 1);
+            Timing = UnityEngine.Mathf.RoundToInt(float.Parse(timingString));
+            Value = valueString.ToCharArray();
+            TransitionFrom = UnityEngine.Mathf.RoundToInt(float.Parse(fromString));
+            EasingString = easingString;
         }
 
         public object Serialize()

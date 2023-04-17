@@ -263,6 +263,12 @@ namespace ArcCreate.Gameplay.Audio
                 timing = 0;
             }
 
+            if (timing < 0)
+            {
+                stationaryBeforeStart = false;
+                timing = 0;
+            }
+
             audioTiming = stationaryBeforeStart ? timing : timing - delay;
             updatePace = 1;
 

@@ -30,11 +30,19 @@ namespace ArcCreate.Gameplay.Particle
         void PlayTextParticle(Vector3 worldPosition, JudgementResult result);
 
         /// <summary>
-        /// Play a long note particle. The coordinate will be translated to screen-space coordinate.
+        /// Play an arc note particle. The coordinate will be translated to screen-space coordinate.
+        /// </summary>
+        /// <param name="colorId">The color id of the arc.</param>
+        /// <param name="reference">The reference. The same particle object will be used for the same reference.</param>
+        /// <param name="worldPosition">The world-space coordinate.</param>
+        void PlayArcParticle(int colorId, LongNote reference, Vector3 worldPosition);
+
+        /// <summary>
+        /// Play a hold note particle. The coordinate will be translated to screen-space coordinate.
         /// </summary>
         /// <param name="reference">The reference. The same particle object will be used for the same reference.</param>
         /// <param name="worldPosition">The world-space coordinate.</param>
-        void PlayLongParticle(LongNote reference, Vector3 worldPosition);
+        void PlayHoldParticle(LongNote reference, Vector3 worldPosition);
 
         /// <summary>
         /// Change tap particle skin.
@@ -49,6 +57,7 @@ namespace ArcCreate.Gameplay.Particle
         /// <param name="colorMax">The max color of the color range.</param>
         /// <param name="fromGradient">The first color-over-time gradient.</param>
         /// <param name="toGradient">The second color-over-time gradient.</param>
-        void SetLongParticleSkin(Color colorMin, Color colorMax, Gradient fromGradient, Gradient toGradient);
+        /// <param name="colorGrid">The color of the grid element.</param>
+        void SetHoldParticleSkin(Color colorMin, Color colorMax, Gradient fromGradient, Gradient toGradient, Color colorGrid);
     }
 }

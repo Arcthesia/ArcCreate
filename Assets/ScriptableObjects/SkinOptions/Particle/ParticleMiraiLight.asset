@@ -15,12 +15,13 @@ MonoBehaviour:
   Name: mirailight
   particleSkin: {fileID: 2800000, guid: 71faa5c08cba47c40a3f50cdff6acfa4, type: 3}
   sfxParticleSkin: {fileID: 2800000, guid: 555fccd079dd6e946b0f63bed196bb41, type: 3}
-  HoldEffectColorMin: {r: 0.44, g: 0.64, b: 0.89, a: 0.14901961}
-  HoldEffectColorMax: {r: 0.44, g: 0.64, b: 0.89, a: 0.34901962}
+  HoldEffectColorMin: {r: 0.47686276, g: 0.5590954, b: 0.74509805, a: 0.7176471}
+  HoldEffectColorMax: {r: 0.20741367, g: 0.3707061, b: 0.745283, a: 0.7176471}
+  HoldEffectColorGrid: {r: 0.20741367, g: 0.3707061, b: 0.745283, a: 0.7176471}
   HoldEffectFromGradient:
     serializedVersion: 2
-    key0: {r: 0.39, g: 0.59, b: 0.84, a: 1}
-    key1: {r: 0.55, g: 0.64, b: 0.89, a: 1}
+    key0: {r: 0.29547882, g: 0.43325025, b: 0.754717, a: 1}
+    key1: {r: 0.118191525, g: 0.2752643, b: 0.3018868, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -28,7 +29,7 @@ MonoBehaviour:
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
     ctime0: 0
-    ctime1: 65535
+    ctime1: 65320
     ctime2: 0
     ctime3: 0
     ctime4: 0
@@ -48,8 +49,8 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   HoldEffectToGradient:
     serializedVersion: 2
-    key0: {r: 0.49, g: 0.69, b: 0.94, a: 0.49803922}
-    key1: {r: 0.55, g: 0.64, b: 0.89, a: 1}
+    key0: {r: 0.24390352, g: 0.4508565, b: 0.8207547, a: 0.49803922}
+    key1: {r: 0.045656823, g: 0.3584906, b: 0.32423225, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}

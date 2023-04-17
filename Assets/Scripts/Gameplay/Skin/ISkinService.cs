@@ -36,5 +36,7 @@ namespace ArcCreate.Gameplay.Skin
         void ApplyRedArcValue(int color, float value);
 
         (Color high, Color low) GetArcColor(int colorId);
+
+        (Color color1, Color color2) GetArcParticleColor(int colorId);
     }
 }

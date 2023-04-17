@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Gameplay.Judgement;
-using ArcCreate.Gameplay.Skin;
 using ArcCreate.Utility.ExternalAssets;
 using Cysharp.Threading.Tasks;
 using TMPro;
@@ -28,17 +26,20 @@ namespace ArcCreate.Gameplay.Particle
 
         [Header("Other particles")]
         [SerializeField] private GameObject tapParticlePrefab;
-        [SerializeField] private GameObject longNoteParticlePrefab;
+        [SerializeField] private GameObject arcNoteParticlePrefab;
+        [SerializeField] private GameObject holdNoteParticlePrefab;
 
         [Header("Parents")]
         [SerializeField] private Transform tapParticleParent;
         [SerializeField] private Transform textParticleParent;
         [SerializeField] private Transform longNoteParticleParent;
+        [SerializeField] private RectTransform screenParticlesRect;
 
         [Header("Numbers")]
         [SerializeField] private int tapParticlePoolCount = 50;
         [SerializeField] private int textParticlePoolCount = 200;
-        [SerializeField] private int longParticlePoolCount = 10;
+        [SerializeField] private int arcParticlePoolCount = 4;
+        [SerializeField] private int holdParticlePoolCount = 6;
         [SerializeField] private float earlyLateLength = 0.5f;
         [SerializeField] private float earlyLateFromY;
         [SerializeField] private float earlyLateToY;
@@ -47,17 +48,23 @@ namespace ArcCreate.Gameplay.Particle
         private ExternalTexture pureMaterialTexture;
         private ExternalTexture farMaterialTexture;
         private ExternalTexture lostMaterialTexture;
-        private ExternalTexture longParticleTexture;
+        private ExternalTexture arcParticleTexture;
+        private ExternalTexture holdParticleTexture;
 
         private ParticlePool<Particle> tapParticlePool;
         private ParticlePool<Particle> textParticlePool;
-        private Pool<Particle> longParticlePool;
+        private Pool<Particle> arcParticlePool;
+        private Pool<Particle> holdParticlePool;
         private float lastEarlyLateRealTime = float.MinValue;
 
-        private readonly Dictionary<LongNote, ParticleSchedule> playingLongParticles
-            = new Dictionary<LongNote, ParticleSchedule>(10);
+        private readonly Dictionary<LongNote, ParticleSchedule> playingArcParticles
+            = new Dictionary<LongNote, ParticleSchedule>(4);
 
-        private readonly List<LongNote> longParticlesToPrune = new List<LongNote>();
+        private readonly Dictionary<LongNote, ParticleSchedule> playingHoldParticles
+            = new Dictionary<LongNote, ParticleSchedule>(6);
+
+        private readonly List<LongNote> arcParticlesToPrune = new List<LongNote>();
+        private readonly List<LongNote> holdParticlesToPrune = new List<LongNote>();
 
         private Material PureMaterial { get; set; }
 
@@ -83,23 +90,42 @@ namespace ArcCreate.Gameplay.Particle
                 earlyLateText.color = c;
             }
 
-            longParticlesToPrune.Clear();
-            foreach (var pair in playingLongParticles)
+            arcParticlesToPrune.Clear();
+            foreach (var pair in playingArcParticles)
             {
                 LongNote reference = pair.Key;
                 ParticleSchedule schedule = pair.Value;
                 if (currentRealTime >= schedule.ExpireAt)
                 {
                     schedule.Particle.Stop();
-                    longParticlePool.Return(schedule.Particle);
-                    longParticlesToPrune.Add(reference);
+                    arcParticlePool.Return(schedule.Particle);
+                    arcParticlesToPrune.Add(reference);
                 }
             }
 
-            for (int i = 0; i < longParticlesToPrune.Count; i++)
+            for (int i = 0; i < arcParticlesToPrune.Count; i++)
             {
-                LongNote reference = longParticlesToPrune[i];
-                playingLongParticles.Remove(reference);
+                LongNote reference = arcParticlesToPrune[i];
+                playingArcParticles.Remove(reference);
+            }
+
+            holdParticlesToPrune.Clear();
+            foreach (var pair in playingHoldParticles)
+            {
+                LongNote reference = pair.Key;
+                ParticleSchedule schedule = pair.Value;
+                if (currentRealTime >= schedule.ExpireAt)
+                {
+                    schedule.Particle.Stop();
+                    holdParticlePool.Return(schedule.Particle);
+                    holdParticlesToPrune.Add(reference);
+                }
+            }
+
+            for (int i = 0; i < holdParticlesToPrune.Count; i++)
+            {
+                LongNote reference = holdParticlesToPrune[i];
+                playingHoldParticles.Remove(reference);
             }
         }
 
@@ -156,18 +182,18 @@ namespace ArcCreate.Gameplay.Particle
             }
         }
 
-        public void PlayLongParticle(LongNote reference, Vector3 worldPosition)
+        public void PlayHoldParticle(LongNote reference, Vector3 worldPosition)
         {
             float currentRealTime = Time.time;
             Vector2 screenPos = ConvertToScreen(worldPosition);
 
-            if (!playingLongParticles.ContainsKey(reference))
+            if (!playingHoldParticles.ContainsKey(reference))
             {
-                Particle ps = longParticlePool.Get();
+                Particle ps = holdParticlePool.Get();
                 ps.transform.localPosition = screenPos;
                 ps.Play();
 
-                playingLongParticles.Add(
+                playingHoldParticles.Add(
                     reference,
                     new ParticleSchedule()
                     {
@@ -177,9 +203,42 @@ namespace ArcCreate.Gameplay.Particle
             }
             else
             {
-                ParticleSchedule ps = playingLongParticles[reference];
+                ParticleSchedule ps = playingHoldParticles[reference];
                 ps.Particle.transform.localPosition = screenPos;
-                playingLongParticles[reference] = new ParticleSchedule()
+                playingHoldParticles[reference] = new ParticleSchedule()
+                {
+                    ExpireAt = currentRealTime + longParticlePersistDuration,
+                    Particle = ps.Particle,
+                };
+            }
+        }
+
+        public void PlayArcParticle(int colorId, LongNote reference, Vector3 worldPosition)
+        {
+            var (color1, color2) = Services.Skin.GetArcParticleColor(colorId);
+            float currentRealTime = Time.time;
+            Vector2 screenPos = ConvertToScreen(worldPosition);
+
+            if (!playingArcParticles.ContainsKey(reference))
+            {
+                Particle ps = arcParticlePool.Get();
+                ps.ApplyColor(color1, color2);
+                ps.transform.localPosition = screenPos;
+                ps.Play();
+
+                playingArcParticles.Add(
+                    reference,
+                    new ParticleSchedule()
+                    {
+                        ExpireAt = currentRealTime + longParticlePersistDuration,
+                        Particle = ps,
+                    });
+            }
+            else
+            {
+                ParticleSchedule ps = playingArcParticles[reference];
+                ps.Particle.transform.localPosition = screenPos;
+                playingArcParticles[reference] = new ParticleSchedule()
                 {
                     ExpireAt = currentRealTime + longParticlePersistDuration,
                     Particle = ps.Particle,
@@ -198,29 +257,31 @@ namespace ArcCreate.Gameplay.Particle
                 tapParticlePoolCount);
         }
 
-        public void SetLongParticleSkin(Color colorMin, Color colorMax, Gradient fromGradient, Gradient toGradient)
+        public void SetHoldParticleSkin(Color colorMin, Color colorMax, Gradient fromGradient, Gradient toGradient, Color colorGrid)
         {
-            ParticleSystem pts = longNoteParticlePrefab.GetComponent<ParticleSystem>();
+            ParticleSystem pts = holdNoteParticlePrefab.GetComponent<ParticleSystem>();
             ParticleSystem.MainModule module = pts.main;
             ParticleSystem.ColorOverLifetimeModule colorModule = pts.colorOverLifetime;
 
             module.startColor = new ParticleSystem.MinMaxGradient(colorMin, colorMax);
             colorModule.color = new ParticleSystem.MinMaxGradient(fromGradient, toGradient);
+            pts.GetComponentInChildren<SpriteRenderer>().color = colorGrid;
 
-            Pools.Destroy<Particle>(Values.LongParticlePoolName);
-            longParticlePool = Pools.New<Particle>(
-                Values.LongParticlePoolName,
-                longNoteParticlePrefab,
+            Pools.Destroy<Particle>(Values.HoldParticlePoolName);
+            holdParticlePool = Pools.New<Particle>(
+                Values.HoldParticlePoolName,
+                holdNoteParticlePrefab,
                 longNoteParticleParent,
-                longParticlePoolCount);
+                holdParticlePoolCount);
 
-            playingLongParticles.Clear();
+            playingHoldParticles.Clear();
         }
 
         private void Awake()
         {
             tapParticlePrefab = Instantiate(tapParticlePrefab, transform);
-            longNoteParticlePrefab = Instantiate(longNoteParticlePrefab, transform);
+            arcNoteParticlePrefab = Instantiate(arcNoteParticlePrefab, transform);
+            holdNoteParticlePrefab = Instantiate(holdNoteParticlePrefab, transform);
             PureMaterial = Instantiate(pureMaterial);
             FarMaterial = Instantiate(farMaterial);
             LostMaterial = Instantiate(lostMaterial);
@@ -235,18 +296,27 @@ namespace ArcCreate.Gameplay.Particle
                 textParticleParent,
                 textParticlePoolCount);
 
-            longParticlePool = Pools.New<Particle>(
-                Values.LongParticlePoolName,
-                longNoteParticlePrefab,
+            arcParticlePool = Pools.New<Particle>(
+                Values.ArcParticlePoolName,
+                arcNoteParticlePrefab,
                 longNoteParticleParent,
-                longParticlePoolCount);
+                arcParticlePoolCount);
+
+            holdParticlePool = Pools.New<Particle>(
+                Values.HoldParticlePoolName,
+                holdNoteParticlePrefab,
+                longNoteParticleParent,
+                holdParticlePoolCount);
 
             pureMaterialTexture = new ExternalTexture(PureMaterial.mainTexture, "Particles");
             farMaterialTexture = new ExternalTexture(FarMaterial.mainTexture, "Particles");
             lostMaterialTexture = new ExternalTexture(LostMaterial.mainTexture, "Particles");
 
-            var particlePrefabRenderer = longNoteParticlePrefab.GetComponent<ParticleSystemRenderer>();
-            longParticleTexture = new ExternalTexture(particlePrefabRenderer.material.mainTexture, "Particles");
+            var particlePrefabRenderer = arcNoteParticlePrefab.GetComponent<ParticleSystemRenderer>();
+            arcParticleTexture = new ExternalTexture(particlePrefabRenderer.material.mainTexture, "Particles");
+
+            particlePrefabRenderer = holdNoteParticlePrefab.GetComponent<ParticleSystemRenderer>();
+            holdParticleTexture = new ExternalTexture(particlePrefabRenderer.material.mainTexture, "Particles");
 
             Settings.LateEarlyTextPosition.OnValueChanged.AddListener(OnLateEarlyPositionSettings);
             OnLateEarlyPositionSettings(Settings.LateEarlyTextPosition.Value);
@@ -281,26 +351,29 @@ namespace ArcCreate.Gameplay.Particle
             await pureMaterialTexture.Load();
             await farMaterialTexture.Load();
             await lostMaterialTexture.Load();
-            await longParticleTexture.Load();
+            await arcParticleTexture.Load();
 
             PureMaterial.mainTexture = pureMaterialTexture.Value;
             FarMaterial.mainTexture = farMaterialTexture.Value;
             LostMaterial.mainTexture = lostMaterialTexture.Value;
 
-            var particlePrefabRenderer = longNoteParticlePrefab.GetComponent<ParticleSystemRenderer>();
-            particlePrefabRenderer.material.mainTexture = longParticleTexture.Value;
+            var particlePrefabRenderer = arcNoteParticlePrefab.GetComponent<ParticleSystemRenderer>();
+            particlePrefabRenderer.material.mainTexture = arcParticleTexture.Value;
+
+            particlePrefabRenderer = holdNoteParticlePrefab.GetComponent<ParticleSystemRenderer>();
+            particlePrefabRenderer.material.mainTexture = holdParticleTexture.Value;
         }
 
         private void OnDestroy()
         {
             tapParticlePool.Destroy();
             textParticlePool.Destroy();
-            Pools.Destroy<Particle>(Values.LongParticlePoolName);
+            Pools.Destroy<Particle>(Values.ArcParticlePoolName);
 
             pureMaterialTexture.Unload();
             farMaterialTexture.Unload();
             lostMaterialTexture.Unload();
-            longParticleTexture.Unload();
+            arcParticleTexture.Unload();
 
             Destroy(PureMaterial);
             Destroy(FarMaterial);
@@ -312,7 +385,7 @@ namespace ArcCreate.Gameplay.Particle
         private Vector2 ConvertToScreen(Vector3 world)
         {
             Vector2 viewport = gameplayCamera.WorldToViewportPoint(world);
-            return new Vector2(viewport.x * gameplayCamera.pixelWidth, viewport.y * gameplayCamera.pixelHeight);
+            return new Vector2(viewport.x * screenParticlesRect.rect.width, viewport.y * screenParticlesRect.rect.height);
         }
     }
 }

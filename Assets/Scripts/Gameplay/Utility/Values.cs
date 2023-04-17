@@ -87,7 +87,8 @@ namespace ArcCreate.Gameplay
         public const string LateText = "LATE";
         public const string BeatlinePoolName = "beatline";
         public const string TapParticlePoolName = "tapparticle";
-        public const string LongParticlePoolName = "longparticle";
+        public const string ArcParticlePoolName = "arcparticle";
+        public const string HoldParticlePoolName = "holdparticle";
 
         // I sure hope no charter will make use of lane -2147483648
         public const int InvalidLane = int.MinValue;

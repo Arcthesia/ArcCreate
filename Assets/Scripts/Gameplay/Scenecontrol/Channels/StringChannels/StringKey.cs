@@ -10,9 +10,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public void Deserialize(string str)
         {
-            string[] split = str.Split(',');
-            Timing = UnityEngine.Mathf.RoundToInt(float.Parse(split[0]));
-            Value = split[1];
+            int i = str.IndexOf(',');
+            string timingString = str.Substring(0, i);
+            string valueString = str.Substring(i + 1);
+            Timing = UnityEngine.Mathf.RoundToInt(float.Parse(timingString));
+            Value = valueString;
         }
 
         public object Serialize()

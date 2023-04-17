@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311926, g: 0.38073993, b: 0.35872683, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311956, g: 0.3807402, b: 0.35872734, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2728,14 +2728,18 @@ MonoBehaviour:
   lateColor: {r: 0.84313726, g: 0, b: 0.09411765, a: 1}
   tapParticlePrefab: {fileID: 1660056931339614116, guid: dea5043649ba8454080aacd75a2db098,
     type: 3}
-  longNoteParticlePrefab: {fileID: 1799711940945094, guid: f383748865dc4d34b976d677479f8b0c,
+  arcNoteParticlePrefab: {fileID: 1799711940945094, guid: f383748865dc4d34b976d677479f8b0c,
+    type: 3}
+  holdNoteParticlePrefab: {fileID: 8182895525809098792, guid: 648fe7c891b865463806714d06bed943,
     type: 3}
   tapParticleParent: {fileID: 641820345}
   textParticleParent: {fileID: 1814093797}
   longNoteParticleParent: {fileID: 612397323}
+  screenParticlesRect: {fileID: 1579535198}
   tapParticlePoolCount: 50
   textParticlePoolCount: 50
-  longParticlePoolCount: 10
+  arcParticlePoolCount: 4
+  holdParticlePoolCount: 6
   earlyLateLength: 0.5
   earlyLateFromY: 35
   earlyLateToY: 50
@@ -6750,7 +6754,6 @@ Transform:
   - {fileID: 698490209}
   - {fileID: 1122036282}
   - {fileID: 1405293680}
-  - {fileID: 1989008255}
   m_Father: {fileID: 1075730660}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7869,7 +7872,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1280, y: 720}
@@ -10429,36 +10432,6 @@ MonoBehaviour:
   textComponent: {fileID: 1987312593}
   rectTransform: {fileID: 1987312592}
   gameplayData: {fileID: 11400000, guid: ae19a07671eb9dc748d6346649a697b7, type: 2}
---- !u!1 &1989008254
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1989008255}
-  m_Layer: 8
-  m_Name: NoteLayer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1989008255
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1989008254}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1332914349}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2001664968
 GameObject:
   m_ObjectHideFlags: 0
@@ -10677,7 +10650,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 50
   orthographic: 0
   orthographic size: 5
   m_Depth: 1

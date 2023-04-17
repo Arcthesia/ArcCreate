@@ -266,7 +266,8 @@ namespace ArcCreate.Gameplay.Data
 
             if (currentTiming <= longParticleUntil && currentTiming >= Timing && currentTiming <= EndTiming)
             {
-                Services.Particle.PlayLongParticle(
+                Services.Particle.PlayArcParticle(
+                    Color,
                     firstArcOfBranch ?? this,
                     new Vector3(WorldXAt(currentTiming), WorldYAt(currentTiming), 0));
             }

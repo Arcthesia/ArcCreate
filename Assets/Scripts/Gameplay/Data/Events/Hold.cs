@@ -183,7 +183,7 @@ namespace ArcCreate.Gameplay.Data
 
             if (currentTiming <= longParticleUntil && currentTiming <= EndTiming)
             {
-                Services.Particle.PlayLongParticle(this, new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0));
+                Services.Particle.PlayHoldParticle(this, new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0));
             }
         }
 
@@ -212,7 +212,7 @@ namespace ArcCreate.Gameplay.Data
             longParticleUntil = currentTiming + Values.HoldParticlePersistDuration;
             highlight = true;
             Services.InputFeedback.LaneFeedback(Lane);
-            Services.Particle.PlayLongParticle(this, new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0));
+            Services.Particle.PlayHoldParticle(this, new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0));
             Services.Hitsound.PlayTapHitsound();
 
             // Extend the note back

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.Gameplay.Data;
@@ -49,7 +50,7 @@ namespace ArcCreate.Gameplay.Skin
         [SerializeField] private Texture defaultArctapShadow;
         private readonly List<Color> arcColors = new List<Color>();
         private readonly List<Color> arcLowColors = new List<Color>();
-        private readonly List<Color> arcHeightIndicatorColors = new List<Color>();
+        private readonly List<Color> arcLowDesaturatedColors = new List<Color>();
         private readonly List<float> redArcValues = new List<float>();
         private float unknownRedArcValue = 0;
         private ExternalTexture arcTexture;
@@ -115,11 +116,12 @@ namespace ArcCreate.Gameplay.Skin
                 particleOpt = particleOpt != null ? particleOpt : currentAlignment.DefaultParticleOption;
 
                 Services.Particle.SetTapParticleSkin(particleOpt.ParticleSkin.Value);
-                Services.Particle.SetLongParticleSkin(
+                Services.Particle.SetHoldParticleSkin(
                     particleOpt.HoldEffectColorMin,
                     particleOpt.HoldEffectColorMax,
                     particleOpt.HoldEffectFromGradient,
-                    particleOpt.HoldEffectToGradient);
+                    particleOpt.HoldEffectToGradient,
+                    particleOpt.HoldEffectColorGrid);
                 gameplayData.NotifySkinValuesChange();
             }
         }
@@ -255,12 +257,12 @@ namespace ArcCreate.Gameplay.Skin
                 return (arcCap, Color.clear);
             }
 
-            if (note.Color < 0 || note.Color >= arcHeightIndicatorColors.Count)
+            if (note.Color < 0 || note.Color >= arcColors.Count)
             {
                 return (arcCap, unknownArcColor);
             }
 
-            return (arcCap, arcHeightIndicatorColors[note.Color]);
+            return (arcCap, arcColors[note.Color]);
         }
 
         public float GetRedArcValue(int color)
@@ -290,7 +292,7 @@ namespace ArcCreate.Gameplay.Skin
         {
             arcColors.Clear();
             arcLowColors.Clear();
-            arcHeightIndicatorColors.Clear();
+            arcLowDesaturatedColors.Clear();
             redArcValues.Clear();
 
             int max = Mathf.Min(arcs.Count, arcLows.Count);
@@ -298,7 +300,7 @@ namespace ArcCreate.Gameplay.Skin
             {
                 arcColors.Add(arcs[i]);
                 arcLowColors.Add(arcLows[i]);
-                arcHeightIndicatorColors.Add(arcs[i]);
+                arcLowDesaturatedColors.Add(Desaturate(arcLows[i]));
                 redArcValues.Add(0);
             }
         }
@@ -339,6 +341,12 @@ namespace ArcCreate.Gameplay.Skin
         {
             int i = Mathf.Clamp(colorId, 0, arcColors.Count - 1);
             return (arcColors[i], arcLowColors[i]);
+        }
+
+        public (Color color1, Color color2) GetArcParticleColor(int colorId)
+        {
+            int i = Mathf.Clamp(colorId, 0, arcColors.Count - 1);
+            return (arcLowDesaturatedColors[i], arcLowColors[i]);
         }
 
         private void Awake()
@@ -499,6 +507,14 @@ namespace ArcCreate.Gameplay.Skin
         private void ReloadNoteSkin(int inputMode)
         {
             Services.Chart?.ReloadSkin();
+        }
+
+        private Color Desaturate(Color color)
+        {
+            Color.RGBToHSV(color, out float h, out float s, out float v);
+            Color c = Color.HSVToRGB(h, s / 2, v);
+            c.a = color.a;
+            return c;
         }
     }
 }

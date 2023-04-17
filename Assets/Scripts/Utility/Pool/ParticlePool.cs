@@ -37,7 +37,10 @@ public class ParticlePool<T>
     {
         for (int i = 0; i < pool.Length; i++)
         {
-            UnityEngine.Object.Destroy(pool[i].gameObject);
+            if (pool[i] != null)
+            {
+                UnityEngine.Object.Destroy(pool[i].gameObject);
+            }
         }
 
         pool = new T[0];
