@@ -15,8 +15,8 @@ MonoBehaviour:
   Name: light
   particleSkin: {fileID: 2800000, guid: afa6d5cb054698a43b45270efbc7577b, type: 3}
   sfxParticleSkin: {fileID: 2800000, guid: 555fccd079dd6e946b0f63bed196bb41, type: 3}
-  HoldEffectColorMin: {r: 0.53749025, g: 0.28920433, b: 0.6320754, a: 0.8509804}
-  HoldEffectColorMax: {r: 0.44330916, g: 0.23529412, b: 0.5764706, a: 0.8509804}
+  HoldEffectColorMin: {r: 0.53749025, g: 0.28920433, b: 0.6320754, a: 1}
+  HoldEffectColorMax: {r: 0.44330916, g: 0.23529412, b: 0.5764706, a: 1}
   HoldEffectColorGrid: {r: 0.75575125, g: 0.49167854, b: 0.8207547, a: 0.7176471}
   HoldEffectFromGradient:
     serializedVersion: 2

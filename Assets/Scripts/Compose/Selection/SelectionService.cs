@@ -152,6 +152,7 @@ namespace ArcCreate.Compose.Selection
                 if (ev is Note n && selectedNotes.Contains(n))
                 {
                     selectedNotes.Remove(n);
+                    n.IsSelected = false;
                     changed = true;
                 }
             }
@@ -367,6 +368,7 @@ namespace ArcCreate.Compose.Selection
         {
             RequireSelectionAttribute.Selection = selectedNotes;
             RequireNoSelectionAttribute.Selection = selectedNotes;
+            Physics.queriesHitBackfaces = true;
             rangeSelectPreview.OnEndEdit += SelectNotesBetweenRange;
         }
 

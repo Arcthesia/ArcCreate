@@ -658,9 +658,9 @@ Gameplay:
         Speed: Tốc độ
         SpeedDetail: |-
           Thay đổi tốc độ nốt tiếp cận khu vực chơi.
-        EarlyLatePureDisplay: Hiển thị Early/Late pure
-        EarlyLatePureDisplayDetail: |-
-          Nếu bạn muốn biết mình nhấn sớm hay muộn trên nốt "pure".
+        EarlyLatePerfectDisplay: Hiển thị Early/Late perfect
+        EarlyLatePerfectDisplayDetail: |-
+          Nếu bạn muốn biết mình nhấn sớm hay muộn trên nốt "perfect".
       Audio:
         Name: Âm thanh
         Offset: Độ trễ

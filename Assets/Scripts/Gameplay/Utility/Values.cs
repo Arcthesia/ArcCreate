@@ -21,11 +21,11 @@ namespace ArcCreate.Gameplay
         public const float LaneFeedbackMaxAlpha = 0.15f;
 
         // Judgement winodw
-        public const int LostJudgeWindow = 120;
-        public const int FarJudgeWindow = 100;
-        public const int PureJudgeWindow = 50;
+        public const int MissJudgeWindow = 120;
+        public const int GoodJudgeWindow = 100;
+        public const int PerfectJudgeWindow = 50;
         public const int MaxJudgeWindow = 25;
-        public const int HoldLostLateJudgeWindow = 240;
+        public const int HoldMissLateJudgeWindow = 240;
 
         // Visual
         public const int HoldFlashCycle = 4;
@@ -59,7 +59,7 @@ namespace ArcCreate.Gameplay
         // Judgement
         public const int MaxScore = 10_000_000;
         public const int ScoreModifyDelay = 500;
-        public const float FarPenaltyMultipler = 0.5f;
+        public const float GoodPenaltyMultipler = 0.5f;
         public const int ArcLockDuration = 500;
         public const int ArcGraceDuration = 600;
         public const int ArcRedFlashCycle = 500;

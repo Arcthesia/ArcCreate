@@ -9,12 +9,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
     public class JudgementTrigger : Trigger
     {
         private bool triggerOnMax = false;
-        private bool triggerOnPureEarly = false;
-        private bool triggerOnPureLate = false;
-        private bool triggerOnFarEarly = false;
-        private bool triggerOnFarLate = false;
-        private bool triggerOnLostEarly = false;
-        private bool triggerOnLostLate = false;
+        private bool triggerOnPerfectEarly = false;
+        private bool triggerOnPerfectLate = false;
+        private bool triggerOnGoodEarly = false;
+        private bool triggerOnGoodLate = false;
+        private bool triggerOnMissEarly = false;
+        private bool triggerOnMissLate = false;
 
         [EmmyDoc("Sets the channel to listen to Max judge event")]
         public JudgementTrigger OnMax()
@@ -23,70 +23,70 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return this;
         }
 
-        [EmmyDoc("Sets the channel to listen to Pure judge event")]
-        public JudgementTrigger OnPure()
+        [EmmyDoc("Sets the channel to listen to Perfect judge event")]
+        public JudgementTrigger OnPerfect()
         {
-            triggerOnPureEarly = true;
-            triggerOnPureLate = true;
+            triggerOnPerfectEarly = true;
+            triggerOnPerfectLate = true;
             triggerOnMax = true;
             return this;
         }
 
-        [EmmyDoc("Sets the channel to listen to Early Pure judge event")]
-        public JudgementTrigger OnPureEarly()
+        [EmmyDoc("Sets the channel to listen to Early Perfect judge event")]
+        public JudgementTrigger OnPerfectEarly()
         {
-            triggerOnPureEarly = true;
+            triggerOnPerfectEarly = true;
             return this;
         }
 
-        [EmmyDoc("Sets the channel to listen to Late Pure judge event")]
-        public JudgementTrigger OnPureLate()
+        [EmmyDoc("Sets the channel to listen to Late Perfect judge event")]
+        public JudgementTrigger OnPerfectLate()
         {
-            triggerOnPureLate = true;
+            triggerOnPerfectLate = true;
             return this;
         }
 
-        [EmmyDoc("Sets the channel to listen to Far judge event")]
-        public JudgementTrigger OnFar()
+        [EmmyDoc("Sets the channel to listen to Good judge event")]
+        public JudgementTrigger OnGood()
         {
-            triggerOnFarEarly = true;
-            triggerOnFarLate = true;
+            triggerOnGoodEarly = true;
+            triggerOnGoodLate = true;
             return this;
         }
 
-        [EmmyDoc("Sets the channel to listen to Early Far judge event")]
-        public JudgementTrigger OnFarEarly()
+        [EmmyDoc("Sets the channel to listen to Early Good judge event")]
+        public JudgementTrigger OnGoodEarly()
         {
-            triggerOnFarEarly = true;
+            triggerOnGoodEarly = true;
             return this;
         }
 
-        [EmmyDoc("Sets the channel to listen to Late Far judge event")]
-        public JudgementTrigger OnFarLate()
+        [EmmyDoc("Sets the channel to listen to Late Good judge event")]
+        public JudgementTrigger OnGoodLate()
         {
-            triggerOnFarLate = true;
+            triggerOnGoodLate = true;
             return this;
         }
 
-        [EmmyDoc("Sets the channel to listen to Lost judge event")]
-        public JudgementTrigger OnLost()
+        [EmmyDoc("Sets the channel to listen to Miss judge event")]
+        public JudgementTrigger OnMiss()
         {
-            triggerOnLostEarly = true;
-            triggerOnLostLate = true;
+            triggerOnMissEarly = true;
+            triggerOnMissLate = true;
             return this;
         }
 
-        [EmmyDoc("Sets the channel to listen to Early Lost judge event")]
-        public JudgementTrigger OnLostEarly()
+        [EmmyDoc("Sets the channel to listen to Early Miss judge event")]
+        public JudgementTrigger OnMissEarly()
         {
-            triggerOnLostEarly = true;
+            triggerOnMissEarly = true;
             return this;
         }
 
-        [EmmyDoc("Sets the channel to listen to Late Lost judge event")]
-        public JudgementTrigger OnLostLate()
+        [EmmyDoc("Sets the channel to listen to Late Miss judge event")]
+        public JudgementTrigger OnMissLate()
         {
-            triggerOnLostLate = true;
+            triggerOnMissLate = true;
             return this;
         }
 
@@ -135,22 +135,22 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 JudgementResult res = judgements[i];
                 switch (res)
                 {
-                    case JudgementResult.LostEarly:
-                        if (triggerOnLostEarly)
+                    case JudgementResult.MissEarly:
+                        if (triggerOnMissEarly)
                         {
                             Dispatch(timing);
                         }
 
                         break;
-                    case JudgementResult.FarEarly:
-                        if (triggerOnFarEarly)
+                    case JudgementResult.GoodEarly:
+                        if (triggerOnGoodEarly)
                         {
                             Dispatch(timing);
                         }
 
                         break;
-                    case JudgementResult.PureEarly:
-                        if (triggerOnPureEarly)
+                    case JudgementResult.PerfectEarly:
+                        if (triggerOnPerfectEarly)
                         {
                             Dispatch(timing);
                         }
@@ -163,22 +163,22 @@ namespace ArcCreate.Gameplay.Scenecontrol
                         }
 
                         break;
-                    case JudgementResult.PureLate:
-                        if (triggerOnPureLate)
+                    case JudgementResult.PerfectLate:
+                        if (triggerOnPerfectLate)
                         {
                             Dispatch(timing);
                         }
 
                         break;
-                    case JudgementResult.FarLate:
-                        if (triggerOnFarLate)
+                    case JudgementResult.GoodLate:
+                        if (triggerOnGoodLate)
                         {
                             Dispatch(timing);
                         }
 
                         break;
-                    case JudgementResult.LostLate:
-                        if (triggerOnLostLate)
+                    case JudgementResult.MissLate:
+                        if (triggerOnMissLate)
                         {
                             Dispatch(timing);
                         }
@@ -193,12 +193,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return new List<object>
             {
                 triggerOnMax,
-                triggerOnPureEarly,
-                triggerOnPureLate,
-                triggerOnFarEarly,
-                triggerOnFarLate,
-                triggerOnLostEarly,
-                triggerOnLostLate,
+                triggerOnPerfectEarly,
+                triggerOnPerfectLate,
+                triggerOnGoodEarly,
+                triggerOnGoodLate,
+                triggerOnMissEarly,
+                triggerOnMissLate,
                 serialization.AddUnitAndGetId(TriggerDispatch.Value),
                 serialization.AddUnitAndGetId(TriggerDispatch.Duration),
                 TriggerDispatch.EasingString,
@@ -208,12 +208,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public override void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization)
         {
             triggerOnMax = (bool)properties[0];
-            triggerOnPureEarly = (bool)properties[1];
-            triggerOnPureLate = (bool)properties[2];
-            triggerOnFarEarly = (bool)properties[3];
-            triggerOnFarLate = (bool)properties[4];
-            triggerOnLostEarly = (bool)properties[5];
-            triggerOnLostLate = (bool)properties[6];
+            triggerOnPerfectEarly = (bool)properties[1];
+            triggerOnPerfectLate = (bool)properties[2];
+            triggerOnGoodEarly = (bool)properties[3];
+            triggerOnGoodLate = (bool)properties[4];
+            triggerOnMissEarly = (bool)properties[5];
+            triggerOnMissLate = (bool)properties[6];
             TriggerDispatch = new TriggerValueDispatch
             {
                 Value = deserialization.GetUnitFromId<ValueChannel>(properties[7]),

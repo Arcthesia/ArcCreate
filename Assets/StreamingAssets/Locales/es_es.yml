@@ -651,9 +651,9 @@ Gameplay:
         Speed: Velocidad
         SpeedDetail: |-
           Ajusta la velocidad a la que las notas se aproximan al área de juicio.
-        EarlyLatePureDisplay: Visualizar Early/Late Pure
-        EarlyLatePureDisplayDetail: |-
-          Cambiar si quieres mostrar o no los juicios Early/Late Pure
+        EarlyLatePerfectDisplay: Visualizar Early/Late Perfect
+        EarlyLatePerfectDisplayDetail: |-
+          Cambiar si quieres mostrar o no los juicios Early/Late Perfect
       Audio:
         Name: Audio
         Offset: Offset

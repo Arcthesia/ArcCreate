@@ -21,7 +21,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             int i = str.IndexOf(',');
             int k = str.LastIndexOf(',');
-            int j = str.LastIndexOf(',', 0, k);
+            int j = str.LastIndexOf(',', k - 1);
             string timingString = str.Substring(0, i);
             string valueString = str.Substring(i + 1, j - i - 1);
             string fromString = str.Substring(j + 1, k - j - 1);

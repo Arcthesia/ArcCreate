@@ -28,13 +28,13 @@ namespace ArcCreate.EditorScripts
             GUILayout.BeginHorizontal();
             result = (JudgementResult)EditorGUILayout.Popup("Judge result", (int)result, new string[]
                 {
-                    "LostEarly",
-                    "FarEarly",
-                    "PureEarly",
+                    "MissEarly",
+                    "GoodEarly",
+                    "PerfectEarly",
                     "Max",
-                    "PureLate",
-                    "FarLate",
-                    "LostLate",
+                    "PerfectLate",
+                    "GoodLate",
+                    "MissLate",
                 });
             GUILayout.EndHorizontal();
 

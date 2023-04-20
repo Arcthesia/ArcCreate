@@ -105,14 +105,14 @@ namespace ArcCreate.Gameplay.Data
                 {
                     if (!spawnedParticleThisFrame)
                     {
-                        Services.Particle.PlayTextParticle(currentPos, JudgementResult.LostLate);
+                        Services.Particle.PlayTextParticle(currentPos, JudgementResult.MissLate);
                         spawnedParticleThisFrame = true;
                     }
 
-                    Services.Score.ProcessJudgement(JudgementResult.LostLate);
+                    Services.Score.ProcessJudgement(JudgementResult.MissLate);
                 }
             }
-            else if (currentTiming <= EndTiming + Values.HoldLostLateJudgeWindow)
+            else if (currentTiming <= EndTiming + Values.HoldMissLateJudgeWindow)
             {
                 SetGroupHighlight(true, currentTiming + Values.HoldParticlePersistDuration);
                 if (!hasBeenHitOnce)
@@ -142,8 +142,8 @@ namespace ArcCreate.Gameplay.Data
                 int timing = (int)System.Math.Round(FirstJudgeTime + (t * TimeIncrement));
                 Services.Judgement.Request(new ArcJudgementRequest()
                 {
-                    StartAtTiming = timing - Values.FarJudgeWindow,
-                    ExpireAtTiming = timing + Values.HoldLostLateJudgeWindow,
+                    StartAtTiming = timing - Values.GoodJudgeWindow,
+                    ExpireAtTiming = timing + Values.HoldMissLateJudgeWindow,
                     AutoAtTiming = timing,
                     Arc = this,
                     IsJudgement = true,

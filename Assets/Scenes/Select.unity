@@ -544,7 +544,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a32ed771c5ecb9c0b803c7385241b686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: Gameplay.Selection.Settings.Gameplay.EarlyLatePureDisplay
+  id: Gameplay.Selection.Settings.Gameplay.EarlyLatePerfectDisplay
   readIdFromContent: 0
 --- !u!114 &21950549
 MonoBehaviour:
@@ -15839,7 +15839,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1449154318}
   m_Layer: 9
-  m_Name: EarlyLatePure
+  m_Name: EarlyLatePerfect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15939,7 +15939,7 @@ MonoBehaviour:
   decreaseSpeedButton: {fileID: 1723821033}
   increateSpeedButton: {fileID: 545818}
   noteSpeedText: {fileID: 1663782049}
-  earlyLatePureToggle: {fileID: 871981726}
+  earlyLatePerfectToggle: {fileID: 871981726}
   increaseNoteVolumeButton: {fileID: 1489924898}
   decreaseNoteVolumeButton: {fileID: 1375162536}
   noteVolumeText: {fileID: 1967423850}
@@ -22523,7 +22523,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a32ed771c5ecb9c0b803c7385241b686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: Gameplay.Selection.Settings.Gameplay.EarlyLatePureDisplayDetail
+  id: Gameplay.Selection.Settings.Gameplay.EarlyLatePerfectDisplayDetail
   readIdFromContent: 0
 --- !u!114 &2116192607
 MonoBehaviour:

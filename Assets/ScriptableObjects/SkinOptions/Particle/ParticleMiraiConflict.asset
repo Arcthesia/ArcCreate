@@ -15,8 +15,8 @@ MonoBehaviour:
   Name: miraiconflict
   particleSkin: {fileID: 2800000, guid: 4be09a7c9e7c14949b76ff998a388c6a, type: 3}
   sfxParticleSkin: {fileID: 2800000, guid: 555fccd079dd6e946b0f63bed196bb41, type: 3}
-  HoldEffectColorMin: {r: 0.54901963, g: 0.49932408, b: 0.3529412, a: 0.52156866}
-  HoldEffectColorMax: {r: 0.54901963, g: 0.4462431, b: 0.15372548, a: 0.5176471}
+  HoldEffectColorMin: {r: 0.54901963, g: 0.49932408, b: 0.3529412, a: 0.6}
+  HoldEffectColorMax: {r: 0.54901963, g: 0.4462431, b: 0.15372548, a: 0.6}
   HoldEffectColorGrid: {r: 0.74509805, g: 0.50655967, b: 0.20784312, a: 0.7176471}
   HoldEffectFromGradient:
     serializedVersion: 2

@@ -9,19 +9,19 @@ namespace ArcCreate.Gameplay.Judgement
 
         public static JudgementResult CalculateJudgeResult(this int offset)
         {
-            if (offset >= Values.FarJudgeWindow)
+            if (offset >= Values.GoodJudgeWindow)
             {
-                return JudgementResult.LostLate;
+                return JudgementResult.MissLate;
             }
 
-            if (offset >= Values.PureJudgeWindow)
+            if (offset >= Values.PerfectJudgeWindow)
             {
-                return JudgementResult.FarLate;
+                return JudgementResult.GoodLate;
             }
 
             if (offset >= Values.MaxJudgeWindow)
             {
-                return JudgementResult.PureLate;
+                return JudgementResult.PerfectLate;
             }
 
             if (offset >= -Values.MaxJudgeWindow)
@@ -29,48 +29,48 @@ namespace ArcCreate.Gameplay.Judgement
                 return JudgementResult.Max;
             }
 
-            if (offset >= -Values.PureJudgeWindow)
+            if (offset >= -Values.PerfectJudgeWindow)
             {
-                return JudgementResult.PureEarly;
+                return JudgementResult.PerfectEarly;
             }
 
-            if (offset >= -Values.FarJudgeWindow)
+            if (offset >= -Values.GoodJudgeWindow)
             {
-                return JudgementResult.FarEarly;
+                return JudgementResult.GoodEarly;
             }
 
-            return JudgementResult.LostEarly;
+            return JudgementResult.MissEarly;
         }
 
         public static bool IsEarly(this JudgementResult res)
         {
-            return res == JudgementResult.FarEarly
-                || res == JudgementResult.PureEarly;
+            return res == JudgementResult.GoodEarly
+                || res == JudgementResult.PerfectEarly;
         }
 
         public static bool IsLate(this JudgementResult res)
         {
-            return res == JudgementResult.FarLate
-                || res == JudgementResult.PureLate;
+            return res == JudgementResult.GoodLate
+                || res == JudgementResult.PerfectLate;
         }
 
-        public static bool IsLost(this JudgementResult res)
+        public static bool IsMiss(this JudgementResult res)
         {
-            return res == JudgementResult.LostEarly
-                || res == JudgementResult.LostLate;
+            return res == JudgementResult.MissEarly
+                || res == JudgementResult.MissLate;
         }
 
-        public static bool IsFar(this JudgementResult res)
+        public static bool IsGood(this JudgementResult res)
         {
-            return res == JudgementResult.FarEarly
-                || res == JudgementResult.FarLate;
+            return res == JudgementResult.GoodEarly
+                || res == JudgementResult.GoodLate;
         }
 
-        public static bool IsPure(this JudgementResult res)
+        public static bool IsPerfect(this JudgementResult res)
         {
-            return res == JudgementResult.PureEarly
+            return res == JudgementResult.PerfectEarly
                 || res == JudgementResult.Max
-                || res == JudgementResult.PureLate;
+                || res == JudgementResult.PerfectLate;
         }
 
         public static bool IsMax(this JudgementResult res)

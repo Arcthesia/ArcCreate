@@ -9,7 +9,7 @@ namespace ArcCreate
 
         // Gameplay
         public static readonly IntSetting DropRate = new IntSetting("DropRate", 150);
-        public static readonly BoolSetting ShowEarlyLatePure = new BoolSetting("ShowEarlyLate", true);
+        public static readonly BoolSetting ShowEarlyLatePerfect = new BoolSetting("ShowEarlyLate", true);
         public static readonly BoolSetting EnableColorblind = new BoolSetting("EnableColorblind", false);
         public static readonly IntSetting FrPmIndicatorPosition = new IntSetting(
             "IndicatorPosition",

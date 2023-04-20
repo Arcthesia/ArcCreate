@@ -29,8 +29,8 @@ namespace ArcCreate.Gameplay.Chart
                 return;
             }
 
-            int judgeFrom = timing - Values.LostJudgeWindow;
-            int judgeTo = timing + Values.HoldLostLateJudgeWindow;
+            int judgeFrom = timing - Values.MissJudgeWindow;
+            int judgeTo = timing + Values.HoldMissLateJudgeWindow;
             var notesInRange = timingTree[judgeFrom, judgeTo];
 
             int i = 0;

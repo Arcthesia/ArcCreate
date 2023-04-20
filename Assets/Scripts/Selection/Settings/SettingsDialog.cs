@@ -12,7 +12,7 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private Button decreaseSpeedButton;
         [SerializeField] private Button increateSpeedButton;
         [SerializeField] private TMP_Text noteSpeedText;
-        [SerializeField] private Toggle earlyLatePureToggle;
+        [SerializeField] private Toggle earlyLatePerfectToggle;
 
         [Header("Audio")]
         [SerializeField] private Button increaseNoteVolumeButton;
@@ -43,7 +43,7 @@ namespace ArcCreate.Selection.Interface
             base.Awake();
             decreaseSpeedButton.onClick.AddListener(OnDecreaseSpeedButton);
             increateSpeedButton.onClick.AddListener(OnIncreateSpeedButton);
-            earlyLatePureToggle.onValueChanged.AddListener(OnEarlyLatePureToggle);
+            earlyLatePerfectToggle.onValueChanged.AddListener(OnEarlyLatePerfectToggle);
             increaseNoteVolumeButton.onClick.AddListener(OnIncreaseNoteVolumeButton);
             decreaseNoteVolumeButton.onClick.AddListener(OnDecreaseNoteVolumeButton);
             increaseMusicVolumeButton.onClick.AddListener(OnIncreaseMusicVolumeButton);
@@ -59,7 +59,7 @@ namespace ArcCreate.Selection.Interface
             maxIndicatorToggle.onValueChanged.AddListener(OnMaxIndicatorToggle);
 
             Settings.DropRate.OnValueChanged.AddListener(OnDropRateSettings);
-            Settings.ShowEarlyLatePure.OnValueChanged.AddListener(OnShowEarlyLatePureSettings);
+            Settings.ShowEarlyLatePerfect.OnValueChanged.AddListener(OnShowEarlyLatePerfectSettings);
             Settings.MusicAudio.OnValueChanged.AddListener(OnMusicAudioSettings);
             Settings.EffectAudio.OnValueChanged.AddListener(OnEffectAudioSettings);
             Settings.GlobalAudioOffset.OnValueChanged.AddListener(OnGlobalAudioOffsetSettings);
@@ -72,7 +72,7 @@ namespace ArcCreate.Selection.Interface
             Settings.EnableMaxIndicator.OnValueChanged.AddListener(OnMaxIndicatorSettings);
 
             OnDropRateSettings(Settings.DropRate.Value);
-            OnShowEarlyLatePureSettings(Settings.ShowEarlyLatePure.Value);
+            OnShowEarlyLatePerfectSettings(Settings.ShowEarlyLatePerfect.Value);
             OnMusicAudioSettings(Settings.MusicAudio.Value);
             OnEffectAudioSettings(Settings.EffectAudio.Value);
             OnGlobalAudioOffsetSettings(Settings.GlobalAudioOffset.Value);
@@ -92,7 +92,7 @@ namespace ArcCreate.Selection.Interface
             base.OnDestroy();
             decreaseSpeedButton.onClick.RemoveListener(OnDecreaseSpeedButton);
             increateSpeedButton.onClick.RemoveListener(OnIncreateSpeedButton);
-            earlyLatePureToggle.onValueChanged.RemoveListener(OnEarlyLatePureToggle);
+            earlyLatePerfectToggle.onValueChanged.RemoveListener(OnEarlyLatePerfectToggle);
             increaseNoteVolumeButton.onClick.RemoveListener(OnIncreaseNoteVolumeButton);
             decreaseNoteVolumeButton.onClick.RemoveListener(OnDecreaseNoteVolumeButton);
             increaseMusicVolumeButton.onClick.RemoveListener(OnIncreaseMusicVolumeButton);
@@ -107,7 +107,7 @@ namespace ArcCreate.Selection.Interface
             maxIndicatorToggle.onValueChanged.AddListener(OnMaxIndicatorToggle);
 
             Settings.DropRate.OnValueChanged.RemoveListener(OnDropRateSettings);
-            Settings.ShowEarlyLatePure.OnValueChanged.RemoveListener(OnShowEarlyLatePureSettings);
+            Settings.ShowEarlyLatePerfect.OnValueChanged.RemoveListener(OnShowEarlyLatePerfectSettings);
             Settings.MusicAudio.OnValueChanged.RemoveListener(OnMusicAudioSettings);
             Settings.EffectAudio.OnValueChanged.RemoveListener(OnEffectAudioSettings);
             Settings.GlobalAudioOffset.OnValueChanged.RemoveListener(OnGlobalAudioOffsetSettings);
@@ -126,9 +126,9 @@ namespace ArcCreate.Selection.Interface
             noteSpeedText.text = (value / Constants.DropRateScalar).ToString("F1");
         }
 
-        private void OnShowEarlyLatePureSettings(bool value)
+        private void OnShowEarlyLatePerfectSettings(bool value)
         {
-            earlyLatePureToggle.SetIsOnWithoutNotify(value);
+            earlyLatePerfectToggle.SetIsOnWithoutNotify(value);
         }
 
         private void OnMusicAudioSettings(float value)
@@ -193,9 +193,9 @@ namespace ArcCreate.Selection.Interface
             Settings.DropRate.Value = (int)Mathf.Clamp(Settings.DropRate.Value + (Constants.DropRateScalar / 10), Constants.MinDropRate, Constants.MaxDropRate);
         }
 
-        private void OnEarlyLatePureToggle(bool value)
+        private void OnEarlyLatePerfectToggle(bool value)
         {
-            Settings.ShowEarlyLatePure.Value = value;
+            Settings.ShowEarlyLatePerfect.Value = value;
         }
 
         private void OnIncreaseNoteVolumeButton()

@@ -126,7 +126,7 @@ namespace ArcCreate.Gameplay.Data
             Services.Score.ProcessJudgement(result);
             isHit = true;
 
-            if (!result.IsLost())
+            if (!result.IsMiss())
             {
                 Services.InputFeedback.LaneFeedback(Lane);
                 Services.Hitsound.PlayTapHitsound();
@@ -138,7 +138,7 @@ namespace ArcCreate.Gameplay.Data
             Services.Judgement.Request(
                 new LaneTapJudgementRequest()
                 {
-                    ExpireAtTiming = Timing + Values.LostJudgeWindow,
+                    ExpireAtTiming = Timing + Values.MissJudgeWindow,
                     AutoAtTiming = Timing,
                     Lane = Lane,
                     Receiver = this,

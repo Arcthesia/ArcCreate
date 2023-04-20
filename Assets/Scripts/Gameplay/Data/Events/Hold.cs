@@ -107,7 +107,7 @@ namespace ArcCreate.Gameplay.Data
 
         public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)
         {
-            if (currentTiming >= Timing - Values.LostJudgeWindow && locked && !tapJudgementRequestSent)
+            if (currentTiming >= Timing - Values.MissJudgeWindow && locked && !tapJudgementRequestSent)
             {
                 RequestTapJudgement();
                 tapJudgementRequestSent = true;
@@ -201,7 +201,7 @@ namespace ArcCreate.Gameplay.Data
         public void ProcessLaneTapJudgement(int offset)
         {
             int currentTiming = Services.Audio.ChartTiming;
-            if (currentTiming >= EndTiming + Values.FarJudgeWindow)
+            if (currentTiming >= EndTiming + Values.GoodJudgeWindow)
             {
                 return;
             }
@@ -236,10 +236,10 @@ namespace ArcCreate.Gameplay.Data
                 highlight = false;
                 if (isJudgement)
                 {
-                    Services.Score.ProcessJudgement(JudgementResult.LostLate);
+                    Services.Score.ProcessJudgement(JudgementResult.MissLate);
                     if (!spawnedParticleThisFrame)
                     {
-                        PlayParticle(JudgementResult.LostLate);
+                        PlayParticle(JudgementResult.MissLate);
                         spawnedParticleThisFrame = true;
                     }
                 }
@@ -264,7 +264,7 @@ namespace ArcCreate.Gameplay.Data
         {
             Services.Judgement.Request(new LaneTapJudgementRequest()
             {
-                ExpireAtTiming = EndTiming + Values.FarJudgeWindow,
+                ExpireAtTiming = EndTiming + Values.GoodJudgeWindow,
                 AutoAtTiming = Timing,
                 Lane = Lane,
                 Receiver = this,
@@ -279,8 +279,8 @@ namespace ArcCreate.Gameplay.Data
 
                 Services.Judgement.Request(new LaneHoldJudgementRequest()
                 {
-                    StartAtTiming = timing - Values.FarJudgeWindow,
-                    ExpireAtTiming = timing + Values.HoldLostLateJudgeWindow,
+                    StartAtTiming = timing - Values.GoodJudgeWindow,
+                    ExpireAtTiming = timing + Values.HoldMissLateJudgeWindow,
                     AutoAtTiming = timing,
                     Lane = Lane,
                     IsJudgement = true,

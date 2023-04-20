@@ -7,13 +7,15 @@ Format:
       While parsing event of type: {EventType}
       With the following: "{Content}".
       {Reason}
-    WrongSyntax: |-
-      Wrong or incomplete syntax.
     UnknownException: |-
       Unknown exception.
       Exception: {Exception}
       Stack trace:
       {StackTrace}
+    WrongSyntax: |-
+      Wrong or incomplete syntax.
+    InvalidHeader: |-
+      Invalid header line.
     ArcColorNegative: |-
       Arc color id can not be negative.
     AudioOffsetInvalid: |-
@@ -691,9 +693,9 @@ Gameplay:
         Speed: Speed
         SpeedDetail: |-
           Adjust the speed at which notes approach the judgement area.
-        EarlyLatePureDisplay: Early/Late pure display
-        EarlyLatePureDisplayDetail: |-
-          Change whether or not to display early/late pure judgements.
+        EarlyLatePerfectDisplay: Early/Late perfect display
+        EarlyLatePerfectDisplayDetail: |-
+          Change whether or not to display early/late perfect judgements.
       Audio:
         Name: Audio
         Offset: Offset

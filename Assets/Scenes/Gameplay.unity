@@ -2719,9 +2719,9 @@ MonoBehaviour:
   gameplayCamera: {fileID: 613949612}
   textParticlePrefab: {fileID: 6418235184630294719, guid: 7fe53f3bc30c6784ea57b51f036346b2,
     type: 3}
-  pureMaterial: {fileID: 2100000, guid: 0b4899441804d7f4fad043314f2bb876, type: 2}
-  farMaterial: {fileID: 2100000, guid: 37003c1bf932b2449996c45caea94297, type: 2}
-  lostMaterial: {fileID: 2100000, guid: 974642831b321b845aca48316a2bf7b5, type: 2}
+  perfectMaterial: {fileID: 2100000, guid: 0b4899441804d7f4fad043314f2bb876, type: 2}
+  goodMaterial: {fileID: 2100000, guid: 37003c1bf932b2449996c45caea94297, type: 2}
+  missMaterial: {fileID: 2100000, guid: 974642831b321b845aca48316a2bf7b5, type: 2}
   earlyLateText: {fileID: 211840654}
   earlyLateTransform: {fileID: 211840653}
   earlyColor: {r: 0, g: 0.09019608, b: 0.9254902, a: 1}

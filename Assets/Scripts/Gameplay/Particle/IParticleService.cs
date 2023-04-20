@@ -22,7 +22,7 @@ namespace ArcCreate.Gameplay.Particle
         void PlayTapParticle(Vector3 worldPosition, JudgementResult result);
 
         /// <summary>
-        /// Play a text (e.g "PURE") particle. The coordinate will be translated to screen-space coordinate.
+        /// Play a text (e.g "Perfect") particle. The coordinate will be translated to screen-space coordinate.
         /// Additionally display the "EARLY" / "LATE" text if judgement matches.
         /// </summary>
         /// <param name="worldPosition">The world-space coordinate.</param>

@@ -2,12 +2,12 @@ namespace ArcCreate.Gameplay.Judgement
 {
     public enum JudgementResult
     {
-        LostEarly,
-        FarEarly,
-        PureEarly,
+        MissEarly,
+        GoodEarly,
+        PerfectEarly,
         Max,
-        PureLate,
-        FarLate,
-        LostLate,
+        PerfectLate,
+        GoodLate,
+        MissLate,
     }
 }

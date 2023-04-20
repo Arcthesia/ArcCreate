@@ -14,9 +14,9 @@ namespace ArcCreate.Gameplay.Particle
 
         [Header("Text particle")]
         [SerializeField] private GameObject textParticlePrefab;
-        [SerializeField] private Material pureMaterial;
-        [SerializeField] private Material farMaterial;
-        [SerializeField] private Material lostMaterial;
+        [SerializeField] private Material perfectMaterial;
+        [SerializeField] private Material goodMaterial;
+        [SerializeField] private Material missMaterial;
 
         [Header("Early late display")]
         [SerializeField] private TMP_Text earlyLateText;
@@ -45,9 +45,9 @@ namespace ArcCreate.Gameplay.Particle
         [SerializeField] private float earlyLateToY;
         [SerializeField] private float longParticlePersistDuration;
 
-        private ExternalTexture pureMaterialTexture;
-        private ExternalTexture farMaterialTexture;
-        private ExternalTexture lostMaterialTexture;
+        private ExternalTexture perfectMaterialTexture;
+        private ExternalTexture goodMaterialTexture;
+        private ExternalTexture missMaterialTexture;
         private ExternalTexture arcParticleTexture;
         private ExternalTexture holdParticleTexture;
 
@@ -66,11 +66,11 @@ namespace ArcCreate.Gameplay.Particle
         private readonly List<LongNote> arcParticlesToPrune = new List<LongNote>();
         private readonly List<LongNote> holdParticlesToPrune = new List<LongNote>();
 
-        private Material PureMaterial { get; set; }
+        private Material PerfectMaterial { get; set; }
 
-        private Material FarMaterial { get; set; }
+        private Material GoodMaterial { get; set; }
 
-        private Material LostMaterial { get; set; }
+        private Material MissMaterial { get; set; }
 
         public void UpdateParticles()
         {
@@ -131,7 +131,7 @@ namespace ArcCreate.Gameplay.Particle
 
         public void PlayTapParticle(Vector3 worldPosition, JudgementResult result)
         {
-            if (result.IsLost())
+            if (result.IsMiss())
             {
                 return;
             }
@@ -145,19 +145,19 @@ namespace ArcCreate.Gameplay.Particle
 
         public void PlayTextParticle(Vector3 worldPosition, JudgementResult result)
         {
-            Material mat = PureMaterial;
+            Material mat = PerfectMaterial;
 
-            if (result.IsPure())
+            if (result.IsPerfect())
             {
-                mat = PureMaterial;
+                mat = PerfectMaterial;
             }
-            else if (result.IsFar())
+            else if (result.IsGood())
             {
-                mat = FarMaterial;
+                mat = GoodMaterial;
             }
             else
             {
-                mat = LostMaterial;
+                mat = MissMaterial;
             }
 
             Vector2 screenPos = ConvertToScreen(worldPosition);
@@ -168,13 +168,13 @@ namespace ArcCreate.Gameplay.Particle
             ps.ApplyMaterial(mat);
             ps.Play();
 
-            if (result.IsEarly() && (result.IsFar() || Settings.ShowEarlyLatePure.Value))
+            if (result.IsEarly() && (result.IsGood() || Settings.ShowEarlyLatePerfect.Value))
             {
                 earlyLateText.SetText(Values.EarlyText);
                 earlyLateText.color = earlyColor;
                 lastEarlyLateRealTime = Time.time;
             }
-            else if (result.IsLate() && (result.IsFar() || Settings.ShowEarlyLatePure.Value))
+            else if (result.IsLate() && (result.IsGood() || Settings.ShowEarlyLatePerfect.Value))
             {
                 earlyLateText.SetText(Values.LateText);
                 earlyLateText.color = lateColor;
@@ -283,9 +283,9 @@ namespace ArcCreate.Gameplay.Particle
             tapParticlePrefab = Instantiate(tapParticlePrefab, transform);
             arcNoteParticlePrefab = Instantiate(arcNoteParticlePrefab, transform);
             holdNoteParticlePrefab = Instantiate(holdNoteParticlePrefab, transform);
-            PureMaterial = Instantiate(pureMaterial);
-            FarMaterial = Instantiate(farMaterial);
-            LostMaterial = Instantiate(lostMaterial);
+            PerfectMaterial = Instantiate(perfectMaterial);
+            GoodMaterial = Instantiate(goodMaterial);
+            MissMaterial = Instantiate(missMaterial);
 
             tapParticlePool = new ParticlePool<Particle>(
                 tapParticlePrefab,
@@ -309,9 +309,9 @@ namespace ArcCreate.Gameplay.Particle
                 longNoteParticleParent,
                 holdParticlePoolCount);
 
-            pureMaterialTexture = new ExternalTexture(PureMaterial.mainTexture, "Particles");
-            farMaterialTexture = new ExternalTexture(FarMaterial.mainTexture, "Particles");
-            lostMaterialTexture = new ExternalTexture(LostMaterial.mainTexture, "Particles");
+            perfectMaterialTexture = new ExternalTexture(PerfectMaterial.mainTexture, "Particles");
+            goodMaterialTexture = new ExternalTexture(GoodMaterial.mainTexture, "Particles");
+            missMaterialTexture = new ExternalTexture(MissMaterial.mainTexture, "Particles");
 
             var particlePrefabRenderer = arcNoteParticlePrefab.GetComponent<ParticleSystemRenderer>();
             arcParticleTexture = new ExternalTexture(particlePrefabRenderer.material.mainTexture, "Particles");
@@ -349,14 +349,14 @@ namespace ArcCreate.Gameplay.Particle
 
         private async UniTask LoadExternalParticleSkin()
         {
-            await pureMaterialTexture.Load();
-            await farMaterialTexture.Load();
-            await lostMaterialTexture.Load();
+            await perfectMaterialTexture.Load();
+            await goodMaterialTexture.Load();
+            await missMaterialTexture.Load();
             await arcParticleTexture.Load();
 
-            PureMaterial.mainTexture = pureMaterialTexture.Value;
-            FarMaterial.mainTexture = farMaterialTexture.Value;
-            LostMaterial.mainTexture = lostMaterialTexture.Value;
+            PerfectMaterial.mainTexture = perfectMaterialTexture.Value;
+            GoodMaterial.mainTexture = goodMaterialTexture.Value;
+            MissMaterial.mainTexture = missMaterialTexture.Value;
 
             var particlePrefabRenderer = arcNoteParticlePrefab.GetComponent<ParticleSystemRenderer>();
             particlePrefabRenderer.material.mainTexture = arcParticleTexture.Value;
@@ -371,14 +371,14 @@ namespace ArcCreate.Gameplay.Particle
             textParticlePool.Destroy();
             Pools.Destroy<Particle>(Values.ArcParticlePoolName);
 
-            pureMaterialTexture.Unload();
-            farMaterialTexture.Unload();
-            lostMaterialTexture.Unload();
+            perfectMaterialTexture.Unload();
+            goodMaterialTexture.Unload();
+            missMaterialTexture.Unload();
             arcParticleTexture.Unload();
 
-            Destroy(PureMaterial);
-            Destroy(FarMaterial);
-            Destroy(LostMaterial);
+            Destroy(PerfectMaterial);
+            Destroy(GoodMaterial);
+            Destroy(MissMaterial);
 
             Settings.LateEarlyTextPosition.OnValueChanged.RemoveListener(OnLateEarlyPositionSettings);
         }

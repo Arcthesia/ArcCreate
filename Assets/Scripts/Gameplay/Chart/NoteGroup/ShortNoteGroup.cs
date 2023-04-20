@@ -28,8 +28,8 @@ namespace ArcCreate.Gameplay.Chart
                 return;
             }
 
-            int judgeFrom = timing - Values.LostJudgeWindow;
-            int judgeTo = timing + Values.LostJudgeWindow;
+            int judgeFrom = timing - Values.MissJudgeWindow;
+            int judgeTo = timing + Values.MissJudgeWindow;
             int judgeIndex = timingSearch.Bisect(judgeFrom);
             while (judgeIndex < timingSearch.List.Count)
             {

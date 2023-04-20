@@ -52,7 +52,7 @@ namespace ArcCreate.Gameplay.Score
             resultReceivedThisFrame.Add(result);
             SetJudgementCount(result, GetJudgementCount(result) + 1);
 
-            if (result.IsLost())
+            if (result.IsMiss())
             {
                 currentCombo = 0;
                 if (Mathf.Approximately(comboRedmix, 0))
@@ -73,9 +73,9 @@ namespace ArcCreate.Gameplay.Score
                 totalCombo != 0 ? (double)Values.MaxScore / totalCombo : 0;
 
             double scoreToAdd = 0;
-            if (result.IsFar())
+            if (result.IsGood())
             {
-                scoreToAdd = scorePerNote * Values.FarPenaltyMultipler;
+                scoreToAdd = scorePerNote * Values.GoodPenaltyMultipler;
                 pmIndicator.SetActive(false);
                 maxIndicator.SetActive(false);
             }

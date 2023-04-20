@@ -675,9 +675,9 @@ Gameplay:
         Speed: 속도
         SpeedDetail: |-
           노트가 다가오는 속도를 조절합니다.
-        EarlyLatePureDisplay: 세부 판정 표시
-        EarlyLatePureDisplayDetail: |-
-          Early/Late Pure 판정의 표시 여부를 설정합니다.
+        EarlyLatePerfectDisplay: 세부 판정 표시
+        EarlyLatePerfectDisplayDetail: |-
+          Early/Late Perfect 판정의 표시 여부를 설정합니다.
       Audio:
         Name: 오디오
         Offset: 오프셋

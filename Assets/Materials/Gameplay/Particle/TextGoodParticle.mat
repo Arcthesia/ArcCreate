@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TextFarParticle
+  m_Name: TextGoodParticle
   m_Shader: {fileID: 4800000, guid: 31bc0b3b4be892744990e5a78c9fc17a, type: 3}
   m_ShaderKeywords: _COLOROVERLAY_ON _EMISSION
   m_LightmapFlags: 0
