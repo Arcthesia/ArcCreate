@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 198445555897360624}
   - component: {fileID: 199917444102316408}
   - component: {fileID: 5096848114926749841}
-  m_Layer: 10
+  m_Layer: 9
   m_Name: ArcNoteParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ ParticleSystem:
   m_GameObject: {fileID: 1799711940945094}
   serializedVersion: 6
   lengthInSec: 0.05
-  simulationSpeed: 5
+  simulationSpeed: 10
   stopAction: 0
   cullingMode: 1
   ringBufferMode: 2
@@ -223,8 +223,8 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 0.9411765, g: 0.4117647, b: 0.60784316, a: 0.8509804}
-      maxColor: {r: 0.9411765, g: 0.67764705, b: 0.77525055, a: 0.8509804}
+      minColor: {r: 0.9411765, g: 0.4117647, b: 0.60784316, a: 1}
+      maxColor: {r: 0.9411765, g: 0.67764705, b: 0.77525055, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -286,7 +286,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 90
+      scalar: 70
       minScalar: 60
       maxCurve:
         serializedVersion: 2
@@ -602,7 +602,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 4
+    maxNumParticles: 1
     size3D: 0
     rotation3D: 0
     gravityModifier:
@@ -867,7 +867,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 50
+      scalar: 5
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -984,7 +984,7 @@ ParticleSystem:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 0.24615097
+          value: 0.7237663
           inSlope: 0.000015568663
           outSlope: 0.000015568663
           tangentMode: 0
@@ -994,11 +994,11 @@ ParticleSystem:
         - serializedVersion: 3
           time: 1
           value: 1
-          inSlope: 2.6572816
-          outSlope: 2.6572816
+          inSlope: 0.76879716
+          outSlope: 0.76879716
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.063685715
+          inWeight: 0.2523811
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -1305,8 +1305,8 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0.34576362, g: 0.46790293, b: 0.6603774, a: 0.7529412}
-        key1: {r: 0.8, g: 0.2, b: 0.4669014, a: 0.050980393}
+        key0: {r: 0.34576362, g: 0.46790293, b: 0.6603774, a: 1}
+        key1: {r: 0.8, g: 0.2, b: 0.4669014, a: 1}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -1334,8 +1334,8 @@ ParticleSystem:
         m_NumAlphaKeys: 2
       minGradient:
         serializedVersion: 2
-        key0: {r: 0.8, g: 0.2, b: 0.67570746, a: 0.24705882}
-        key1: {r: 0.2509804, g: 0.4157608, b: 0.4509804, a: 0.5019608}
+        key0: {r: 0.8, g: 0.2, b: 0.67570746, a: 1}
+        key1: {r: 0.2509804, g: 0.4157608, b: 0.4509804, a: 1}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -4734,8 +4734,8 @@ ParticleSystemRenderer:
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 0
-  m_MinParticleSize: 0.3
-  m_MaxParticleSize: 0.65
+  m_MinParticleSize: 0.35
+  m_MaxParticleSize: 0.75
   m_CameraVelocityScale: 0
   m_VelocityScale: 0
   m_LengthScale: 2
@@ -4778,7 +4778,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4611941572907986988}
   - component: {fileID: 511984382984346291}
-  m_Layer: 10
+  m_Layer: 9
   m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}

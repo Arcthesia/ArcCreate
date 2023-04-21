@@ -45,7 +45,7 @@ namespace ArcCreate.Remote.Gameplay
             this.requestFileFromPort = requestFileFromPort;
             this.channel = channel;
 
-            lastSendTiming = Time.realtimeSinceStartup + Constants.SyncTimingInterval;
+            lastSendTiming = Time.realtimeSinceStartup + Common.Constants.SyncTimingInterval;
         }
 
         public async UniTask HandleMessage(RemoteControl control, byte[] data)
@@ -371,7 +371,7 @@ namespace ArcCreate.Remote.Gameplay
             }
 
             int currentTiming = gameplay.Audio.AudioTiming;
-            if (Time.realtimeSinceStartup > lastSendTiming + Constants.SyncTimingInterval)
+            if (Time.realtimeSinceStartup > lastSendTiming + Common.Constants.SyncTimingInterval)
             {
                 GetBytes(currentTiming, sendTimingArray);
                 channel?.SendMessage(RemoteControl.CurrentTiming, sendTimingArray);

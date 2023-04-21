@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using ArcCreate.ChartFormat;
+using ArcCreate.Data;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -31,6 +32,8 @@ namespace ArcCreate.Gameplay
         public event Action OnChartEdit;
 
         public event Action<int> OnGameplayUpdate;
+
+        public event Action<PlayResult> OnPlayComplete;
 
 #pragma warning disable
         /// <summary>
@@ -340,6 +343,11 @@ namespace ArcCreate.Gameplay
         internal void NotifyUpdate(int currentTiming)
         {
             OnGameplayUpdate?.Invoke(currentTiming);
+        }
+
+        internal void NotifyPlayComplete(PlayResult result)
+        {
+            OnPlayComplete?.Invoke(result);
         }
     }
 }

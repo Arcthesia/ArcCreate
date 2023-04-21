@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ArcCreate.Data;
 using ArcCreate.Gameplay.Judgement;
 using ArcCreate.Utility;
 using ArcCreate.Utility.Extension;
@@ -24,6 +25,7 @@ namespace ArcCreate.Gameplay.Score
 
         private readonly int[] judgeCounts = new int[7];
         private int currentCombo = 0;
+        private int maxCombo = 0;
         private int totalCombo = 1;
         private double currentScoreFull = 0;
         private double currentScorePartial = 0;
@@ -68,14 +70,15 @@ namespace ArcCreate.Gameplay.Score
 
             comboRedmix = 0;
             currentCombo++;
+            maxCombo = Mathf.Max(currentCombo, maxCombo);
 
             double scorePerNote =
-                totalCombo != 0 ? (double)Values.MaxScore / totalCombo : 0;
+                totalCombo != 0 ? (double)Constants.MaxScore / totalCombo : 0;
 
             double scoreToAdd = 0;
             if (result.IsGood())
             {
-                scoreToAdd = scorePerNote * Values.GoodPenaltyMultipler;
+                scoreToAdd = scorePerNote * Constants.GoodPenaltyMultipler;
                 pmIndicator.SetActive(false);
                 maxIndicator.SetActive(false);
             }
@@ -130,6 +133,7 @@ namespace ArcCreate.Gameplay.Score
         public void ResetScoreTo(int currentCombo, int totalCombo)
         {
             this.currentCombo = currentCombo;
+            this.maxCombo = currentCombo;
             this.totalCombo = totalCombo;
             SetCombo(currentCombo);
 
@@ -148,7 +152,7 @@ namespace ArcCreate.Gameplay.Score
             }
             else
             {
-                double scorePerNote = (double)Values.MaxScore / totalCombo;
+                double scorePerNote = (double)Constants.MaxScore / totalCombo;
                 currentScoreFull = (scorePerNote + 1) * currentCombo;
                 SetJudgementCount(JudgementResult.Max, currentCombo);
             }
@@ -162,6 +166,27 @@ namespace ArcCreate.Gameplay.Score
         public List<JudgementResult> GetJudgementsThisFrame() => resultReceivedThisFrame;
 
         public void ClearJudgementsThisFrame() => resultReceivedThisFrame.Clear();
+
+        public PlayResult GetPlayResult()
+        {
+            return new PlayResult
+            {
+                DateTime = System.DateTime.UtcNow,
+                LateMissCount = judgeCounts[(int)JudgementResult.MissLate],
+                LateGoodCount = judgeCounts[(int)JudgementResult.GoodLate],
+                LatePerfectCount = judgeCounts[(int)JudgementResult.PerfectLate],
+                MaxCount = judgeCounts[(int)JudgementResult.Max],
+                EarlyPerfectCount = judgeCounts[(int)JudgementResult.PerfectEarly],
+                EarlyGoodCount = judgeCounts[(int)JudgementResult.GoodEarly],
+                EarlyMissCount = judgeCounts[(int)JudgementResult.MissEarly],
+                MaxCombo = maxCombo,
+                RetryCount = Values.RetryCount,
+                GaugeValue = 100,
+                GaugeClearRequirement = 70,
+                GaugeMax = 100,
+                NoteCount = totalCombo,
+            };
+        }
 
         private void SetScore(int score)
         {

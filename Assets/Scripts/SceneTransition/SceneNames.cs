@@ -7,6 +7,7 @@
         public const string GameplayScene = "Gameplay";
         public const string RemoteScene = "Remote";
         public const string SelectScene = "Select";
+        public const string ResultScene = "Result";
         public const string StorageScene = "Storage";
 
 #if UNITY_EDITOR || UNITY_STANDALONE

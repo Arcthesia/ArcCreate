@@ -57,9 +57,7 @@ namespace ArcCreate.Gameplay
         public const int BeatlineThickness = 20;
 
         // Judgement
-        public const int MaxScore = 10_000_000;
         public const int ScoreModifyDelay = 500;
-        public const float GoodPenaltyMultipler = 0.5f;
         public const int ArcLockDuration = 500;
         public const int ArcGraceDuration = 600;
         public const int ArcRedFlashCycle = 500;
@@ -124,5 +122,9 @@ namespace ArcCreate.Gameplay
         public static float LaneScreenHitboxVertical => LaneScreenHitboxBase.y * ScreenSize.y / ScreenSizeBase.y;
 
         public static bool EnablePauseMenu { get; internal set; } = true;
+
+        public static bool ShouldNotifyOnAudioEnd { get; internal set; } = false;
+
+        public static int RetryCount { get; internal set; } = 0;
     }
 }

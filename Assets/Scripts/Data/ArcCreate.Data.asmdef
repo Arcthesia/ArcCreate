@@ -1,14 +1,15 @@
 {
-    "name": "ArcCreate.Settings",
+    "name": "ArcCreate.Data",
     "references": [
-        "GUID:b3f49edfedc855a48aa1a9e5d3cba438",
-        "GUID:487fec7a34e3d5e99b05a90f30225ba2"
+        "GUID:b3f49edfedc855a48aa1a9e5d3cba438"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "UltraLiteDB.dll"
+    ],
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],

@@ -384,6 +384,7 @@ namespace ArcCreate.Compose.Project
                                 {
                                     new RawTiming()
                                     {
+                                        Type = RawEventType.Timing,
                                         Timing = 0,
                                         TimingGroup = 0,
                                         Bpm = chart.BaseBpm,

@@ -28,11 +28,11 @@ namespace ArcCreate.Storage
             LoadChart(level, chart);
             LoadScenecontrol(level, chart);
 
-            UniTask jacketTask = LoadJacket(level, chart);
+            // Avoid jacket flickering after reload
             UniTask audioTask = LoadAudio(level, chart);
             UniTask bgTask = LoadBackground(level, chart);
 
-            await UniTask.WhenAll(audioTask, jacketTask, bgTask);
+            await UniTask.WhenAll(audioTask, bgTask);
             await UniTask.WaitUntil(() => gameplayControl.IsLoaded);
         }
 
@@ -41,19 +41,6 @@ namespace ArcCreate.Storage
             string audioPath = level.GetRealPath(chart.AudioPath);
             string uri = "file:///" + Uri.EscapeDataString(audioPath.Replace("\\", "/"));
             await gameplayData.LoadAudioFromHttp(uri, System.IO.Path.GetExtension(audioPath));
-        }
-
-        private async UniTask LoadJacket(LevelStorage level, ChartSettings chart)
-        {
-            string jacketPath = level.GetRealPath(chart.JacketPath);
-            if (string.IsNullOrEmpty(jacketPath))
-            {
-                gameplayData.SetDefaultJacket();
-                return;
-            }
-
-            string uri = "file:///" + Uri.EscapeDataString(jacketPath.Replace("\\", "/"));
-            await gameplayData.LoadJacketFromHttp(uri);
         }
 
         private async UniTask LoadBackground(LevelStorage level, ChartSettings chart)

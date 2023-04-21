@@ -35,57 +35,7 @@ namespace ArcCreate.Selection.Interface
             PlayPreviewAudio(level, chart, cts.Token).Forget();
         }
 
-        private void Awake()
-        {
-            minPreviewLength = Constants.MinPreviewSegmentLengthMs / 1000f;
-            storage.SelectedChart.OnValueChange += OnChartChange;
-            storage.OnStorageChange += OnStorageChange;
-            storage.OnSwitchToGameplayScene += OnSwitchToGameplayScene;
-
-            if (storage.IsLoaded)
-            {
-                OnStorageChange();
-            }
-        }
-
-        private void OnDestroy()
-        {
-            storage.SelectedChart.OnValueChange -= OnChartChange;
-            storage.OnStorageChange -= OnStorageChange;
-            storage.OnSwitchToGameplayScene -= OnSwitchToGameplayScene;
-            cts.Cancel();
-            cts.Dispose();
-        }
-
-        private void OnSwitchToGameplayScene()
-        {
-            cts.Cancel();
-            cts.Dispose();
-            cts = new CancellationTokenSource();
-            audioSource.DOFade(0, switchSceneAudioFadeDuration).OnComplete(audioSource.Stop);
-        }
-
-        private void OnStorageChange()
-        {
-            OnChartChange(storage.SelectedChart.Value);
-        }
-
-        private void OnChartChange((LevelStorage level, ChartSettings chart) obj)
-        {
-            var (level, chart) = obj;
-            cts.Cancel();
-            cts.Dispose();
-            cts = new CancellationTokenSource();
-
-            if (level != currentlyPlaying.level || chart.AudioPath != currentlyPlaying.audioPath)
-            {
-                PlayPreviewAudio(level, chart, cts.Token).Forget();
-            }
-
-            currentlyPlaying = (level, chart.AudioPath);
-        }
-
-        private async UniTask PlayPreviewAudio(LevelStorage level, ChartSettings chart, CancellationToken ct)
+        public async UniTask PlayPreviewAudio(LevelStorage level, ChartSettings chart, CancellationToken ct)
         {
             audioSource.Stop();
             AudioClip clip = await storage.GetAudioClipStreaming(level, chart.AudioPath);
@@ -137,6 +87,56 @@ namespace ArcCreate.Selection.Interface
 
                 audioSource.Stop();
             }
+        }
+
+        private void Awake()
+        {
+            minPreviewLength = Constants.MinPreviewSegmentLengthMs / 1000f;
+            storage.SelectedChart.OnValueChange += OnChartChange;
+            storage.OnStorageChange += OnStorageChange;
+            storage.OnSwitchToGameplayScene += OnSwitchToGameplayScene;
+
+            if (storage.IsLoaded)
+            {
+                OnStorageChange();
+            }
+        }
+
+        private void OnDestroy()
+        {
+            storage.SelectedChart.OnValueChange -= OnChartChange;
+            storage.OnStorageChange -= OnStorageChange;
+            storage.OnSwitchToGameplayScene -= OnSwitchToGameplayScene;
+            cts.Cancel();
+            cts.Dispose();
+        }
+
+        private void OnSwitchToGameplayScene()
+        {
+            cts.Cancel();
+            cts.Dispose();
+            cts = new CancellationTokenSource();
+            audioSource.DOFade(0, switchSceneAudioFadeDuration).OnComplete(audioSource.Stop);
+        }
+
+        private void OnStorageChange()
+        {
+            OnChartChange(storage.SelectedChart.Value);
+        }
+
+        private void OnChartChange((LevelStorage level, ChartSettings chart) obj)
+        {
+            var (level, chart) = obj;
+            cts.Cancel();
+            cts.Dispose();
+            cts = new CancellationTokenSource();
+
+            if (level != currentlyPlaying.level || chart.AudioPath != currentlyPlaying.audioPath)
+            {
+                PlayPreviewAudio(level, chart, cts.Token).Forget();
+            }
+
+            currentlyPlaying = (level, chart.AudioPath);
         }
     }
 }

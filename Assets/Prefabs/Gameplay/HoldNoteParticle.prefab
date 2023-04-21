@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3569648718598980802}
   - component: {fileID: 8544445464887979613}
-  m_Layer: 10
+  m_Layer: 9
   m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49,7 +49,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 820dcd9646d8b304dbe8c47dc195693f, type: 2}
+  - {fileID: 2100000, guid: 0077ff23d523e3c18aae9ce29959c184, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 8306922337736348702}
   - component: {fileID: 8308902920860161430}
   - component: {fileID: 3977448881185635455}
-  m_Layer: 10
+  m_Layer: 9
   m_Name: HoldNoteParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

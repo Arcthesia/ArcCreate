@@ -10,7 +10,6 @@ namespace ArcCreate.Gameplay.Particle
         private ParticleSystem ps;
         private ParticleSystemRenderer render;
         private Transform cachedTransform;
-        private bool hasGameObject;
 
         public Transform Transform => cachedTransform;
 

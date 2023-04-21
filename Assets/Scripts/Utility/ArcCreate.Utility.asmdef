@@ -6,7 +6,8 @@
         "UniTask",
         "YamlDotNet",
         "ArcCreate.Settings",
-        "Demigiant.DOTween"
+        "Demigiant.DOTween",
+        "ArcCreate.Data"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -46,6 +46,8 @@ namespace ArcCreate.Gameplay
 
         public bool EnablePauseMenu { get => Values.EnablePauseMenu; set => Values.EnablePauseMenu = value; }
 
+        public bool ShouldNotifyOnAudioEnd { get => Values.ShouldNotifyOnAudioEnd; set => Values.ShouldNotifyOnAudioEnd = value; }
+
         public void SetCameraViewportRect(Rect rect)
         {
             backgroundCamera.rect = rect;
@@ -91,6 +93,7 @@ namespace ArcCreate.Gameplay
 
             Time.timeScale = 1;
             Services.Judgement.SetDebugDisplayMode(Settings.ShowGameplayDebug.Value);
+            Values.RetryCount = 0;
         }
 
         private async UniTask ImportTestChartAndroid(string path)

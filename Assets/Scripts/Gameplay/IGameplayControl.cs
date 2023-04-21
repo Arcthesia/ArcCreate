@@ -18,6 +18,11 @@ namespace ArcCreate.Gameplay
         bool EnablePauseMenu { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating Whether or not to notify <see cref="GameplayData.OnPlayComplete"/>.
+        /// </summary>
+        bool ShouldNotifyOnAudioEnd { get; set; }
+
+        /// <summary>
         /// Gets the controller for chart related functionality.
         /// </summary>
         IChartControl Chart { get; }

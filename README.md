@@ -38,7 +38,7 @@ This project was made with Unity 2019.4.34f1. You can download the exact version
 - [ ] Support for controller input
 - [x] Level selection menu
 - [ ] Custom gauge and partner
-- [ ] Result screen
+- [x] Result screen
 - [x] Import level from package file
 - [x] Settings menu
 

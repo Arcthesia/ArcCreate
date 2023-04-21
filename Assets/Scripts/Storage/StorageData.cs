@@ -23,6 +23,7 @@ namespace ArcCreate.Storage
         private static readonly HashSet<UnityEngine.Object> QueuedForDelete = new HashSet<UnityEngine.Object>();
         [SerializeField] private Texture defaultJacket;
         [SerializeField] private GameplayData gameplayData;
+        private (LevelStorage level, ChartSettings chart) currentGameplayChart;
 
         public event Action OnStorageChange;
 
@@ -259,11 +260,12 @@ namespace ArcCreate.Storage
                 return;
             }
 
+            currentGameplayChart = selection;
             var (level, chart) = selection;
             SceneTransitionManager.Instance.SetTransition(new ShutterWithInfoTransition());
             IGameplayControl gameplay = null;
             IsTransitioning = true;
-            OnSwitchToGameplayScene.Invoke();
+            OnSwitchToGameplayScene?.Invoke();
             SceneTransitionManager.Instance.SwitchScene(
                 SceneNames.GameplayScene,
                 async (rep) =>
@@ -272,6 +274,8 @@ namespace ArcCreate.Storage
                     {
                         await new GameplayLoader(gameplayControl, gameplayData).Load(level, chart);
                         gameplay = gameplayControl;
+                        gameplay.ShouldNotifyOnAudioEnd = true;
+                        gameplay.EnablePauseMenu = true;
                         gameplay.Audio.AudioTiming = -Values.DelayBeforeAudioStart;
                     }
 
@@ -283,6 +287,21 @@ namespace ArcCreate.Storage
                     IsTransitioning = false;
                 })
                 .ContinueWith(() => gameplay?.Audio.PlayWithDelay(0, Values.DelayBeforeAudioStart));
+
+            gameplayData.OnPlayComplete -= OnPlayComplete;
+            gameplayData.OnPlayComplete += OnPlayComplete;
+        }
+
+        public void SwitchToResultScene(LevelStorage level, ChartSettings chart, PlayResult result)
+        {
+            SceneTransitionManager.Instance.SetTransition(new ShutterTransition(500));
+            SceneTransitionManager.Instance.SwitchScene(
+                SceneNames.ResultScene,
+                (rep) =>
+                {
+                    rep.PassData(level, chart, result);
+                    return default;
+                }).Forget();
         }
 
         public (LevelStorage level, ChartSettings chart) GetLastSelectedChart(string packId)
@@ -370,6 +389,17 @@ namespace ArcCreate.Storage
             {
                 QueuedForDelete.Add(obj.Value);
             }
+        }
+
+        private void OnPlayComplete(PlayResult result)
+        {
+            var (currentLevel, currentChart) = currentGameplayChart;
+            PlayHistory history = PlayHistory.GetHistoryForChart(currentLevel.Identifier, currentChart.ChartPath);
+            result.BestScore = history.BestScorePlay.Score;
+            result.PlayCount = history.PlayCount + result.RetryCount + 1;
+            history.AddPlay(result);
+            history.Save();
+            SwitchToResultScene(currentLevel, currentChart, result);
         }
 
         private class Incompletable<T>

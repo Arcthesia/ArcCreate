@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ArcCreate.Data;
 using ArcCreate.Gameplay.Judgement;
 
 namespace ArcCreate.Gameplay.Score
@@ -38,5 +39,7 @@ namespace ArcCreate.Gameplay.Score
         /// </summary>
         /// <param name="currentTiming">The current chart timing.</param>
         void UpdateDisplay(int currentTiming);
+
+        PlayResult GetPlayResult();
     }
 }

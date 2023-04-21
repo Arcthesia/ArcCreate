@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ArcCreate.Data;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -54,6 +55,7 @@ namespace ArcCreate.Gameplay.Audio
         private int onPauseReturnTo = 0;
         private bool isStationary;
         private float updatePace = 1;
+        private bool audioEndReported;
 
         public AudioSource AudioSource => audioSource;
 
@@ -120,15 +122,19 @@ namespace ArcCreate.Gameplay.Audio
 
         public void UpdateTime()
         {
+            double dspTime = AudioSettings.dspTime;
             if (!IsPlaying)
             {
+                if (audioSource.clip != null && audioTiming >= Mathf.Max(0, AudioLength - 100))
+                {
+                    OnAudioEnd();
+                }
+
                 return;
             }
 
             if (Application.isMobilePlatform || Settings.SyncToDSPTime.Value)
             {
-                double dspTime = AudioSettings.dspTime;
-
                 isStationary = stationaryBeforeStart && dspTime <= dspStartPlayingTime;
 
                 if (stationaryBeforeStart)
@@ -295,6 +301,7 @@ namespace ArcCreate.Gameplay.Audio
             }
 
             SetEnableAutorotation(false);
+            audioEndReported = false;
         }
 
         private void Awake()
@@ -326,6 +333,17 @@ namespace ArcCreate.Gameplay.Audio
         private void OnMusicAudioSettings(float volume)
         {
             audioSource.volume = Mathf.Clamp(volume, 0, 1);
+        }
+
+        private void OnAudioEnd()
+        {
+            if (!audioEndReported && Values.ShouldNotifyOnAudioEnd)
+            {
+                PlayResult result = Services.Score.GetPlayResult();
+                gameplayData.NotifyPlayComplete(result);
+            }
+
+            audioEndReported = true;
         }
 
         private float Tanh(float v)

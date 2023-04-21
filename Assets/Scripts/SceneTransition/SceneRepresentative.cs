@@ -9,6 +9,14 @@ namespace ArcCreate.SceneTransition
     public class SceneRepresentative : MonoBehaviour
     {
         /// <summary>
+        /// Lazy method for passing data in case cyclic dependency gets problematic.
+        /// </summary>
+        /// <param name="args">Argument to be passed.</param>
+        public virtual void PassData(params object[] args)
+        {
+        }
+
+        /// <summary>
         /// Called when the scene is unloaded.
         /// </summary>
         public virtual void OnUnloadScene()

@@ -1,7 +1,7 @@
 using System;
 using UltraLiteDB;
 
-namespace ArcCreate.Storage.Data
+namespace ArcCreate.Data
 {
     public struct PlayResult
     {
@@ -14,26 +14,36 @@ namespace ArcCreate.Storage.Data
         public int EarlyGoodCount;
         public int EarlyMissCount;
         public int MaxCombo;
+        public int RetryCount;
         public float GaugeValue;
         public float GaugeClearRequirement;
         public float GaugeMax;
-
-        [BsonIgnore] public int PerfectCount => LatePerfectCount + EarlyPerfectCount + MaxCount;
-
-        [BsonIgnore] public int GoodCount => LateGoodCount + EarlyGoodCount;
-
-        [BsonIgnore] public int MissCount => LateMissCount + EarlyMissCount;
-
-        [BsonIgnore] public int NoteCount => PerfectCount + GoodCount + MissCount;
+        public double BestScore;
+        public int PlayCount;
+        public int NoteCount;
 
         [BsonIgnore]
-        public float Score
+        public int PerfectCount => LatePerfectCount + EarlyPerfectCount + MaxCount;
+
+        [BsonIgnore]
+        public int GoodCount => LateGoodCount + EarlyGoodCount;
+
+        [BsonIgnore]
+        public int MissCount => LateMissCount + EarlyMissCount;
+
+        [BsonIgnore]
+        public double Score
         {
             get
             {
-                float res = 0;
-                float scorePerNote = Gameplay.Values.MaxScore / NoteCount;
-                res += GoodCount * scorePerNote * Gameplay.Values.GoodPenaltyMultipler;
+                double res = 0;
+                if (NoteCount == 0)
+                {
+                    return 0;
+                }
+
+                double scorePerNote = (double)Constants.MaxScore / NoteCount;
+                res += GoodCount * scorePerNote * Constants.GoodPenaltyMultipler;
                 res += PerfectCount * scorePerNote;
                 res += MaxCount;
                 return res;
@@ -71,6 +81,25 @@ namespace ArcCreate.Storage.Data
                 }
 
                 return ClearResult.Fail;
+            }
+        }
+
+        [BsonIgnore]
+        public Grade Grade
+        {
+            get
+            {
+                double score = Score;
+                Grade result = Grade.D;
+                foreach (Grade grade in Enum.GetValues(typeof(Grade)))
+                {
+                    if (score > (double)grade)
+                    {
+                        result = grade;
+                    }
+                }
+
+                return result;
             }
         }
     }

@@ -166,6 +166,7 @@ namespace ArcCreate.Remote.Gameplay
 
         private void UseGameplay(IGameplayControl gameplay)
         {
+            gameplay.ShouldNotifyOnAudioEnd = false;
             gameplay.Chart.EnableColliderGeneration = false;
             remoteGameplayControl.SetGameplay(gameplay);
             Debug.Log(I18n.S("Compose.Notify.GameplayLoaded"));
