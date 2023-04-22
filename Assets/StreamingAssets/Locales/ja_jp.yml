@@ -1,7 +1,6 @@
-# このファイルは「[f0ff48d] Gameplay: Improve judgement」の`en_us.yml`をもとに翻訳しました。
-# 現在、「[1612cc6] Remote: Add option to manually connect to IP」までの更新を反映作業中。
+# このファイルは「[9a93f2b] Gameplay: Add grade & rank display to result & select」の`en_us.yml`をもとに翻訳しました。
 # 以下のURLで、最新版の`en_us.yml`との差分を確認できます。
-# https://github.com/0thElement/ArcCreate/compare/f0ff48d..HEAD#diff-6842e12e8ae98f1262c6e69a5d98d10210d4cceba6273dce82f5d8dbfd22ce90
+# https://github.com/0thElement/ArcCreate/compare/9a93f2b..HEAD#diff-6842e12e8ae98f1262c6e69a5d98d10210d4cceba6273dce82f5d8dbfd22ce90
 
 # ほんやくノート
 # - カッコは「()」(半角)
@@ -35,6 +34,14 @@ Format:
       イベントタイプ: {EventType}
       処理中の行: "{Content}"
       {Reason}
+    UnknownException: |-
+      不明なエラー: {Exception}
+      -
+      {StackTrace}
+    WrongSyntax: |-
+      構文が間違っているか不完全です。
+    InvalidHeader: |-
+      無効なヘッダーです。
     ArcColorNegative: |-
       ArcのColorIDは負の値にできません。
     AudioOffsetInvalid: |-
@@ -61,6 +68,11 @@ Format:
       Skyが属しているArcの継続時間外にあります。
     TimingGroupPropertiesInvalid: |-
       TimingGroupのプロパティが正しくありません。
+  Warning:
+    HoldTooShort:
+      ホールドノートの長さが17ms以下です。
+    TapJudgementOverlap:
+      タップノートの判定が他のノーツの判定と重なっています。
 
 Compose:
   # Exception messages within the editor
@@ -105,15 +117,39 @@ Compose:
         無効な修飾キー: 文字列"{0}"を修飾キーに変換できません。不明な修飾キー名です。
       InvalidActionPath: |-
         無効なアクションパス: 文字列"{0}"をアクションに変換できません。不明なアクションパスです。
-    Scenecontrol: |- # (?) 後で実際に使ってみて見直す
+    Scenecontrol: |-
       SceneControl "{0}"を実行中にエラーが発生しました。
       詳細: {Message}
+      -
       {StackTrace}
     LuaScript: |-
       Luaスクリプトを実行中にエラーが発生しました。
       ファイル: {Path}
       詳細: {Message}
+      -
       {StackTrace}
+    Render:
+      FFmpeg:
+        NotFound: |-
+          FFmpegを検出できませんでした。
+          設定されているパスを確認してください。
+          ファイル: {0}
+        Start: |-
+          FFmpegを開始できませんでした。
+          詳細: {Message}
+          FFmpeg: {Path}
+          -
+          {StackTrace}
+        Write: |-
+          出力中にエラーが発生しました。
+          詳細: {Message}
+          -
+          {StackTrace}
+      Audio:
+        IncompatibleSfx: |- # TODO: 複数箇所使えるか確認すること
+          SFX音"{Sfx}"は出力できません。音声に互換性がありません。
+          SFX音は{ExpectedChannels}チャンネルで{ExpectedFrequency}Hzである必要があります。
+          "{Sfx}"は{Channels}チャンネルで{Frequency}Hzです。
 
   # Notification messages
   Notify:
@@ -129,8 +165,8 @@ Compose:
       O: 右回転
       Esc: キャンセル
       Enter: 確定
-    EmmyLuaGenerated: |- # (?) もっといい訳を考える
-      EmmyLuaテンプレートをプロジェクトフォルダに生成しました。
+    EmmyLuaGenerated: |-
+      EmmyLua向けの型定義ファイルを生成しました。
       VSCodeで拡張機能"tangzx.emmylua"を使って補完が利用できます。
     Actions:
       CannotMirror: 選択中のノーツをミラーできませんでした。
@@ -198,6 +234,13 @@ Compose:
       CopyPosition: Arcの座標をコピーしました
       CopyX: ArcのX座標をコピーしました
       CopyY: ArcのY座標をコピーしました
+    Export:
+      Render:
+        Cancelled: 出力をキャンセルしました
+        Complete: 出力が完了しました
+      Package:
+        Complete: |-
+          パッケージにエクスポートしました: {0}
   # Dialog boxes
   Dialog:
     RemoveGroup:
@@ -211,7 +254,8 @@ Compose:
       Title: 譜面を削除
       Content: |-
         この譜面をプロジェクトから取り除いてもよろしいですか？
-        譜面ファイル自体は削除*されず*、後でプロジェクトに追加し直すことができますが、譜面に関連付けられたメタデータは失われます。
+        譜面ファイル自体は削除*されず*、後でプロジェクトに追加し直すことができます。
+        ただし、譜面に関連付けられたメタデータは失われます。
       Yes: 削除
       No: キャンセル
     UnsavedChanges:
@@ -221,6 +265,18 @@ Compose:
       Yes: 保存
       No: 変更を破棄
       Cancel: キャンセル
+    LoadChartError:
+      Title: 譜面エラー
+      Content: |-
+        譜面ファイルを読み込み中にエラーが発生しました。
+        外部テキストエディタで修正するか、このダイアログを閉じてから"<> {TabName}"タブで修正してください。
+        
+        ファイル: {ChartPath}
+        {LineNumber}行目: "{Content}"
+        イベントタイプ: {EventType}
+        -
+        {Exception}
+      Confirm: 確認
   Navigation:
     KeybindOverride: アクション"{0}"のキーバインドがオーバーライドされました。
     # Texts that appear on the context menu (right-click menu)
@@ -305,6 +361,7 @@ Compose:
       ImagePrompt: クリックして選択
     PanelNames: # 翻訳しない
       Toolbox: Toolbox
+      RawEditor: Text
       Gameplay: Gameplay
       Timeline: Timeline
       Project: Project
@@ -327,15 +384,20 @@ Compose:
       Label:
         NewChart: 新規譜面
         NewProject: 新規プロジェクト
-        ProjectFile: プロジェクトファイル
+        ProjectFile: |-
+          プロジェクト
+          ファイル
         ChartFile: 譜面ファイル
         Information: 情報
+        Gameplay: プレイ関係 # (?) これでいい？
         Title: 曲名
         Composer: 作曲
         Illustrator: イラスト
         Charter: 譜面制作
+        Alias: エイリアス # (?) 適切な訳が思いつかない
         BPM: BPM
         BaseBPM: 基準BPM
+        BPMText: BPM表示
         SyncBaseBPM: 同期 # (?) 機能不明
         ChartOffset: 譜面オフセット
         TimingPointDensityFactor: 判定密度
@@ -366,6 +428,10 @@ Compose:
         NoProjectLoaded: |-
           プロジェクトがロードされていません。
           新しく作成するか、既存のプロジェクトを開いてください。
+        Shutter: シャッター
+        ShowShutter: シャッターを表示
+        HideShutter: シャッターを隠す 
+        PreviewSegment: 楽曲プレビュー
       Options: # 翻訳しない
         Inherit: （既定）
         Light: Light
@@ -404,7 +470,7 @@ Compose:
         AddEvent: 追加
         DeleteEvent: 削除
         AutoReload: 自動再読み込み
-        GenerateEmmyLua: EmmyLuaファイルを生成 # (?)
+        GenerateEmmyLua: 型定義ファイルを生成
         Reload: 再読み込み
         FreeCamera: フリー
       CameraView:
@@ -417,6 +483,40 @@ Compose:
         Timing: Timing
         Camera: Camera
         Scenecontrol: Scene
+    # Export panel
+    Export:
+      Render:
+        Name: 動画出力
+        Description: |-
+          譜面動画を録画・出力します。
+          FFmpegのインストールが必要です。
+        ConfigureFFmpeg: FFmpegのインストールパス
+        Settings:
+          Name: 出力設定
+          From: 開始
+          To: 終了
+          Quality: 品質
+          FPS: FPS
+          Width: 幅
+          Height: 高さ
+          Size: Size # (?) 機能不明・用途不明
+          ShowShutter: シャッターを表示
+        Start: 出力開始
+        Cancel: キャンセル
+        Status: |-
+          出力中
+          経過: {0}
+          残り: {1}
+      Package:
+        Name: パッケージ化
+        Description: |-
+          共有してプレイ可能な.arcpkgパッケージにエクスポートします。
+        Publisher: 作成者
+        Package: パッケージ名
+        Version: バージョン
+        BlankField: 作成者とパッケージ名を設定してください。
+        Identifier: "パッケージID: {0}"
+        Export: エクスポート
     # Editor settings panel
     Settings:
       Label:
@@ -429,6 +529,8 @@ Compose:
           Name: ゲーム画面
           Speed: 譜面速度
           AspectRatio: アスペクト比
+          Indicator: FR/PM表示
+          MaxIndicator: 理論値表示
         Grid:
           Name: グリッド
           Slot: スロット
@@ -442,7 +544,8 @@ Compose:
           Name: 音量
           Music: 曲
           Effect: SE
-          GlobalOffset: Global Offset # (?) 機能不明
+          GlobalOffset: オフセット # (?) 機能不明
+          SyncToDSPTime: DSPタイミングに同期 # (?) 機能不明
         Display:
           Name: 画面
           Vsync: VSync
@@ -451,6 +554,12 @@ Compose:
         Input:
           Name: 入力
           ReloadKeybinds: キーバインドを再読み込み
+        Files:
+          Name: ファイル
+          Backup: 自動バックアップ
+          BackupCount: 最大数
+          Autosave: 自動保存
+          AutosaveInterval: 間隔(秒)
         ScrollSensitivity:
           Name: スクロール感度
           Vertical: 垂直
@@ -528,6 +637,7 @@ Remote:
     StopSession: セッションを終了
     StartNewSession: 新しいセッションを開始
     ManualIP: マニュアルで接続する
+    ReturnToSelect: 曲選択画面に戻る
   Control:
     Name: Control
     Sync:
@@ -538,15 +648,18 @@ Remote:
       Jacket: ジャケット
       Background: 背景
       Metadata: メタデータ
-    Settings:
+    Settings: # (?) 用途不明
       Name: プレイ設定
       Offset: オフセット
       Speed: 譜面速度
+      MusicVolume: 曲音量 # (?) 用途不明
+      EffectVolume: FX音量 # (?) スペースあれば変える
     StartTiming: 開始タイミング
     EndTiming: 終了タイミング
     Loop: ループ再生
     ShowLog: ログを表示
     ShowDebug: デバッグ情報を表示
+    ManualIP: IPを手動で設定
   Window:
     Name: Remote
     SyncChart: 譜面を同期
@@ -555,22 +668,155 @@ Remote:
 Gameplay:
   Exception:
     LoadAudio: |-
-      音声ファイルの読み込み中にエラーが発生しました。
+      音声の読み込み中にエラーが発生しました。
       ファイル: "{Path}"
       {Error}
     Chart: |-
-      譜面ファイルの読み込み中にエラーが発生しました。
+      譜面の読み込み中にエラーが発生しました。
       ファイル: "{Path}"
       {Error}
     Skin: |-
-      画像ファイルの読み込み中にエラーが発生しました。
+      画像の読み込み中にエラーが発生しました。
       ファイル: "{Path}"
       {Error}
     Scenecontrol: |-
       SceneControlデータの読み込み中にエラーが発生しました。
       ファイル: "{Path}"
       {Error}
-  HUD: # (?) 用途不明
-    Play: プレイ
+    ScenecontrolSprite: |-
+      SceneControlスプライトの読み込み中にエラーが発生しました。
+      ファイル: "{Path}"
+      {Error}
+    Load: |-
+      譜面の読み込み中に不明なエラーが発生しました。
+      譜面: "{Identifier}", {ChartPath}
+      詳細: {Message}
+      -
+      {StackTrace}
+  HUD:
+    Play: つづける
     Retry: リトライ
-    Return: 戻る
+    Return: 中断する
+  Selection:
+    SelectStatus: # (?) asset: アセットでいい？
+      Singular: |-
+        {0}個のアセットを選択中
+      Plural: |-
+        {0}個のアセットを選択中
+    DeleteConfirmation: |-
+      選択中のアセットを削除してもよろしいですか？
+      プレイスコアは保存されます。
+    CannotDeleteDefault: |-
+      デフォルトのアセットは削除できません。
+    Action:
+      Delete: 削除
+      Cancel: キャンセル
+      Done: 完了
+    List:
+      RemoteTestplay: "リモート\nテストプレイ"
+      Import: インポート
+      Community: コミュニティ
+      AllSongs: All Songs
+      OtherDifficulties: Other Difficulties
+    Info:
+      Undefined:
+        Title: Unnamed
+        Composer: N/A
+        Charter: Unknown
+      Charter: '譜面制作: {0}'
+    Sort:
+      addeddate: "日付"
+      charter: "譜面制作"
+      composer: "作曲"
+      difficulty: "難易度"
+      grade: "グレード"
+      playcount: "プレイ回数"
+      score: "スコア"
+      title: "曲名"
+    Group:
+      none: "なし"
+      difficulty: "難易度"
+      grade: "グレード"
+      rank: "ランク"
+      charter: "譜面制作"
+    Settings:
+      Name: 設定
+      Language: 言語設定
+      Gameplay:
+        Name: プレイ設定
+        Speed: 譜面速度
+        SpeedDetail: |-
+          流れてくる譜面の速さを調整します。
+        EarlyLatePerfectDisplay: Perfect Early/Lateを表示
+        EarlyLatePerfectDisplayDetail: |-
+          Perfect判定でもEarly/Lateを表示します。
+      Audio:
+        Name: 音声設定
+        Offset: 音ズレ調整
+        OffsetDetail: |-
+          音楽と譜面のズレを微調整します。
+          LATEが多いときは増やして、EARLYが多いときは減らしてみてください。
+        Calibrate: 調整する
+        MusicAudio: 曲音量
+        MusicAudioDetail: |-
+          音楽の音量を調整します。
+        EffectAudio: SE音量
+        EffectAudioDetail: |-
+          タップ音の音量を調整します。
+      Visual:
+        Name: 画面設定
+        Colorblind: 色覚補助モード
+        ColorblindDetail: アークノートの色が青と黄色になります。
+        FrPmDisplay: FR/PM表示
+        FrPmDisplayDetail: FR/PM表示の有効/無効と表示場所を調整します。
+        MaxDisplay: 理論値表示
+        MaxDisplayDetail: 現在理論値かどうかに応じてFR/PM表示の色が変わります。
+        EarlyLateDisplay: Early/Lateの位置
+        EarlyLateDisplayDetail: Early/Lateの位置を調整します。
+        LimitFramerate: FPS制限
+        LimitFramerateDetail: FPSを60に制限します。バッテリーの消費が抑えられますが、遅延が増加する場合があります。
+        ShowFPS: FPSを表示
+        ShowFPSDetail: FPSの表示/非表示を切り替えます。
+        ShowDebug: デバッグ情報を表示
+        ShowDebugDetail: プレイ画面でデバッグ情報を表示します。(開発者向け)
+      FrPmPosition:
+        middle: コンボの下
+        infopanel: 画面上部
+        off: 無効
+      EarlyLateTextPosition:
+        middle: 画面中部
+        bottom: 画面下部
+        top: 画面上部
+
+Shutter:
+  Composer: 作曲
+  Illustrator: イラスト
+  Charter: 譜面制作
+  Alias: as
+
+Storage:
+  Confirm: 確認
+  ImportErrors: |-
+    以下のアセットを正常にインポートできませんでした。
+  ImportSummary: |-
+    アセットのインポートが完了しました。
+  NoAssetImported: |- # (?) 用途不明
+    アセットはインポートされませんでした。 
+  ImportConflict:
+    Message: |-
+      アセットの古いバージョンをインポートしようとしています。
+      どちらのバージョンを保持しますか？
+    ReplaceAsset:
+      インポート中のアセットで置き換える。
+    KeepOriginal:
+      すでにインポート済みのアセットを保持する。
+    Identifier: "パッケージID: {0}"
+    Version: "バージョン: {0}"
+  Loading:
+    Message: 'ロード中: {0}...'
+    Archive: アーカイブを解凍中
+    ValidatePackage: パッケージを検証中
+    CheckConflict: コンフリクトを確認中
+    DeleteAsset: アセット"{0}"を削除中
+    StoreAsset: アセット"{0}"を保存中
+    Finalizing: インポート完了
