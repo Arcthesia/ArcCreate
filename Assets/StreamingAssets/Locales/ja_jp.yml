@@ -108,12 +108,36 @@ Compose:
     Scenecontrol: |- # (?) 後で実際に使ってみて見直す
       SceneControl "{0}"を実行中にエラーが発生しました。
       詳細: {Message}
+      -
       {StackTrace}
     LuaScript: |-
       Luaスクリプトを実行中にエラーが発生しました。
       ファイル: {Path}
       詳細: {Message}
+      -
       {StackTrace}
+    Render:
+      FFmpeg:
+        NotFound: |-
+          FFmpegを検出できませんでした。
+          設定されているパスを確認してください。
+          ファイル: {0}
+        Start: |-
+          FFmpegを開始できませんでした。
+          詳細: {Message}
+          FFmpeg: {Path}
+          -
+          {StackTrace}
+        Write: |-
+          出力中にエラーが発生しました。
+          詳細: {Message}
+          -
+          {StackTrace}
+      Audio:
+        IncompatibleSfx: |- # TODO: 複数箇所使えるか確認すること
+          SFX音"{Sfx}"は出力できません。音声に互換性がありません。
+          SFX音は{ExpectedChannels}チャンネルで{ExpectedFrequency}Hzである必要があります。
+          "{Sfx}"は{Channels}チャンネルで{Frequency}Hzです。
 
   # Notification messages
   Notify:
@@ -198,6 +222,13 @@ Compose:
       CopyPosition: Arcの座標をコピーしました
       CopyX: ArcのX座標をコピーしました
       CopyY: ArcのY座標をコピーしました
+    Export:
+      Render:
+        Cancelled: 出力をキャンセルしました
+        Complete: 出力が完了しました
+      Package:
+        Complete: |-
+          パッケージにエクスポートしました: {0}
   # Dialog boxes
   Dialog:
     RemoveGroup:
@@ -211,7 +242,8 @@ Compose:
       Title: 譜面を削除
       Content: |-
         この譜面をプロジェクトから取り除いてもよろしいですか？
-        譜面ファイル自体は削除*されず*、後でプロジェクトに追加し直すことができますが、譜面に関連付けられたメタデータは失われます。
+        譜面ファイル自体は削除*されず*、後でプロジェクトに追加し直すことができます。
+        ただし、譜面に関連付けられたメタデータは失われます。
       Yes: 削除
       No: キャンセル
     UnsavedChanges:
@@ -327,15 +359,20 @@ Compose:
       Label:
         NewChart: 新規譜面
         NewProject: 新規プロジェクト
-        ProjectFile: プロジェクトファイル
+        ProjectFile: |-
+          プロジェクト
+          ファイル
         ChartFile: 譜面ファイル
         Information: 情報
+        Gameplay: プレイ関係 # (?) これでいい？
         Title: 曲名
         Composer: 作曲
         Illustrator: イラスト
         Charter: 譜面制作
+        Alias: エイリアス # (?) 適切な訳が思いつかない
         BPM: BPM
         BaseBPM: 基準BPM
+        BPMText: BPM表示
         SyncBaseBPM: 同期 # (?) 機能不明
         ChartOffset: 譜面オフセット
         TimingPointDensityFactor: 判定密度
@@ -366,6 +403,10 @@ Compose:
         NoProjectLoaded: |-
           プロジェクトがロードされていません。
           新しく作成するか、既存のプロジェクトを開いてください。
+        Shutter: シャッター
+        ShowShutter: シャッターを表示
+        HideShutter: シャッターを隠す 
+        PreviewSegment: 楽曲プレビュー
       Options: # 翻訳しない
         Inherit: （既定）
         Light: Light
@@ -417,6 +458,40 @@ Compose:
         Timing: Timing
         Camera: Camera
         Scenecontrol: Scene
+    # Export panel
+    Export:
+      Render:
+        Name: 動画出力
+        Description: |-
+          譜面動画を録画・出力します。
+          FFmpegのインストールが必要です。
+        ConfigureFFmpeg: FFmpegのインストールパス
+        Settings:
+          Name: 出力設定
+          From: 開始
+          To: 終了
+          Quality: 品質
+          FPS: FPS
+          Width: 幅
+          Height: 高さ
+          Size: Size # (?)
+          ShowShutter: シャッターを表示
+        Start: 出力開始
+        Cancel: キャンセル
+        Status: |-
+          出力中
+          経過: {0}
+          残り: {1}
+      Package:
+        Name: パッケージ化
+        Description: |-
+          共有してプレイ可能な.arcpkgパッケージにエクスポートします。
+        Publisher: 作成者
+        Package: パッケージ名
+        Version: バージョン
+        BlankField: 作成者とパッケージ名を設定してください。
+        Identifier: "パッケージID: {0}"
+        Export: エクスポート
     # Editor settings panel
     Settings:
       Label:
@@ -429,6 +504,7 @@ Compose:
           Name: ゲーム画面
           Speed: 譜面速度
           AspectRatio: アスペクト比
+          Indicator: FR/PM表示
         Grid:
           Name: グリッド
           Slot: スロット
@@ -451,6 +527,12 @@ Compose:
         Input:
           Name: 入力
           ReloadKeybinds: キーバインドを再読み込み
+        Files:
+          Name: ファイル
+          Backup: 自動バックアップ
+          BackupCount: 最大数
+          Autosave: 自動保存
+          AutosaveInterval: 間隔(秒)
         ScrollSensitivity:
           Name: スクロール感度
           Vertical: 垂直
@@ -528,6 +610,7 @@ Remote:
     StopSession: セッションを終了
     StartNewSession: 新しいセッションを開始
     ManualIP: マニュアルで接続する
+    ReturnToSelect: 曲選択画面に戻る
   Control:
     Name: Control
     Sync:
@@ -542,11 +625,14 @@ Remote:
       Name: プレイ設定
       Offset: オフセット
       Speed: 譜面速度
+      MusicVolume: 曲音量 # (?) 用途不明
+      EffectVolume: FX音量 # (?) スペースあれば変える
     StartTiming: 開始タイミング
     EndTiming: 終了タイミング
     Loop: ループ再生
     ShowLog: ログを表示
     ShowDebug: デバッグ情報を表示
+    ManualIP: IPを手動で設定
   Window:
     Name: Remote
     SyncChart: 譜面を同期
@@ -555,22 +641,32 @@ Remote:
 Gameplay:
   Exception:
     LoadAudio: |-
-      音声ファイルの読み込み中にエラーが発生しました。
+      音声の読み込み中にエラーが発生しました。
       ファイル: "{Path}"
       {Error}
     Chart: |-
-      譜面ファイルの読み込み中にエラーが発生しました。
+      譜面の読み込み中にエラーが発生しました。
       ファイル: "{Path}"
       {Error}
     Skin: |-
-      画像ファイルの読み込み中にエラーが発生しました。
+      画像の読み込み中にエラーが発生しました。
       ファイル: "{Path}"
       {Error}
     Scenecontrol: |-
       SceneControlデータの読み込み中にエラーが発生しました。
       ファイル: "{Path}"
       {Error}
-  HUD: # (?) 用途不明
-    Play: プレイ
+    ScenecontrolSprite: |-
+      SceneControlスプライトの読み込み中にエラーが発生しました。
+      ファイル: "{Path}"
+      {Error}
+    Load: |-
+      譜面の読み込み中に不明なエラーが発生しました。
+      譜面: "{Identifier}", {ChartPath}
+      詳細: {Message}
+      -
+      {StackTrace}
+  HUD:
+    Play: つづける
     Retry: リトライ
-    Return: 戻る
+    Return: 中断する
