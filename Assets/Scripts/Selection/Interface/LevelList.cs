@@ -152,6 +152,9 @@ namespace ArcCreate.Selection.Interface
                 case GroupByGrade.Typename:
                     groupStrategy = new GroupByGrade();
                     break;
+                case GroupByRank.Typename:
+                    groupStrategy = new GroupByRank();
+                    break;
                 case GroupByDifficulty.Typename:
                     groupStrategy = new GroupByDifficulty();
                     break;

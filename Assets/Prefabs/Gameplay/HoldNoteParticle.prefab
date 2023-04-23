@@ -49,7 +49,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0077ff23d523e3c18aae9ce29959c184, type: 2}
+  - {fileID: 2100000, guid: 820dcd9646d8b304dbe8c47dc195693f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -198,7 +198,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.75
+      scalar: 0.8
       minScalar: 5
       maxCurve:
         serializedVersion: 2

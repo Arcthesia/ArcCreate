@@ -395,8 +395,8 @@ namespace ArcCreate.Storage
         {
             var (currentLevel, currentChart) = currentGameplayChart;
             PlayHistory history = PlayHistory.GetHistoryForChart(currentLevel.Identifier, currentChart.ChartPath);
-            result.BestScore = history.BestScorePlay.Score;
-            result.PlayCount = history.PlayCount + result.RetryCount + 1;
+            result.BestScore = history.BestScorePlayOrDefault.Score;
+            result.PlayCount = history.PlayCount + 1;
             history.AddPlay(result);
             history.Save();
             SwitchToResultScene(currentLevel, currentChart, result);

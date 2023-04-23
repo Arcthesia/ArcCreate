@@ -31,21 +31,26 @@ namespace ArcCreate.Selection.Interface
 
                 if (matchingChart != null)
                 {
+                    PlayHistory history = PlayHistory.GetHistoryForChart(level.Identifier, matchingChart.ChartPath);
                     difficultyMatchLevelCells.Add(new LevelCellData
                     {
                         Pool = pool,
                         ChartToDisplay = matchingChart,
                         LevelStorage = level,
+                        PlayHistory = history,
                         Size = LevelList.LevelCellSize,
                     });
                 }
                 else
                 {
+                    ChartSettings closestChart = level.Settings.GetClosestDifficultyToChart(selectedChart);
+                    PlayHistory history = PlayHistory.GetHistoryForChart(level.Identifier, closestChart.ChartPath);
                     otherLevelCells.Add(new LevelCellData
                     {
                         Pool = pool,
-                        ChartToDisplay = level.Settings.GetClosestDifficultyToChart(selectedChart),
+                        ChartToDisplay = closestChart,
                         LevelStorage = level,
+                        PlayHistory = history,
                         Size = LevelList.LevelCellSize,
                     });
                 }

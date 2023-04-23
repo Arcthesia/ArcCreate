@@ -35,6 +35,7 @@ namespace ArcCreate.Selection.Interface
         private void OnButton()
         {
             Settings.Locale.Value = text.text;
+            I18n.SetLocale(Settings.Locale.Value);
         }
     }
 }

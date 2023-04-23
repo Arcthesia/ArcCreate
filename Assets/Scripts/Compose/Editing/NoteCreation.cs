@@ -23,7 +23,6 @@ namespace ArcCreate.Compose.Editing
         [SubAction("Confirm", false, "<u-mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
         [RequireGameplayLoaded]
-        [Selection.SelectionService.RequireNoSelection]
         [WhitelistScopes(typeof(Timeline.TimelineService), typeof(Grid.GridService), typeof(Cursor.CursorService))]
         public async UniTask StartCreatingNote(EditorAction action)
         {
@@ -33,7 +32,8 @@ namespace ArcCreate.Compose.Editing
             bool selectionChanged = Services.Selection.SelectedNotes.Count != selectionSize;
 
             if (!Services.Cursor.IsHittingLane
-             || selectionChanged)
+             || selectionChanged
+             || (Values.CreateNoteMode.Value != CreateNoteMode.ArcTap && selectionSize != 0))
             {
                 return;
             }

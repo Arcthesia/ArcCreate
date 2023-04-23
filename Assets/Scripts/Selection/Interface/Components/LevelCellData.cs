@@ -8,6 +8,8 @@ namespace ArcCreate.Selection.Interface
     {
         public LevelStorage LevelStorage { get; set; }
 
+        public PlayHistory PlayHistory { get; set; }
+
         public ChartSettings ChartToDisplay { get; set; }
     }
 }

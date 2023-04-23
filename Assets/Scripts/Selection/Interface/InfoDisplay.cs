@@ -20,7 +20,6 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private TMP_Text title;
         [SerializeField] private TMP_Text composer;
         [SerializeField] private TMP_Text bpm;
-        [SerializeField] private TMP_Text score;
         [SerializeField] private TMP_Text charter;
         [SerializeField] private Button switchDiffButton;
         [SerializeField] private Button nextDiffButton;
@@ -38,6 +37,10 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private Image side;
         [SerializeField] private Sprite[] sideSprites;
         [SerializeField] private Texture[] defaultBackgrounds;
+
+        [Header("Score")]
+        [SerializeField] private TMP_Text score;
+        [SerializeField] private GradeDisplay gradeDisplay;
 
         [Header("Shutter")]
         [SerializeField] private SpriteSO shutterJacketSprite;
@@ -101,6 +104,7 @@ namespace ArcCreate.Selection.Interface
         private void OnChartChange((LevelStorage level, ChartSettings chart) obj)
         {
             var (level, chart) = obj;
+            PlayHistory history = PlayHistory.GetHistoryForChart(level.Identifier, chart.ChartPath);
             if (level == null || chart == null)
             {
                 return;
@@ -109,7 +113,6 @@ namespace ArcCreate.Selection.Interface
             title.text = string.IsNullOrEmpty(chart.Title) ? I18n.S("Gameplay.Selection.Info.Undefined.Title") : chart.Title;
             composer.text = string.IsNullOrEmpty(chart.Composer) ? I18n.S("Gameplay.Selection.Info.Undefined.Composer") : chart.Composer;
             bpm.text = string.IsNullOrEmpty(chart.BpmText) ? "BPM: " + chart.BaseBpm.ToString() : "BPM: " + chart.BpmText;
-            score.text = "Coming soon";
             charter.text = string.IsNullOrEmpty(chart.Charter) ? I18n.S("Gameplay.Selection.Info.Undefined.Charter") : I18n.S("Gameplay.Selection.Info.Charter", chart.Charter);
 
             shutterTitle.Value = title.text;
@@ -117,6 +120,10 @@ namespace ArcCreate.Selection.Interface
             shutterIllustrator.Value = chart.Illustrator;
             shutterCharter.Value = chart.Charter;
             shutterAlias.Value = chart.Alias;
+
+            score.text = history.BestScorePlayOrDefault.FormattedScore;
+            gradeDisplay.Display(history.BestScorePlayOrDefault.Grade);
+            gradeDisplay.gameObject.SetActive(history.PlayCount > 0);
 
             string sideString = (chart.Skin?.Side ?? "").ToLower();
 

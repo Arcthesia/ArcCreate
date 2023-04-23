@@ -1,26 +1,42 @@
 using System;
+using System.Text;
 using UltraLiteDB;
 
 namespace ArcCreate.Data
 {
-    public struct PlayResult
+    public class PlayResult
     {
-        public DateTime DateTime;
-        public int LateMissCount;
-        public int LateGoodCount;
-        public int LatePerfectCount;
-        public int MaxCount;
-        public int EarlyPerfectCount;
-        public int EarlyGoodCount;
-        public int EarlyMissCount;
-        public int MaxCombo;
-        public int RetryCount;
-        public float GaugeValue;
-        public float GaugeClearRequirement;
-        public float GaugeMax;
-        public double BestScore;
-        public int PlayCount;
-        public int NoteCount;
+        public DateTime DateTime { get; set; }
+
+        public int LateMissCount { get; set; }
+
+        public int LateGoodCount { get; set; }
+
+        public int LatePerfectCount { get; set; }
+
+        public int MaxCount { get; set; }
+
+        public int EarlyPerfectCount { get; set; }
+
+        public int EarlyGoodCount { get; set; }
+
+        public int EarlyMissCount { get; set; }
+
+        public int MaxCombo { get; set; }
+
+        public int RetryCount { get; set; }
+
+        public float GaugeValue { get; set; }
+
+        public float GaugeClearRequirement { get; set; }
+
+        public float GaugeMax { get; set; }
+
+        public double BestScore { get; set; }
+
+        public int PlayCount { get; set; }
+
+        public int NoteCount { get; set; }
 
         [BsonIgnore]
         public int PerfectCount => LatePerfectCount + EarlyPerfectCount + MaxCount;
@@ -55,6 +71,11 @@ namespace ArcCreate.Data
         {
             get
             {
+                if (NoteCount == 0)
+                {
+                    return ClearResult.Unknown;
+                }
+
                 if (MaxCount == NoteCount)
                 {
                     return ClearResult.Max;
@@ -93,7 +114,7 @@ namespace ArcCreate.Data
                 Grade result = Grade.D;
                 foreach (Grade grade in Enum.GetValues(typeof(Grade)))
                 {
-                    if (score > (double)grade)
+                    if (score > (double)grade && (double)grade > (double)result)
                     {
                         result = grade;
                     }
@@ -101,6 +122,24 @@ namespace ArcCreate.Data
 
                 return result;
             }
+        }
+
+        public string FormattedScore => FormatScore(Score);
+
+        public static string FormatScore(double score)
+        {
+            string s = ((int)Math.Round(score)).ToString("D8");
+            StringBuilder sb = new StringBuilder();
+            for (int i = s.Length - 1; i >= 0; i--)
+            {
+                sb.Insert(0, s[i]);
+                if ((i + 1) % 3 == 0 && i != 0)
+                {
+                    sb.Insert(0, '\'');
+                }
+            }
+
+            return sb.ToString();
         }
     }
 }

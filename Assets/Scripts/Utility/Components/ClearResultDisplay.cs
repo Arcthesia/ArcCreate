@@ -8,10 +8,10 @@ namespace ArcCreate.Selection.Interface
     public class ClearResultDisplay : MonoBehaviour
     {
         [SerializeField] private ClearResultSprite[] resultSprites;
-        private Image image;
 
         public void Display(ClearResult result)
         {
+            Image image = GetComponent<Image>();
             foreach (var spr in resultSprites)
             {
                 if (spr.Result == result)
@@ -20,11 +20,6 @@ namespace ArcCreate.Selection.Interface
                     return;
                 }
             }
-        }
-
-        private void Awake()
-        {
-            image = GetComponent<Image>();
         }
 
         [System.Serializable]

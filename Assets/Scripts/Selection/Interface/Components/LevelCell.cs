@@ -24,6 +24,8 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private TMP_Text difficulty;
         [SerializeField] private RawImage jacket;
         [SerializeField] private DifficultyCell difficultyBackground;
+        [SerializeField] private ClearResultDisplay clearResult;
+        [SerializeField] private GradeDisplay grade;
         [SerializeField] private Transform difficultyCellParent;
         [SerializeField] private GameObject playIndicate;
 
@@ -34,6 +36,7 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private Ease animationEase = Ease.OutExpo;
 
         private LevelStorage level;
+        private PlayHistory playHistory;
         private readonly List<DifficultyCell> difficultyCells = new List<DifficultyCell>();
         private ChartSettings visibleChart;
         private Vector2 defaultSizeDelta;
@@ -60,6 +63,7 @@ namespace ArcCreate.Selection.Interface
         {
             LevelCellData data = cellData as LevelCellData;
             level = data.LevelStorage;
+            playHistory = data.PlayHistory;
             selectable.StorageUnit = level;
             visibleChart = data.ChartToDisplay;
 
@@ -110,6 +114,11 @@ namespace ArcCreate.Selection.Interface
             {
                 MarkFullyLoaded();
             }
+
+            grade.Display(playHistory.BestScorePlayOrDefault.Grade);
+            clearResult.Display(playHistory.BestResultPlayOrDefault.ClearResult);
+            grade.gameObject.SetActive(playHistory.PlayCount > 0);
+            clearResult.gameObject.SetActive(playHistory.PlayCount > 0);
         }
 
         private void Awake()

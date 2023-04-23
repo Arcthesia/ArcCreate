@@ -18,6 +18,7 @@ namespace ArcCreate.SceneTransition
         {
             cachedText = GetComponent<TMP_Text>();
             stringSO.OnValueChange.AddListener(OnTextChange);
+            OnTextChange(stringSO.Value);
         }
 
         private void OnDestroy()

@@ -32,6 +32,9 @@ namespace ArcCreate.Selection.Interface
                     newStrat = GroupByGrade.Typename;
                     break;
                 case GroupByGrade.Typename:
+                    newStrat = GroupByRank.Typename;
+                    break;
+                case GroupByRank.Typename:
                     newStrat = GroupByCharter.Typename;
                     break;
                 case GroupByCharter.Typename:

@@ -64,7 +64,7 @@ namespace ArcCreate.Compose.Selection
                 ClearSelection();
                 AddNoteToSelection(note);
             }
-            else
+            else if (Values.CreateNoteMode.Value != CreateNoteMode.ArcTap || !Services.Cursor.IsHittingLane)
             {
                 ClearSelection();
             }
@@ -367,7 +367,6 @@ namespace ArcCreate.Compose.Selection
         private void Awake()
         {
             RequireSelectionAttribute.Selection = selectedNotes;
-            RequireNoSelectionAttribute.Selection = selectedNotes;
             Physics.queriesHitBackfaces = true;
             rangeSelectPreview.OnEndEdit += SelectNotesBetweenRange;
         }
@@ -382,13 +381,6 @@ namespace ArcCreate.Compose.Selection
             public static HashSet<Note> Selection { get; set; }
 
             public override bool CheckRequirement() => Selection.Count > 0;
-        }
-
-        internal class RequireNoSelectionAttribute : ContextRequirementAttribute
-        {
-            public static HashSet<Note> Selection { get; set; }
-
-            public override bool CheckRequirement() => Selection.Count == 0;
         }
     }
 }

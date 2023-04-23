@@ -23,9 +23,11 @@ namespace ArcCreate.Storage.Data
 
         public PlayResult BestResultPlay { get; set; }
 
-        public int PlayCount { get; set; }
+        [BsonIgnore] public PlayResult BestScorePlayOrDefault => BestScorePlay ?? new PlayResult();
 
-        [BsonId] public PlayResult BestPlay => TopScorePlays[0];
+        [BsonIgnore] public PlayResult BestResultPlayOrDefault => BestResultPlay ?? new PlayResult();
+
+        public int PlayCount { get; set; }
 
         public static PlayHistory GetHistoryForChart(string levelId, string chartPath)
         {
@@ -41,10 +43,10 @@ namespace ArcCreate.Storage.Data
         public void AddPlay(PlayResult play)
         {
             RecentPlays.Add(play);
-            RecentPlays.Sort((a, b) => a.DateTime.CompareTo(b.DateTime));
+            RecentPlays.Sort((a, b) => -a.DateTime.CompareTo(b.DateTime));
 
             TopScorePlays.Add(play);
-            TopScorePlays.Sort((a, b) => a.Score.CompareTo(b.Score));
+            TopScorePlays.Sort((a, b) => -a.Score.CompareTo(b.Score));
 
             for (int i = RecentPlays.Count - 1; i >= MaxRecentPlaysCount; i--)
             {
@@ -56,12 +58,12 @@ namespace ArcCreate.Storage.Data
                 TopScorePlays.RemoveAt(i);
             }
 
-            if (play.Score > BestScorePlay.Score)
+            if (play.Score > BestScorePlayOrDefault.Score)
             {
                 BestScorePlay = play;
             }
 
-            if ((int)play.ClearResult > (int)BestResultPlay.ClearResult)
+            if ((int)play.ClearResult > (int)BestResultPlayOrDefault.ClearResult)
             {
                 BestResultPlay = play;
             }

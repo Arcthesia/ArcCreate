@@ -15,6 +15,7 @@ namespace ArcCreate.SceneTransition
             if (spriteSO != null)
             {
                 spriteSO.OnValueChange.AddListener(OnSpriteChange);
+                OnSpriteChange(spriteSO.Value);
             }
         }
 

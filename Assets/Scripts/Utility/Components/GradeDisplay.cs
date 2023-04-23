@@ -4,13 +4,14 @@ using UnityEngine.UI;
 
 namespace ArcCreate.Selection.Interface
 {
+    [RequireComponent(typeof(Image))]
     public class GradeDisplay : MonoBehaviour
     {
         [SerializeField] private GradeSprite[] gradeSprites;
-        private Image image;
 
         public void Display(Grade grade)
         {
+            Image image = GetComponent<Image>();
             foreach (var spr in gradeSprites)
             {
                 if (spr.Grade == grade)
@@ -19,11 +20,6 @@ namespace ArcCreate.Selection.Interface
                     return;
                 }
             }
-        }
-
-        private void Awake()
-        {
-            image = GetComponent<Image>();
         }
 
         [System.Serializable]

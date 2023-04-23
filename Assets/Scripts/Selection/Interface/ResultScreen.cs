@@ -1,5 +1,3 @@
-using System;
-using System.Text;
 using System.Threading;
 using ArcCreate.Data;
 using ArcCreate.SceneTransition;
@@ -20,8 +18,6 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private DifficultyCell difficulty;
         [SerializeField] private TMP_Text difficultyText;
         [SerializeField] private TMP_Text charterName;
-        [SerializeField] private TMP_Text charterAlias;
-        [SerializeField] private GameObject charterAliasLabel;
         [SerializeField] private RawImage jacket;
         [SerializeField] private TMP_Text perfectEarly;
         [SerializeField] private TMP_Text perfectTotal;
@@ -42,6 +38,8 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private Sprite[] backgroundSprites;
         [SerializeField] private Image side;
         [SerializeField] private Sprite[] sideSprites;
+        [SerializeField] private GradeDisplay gradeDisplay;
+        [SerializeField] private ClearResultDisplay clearResultDisplay;
         [SerializeField] private Button returnButton;
         [SerializeField] private Button retryButton;
         [SerializeField] private AudioPreview audioPreview;
@@ -58,11 +56,6 @@ namespace ArcCreate.Selection.Interface
             ColorUtility.TryParseHtmlString(chart.DifficultyColor, out Color c);
             difficulty.Color = c;
             difficultyText.text = chart.Difficulty;
-            charterName.text = chart.Charter;
-            charterName.gameObject.SetActive(!string.IsNullOrEmpty(chart.Charter));
-            charterAlias.text = chart.Alias;
-            charterAlias.gameObject.SetActive(!string.IsNullOrEmpty(chart.Alias));
-            charterAliasLabel.SetActive(!string.IsNullOrEmpty(chart.Alias));
             storage.ReleasePersistent(jacket.texture);
             storage.AssignTexture(jacket, level, chart.JacketPath).Forget();
             storage.EnsurePersistent(jacket.texture);
@@ -76,6 +69,8 @@ namespace ArcCreate.Selection.Interface
             missTotal.text = play.MissCount.ToString();
             missLate.text = play.LateMissCount.ToString();
             maxCombo.text = play.MaxCombo.ToString();
+            gradeDisplay.Display(play.Grade);
+            clearResultDisplay.Display(play.ClearResult);
 
             string sideString = (chart.Skin?.Side ?? "").ToLower();
             switch (sideString)
@@ -102,11 +97,21 @@ namespace ArcCreate.Selection.Interface
             retryCount.text = $"RETRY: {play.RetryCount}";
 
             double best = play.BestScore;
-            bestScore.text = FormatScore(best);
-
             double current = play.Score;
-            scoreIncrease.text = (current >= best ? "+" : "") + FormatScore(current - best);
-            score.text = FormatScore(current);
+            bestScore.text = PlayResult.FormatScore(best);
+            scoreIncrease.text = (current >= best ? "+" : "") + PlayResult.FormatScore(current - best);
+            score.text = PlayResult.FormatScore(current);
+
+            charterName.gameObject.SetActive(!string.IsNullOrEmpty(chart.Charter));
+            if (!string.IsNullOrEmpty(chart.Alias))
+            {
+                charterName.text = $"{chart.Charter}\n<b>{I18n.S("Shutter.Alias")}</b>\n{chart.Alias}";
+            }
+
+            if (string.IsNullOrEmpty(chart.Alias) || charterName.preferredHeight > charterName.GetComponent<RectTransform>().rect.height)
+            {
+                charterName.text = chart.Charter;
+            }
 
             audioPreview.PlayPreviewAudio(level, chart, cts.Token).Forget();
         }
@@ -145,22 +150,6 @@ namespace ArcCreate.Selection.Interface
             {
                 storage.SwitchToPlayScene((currentLevel, currentChart));
             }
-        }
-
-        private string FormatScore(double score)
-        {
-            string s = ((int)Math.Round(score)).ToString("D8");
-            StringBuilder sb = new StringBuilder();
-            for (int i = s.Length - 1; i >= 0; i--)
-            {
-                sb.Insert(0, s[i]);
-                if ((i + 1) % 3 == 0 && i != 0)
-                {
-                    sb.Insert(0, '\'');
-                }
-            }
-
-            return sb.ToString();
         }
     }
 }

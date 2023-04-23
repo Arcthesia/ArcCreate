@@ -76,7 +76,7 @@ namespace ArcCreate.Gameplay.Audio
             set
             {
                 audioTiming = value;
-                timingSlider.value = Mathf.Clamp((float)value / AudioLength, 0, 1);
+                UpdateSlider(value);
                 if (IsPlaying)
                 {
                     audioSource.Stop();
@@ -169,7 +169,7 @@ namespace ArcCreate.Gameplay.Audio
                 audioTiming = Mathf.RoundToInt(AudioSource.time * 1000f);
             }
 
-            timingSlider.value = Mathf.Clamp((float)audioTiming / AudioLength, 0, 1);
+            UpdateSlider(audioTiming);
         }
 
         public void PauseButtonPressed()
@@ -350,6 +350,11 @@ namespace ArcCreate.Gameplay.Audio
         {
             float exp2v = Mathf.Exp(v * 2);
             return (exp2v - 1) / (exp2v + 1);
+        }
+
+        private void UpdateSlider(float timing)
+        {
+            timingSlider.value = AudioLength > 0 ? Mathf.Clamp(timing / AudioLength, 0, 1) : 0;
         }
     }
 }
