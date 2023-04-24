@@ -20,7 +20,7 @@ Format:
     WrongSyntax: |-
       语法错误或语句不完整。
     InvalidHeader: |-
-      无效的顶行。Invalid header line.
+      无效的文件头。
     ArcColorNegative: |-
       音弧的颜色ID不能为负数。
     AudioOffsetInvalid: |-
@@ -30,13 +30,14 @@ Format:
     BaseTimingInvalid: |-
       无效的基准timing。请确认你的谱面0ms处存在一条timing语句。
     IncludeReferencedMultipleTimes: |-
-      A chart file was already included but is being referenced again.
+      工程已经引用了一个谱面文件，但是又重复引用了这个谱面。
     IncludeAReferencedFragment: |-
-      A chart file was already referenced as a fragment but is being included again.
+      工程已经引用了一个谱面文件的一部分，但是又重复引用了这个谱面。
     TimingGroupPairInvalid: |-
-      时间组符号配对错误。请注意在编辑时间组时用大括号括起来并在结尾加分号“};”。
+      '时间组符号配对错误。请注意在编辑时间组时用大括号括起来并在结尾加分号“};”。'
     DivisorNegative: |-
-      Divisor property of timing event can not be negative.
+      'Timing事件的节拍分割参数不能为负数。'
+    # 原文为“divisor property”，我翻译为“节拍分割”，指的是timing语句的第三个参数（四分音符每小节）
     BaseBPMZero: |-
       基准BPM不能为0。
     DurationNegative: |-
@@ -49,71 +50,74 @@ Format:
       无效的时间组属性。
   Warning:
     HoldTooShort:
-      Hold note's duration is shorter than 17ms.
+      长音符的持续时间过短，小于17ms。
     TapJudgementOverlap:
-      Tap judgement overlaps with other notes.
+      地面音符判定和其他音符发生重叠。
 
 Compose:
   # Exception messages within the editor
   Exception:
     FileDoesNotExist: |-
-      Trying to read file located at {Path} but it does not exist. The file might have been deleted.
+      尝试读取位于路径{Path}的文件，但是该文件不存在，可能被删除了。
     LoadImage: |-
-      An error occured while trying to load the image located at {Path}.
+      尝试读取位于路径{Path}的图片文件时发生错误。
       {Error}
     LoadProject: |-
-      An error occured while trying to load the project file located at {Path}.
-      The file could have been saved incorrectly.
-      You can try modifying it manually, or you can delete the file and create a new project.
+      尝试读取位于路径{Path}的工程文件时发生错误。
+      工程文件可能没有正常保存。
+      你可以试着手动修复工程文件，也可以删掉原有的文件并创建一个新的工程文件。
       {Error}
     ChartFileAlreadyExists: |-
-      Chart is already included in the project
+      谱面在工程中已被引用
     InvalidChartFile: |-
-      The provided chart file name is invalid
+      输入了无效的谱面文件名
     NoChartIncluded: |-
-      Invalid project file: No chart is included within this project.
+      无效的工程文件：工程中不包含谱面
     InvalidGroupProperties: |-
-      Invalid timing group properties. {Message}
+      无效的Timing组属性。{Message}
     InstructionLimit: |-
-      Lua script execution has been aborted: The instruction count limit of {0} was reached.
+      中止执行Lua脚本：到达指令数量上限{0}。
     InvalidBaseBPM: |-
-      Invalid base bpm value: {0}
+      无效的基准BPM数值：{0}
     CreateSkyNoteNoValidArc: |-
-      Can not create sky note here. Sky notes must be placed on traces.
+      不能在这里放置天空音符。天空音符必须放在音轨上。
     Navigation:
       ParseKeybind: |-
-        An exception occured while parsing the keybind: "{0}".
+        解析键位绑定时出现了一个错误："{0}"。
       ParseWhitespace: |-
-        Invalid keybind: a keystroke can not be a whitespace.
+        无效的键位绑定：键位设置不能为空。
       InvalidKeystroke: |-
-        Invalid keystroke: The keystroke "{0}" does not follow the correct format.
+        无效的键位设置：键位"{0}"的格式错误。
       InvalidKey: |-
-        Invalid key: The string "{0}" does not match any key.
+        无效的键位：键位"{0}"并不匹配任何按键。
       InvalidModifier: |-
-        Invalid modifier: The string "{0}" does not match any modifier key.
+        无效的键位指示符：字符串"{0}"并不匹配任何键位指示符。
+      # 原文：“modifier key”，指的是在keybind编辑中用字母代替某些特别的键位
+      # 例如c代表ctrl，s代表shift，然后在尖括号中使用，例如<c-s-esc>就是ctrl+shift+esc
+      # 详见github wiki的keybind页面
       InvalidActionPath: |-
-        Invalid action path: The string "{0}" does not match any action.
+        无效的动作路径：字符串"{0}"并不匹配任何动作。
     Scenecontrol: |-
-      Error occured while executing scenecontrol event of type {Type}: {Message}
+      执行{Type}类型SceneControl事件时发生错误：{Message}
       {StackTrace}
     LuaScript: |-
-      Error occured while executing lua script {Path}: {Message}
+      执行{Path}路径下的Lua脚本时发生错误：{Message}
       {StackTrace}
     Render:
-      FFmpeg:
+      ConfigureFFmpeg:
         NotFound: |-
-          Could not find any FFmpeg executable.
-          Please confirm that the configured path {0} is correct.
+          找不到任何FFmpeg可执行文件。
+          请确认配置的路径{0}是正确路径。
         Start: |-
-          Error occured while starting FFmpeg at {Path}: {Message}
+          启动位于{Path}路径的FFmpeg时发生错误：{Message}
           {StackTrace}
         Write: |-
-          Error occured while writing to FFmpeg process: {Message}
+          写入FFmpeg进程时发生错误：{Message}
           {StackTrace}
       Audio:
         IncompatibleSfx: |-
-          The audio clip {Sfx} is incompatible for rendering.
-          Expected channel count of {ExpectedChannels} and frequency of {ExpectedFrequency}, but the clip's channel count is {Channels} and its frequency is {Frequency}.
+          音频片段{Sfx}不兼容渲染。
+          渲染音频声道数量为{ExpectedChannels}，渲染音频采样率为{ExpectedFrequency}，而音频片段的声道数量为{Channels}，采样率为{Frequency}。
           
   # Notification messages
   Notify:
