@@ -556,7 +556,7 @@ Remote:
     StopSession: Dừng phiên hoạt động
     StartNewSession: Bắt đầu một phiên chơi mới
     ManualIP: Thiết lập kết nối thủ công
-    ReturnToSelect: Trở lại mục chọn bài
+    ReturnToSelect: Quay lại
   Control:
     Name: Control
     Sync:
@@ -607,9 +607,9 @@ Gameplay:
       Theo dấu:
       {StackTrace}
   HUD:
-    Play: Resume
-    Retry: Retry
-    Return: Quit
+    Play: Tiếp tục
+    Retry: Thử lại
+    Return: Thoát
   Selection:
     SelectStatus:
       Singular: |-
@@ -660,7 +660,7 @@ Gameplay:
           Thay đổi tốc độ nốt tiếp cận khu vực chơi.
         EarlyLatePerfectDisplay: Hiển thị Early/Late perfect
         EarlyLatePerfectDisplayDetail: |-
-          Nếu bạn muốn biết mình nhấn sớm hay muộn trên nốt "perfect".
+          Cho bạn biết mình nhấn sớm hay muộn.
       Audio:
         Name: Âm thanh
         Offset: Độ trễ
@@ -681,9 +681,9 @@ Gameplay:
         FrPmDisplay: Hiện FR/PM
         FrPmDisplayDetail: Chỉnh vị trí hiển thị FR/PM.
         MaxDisplay: Hiện điểm tối đa
-        MaxDisplayDetail: Hiện điểm tối đa :).
-        EarlyLateDisplay: Hiện Early/Late
-        EarlyLateDisplayDetail: Cho bạn biết mình bấm sớm hay muộn và vị trí hiện
+        MaxDisplayDetail: Hiện điểm giống skill của Larrange.
+        EarlyLateDisplay: Vị trí Early/Late
+        EarlyLateDisplayDetail: Vị trí của Late/Early
         LimitFramerate: Giới hạn khung hình
         LimitFramerateDetail: Giới hạn khung hình xuống 60 FPS để tiết kiệm pin. Có thể tăng độ trễ.
         ShowFPS: Hiện FPS
@@ -692,8 +692,8 @@ Gameplay:
         ShowDebugDetail: Hiện thông tin gỡ lỗi trong lúc chơi (Đừng bật trừ khi cần thiết).
       FrPmPosition:
         middle: Giữa
-        infopanel: Info panel
-        off: Off
+        infopanel: Bảng Điểm
+        off: Tắt
       EarlyLateTextPosition:
         middle: Giữa
         bottom: Đáy
