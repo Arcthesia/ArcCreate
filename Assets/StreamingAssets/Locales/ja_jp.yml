@@ -505,7 +505,7 @@ Compose:
           Speed: 譜面速度
           AspectRatio: アスペクト比
           Indicator: FR/PM表示
-#           MaxIndicator: Enable max indicator # (?) 機能不明
+          MaxIndicator: 理論値表示
         Grid:
           Name: グリッド
           Slot: スロット
@@ -672,7 +672,7 @@ Gameplay:
     Play: つづける
     Retry: リトライ
     Return: 中断する
-#   Selection:
+  Selection:
 #     SelectStatus:
 #       Singular: |-
 #         {0} asset selected
@@ -683,22 +683,22 @@ Gameplay:
 #       Your score will not be deleted.
 #     CannotDeleteDefault: |-
 #       Default assets cannot be deleted.
-#     Action:
-#       Delete: Delete
-#       Cancel: Cancel
-#       Done: Done
-#     List:
-#       RemoteTestplay: Remote Testplay
-#       Import: Import package
-#       Community: Community
-#       AllSongs: All Songs
-#       OtherDifficulties: Other difficulties
-#     Info:
-#       Undefined:
-#         Title: Unnamed
-#         Composer: N/A
-#         Charter: Unknown
-#       Charter: 'Charter: {0}'
+    Action:
+      Delete: 削除
+      Cancel: キャンセル
+      Done: 完了
+    List:
+      RemoteTestplay: "リモート\nテストプレイ"
+      Import: インポート
+      Community: コミュニティ
+      AllSongs: All Songs
+      OtherDifficulties: Other difficulties
+    Info:
+      Undefined:
+        Title: Unnamed
+        Composer: N/A
+        Charter: Unknown
+      Charter: '譜面制作: {0}'
 #     Sort:
 #       addeddate: "Sort: Added date"
 #       charter: "Sort: Charter"
@@ -713,60 +713,60 @@ Gameplay:
 #       difficulty: "Group: Difficulty"
 #       grade: "Group: Grade"
 #       charter: "Group: Charter"
-#     Settings:
-#       Name: Settings
-#       Language: Language
-#       Gameplay:
-#         Name: Gameplay
-#         Speed: Speed
-#         SpeedDetail: |-
-#           Adjust the speed at which notes approach the judgement area.
-#         EarlyLatePureDisplay: Early/Late pure display
-#         EarlyLatePureDisplayDetail: |-
-#           Change whether or not to display early/late pure judgements.
-#       Audio:
-#         Name: Audio
-#         Offset: Offset
-#         OffsetDetail: |-
-#           Adjust music synchronization.
-#           Increase if you're getting LATE, or decrease if you're getting EARLY.
-#         Calibrate: Calibrate
-#         MusicAudio: Music volume
-#         MusicAudioDetail: |-
-#           Change the volume of music during gameplay.
-#         EffectAudio: Effect volume
-#         EffectAudioDetail: |-
-#           Change the volume of hit sounds during gameplay.
-#       Visual:
-#         Name: Visual
-#         Colorblind: Colorblind mode
-#         ColorblindDetail: Use alternate arc colors.
-#         FrPmDisplay: FR/PM display
-#         FrPmDisplayDetail: Adjust FR/PM indicator position.
-#         MaxDisplay: Max indicator display
-#         MaxDisplayDetail: Toggle max score indicator display.
-#         EarlyLateDisplay: Early/Late display
-#         EarlyLateDisplayDetail: Adjust early/late text position.
-#         LimitFramerate: Limit framerate
-#         LimitFramerateDetail: Limit display framerate to 60 FPS to preserve battery life. Might increase latency.
-#         ShowFPS: Show FPS
-#         ShowFPSDetail: Toggle FPS display.
-#         ShowDebug: Show debug information
-#         ShowDebugDetail: Display debug information during gameplay (advanced).
-#       FrPmPosition:
-#         middle: Middle
-#         infopanel: Info panel
-#         off: Off
-#       EarlyLateTextPosition:
-#         middle: Middle
-#         bottom: Bottom
-#         top: Top
+    Settings:
+      Name: 設定
+      Language: 言語設定
+      Gameplay:
+        Name: プレイ設定
+        Speed: 譜面速度
+        SpeedDetail: |-
+          流れてくる譜面の速さを調整します。
+        EarlyLatePureDisplay: Pure Early/Lateを表示
+        EarlyLatePureDisplayDetail: |-
+          Pure判定でもEarly/Lateを表示します。
+      Audio:
+        Name: 音声設定
+        Offset: 音ズレ調整
+        OffsetDetail: |-
+          音楽と譜面のズレを微調整します。
+          LATEが多いときは増やして、EARLYが多いときは減らしてみてください。
+        Calibrate: 調整する
+        MusicAudio: 曲音量
+        MusicAudioDetail: |-
+          音楽の音量を調整します。
+        EffectAudio: SE音量
+        EffectAudioDetail: |-
+          タップ音の音量を調整します。
+      Visual:
+        Name: 画面設定
+        Colorblind: 色覚補助モード
+        ColorblindDetail: アークノートの色が青と黄色になります。
+        FrPmDisplay: FR/PM表示
+        FrPmDisplayDetail: FR/PM表示の有効/無効と表示場所を調整します。
+        MaxDisplay: 理論値表示
+        MaxDisplayDetail: 現在理論値かどうかに応じてFR/PM表示の色が変わります。
+        EarlyLateDisplay: Early/Lateの位置
+        EarlyLateDisplayDetail: Early/Lateの位置を調整します。
+        LimitFramerate: FPS制限
+        LimitFramerateDetail: FPSを60に制限します。バッテリーの消費が抑えられますが、遅延が増加する場合があります。
+        ShowFPS: FPSを表示
+        ShowFPSDetail: FPSの表示/非表示を切り替えます。
+        ShowDebug: デバッグ情報を表示
+        ShowDebugDetail: プレイ画面でデバッグ情報を表示します。(開発者向け)
+      FrPmPosition:
+        middle: コンボの下
+        infopanel: 画面上部
+        off: 無効
+      EarlyLateTextPosition:
+        middle: 画面中部
+        bottom: 画面下部
+        top: 画面上部
 
-# Shutter:
-#   Composer: Music
-#   Illustrator: Illustration
-#   Charter: Note Design
-#   Alias: as
+Shutter:
+  Composer: 作曲
+  Illustrator: イラスト
+  Charter: 譜面制作
+  Alias: as
 
 # Storage:
 #   Confirm: Confirm
