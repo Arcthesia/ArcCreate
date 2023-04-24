@@ -1,0 +1,779 @@
+### 翻译注意事项：
+# 1. 音符名称保持原文并尽量首字母大写，无论是否在句首：Tap、Hold、Arc、Sky note、Trace
+# 2. Timing同样不翻译，位于句首时大写，位于句中时小写。Timing group翻译为时间组。有些位置的timing可以翻译为“时间”一词，请自行判断。
+# 3. 
+#
+######
+Format:
+  # 解析谱面文件时发生的错误
+  Exception:
+    Message: |-
+      读取谱面文件{File}时发生错误
+      错误位于第{LineNumber}行的{EventType}事件
+      语句内容："{Content}"
+      错误原因：
+      {Reason}
+    UnknownException: |-
+      未知错误。
+      错误类型：{Exception}
+      堆栈追踪（错误报告）：
+      {StackTrace}
+    WrongSyntax: |-
+      语法错误或语句不完整。
+    InvalidHeader: |-
+      无效的文件头。
+    ArcColorNegative: |-
+      Arc的颜色ID不能为负数。
+    AudioOffsetInvalid: |-
+      无效的音频偏移。
+    TimingPointDensityFactorInvalid: |-
+      无效的判定点密度。
+    BaseTimingInvalid: |-
+      无效的基准timing。请确认你的谱面0ms处存在一条timing语句。
+    IncludeReferencedMultipleTimes: |-
+      工程已经引用了一个谱面文件，但是又重复引用了这个谱面。
+    IncludeAReferencedFragment: |-
+      工程已经引用了一个谱面文件的一部分，但是又重复引用了这个谱面。
+    TimingGroupPairInvalid: |-
+      时间组符号配对错误。请注意在编辑时间组时用大括号括起来并在结尾加分号“};”。
+    DivisorNegative: |-
+      Timing事件的节拍分割参数不能为负数。
+    # 原文为“divisor property”，我翻译为“节拍分割参数”，指的是timing语句的第三个参数（四分音符每小节）
+    BaseBPMZero: |-
+      基准BPM不能为0。
+    DurationNegative: |-
+      该类事件的持续时间不能为负数。
+    DurationZero: |-
+      该类事件的持续时间不能为零。
+    ArcTapOutOfRange: |-
+      Sky note的时间超出其所在Arc的时间范围。
+    TimingGroupPropertiesInvalid: |-
+      无效的时间组属性。
+  Warning:
+    HoldTooShort:
+      Hold的持续时间过短，小于17ms。
+    TapJudgementOverlap:
+      Tap判定和其他音符发生重叠。
+
+Compose:
+  # 编辑器中的报错
+  Exception:
+    FileDoesNotExist: |-
+      尝试读取位于路径{Path}的文件，但是该文件不存在，可能被删除了。
+    LoadImage: |-
+      尝试读取位于路径{Path}的图片文件时发生错误。
+      {Error}
+    LoadProject: |-
+      尝试读取位于路径{Path}的工程文件时发生错误。
+      工程文件可能没有正常保存。
+      你可以试着手动修复工程文件，也可以删掉原有的文件并创建一个新的工程文件。
+      {Error}
+    ChartFileAlreadyExists: |-
+      谱面在工程中已被引用
+    InvalidChartFile: |-
+      输入了无效的谱面文件名
+    NoChartIncluded: |-
+      无效的工程文件：工程中不包含谱面
+    InvalidGroupProperties: |-
+      无效的时间组属性。{Message}
+    InstructionLimit: |-
+      Lua脚本执行中止：到达指令数量上限{0}。
+    InvalidBaseBPM: |-
+      无效的基准BPM数值：{0}
+    CreateSkyNoteNoValidArc: |-
+      不能在这里放置Sky note。Sky note必须放在Trace上。
+    Navigation:
+      ParseKeybind: |-
+        解析键位绑定时出现了一个错误："{0}"。
+      ParseWhitespace: |-
+        无效的键位绑定：键位设置不能为空。
+      InvalidKeystroke: |-
+        无效的键位设置：键位"{0}"的格式错误。
+      InvalidKey: |-
+        无效的键位：键位"{0}"并不匹配任何按键。
+      InvalidModifier: |-
+        无效的键位指示符：字符串"{0}"并不匹配任何键位指示符。
+      # 原文：“modifier key”，指的是在keybind编辑中用字母代替某些特别的键位
+      # 例如c代表ctrl，s代表shift，然后在尖括号中使用，例如<c-s-esc>就是ctrl+shift+esc
+      # 详见github wiki的keybind页面
+      InvalidActionPath: |-
+        无效的动作路径：字符串"{0}"并不匹配任何动作。
+    Scenecontrol: |-
+      执行{Type}类型SceneControl事件时发生错误：{Message}
+      {StackTrace}
+    LuaScript: |-
+      执行{Path}路径下的Lua脚本时发生错误：{Message}
+      {StackTrace}
+    Render:
+      ConfigureFFmpeg:
+        NotFound: |-
+          找不到任何FFmpeg可执行文件。
+          请确认配置的路径{0}是正确路径。
+        Start: |-
+          启动位于{Path}路径的FFmpeg时发生错误：{Message}
+          {StackTrace}
+        Write: |-
+          写入FFmpeg进程时发生错误：{Message}
+          {StackTrace}
+      Audio:
+        IncompatibleSfx: |-
+          音效片段{Sfx}不兼容渲染。
+          渲染音频声道数量为{ExpectedChannels}，渲染音频采样率为{ExpectedFrequency}，而音频片段的声道数量为{Channels}，采样率为{Frequency}。
+          
+  # 通知消息
+  Notify:
+    GameplayLoaded: 游玩场景加载成功
+    FreeCameraEditHelp: |-
+      正在启动自由camera视角（鼠标悬停查看更多信息）
+      
+      WASD：向前/向左/向后/向右移动
+      空格：向上移动
+      Shift：向下移动
+      IJKL：向上/向左/向下/向右旋转
+      U：向左翻滚
+      O：向右翻滚
+      Esc：取消
+      回车：确认
+    EmmyLuaGenerated: |-
+      在当前文件夹下生成了用于scenecontrol的EmmyLua模板
+      请使用安装了tangzx.emmylua插件的VS Code进行自动填充
+    Actions:
+      CannotMirror: 无法镜像选中的音符。
+      NoDragRange: 无法拖动选中音符的timing。请尝试分别拖动音符。
+    History:
+      Execute: |-
+        已执行的命令：{Name}
+      Undo: |-
+        撤销命令：{Name}
+      Redo: |-
+        重做命令：{Name}
+      # 上方的{Name}占位符会用以下项代替
+      AddTiming: 添加timing事件
+      EditTiming: 编辑timing事件
+      RemoveTiming: 移除timing事件
+      AddCamera: 添加camera事件
+      EditCamera: 编辑camera事件
+      RemoveCamera: 移除camera事件
+      AddScenecontrol: 添加scenecontrol事件
+      EditScenecontrol: 编辑scenecontrol事件
+      RemoveScenecontrol: 移除scenecontrol事件
+      EditValue: 编辑选中音符的值
+      EditArc: 编辑arc的值
+      CreateNote:
+        Tap: 创建Tap音符
+        Hold: 创建Hold音符
+        Arc: 创建Arc音符
+        ArcTap: 创建Sky note音符
+        Trace: 创建Trace音符
+      DeleteNotes: 删除音符
+      Cut: 剪切音符
+      Paste: 粘贴音符
+      Mirror:
+        Vertical: 垂直镜像音符
+        Horizontal: 水平镜像音符
+      Drag:
+        Timing: 拖动音符timing
+        Position: 拖动音符位置
+    Clipboard:
+      Copy: 复制了{0}个音符
+      Cut: 剪切了{0}个音符
+      NamedCopy: 复制了{0}个音符到已命名的剪贴板"{1}"中
+      NamedCut: 剪切了{0}个音符到已命名的剪贴板"{1}"中
+    GroupTable:
+      AddGroup: 添加了时间组 {Number}
+      EditGroup: 编辑了时间组 {Number}
+      RemoveGroup: 移除了时间组 {Number}
+    Project:
+      NewProject: |-
+        工程已创建
+        位于路径{Path}
+      OpenProject: |-
+        工程已打开
+        位于路径{Path}
+      SaveProject: |-
+        工程已保存
+        位于路径{Path}
+      OpenChart: 打开了位于路径{Path}的谱面文件
+      CreateChart: 在路径{Path}下创建了谱面文件
+      RemoveChart: 从工程文件中移除了位于路径{Path}的谱面文件
+    Inspector:
+      InvalidParamameter: 无效参数
+    Measurer:
+      CopyTiming: 复制了光标timing
+      CopyPosition: 复制了Arc位置
+      CopyX: 复制了Arc的x坐标
+      CopyY: 复制了Arc的y坐标
+    Export:
+      Render:
+        Cancelled: 取消渲染
+        Complete: 渲染完成
+      Package:
+        Complete: 将包导出到了{0}
+  # 对话框
+  Dialog:
+    RemoveGroup:
+      Title: 移除时间组
+      Content: |-
+        你确定要移除这个时间组以及其中所有的内容吗？（不可撤销）
+      Yes: 移除
+      No: 取消
+    RemoveChart:
+      Title: 移除谱面文件
+      Content: |-
+        你确定要将这个谱面文件从工程中删除吗？
+
+        这个谱面文件本身并不会被删除，之后还可以将其重新添加到工程中，但是和它相关的元数据将会丢失。
+      Yes: 移除
+      No: 取消
+    UnsavedChanges:
+      Title: 未保存的更改
+      Content: |-
+        你的工程还有未保存的更改。你想要保存更改吗？
+      Yes: 保存更改
+      No: 放弃更改
+      Cancel: 取消
+    LoadChartError:
+      Title: 错误
+      Content: |-
+        加载谱面文件{ChartPath}时发生错误。
+        你可以选择在外部编辑器中修复该错误，也可以关闭此对话框并使用"<{TabName}>"面板修复。
+        
+        错误信息：
+        错误行号：{LineNumber}
+        错误内容："{Content}"
+        事件类型：{EventType}
+        {Exception}
+      Confirm: 确认
+  Navigation:
+    KeybindOverride: 正在覆盖{0}的键位设置
+    # 右键菜单的文本
+    Actions:
+      Camera:
+        Name: Camera
+        FreeCamera:
+          Name: 启动自由camera
+      Grid:
+        Name: 网格
+        Toggle: 切换网格
+      Display:
+        Name: 显示
+        FullScreen: 切换全屏
+      Selection:
+        Name: 选择
+        Clear: 取消选择
+        RangeSelect:
+          Name: 段落选择
+      Measure:
+        Name: 量尺
+        Start:
+          Name: 打开量尺
+      Clipboard:
+        Name: 剪贴板
+        Copy: 复制
+        Cut: 剪切
+        Paste:
+          Name: 粘贴
+          Cancel: 取消粘贴
+        NamedPaste:
+          Name: 粘贴
+          Cancel: 取消粘贴
+        Clear: 清除剪贴板
+      Delete:
+        Name: 删除
+        Execute: 删除音符
+      Mirror:
+        Name: 镜像
+        Horizontal: 水平镜像
+        HorizontalNoColorSwitch: 水平镜像（无视颜色）
+        Vertical: 垂直镜像
+  Grid:
+    # 请只编辑注释的行（开头为“--”的行）
+    DefaultScript: |-
+      -- 这是一个lua脚本
+
+      -- 用四个数字定义网格平面范围
+      -- (左x坐标, 右x坐标, 下y坐标, 上y坐标)
+      grid.setCollider(-0.5, 1.5, -0.2, 1)
+
+      -- 设定网格的背景颜色
+      grid.setPanelColor(rgba(255, 255, 255, 16))
+      
+      -- 用四个数字来画网格线
+      -- (左x坐标, 右x坐标, 下y坐标, 上y坐标)
+      grid.drawLine(-0.5, 1.5, -0.2, -0.2, defaultColor)
+
+      -- 也可以用for循环来画网格
+      for x = -0.5, 1.5, 0.125 do
+        grid.drawLine(x, x, -0.2, 1, defaultColor)
+      end
+
+      for y = 0, 1, 0.25 do
+        grid.drawLine(-0.5, 1.5, y, y, defaultColor)
+      end
+  # 在编辑器UI上出现的文本
+  UI:
+    Common:
+      Confirm: 确认
+      Cancel: 取消
+      Close: 关闭
+      NotRequired: （选填）
+      Extension: 扩展
+    Placeholder:
+      Text: 空……
+      File: 没有选择文件……
+      Image: 没有选择图片……
+      Property: 没有属性……
+      ImagePrompt: 点击选择图片
+    PanelNames:
+      Toolbox: 工具箱
+      RawEditor: 文本
+      Gameplay: 游玩
+      Timeline: 时间轴
+      Project: 工程
+      Events: 事件
+      Remote: 远程连接
+      Export: 导出
+      Settings: 设置
+    # UI顶栏
+    Top:
+      Label:
+        New: 新建
+        Open: 打开
+        Save: 保存
+        InputMode: 输入模式
+        FullScreen: 全屏
+        ToggleFullScreenHint: 按下F11切换全屏模式。
+        Chart: 谱面
+    # 工程面板
+    Project:
+      Label:
+        NewChart: 新建谱面
+        NewProject: 新建工程
+        ProjectFile: 工程文件
+        ChartFile: 谱面文件
+        Information: 谱面信息
+        Gameplay: 游玩设置
+        Title: 标题
+        Composer: 曲师
+        Illustrator: 插画作者
+        Charter: 谱师
+        Alias: 假名
+        BPM: BPM
+        BaseBPM: 基准BPM
+        BPMText: BPM文本
+        SyncBaseBPM: 同步BPM
+        ChartOffset: 谱面偏移
+        TimingPointDensityFactor: 判定点密度
+        ChartConstant: 谱面定数
+        DifficultyName: 难度名称
+        DifficultyColor: 难度颜色
+        Files: 文件
+        Audio: 音频
+        JacketArt: 曲绘
+        Background: 背景
+        Video: 视频
+        Skin: 外观
+        Side: 风格侧
+        Note: 音符
+        Particle: 粒子特效
+        Accent: 判定线和连击数
+        Track: 轨道
+        SingleLine: 单曲装饰线
+        Colors: 颜色设置
+        TraceBody: Trace主体
+        Shadow: 阴影
+        ArcColors: Arc颜色
+        Blue: 蓝（0）
+        Red: 红（1）
+        Green: 绿（2）
+        Custom: 自定义（{0}）
+        AddArcColor: 添加Arc颜色
+        NoProjectLoaded: |-
+          没有加载工程。
+          请新建或打开一个工程
+        Shutter: 加载界面
+        ShowShutter: 显示加载界面
+        HideShutter: 隐藏加载界面
+        PreviewSegment: 预览片段
+      Options:
+        Inherit: 不变
+        Light: 光芒侧
+        Conflict: 对立侧
+        Colorless: 消色侧
+        MiraiLight: Mirai光芒侧
+        MiraiConflict: Mirai对立侧
+        Dynamix: Dynamix
+        Black: Black
+        Nijuusei: Nijuusei
+        Rei: Rei
+        DarkVs: DarkVs
+        Tempest: Tempest
+        Finale: Finale
+        Pentiment: Pentiment
+        Arcana: Arcana
+        None: 无
+        Neo: Neo
+        Past: Past
+        Present: Present
+        Future: Future
+        Beyond: Beyond
+    Timeline:
+      Label:
+        Offset: 偏移
+        TimingGroup: 时间组
+        Density: 节拍细分
+    # 事件编辑器面板
+    EventsEditor:
+      Label:
+        Group: 时间组
+        Events: 事件
+      Actions:
+        AddGroup: 添加时间组
+        DeleteGroup: 删除时间组
+        AddEvent: 添加事件
+        DeleteEvent: 删除事件
+        AutoReload: 自动重新加载
+        GenerateEmmyLua: 生成EmmyLua
+        Reload: 重新加载
+        FreeCamera: 自由camera
+      CameraView:
+        Default: 默认视角
+        Stationary: 固定视角
+        ZoomedOut: 镜头拉远视角
+        BirdsEye1: 鸟瞰视角1
+        BirdsEye2: 鸟瞰视角2
+      Mode:
+        Timing: Timing
+        Camera: Camera
+        Scenecontrol: Scene
+    # 输出面板
+    Export:
+      Render:
+        Name: 渲染视频
+        Description: |-
+          自动输出谱面预览视频。
+          需要安装FFmpeg。
+        ConfigureFFmpeg: 编辑FFmpeg可执行文件路径
+        Settings:
+          Name: 设置
+          From: 从
+          To: 到
+          Quality: 质量
+          FPS: FPS
+          Width: 宽度
+          Height: 高度
+          Size: 大小
+          ShowShutter: 显示加载界面
+        Start: 开始渲染
+        Cancel: 取消渲染
+        Status: |-
+          正在渲染视频，可能需要一段时间。
+          已使用时间：{0}
+          剩余时间：{1}
+      Package:
+        Name: 谱面打包
+        Description: |-
+          导出一个可分享给其他玩家的 .arcpkg 谱面包。
+        Publisher: 发布者
+        Package: 谱面包
+        Version: 版本
+        BlankField: 请输入发布者和谱面包名信息。
+        Identifier: "你的谱面包标识符是：{0}"
+        Export: 导出
+    # 编辑器设置面板
+    Settings:
+      Label:
+        Locale:
+          Name: 本地化设置
+          Language: 语言
+          Reload: 重新加载本地化文件
+          CheckMissing: 检查丢失条目
+        Gameplay:
+          Name: 游玩设置
+          Speed: 速度
+          AspectRatio: 画面比例
+          Indicator: 指示器
+          MaxIndicator: 打开理论值指示器
+        Grid:
+          Name: 网格设置
+          Slot: 栏位
+          UseDefault: 使用默认设置
+          FromLane: 从轨道
+          ToLane: 到轨道
+          ScaleGrid: 和天空判定线成比例
+          Gridline: 定义网格线
+          Script: Lua脚本
+        AudioVolume:
+          Name: 音频设置
+          Music: 音乐音量
+          Effect: 音效音量
+          GlobalOffset: 音频偏移
+          SyncToDSPTime: 音频同步
+        Display:
+          Name: 显示设置
+          Vsync: 垂直同步
+          Framerate: 帧率
+          ShowCounter: 显示帧率
+        Input:
+          Name: 输入设置
+          ReloadKeybinds: 重新加载键位绑定
+        Files:
+          Name: 文件设置
+          Backup: 保存时创建备份
+          BackupCount: 备份数量
+          Autosave: 开启自动保存
+          AutosaveInterval: 自动保存间隔（秒）
+        ScrollSensitivity:
+          Name: 滚动灵敏度
+          Vertical: 垂直
+          Horizontal: 水平
+          Timeline: 时间轴
+        TrackScrolling:
+          Name: 轨道滚动
+          Threshold: 阈值
+          MaxMovement: 最大移动量
+        Credits:
+          Name: 制作组名单
+          View: 查看制作组名单
+    # 工具箱面板
+    Toolbox:
+      Pallete:
+        Name: 音符选择
+        Arc: Arc
+        Trace: Trace
+        Tap: Tap
+        Hold: Hold
+        Arctap: Sky
+        Easing: Easing
+      Macros: 宏
+    # Inspector window
+    Inspector:
+      Name: 查看器
+      Timing: 时间
+      StartTiming: 开始时间
+      EndTiming: 结束时间
+      Lane: 轨道
+      StartPos: 从
+      EndPos: 到
+      Sfx: 音效片段
+      Group: 时间组
+      Mixed: 混合
+      Arc: Arc
+      Trace: Trace
+      Actions:
+        SelectArc: 选中所在Arc
+        SelectArctap: 选中Sky notes
+
+Remote:
+  Exception:
+    InvalidIP: 无效的IP地址
+  State:
+    Listening: |-
+      正在监听广播……
+      <size=20>
+      在你的桌面ArcCreate客户端上打开“远程连接”标签页并点击“开始广播”开始游玩。</size>
+    ManualIP: |-
+      等待桌面客户端连接。
+      <size=20>
+      在你的桌面ArcCreate客户端上打开“远程连接”标签页并输入IP地址：{0}。</size>
+    Found: |-
+      从以下设备接收到广播。
+      选择一个设备以继续。
+    TargetDisconnected:
+      Compose: 目标客户端断开连接，连接中止。
+      Gameplay: 目标客户端断开连接，你想要创建一个新会话吗？
+    Receiving:
+      接收数据（{0}）
+  Description:
+    Idle: |-
+      没有连接测试游玩设备。
+      开始广播来寻找设备。请确认这台设备和测试游玩的设备在同一个本地网络中，并且测试游玩的设备正在监听广播。
+    Broadcasting: |-
+      广播码：{0}。
+      在测试游玩设备上选择选项并输入广播码来开始游玩。
+    Connected: |-
+      连接到了测试游玩设备：{0}:{1}
+  Actions:
+    Broadcast: 开始广播
+    AbortBroadcast: 停止广播
+    BroadcastAgain: 再次广播
+    StopSession: 结束会话
+    StartNewSession: 开始新会话
+    ManualIP: 手动设置连接
+    ReturnToSelect: 回到选曲界面
+  Control:
+    Name: 控制
+    Sync:
+      Name: 同步数据
+      AllFiles: 所有文件
+      Chart: 谱面
+      Audio: 音频
+      Jacket: 曲绘
+      Background: 背景
+      Metadata: 元数据
+    Settings:
+      Name: 设置
+      Offset: 设备偏移
+      Speed: 设备速度
+      MusicVolume: 音乐音量
+      EffectVolume: 音效音量
+    StartTiming: 从时间点开始游玩
+    EndTiming: 游玩至时间点     
+    Loop: 循环回放
+    ShowLog: 显示日志
+    ShowDebug: 显示调试信息
+    ManualIP: 手动输入IP
+  Window:
+    Name: 远程
+    SyncChart: 同步谱面
+    SyncTiming: 同步时间
+
+Gameplay:
+  Exception:
+    LoadAudio: |-
+      尝试加载位于路径{Path}的音频文件时发生错误。
+      {Error}
+    Chart: |-
+      尝试加载位于路径{Path}的谱面时发生错误。
+      {Error}
+    Skin: |-
+      尝试加载位于路径{Path}的图片时发生错误。
+      {Error}
+    Scenecontrol: |-
+      尝试加载位于路径{Path}的SceneControl json时发生错误。
+      {Error}
+    ScenecontrolSprite: |-
+      尝试加载位于路径{Path}的SceneControl精灵图时发生错误。
+      {Error}
+    Load: |-
+      尝试加载{ChartPath}路径下的谱面{Identifier}时发生未知错误。
+      错误信息：{Message}
+      堆栈追踪：
+      {StackTrace}
+  HUD:
+    Play: 返回
+    Retry: 重试
+    Return: 退出
+  Selection:
+    SelectStatus:
+      Singular: |-
+        选择了{0}个资源
+      Plural: |-
+        选择了{0}个资源
+    DeleteConfirmation: |-
+      你确定要删除以下资源吗？
+      这不会删除你的分数。
+    CannotDeleteDefault: |-
+      无法删除默认资源。
+    Action:
+      Delete: 删除
+      Cancel: 取消
+      Done: 完成
+    List:
+      RemoteTestplay: 远程测试游玩
+      Import: 导入谱面包
+      Community: 社区
+      AllSongs: 所有曲目
+      OtherDifficulties: 其他难度
+    Info:
+      Undefined:
+        Title: 未命名
+        Composer: N/A
+        Charter: 未知
+      Charter: '谱师：{0}'
+    Sort:
+      addeddate: "排序：添加时间"
+      charter: "排序：谱师"
+      composer: "排序：曲师"
+      difficulty: "排序：难度"
+      grade: "排序：评级"
+      playcount: "排序：游玩次数"
+      score: "排序：分数"
+      title: "排序：标题"
+    Group:
+      none: "分组：无"
+      difficulty: "分组：难度"
+      grade: "分组：评级"
+      rank: "分组：通关状态"
+      charter: "分组：谱师"
+    Settings:
+      Name: 设置
+      Language: 语言
+      Gameplay:
+        Name: 游玩设置
+        Speed: 速度
+        SpeedDetail: |-
+          调节音符下落的速度。
+        EarlyLatePerfectDisplay: 纯粹【过早/过晚】
+        EarlyLatePerfectDisplayDetail: |-
+          控制Pure判定时是否显示过早/过晚。
+      Audio:
+        Name: 音频设置
+        Offset: 偏移
+        OffsetDetail: |-
+          调节音频同步。
+          如果LATE过多就增加偏移，如果EARLY过多就减少偏移。
+        Calibrate: 校准
+        MusicAudio: 音乐音量
+        MusicAudioDetail: |-
+          调节游玩过程中的音乐音量。
+        EffectAudio: 音效音量
+        EffectAudioDetail: |-
+          调节游玩过程中的打击音效音量。
+      Visual:
+        Name: 视觉设置
+        Colorblind: 色盲模式
+        ColorblindDetail: 使用其他的Arc颜色。
+        FrPmDisplay: FR/PM指示
+        FrPmDisplayDetail: 调节FR/PM指示器的位置
+        MaxDisplay: 理论值指示
+        MaxDisplayDetail: 切换是否显示理论值指示器
+        EarlyLateDisplay: 过早/过晚指示
+        EarlyLateDisplayDetail: 调节过早/过晚提示的位置
+        LimitFramerate: 限制帧率
+        LimitFramerateDetail: 限制帧率为60帧以省电。可能会增加延迟。
+        ShowFPS: 显示FPS
+        ShowFPSDetail: 开关FPS显示
+        ShowDebug: 显示调试信息
+        ShowDebugDetail: 在游玩过程中显示调试信息（高级）
+      FrPmPosition:
+        middle: 中间
+        infopanel: 信息栏
+        off: 关闭
+      EarlyLateTextPosition:
+        middle: 中间
+        bottom: 底部
+        top: 顶部
+
+Shutter:
+  Composer: 音乐
+  Illustrator: 插画
+  Charter: 谱面设计
+  Alias: 作为
+    
+Storage:
+  Confirm: 确认
+  ImportErrors: |-
+    以下资源无法导入：
+  ImportSummary: |-
+    成功导入以下资源：
+  NoAssetImported: |-
+    没有导入资源。
+  ImportConflict:
+    Message: |-
+      你正在尝试导入一个资源的较早版本。
+      你想保留哪个版本？
+    ReplaceAsset:
+      用导入的资源替换
+    KeepOriginal:
+      保留原有资源
+    Identifier: "标识符：{0}"
+    Version: "版本：{0}"
+  Loading:
+    Message: '正在加载：{0}……'
+    Archive: 正在解包
+    ValidatePackage: 正在验证包
+    CheckConflict: 正在检查冲突
+    DeleteAsset: 正在删除资源{0}
+    StoreAsset: 正在保存资源{0}
+    Finalizing: 即将完成
