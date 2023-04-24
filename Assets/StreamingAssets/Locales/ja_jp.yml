@@ -1,5 +1,4 @@
-# このファイルは「[1612cc6] Remote: Add option to manually connect to IP」の`en_us.yml`をもとに翻訳しました。
-# 現在、「[71908bb] Gameplay: Remove ComputeBuffer from rendering」までの更新を反映作業中。
+# このファイルは「[71908bb] Gameplay: Remove ComputeBuffer from rendering」の`en_us.yml`をもとに翻訳しました。
 # 以下のURLで、最新版の`en_us.yml`との差分を確認できます。
 # https://github.com/0thElement/ArcCreate/compare/71908bb..HEAD#diff-6842e12e8ae98f1262c6e69a5d98d10210d4cceba6273dce82f5d8dbfd22ce90
 
@@ -519,8 +518,8 @@ Compose:
           Name: 音量
           Music: 曲
           Effect: SE
-#           GlobalOffset: Global Offset # (?) 機能不明
-#           SyncToDSPTime: Sync to DSP timing # (?) 機能不明
+          GlobalOffset: オフセット # (?) 機能不明
+          SyncToDSPTime: DSPタイミングに同期 # (?) 機能不明
         Display:
           Name: 画面
           Vsync: VSync
@@ -623,7 +622,7 @@ Remote:
       Jacket: ジャケット
       Background: 背景
       Metadata: メタデータ
-    Settings:
+    Settings: # (?) 用途不明
       Name: プレイ設定
       Offset: オフセット
       Speed: 譜面速度
@@ -673,16 +672,16 @@ Gameplay:
     Retry: リトライ
     Return: 中断する
   Selection:
-#     SelectStatus:
-#       Singular: |-
-#         {0} asset selected
-#       Plural: |-
-#         {0} assets selected
-#     DeleteConfirmation: |-
-#       Are you sure you want to delete the following assets?
-#       Your score will not be deleted.
-#     CannotDeleteDefault: |-
-#       Default assets cannot be deleted.
+    SelectStatus: # (?) asset: アセットでいい？
+      Singular: |-
+        {0}個のアセットを選択中
+      Plural: |-
+        {0}個のアセットを選択中
+    DeleteConfirmation: |-
+      選択中のアセットを削除してもよろしいですか？
+      プレイスコアは保存されます。
+    CannotDeleteDefault: |-
+      デフォルトのアセットは削除できません。
     Action:
       Delete: 削除
       Cancel: キャンセル
@@ -692,27 +691,27 @@ Gameplay:
       Import: インポート
       Community: コミュニティ
       AllSongs: All Songs
-      OtherDifficulties: Other difficulties
+      OtherDifficulties: Other Difficulties
     Info:
       Undefined:
         Title: Unnamed
         Composer: N/A
         Charter: Unknown
       Charter: '譜面制作: {0}'
-#     Sort:
-#       addeddate: "Sort: Added date"
-#       charter: "Sort: Charter"
-#       composer: "Sort: Composer"
-#       difficulty: "Sort: Difficulty"
-#       grade: "Sort: Grade"
-#       playcount: "Sort: Play count"
-#       score: "Sort: Score"
-#       title: "Sort: Title"
-#     Group:
-#       none: "Group: None"
-#       difficulty: "Group: Difficulty"
-#       grade: "Group: Grade"
-#       charter: "Group: Charter"
+    Sort:
+      addeddate: "日付"
+      charter: "譜面制作"
+      composer: "作曲"
+      difficulty: "難易度"
+      grade: "グレード"
+      playcount: "プレイ回数"
+      score: "スコア"
+      title: "曲名"
+    Group:
+      none: "なし"
+      difficulty: "難易度"
+      grade: "グレード"
+      charter: "譜面制作"
     Settings:
       Name: 設定
       Language: 言語設定
@@ -768,29 +767,29 @@ Shutter:
   Charter: 譜面制作
   Alias: as
 
-# Storage:
-#   Confirm: Confirm
-#   ImportErrors: |-
-#     The following assets could not be imported:
-#   ImportSummary: |-
-#     Successfully imported the following assets:
-#   NoAssetImported: |-
-#     No assets were imported.
-#   ImportConflict:
-#     Message: |-
-#       You're trying to import an older version of an asset.
-#       Which version would you like to keep?
-#     ReplaceAsset:
-#       Replace with importing asset
-#     KeepOriginal:
-#       Keep the original asset
-#     Identifier: "Identifier: {0}"
-#     Version: "Version: {0}"
-#   Loading:
-#     Message: 'Loading: {0}...'
-#     Archive: Unpacking archive
-#     ValidatePackage: Validating package
-#     CheckConflict: Checking for conflict
-#     DeleteAsset: Deleting asset {0}
-#     StoreAsset: Storing asset {0}
-#     Finalizing: Finalizing
+Storage:
+  Confirm: 確認
+  ImportErrors: |-
+    以下のアセットを正常にインポートできませんでした。
+  ImportSummary: |-
+    アセットのインポートが完了しました。
+  NoAssetImported: |- # (?) 用途不明
+    アセットはインポートされませんでした。 
+  ImportConflict:
+    Message: |-
+      アセットの古いバージョンをインポートしようとしています。
+      どちらのバージョンを保持しますか？
+    ReplaceAsset:
+      インポート中のアセットで置き換える。
+    KeepOriginal:
+      すでにインポート済みのアセットを保持する。
+    Identifier: "パッケージID: {0}"
+    Version: "バージョン: {0}"
+  Loading:
+    Message: 'ロード中: {0}...'
+    Archive: 解凍中
+    ValidatePackage: 検証中
+    CheckConflict: コンフリクトを確認中
+    DeleteAsset: アセット"{0}"を削除中
+    StoreAsset: アセット"{0}"を保存中
+    Finalizing: 完了
