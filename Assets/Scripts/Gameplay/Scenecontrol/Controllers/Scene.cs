@@ -575,6 +575,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
                     if (task.Status == UniTaskStatus.Faulted)
                     {
+                        ClearCache();
                         throw new Exception("Could not load a sprite for scenecontrol (Unknown error)");
                     }
                 }
@@ -774,12 +775,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             if (spriteCache.ContainsKey(definition))
             {
-                while (spriteCache[definition] == null)
+                Sprite spr = null;
+                while (spriteCache.TryGetValue(definition, out spr) && spr == null)
                 {
                     await UniTask.NextFrame();
                 }
 
-                return spriteCache[definition];
+                return spr;
             }
 
             spriteCache.Add(definition, null);

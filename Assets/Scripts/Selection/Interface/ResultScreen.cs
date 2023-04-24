@@ -89,7 +89,7 @@ namespace ArcCreate.Selection.Interface
                     break;
                 default:
                     side.sprite = sideSprites[0];
-                    background.sprite = backgroundSprites[3];
+                    background.sprite = backgroundSprites[0];
                     break;
             }
 

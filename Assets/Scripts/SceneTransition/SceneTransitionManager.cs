@@ -90,6 +90,7 @@ namespace ArcCreate.SceneTransition
             catch (Exception e)
             {
                 onException?.Invoke(e);
+                Debug.LogError(e);
                 await SceneManager.UnloadSceneAsync(sceneName);
             }
             finally

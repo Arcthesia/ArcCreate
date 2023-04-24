@@ -88,7 +88,7 @@ namespace ArcCreate.Data
 
                 if (GoodCount == NoteCount)
                 {
-                    return ClearResult.AllPerfect;
+                    return ClearResult.AllGood;
                 }
 
                 if (MaxCombo == NoteCount)

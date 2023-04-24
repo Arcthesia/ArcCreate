@@ -362,7 +362,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             DefaultAnchorMin = rectTransform.anchorMin;
             DefaultAnchorMax = rectTransform.anchorMax;
             DefaultPivot = rectTransform.pivot;
-            defaultText = textComponent.text;
+            defaultText = textComponent.text ?? string.Empty;
             DefaultFontSize = textComponent.fontSize;
             DefaultLineSpacing = textComponent.lineSpacing;
             DefaultFontAsset = textComponent.font;
