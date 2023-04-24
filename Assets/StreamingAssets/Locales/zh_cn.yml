@@ -1,6 +1,7 @@
 ### 翻译注意事项：
-# 1. 
-#
+# 1. 音符名称保持原文并尽量首字母大写，无论是否在句首：Tap、Hold、Arc、Sky note、Trace
+# 2. Timing同样不翻译，位于句首时大写，位于句中时小写。Timing group同理。有些位置的timing可以翻译为“时间”一词，请自行判断。
+# 3. 
 #
 ######
 Format:
@@ -22,7 +23,7 @@ Format:
     InvalidHeader: |-
       无效的文件头。
     ArcColorNegative: |-
-      音弧的颜色ID不能为负数。
+      Arc的颜色ID不能为负数。
     AudioOffsetInvalid: |-
       无效的音频偏移。
     TimingPointDensityFactorInvalid: |-
@@ -34,10 +35,10 @@ Format:
     IncludeAReferencedFragment: |-
       工程已经引用了一个谱面文件的一部分，但是又重复引用了这个谱面。
     TimingGroupPairInvalid: |-
-      '时间组符号配对错误。请注意在编辑时间组时用大括号括起来并在结尾加分号“};”。'
+      Timing group符号配对错误。请注意在编辑timing group时用大括号括起来并在结尾加分号“};”。
     DivisorNegative: |-
-      'Timing事件的节拍分割参数不能为负数。'
-    # 原文为“divisor property”，我翻译为“节拍分割”，指的是timing语句的第三个参数（四分音符每小节）
+      Timing事件的节拍分割参数不能为负数。
+    # 原文为“divisor property”，我翻译为“节拍分割参数”，指的是timing语句的第三个参数（四分音符每小节）
     BaseBPMZero: |-
       基准BPM不能为0。
     DurationNegative: |-
@@ -45,17 +46,17 @@ Format:
     DurationZero: |-
       该类事件的持续时间不能为零。
     ArcTapOutOfRange: |-
-      天键的时间超出其所在音弧的时间范围。
+      Sky note的时间超出其所在Arc的时间范围。
     TimingGroupPropertiesInvalid: |-
       无效的时间组属性。
   Warning:
     HoldTooShort:
-      长音符的持续时间过短，小于17ms。
+      Hold的持续时间过短，小于17ms。
     TapJudgementOverlap:
-      地面音符判定和其他音符发生重叠。
+      Tap判定和其他音符发生重叠。
 
 Compose:
-  # Exception messages within the editor
+  # 编辑器中的报错
   Exception:
     FileDoesNotExist: |-
       尝试读取位于路径{Path}的文件，但是该文件不存在，可能被删除了。
@@ -74,13 +75,13 @@ Compose:
     NoChartIncluded: |-
       无效的工程文件：工程中不包含谱面
     InvalidGroupProperties: |-
-      无效的Timing组属性。{Message}
+      无效的timing group属性。{Message}
     InstructionLimit: |-
-      中止执行Lua脚本：到达指令数量上限{0}。
+      Lua脚本执行中止：到达指令数量上限{0}。
     InvalidBaseBPM: |-
       无效的基准BPM数值：{0}
     CreateSkyNoteNoValidArc: |-
-      不能在这里放置天空音符。天空音符必须放在音轨上。
+      不能在这里放置Sky note。Sky note必须放在Trace上。
     Navigation:
       ParseKeybind: |-
         解析键位绑定时出现了一个错误："{0}"。
@@ -119,172 +120,172 @@ Compose:
           音频片段{Sfx}不兼容渲染。
           渲染音频声道数量为{ExpectedChannels}，渲染音频采样率为{ExpectedFrequency}，而音频片段的声道数量为{Channels}，采样率为{Frequency}。
           
-  # Notification messages
+  # 通知消息
   Notify:
-    GameplayLoaded: Gameplay scene loaded successfully
+    GameplayLoaded: 游玩场景加载成功
     FreeCameraEditHelp: |-
-      Starting free camera (hover for more info)
+      正在启动自由camera视角（鼠标悬停查看更多信息）
       
-      WASD: Move forward/left/backward/right
-      Space: Move upward
-      Shift: Move downward
-      IJKL: Rotate up/left/down/right
-      U: Roll left
-      O: Roll right
-      Esc: Cancel
-      Enter: Confirm
+      WASD：向前/向左/向后/向右移动
+      空格：向上移动
+      Shift：向下移动
+      IJKL：向上/向左/向下/向右旋转
+      U：向左翻滚
+      O：向右翻滚
+      Esc：取消
+      回车：确认
     EmmyLuaGenerated: |-
-      EmmyLua template for scenecontrol generated at the current project's folder
-      Use VsCode with the extension tangzx.emmylua to get autocompletion
+      在当前文件夹下生成了用于scenecontrol的EmmyLua模板
+      请使用安装了tangzx.emmylua插件的VS Code进行自动填充
     Actions:
-      CannotMirror: Can not mirror any of the selected notes.
-      NoDragRange: Can not drag selected notes timing. Try dragging the notes separately.
+      CannotMirror: 无法镜像选中的音符。
+      NoDragRange: 无法拖动选中音符的timing。请尝试分别拖动音符。
     History:
       Execute: |-
-        Executed command: {Name}
+        已执行的命令：{Name}
       Undo: |-
-        Undo command: {Name}
+        撤销命令：{Name}
       Redo: |-
-        Redo command: {Name}
-      # {Name} above will be replaced with these entries
-      AddTiming: Add timing event
-      EditTiming: Edit timing event
-      RemoveTiming: Remove timing event
-      AddCamera: Add camera event
-      EditCamera: Edit camera event
-      RemoveCamera: Remove camera event
-      AddScenecontrol: Add scenecontrol event
-      EditScenecontrol: Edit scenecontrol event
-      RemoveScenecontrol: Remove scenecontrol event
-      EditValue: Edit selected note's value
-      EditArc: Edit arc's values
+        重做命令：{Name}
+      # 上方的{Name}占位符会用以下项代替
+      AddTiming: 添加timing事件
+      EditTiming: 编辑timing事件
+      RemoveTiming: 移除timing事件
+      AddCamera: 添加camera事件
+      EditCamera: 编辑camera事件
+      RemoveCamera: 移除camera事件
+      AddScenecontrol: 添加scenecontrol事件
+      EditScenecontrol: 编辑scenecontrol事件
+      RemoveScenecontrol: 移除scenecontrol事件
+      EditValue: 编辑选中音符的值
+      EditArc: 编辑arc的值
       CreateNote:
-        Tap: Create tap note
-        Hold: Create hold note
-        Arc: Create arc note
-        ArcTap: Create sky note
-        Trace: Create trace note
-      DeleteNotes: Delete notes
-      Cut: Cut notes
-      Paste: Paste notes
+        Tap: 创建Tap音符
+        Hold: 创建Hold音符
+        Arc: 创建Arc音符
+        ArcTap: 创建Sky note音符
+        Trace: 创建Trace音符
+      DeleteNotes: 删除音符
+      Cut: 剪切音符
+      Paste: 粘贴音符
       Mirror:
-        Vertical: Mirror notes vertically
-        Horizontal: Mirror notes horizontally
+        Vertical: 垂直镜像音符
+        Horizontal: 水平镜像音符
       Drag:
-        Timing: Drag notes timing
-        Position: Drag notes position
+        Timing: 拖动音符timing
+        Position: 拖动音符位置
     Clipboard:
-      Copy: Copied {0} notes
-      Cut: Cut {0} notes
-      NamedCopy: Copied {0} notes to named clipboard "{1}"
-      NamedCut: Cut {0} notes to named clipboard "{1}"
+      Copy: 复制了{0}个音符
+      Cut: 剪切了{0}个音符
+      NamedCopy: 复制了{0}个音符到已命名的剪贴板"{1}"中
+      NamedCut: 剪切了{0}个音符到已命名的剪贴板"{1}"中
     GroupTable:
-      AddGroup: Added timing group {Number}
-      EditGroup: Edited timing group {Number}
-      RemoveGroup: Removed timing group {Number}
+      AddGroup: 添加了timing group {Number}
+      EditGroup: 编辑了timing group {Number}
+      RemoveGroup: 移除了timing group {Number}
     Project:
       NewProject: |-
-        Created new project
-        at: {Path}
+        工程已创建
+        位于路径{Path}
       OpenProject: |-
-        Opened project
-        at: {Path}
+        工程已打开
+        位于路径{Path}
       SaveProject: |-
-        Saved project
-        at: {Path}
-      OpenChart: Opened chart file {Path}
-      CreateChart: Created chart file {Path}
-      RemoveChart: Removed chart file {Path} from project
+        工程已保存
+        位于路径{Path}
+      OpenChart: 打开了位于路径{Path}的谱面文件
+      CreateChart: 在路径{Path}下创建了谱面文件
+      RemoveChart: 从工程文件中移除了位于路径{Path}的谱面文件
     Inspector:
-      InvalidParamameter: Invalid parameter
+      InvalidParamameter: 无效参数
     Measurer:
-      CopyTiming: Copied cursor timing
-      CopyPosition: Copied arc's position
-      CopyX: Copied arc's x coordinate
-      CopyY: Copied arc's y coordinate
+      CopyTiming: 复制了光标timing
+      CopyPosition: 复制了Arc位置
+      CopyX: 复制了Arc的x坐标
+      CopyY: 复制了Arc的y坐标
     Export:
       Render:
-        Cancelled: Render cancelled
-        Complete: Render complete
+        Cancelled: 取消渲染
+        Complete: 渲染完成
       Package:
-        Complete: Exported package to {0}
-  # Dialog boxes
+        Complete: 将包导出到了{0}
+  # 对话框
   Dialog:
     RemoveGroup:
-      Title: Remove timing group
+      Title: 移除timing group
       Content: |-
-        Are you sure you want to remove this timing group and all of its content? (no undo)
-      Yes: Remove
-      No: Cancel
+        你确定要移除这个timing group以及其中所有的内容吗？（不可撤销）
+      Yes: 移除
+      No: 取消
     RemoveChart:
-      Title: Remove chart file
+      Title: 移除谱面文件
       Content: |-
-        Are you sure you want to remove this chart file from the project?
+        你确定要将这个谱面文件从工程中删除吗？
 
-        The file itself will NOT be deleted and can be added back to the project later, but any metadata associated with it will be lost.
-      Yes: Remove
-      No: Cancel
+        这个谱面文件本身并不会被删除，之后还可以将其重新添加到工程中，但是和它相关的元数据将会丢失。
+      Yes: 移除
+      No: 取消
     UnsavedChanges:
-      Title: Unsaved changes
+      Title: 未保存的更改
       Content: |-
-        Your project has unsaved changes. Do you want to save?
-      Yes: Save changes
-      No: Discard changes
-      Cancel: Cancel
+        你的工程还有未保存的更改。你想要保存更改吗？
+      Yes: 保存更改
+      No: 放弃更改
+      Cancel: 取消
     LoadChartError:
-      Title: Error
+      Title: 错误
       Content: |-
-        There was an error loading the chart file {ChartPath}.
-        Either fix this in a separate text editor, or close this dialog and use the "<> {TabName}" panel.
+        加载谱面文件{ChartPath}时发生错误。
+        你可以选择在外部编辑器中修复该错误，也可以关闭此对话框并使用"<{TabName}>"面板修复。
         
-        Details:
-        Line number: {LineNumber}
-        LineContent: "{Content}".
-        Event type: {EventType}
+        错误信息：
+        错误行号：{LineNumber}
+        错误内容："{Content}"
+        事件类型：{EventType}
         {Exception}
-      Confirm: Confirm
+      Confirm: 确认
   Navigation:
-    KeybindOverride: Overriding keybind for action {0}
-    # Texts that appear on the context menu (right-click menu)
+    KeybindOverride: 正在覆盖{0}的键位设置
+    # 右键菜单的文本
     Actions:
       Camera:
         Name: Camera
         FreeCamera:
-          Name: Start free camera
+          Name: 启动自由camera
       Grid:
-        Name: Grid
-        Toggle: Toggle grid
+        Name: 网格
+        Toggle: 切换网格
       Display:
-        Name: Display
-        FullScreen: Toggle full screen
+        Name: 显示
+        FullScreen: 切换全屏
       Selection:
-        Name: Selection
-        Clear: Clear selection
+        Name: 选择
+        Clear: 取消选择
         RangeSelect:
-          Name: Select notes between range
+          Name: 段落选择
       Measure:
-        Name: Measure
+        Name: 量尺
         Start:
-          Name: Open measurer
+          Name: 打开量尺
       Clipboard:
-        Name: Clipboard
-        Copy: Copy
-        Cut: Cut
+        Name: 剪贴板
+        Copy: 复制
+        Cut: 剪切
         Paste:
-          Name: Paste
-          Cancel: Cancel pasting
+          Name: 粘贴
+          Cancel: 取消粘贴
         NamedPaste:
-          Name: Paste
-          Cancel: Cancel pasting
-        Clear: Clear clipboard
+          Name: 粘贴
+          Cancel: 取消粘贴
+        Clear: 清除剪贴板
       Delete:
-        Name: Delete
-        Execute: Delete notes
+        Name: 删除
+        Execute: 删除音符
       Mirror:
-        Name: Mirror
-        Horizontal: Mirror horizontally
-        HorizontalNoColorSwitch: Mirror horizontally (ignore color)
-        Vertical: Mirror vertically
+        Name: 镜像
+        Horizontal: 水平镜像
+        HorizontalNoColorSwitch: 水平镜像（无视颜色）
+        Vertical: 垂直镜像
   Grid:
     # Please modify the comment lines only (lines beginning with '--')
     DefaultScript: |-
