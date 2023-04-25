@@ -1,0 +1,774 @@
+Format:
+  # Exception messages while parsing chart files
+  Exception:
+    Message: |-
+      讀取譜面檔案:{File} 時發生了錯誤。
+      行數: {LineNumber}
+      解析事件型態: {EventType}
+      內容: "{Content}"
+      肇因: {Reason}
+    UnknownException: |-
+      未知的錯誤。
+      錯誤: {Exception}
+      堆疊追蹤 (Stack Trace):
+      {StackTrace}
+    WrongSyntax: |-
+      錯誤或是不完整的語法。
+    InvalidHeader: |-
+      無效的header line。
+    ArcColorNegative: |-
+      音弧顏色的id不可以是負數。
+    AudioOffsetInvalid: |-
+      無效的音樂偏移。
+    TimingPointDensityFactorInvalid: |-
+      無效的判定密度定義。
+    BaseTimingInvalid: |-
+      無效的base timing定義，請確認您的譜面檔案是否起始於0毫秒的時間事件。
+    IncludeReferencedMultipleTimes: |-
+      譜面檔案已經被引入了卻又被參照了一次。
+    IncludeAReferencedFragment: |-
+      譜面已經被參照了一部分卻又引入了一次。
+    TimingGroupPairInvalid: |-
+      非法的時間群組配對。請確認您的時間群組的定義是否正確地使用 "};" 來封閉。
+    DivisorNegative: |-
+      時間群組的除數屬性不可為負。
+    BaseBPMZero: |-
+      基準BPM不能為0。
+    DurationNegative: |-
+      此種事件的時間不能為0。
+    DurationZero: |-
+      此種事件的持續時間不能為0。
+    ArcTapOutOfRange: |-
+      天鍵在音弧/黑線的時間範圍外。
+    TimingGroupPropertiesInvalid: |-
+      無效的時間群組屬性定義。
+  Warning:
+    HoldTooShort: 長按音符長度小於17毫秒。
+    TapJudgementOverlap: 點擊音符和其他音符重疊。
+
+Compose:
+  # Exception messages within the editor
+  Exception:
+    FileDoesNotExist: |-
+      嘗試讀取位於 {Path} 的檔案，然而其不存在，該檔案可能被刪除了。
+    LoadImage: |-
+      在載入位於 {Path} 的圖片時發生錯誤。
+      {Error}
+    LoadProject: |-
+      在載入位於 {Path} 的專案檔發生錯誤。
+      專案檔可能不正確地被儲存。
+      您可以嘗試手動更改，或是刪除檔案並創建新檔。
+      {Error}
+    ChartFileAlreadyExists: |-
+      譜面檔案已引入專案。
+    InvalidChartFile: |-
+      無效的譜面檔名。
+    NoChartIncluded: |-
+      無效的專案檔: 此專案檔中沒有譜面檔。
+    InvalidGroupProperties: |-
+      無效的時間群組屬性 {Message}
+    InstructionLimit: |-
+      Lua 腳本的執行被終止: 已經到達指令執行的數量上限: {0}。
+    InvalidBaseBPM: |-
+      無效的基準BPM值: {0}。
+    CreateSkyNoteNoValidArc: |-
+      無法在此新增天鍵。天鍵必須放在音弧/黑線上。
+    Navigation:
+      ParseKeybind: |-
+        在解析快捷鍵時發生錯誤，快捷鍵: "{0}"。
+      ParseWhitespace: |-
+        無效的快捷鍵: 擊鍵不可為空白鍵。
+      InvalidKeystroke: |-
+        無效的擊鍵: "{0}" 該擊鍵不符合格式。
+      InvalidKey: |-
+        無效的按鍵: 字串 "{0}" 和任何鍵不符。
+      InvalidModifier: |-
+        無效的修飾鍵: 字串 "{0}" 和任何修飾鍵不符。
+      InvalidActionPath: |-
+        無效的動作指令路徑: 字串 "{0}" 和任何動作指令不符。
+    Scenecontrol: |-
+      在執行場景控制時發生錯誤，錯誤型態: {Type}: {Message}
+      {StackTrace}
+    LuaScript: |-
+      在執行 lua 腳本時發生錯誤，路徑: {Path}: {Message}
+      {StackTrace}
+    Render:
+      FFmpeg:
+        NotFound: |-
+          找不到FFmpeg的執行檔。
+          請確認設定的檔案路徑: {0} 是正確的。
+        Start: |-
+          在啟動FFmpeg時發生錯誤。
+          路徑: {Path}: 
+          錯誤訊息: {Message}
+          {StackTrace}
+        Write: |-
+          在FFmpeg的寫入程序發生錯誤。
+          錯誤訊息: {Message}
+          {StackTrace}
+      Audio:
+        IncompatibleSfx: |-
+          此音檔: {Sfx} 無法用於錄製。
+          預期聲道數量: {ExpectedChannels} 及預期頻率: {ExpectedFrequency}， 但本聲道數量為 {Channels} 及頻率 {Frequency}。
+
+  # Notification messages
+  Notify:
+    GameplayLoaded: 成功載入遊戲場景
+    FreeCameraEditHelp: |-
+      開始移動相機 (將游標放在此訊息以獲得更多資訊)
+
+      WASD: 向 前/左/後/右 移動
+      Space: 向上移動
+      Shift: 向下移動
+      IJKL: 向 上/左/下/右 旋轉
+      U: 向左翻轉
+      O: 向右翻轉
+      Esc: 取消
+      Enter: 確認
+    EmmyLuaGenerated: |-
+      在專案資料夾，用以設定場景控制 EmmyLua 的腳本範本。
+      使用VsCode:"tangzx.emmylua"的擴充套件以得到自動補字的功能。
+    Actions:
+      CannotMirror: 無法鏡像所選的音符。
+      NoDragRange: 無法拖曳所選音符的時間，請嘗試個別拖曳音符。
+    History:
+      Execute: |-
+        執行指令: {Name}
+      Undo: |-
+        還原指令: {Name}
+      Redo: |-
+        重做指令: {Name}
+      # {Name} above will be replaced with these entries
+      AddTiming: 新增時間事件
+      EditTiming: 編輯時間事件
+      RemoveTiming: 刪除時間事件
+      AddCamera: 新增相機事件
+      EditCamera: 編輯相機事件
+      RemoveCamera: 移除相機事件
+      AddScenecontrol: 新增場景控制事件
+      EditScenecontrol: 編輯場景控制事件
+      RemoveScenecontrol: 移除場景控制事件
+      EditValue: 編輯選取音符的值
+      EditArc: 編輯音弧的值
+      CreateNote:
+        Tap: 新增點擊音符
+        Hold: 新增長按音符
+        Arc: 新增音弧
+        ArcTap: 新增天鍵
+        Trace: 新增黑線
+      DeleteNotes: 刪除音符
+      Cut: 剪切音符
+      Paste: 貼上音符
+      Mirror:
+        Vertical: 垂直鏡像音符
+        Horizontal: 水平鏡像音符
+      Drag:
+        Timing: 拖曳音符時間
+        Position: 拖曳音符位置
+    Clipboard:
+      Copy: 已複製 {0} 個音符
+      Cut: 已剪切 {0} 個音符
+      NamedCopy: 已複製 {0} 個音符到名為 "{1}" 剪貼簿
+      NamedCut: 已剪切 {0} 個音符到名為 "{1}" 剪貼簿
+    GroupTable:
+      AddGroup: 已新增時間群組 {Number}
+      EditGroup: 已編輯時間群組 {Number}
+      RemoveGroup: 已刪除時間群組 {Number}
+    Project:
+      NewProject: |-
+        已創建新專案
+        路徑: {Path}
+      OpenProject: |-
+        已開啟新專案
+        路徑: {Path}
+      SaveProject: |-
+        已儲存新專案
+        路徑: {Path}
+      OpenChart: |-
+        已開啟譜面檔案，路徑: {Path}
+      CreateChart: |-
+        已新增譜面檔案，路徑: {Path}
+      RemoveChart: |-
+        已從專案刪除譜面檔案，路徑: {Path}
+    Inspector:
+      InvalidParamameter: 無效的參數
+    Measurer:
+      CopyTiming: 已複製游標的時間
+      CopyPosition: 已複製音弧的位置
+      CopyX: 已複製音弧 x 座標
+      CopyY: 已複製音弧 y 座標
+    Export:
+      Render:
+        Cancelled: 取消錄製影片
+        Complete: 影片已錄製完成
+      Package:
+        Complete: 匯出譜面封裝檔至 {0}
+  # Dialog boxes
+  Dialog:
+    RemoveGroup:
+      Title: 刪除時間群組
+      Content: |-
+        請問是否刪除此時間群組及其所有內容 ? (不可還原)
+      Yes: 刪除
+      No: 取消
+    RemoveChart:
+      Title: 刪除譜面檔案
+      Content: |-
+        請問是否從專案刪除此譜面檔案?
+
+        此譜面檔案"將不會"被刪除並且可被重新加入檔案，但是關於此譜面檔案的譜面資訊檔(Metadata)將會遺失。
+      Yes: 刪除
+      No: 取消
+    UnsavedChanges:
+      Title: 未儲存的變更
+      Content: |-
+        您的專案有未儲存的變更。請問您想要儲存嗎?
+      Yes: 儲存變更
+      No: 捨棄變更
+      Cancel: 取消
+    LoadChartError:
+      Title: 載入譜面錯誤
+      Content: |-
+        在載入譜面檔案的時候發生錯誤。路徑: {ChartPath}
+        請在其他文字編輯器修正此問題，或是關閉此對話視窗並使用 "<{TabName}>" 的控制項。
+
+        資訊:
+        行數: {LineNumber}
+        該行內容: "{Content}"。
+        事件型態: {EventType}
+        {Exception}
+      Confirm: 確定
+  Navigation:
+    KeybindOverride: 複寫動作指令 {0} 的快捷鍵
+    # Texts that appear on the context menu (right-click menu)
+    Actions:
+      Camera:
+        Name: 相機
+        FreeCamera:
+          Name: 移動相機
+      Grid:
+        Name: 網格
+        Toggle: 切換網格
+      Display:
+        Name: 顯示
+        FullScreen: 切換全螢幕
+      Selection:
+        Name: 選取
+        Clear: 清除選取
+        RangeSelect:
+          Name: 範圍選取
+      Measure:
+        Name: 測量
+        Start:
+          Name: 開啟測量器
+      Clipboard:
+        Name: 剪貼簿
+        Copy: 複製
+        Cut: 剪切
+        Paste:
+          Name: 貼上
+          Cancel: 取消貼上
+        NamedPaste:
+          Name: 貼上
+          Cancel: 取消貼上
+        Clear: 清除剪貼簿
+      Delete:
+        Name: 刪除
+        Execute: 刪除音符
+      Mirror:
+        Name: 鏡像
+        Horizontal: 水平鏡像
+        HorizontalNoColorSwitch: 水平鏡像 (忽略顏色)
+        Vertical: 垂直鏡像
+  Grid:
+    # Please modify the comment lines only (lines beginning with '--')
+    DefaultScript: |-
+      -- 這是一個 lua 腳本
+
+      -- 以4個數值設定判定區域
+      -- (角落1 x座標, 角落2 x座標, 角落1 y座標, 角落2 y座標)
+      grid.setCollider(-0.5, 1.5, -0.2, 1)
+
+      -- 設定網格背景顏色
+      grid.setPanelColor(rgba(255, 255, 255, 16))
+
+      -- 以4個數值繪製直線
+      -- (頂點1 x座標, 頂點2 x座標, 頂點1 y座標, 頂點2 y座標)
+      grid.drawLine(-0.5, 1.5, -0.2, -0.2, defaultColor)
+
+      -- 您也可以使用for迴圈
+      for x = -0.5, 1.5, 0.125 do
+        grid.drawLine(x, x, -0.2, 1, defaultColor)
+      end
+
+      for y = 0, 1, 0.25 do
+        grid.drawLine(-0.5, 1.5, y, y, defaultColor)
+      end
+  # Texts that appear on the editor UI
+  UI:
+    Common:
+      Confirm: 確定
+      Cancel: 取消
+      Close: 關閉
+      NotRequired: (不需要)
+      Extension: Extension
+    Placeholder:
+      Text: 無...
+      File: 沒有檔案被選取...
+      Image: 沒有圖片被選取...
+      Property: 沒有屬性...
+      ImagePrompt: 點擊以選取圖片
+    PanelNames:
+      Toolbox: 工具箱
+      RawEditor: 文字輸入
+      Gameplay: 遊戲畫面
+      Timeline: 音樂檢視
+      Project: 專案
+      Events: 事件
+      Remote: 遠端測試
+      Export: 匯出譜面
+      Settings: 設定
+    # Top bar of the UI
+    Top:
+      Label:
+        New: 新增
+        Open: 開啟
+        Save: 儲存
+        InputMode: 輸入模式
+        FullScreen: 全螢幕
+        ToggleFullScreenHint: 按F11以切換全螢幕模式
+        Chart: 譜面
+    # Project panel
+    Project:
+      Label:
+        NewChart: 新增譜面
+        NewProject: 新增專案
+        ProjectFile: 專案檔案
+        ChartFile: 譜面檔案
+        Information: 譜面資訊
+        Gameplay: 遊戲遊玩
+        Title: 音樂名稱
+        Composer: 曲師
+        Illustrator: 繪師
+        Charter: 譜師
+        Alias: 譜師別名
+        BPM: BPM
+        BaseBPM: 基準BPM
+        BPMText: BPM文字
+        SyncBaseBPM: 同步
+        ChartOffset: 譜面偏移
+        TimingPointDensityFactor: 判定密度
+        ChartConstant: 譜面定數
+        DifficultyName: 難度名稱
+        DifficultyColor: 難度顏色
+        Files: 檔案
+        Audio: 音樂
+        JacketArt: 曲繪
+        Background: 背景
+        Video: 影片
+        Skin: 造型
+        Side: 光/對立/消色 側
+        Note: 音符
+        Particle: 打擊特效
+        Accent: 主題色
+        Track: 軌道樣式
+        SingleLine: 雙側特效
+        Colors: 顏色
+        TraceBody: 黑線顏色
+        Shadow: 影子顏色
+        ArcColors: 音弧顏色
+        Blue: 藍 (0)
+        Red: 紅 (1)
+        Green: 綠 (2)
+        Custom: 自訂 ({0})
+        AddArcColor: 新增音弧顏色
+        NoProjectLoaded: |-
+          沒有專案被讀取，
+          請新增或開啟新的專案。
+        Shutter: 載入介面
+        ShowShutter: 顯示載入介面
+        HideShutter: 隱藏載入介面
+        PreviewSegment: 預覽音樂區段
+      Options:
+        Inherit: 繼承
+        Light: Light
+        Conflict: Conflict
+        Colorless: Colorless
+        MiraiLight: Mirai Light
+        MiraiConflict: Mirai Conflict
+        Dynamix: Dynamix
+        Black: Black
+        Nijuusei: Nijuusei
+        Rei: Rei
+        DarkVs: DarkVs
+        Tempest: Tempest
+        Finale: Finale
+        Pentiment: Pentiment
+        Arcana: Arcana
+        None: None
+        Neo: Neo
+        Past: Past
+        Present: Present
+        Future: Future
+        Beyond: Beyond
+    Timeline:
+      Label:
+        Offset: 偏移
+        TimingGroup: 群組
+        Density: 節奏密度
+    # Events editor panel
+    EventsEditor:
+      Label:
+        Group: 群組
+        Events: 事件
+      Actions:
+        AddGroup: 新增群組
+        DeleteGroup: 刪除群組
+        AddEvent: 新增事件
+        DeleteEvent: 刪除事件
+        AutoReload: 自動重新載入
+        GenerateEmmyLua: 產生 EmmyLua
+        Reload: 重新載入
+        FreeCamera: 移動相機
+      CameraView:
+        Default: 遊戲視角
+        Stationary: 正常視角
+        ZoomedOut: 縮小視角
+        BirdsEye1: 俯視視角 1
+        BirdsEye2: 俯視視角 2
+      Mode:
+        Timing: 時間
+        Camera: 相機
+        Scenecontrol: 場景
+    # Export panel
+    Export:
+      Render:
+        Name: 錄製影片
+        Description: |-
+          錄製並匯出譜面影片檔案，
+          需要安裝FFmpeg。
+        ConfigureFFmpeg: 設定FFmpeg執行檔的路徑
+        Settings:
+          Name: 設定
+          From: 開始
+          To: 結束
+          Quality: 品質
+          FPS: FPS
+          Width: 寬度
+          Height: 高度
+          Size: 大小
+          ShowShutter: 顯示載入介面
+        Start: 開始錄製
+        Cancel: 取消錄製
+        Status: |-
+          錄製譜面影片， 這會花一點時間。
+          經過時間: {0}
+          剩餘時間: {1}
+      Package:
+        Name: 匯出封裝檔
+        Description: |-
+          匯出 .arcpkg 的封裝檔，
+          以和其他玩家分享您的譜面。
+        Publisher: 發布人
+        Package: 封裝檔
+        Version: 版本
+        BlankField: 請輸入發布人和封裝檔的名稱
+        Identifier: "您的封裝檔辨識碼為: {0}"
+        Export: 匯出
+    # Editor settings panel
+    Settings:
+      Label:
+        Locale:
+          Name: 語言設定
+          Language: 語言
+          Reload: 重新載入語言資料
+          CheckMissing: 確認遺失的語言資料
+        Gameplay:
+          Name: 遊玩設定
+          Speed: 下落速度
+          AspectRatio: 螢幕比例設定
+          Indicator: FC/PM 顯示
+          MaxIndicator: 理論值顯示
+        Grid:
+          Name: 網格設定
+          Slot: 網格箱
+          UseDefault: 使用預設
+          FromLane: 起始軌數
+          ToLane: 結束軌數
+          ScaleGrid: 和天空判定線等比例縮放
+          Gridline: 定義網格線
+          Script: Lua 腳本
+        AudioVolume:
+          Name: 聲音設定
+          Music: 音樂音量
+          Effect: 打擊音效音量
+          GlobalOffset: 全局時間偏移
+          SyncToDSPTime: 同步至DSP timing
+        Display:
+          Name: 顯示設定
+          Vsync: Vsync
+          Framerate: 幀率
+          ShowCounter: 顯示幀率
+        Input:
+          Name: 輸入設定
+          ReloadKeybinds: 重新載入快捷鍵
+        Files:
+          Name: 檔案設定
+          Backup: 在儲存時新增備份
+          BackupCount: 備份數量
+          Autosave: 開啟自動備份
+          AutosaveInterval: 自動備份時間間隔 (秒)
+        ScrollSensitivity:
+          Name: 捲動靈敏度
+          Vertical: 垂直
+          Horizontal: 水平
+          Timeline: 時間
+        TrackScrolling:
+          Name: 捲動軌道
+          Threshold: 門檻值
+          MaxMovement: 最大移動
+        Credits:
+          Name: 致謝名單
+          View: 查看致謝名單
+    # Toolbox panel
+    Toolbox:
+      Pallete:
+        Name: 新增音符
+        Arc: 音弧
+        Trace: 黑線
+        Tap: 點擊
+        Hold: 長按
+        Arctap: 天鍵
+        Easing: 緩動函數
+      Macros: 巨集
+    # Inspector window
+    Inspector:
+      Name: 音符資訊
+      Timing: 時間
+      StartTiming: <size=11>起始時間</size>
+      EndTiming: <size=11>結束時間</size>
+      Lane: 軌數
+      StartPos: <size=11>起始位置</size>
+      EndPos: <size=11>結束位置</size>
+      Sfx: 音效
+      Group: 群組
+      Mixed: 混合
+      Arc: 音弧
+      Trace: 黑線
+      Actions:
+        SelectArc: 選取父音弧
+        SelectArctap: 選取天鍵
+
+Remote:
+  Exception:
+    InvalidIP: 無效的IP位址
+  State:
+    Listening: |-
+      正在監聽廣播...
+      <size=20>
+      請在您的電腦的ArcCreate客戶端，開啟"遠端測試"的控制項，並且點擊"開啟廣播"以開始測試。</size>
+    ManualIP: |-
+      等待電腦客戶端的連線。
+      <size=20>
+      請在您的電腦的ArcCreate客戶端，開啟"遠端測試"的控制項並且輸入IP位址: {0}</size>
+    Found: |-
+      接收到下列裝置的廣播。
+      請選取一個裝置以繼續。
+    TargetDisconnected:
+      Compose: 目標客戶端已斷線。停止連線。
+      Gameplay: 目標客戶端已斷線。請問您想要開啟新的連線嗎?
+    Receiving: 接收資料 ({0})
+  Description:
+    Idle: |-
+      當前沒有測試客戶端被連接。
+      請開啟廣播以搜尋客戶端，確認這個裝置和測試遊玩的客戶端在同一個區域網路。
+      並且測試的客戶端必需接收到傳入的廣播。
+    Broadcasting: |-
+      廣播代碼: {0}
+      請在測試遊玩的客戶端選取擁有此代碼的選項以開啟連線。
+    Connected: |-
+      已連接至測試客戶端。
+      客戶端IP: {0}:{1}
+  Actions:
+    Broadcast: 開啟廣播
+    AbortBroadcast: 停止廣播
+    BroadcastAgain: 重新廣播
+    StopSession: 停止連線
+    StartNewSession: 開啟新的連線
+    ManualIP: 手動設置連線
+    ReturnToSelect: 返回至歌曲選擇
+  Control:
+    Name: 控制
+    Sync:
+      Name: 同步資料
+      AllFiles: 所有檔案
+      Chart: 譜面
+      Audio: 音樂
+      Jacket: 曲繪
+      Background: 背景
+      Metadata: 譜面資訊檔
+    Settings:
+      Name: 設定
+      Offset: 裝置音樂偏移
+      Speed: 裝置下落速度
+      MusicVolume: 音樂音量
+      EffectVolume: 打擊音效音量
+    StartTiming: 以當前時間點播放
+    EndTiming: 播放至
+    Loop: 循環播放
+    ShowLog: 顯示log
+    ShowDebug: 顯示除錯訊息
+    ManualIP: 手動輸入網路IP
+  Window:
+    Name: 遠端測試
+    SyncChart: 同步譜面
+    SyncTiming: 同步時間
+
+Gameplay:
+  Exception:
+    LoadAudio: |-
+      在載入音樂時發生了錯誤， 路徑: {Path}
+      {Error}
+    Chart: |-
+      在載入譜面檔案時發生了錯誤， 路徑: {Path}
+      {Error}
+    Skin: |-
+      在載入圖片時發生了錯誤， 路徑: {Path}
+      {Error}
+    Scenecontrol: |-
+      在載入scenecontol(json)時發生了錯誤， 路徑: {Path}
+      {Error}
+    ScenecontrolSprite: |-
+      在載入scenecontrol所需的圖片時發生了錯誤， 路徑: {Path}
+      {Error}
+    Load: |-
+      在載入的時候發生未知的錯誤: {Identifier}， {ChartPath}
+      錯誤訊息: {Message}
+      堆疊追蹤 (Stack Trace):
+      {StackTrace}
+  HUD:
+    Play: 遊玩
+    Retry: 重試
+    Return: 退出
+  Selection:
+    SelectStatus:
+      Singular: |-
+        {0} 譜面已選取
+      Plural: |-
+        {0} 譜面已選取
+    DeleteConfirmation: |-
+      請問您是否要刪除以下的譜面?
+      您的分數將不會被刪除。
+    CannotDeleteDefault: |-
+      預設的譜面無法被刪除。
+    Action:
+      Delete: 刪除
+      Cancel: 取消
+      Done: 完成
+    List:
+      RemoteTestplay: 遠端測試遊玩
+      Import: 匯入譜面封裝檔
+      Community: 社群
+      AllSongs: 所有歌曲
+      OtherDifficulties: 其他難度
+    Info:
+      Undefined:
+        Title: 無題
+        Composer: 未知
+        Charter: 未知
+      Charter: "譜師: {0}"
+    Sort:
+      addeddate: "排序: 新增日期"
+      charter: "排序: 譜師"
+      composer: "排序: 曲師"
+      difficulty: "排序: 難度"
+      grade: "排序: 評級"
+      playcount: "排序: 遊玩次數"
+      score: "排序: 分數"
+      title: "排序: 曲名"
+    Group:
+      none: "群組: 無"
+      difficulty: "群組: 難度"
+      grade: "群組: 評級"
+      rank: "群組: 通關狀態"
+      charter: "群組: 譜師"
+    Settings:
+      Name: 設定
+      Language: 語言設定
+      Gameplay:
+        Name: 遊玩設定
+        Speed: 速度
+        SpeedDetail: |-
+          調整音符下落至判定區域的速度。
+        EarlyLatePerfectDisplay: Early/Late perfect顯示
+        EarlyLatePerfectDisplayDetail: |-
+          是否顯示 Early/Late perfect 的判定。
+      Audio:
+        Name: 音效設定
+        Offset: 偏移
+        OffsetDetail: |-
+          調整音樂的偏移是否與遊玩時同步。
+          如果LATE過多增加數值，如果EARLY過多則減少數值。
+        Calibrate: 譜面校正
+        MusicAudio: 音樂音量
+        MusicAudioDetail: |-
+          調整游戲内音樂音量大小。
+        EffectAudio: 打擊音效音量
+        EffectAudioDetail: |-
+          調整遊戲內打擊音效的音量。
+      Visual:
+        Name: 視覺設定
+        Colorblind: 色盲模式
+        ColorblindDetail: 使用另一種顏色的音弧。
+        FrPmDisplay: 顯示FR/PM
+        FrPmDisplayDetail: 調整FR/PM顯示的位置。
+        MaxDisplay: 理論值顯示
+        MaxDisplayDetail: 切換理論值顯示。
+        EarlyLateDisplay: 顯示 Early/Late
+        EarlyLateDisplayDetail: 調整 Early/Late 位置。
+        LimitFramerate: 限制幀率
+        LimitFramerateDetail: 限制幀率至60FPS以減少電池消耗，可能會增加延遲。
+        ShowFPS: 顯示幀率
+        ShowFPSDetail: 調整幀率顯示。
+        ShowDebug: 顯示除錯訊息
+        ShowDebugDetail: 在游戲内顯示除錯訊息 (進階)。
+      FrPmPosition:
+        middle: 中間
+        infopanel: 訊息欄
+        off: 關閉
+      EarlyLateTextPosition:
+        middle: 中間
+        bottom: 底部
+        top: 頂端
+
+Shutter:
+  Composer: 曲師
+  Illustrator: 繪師
+  Charter: 譜面設計
+  Alias: as
+
+Storage:
+  Confirm: 確認
+  ImportErrors: |-
+    以下譜面資料不能被匯入:
+  ImportSummary: |-
+    成功匯入了以下譜面資料:
+  NoAssetImported: |-
+    沒有譜面資料被匯入。
+  ImportConflict:
+    Message: |-
+      您正在嘗試匯入舊版本的譜面資料，
+      請問您想要保留哪個版本?
+    ReplaceAsset: 以匯入譜面資料取代。
+    KeepOriginal: 保留原本的譜面資料。
+    Identifier: "辨識碼: {0}"
+    Version: "版本: {0}"
+  Loading:
+    Message: "讀取中: {0}..."
+    Archive: 解壓縮檔案
+    ValidatePackage: 檢查譜面封裝檔案
+    CheckConflict: 檢查衝突
+    DeleteAsset: 刪除譜面資料 {0}
+    StoreAsset: 儲存譜面資料 {0}
+    Finalizing: 完成中...
+# First Edited by sylvex - 2023/4/25
