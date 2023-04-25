@@ -1,6 +1,6 @@
-# このファイルは「[71908bb] Gameplay: Remove ComputeBuffer from rendering」の`en_us.yml`をもとに翻訳しました。
+# このファイルは「[9a93f2b] Gameplay: Add grade & rank display to result & select」の`en_us.yml`をもとに翻訳しました。
 # 以下のURLで、最新版の`en_us.yml`との差分を確認できます。
-# https://github.com/0thElement/ArcCreate/compare/71908bb..HEAD#diff-6842e12e8ae98f1262c6e69a5d98d10210d4cceba6273dce82f5d8dbfd22ce90
+# https://github.com/0thElement/ArcCreate/compare/9a93f2b..HEAD#diff-6842e12e8ae98f1262c6e69a5d98d10210d4cceba6273dce82f5d8dbfd22ce90
 
 # ほんやくノート
 # - カッコは「()」(半角)
@@ -34,6 +34,14 @@ Format:
       イベントタイプ: {EventType}
       処理中の行: "{Content}"
       {Reason}
+    UnknownException: |-
+      不明なエラー: {Exception}
+      -
+      {StackTrace}
+    WrongSyntax: |-
+      構文が間違っているか不完全です。
+    InvalidHeader: |-
+      無効なヘッダーです。
     ArcColorNegative: |-
       ArcのColorIDは負の値にできません。
     AudioOffsetInvalid: |-
@@ -60,6 +68,11 @@ Format:
       Skyが属しているArcの継続時間外にあります。
     TimingGroupPropertiesInvalid: |-
       TimingGroupのプロパティが正しくありません。
+  Warning:
+    HoldTooShort:
+      ホールドノートの長さが17ms以下です。
+    TapJudgementOverlap:
+      タップノートの判定が他のノーツの判定と重なっています。
 
 Compose:
   # Exception messages within the editor
@@ -252,6 +265,18 @@ Compose:
       Yes: 保存
       No: 変更を破棄
       Cancel: キャンセル
+    LoadChartError:
+      Title: 譜面エラー
+      Content: |-
+        譜面ファイルを読み込み中にエラーが発生しました。
+        外部テキストエディタで修正するか、このダイアログを閉じてから"<> {TabName}"タブで修正してください。
+        
+        ファイル: {ChartPath}
+        {LineNumber}行目: "{Content}"
+        イベントタイプ: {EventType}
+        -
+        {Exception}
+      Confirm: 確認
   Navigation:
     KeybindOverride: アクション"{0}"のキーバインドがオーバーライドされました。
     # Texts that appear on the context menu (right-click menu)
@@ -336,6 +361,7 @@ Compose:
       ImagePrompt: クリックして選択
     PanelNames: # 翻訳しない
       Toolbox: Toolbox
+      RawEditor: Text
       Gameplay: Gameplay
       Timeline: Timeline
       Project: Project
@@ -711,6 +737,7 @@ Gameplay:
       none: "なし"
       difficulty: "難易度"
       grade: "グレード"
+      rank: "ランク"
       charter: "譜面制作"
     Settings:
       Name: 設定
@@ -720,9 +747,9 @@ Gameplay:
         Speed: 譜面速度
         SpeedDetail: |-
           流れてくる譜面の速さを調整します。
-        EarlyLatePureDisplay: Pure Early/Lateを表示
-        EarlyLatePureDisplayDetail: |-
-          Pure判定でもEarly/Lateを表示します。
+        EarlyLatePerfectDisplay: Perfect Early/Lateを表示
+        EarlyLatePerfectDisplayDetail: |-
+          Perfect判定でもEarly/Lateを表示します。
       Audio:
         Name: 音声設定
         Offset: 音ズレ調整
@@ -787,9 +814,9 @@ Storage:
     Version: "バージョン: {0}"
   Loading:
     Message: 'ロード中: {0}...'
-    Archive: 解凍中
-    ValidatePackage: 検証中
+    Archive: アーカイブを解凍中
+    ValidatePackage: パッケージを検証中
     CheckConflict: コンフリクトを確認中
     DeleteAsset: アセット"{0}"を削除中
     StoreAsset: アセット"{0}"を保存中
-    Finalizing: 完了
+    Finalizing: インポート完了
