@@ -478,7 +478,7 @@ Compose:
         Package: 谱面包
         Version: 版本
         BlankField: 请输入发布者和谱面包名信息。
-        Identifier: "你的谱面包识别符是：{0}"
+        Identifier: "你的谱面包标识符是：{0}"
         Export: 导出
     # 编辑器设置面板
     Settings:
@@ -619,7 +619,7 @@ Remote:
       EffectVolume: 音效音量
     StartTiming: 从时间点开始游玩
     EndTiming: 游玩至时间点     
-    Loop: Loop playback
+    Loop: 循环回放
     ShowLog: 显示日志
     ShowDebug: 显示调试信息
     ManualIP: 手动输入IP
@@ -631,149 +631,149 @@ Remote:
 Gameplay:
   Exception:
     LoadAudio: |-
-      An error occured while trying to load the audio file located at {Path}.
+      尝试加载位于路径{Path}的音频文件时发生错误。
       {Error}
     Chart: |-
-      An error occured while trying to load the chart located at {Path}.
+      尝试加载位于路径{Path}的谱面时发生错误。
       {Error}
     Skin: |-
-      An error occured while trying to load the image located at {Path}.
+      尝试加载位于路径{Path}的图片时发生错误。
       {Error}
     Scenecontrol: |-
-      An error occured while trying to load scenecontrol json located at {Path}.
+      尝试加载位于路径{Path}的SceneControl json时发生错误。
       {Error}
     ScenecontrolSprite: |-
-      An error occured while trying to load a scenecontrol sprite located at {Path}.
+      尝试加载位于路径{Path}的SceneControl精灵图时发生错误。
       {Error}
     Load: |-
-      An unknown error occured while trying to load the chart {Identifier}, {ChartPath}
-      Error: {Message}
-      Stack trace:
+      尝试加载{ChartPath}路径下的谱面{Identifier}时发生未知错误。
+      错误信息：{Message}
+      堆栈追踪：
       {StackTrace}
   HUD:
-    Play: Resume
-    Retry: Retry
-    Return: Quit
+    Play: 返回
+    Retry: 重试
+    Return: 退出
   Selection:
     SelectStatus:
       Singular: |-
-        {0} asset selected
+        选择了{0}个资源
       Plural: |-
-        {0} assets selected
+        选择了{0}个资源
     DeleteConfirmation: |-
-      Are you sure you want to delete the following assets?
-      Your score will not be deleted.
+      你确定要删除以下资源吗？
+      这不会删除你的分数。
     CannotDeleteDefault: |-
-      Default assets cannot be deleted.
+      无法删除默认资源。
     Action:
-      Delete: Delete
-      Cancel: Cancel
-      Done: Done
+      Delete: 删除
+      Cancel: 取消
+      Done: 完成
     List:
-      RemoteTestplay: Remote Testplay
-      Import: Import package
-      Community: Community
-      AllSongs: All Songs
-      OtherDifficulties: Other difficulties
+      RemoteTestplay: 远程测试游玩
+      Import: 导入谱面包
+      Community: 社区
+      AllSongs: 所有曲目
+      OtherDifficulties: 其他难度
     Info:
       Undefined:
-        Title: Unnamed
+        Title: 未命名
         Composer: N/A
-        Charter: Unknown
-      Charter: 'Charter: {0}'
+        Charter: 未知
+      Charter: '谱师：{0}'
     Sort:
-      addeddate: "Sort: Added date"
-      charter: "Sort: Charter"
-      composer: "Sort: Composer"
-      difficulty: "Sort: Difficulty"
-      grade: "Sort: Grade"
-      playcount: "Sort: Play count"
-      score: "Sort: Score"
-      title: "Sort: Title"
+      addeddate: "排序：添加时间"
+      charter: "排序：谱师"
+      composer: "排序：曲师"
+      difficulty: "排序：难度"
+      grade: "排序：评级"
+      playcount: "排序：游玩次数"
+      score: "排序：分数"
+      title: "排序：标题"
     Group:
-      none: "Group: None"
-      difficulty: "Group: Difficulty"
-      grade: "Group: Grade"
-      rank: "Group: Rank"
-      charter: "Group: Charter"
+      none: "分组：无"
+      difficulty: "分组：难度"
+      grade: "分组：评级"
+      rank: "分组：通关状态"
+      charter: "分组：谱师"
     Settings:
-      Name: Settings
-      Language: Language
+      Name: 设置
+      Language: 语言
       Gameplay:
-        Name: Gameplay
-        Speed: Speed
+        Name: 游玩设置
+        Speed: 速度
         SpeedDetail: |-
-          Adjust the speed at which notes approach the judgement area.
-        EarlyLatePerfectDisplay: Early/Late perfect display
+          调节音符下落的速度。
+        EarlyLatePerfectDisplay: 纯粹【过早/过晚】
         EarlyLatePerfectDisplayDetail: |-
-          Change whether or not to display early/late perfect judgements.
+          控制Pure判定时是否显示过早/过晚。
       Audio:
-        Name: Audio
-        Offset: Offset
+        Name: 音频设置
+        Offset: 偏移
         OffsetDetail: |-
-          Adjust music synchronization.
-          Increase if you're getting LATE, or decrease if you're getting EARLY.
-        Calibrate: Calibrate
-        MusicAudio: Music volume
+          调节音频同步。
+          如果LATE过多就增加偏移，如果EARLY过多就减少偏移。
+        Calibrate: 校准
+        MusicAudio: 音乐音量
         MusicAudioDetail: |-
-          Change the volume of music during gameplay.
-        EffectAudio: Effect volume
+          调节游玩过程中的音乐音量。
+        EffectAudio: 音效音量
         EffectAudioDetail: |-
-          Change the volume of hit sounds during gameplay.
+          调节游玩过程中的打击音效音量。
       Visual:
-        Name: Visual
-        Colorblind: Colorblind mode
-        ColorblindDetail: Use alternate arc colors.
-        FrPmDisplay: FR/PM display
-        FrPmDisplayDetail: Adjust FR/PM indicator position.
-        MaxDisplay: Max indicator display
-        MaxDisplayDetail: Toggle max score indicator display.
-        EarlyLateDisplay: Early/Late display
-        EarlyLateDisplayDetail: Adjust early/late text position.
-        LimitFramerate: Limit framerate
-        LimitFramerateDetail: Limit display framerate to 60 FPS to preserve battery life. Might increase latency.
-        ShowFPS: Show FPS
-        ShowFPSDetail: Toggle FPS display.
-        ShowDebug: Show debug information
-        ShowDebugDetail: Display debug information during gameplay (advanced).
+        Name: 视觉设置
+        Colorblind: 色盲模式
+        ColorblindDetail: 使用其他的Arc颜色。
+        FrPmDisplay: FR/PM指示
+        FrPmDisplayDetail: 调节FR/PM指示器的位置
+        MaxDisplay: 理论值指示
+        MaxDisplayDetail: 切换是否显示理论值指示器
+        EarlyLateDisplay: 过早/过晚指示
+        EarlyLateDisplayDetail: 调节过早/过晚提示的位置
+        LimitFramerate: 限制帧率
+        LimitFramerateDetail: 限制帧率为60帧以省电。可能会增加延迟。
+        ShowFPS: 显示FPS
+        ShowFPSDetail: 开关FPS显示
+        ShowDebug: 显示调试信息
+        ShowDebugDetail: 在游玩过程中显示调试信息（高级）
       FrPmPosition:
-        middle: Middle
-        infopanel: Info panel
-        off: Off
+        middle: 中间
+        infopanel: 信息栏
+        off: 关闭
       EarlyLateTextPosition:
-        middle: Middle
-        bottom: Bottom
-        top: Top
+        middle: 中间
+        bottom: 底部
+        top: 顶部
 
 Shutter:
-  Composer: Music
-  Illustrator: Illustration
-  Charter: Note Design
-  Alias: as
+  Composer: 音乐
+  Illustrator: 插画
+  Charter: 谱面设计
+  Alias: 作为
     
 Storage:
-  Confirm: Confirm
+  Confirm: 确认
   ImportErrors: |-
-    The following assets could not be imported:
+    以下资源无法导入：
   ImportSummary: |-
-    Successfully imported the following assets:
+    成功导入以下资源：
   NoAssetImported: |-
-    No assets were imported.
+    没有导入资源。
   ImportConflict:
     Message: |-
-      You're trying to import an older version of an asset.
-      Which version would you like to keep?
+      你正在尝试导入一个资源的较早版本。
+      你想保留哪个版本？
     ReplaceAsset:
-      Replace with importing asset
+      用导入的资源替换
     KeepOriginal:
-      Keep the original asset
-    Identifier: "Identifier: {0}"
-    Version: "Version: {0}"
+      保留原有资源
+    Identifier: "标识符：{0}"
+    Version: "版本：{0}"
   Loading:
-    Message: 'Loading: {0}...'
-    Archive: Unpacking archive
-    ValidatePackage: Validating package
-    CheckConflict: Checking for conflict
-    DeleteAsset: Deleting asset {0}
-    StoreAsset: Storing asset {0}
-    Finalizing: Finalizing
+    Message: '正在加载：{0}……'
+    Archive: 正在解包
+    ValidatePackage: 正在验证包
+    CheckConflict: 正在检查冲突
+    DeleteAsset: 正在删除资源{0}
+    StoreAsset: 正在保存资源{0}
+    Finalizing: 即将完成
