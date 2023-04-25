@@ -1,6 +1,6 @@
 ### 翻译注意事项：
 # 1. 音符名称保持原文并尽量首字母大写，无论是否在句首：Tap、Hold、Arc、Sky note、Trace
-# 2. Timing同样不翻译，位于句首时大写，位于句中时小写。Timing group同理。有些位置的timing可以翻译为“时间”一词，请自行判断。
+# 2. Timing同样不翻译，位于句首时大写，位于句中时小写。Timing group翻译为时间组。有些位置的timing可以翻译为“时间”一词，请自行判断。
 # 3. 
 #
 ######
@@ -35,7 +35,7 @@ Format:
     IncludeAReferencedFragment: |-
       工程已经引用了一个谱面文件的一部分，但是又重复引用了这个谱面。
     TimingGroupPairInvalid: |-
-      Timing group符号配对错误。请注意在编辑timing group时用大括号括起来并在结尾加分号“};”。
+      时间组符号配对错误。请注意在编辑时间组时用大括号括起来并在结尾加分号“};”。
     DivisorNegative: |-
       Timing事件的节拍分割参数不能为负数。
     # 原文为“divisor property”，我翻译为“节拍分割参数”，指的是timing语句的第三个参数（四分音符每小节）
@@ -75,7 +75,7 @@ Compose:
     NoChartIncluded: |-
       无效的工程文件：工程中不包含谱面
     InvalidGroupProperties: |-
-      无效的timing group属性。{Message}
+      无效的时间组属性。{Message}
     InstructionLimit: |-
       Lua脚本执行中止：到达指令数量上限{0}。
     InvalidBaseBPM: |-
@@ -117,7 +117,7 @@ Compose:
           {StackTrace}
       Audio:
         IncompatibleSfx: |-
-          音频片段{Sfx}不兼容渲染。
+          音效片段{Sfx}不兼容渲染。
           渲染音频声道数量为{ExpectedChannels}，渲染音频采样率为{ExpectedFrequency}，而音频片段的声道数量为{Channels}，采样率为{Frequency}。
           
   # 通知消息
@@ -180,9 +180,9 @@ Compose:
       NamedCopy: 复制了{0}个音符到已命名的剪贴板"{1}"中
       NamedCut: 剪切了{0}个音符到已命名的剪贴板"{1}"中
     GroupTable:
-      AddGroup: 添加了timing group {Number}
-      EditGroup: 编辑了timing group {Number}
-      RemoveGroup: 移除了timing group {Number}
+      AddGroup: 添加了时间组 {Number}
+      EditGroup: 编辑了时间组 {Number}
+      RemoveGroup: 移除了时间组 {Number}
     Project:
       NewProject: |-
         工程已创建
@@ -212,9 +212,9 @@ Compose:
   # 对话框
   Dialog:
     RemoveGroup:
-      Title: 移除timing group
+      Title: 移除时间组
       Content: |-
-        你确定要移除这个timing group以及其中所有的内容吗？（不可撤销）
+        你确定要移除这个时间组以及其中所有的内容吗？（不可撤销）
       Yes: 移除
       No: 取消
     RemoveChart:
@@ -287,22 +287,22 @@ Compose:
         HorizontalNoColorSwitch: 水平镜像（无视颜色）
         Vertical: 垂直镜像
   Grid:
-    # Please modify the comment lines only (lines beginning with '--')
+    # 请只编辑注释的行（开头为“--”的行）
     DefaultScript: |-
-      -- This is a lua script
+      -- 这是一个lua脚本
 
-      -- Set the collider area with four values
-      -- (corner1.x, corner2.x, corner1.y, corner2.y)
+      -- 用四个数字定义网格平面范围
+      -- (左x坐标, 右x坐标, 下y坐标, 上y坐标)
       grid.setCollider(-0.5, 1.5, -0.2, 1)
 
-      -- Set the grid's background color
+      -- 设定网格的背景颜色
       grid.setPanelColor(rgba(255, 255, 255, 16))
       
-      -- Draw lines with four values
-      -- (point1.x, point2.x, point1.y, point2.y)
+      -- 用四个数字来画网格线
+      -- (左x坐标, 右x坐标, 下y坐标, 上y坐标)
       grid.drawLine(-0.5, 1.5, -0.2, -0.2, defaultColor)
 
-      -- You can also use for loops
+      -- 也可以用for循环来画网格
       for x = -0.5, 1.5, 0.125 do
         grid.drawLine(x, x, -0.2, 1, defaultColor)
       end
@@ -310,98 +310,98 @@ Compose:
       for y = 0, 1, 0.25 do
         grid.drawLine(-0.5, 1.5, y, y, defaultColor)
       end
-  # Texts that appear on the editor UI
+  # 在编辑器UI上出现的文本
   UI:
     Common:
-      Confirm: Confirm
-      Cancel: Cancel
-      Close: Close
-      NotRequired: (not required)
-      Extension: Extension
+      Confirm: 确认
+      Cancel: 取消
+      Close: 关闭
+      NotRequired: （选填）
+      Extension: 扩展
     Placeholder:
-      Text: Empty...
-      File: No file selected...
-      Image: No image selected...
-      Property: No property...
-      ImagePrompt: Click to select image
+      Text: 空……
+      File: 没有选择文件……
+      Image: 没有选择图片……
+      Property: 没有属性……
+      ImagePrompt: 点击选择图片
     PanelNames:
-      Toolbox: Toolbox
-      RawEditor: Text
-      Gameplay: Gameplay
-      Timeline: Timeline
-      Project: Project
-      Events: Events
-      Remote: Remote
-      Export: Export
-      Settings: Settings
-    # Top bar of the UI
+      Toolbox: 工具箱
+      RawEditor: 文本
+      Gameplay: 游玩
+      Timeline: 时间轴
+      Project: 工程
+      Events: 事件
+      Remote: 远程连接
+      Export: 导出
+      Settings: 设置
+    # UI顶栏
     Top:
       Label:
-        New: New
-        Open: Open
-        Save: Save
-        InputMode: Input Mode
-        FullScreen: Full Screen
-        ToggleFullScreenHint: Press F11 to toggle full screen mode.
-        Chart: Chart
-    # Project panel
+        New: 新建
+        Open: 打开
+        Save: 保存
+        InputMode: 输入模式
+        FullScreen: 全屏
+        ToggleFullScreenHint: 按下F11切换全屏模式。
+        Chart: 谱面
+    # 工程面板
     Project:
       Label:
-        NewChart: New Chart
-        NewProject: New Project
-        ProjectFile: Project File
-        ChartFile: Chart file
-        Information: Information
-        Gameplay: Gameplay
-        Title: Title
-        Composer: Composer
-        Illustrator: Illustrator
-        Charter: Charter
-        Alias: Alias
+        NewChart: 新建谱面
+        NewProject: 新建工程
+        ProjectFile: 工程文件
+        ChartFile: 谱面文件
+        Information: 谱面信息
+        Gameplay: 游玩设置
+        Title: 标题
+        Composer: 曲师
+        Illustrator: 插画作者
+        Charter: 谱师
+        Alias: 假名
         BPM: BPM
-        BaseBPM: Base BPM
-        BPMText: BPM Text
-        SyncBaseBPM: Sync
-        ChartOffset: Chart Offset
-        TimingPointDensityFactor: Judge Density
-        ChartConstant: Chart Constant
-        DifficultyName: Difficulty Name
-        DifficultyColor: Difficulty Color
-        Files: Files
-        Audio: Audio
-        JacketArt: Jacket Art
-        Background: Background
-        Video: Video
-        Skin: Skin
-        Side: Side
-        Note: Note
-        Particle: Particle
-        Accent: Accent
-        Track: Track
-        SingleLine: Single Line
-        Colors: Colors
-        TraceBody: Trace Body
-        Shadow: Shadow
-        ArcColors: Arc Colors
-        Blue: Blue (0)
-        Red: Red (1)
-        Green: Green (2)
-        Custom: Custom ({0})
-        AddArcColor: Add arc color
+        BaseBPM: 基准BPM
+        BPMText: BPM文本
+        SyncBaseBPM: 同步BPM
+        ChartOffset: 谱面偏移
+        TimingPointDensityFactor: 判定点密度
+        ChartConstant: 谱面定数
+        DifficultyName: 难度名称
+        DifficultyColor: 难度颜色
+        Files: 文件
+        Audio: 音频
+        JacketArt: 曲绘
+        Background: 背景
+        Video: 视频
+        Skin: 外观
+        Side: 风格侧
+        Note: 音符
+        Particle: 粒子特效
+        Accent: 判定线和连击数
+        Track: 轨道
+        SingleLine: 单曲装饰线
+        Colors: 颜色设置
+        TraceBody: Trace主体
+        Shadow: 阴影
+        ArcColors: Arc颜色
+        Blue: 蓝（0）
+        Red: 红（1）
+        Green: 绿（2）
+        Custom: 自定义（{0}）
+        AddArcColor: 添加Arc颜色
         NoProjectLoaded: |-
-          No project loaded.
-          Create or open a new project
-        Shutter: Shutter
-        ShowShutter: Show shutter
-        HideShutter: Hide shutter
-        PreviewSegment: Preview segment
+          没有加载工程。
+          请新建或打开一个工程
+        Shutter: 加载界面
+        ShowShutter: 显示加载界面
+        HideShutter: 隐藏加载界面
+        PreviewSegment: 预览片段
       Options:
-        Inherit: Inherit
-        Light: Light
-        Conflict: Conflict
-        Colorless: Colorless
-        MiraiLight: Mirai Light
-        MiraiConflict: Mirai Conflict
+        Inherit: 不变
+        Light: 光芒侧
+        Conflict: 对立侧
+        Colorless: 消色侧
+        MiraiLight: Mirai光芒侧
+        MiraiConflict: Mirai对立侧
         Dynamix: Dynamix
         Black: Black
         Nijuusei: Nijuusei
@@ -411,7 +411,7 @@ Compose:
         Finale: Finale
         Pentiment: Pentiment
         Arcana: Arcana
-        None: None
+        None: 无
         Neo: Neo
         Past: Past
         Present: Present
@@ -419,214 +419,214 @@ Compose:
         Beyond: Beyond
     Timeline:
       Label:
-        Offset: Offset
-        TimingGroup: Group
-        Density: Density
-    # Events editor panel
+        Offset: 偏移
+        TimingGroup: 时间组
+        Density: 节拍细分
+    # 事件编辑器面板
     EventsEditor:
       Label:
-        Group: Group
-        Events: Events
+        Group: 时间组
+        Events: 事件
       Actions:
-        AddGroup: Add group
-        DeleteGroup: Delete group
-        AddEvent: Add event
-        DeleteEvent: Delete event
-        AutoReload: Reload automatically
-        GenerateEmmyLua: Generate EmmyLua
-        Reload: Reload
-        FreeCamera: Free camera
+        AddGroup: 添加时间组
+        DeleteGroup: 删除时间组
+        AddEvent: 添加事件
+        DeleteEvent: 删除事件
+        AutoReload: 自动重新加载
+        GenerateEmmyLua: 生成EmmyLua
+        Reload: 重新加载
+        FreeCamera: 自由camera
       CameraView:
-        Default: Default view
-        Stationary: Stationary view
-        ZoomedOut: Zoomed out view
-        BirdsEye1: Bird's-eye view 1
-        BirdsEye2: Bird's-eye view 2
+        Default: 默认视角
+        Stationary: 固定视角
+        ZoomedOut: 镜头拉远视角
+        BirdsEye1: 鸟瞰视角1
+        BirdsEye2: 鸟瞰视角2
       Mode:
         Timing: Timing
         Camera: Camera
         Scenecontrol: Scene
-    # Export panel
+    # 输出面板
     Export:
       Render:
-        Name: Render video
+        Name: 渲染视频
         Description: |-
-          Automatically export chart view video.
-          Requires FFmpeg to be installed.
-        ConfigureFFmpeg: Configure FFmpeg executable path
+          自动输出谱面预览视频。
+          需要安装FFmpeg。
+        ConfigureFFmpeg: 编辑FFmpeg可执行文件路径
         Settings:
-          Name: Settings
-          From: From
-          To: To
-          Quality: Quality
+          Name: 设置
+          From: 从
+          To: 到
+          Quality: 质量
           FPS: FPS
-          Width: Width
-          Height: Height
-          Size: Size
-          ShowShutter: Show shutter
-        Start: Start rendering
-        Cancel: Cancel rendering
+          Width: 宽度
+          Height: 高度
+          Size: 大小
+          ShowShutter: 显示加载界面
+        Start: 开始渲染
+        Cancel: 取消渲染
         Status: |-
-          Rendering video. This will take a while.
-          Elapsed: {0}
-          Remaining: {1}
+          正在渲染视频，可能需要一段时间。
+          已使用时间：{0}
+          剩余时间：{1}
       Package:
-        Name: Export package
+        Name: 谱面打包
         Description: |-
-          Export a .arcpkg package file to share to other players.
-        Publisher: Publisher
-        Package: Package
-        Version: Version
-        BlankField: Please enter both publisher and package name information
-        Identifier: "Your package identifier is: {0}"
-        Export: Export
-    # Editor settings panel
+          导出一个可分享给其他玩家的 .arcpkg 谱面包。
+        Publisher: 发布者
+        Package: 谱面包
+        Version: 版本
+        BlankField: 请输入发布者和谱面包名信息。
+        Identifier: "你的谱面包识别符是：{0}"
+        Export: 导出
+    # 编辑器设置面板
     Settings:
       Label:
         Locale:
-          Name: Localization
-          Language: Language
-          Reload: Reload locales
-          CheckMissing: Check missing entries
+          Name: 本地化设置
+          Language: 语言
+          Reload: 重新加载本地化文件
+          CheckMissing: 检查丢失条目
         Gameplay:
-          Name: Gameplay
-          Speed: Speed
-          AspectRatio: Aspect Ratio
-          Indicator: Indicator
-          MaxIndicator: Enable max indicator
+          Name: 游玩设置
+          Speed: 速度
+          AspectRatio: 画面比例
+          Indicator: 指示器
+          MaxIndicator: 打开理论值指示器
         Grid:
-          Name: Grid
-          Slot: Slot
-          UseDefault: Use default
-          FromLane: From lane
-          ToLane: To lane
-          ScaleGrid: Scale with sky input
-          Gridline: Define gridlines
-          Script: Lua script
+          Name: 网格设置
+          Slot: 栏位
+          UseDefault: 使用默认设置
+          FromLane: 从轨道
+          ToLane: 到轨道
+          ScaleGrid: 和天空判定线成比例
+          Gridline: 定义网格线
+          Script: Lua脚本
         AudioVolume:
-          Name: Audio
-          Music: Music
-          Effect: Effect
-          GlobalOffset: Global offset
-          SyncToDSPTime: Sync to DSP timing
+          Name: 音频设置
+          Music: 音乐音量
+          Effect: 音效音量
+          GlobalOffset: 音频偏移
+          SyncToDSPTime: 音频同步
         Display:
-          Name: Display
-          Vsync: Vsync
-          Framerate: Framerate
-          ShowCounter: Show framerate
+          Name: 显示设置
+          Vsync: 垂直同步
+          Framerate: 帧率
+          ShowCounter: 显示帧率
         Input:
-          Name: Input
-          ReloadKeybinds: Reload keybinds
+          Name: 输入设置
+          ReloadKeybinds: 重新加载键位绑定
         Files:
-          Name: Files
-          Backup: Create backup on save
-          BackupCount: Backups count
-          Autosave: Enable autosaving
-          AutosaveInterval: Autosave interval (seconds)
+          Name: 文件设置
+          Backup: 保存时创建备份
+          BackupCount: 备份数量
+          Autosave: 开启自动保存
+          AutosaveInterval: 自动保存间隔（秒）
         ScrollSensitivity:
-          Name: Scroll sensitivity
-          Vertical: Vertical
-          Horizontal: Horizontal
-          Timeline: Timeline
+          Name: 滚动灵敏度
+          Vertical: 垂直
+          Horizontal: 水平
+          Timeline: 时间轴
         TrackScrolling:
-          Name: Track scrolling
-          Threshold: Threshold
-          MaxMovement: Max movement
+          Name: 轨道滚动
+          Threshold: 阈值
+          MaxMovement: 最大移动量
         Credits:
-          Name: Credits
-          View: See credits
-    # Toolbox panel
+          Name: 制作组名单
+          View: 查看制作组名单
+    # 工具箱面板
     Toolbox:
       Pallete:
-        Name: Pallete
+        Name: 音符选择
         Arc: Arc
         Trace: Trace
         Tap: Tap
         Hold: Hold
         Arctap: Sky
         Easing: Easing
-      Macros: Macros
+      Macros: 宏
     # Inspector window
     Inspector:
-      Name: Inspector
-      Timing: Timing
-      StartTiming: Start
-      EndTiming: End
-      Lane: Lane
-      StartPos: From
-      EndPos: To
-      Sfx: Sfx
-      Group: Group
-      Mixed: Mixed
+      Name: 查看器
+      Timing: 时间
+      StartTiming: 开始时间
+      EndTiming: 结束时间
+      Lane: 轨道
+      StartPos: 从
+      EndPos: 到
+      Sfx: 音效片段
+      Group: 时间组
+      Mixed: 混合
       Arc: Arc
       Trace: Trace
       Actions:
-        SelectArc: Select parent arc
-        SelectArctap: Select sky notes
+        SelectArc: 选中所在Arc
+        SelectArctap: 选中Sky notes
 
 Remote:
   Exception:
-    InvalidIP: Invalid IP address
+    InvalidIP: 无效的IP地址
   State:
     Listening: |-
-      Listening for broadcast...
+      正在监听广播……
       <size=20>
-      On your desktop ArcCreate client, open "Remote" tab and press "Start broadcasting" to begin.</size>
+      在你的桌面ArcCreate客户端上打开“远程连接”标签页并点击“开始广播”开始游玩。</size>
     ManualIP: |-
-      Waiting for connection from desktop client.
+      等待桌面客户端连接。
       <size=20>
-      On your desktop ArcCreate client, open "Remote" tab and enter the IP address: {0}.</size>
+      在你的桌面ArcCreate客户端上打开“远程连接”标签页并输入IP地址：{0}。</size>
     Found: |-
-      Broadcast received from the following device(s).
-      Select a device to continue.
+      从以下设备接收到广播。
+      选择一个设备以继续。
     TargetDisconnected:
-      Compose: Target client disconnected. Stopping connection.
-      Gameplay: Target client disconnected. Do you want to start a new session?
+      Compose: 目标客户端断开连接，连接中止。
+      Gameplay: 目标客户端断开连接，你想要创建一个新会话吗？
     Receiving:
-      Receiving data ({0})
+      接收数据（{0}）
   Description:
     Idle: |-
-      No test play client has been connected.
-      Start broadcasting to discover clients. Make sure this device and test play client's device are on the same local network, and that the test play client is listening for incoming broadcast.
+      没有连接测试游玩设备。
+      开始广播来寻找设备。请确认这台设备和测试游玩的设备在同一个本地网络中，并且测试游玩的设备正在监听广播。
     Broadcasting: |-
-      Broadcasting code: {0}.
-      Select the option with this code on the test play client to start the session.
+      广播码：{0}。
+      在测试游玩设备上选择选项并输入广播码来开始游玩。
     Connected: |-
-      Connected to test play client at: {0}:{1}
+      连接到了测试游玩设备：{0}:{1}
   Actions:
-    Broadcast: Start broadcasting
-    AbortBroadcast: Stop broadcast
-    BroadcastAgain: Broadcast again
-    StopSession: Stop session
-    StartNewSession: Start new session
-    ManualIP: Manually set up connection
-    ReturnToSelect: Return to Song Select
+    Broadcast: 开始广播
+    AbortBroadcast: 停止广播
+    BroadcastAgain: 再次广播
+    StopSession: 结束会话
+    StartNewSession: 开始新会话
+    ManualIP: 手动设置连接
+    ReturnToSelect: 回到选曲界面
   Control:
-    Name: Control
+    Name: 控制
     Sync:
-      Name: Sync data
-      AllFiles: All files
-      Chart: Chart
-      Audio: Audio
-      Jacket: Jacket
-      Background: Background
-      Metadata: Metadata
+      Name: 同步数据
+      AllFiles: 所有文件
+      Chart: 谱面
+      Audio: 音频
+      Jacket: 曲绘
+      Background: 背景
+      Metadata: 元数据
     Settings:
-      Name: Settings
-      Offset: Device offset
-      Speed: Device speed
-      MusicVolume: Music volume
-      EffectVolume: Effect volume
-    StartTiming: Play from timing
-    EndTiming: Play to timing      
+      Name: 设置
+      Offset: 设备偏移
+      Speed: 设备速度
+      MusicVolume: 音乐音量
+      EffectVolume: 音效音量
+    StartTiming: 从时间点开始游玩
+    EndTiming: 游玩至时间点     
     Loop: Loop playback
-    ShowLog: Show log
-    ShowDebug: Show debug information
-    ManualIP: Enter IP Manually
+    ShowLog: 显示日志
+    ShowDebug: 显示调试信息
+    ManualIP: 手动输入IP
   Window:
-    Name: Remote
-    SyncChart: Sync chart
-    SyncTiming: Sync timing
+    Name: 远程
+    SyncChart: 同步谱面
+    SyncTiming: 同步时间
 
 Gameplay:
   Exception:
