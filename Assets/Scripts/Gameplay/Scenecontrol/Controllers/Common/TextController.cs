@@ -419,7 +419,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public void UpdateProperties(float fontSize, float lineSpacing)
         {
             textComponent.lineSpacing = lineSpacing;
-            textComponent.fontSize = Mathf.RoundToInt(fontSize);
+            textComponent.fontSize = fontSize;
         }
 
         [EmmyDoc("Change the font of this text object.")]

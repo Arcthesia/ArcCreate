@@ -129,8 +129,9 @@ public static class I18n
         }
     }
 
-    public static async UniTask StartLoadingLocale()
+    public static async UniTask StartLoadingLocale(string locale)
     {
+        CurrentLocale = locale;
         string path = Path.Combine(LocaleDirectory, CurrentLocale) + ".yml";
         if (CurrentLocale != DefaultLocale)
         {
