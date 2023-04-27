@@ -27,6 +27,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public ISerializableUnit GetUnitFromId(int id)
         {
+            if (deserialized[id] != null)
+            {
+                return deserialized[id];
+            }
+
             SerializedUnit serializedChannel = serializedUnits[id];
             ISerializableUnit result = GetUnitFromType(serializedChannel.Type);
             result.DeserializeProperties(serializedChannel.Properties, this);
@@ -42,11 +47,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
 
             int id = Convert.ToInt32(obj);
-            SerializedUnit serializedChannel = serializedUnits[id];
-
-            ISerializableUnit result = GetUnitFromType(serializedChannel.Type);
-            result.DeserializeProperties(serializedChannel.Properties, this);
-            return result as T;
+            return GetUnitFromId(id) as T;
         }
 
         public ISerializableUnit GetUnitFromType(string type)

@@ -36,6 +36,7 @@ public class EntitlementsPostprocessStep : MonoBehaviour
 
         rootDict.SetString("Appearance", "Dark");
         rootDict.SetString("UIUserInterfaceStyle", "Dark");
+        rootDict.SetBoolean("CADisableMinimumFrameDurationOnPhone", true);
         PlistElementDict nsAppTransportSecurity = rootDict.CreateDict("NSAppTransportSecurity");
         nsAppTransportSecurity.SetBoolean("NSAllowsArbitraryLoads", true);
         nsAppTransportSecurity.SetBoolean("NSAllowsLocalNetworking", true);
