@@ -20,6 +20,8 @@ namespace ArcCreate.Utility.Lua
         public static void RunScript(string script, IScriptSetup setup, int limitInstructionCountTo = int.MaxValue, FileSystemScriptLoader scriptLoader = null)
         {
             Script scriptObject = new Script();
+            Script.GlobalOptions.RethrowExceptionNested = true;
+            scriptObject.Options.UseLuaErrorLocations = true;
 
             if (!hasRegisteredAssembly)
             {
@@ -52,12 +54,16 @@ namespace ArcCreate.Utility.Lua
             scriptObject.Globals["toBool"] = (Func<DynValue, bool>)ToBool;
         }
 
+        [EmmyAlias("xy")]
         public static XY XY(float x, float y) => new XY(x, y);
 
+        [EmmyAlias("xyz")]
         public static XYZ XYZ(float x, float y, float z) => new XYZ(x, y, z);
 
+        [EmmyAlias("hsva")]
         public static HSVA HSVA(float h, float s, float v, float a) => new HSVA(h, s, v, a);
 
+        [EmmyAlias("rgba")]
         public static RGBA RGBA(float r, float g, float b, float a) => new RGBA(r, g, b, a);
 
         public static void Log(object content) => Debug.Log(content.ToString());

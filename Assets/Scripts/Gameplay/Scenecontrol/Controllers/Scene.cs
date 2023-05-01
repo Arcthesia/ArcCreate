@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using ArcCreate.ChartFormat;
 using ArcCreate.Utility.Lua;
 using ArcCreate.Utility.Parser;
@@ -295,6 +296,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         private readonly Dictionary<SpriteDefinition, Sprite> spriteCache = new Dictionary<SpriteDefinition, Sprite>();
         private readonly Dictionary<int, NoteGroupController> noteGroups = new Dictionary<int, NoteGroupController>();
         private readonly List<UniTask<Sprite>> spriteTasks = new List<UniTask<Sprite>>();
+        private CancellationTokenSource cts = new CancellationTokenSource();
 
         [MoonSharpHidden]
         public void SetFileAccess(IFileAccessWrapper fileAccess)
@@ -363,7 +365,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 {
                     Uri = customFileAccess?.GetFileUri(Path.Combine("Scenecontrol", imgPath)) ?? Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath),
                     Pivot = pivotVec,
-                }).ContinueWith(sprite => c.Image.sprite = sprite));
+                },
+                cts.Token).ContinueWith(sprite => c.Image.sprite = sprite));
 
             c.SerializedType = $"image.{imgPath},{material},{renderLayer},{pivotVec.x},{pivotVec.y}";
             c.Start();
@@ -398,7 +401,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 {
                     Uri = customFileAccess?.GetFileUri(Path.Combine("Scenecontrol", imgPath)) ?? Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath),
                     Pivot = pivotVec,
-                }).ContinueWith(sprite => c.SpriteRenderer.sprite = sprite));
+                },
+                cts.Token).ContinueWith(sprite => c.SpriteRenderer.sprite = sprite));
 
             c.SerializedType = $"sprite.{imgPath},{material},{renderLayer},{pivotVec.x},{pivotVec.y}";
             c.Start();
@@ -445,7 +449,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             obj.layer = GetLayer(renderLayer);
             TextController c = obj.GetComponent<TextController>();
             c.SetFont(font);
-            c.TextComponent.fontSize = Mathf.RoundToInt(fontSize);
+            c.TextComponent.fontSize = fontSize;
             c.TextComponent.lineSpacing = lineSpacing;
             switch (alignment.ToLower())
             {
@@ -575,6 +579,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
                     if (task.Status == UniTaskStatus.Faulted)
                     {
+                        cts.Cancel();
+                        cts.Dispose();
+                        cts = new CancellationTokenSource();
+                        spriteTasks.Clear();
+                        ClearCache();
+                        Services.Scenecontrol.Clean();
                         throw new Exception("Could not load a sprite for scenecontrol (Unknown error)");
                     }
                 }
@@ -770,16 +780,21 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
-        private async UniTask<Sprite> GetSprite(SpriteDefinition definition)
+        private async UniTask<Sprite> GetSprite(SpriteDefinition definition, CancellationToken ct)
         {
             if (spriteCache.ContainsKey(definition))
             {
-                while (spriteCache[definition] == null)
+                Sprite spr = null;
+                while (spriteCache.TryGetValue(definition, out spr) && spr == null)
                 {
                     await UniTask.NextFrame();
+                    if (ct.IsCancellationRequested)
+                    {
+                        return null;
+                    }
                 }
 
-                return spriteCache[definition];
+                return spr;
             }
 
             spriteCache.Add(definition, null);
@@ -788,6 +803,10 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 try
                 {
                     await req.SendWebRequest();
+                    if (ct.IsCancellationRequested)
+                    {
+                        return null;
+                    }
 
                     var t = DownloadHandlerTexture.GetContent(req);
                     Sprite output = Sprite.Create(

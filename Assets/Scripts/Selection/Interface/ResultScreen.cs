@@ -89,12 +89,12 @@ namespace ArcCreate.Selection.Interface
                     break;
                 default:
                     side.sprite = sideSprites[0];
-                    background.sprite = backgroundSprites[3];
+                    background.sprite = backgroundSprites[0];
                     break;
             }
 
-            playCount.text = $"PLAY: {play.PlayCount}";
-            retryCount.text = $"RETRY: {play.RetryCount}";
+            playCount.text = play.PlayCount.ToString();
+            retryCount.text = play.RetryCount.ToString();
 
             double best = play.BestScore;
             double current = play.Score;
@@ -110,7 +110,7 @@ namespace ArcCreate.Selection.Interface
 
             if (string.IsNullOrEmpty(chart.Alias) || charterName.preferredHeight > charterName.GetComponent<RectTransform>().rect.height)
             {
-                charterName.text = chart.Charter;
+                charterName.text = $"<b>{I18n.S("Shutter.Charter")}</b>\n{chart.Charter}";
             }
 
             audioPreview.PlayPreviewAudio(level, chart, cts.Token).Forget();

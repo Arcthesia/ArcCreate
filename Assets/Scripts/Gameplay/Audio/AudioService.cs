@@ -25,9 +25,9 @@ namespace ArcCreate.Gameplay.Audio
         private double dspStartPlayingTime = 0;
 
         /// <summary>
-        /// Dsp timing at the last frame.
+        /// Time (in realTimeSinceStartup unit) at which the audio started playing.
         /// </summary>
-        private double lastDspTiming = 0;
+        private double realStartPlayingTime = 0;
 
         /// <summary>
         /// Whether to let the timing stay unchanged until the audio start playing, or to increate it linearly.
@@ -53,8 +53,17 @@ namespace ArcCreate.Gameplay.Audio
         /// Return to this timing point after next pause.
         /// </summary>
         private int onPauseReturnTo = 0;
+
+        /// <summary>
+        /// Whether or not chart timing is being stationary. Example of this being true is during warming up period after a play with delay.
+        /// </summary>
         private bool isStationary;
+
+        /// <summary>
+        /// Scalar to speed up or slow down chart update speed to sync with music.
+        /// </summary>
         private float updatePace = 1;
+
         private bool audioEndReported;
 
         public AudioSource AudioSource => audioSource;
@@ -142,27 +151,16 @@ namespace ArcCreate.Gameplay.Audio
                     dspTime = Math.Max(dspTime, dspStartPlayingTime);
                 }
 
-                int timePassedSinceAudioStart = Mathf.RoundToInt((float)((dspTime - dspStartPlayingTime) * 1000));
-                int newDspTiming = timePassedSinceAudioStart + startTime - FullOffset;
-                int newTiming = audioTiming + Mathf.RoundToInt(Time.deltaTime * 1000 * updatePace);
+                int dspTimePassedSinceAudioStart = Mathf.RoundToInt((float)((dspTime - dspStartPlayingTime) * 1000));
+                int realTimePassedSinceAudioStart = Mathf.RoundToInt((float)((Time.realtimeSinceStartup - realStartPlayingTime) * 1000));
+                updatePace = Mathf.Approximately(realTimePassedSinceAudioStart, 0) ? 1
+                           : Mathf.Lerp(updatePace, (float)dspTimePassedSinceAudioStart / realTimePassedSinceAudioStart, 0.1f);
+                int newTiming = Mathf.RoundToInt(realTimePassedSinceAudioStart * updatePace) + startTime - FullOffset;
 
                 if (!stationaryBeforeStart || dspTime > dspStartPlayingTime)
                 {
                     audioTiming = newTiming;
                 }
-
-                if (dspTime > dspStartPlayingTime && lastDspTiming != newDspTiming)
-                {
-                    float difference = (newDspTiming - newTiming) / 1000f;
-                    if (difference >= 5 / 60f)
-                    {
-                        audioTiming = newDspTiming;
-                    }
-
-                    updatePace = 1 + (Tanh(difference) * 0.5f);
-                }
-
-                lastDspTiming = newDspTiming;
             }
             else
             {
@@ -290,6 +288,7 @@ namespace ArcCreate.Gameplay.Audio
             }
 
             dspStartPlayingTime = AudioSettings.dspTime + ((double)delay / 1000);
+            realStartPlayingTime = Time.realtimeSinceStartup + ((double)delay / 1000);
             startTime = timing + FullOffset;
             if (delay > 0)
             {
@@ -344,12 +343,6 @@ namespace ArcCreate.Gameplay.Audio
             }
 
             audioEndReported = true;
-        }
-
-        private float Tanh(float v)
-        {
-            float exp2v = Mathf.Exp(v * 2);
-            return (exp2v - 1) / (exp2v + 1);
         }
 
         private void UpdateSlider(float timing)

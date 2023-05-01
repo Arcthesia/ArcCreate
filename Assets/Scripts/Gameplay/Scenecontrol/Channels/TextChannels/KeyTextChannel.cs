@@ -27,7 +27,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public int KeyCount => keys.Count;
 
-        public override int MaxLength => charArray.Length;
+        public override int MaxLength => charArray?.Length ?? 0;
 
         [MoonSharpUserDataMetamethod("__concat")]
         public static ConcatTextChannel Concat(KeyTextChannel a, TextChannel b)

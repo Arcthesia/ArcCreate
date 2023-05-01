@@ -24,7 +24,7 @@ Shader "Sprites/FastAdd"
 		Lighting Off
 		ZWrite Off
 		ZTest Always
-		Blend SrcAlpha DstAlpha
+		Blend SrcAlpha One
 
 		Pass
 		{

@@ -90,6 +90,7 @@ namespace ArcCreate.SceneTransition
             catch (Exception e)
             {
                 onException?.Invoke(e);
+                Debug.LogError(e);
                 await SceneManager.UnloadSceneAsync(sceneName);
             }
             finally
@@ -142,7 +143,11 @@ namespace ArcCreate.SceneTransition
         {
             if (Application.platform == RuntimePlatform.Android)
             {
-                await I18n.StartLoadingLocale();
+                await I18n.StartLoadingLocale(Settings.Locale.Value);
+            }
+            else
+            {
+                I18n.SetLocale(Settings.Locale.Value);
             }
 
             foreach (string scene in SceneNames.RequiredScenes)

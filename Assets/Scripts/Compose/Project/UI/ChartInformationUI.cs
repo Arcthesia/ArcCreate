@@ -388,11 +388,14 @@ namespace ArcCreate.Compose.Project
         private void OnAudioClip(AudioClip clip)
         {
             int audioLength = Mathf.RoundToInt(clip.length * 1000);
-            Target.PreviewEnd = Mathf.Clamp(Target.PreviewEnd, Mathf.Min(Target.PreviewStart + Constants.MinPreviewSegmentLengthMs, audioLength), audioLength);
-            Target.PreviewStart = Mathf.Clamp(Target.PreviewStart, 0, Mathf.Max(Target.PreviewEnd - Constants.MinPreviewSegmentLengthMs, 0));
+            if (Target != null)
+            {
+                Target.PreviewEnd = Mathf.Clamp(Target.PreviewEnd, Mathf.Min(Target.PreviewStart + Constants.MinPreviewSegmentLengthMs, audioLength), audioLength);
+                Target.PreviewStart = Mathf.Clamp(Target.PreviewStart, 0, Mathf.Max(Target.PreviewEnd - Constants.MinPreviewSegmentLengthMs, 0));
 
-            previewStart.text = Target.PreviewStart.ToString();
-            previewEnd.text = Target.PreviewEnd.ToString();
+                previewStart.text = Target.PreviewStart.ToString();
+                previewEnd.text = Target.PreviewEnd.ToString();
+            }
         }
 
         private void OnGameplayAudioOffset(int obj)

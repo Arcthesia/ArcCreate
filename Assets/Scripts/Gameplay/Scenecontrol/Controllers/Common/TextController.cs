@@ -362,7 +362,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             DefaultAnchorMin = rectTransform.anchorMin;
             DefaultAnchorMax = rectTransform.anchorMax;
             DefaultPivot = rectTransform.pivot;
-            defaultText = textComponent.text;
+            defaultText = textComponent.text ?? string.Empty;
             DefaultFontSize = textComponent.fontSize;
             DefaultLineSpacing = textComponent.lineSpacing;
             DefaultFontAsset = textComponent.font;
@@ -419,7 +419,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public void UpdateProperties(float fontSize, float lineSpacing)
         {
             textComponent.lineSpacing = lineSpacing;
-            textComponent.fontSize = Mathf.RoundToInt(fontSize);
+            textComponent.fontSize = fontSize;
         }
 
         [EmmyDoc("Change the font of this text object.")]

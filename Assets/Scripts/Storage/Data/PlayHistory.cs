@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using ArcCreate.Data;
 using UltraLiteDB;
 
@@ -8,6 +9,8 @@ namespace ArcCreate.Storage.Data
     {
         public const int MaxRecentPlaysCount = 10;
         public const int MaxTopScorePlaysCount = 10;
+
+        private static Dictionary<(string levelId, string chartPath), PlayHistory> cache;
 
         [BsonId] public int Id { get; set; }
 
@@ -31,8 +34,22 @@ namespace ArcCreate.Storage.Data
 
         public static PlayHistory GetHistoryForChart(string levelId, string chartPath)
         {
-            var collecion = Database.Current.GetCollection<PlayHistory>();
-            PlayHistory alreadyExist = collecion.FindOne(Query.And(Query.EQ("LevelIdentifier", levelId), Query.EQ("ChartPath", chartPath)));
+            if (cache == null)
+            {
+                cache = new Dictionary<(string levelId, string chartPath), PlayHistory>();
+
+                var collecion = Database.Current.GetCollection<PlayHistory>();
+                List<PlayHistory> histories = collecion.FindAll().ToList();
+                foreach (var history in histories)
+                {
+                    if (!cache.ContainsKey((history.LevelIdentifier, history.ChartPath)))
+                    {
+                        cache.Add((history.LevelIdentifier, history.ChartPath), history);
+                    }
+                }
+            }
+
+            cache.TryGetValue((levelId, chartPath), out PlayHistory alreadyExist);
             return alreadyExist ?? new PlayHistory()
             {
                 LevelIdentifier = levelId,
@@ -74,11 +91,23 @@ namespace ArcCreate.Storage.Data
         public void Delete()
         {
             Database.Current.GetCollection<PlayHistory>().Delete(Id);
+
+            var key = (LevelIdentifier, ChartPath);
+            cache.Remove(key);
         }
 
         public void Save()
         {
+            var key = (LevelIdentifier, ChartPath);
             Database.Current.GetCollection<PlayHistory>().Upsert(this);
+            if (cache.ContainsKey(key))
+            {
+                cache[key] = this;
+            }
+            else
+            {
+                cache.Add(key, this);
+            }
         }
     }
 }
