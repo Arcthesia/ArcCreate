@@ -277,6 +277,7 @@ namespace ArcCreate.Storage
                         gameplay.ShouldNotifyOnAudioEnd = true;
                         gameplay.EnablePauseMenu = true;
                         gameplay.Audio.AudioTiming = -Values.DelayBeforeAudioStart;
+                        gameplay.Audio.PlaybackSpeed = 1;
                     }
 
                     IsTransitioning = false;

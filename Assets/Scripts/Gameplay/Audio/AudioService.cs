@@ -40,6 +40,11 @@ namespace ArcCreate.Gameplay.Audio
         private int audioTiming;
 
         /// <summary>
+        /// The audio playback speed.
+        /// </summary>
+        private float playbackSpeed = 1;
+
+        /// <summary>
         /// Last timing the audio was paused at.
         /// </summary>
         private int lastPausedTiming = 0;
@@ -93,6 +98,21 @@ namespace ArcCreate.Gameplay.Audio
                 }
 
                 Services.Chart.ResetJudge();
+            }
+        }
+
+        public float PlaybackSpeed
+        {
+            get => playbackSpeed;
+            set
+            {
+                playbackSpeed = value;
+                audioSource.pitch = value;
+                if (Application.isMobilePlatform || Settings.SyncToDSPTime.Value)
+                {
+                    Pause();
+                    ResumeWithDelay(200, false);
+                }
             }
         }
 
@@ -151,8 +171,8 @@ namespace ArcCreate.Gameplay.Audio
                     dspTime = Math.Max(dspTime, dspStartPlayingTime);
                 }
 
-                int dspTimePassedSinceAudioStart = Mathf.RoundToInt((float)((dspTime - dspStartPlayingTime) * 1000));
-                int realTimePassedSinceAudioStart = Mathf.RoundToInt((float)((Time.realtimeSinceStartup - realStartPlayingTime) * 1000));
+                int dspTimePassedSinceAudioStart = Mathf.RoundToInt((float)((dspTime - dspStartPlayingTime) * 1000 * playbackSpeed));
+                int realTimePassedSinceAudioStart = Mathf.RoundToInt((float)((Time.realtimeSinceStartup - realStartPlayingTime) * 1000 * playbackSpeed));
                 updatePace = Mathf.Approximately(realTimePassedSinceAudioStart, 0) ? 1
                            : Mathf.Lerp(updatePace, (float)dspTimePassedSinceAudioStart / realTimePassedSinceAudioStart, 0.1f);
                 int newTiming = Mathf.RoundToInt(realTimePassedSinceAudioStart * updatePace) + startTime - FullOffset;

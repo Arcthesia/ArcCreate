@@ -398,6 +398,7 @@ Compose:
         ShowShutter: Show shutter
         HideShutter: Hide shutter
         PreviewSegment: Preview segment
+        CustomChartPath: Use custom (advanced)
       Options:
         Inherit: Inherit
         Light: Light
@@ -425,6 +426,7 @@ Compose:
         Offset: Offset
         TimingGroup: Group
         Density: Density
+        PlaybackSpeed: Speed
     # Events editor panel
     EventsEditor:
       Label:

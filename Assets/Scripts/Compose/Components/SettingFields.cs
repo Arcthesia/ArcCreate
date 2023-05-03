@@ -16,6 +16,7 @@ namespace ArcCreate.Compose.Components
         [SerializeField] private GameplayData gameplayData;
 
         [Header("Common")]
+        [SerializeField] private TMP_InputField playbackSpeedField;
         [SerializeField] private TMP_InputField densityField;
         [SerializeField] private TimingGroupField groupField;
         [SerializeField] private TMP_Dropdown inputModeDropdown;
@@ -83,6 +84,7 @@ namespace ArcCreate.Compose.Components
             shouldSaveBackup.onValueChanged.AddListener(OnBackupToggle);
             backupCount.onEndEdit.AddListener(OnBackupCountField);
             syncToDspTime.onValueChanged.AddListener(OnSyncToDspField);
+            playbackSpeedField.onValueChanged.AddListener(OnPlaybackSpeedField);
 
             Settings.InputMode.OnValueChanged.AddListener(OnSettingInputMode);
             Values.BeatlineDensity.OnValueChange += OnDensity;
@@ -139,9 +141,19 @@ namespace ArcCreate.Compose.Components
             shouldSaveBackup.onValueChanged.RemoveListener(OnBackupToggle);
             backupCount.onEndEdit.RemoveListener(OnBackupCountField);
             syncToDspTime.onValueChanged.RemoveListener(OnSyncToDspField);
+            playbackSpeedField.onValueChanged.RemoveListener(OnPlaybackSpeedField);
 
             Settings.InputMode.OnValueChanged.RemoveListener(OnSettingInputMode);
             Values.BeatlineDensity.OnValueChange -= OnDensity;
+        }
+
+        private void OnPlaybackSpeedField(string str)
+        {
+            if (Evaluator.TryFloat(str, out float val))
+            {
+                val = Mathf.Max(val, 0.1f);
+                Services.Gameplay.Audio.PlaybackSpeed = val;
+            }
         }
 
         private void OnSyncToDspField(bool value)

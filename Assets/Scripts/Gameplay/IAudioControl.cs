@@ -38,6 +38,8 @@ namespace ArcCreate.Gameplay
 
         bool IsRendering { get; set; }
 
+        float PlaybackSpeed { get; set; }
+
         AudioClip TapHitsoundClip { get; }
 
         AudioClip ArcHitsoundClip { get; }
