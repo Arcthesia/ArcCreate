@@ -7,6 +7,15 @@ Format:
       Mientras se analizaba evento de tipo: {EventType}
       Con el siguiente: "{Content}".
       {Reason}
+    UnknownException: |-
+      Excepción desconocida.
+      Excepción: {Exception}
+      Stack trace:
+      {StackTrace}
+    WrongSyntax: |-
+      Sintaxis errónea o incompleta.
+    InvalidHeader: |-
+      Línea de cabecera no válida.  
     ArcColorNegative: |-
       La ID del color del arco no puede ser negativa.
     AudioOffsetInvalid: |-
@@ -33,6 +42,11 @@ Format:
       La Nota Flotante está fuera del rango de tiempo de su Arco principal.
     TimingGroupPropertiesInvalid: |-
       Definición de las propìedades del grupo de tiempo no válida.
+  Warning:
+    HoldTooShort:
+      La duración de la nota Hold es inferior a 17ms.
+    TapJudgementOverlap:
+      El juicio de las notas Tap se superpone con otras notas.    
 
 Compose:
   # Exception messages within the editor
@@ -208,6 +222,18 @@ Compose:
       Yes: Guardar cambios
       No: Descartar cambios
       Cancel: Cancelar
+    LoadChartError:
+      Title: Error
+      Content: |-
+        Ha ocurrido un error cargando el archivo de mapa {ChartPath}.
+        Corrige esto en cualquier editor de texto o cierra este diálogo y usa el panel "<> {TabName}".
+        
+        Detalles:
+        Línea número: {LineNumber}
+        Contenido de línea: "{Content}".
+        Tipo de evento: {EventType}
+        {Exception}
+      Confirm: Confirmar  
   Navigation:
     KeybindOverride: Anulación de la combinación de teclas para la acción {0}
     # Texts that appear on the context menu (right-click menu)
@@ -290,6 +316,7 @@ Compose:
       ImagePrompt: <size=10>Click para seleccionar imagen</size>
     PanelNames:
       Toolbox: <size=10>Herramientas</size>
+      RawEditor: Texto
       Gameplay: Juego
       Timeline: <size=9>Línea de tiempo</size>
       Project: Proyecto
@@ -455,6 +482,8 @@ Compose:
           Name: Juego
           Speed: Velocidad
           AspectRatio: <size=9>Relación de aspecto</size>
+          Indicator: Indicador
+          MaxIndicator: <size=10>Activar indicador puntuación máxima</size>
         Grid:
           Name: Cuadrícula
           Slot: Ranura
@@ -469,6 +498,7 @@ Compose:
           Music: Música
           Effect: Efectos
           GlobalOffset: <size=8>Desplazamiento global</size>
+          SyncToDSPTime: Sincronizar con temporización DSP
         Display:
           Name: Pantalla
           Vsync: VSync
@@ -477,6 +507,12 @@ Compose:
         Input:
           Name: Controles
           ReloadKeybinds: Recargar combinaciones de teclas
+        Files:
+          Name: Archivos
+          Backup: <size=11>Crear copia de seguridad al guardar</size>
+          BackupCount: Recuento de copias de seguridad
+          Autosave: <size=11>Activar autoguardado</size>
+          AutosaveInterval: Intervalo de autoguardado (segundos)
         ScrollSensitivity:
           Name: Sensibilidad de desplazamiento
           Vertical: Vertical
@@ -504,12 +540,12 @@ Compose:
     Inspector:
       Name: Inspector
       Timing: Tiempo
-      StartTiming: Principio
+      StartTiming: <size=10>Principio</size>
       EndTiming: Fin
       Lane: Carril
       StartPos: Desde
-      EndPos: A
-      Sfx: Efectos de sonido
+      EndPos: Hasta
+      Sfx: <size=9>Efectos de sonido</size>
       Group: Grupo
       Mixed: Mezclado
       Arc: Arco
@@ -554,6 +590,7 @@ Remote:
     StopSession: Finalizar sesión
     StartNewSession: Iniciar nueva sesión
     ManualIP: Configurar conexión manualmente
+    ReturnToSelect: Volver a Selección de Canción
   Control:
     Name: Control
     Sync:
@@ -623,6 +660,10 @@ Gameplay:
       Cancel: Cancelar
       Done: Listo
     List:
+      RemoteTestplay: Juego de Prueba Remoto
+      Import: <size=11>Importar paquete</size>
+      Community: Comunidad
+      AllSongs: <size=10.5>Todas las canciones</size>
       OtherDifficulties: Otras dificultades
     Info:
       Undefined:
@@ -631,18 +672,20 @@ Gameplay:
         Charter: Desconocido
       Charter: 'Creador: {0}'
     Sort:
-      addeddate: "Ordenar: Fecha añadido"
-      charter: "Ordenar: Creador"
-      composer: "Ordenar: Compositor"
-      difficulty: "Ordenar: Dificultad"
-      grade: "Ordenar: Calificación"
-      playcount: "Ordenar: Veces jugado"
-      score: "Ordenar: Puntuación"
-      title: "Ordenar: Título"
+      addeddate: <size=10.5>"Orden: Fecha añadida"</size>
+      charter: "Orden: Creador"
+      composer: "Orden: Compositor"
+      difficulty: "Orden: Dificultad"
+      grade: "Orden: Calificación"
+      playcount: <size=11>"Orden: Veces jugada"</size>
+      score: "Orden: Puntuación"
+      title: "Orden: Título"
     Group:
       none: "Grupo: Ninguno"
       difficulty: "Grupo: Dificultad"
       grade: "Grupo: Calificación"
+      rank: "Grupo: Rango"
+      charter: "Grupo: Creador"
     Settings:
       Name: Ajustes
       Language: Idioma
@@ -653,7 +696,7 @@ Gameplay:
           Ajusta la velocidad a la que las notas se aproximan al área de juicio.
         EarlyLatePerfectDisplay: Visualizar Early/Late Perfect
         EarlyLatePerfectDisplayDetail: |-
-          Cambiar si quieres mostrar o no los juicios Early/Late Perfect
+          Cambia si quieres mostrar o no los juicios Early/Late Perfect
       Audio:
         Name: Audio
         Offset: Offset
@@ -670,19 +713,23 @@ Gameplay:
       Visual:
         Name: Visual
         Colorblind: Modo daltónico
-        ColorblindDetail: Usar colores alternativos en arcos.
+        ColorblindDetail: Usa colores alternativos en arcos.
         FrPmDisplay: Visualizar FR/PM
-        FrPmDisplayDetail: Ajustar la posición del indicador FR/PM.
-        EarlyLateDisplay: Early/Late display
-        EarlyLateDisplayDetail: Adjust early/late text position.
-        LimitFramerate: Limitar velocidad de fotogramas
-        LimitFramerateDetail: Limitar velocidad de fotogramas a 60 FPS para preservar la duración de la batería. Podría aumentar la latencia.
+        FrPmDisplayDetail: Ajusta la posición del indicador FR/PM.
+        MaxDisplay: <size=10>Visualizar puntuación máxima</size>
+        MaxDisplayDetail: Activa el indicador de puntuación máxima.
+        EarlyLateDisplay: Visualizar Early/Late
+        EarlyLateDisplayDetail: Ajusta la posición de los textos EARLY/LATE.
+        LimitFramerate: <size=10>Limitar velocidad de fotogramas</size>
+        LimitFramerateDetail: <size=10>Limita velocidad de fotogramas a 60 FPS para preservar la duración de la batería. Podría aumentar la latencia.</size>
         ShowFPS: Mostrar FPS
-        ShowFPSDetail: Activar visualización de FPS.
+        ShowFPSDetail: Activa la visualización de FPS.
+        ShowDebug: <size=10>Mostrar información de depuración</size>
+        ShowDebugDetail: Muestra información de depuración mientras juegas (avanzado).
       FrPmPosition:
         middle: En medio
         infopanel: Panel de info
-        off: Apagado
+        off: <size=10>Desactivado</size>
       EarlyLateTextPosition:
         middle: En medio
         bottom: Abajo
