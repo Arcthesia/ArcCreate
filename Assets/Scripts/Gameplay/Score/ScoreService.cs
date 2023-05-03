@@ -26,7 +26,7 @@ namespace ArcCreate.Gameplay.Score
         private readonly int[] judgeCounts = new int[7];
         private int currentCombo = 0;
         private int maxCombo = 0;
-        private int totalCombo = 1;
+        private int noteCount = 1;
         private double currentScoreFull = 0;
         private double currentScorePartial = 0;
         private float comboRedmix = 0;
@@ -36,6 +36,8 @@ namespace ArcCreate.Gameplay.Score
         public int CurrentScore => CurrentScoreTotal;
 
         public int CurrentCombo => currentCombo;
+
+        public int NoteCount => noteCount;
 
         private int CurrentScoreTotal => (int)System.Math.Round(currentScoreFull + currentScorePartial);
 
@@ -73,7 +75,7 @@ namespace ArcCreate.Gameplay.Score
             maxCombo = Mathf.Max(currentCombo, maxCombo);
 
             double scorePerNote =
-                totalCombo != 0 ? (double)Constants.MaxScore / totalCombo : 0;
+                noteCount != 0 ? (double)Constants.MaxScore / noteCount : 0;
 
             double scoreToAdd = 0;
             if (result.IsGood())
@@ -130,11 +132,11 @@ namespace ArcCreate.Gameplay.Score
             SetScore(CurrentScoreTotal);
         }
 
-        public void ResetScoreTo(int currentCombo, int totalCombo)
+        public void ResetScoreTo(int currentCombo, int noteCount)
         {
             this.currentCombo = currentCombo;
             this.maxCombo = currentCombo;
-            this.totalCombo = totalCombo;
+            this.noteCount = noteCount;
             SetCombo(currentCombo);
 
             pendingScoreEvents.Clear();
@@ -145,14 +147,14 @@ namespace ArcCreate.Gameplay.Score
                 judgeCounts[i] = 0;
             }
 
-            if (totalCombo == 0)
+            if (noteCount == 0)
             {
                 currentScoreFull = 0;
                 SetScore(0);
             }
             else
             {
-                double scorePerNote = (double)Constants.MaxScore / totalCombo;
+                double scorePerNote = (double)Constants.MaxScore / noteCount;
                 currentScoreFull = (scorePerNote + 1) * currentCombo;
                 SetJudgementCount(JudgementResult.Max, currentCombo);
             }
@@ -184,7 +186,7 @@ namespace ArcCreate.Gameplay.Score
                 GaugeValue = 100,
                 GaugeClearRequirement = 70,
                 GaugeMax = 100,
-                NoteCount = totalCombo,
+                NoteCount = noteCount,
             };
         }
 

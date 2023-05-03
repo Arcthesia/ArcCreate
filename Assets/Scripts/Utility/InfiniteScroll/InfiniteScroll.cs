@@ -131,7 +131,7 @@ namespace ArcCreate.Utility.InfiniteScroll
             data.Add(cellData);
             hierarchy.Add(new HierarchyData(index, cellData.Size, indent, parent)
             {
-                IsCollapsed = false,
+                IsCollapsed = cellData.CollapsedByDefault,
                 SecondStageStarted = false,
             });
 

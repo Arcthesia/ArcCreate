@@ -23,6 +23,8 @@ namespace ArcCreate.Gameplay
         /// </summary>
         bool EnableArcRebuildSegment { get; set; }
 
+        int NoteCount { get; }
+
         /// <summary>
         /// Add events to the currently playing chart.
         /// </summary>

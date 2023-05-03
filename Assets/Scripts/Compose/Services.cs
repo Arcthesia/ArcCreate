@@ -1,6 +1,7 @@
 using ArcCreate.Compose.Cursor;
 using ArcCreate.Compose.Grid;
 using ArcCreate.Compose.History;
+using ArcCreate.Compose.Macros;
 using ArcCreate.Compose.Navigation;
 using ArcCreate.Compose.Popups;
 using ArcCreate.Compose.Project;
@@ -21,6 +22,7 @@ namespace ArcCreate.Compose
         [SerializeField] private CursorService cursor;
         [SerializeField] private GridService grid;
         [SerializeField] private SelectionService selection;
+        [SerializeField] private MacroService macros;
 
         public static IProjectService Project { get; private set; }
 
@@ -40,6 +42,8 @@ namespace ArcCreate.Compose
 
         public static ISelectionService Selection { get; set; }
 
+        public static IMacroService Macros { get; set; }
+
         private void Awake()
         {
             Project = project;
@@ -50,6 +54,7 @@ namespace ArcCreate.Compose
             Cursor = cursor;
             Grid = grid;
             Selection = selection;
+            Macros = macros;
         }
     }
 }

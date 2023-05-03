@@ -28,6 +28,7 @@
 # EmmySharp testing
 .vscode/workspace/
 test.lua
+/Macros/
 
 # Storage testing
 .imported/

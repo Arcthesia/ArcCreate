@@ -40,6 +40,43 @@ namespace ArcCreate.Compose.History
             updateAvailable = update?.Any() ?? false;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EventCommand"/> class.
+        /// Create a batch command that executes multiple commands at once.
+        /// </summary>
+        /// <param name="name">The name of the command which will be displayed in log and notification.</param>
+        /// <param name="commands">List of commands to include in the batch.</param>
+        /// <returns>A command combining all included commands.</returns>
+        public EventCommand(string name, IEnumerable<EventCommand> commands)
+        {
+            Name = name;
+            add = new List<ArcEvent>();
+            remove = new List<ArcEvent>();
+            update = new List<(ArcEvent instance, ArcEvent oldValue, ArcEvent newValue)>();
+
+            foreach (var cmd in commands)
+            {
+                if (cmd.add != null)
+                {
+                    add.AddRange(cmd.add);
+                }
+
+                if (cmd.remove != null)
+                {
+                    remove.AddRange(cmd.remove);
+                }
+
+                if (cmd.update != null)
+                {
+                    update.AddRange(cmd.update);
+                }
+            }
+
+            addAvailable = add.Count > 0;
+            removeAvailable = remove.Count > 0;
+            updateAvailable = update.Count > 0;
+        }
+
         public string Name { get; private set; }
 
         public void Execute()

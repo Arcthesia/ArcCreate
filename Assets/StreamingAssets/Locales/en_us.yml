@@ -124,9 +124,13 @@ Compose:
       O: Roll right
       Esc: Cancel
       Enter: Confirm
-    EmmyLuaGenerated: |-
-      EmmyLua template for scenecontrol generated at the current project's folder
-      Use VsCode with the extension tangzx.emmylua to get autocompletion
+    EmmyLuaGenerated:
+      Scenecontrol: |-
+        EmmyLua template for scenecontrol generated at the current project's folder
+        Use VsCode with the extension tangzx.emmylua to get autocompletion
+      Macros: |-
+        EmmyLua template for macros generated at macros folder
+        Use VsCode with the extension tangzx.emmylua to get autocompletion
     Actions:
       CannotMirror: Can not mirror any of the selected notes.
       NoDragRange: Can not drag selected notes timing. Try dragging the notes separately.
@@ -199,6 +203,13 @@ Compose:
         Complete: Render complete
       Package:
         Complete: Exported package to {0}
+    Macros:
+      Cancelled: Cancelled macro
+      Select:
+        Timing: Select timing
+        Position: Select position
+        Lane: Select lane
+      NotFound: Macro "{macroId}" does not exist.
   # Dialog boxes
   Dialog:
     RemoveGroup:
@@ -234,6 +245,8 @@ Compose:
         Event type: {EventType}
         {Exception}
       Confirm: Confirm
+    Macros:
+      Title: Macros
   Navigation:
     KeybindOverride: Overriding keybind for action {0}
     # Texts that appear on the context menu (right-click menu)
@@ -535,7 +548,11 @@ Compose:
         Hold: Hold
         Arctap: Sky
         Easing: Easing
-      Macros: Macros
+      Macros:
+        Name: Macros
+        GenerateEmmy: Generate EmmyLua
+        Reload: Reload macro scripts
+        OpenExplorer: Open macros folder
     # Inspector window
     Inspector:
       Name: Inspector

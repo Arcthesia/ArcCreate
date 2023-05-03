@@ -32,6 +32,8 @@ namespace ArcCreate.Gameplay.Chart
             set => Values.EnableArcRebuildSegment = value;
         }
 
+        public int NoteCount => Services.Score.NoteCount;
+
         public List<TimingGroup> TimingGroups => timingGroups;
 
         public void ReloadSkin()

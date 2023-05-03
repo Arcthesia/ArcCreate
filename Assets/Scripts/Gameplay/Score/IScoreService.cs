@@ -13,6 +13,8 @@ namespace ArcCreate.Gameplay.Score
 
         int CurrentCombo { get; }
 
+        int NoteCount { get; }
+
         /// <summary>
         /// Gets a list of judgement results that was sent to this service in a frame.
         /// </summary>

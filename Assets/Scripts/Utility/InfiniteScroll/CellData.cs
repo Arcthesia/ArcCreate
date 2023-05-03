@@ -8,6 +8,8 @@ namespace ArcCreate.Utility.InfiniteScroll
 
         public float Size { get; set; }
 
+        public bool CollapsedByDefault { get; set; } = false;
+
         public List<CellData> Children { get; set; }
     }
 }
