@@ -8,10 +8,9 @@ namespace ArcCreate.Compose.Macros
     {
         [SerializeField] private TMP_InputField textField;
         [SerializeField] private TMP_Text invalidFeedback;
+        [SerializeField] private float baseHeight;
 
         private FieldConstraint constraint;
-
-        public override float PreferredHeight { get => base.PreferredHeight + (invalidFeedback.enabled ? invalidFeedback.preferredHeight : 0); }
 
         public override void SetupField(DialogField field, MacroRequest request)
         {
@@ -48,6 +47,9 @@ namespace ArcCreate.Compose.Macros
                 invalidFeedback.enabled = true;
                 invalidFeedback.text = message;
             }
+
+            float height = (valid ? 0 : invalidFeedback.preferredHeight) + baseHeight;
+            GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
         }
 
         public override bool IsFieldValid()

@@ -118,6 +118,9 @@ namespace ArcCreate.Compose.Macros
             };
         }
 
+        [EmmyDoc("Create an arctap event data.")]
+        public static LuaArcTap Arctap(int timing, LuaArc arc) => ArcTap(timing, arc);
+
         [EmmyDoc("Create a timing event data.")]
         public static LuaTiming Timing(int timing, float bpm, float divisor, int timingGroup = 0)
         {

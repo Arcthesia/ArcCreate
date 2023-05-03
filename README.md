@@ -35,12 +35,12 @@ This project was made with Unity 2019.4.34f1. You can download the exact version
 - [x] Gameplay judgement
 - [x] Pause menu
 - [x] Compiled scenecontrol support
-- [ ] Support for controller input
 - [x] Level selection menu
-- [ ] Custom gauge and partner
 - [x] Result screen
 - [x] Import level from package file
 - [x] Settings menu
+- [ ] Support for controller input
+- [ ] Custom gauge and partner
 
 ### Editor (Desktop only)
 - [x] Project metadata management
@@ -49,7 +49,7 @@ This project was made with Unity 2019.4.34f1. You can download the exact version
 - [x] Timing, camera editing
 - [x] Custom hotkeys configuration
 - [x] FFmpeg rendering support
-- [ ] Lua macro support
+- [x] Lua macro support
 - [x] Lua scenecontrol editing & compiling
 - [x] LAN communication between desktop and mobile
 

@@ -61,10 +61,10 @@ namespace ArcCreate.Gameplay.Audio.Practice
         private void ChangeSpeed()
         {
             float speed = Services.Audio.PlaybackSpeed;
-            float nextSpeed = (Mathf.Floor(speed / speedIncrement) + 1) * speedIncrement;
-            if (nextSpeed > 1)
+            float nextSpeed = (Mathf.Floor(speed / speedIncrement) - 1) * speedIncrement;
+            if (nextSpeed <= 0)
             {
-                nextSpeed = speedIncrement;
+                nextSpeed = 1;
             }
 
             speedText.text = nextSpeed.ToString("f2") + "x";

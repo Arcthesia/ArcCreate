@@ -679,11 +679,11 @@ Gameplay:
         Colorblind: Chế độ mù màu
         ColorblindDetail: Sử dụng màu khác cho arcs.
         FrPmDisplay: Hiện FR/PM
-        FrPmDisplayDetail: Chỉnh vị trí hiển thị FR/PM.
-        MaxDisplay: Hiện điểm tối đa
-        MaxDisplayDetail: Hiện điểm tối đa :).
-        EarlyLateDisplay: Hiện Early/Late
-        EarlyLateDisplayDetail: Cho bạn biết mình bấm sớm hay muộn và vị trí hiện
+        FrPmDisplayDetail: Chỉnh vị trí hiển thị báo hiệu FR/PM.
+        MaxDisplay: Hiện Max PM
+        MaxDisplayDetail: Hiện thị báo hiệu Max PM.
+        EarlyLateDisplay: Vị trí Early/Late
+        EarlyLateDisplayDetail: Vị trí của Late/Early
         LimitFramerate: Giới hạn khung hình
         LimitFramerateDetail: Giới hạn khung hình xuống 60 FPS để tiết kiệm pin. Có thể tăng độ trễ.
         ShowFPS: Hiện FPS
@@ -703,7 +703,7 @@ Shutter:
   Composer: Nhạc
   Illustrator: Minh họa
   Charter: Charter
-  Alias: as
+  Alias: dưới tên
     
 Storage:
   Confirm: Xác nhận

@@ -1,14 +1,15 @@
-﻿using UnityEngine.EventSystems;
+﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace ArcCreate.Compose.Macros
 {
     public class DescriptionMacroField : BaseField
     {
-        public override float PreferredHeight { get => Label.preferredHeight; }
-
         public override void SetupField(DialogField field, MacroRequest request)
         {
             base.SetupField(field, request);
+            float height = Label.preferredHeight;
+            GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
         }
 
         public override bool IsFieldValid()

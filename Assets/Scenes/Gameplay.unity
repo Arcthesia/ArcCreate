@@ -10079,7 +10079,7 @@ MonoBehaviour:
   timeline: {fileID: 833819708}
   changeSpeedButton: {fileID: 1089679182}
   speedText: {fileID: 2095621058}
-  speedIncrement: 0.25
+  speedIncrement: 0.05
   repeatOff: {fileID: 1409023642}
   repeatOn: {fileID: 1841460535}
   repeatOffButton: {fileID: 377893500}

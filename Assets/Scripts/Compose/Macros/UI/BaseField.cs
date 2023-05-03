@@ -1,7 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Macros
 {
@@ -12,10 +11,6 @@ namespace ArcCreate.Compose.Macros
         [HideInInspector] private string tooltipText;
 
         public TMP_Text Tooltip { get; set; }
-
-        public RectTransform TooltipParent { get; set; }
-
-        public virtual float PreferredHeight { get => GetComponent<RectTransform>().sizeDelta.y; }
 
         protected MacroRequest Request { get; set; }
 
@@ -41,16 +36,12 @@ namespace ArcCreate.Compose.Macros
         public virtual void OnPointerEnter(PointerEventData data)
         {
             Tooltip.text = tooltipText;
-            Tooltip.enabled = true;
-            TooltipParent.gameObject.SetActive(true);
-            LayoutRebuilder.ForceRebuildLayoutImmediate(TooltipParent);
+            Tooltip.gameObject.SetActive(true);
         }
 
         public virtual void OnPointerExit(PointerEventData data)
         {
-            Tooltip.text = "";
-            Tooltip.enabled = false;
-            TooltipParent.gameObject.SetActive(false);
+            Tooltip.gameObject.SetActive(false);
         }
 
         public abstract bool IsFieldValid();

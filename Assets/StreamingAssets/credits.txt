@@ -14,6 +14,8 @@ Exiony
 Japanese: rassvet2
 Spanish: Alaiskai
 Vietnamese: Himori
+Chinese (simplified): HaloSense
+Chinese (traditional): Sylvexia
 
 <size=33><b>Quality Assurance</b></size>
 ZydeKun
