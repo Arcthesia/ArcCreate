@@ -663,6 +663,13 @@ Gameplay:
     Play: Resume
     Retry: Retry
     Return: Quit
+  Practice:
+    PlaybackSpeed: Speed
+    Repeat:
+      On: Repeat On
+      Off: Repeat Off
+      From: Set starting point
+      To: Set ending point 
   Selection:
     SelectStatus:
       Singular: |-
@@ -674,6 +681,8 @@ Gameplay:
       Your score will not be deleted.
     CannotDeleteDefault: |-
       Default assets cannot be deleted.
+    EnablePractice: |-
+      Practice mode enabled for next play.
     Action:
       Delete: Delete
       Cancel: Cancel
@@ -716,6 +725,9 @@ Gameplay:
         EarlyLatePerfectDisplay: Early/Late perfect display
         EarlyLatePerfectDisplayDetail: |-
           Change whether or not to display early/late perfect judgements.
+        EnablePractice: Enable practice mode
+        EnablePracticeDetail: Enable practice mode for next play
+        EnablePracticeButton: Enable
       Audio:
         Name: Audio
         Offset: Offset

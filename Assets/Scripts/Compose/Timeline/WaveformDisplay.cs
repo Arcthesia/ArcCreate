@@ -1,6 +1,7 @@
 using System;
 using ArcCreate.Compose.Components;
 using ArcCreate.Gameplay;
+using ArcCreate.Utility;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -133,6 +134,11 @@ namespace ArcCreate.Compose.Timeline
         {
             viewFromSecond = 0;
             viewToSecond = clip.length;
+            if (image.texture != null)
+            {
+                Destroy(image.texture);
+            }
+
             Texture2D texture = WaveformGenerator.EncodeTexture(clip);
             image.texture = texture;
             image.material.mainTexture = texture;

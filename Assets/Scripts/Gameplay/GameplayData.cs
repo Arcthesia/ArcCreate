@@ -110,6 +110,8 @@ namespace ArcCreate.Gameplay
         /// Setting it to null or empty string will disable the renderer.
         /// </summary>
         public State<string> VideoBackgroundUrl { get; } = new State<string>();
+
+        public State<bool> EnablePracticeMode { get; } = new State<bool>(false);
 #pragma warning restore
 
         /// <summary>

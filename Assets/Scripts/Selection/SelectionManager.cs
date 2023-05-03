@@ -1,5 +1,6 @@
 using System;
 using ArcCreate.Data;
+using ArcCreate.Gameplay;
 using ArcCreate.SceneTransition;
 using ArcCreate.Selection.Interface;
 using ArcCreate.Storage;
@@ -11,10 +12,12 @@ namespace ArcCreate.Selection
 {
     public class SelectionManager : SceneRepresentative
     {
+        [SerializeField] private GameplayData gameplayData;
         [SerializeField] private StorageData storageData;
 
         protected override void OnSceneLoad()
         {
+            gameplayData.EnablePracticeMode.Value = false;
             storageData.SelectedPack.OnValueChange += OnPackChange;
             storageData.SelectedChart.OnValueChange += OnChartChange;
         }

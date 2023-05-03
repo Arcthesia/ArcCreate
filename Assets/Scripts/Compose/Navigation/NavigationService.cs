@@ -107,6 +107,8 @@ namespace ArcCreate.Compose.Navigation
                     return;
                 }
             }
+
+            Services.Macros.RunMacro(fullPath);
         }
 
         public List<IAction> GetContextMenuEntries(bool calledByAction = false)

@@ -1,6 +1,8 @@
 using System;
 using ArcCreate.Data;
+using ArcCreate.Gameplay;
 using ArcCreate.Utility;
+using ArcCreate.Utility.Animation;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,11 +11,16 @@ namespace ArcCreate.Selection.Interface
 {
     public class SettingsDialog : Dialog
     {
+        [SerializeField] private GameplayData gameplayData;
+
         [Header("Gameplay")]
         [SerializeField] private Button decreaseSpeedButton;
         [SerializeField] private Button increateSpeedButton;
         [SerializeField] private TMP_Text noteSpeedText;
         [SerializeField] private Toggle earlyLatePerfectToggle;
+        [SerializeField] private Button enablePracticeButton;
+        [SerializeField] private Button disablePracticeButton;
+        [SerializeField] private ScriptedAnimator practiceAnimation;
 
         [Header("Audio")]
         [SerializeField] private Button increaseNoteVolumeButton;
@@ -58,6 +65,8 @@ namespace ArcCreate.Selection.Interface
             showFpsToggle.onValueChanged.AddListener(OnShowFpsToggle);
             showDebug.onValueChanged.AddListener(OnShowDebugToggle);
             maxIndicatorToggle.onValueChanged.AddListener(OnMaxIndicatorToggle);
+            enablePracticeButton.onClick.AddListener(EnablePractice);
+            disablePracticeButton.onClick.AddListener(DisablePractice);
 
             Settings.DropRate.OnValueChanged.AddListener(OnDropRateSettings);
             Settings.ShowEarlyLatePerfect.OnValueChanged.AddListener(OnShowEarlyLatePerfectSettings);
@@ -105,7 +114,9 @@ namespace ArcCreate.Selection.Interface
             changeLateEarlyPositionButton.onClick.RemoveListener(OnChangeLateEarlyPositionButton);
             limitFrameRateToggle.onValueChanged.RemoveListener(OnLimitFrameRateToggle);
             showFpsToggle.onValueChanged.RemoveListener(OnShowFpsToggle);
-            maxIndicatorToggle.onValueChanged.AddListener(OnMaxIndicatorToggle);
+            maxIndicatorToggle.onValueChanged.RemoveListener(OnMaxIndicatorToggle);
+            enablePracticeButton.onClick.RemoveListener(EnablePractice);
+            disablePracticeButton.onClick.AddListener(DisablePractice);
 
             Settings.DropRate.OnValueChanged.RemoveListener(OnDropRateSettings);
             Settings.ShowEarlyLatePerfect.OnValueChanged.RemoveListener(OnShowEarlyLatePerfectSettings);
@@ -262,6 +273,19 @@ namespace ArcCreate.Selection.Interface
         private void OnMaxIndicatorToggle(bool value)
         {
             Settings.EnableMaxIndicator.Value = value;
+        }
+
+        private void EnablePractice()
+        {
+            gameplayData.EnablePracticeMode.Value = true;
+            practiceAnimation.Show();
+            Hide();
+        }
+
+        private void DisablePractice()
+        {
+            gameplayData.EnablePracticeMode.Value = false;
+            practiceAnimation.Hide();
         }
     }
 }

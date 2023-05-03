@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ArcCreate.Compose.Timeline
+namespace ArcCreate.Utility
 {
     public static class WaveformGenerator
     {

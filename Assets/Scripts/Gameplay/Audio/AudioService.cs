@@ -108,7 +108,7 @@ namespace ArcCreate.Gameplay.Audio
             {
                 playbackSpeed = value;
                 audioSource.pitch = value;
-                if (Application.isMobilePlatform || Settings.SyncToDSPTime.Value)
+                if (IsPlayingAndNotStationary && (Application.isMobilePlatform || Settings.SyncToDSPTime.Value))
                 {
                     Pause();
                     ResumeWithDelay(200, false);
@@ -356,7 +356,7 @@ namespace ArcCreate.Gameplay.Audio
 
         private void OnAudioEnd()
         {
-            if (!audioEndReported && Values.ShouldNotifyOnAudioEnd)
+            if (!audioEndReported && Values.ShouldNotifyOnAudioEnd && !gameplayData.EnablePracticeMode.Value)
             {
                 PlayResult result = Services.Score.GetPlayResult();
                 gameplayData.NotifyPlayComplete(result);

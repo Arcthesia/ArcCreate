@@ -36,6 +36,7 @@ namespace ArcCreate.Remote.Gameplay
         {
             this.gameplay = gameplay;
             canvas.worldCamera = gameplay.Camera.GameplayCamera;
+            gameplayData.EnablePracticeMode.Value = true;
         }
 
         public void SetTarget(IPAddress requestFileFromIP, int requestFileFromPort, MessageChannel channel)
