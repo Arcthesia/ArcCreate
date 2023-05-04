@@ -155,8 +155,10 @@ public static class I18n
                 "en_us",
                 "es_es",
                 "ja_jp",
-                "vi",
                 "ko",
+                "vi",
+                "zh_cn",
+                "zh_tw",
             };
         }
 

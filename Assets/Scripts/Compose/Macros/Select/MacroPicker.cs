@@ -20,7 +20,14 @@ namespace ArcCreate.Compose.Macros
 
         public void SetLastRunMacro(MacroDefinition macro)
         {
-            lastRunMacros.Remove(macro);
+            for (int i = lastRunMacros.Count - 1; i >= 0; i--)
+            {
+                if (lastRunMacros[i].Id == macro.Id)
+                {
+                    lastRunMacros.RemoveAt(i);
+                }
+            }
+
             lastRunMacros.Insert(0, macro);
             recentTable.SetData(lastRunMacros);
         }

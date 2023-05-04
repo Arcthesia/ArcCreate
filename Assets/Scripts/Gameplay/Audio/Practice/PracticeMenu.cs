@@ -113,10 +113,11 @@ namespace ArcCreate.Gameplay.Audio.Practice
             timeline.SetRepeatRange(repeat, repeatFromTiming, repeatToTiming);
         }
 
-        private void CheckRepeat(int timing)
+        private void CheckRepeat(int chartTiming)
         {
+            int timing = Services.Audio.AudioTiming;
             int length = Services.Audio.AudioLength;
-            bool outsideRange = timing < repeatFromTiming || timing > repeatToTiming;
+            bool outsideRange = timing < repeatFromTiming - 200 || timing > repeatToTiming;
             bool audioEnd = timing >= length - 100 && repeatToTiming >= length - 100;
             if ((Services.Audio.IsPlaying && outsideRange) || (audioEnd && !gameObject.activeInHierarchy))
             {

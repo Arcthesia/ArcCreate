@@ -394,6 +394,8 @@ Compose:
         NoProjectLoaded: |-
           No project loaded.
           Create or open a new project
+        RawEditorFileTooLarge: |-
+          Text editor is disabled for files larger than 100kb
         Shutter: Shutter
         ShowShutter: Show shutter
         HideShutter: Hide shutter

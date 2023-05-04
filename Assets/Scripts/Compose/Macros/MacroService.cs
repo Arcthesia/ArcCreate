@@ -109,6 +109,7 @@ namespace ArcCreate.Compose.Macros
                 if (cancel.WasExecuted)
                 {
                     macroEnvironment.CancelMacro();
+                    Services.Selection.OnSelectionChange -= OnSelectionChange;
                     return;
                 }
 

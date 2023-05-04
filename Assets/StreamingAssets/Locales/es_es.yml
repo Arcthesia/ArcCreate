@@ -672,12 +672,12 @@ Gameplay:
         Charter: Desconocido
       Charter: 'Creador: {0}'
     Sort:
-      addeddate: <size=10.5>"Orden: Fecha añadida"</size>
+      addeddate: "<size=10.5>Orden: Fecha añadida</size>"
       charter: "Orden: Creador"
       composer: "Orden: Compositor"
       difficulty: "Orden: Dificultad"
       grade: "Orden: Calificación"
-      playcount: <size=11>"Orden: Veces jugada"</size>
+      playcount: "<size=11>Orden: Veces jugada</size>"
       score: "Orden: Puntuación"
       title: "Orden: Título"
     Group:

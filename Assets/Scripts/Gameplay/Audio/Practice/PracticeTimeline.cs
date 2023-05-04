@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace ArcCreate.Gameplay.Audio.Practice
 {
-    public class PracticeTimeline : MonoBehaviour, IDragHandler
+    public class PracticeTimeline : MonoBehaviour, IPointerClickHandler, IDragHandler
     {
         [SerializeField] private GameplayData gameplayData;
         [SerializeField] private Camera viewCamera;
@@ -15,6 +15,8 @@ namespace ArcCreate.Gameplay.Audio.Practice
         private readonly int lengthShaderId = Shader.PropertyToID("_AudioLength");
         private readonly int repeatFromShaderId = Shader.PropertyToID("_RepeatSampleFrom");
         private readonly int repeatToShaderId = Shader.PropertyToID("_RepeatSampleTo");
+
+        public void OnPointerClick(PointerEventData eventData) => OnDrag(eventData);
 
         public void OnDrag(PointerEventData eventData)
         {

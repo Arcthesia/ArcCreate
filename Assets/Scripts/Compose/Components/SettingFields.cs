@@ -84,7 +84,7 @@ namespace ArcCreate.Compose.Components
             shouldSaveBackup.onValueChanged.AddListener(OnBackupToggle);
             backupCount.onEndEdit.AddListener(OnBackupCountField);
             syncToDspTime.onValueChanged.AddListener(OnSyncToDspField);
-            playbackSpeedField.onValueChanged.AddListener(OnPlaybackSpeedField);
+            playbackSpeedField.onEndEdit.AddListener(OnPlaybackSpeedField);
 
             Settings.InputMode.OnValueChanged.AddListener(OnSettingInputMode);
             Values.BeatlineDensity.OnValueChange += OnDensity;
@@ -141,7 +141,7 @@ namespace ArcCreate.Compose.Components
             shouldSaveBackup.onValueChanged.RemoveListener(OnBackupToggle);
             backupCount.onEndEdit.RemoveListener(OnBackupCountField);
             syncToDspTime.onValueChanged.RemoveListener(OnSyncToDspField);
-            playbackSpeedField.onValueChanged.RemoveListener(OnPlaybackSpeedField);
+            playbackSpeedField.onEndEdit.RemoveListener(OnPlaybackSpeedField);
 
             Settings.InputMode.OnValueChanged.RemoveListener(OnSettingInputMode);
             Values.BeatlineDensity.OnValueChange -= OnDensity;
@@ -154,6 +154,8 @@ namespace ArcCreate.Compose.Components
                 val = Mathf.Max(val, 0.1f);
                 Services.Gameplay.Audio.PlaybackSpeed = val;
             }
+
+            playbackSpeedField.text = Services.Gameplay.Audio.PlaybackSpeed.ToString();
         }
 
         private void OnSyncToDspField(bool value)

@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using ArcCreate.ChartFormat;
@@ -16,8 +14,8 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private GameplayData gameplayData;
         [SerializeField] private TMP_InputField inputField;
         [SerializeField] private Scrollbar horizontalScrollbar;
-        [SerializeField] private float minWidth;
-        [SerializeField] private float maxWidth;
+        [SerializeField] private long maxFileLength = 100000;
+        [SerializeField] private GameObject disabledNotify;
 
         [Header("Components")]
         [SerializeField] private GameObject lineHighlightPrefab;
@@ -56,6 +54,15 @@ namespace ArcCreate.Compose.Project
                 return;
             }
 
+            bool tooLarge = new FileInfo(absoluteMainChartPath).Length > maxFileLength;
+            if (tooLarge)
+            {
+                gameObject.SetActive(false);
+                disabledNotify.SetActive(true);
+                return;
+            }
+
+            disabledNotify.SetActive(false);
             rawChartData = File.ReadAllText(absoluteMainChartPath);
             UpdateDisplay();
         }
