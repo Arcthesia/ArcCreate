@@ -18,11 +18,11 @@ Fast and powerful .aff editor made with Unity.
 
 ArcCreate is available on Windows, MacOS, Linux, Android and iOS.
 
-Download the latest nightly build: https://nightly.link/0thElement/ArcCreate/workflows/build/master
+Download the latest nightly build: https://nightly.link/Arcthesia/ArcCreate/workflows/build/master
 
 Install on iOS through TestFlight: https://testflight.apple.com/join/O3KJcYgN
 
-Check for available builds on the latest development branch at: https://github.com/0thElement/ArcCreate/actions (Github Account is required for downloading)
+Check for available builds on the latest development branch at: https://github.com/Arcthesia/ArcCreate/actions (Github Account is required for downloading)
 
 ### Building
 

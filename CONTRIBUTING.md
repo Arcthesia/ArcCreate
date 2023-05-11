@@ -69,7 +69,7 @@ Specific to ArcCreate however, to begin contributing, create a fork of this repo
 
 ```
 // Add original repo as upstream
-git remote add upstream https://github.com/0thElement/ArcCreate.git
+git remote add upstream https://github.com/Arcthesia/ArcCreate.git
 
 // Fetch changes from upstream
 git fetch upstream
