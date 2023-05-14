@@ -26369,6 +26369,11 @@ PrefabInstance:
       propertyPath: editorCamera
       value: 
       objectReference: {fileID: 1122073875}
+    - target: {fileID: -6532397882346423682, guid: 5a16d18e89e1e315b9ed31be307c4c74,
+        type: 3}
+      propertyPath: useChartTiming
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1212505145963713556, guid: 5a16d18e89e1e315b9ed31be307c4c74,
         type: 3}
       propertyPath: m_Pivot.x
@@ -27248,6 +27253,11 @@ PrefabInstance:
       propertyPath: editorCamera
       value: 
       objectReference: {fileID: 1122073875}
+    - target: {fileID: 3145646606779005300, guid: c1fea4f90d81208deac171f2d1aca510,
+        type: 3}
+      propertyPath: useChartTiming
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6432376370228520735, guid: c1fea4f90d81208deac171f2d1aca510,
         type: 3}
       propertyPath: m_RaycastTarget
@@ -27398,6 +27408,11 @@ PrefabInstance:
       propertyPath: editorCamera
       value: 
       objectReference: {fileID: 1122073875}
+    - target: {fileID: 7840636689686229043, guid: c1fea4f90d81208deac171f2d1aca510,
+        type: 3}
+      propertyPath: useChartTiming
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1fea4f90d81208deac171f2d1aca510, type: 3}
 --- !u!224 &518160933 stripped
@@ -44639,6 +44654,11 @@ PrefabInstance:
       propertyPath: editorCamera
       value: 
       objectReference: {fileID: 1122073875}
+    - target: {fileID: 3145646606779005300, guid: c1fea4f90d81208deac171f2d1aca510,
+        type: 3}
+      propertyPath: useChartTiming
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6432376372342971993, guid: c1fea4f90d81208deac171f2d1aca510,
         type: 3}
       propertyPath: m_SizeDelta.y
@@ -44774,6 +44794,11 @@ PrefabInstance:
       propertyPath: editorCamera
       value: 
       objectReference: {fileID: 1122073875}
+    - target: {fileID: 7840636689686229043, guid: c1fea4f90d81208deac171f2d1aca510,
+        type: 3}
+      propertyPath: useChartTiming
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1fea4f90d81208deac171f2d1aca510, type: 3}
 --- !u!224 &957675522 stripped
@@ -47246,6 +47271,11 @@ PrefabInstance:
       propertyPath: editorCamera
       value: 
       objectReference: {fileID: 1122073875}
+    - target: {fileID: -6532397882346423682, guid: 5a16d18e89e1e315b9ed31be307c4c74,
+        type: 3}
+      propertyPath: useChartTiming
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1212505145963713556, guid: 5a16d18e89e1e315b9ed31be307c4c74,
         type: 3}
       propertyPath: m_Pivot.x
@@ -47404,6 +47434,11 @@ PrefabInstance:
     - target: {fileID: 3410689794055759883, guid: 5a16d18e89e1e315b9ed31be307c4c74,
         type: 3}
       propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5889951637425022165, guid: 5a16d18e89e1e315b9ed31be307c4c74,
+        type: 3}
+      propertyPath: m_Interactable
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -69622,6 +69657,11 @@ PrefabInstance:
       propertyPath: editorCamera
       value: 
       objectReference: {fileID: 1122073875}
+    - target: {fileID: 3145646606779005300, guid: c1fea4f90d81208deac171f2d1aca510,
+        type: 3}
+      propertyPath: useChartTiming
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6432376370228520735, guid: c1fea4f90d81208deac171f2d1aca510,
         type: 3}
       propertyPath: m_RaycastTarget
@@ -69772,6 +69812,11 @@ PrefabInstance:
       propertyPath: editorCamera
       value: 
       objectReference: {fileID: 1122073875}
+    - target: {fileID: 7840636689686229043, guid: c1fea4f90d81208deac171f2d1aca510,
+        type: 3}
+      propertyPath: useChartTiming
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1fea4f90d81208deac171f2d1aca510, type: 3}
 --- !u!224 &1578069088 stripped
@@ -72964,6 +73009,11 @@ PrefabInstance:
       propertyPath: editorCamera
       value: 
       objectReference: {fileID: 1122073875}
+    - target: {fileID: -6532397882346423682, guid: 5a16d18e89e1e315b9ed31be307c4c74,
+        type: 3}
+      propertyPath: useChartTiming
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1212505145963713556, guid: 5a16d18e89e1e315b9ed31be307c4c74,
         type: 3}
       propertyPath: m_Pivot.x
@@ -80603,9 +80653,8 @@ MonoBehaviour:
     Color: {r: 0.2509804, g: 0.8392157, b: 0.34117648, a: 1}
   - Density: 4
     Color: {r: 1, g: 0.49019608, b: 0.49019608, a: 1}
-  - Density: 0.25
-    Color: {r: 0.1764706, g: 0.22857964, b: 0.7372549, a: 1}
   beatlineFallbackColor: {r: 0.6666667, g: 0.32941177, b: 0.627451, a: 1}
+  beatlineBarColor: {r: 0.1764706, g: 0.22857964, b: 0.7372549, a: 1}
   laneCollider: {fileID: 1114892755}
 --- !u!1 &1788814699
 GameObject:

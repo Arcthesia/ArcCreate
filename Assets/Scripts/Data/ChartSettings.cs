@@ -1,5 +1,3 @@
-using System;
-
 namespace ArcCreate.Data
 {
     public class ChartSettings
@@ -39,8 +37,6 @@ namespace ArcCreate.Data
         public SkinSettings Skin { get; set; }
 
         public ColorSettings Colors { get; set; }
-
-        public PoolSettings PoolSize { get; set; }
 
         public int LastWorkingTiming { get; set; }
 

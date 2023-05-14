@@ -66,8 +66,8 @@ namespace ArcCreate.Compose.Timeline
 
         private void UpdateTiming()
         {
-            int timing1 = marker1.Timing;
-            int timing2 = marker2.Timing;
+            int timing1 = marker1.UseChartTiming ? marker1.ChartTiming : marker1.AudioTiming;
+            int timing2 = marker2.UseChartTiming ? marker2.ChartTiming : marker2.AudioTiming;
 
             Timing = Mathf.Min(timing1, timing2);
             EndTiming = Mathf.Max(timing1, timing2);

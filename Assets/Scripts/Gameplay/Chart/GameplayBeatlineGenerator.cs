@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
 using UnityEngine;
@@ -25,21 +26,26 @@ namespace ArcCreate.Gameplay.Chart
 
                 if (firstTiming.Bpm <= 10000)
                 {
-                    float distanceBetweenTwoLine =
+                    double distanceBetweenTwoLine =
                         firstTiming.Bpm * firstTiming.Divisor == 0 ?
-                        float.MaxValue :
+                        double.MaxValue :
                         60000f / Mathf.Abs(firstTiming.Bpm) * firstTiming.Divisor;
-                    distanceBetweenTwoLine = Mathf.Max(distanceBetweenTwoLine, 1);
+                    distanceBetweenTwoLine = Math.Max(distanceBetweenTwoLine, 1);
 
                     if (distanceBetweenTwoLine > 0)
                     {
-                        for (float timing = 0; timing >= start; timing -= distanceBetweenTwoLine)
+                        int count = 0;
+                        double timing = 0;
+                        while (timing >= start)
                         {
+                            int t = (int)Math.Round(timing);
                             yield return new Beatline(
-                                Mathf.RoundToInt(timing),
-                                tg.GetFloorPosition(Mathf.RoundToInt(timing)),
+                                t,
+                                tg.GetFloorPosition(t),
                                 Values.BeatlineThickness,
                                 beatlineColor);
+                            count++;
+                            timing = -count * distanceBetweenTwoLine;
                         }
                     }
                 }
@@ -55,24 +61,29 @@ namespace ArcCreate.Gameplay.Chart
                     continue;
                 }
 
-                float distanceBetweenTwoLine =
+                double distanceBetweenTwoLine =
                     currentTiming.Bpm * currentTiming.Divisor == 0 ?
-                    float.MaxValue :
+                    double.MaxValue :
                     60000f / Mathf.Abs(currentTiming.Bpm) * currentTiming.Divisor;
-                distanceBetweenTwoLine = Mathf.Max(distanceBetweenTwoLine, 1);
+                distanceBetweenTwoLine = Math.Max(distanceBetweenTwoLine, 1);
 
                 if (distanceBetweenTwoLine <= 0)
                 {
                     continue;
                 }
 
-                for (float timing = currentTiming.Timing; timing < limit; timing += distanceBetweenTwoLine)
+                int count = 0;
+                double timing = currentTiming.Timing;
+                while (timing < limit)
                 {
+                    int t = (int)Math.Round(timing);
                     yield return new Beatline(
-                        Mathf.RoundToInt(timing),
-                        tg.GetFloorPosition(Mathf.RoundToInt(timing)),
+                        t,
+                        tg.GetFloorPosition(t),
                         Values.BeatlineThickness,
                         beatlineColor);
+                    count++;
+                    timing = currentTiming.Timing + (distanceBetweenTwoLine * count);
                 }
             }
 
@@ -83,21 +94,26 @@ namespace ArcCreate.Gameplay.Chart
 
                 if (lastTiming.Bpm <= 10000)
                 {
-                    float distanceBetweenTwoLine =
+                    double distanceBetweenTwoLine =
                         lastTiming.Bpm * lastTiming.Divisor == 0 ?
-                        float.MaxValue :
+                        double.MaxValue :
                         60000f / Mathf.Abs(lastTiming.Bpm) * lastTiming.Divisor;
-                    distanceBetweenTwoLine = Mathf.Max(distanceBetweenTwoLine, 1);
+                    distanceBetweenTwoLine = Math.Max(distanceBetweenTwoLine, 1);
 
                     if (distanceBetweenTwoLine > 0)
                     {
-                        for (float timing = lastTiming.Timing; timing <= limit; timing += distanceBetweenTwoLine)
+                        int count = 0;
+                        double timing = lastTiming.Timing;
+                        while (timing <= limit)
                         {
+                            int t = (int)Math.Round(timing);
                             yield return new Beatline(
-                                Mathf.RoundToInt(timing),
-                                tg.GetFloorPosition(Mathf.RoundToInt(timing)),
+                                t,
+                                tg.GetFloorPosition(t),
                                 Values.BeatlineThickness,
                                 beatlineColor);
+                            count++;
+                            timing = lastTiming.Timing + (distanceBetweenTwoLine * count);
                         }
                     }
                 }

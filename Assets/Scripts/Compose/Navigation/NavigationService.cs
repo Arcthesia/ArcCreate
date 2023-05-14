@@ -21,6 +21,7 @@ namespace ArcCreate.Compose.Navigation
         private readonly List<Keybind> keybinds = new List<Keybind>();
         private readonly Dictionary<Type, object> instances = new Dictionary<Type, object>();
         private readonly List<Keybind> activatingKeybinds = new List<Keybind>();
+        private readonly List<Keybind> inProgressKeybinds = new List<Keybind>();
 
         // Last action in the list is considered top-priority, and only it will have sub-actions processed.
         // A stack was not used because lower-priority actions might exit early.
@@ -45,6 +46,7 @@ namespace ArcCreate.Compose.Navigation
             allActions.Clear();
             keybinds.Clear();
             activatingKeybinds.Clear();
+            inProgressKeybinds.Clear();
 
             Dictionary<string, List<string>> keybindOverrides = new Dictionary<string, List<string>>();
             Dictionary<string, List<string>> keybindActions = new Dictionary<string, List<string>>();
@@ -168,6 +170,8 @@ namespace ArcCreate.Compose.Navigation
 
                     return currentAction.SubActions.Contains(subAction);
                 case CompositeAction compositeAction:
+                    return true;
+                case MacroAction macroAction:
                     return true;
             }
 
@@ -327,7 +331,6 @@ namespace ArcCreate.Compose.Navigation
                 List<string> actionPaths = pair.Value;
 
                 List<IAction> actions = new List<IAction>();
-                bool valid = true;
                 foreach (string actionPath in actionPaths)
                 {
                     bool found = false;
@@ -343,28 +346,23 @@ namespace ArcCreate.Compose.Navigation
 
                     if (!found)
                     {
-                        Debug.LogWarning(I18n.S("Compose.Exception.Navigation.InvalidActionPath", actionPath));
-                        valid = false;
-                        break;
+                        actions.Add(new MacroAction(actionPath));
                     }
                 }
 
-                if (valid)
+                CompositeAction action = new CompositeAction(keybindString, actions);
+                if (string.IsNullOrEmpty(keybindString))
                 {
-                    CompositeAction action = new CompositeAction(keybindString, actions);
-                    if (string.IsNullOrEmpty(keybindString))
-                    {
-                        continue;
-                    }
+                    continue;
+                }
 
-                    if (KeybindUtils.TryParseKeybind(keybindString, action, out Keybind keybind, out string reason))
-                    {
-                        keybinds.Add(keybind);
-                    }
-                    else
-                    {
-                        Debug.LogWarning(reason);
-                    }
+                if (KeybindUtils.TryParseKeybind(keybindString, action, out Keybind keybind, out string reason))
+                {
+                    keybinds.Add(keybind);
+                }
+                else
+                {
+                    Debug.LogWarning(reason);
                 }
             }
         }
@@ -372,6 +370,7 @@ namespace ArcCreate.Compose.Navigation
         private void CheckKeybind()
         {
             activatingKeybinds.Clear();
+            inProgressKeybinds.Clear();
             for (int i = 0; i < keybinds.Count; i++)
             {
                 Keybind keybind = keybinds[i];
@@ -380,6 +379,9 @@ namespace ArcCreate.Compose.Navigation
                 {
                     case KeybindState.Complete:
                         activatingKeybinds.Add(keybind);
+                        break;
+                    case KeybindState.InProgress:
+                        inProgressKeybinds.Add(keybind);
                         break;
                 }
             }
@@ -391,12 +393,23 @@ namespace ArcCreate.Compose.Navigation
                 int complexity = lastKeystroke.Modifiers.Length;
                 KeyCode key = lastKeystroke.Key;
                 bool isMaxComplexity = true;
+                bool hasStartedLate = false;
 
                 for (int j = 0; j < activatingKeybinds.Count; j++)
                 {
                     Keybind otherKeybind = activatingKeybinds[j];
                     Keystroke otherLastKeystroke = otherKeybind.Keystrokes[otherKeybind.Keystrokes.Length - 1];
-                    if (i == j || lastKeystroke.Key != otherLastKeystroke.Key)
+                    if (i == j)
+                    {
+                        continue;
+                    }
+
+                    if (otherLastKeystroke.Modifiers.Contains(key))
+                    {
+                        isMaxComplexity = false;
+                    }
+
+                    if (lastKeystroke.Key != otherLastKeystroke.Key)
                     {
                         continue;
                     }
@@ -408,9 +421,35 @@ namespace ArcCreate.Compose.Navigation
                     }
                 }
 
-                if (isMaxComplexity)
+                for (int j = 0; j < inProgressKeybinds.Count; j++)
                 {
-                    keybind.Execute();
+                    Keybind otherKeybind = inProgressKeybinds[j];
+                    Keystroke otherCurrentKeystroke = otherKeybind.Keystrokes[otherKeybind.CurrentIndex - 1];
+                    if (otherCurrentKeystroke.Modifiers.Contains(key))
+                    {
+                        isMaxComplexity = false;
+                    }
+
+                    if (lastKeystroke.Key != otherCurrentKeystroke.Key)
+                    {
+                        continue;
+                    }
+
+                    int otherComplexity = otherCurrentKeystroke.Modifiers.Length;
+                    if (complexity < otherComplexity)
+                    {
+                        isMaxComplexity = false;
+                    }
+
+                    if (keybind.Keystrokes.Length < otherKeybind.CurrentIndex)
+                    {
+                        hasStartedLate = true;
+                    }
+                }
+
+                if (isMaxComplexity && !hasStartedLate && ShouldExecute(keybind.Action))
+                {
+                    keybind.Action.Execute();
                 }
             }
         }

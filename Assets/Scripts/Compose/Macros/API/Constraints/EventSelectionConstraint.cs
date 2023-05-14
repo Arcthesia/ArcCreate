@@ -27,6 +27,7 @@ namespace ArcCreate.Compose.Macros
             ArcTap,
             Timing,
             Camera,
+            Scenecontrol,
             Floor,
             Sky,
             Short,
@@ -78,6 +79,8 @@ namespace ArcCreate.Compose.Macros
                     return Timing();
                 case "camera":
                     return Camera();
+                case "scenecontrol":
+                    return Scenecontrol();
                 case "floor":
                     return Floor();
                 case "sky":
@@ -111,6 +114,13 @@ namespace ArcCreate.Compose.Macros
         public EventSelectionConstraint Camera()
         {
             inputType = EventType.Camera;
+            return this;
+        }
+
+        [EmmyDoc("Filter for scenecontrol events.")]
+        public EventSelectionConstraint Scenecontrol()
+        {
+            inputType = EventType.Scenecontrol;
             return this;
         }
 
@@ -260,10 +270,13 @@ namespace ArcCreate.Compose.Macros
                     result = "Must select arctap notes";
                     break;
                 case EventType.Timing:
-                    result = "Must select timing notes";
+                    result = "Must select timing events";
                     break;
                 case EventType.Camera:
-                    result = "Must select camera notes";
+                    result = "Must select camera events";
+                    break;
+                case EventType.Scenecontrol:
+                    result = "Must select scenecontrol events";
                     break;
                 case EventType.Floor:
                     result = "Must select tap or hold notes";
@@ -395,6 +408,13 @@ namespace ArcCreate.Compose.Macros
                     break;
                 case EventType.Camera:
                     if (!(value is LuaCamera))
+                    {
+                        return (false, message);
+                    }
+
+                    break;
+                case EventType.Scenecontrol:
+                    if (!(value is LuaScenecontrol))
                     {
                         return (false, message);
                     }

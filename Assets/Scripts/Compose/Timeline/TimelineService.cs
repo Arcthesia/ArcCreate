@@ -263,8 +263,8 @@ namespace ArcCreate.Compose.Timeline
         private void OnWaveformDrag(float x)
         {
             timingMarker.SetDragPosition(x);
-            Services.Gameplay.Audio.AudioTiming = timingMarker.Timing;
-            Services.Gameplay.Audio.SetResumeAt(timingMarker.Timing);
+            Services.Gameplay.Audio.AudioTiming = timingMarker.AudioTiming;
+            Services.Gameplay.Audio.SetResumeAt(timingMarker.AudioTiming);
             shouldFocusWaveformView = false;
         }
 

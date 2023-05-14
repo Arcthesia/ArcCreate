@@ -405,7 +405,7 @@ namespace ArcCreate.Compose.Macros
         }
 
         [EmmyDoc("Query for all notes. If a constraint is provided, then only notes that fit the constraint is returned.")]
-        public static Dictionary<string, List<LuaChartEvent>> Query(EventSelectionConstraint constraint)
+        public static EventSelectionRequest Query(EventSelectionConstraint constraint = null)
         {
             List<ArcEvent> events = new List<ArcEvent>();
             events.AddRange(Services.Gameplay.Chart.GetAll<Tap>());
@@ -417,13 +417,28 @@ namespace ArcCreate.Compose.Macros
             events.AddRange(Services.Gameplay.Chart.GetAll<ScenecontrolEvent>());
 
             Dictionary<string, List<LuaChartEvent>> luaEvents = ConvertAll(events);
-            Dictionary<string, List<LuaChartEvent>> result = new Dictionary<string, List<LuaChartEvent>>();
-            foreach (string key in luaEvents.Keys)
+            if (constraint == null)
             {
-                result.Add(key, luaEvents[key].Where(e => constraint.GetValidityDetail(e).valid).ToList());
+                return new EventSelectionRequest
+                {
+                    Result = luaEvents,
+                    Complete = true,
+                };
             }
+            else
+            {
+                Dictionary<string, List<LuaChartEvent>> result = new Dictionary<string, List<LuaChartEvent>>();
+                foreach (string key in luaEvents.Keys)
+                {
+                    result.Add(key, luaEvents[key].Where(e => constraint.GetValidityDetail(e).valid).ToList());
+                }
 
-            return result;
+                return new EventSelectionRequest
+                {
+                    Result = result,
+                    Complete = true,
+                };
+            }
         }
 
         [MoonSharpHidden]

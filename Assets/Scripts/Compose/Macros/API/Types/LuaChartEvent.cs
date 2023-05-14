@@ -45,7 +45,7 @@ namespace ArcCreate.Compose.Macros
         [EmmyDoc("Create a command that delete current event, if it's connected to a real event in the chart.")]
         public LuaChartCommand Delete()
         {
-            if (Instance is TimingEvent && Instance.Timing == 0)
+            if (Instance == null || (Instance is TimingEvent && Instance.Timing == 0))
             {
                 return Command.Create();
             }

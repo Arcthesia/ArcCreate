@@ -13,6 +13,7 @@ namespace ArcCreate.Compose.Grid
         [SerializeField] private Transform beatlineParent;
         [SerializeField] private List<BeatlineColorSetting> beatlineColorSettings;
         [SerializeField] private Color beatlineFallbackColor;
+        [SerializeField] private Color beatlineBarColor;
         [SerializeField] private MeshCollider laneCollider;
         private BeatlineDisplay beatlineDisplay;
         private TimingGroup tg = null;
@@ -166,7 +167,7 @@ namespace ArcCreate.Compose.Grid
         public void Setup()
         {
             var pool = Pools.New<BeatlineBehaviour>(Values.BeatlinePoolName, beatlinePrefab, beatlineParent, 30);
-            beatlineDisplay = new BeatlineDisplay(new EditorBeatlineGenerator(beatlineColorSettings, beatlineFallbackColor), pool);
+            beatlineDisplay = new BeatlineDisplay(new EditorBeatlineGenerator(beatlineColorSettings, beatlineFallbackColor, beatlineBarColor), pool);
             Values.EditingTimingGroup.OnValueChange += OnEditingTimingGroupChanged;
             Values.BeatlineDensity.OnValueChange += OnBeatlineDensityChanged;
             gameplayData.OnChartFileLoad += OnChartChange;

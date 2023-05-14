@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.Data;
@@ -9,12 +10,14 @@ namespace ArcCreate.Compose.Grid
     {
         private readonly List<BeatlineColorSetting> beatlineColorSettings;
         private readonly Color defaultColor;
+        private readonly Color barColor;
 
-        public EditorBeatlineGenerator(List<BeatlineColorSetting> beatlineColorSettings, Color defaultColor)
+        public EditorBeatlineGenerator(List<BeatlineColorSetting> beatlineColorSettings, Color defaultColor, Color barColor)
         {
             this.beatlineColorSettings = beatlineColorSettings;
             beatlineColorSettings.Sort((a, b) => a.Density.CompareTo(b.Density));
             this.defaultColor = defaultColor;
+            this.barColor = barColor;
         }
 
         public IEnumerable<Beatline> Generate(TimingGroup tg, int audioLength)
@@ -30,22 +33,25 @@ namespace ArcCreate.Compose.Grid
                     continue;
                 }
 
-                float distanceBetweenTwoLine =
+                double distanceBetweenTwoLine =
                     currentTiming.Bpm * Values.BeatlineDensity.Value == 0 ?
-                    float.MaxValue :
+                    double.MaxValue :
                     60000f / Mathf.Abs(currentTiming.Bpm) / Values.BeatlineDensity.Value;
-                distanceBetweenTwoLine = Mathf.Max(distanceBetweenTwoLine, 1);
+                distanceBetweenTwoLine = Math.Max(distanceBetweenTwoLine, 1);
 
                 int count = 0;
-                for (float timing = currentTiming.Timing; timing < limit; timing += distanceBetweenTwoLine)
+                double timing = currentTiming.Timing;
+                while (timing < limit)
                 {
                     Color beatlineColor = ResolveColor(count, Values.BeatlineDensity.Value);
+                    int t = (int)Math.Round(timing);
                     yield return new Beatline(
-                        Mathf.RoundToInt(timing),
-                        tg.GetFloorPosition(Mathf.RoundToInt(timing)),
+                        t,
+                        tg.GetFloorPosition(t),
                         Values.EditorBeatlineThickness,
                         beatlineColor);
                     count++;
+                    timing = currentTiming.Timing + (distanceBetweenTwoLine * count);
                 }
             }
 
@@ -59,28 +65,36 @@ namespace ArcCreate.Compose.Grid
                     yield break;
                 }
 
-                float distanceBetweenTwoLine =
+                double distanceBetweenTwoLine =
                     lastTiming.Bpm * Values.BeatlineDensity.Value == 0 ?
-                    float.MaxValue :
+                    double.MaxValue :
                     60000f / Mathf.Abs(lastTiming.Bpm) / Values.BeatlineDensity.Value;
-                distanceBetweenTwoLine = Mathf.Max(distanceBetweenTwoLine, 1);
+                distanceBetweenTwoLine = Math.Max(distanceBetweenTwoLine, 1);
 
                 int count = 0;
-                for (float timing = lastTiming.Timing; timing <= limit; timing += distanceBetweenTwoLine)
+                double timing = lastTiming.Timing;
+                while (timing <= limit)
                 {
                     Color beatlineColor = ResolveColor(count, Values.BeatlineDensity.Value);
+                    int t = (int)Math.Round(timing);
                     yield return new Beatline(
-                        Mathf.RoundToInt(timing),
-                        tg.GetFloorPosition(Mathf.RoundToInt(timing)),
+                        t,
+                        tg.GetFloorPosition(t),
                         Values.EditorBeatlineThickness,
                         beatlineColor);
                     count++;
+                    timing = lastTiming.Timing + (distanceBetweenTwoLine * count);
                 }
             }
         }
 
         private Color ResolveColor(int count, float beatlineDensity)
         {
+            if (count % (beatlineDensity * beatlineDensity) == 0)
+            {
+                return barColor;
+            }
+
             foreach (BeatlineColorSetting setting in beatlineColorSettings)
             {
                 float density = setting.Density;

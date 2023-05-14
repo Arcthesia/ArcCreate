@@ -94,7 +94,7 @@ namespace ArcCreate.Gameplay
 
         public const int DelayBeforeAudioResume = 200;
 
-        public static int ChartAudioOffset { get; set; } = 0;
+        public static int ChartAudioOffset { get; internal set; } = 0;
 
         public static float BaseBpm { get; set; } = 100;
 

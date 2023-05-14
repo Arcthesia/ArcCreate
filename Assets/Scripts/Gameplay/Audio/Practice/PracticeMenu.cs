@@ -43,6 +43,7 @@ namespace ArcCreate.Gameplay.Audio.Practice
         private void OnDestroy()
         {
             gameplayData.AudioClip.OnValueChange -= OnClipChange;
+            gameplayData.OnGameplayUpdate -= CheckRepeat;
             changeSpeedButton.onClick.RemoveListener(ChangeSpeed);
             repeatOffButton.onClick.RemoveListener(TurnRepeatOff);
             repeatOnButton.onClick.RemoveListener(TurnRepeatOn);

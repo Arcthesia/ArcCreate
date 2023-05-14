@@ -35,6 +35,8 @@ namespace ArcCreate.Compose.Navigation
 
         public Keystroke[] Keystrokes { get; private set; }
 
+        public int CurrentIndex => index;
+
         public void Reset()
         {
             index = 0;
@@ -57,16 +59,12 @@ namespace ArcCreate.Compose.Navigation
                 }
             }
 
-            Reset();
-            return KeybindState.Invalid;
-        }
-
-        public void Execute()
-        {
-            if (Services.Navigation.ShouldExecute(Action))
+            if (UnityEngine.Input.anyKeyDown)
             {
-                Action.Execute();
+                Reset();
             }
+
+            return KeybindState.Invalid;
         }
     }
 }

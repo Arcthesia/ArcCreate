@@ -14,11 +14,13 @@ namespace ArcCreate.Compose.Timeline
         [SerializeField] private TMP_InputField timingField;
         [SerializeField] private RectTransform numberBackground;
         [SerializeField] private float spacing;
+        [SerializeField] private bool useChartTiming;
         [SerializeField] private Camera editorCamera;
 
         private RectTransform rectTransform;
         private RectTransform parentRectTransform;
         private bool queueTimingEdit = false;
+        private int previousOffset;
 
         /// <summary>
         /// Invoked whenever the timing value of this marker changes.
@@ -31,14 +33,24 @@ namespace ArcCreate.Compose.Timeline
         public event Action<Marker, int> OnEndEdit;
 
         /// <summary>
-        /// Gets the current timing value of this marker.
+        /// Gets the current audio timing value of this marker.
         /// </summary>
-        public int Timing { get; private set; }
+        public int AudioTiming { get; private set; }
+
+        /// <summary>
+        /// Gets the current chart timing value of this marker.
+        /// </summary>
+        public int ChartTiming => AudioTiming - Gameplay.Values.ChartAudioOffset;
 
         /// <summary>
         /// Gets a value indicating whether or not this dragger is being dragged.
         /// </summary>
         public bool IsDragging { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether or not this marker uses chart timing instead of audio timing.
+        /// </summary>
+        public bool UseChartTiming => useChartTiming;
 
         public void OnDrag(PointerEventData eventData)
         {
@@ -55,18 +67,18 @@ namespace ArcCreate.Compose.Timeline
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            OnEndEdit?.Invoke(this, Timing);
+            OnEndEdit?.Invoke(this, useChartTiming ? ChartTiming : AudioTiming);
             IsDragging = false;
         }
 
         /// <summary>
         /// Set the marker's timing and update its position.
         /// </summary>
-        /// <param name="timing">The timing value.</param>
+        /// <param name="timing">The timing value. Pass chart timing if <see cref="UseChartTiming"/> is true.</param>
         public void SetTiming(int timing)
         {
-            Timing = timing;
-            SetFieldText(timing);
+            AudioTiming = timing + (useChartTiming ? Gameplay.Values.ChartAudioOffset : 0);
+            SetFieldText(AudioTiming);
             if (gameObject.activeInHierarchy)
             {
                 UpdatePosition();
@@ -83,9 +95,9 @@ namespace ArcCreate.Compose.Timeline
             int viewTo = Services.Timeline.ViewToTiming;
             float p = (x + parentWidth) / (parentWidth * 2);
 
-            Timing = Mathf.RoundToInt(Mathf.Lerp(viewFrom, viewTo, p));
-            SetFieldText(Timing);
-            OnValueChanged?.Invoke(this, Timing);
+            AudioTiming = Mathf.RoundToInt(Mathf.Lerp(viewFrom, viewTo, p));
+            SetFieldText(AudioTiming);
+            OnValueChanged?.Invoke(this, useChartTiming ? ChartTiming : AudioTiming);
 
             AlignNumberBackground();
         }
@@ -128,9 +140,9 @@ namespace ArcCreate.Compose.Timeline
             if (Evaluator.TryFloat(val, out float num))
             {
                 int timing = Mathf.RoundToInt(num);
-                Timing = Mathf.Clamp(timing, 0, Services.Gameplay.Audio.AudioLength);
-                OnValueChanged?.Invoke(this, Timing);
-                OnEndEdit?.Invoke(this, Timing);
+                AudioTiming = Mathf.Clamp(timing, 0, Services.Gameplay.Audio.AudioLength);
+                OnValueChanged?.Invoke(this, useChartTiming ? ChartTiming : AudioTiming);
+                OnEndEdit?.Invoke(this, useChartTiming ? ChartTiming : AudioTiming);
             }
 
             timingField.text = num.ToString();
@@ -151,18 +163,27 @@ namespace ArcCreate.Compose.Timeline
         private void Update()
         {
             UpdatePosition();
-            if (!timingField.isFocused && queueTimingEdit)
+            if ((!timingField.isFocused && queueTimingEdit) || (Gameplay.Values.ChartAudioOffset != previousOffset))
             {
-                timingField.text = Timing.ToString();
+                if (useChartTiming)
+                {
+                    int chartTiming = AudioTiming - previousOffset;
+                    AudioTiming = chartTiming + Gameplay.Values.ChartAudioOffset;
+                }
+
+                int timing = useChartTiming ? ChartTiming : AudioTiming;
+                timingField.text = AudioTiming.ToString();
                 queueTimingEdit = false;
             }
+
+            previousOffset = Gameplay.Values.ChartAudioOffset;
         }
 
         private void UpdatePosition()
         {
             int viewFrom = Services.Timeline.ViewFromTiming;
             int viewTo = Services.Timeline.ViewToTiming;
-            float p = (float)(Timing - viewFrom) / (viewTo - viewFrom);
+            float p = (float)(AudioTiming - viewFrom) / (viewTo - viewFrom);
 
             float parentWidth = parentRectTransform.rect.width / 2;
             float x = Mathf.Lerp(-parentWidth, parentWidth, p);
