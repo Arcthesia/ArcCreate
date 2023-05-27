@@ -1,4 +1,5 @@
 using ArcCreate.Gameplay.Chart;
+using ArcCreate.Gameplay.Data;
 using MoonSharp.Interpreter;
 using UnityEngine;
 
@@ -94,11 +95,19 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public Color DefaultColor => Color.white;
 
         [MoonSharpHidden]
+        private NoteProperties CurrentProperties
+        {
+            get
+            {
+                return TimingGroup.GroupProperties.IndividualOverrides.PropertiesFor(NoteChannel.CurrentNote);
+            }
+        }
+
+        [MoonSharpHidden]
         public void UpdateColor(Color color)
         {
-            var ni = TimingGroup.NoteIndividualProperties.PropertiesFor(NoteChannel.CurrentNote);
-
-            ni.Color = color;
+            TimingGroup.GroupProperties.IndividualOverrides.UseColor = true;
+            CurrentProperties.Color = color;
         }
     }
 }

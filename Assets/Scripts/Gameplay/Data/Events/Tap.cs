@@ -98,7 +98,7 @@ namespace ArcCreate.Gameplay.Data
             Matrix4x4 matrix = groupProperties.GroupMatrix * Matrix4x4.TRS(pos, rot, scl);
 
             float alpha = ArcFormula.CalculateFadeOutAlpha(z);
-            Color color = groupProperties.Color;
+            Color color = groupProperties.GetColor(this);
             Color connectionColor = connectionLineColor;
             color.a *= alpha;
             connectionColor.a *= alpha;

@@ -1,3 +1,4 @@
+using System;
 using ArcCreate.ChartFormat;
 using ArcCreate.Gameplay.Skin;
 using UnityEngine;
@@ -84,6 +85,8 @@ namespace ArcCreate.Gameplay.Data
 
         public bool Visible { get; set; } = true;
 
+        public NoteIndividualProperties IndividualOverrides { get; set; } = new NoteIndividualProperties();
+
         public Vector3 FallDirection
         {
             get
@@ -96,6 +99,11 @@ namespace ArcCreate.Gameplay.Data
                 float z = Mathf.Sin(angleXf * Mathf.Deg2Rad) * Mathf.Cos(angleYf * Mathf.Deg2Rad);
                 return new Vector3(x, y, z);
             }
+        }
+
+        public Color GetColor(Note note)
+        {
+            return GetNIProperty(note, this.Color, ni => ni.UseColor, n => n.Color);
         }
 
         public RawTimingGroup ToRaw()
@@ -116,6 +124,25 @@ namespace ArcCreate.Gameplay.Data
                 AngleY = AngleY,
                 ArcResolution = ArcResolution,
             };
+        }
+
+        /// <summary>
+        /// Get a property which may be overriden on a per-note basis.
+        /// </summary>
+        private T GetNIProperty<T>(Note note, T sharedValue, Predicate<NoteIndividualProperties> nienabled, Func<NoteProperties, T> nivalue)
+        {
+            if (!IndividualOverrides.IsEnabled)
+            {
+                return sharedValue;
+            }
+
+            if (!nienabled(IndividualOverrides))
+            {
+                return sharedValue;
+            }
+
+            var ni = IndividualOverrides.PropertiesFor(note);
+            return nivalue(ni);
         }
     }
 }

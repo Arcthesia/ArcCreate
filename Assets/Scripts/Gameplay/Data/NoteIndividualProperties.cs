@@ -7,15 +7,35 @@ namespace ArcCreate.Gameplay.Data
 {
     public class NoteIndividualProperties
     {
-        private readonly Dictionary<Note, NoteProperties> properties = new Dictionary<Note, NoteProperties>();
+        private Dictionary<Note, NoteProperties> properties;
 
-        public bool HasPropertiesFor(Note note)
+        public bool IsEnabled => properties != null;
+
+        public bool UseColor { get; set; } = false;
+
+        public void Enable()
         {
-            return properties.ContainsKey(note);
+            properties = new Dictionary<Note, NoteProperties>();
         }
 
+        public void Disable()
+        {
+            properties = null;
+        }
+
+        /// <summary>
+        /// Get the properties for a given note, which can be modified
+        /// for use later on.
+        /// </summary>
+        /// <returns>The properties which are associated with a note.</returns>
+        /// <param name="note">The note to find the properties of.</param>
         public NoteProperties PropertiesFor(Note note)
         {
+            if (!IsEnabled)
+            {
+                return null;
+            }
+
             if (!properties.TryGetValue(note, out var prop))
             {
                 prop = new NoteProperties();

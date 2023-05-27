@@ -519,7 +519,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         }
 
         [EmmyDoc("Creates a note individual controller for a timing group")]
-        public NoteIndividualController GetNoteIndividualGroup(int tg)
+        public NoteIndividualController GetNoteIndividual(int tg)
         {
             if (noteIndividualGroups.TryGetValue(tg, out var cached))
             {
@@ -529,6 +529,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             try
             {
                 var group = Services.Chart.GetTimingGroup(tg);
+                group.EnableIndividualOverrides();
                 NoteIndividualController c = Instantiate(IndividualPrefab, transform).GetComponent<NoteIndividualController>();
                 c.TimingGroup = group;
                 c.SerializedType = $"ni.{group.GroupNumber}";
@@ -734,7 +735,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 case "tg":
                     return GetNoteGroup(int.Parse(arg));
                 case "ni":
-                    return GetNoteIndividualGroup(int.Parse(arg));
+                    return GetNoteIndividual(int.Parse(arg));
                 default:
                     return null;
             }

@@ -15,7 +15,6 @@ namespace ArcCreate.Gameplay.Chart
         private ArcNoteGroup arcs;
         private ArcTapNoteGroup arcTaps;
         private GroupProperties groupProperties;
-        private NoteIndividualProperties noteIndividualProperties;
 
         public TimingGroup(int tg)
         {
@@ -26,11 +25,25 @@ namespace ArcCreate.Gameplay.Chart
 
         public GroupProperties GroupProperties => groupProperties;
 
-        public NoteIndividualProperties NoteIndividualProperties => noteIndividualProperties;
-
         public List<ArcEvent> ReferenceEvents { get; private set; }
 
         public bool IsVisible { get; set; } = true;
+
+        /// <summary>
+        /// Enable note-individual parameter overrides for this timing group.
+        /// </summary>
+        public void EnableIndividualOverrides()
+        {
+            GroupProperties.IndividualOverrides.Enable();
+        }
+
+        /// <summary>
+        /// Disable note-individual parameter overrides for this timing group.
+        /// </summary>
+        public void DisableIndividualOverrides()
+        {
+            GroupProperties.IndividualOverrides.Disable();
+        }
 
         /// <summary>
         /// Load a timing group data representation into this instance.
@@ -70,7 +83,6 @@ namespace ArcCreate.Gameplay.Chart
             arcTaps = new ArcTapNoteGroup();
 
             groupProperties = new GroupProperties();
-            noteIndividualProperties = new NoteIndividualProperties();
 
             timings = new List<TimingEvent>
             {
