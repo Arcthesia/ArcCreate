@@ -15,6 +15,7 @@ namespace ArcCreate.Gameplay.Chart
         private ArcNoteGroup arcs;
         private ArcTapNoteGroup arcTaps;
         private GroupProperties groupProperties;
+        private NoteIndividualProperties noteIndividualProperties;
 
         public TimingGroup(int tg)
         {
@@ -24,6 +25,8 @@ namespace ArcCreate.Gameplay.Chart
         public int GroupNumber { get; private set; }
 
         public GroupProperties GroupProperties => groupProperties;
+
+        public NoteIndividualProperties NoteIndividualProperties => noteIndividualProperties;
 
         public List<ArcEvent> ReferenceEvents { get; private set; }
 
@@ -67,6 +70,8 @@ namespace ArcCreate.Gameplay.Chart
             arcTaps = new ArcTapNoteGroup();
 
             groupProperties = new GroupProperties();
+            noteIndividualProperties = new NoteIndividualProperties();
+
             timings = new List<TimingEvent>
             {
                 new TimingEvent

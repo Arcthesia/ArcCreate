@@ -10,6 +10,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
         bool DefaultActive { get; }
     }
 
+    public interface INoteIndividualController : IController
+    {
+        int GroupNumber { get; }
+    }
+
     public interface IPositionController : IController
     {
         bool EnablePositionModule { get; set; }

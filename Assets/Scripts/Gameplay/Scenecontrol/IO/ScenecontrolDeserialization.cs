@@ -92,6 +92,10 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     return new SineChannel();
                 case "channel.sum":
                     return new SumChannel();
+                case "channel.timing":
+                    return new TimingChannel();
+                case "channel.note.timing":
+                    return new NoteTimingChannel();
 
                 // Triggers channels
                 case "channel.trigger.accumulate":

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Lua;
 using MoonSharp.Interpreter;
 using UnityEngine;
@@ -192,61 +193,78 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 return;
             }
 
-            if (this is IPositionController pos && pos.EnablePositionModule)
+            void UpdateOnce()
             {
-                Vector3 translation = pos.DefaultTranslation;
-                Vector3 rotation = pos.DefaultRotation.eulerAngles;
-                Vector3 scale = pos.DefaultScale;
-
-                translation.x = pos.TranslationX.ValueAt(timing);
-                translation.y = pos.TranslationY.ValueAt(timing);
-                translation.z = pos.TranslationZ.ValueAt(timing);
-
-                rotation.x = pos.RotationX.ValueAt(timing);
-                rotation.y = pos.RotationY.ValueAt(timing);
-                rotation.z = pos.RotationZ.ValueAt(timing);
-
-                scale.x = pos.ScaleX.ValueAt(timing);
-                scale.y = pos.ScaleY.ValueAt(timing);
-                scale.z = pos.ScaleZ.ValueAt(timing);
-
-                pos.UpdatePosition(translation, Quaternion.Euler(rotation), scale);
-            }
-
-            if (this is IColorController col && col.EnableColorModule)
-            {
-                RGBA color = new RGBA(col.DefaultColor);
-                HSVA modify = new HSVA(0, 0, 0, 1)
+                if (this is IPositionController pos && pos.EnablePositionModule)
                 {
-                    H = col.ColorH.ValueAt(timing),
-                    S = col.ColorS.ValueAt(timing),
-                    V = col.ColorV.ValueAt(timing),
-                };
+                    Vector3 translation = pos.DefaultTranslation;
+                    Vector3 rotation = pos.DefaultRotation.eulerAngles;
+                    Vector3 scale = pos.DefaultScale;
 
-                color.R = col.ColorR.ValueAt(timing);
-                color.G = col.ColorG.ValueAt(timing);
-                color.B = col.ColorB.ValueAt(timing);
-                color.A = col.ColorA.ValueAt(timing);
+                    translation.x = pos.TranslationX.ValueAt(timing);
+                    translation.y = pos.TranslationY.ValueAt(timing);
+                    translation.z = pos.TranslationZ.ValueAt(timing);
 
-                HSVA hsva = Convert.RGBAToHSVA(color);
-                hsva.H = (hsva.H + modify.H) % 360;
-                hsva.S = Mathf.Clamp(hsva.S + modify.S, 0, 1);
-                hsva.V = Mathf.Clamp(hsva.V + modify.V, 0, 1);
+                    rotation.x = pos.RotationX.ValueAt(timing);
+                    rotation.y = pos.RotationY.ValueAt(timing);
+                    rotation.z = pos.RotationZ.ValueAt(timing);
 
-                col.UpdateColor(Convert.HSVAToRGBA(hsva).ToColor());
+                    scale.x = pos.ScaleX.ValueAt(timing);
+                    scale.y = pos.ScaleY.ValueAt(timing);
+                    scale.z = pos.ScaleZ.ValueAt(timing);
+
+                    pos.UpdatePosition(translation, Quaternion.Euler(rotation), scale);
+                }
+
+                if (this is IColorController col && col.EnableColorModule)
+                {
+                    RGBA color = new RGBA(col.DefaultColor);
+                    HSVA modify = new HSVA(0, 0, 0, 1)
+                    {
+                        H = col.ColorH.ValueAt(timing),
+                        S = col.ColorS.ValueAt(timing),
+                        V = col.ColorV.ValueAt(timing),
+                    };
+
+                    color.R = col.ColorR.ValueAt(timing);
+                    color.G = col.ColorG.ValueAt(timing);
+                    color.B = col.ColorB.ValueAt(timing);
+                    color.A = col.ColorA.ValueAt(timing);
+
+                    HSVA hsva = Convert.RGBAToHSVA(color);
+                    hsva.H = (hsva.H + modify.H) % 360;
+                    hsva.S = Mathf.Clamp(hsva.S + modify.S, 0, 1);
+                    hsva.V = Mathf.Clamp(hsva.V + modify.V, 0, 1);
+
+                    col.UpdateColor(Convert.HSVAToRGBA(hsva).ToColor());
+                }
+
+                if (this is ILayerController lyr && lyr.EnableLayerModule)
+                {
+                    string layer = lyr.DefaultLayer;
+                    int sort = lyr.DefaultSort;
+                    float alpha = lyr.DefaultAlpha;
+
+                    layer = lyr.Layer.ValueAt(timing);
+                    sort = (int)lyr.Sort.ValueAt(timing);
+                    alpha = lyr.Alpha.ValueAt(timing) / 255f;
+
+                    lyr.UpdateLayer(layer, sort, alpha);
+                }
             }
 
-            if (this is ILayerController lyr && lyr.EnableLayerModule)
+            if (this is INoteIndividualController ni)
             {
-                string layer = lyr.DefaultLayer;
-                int sort = lyr.DefaultSort;
-                float alpha = lyr.DefaultAlpha;
-
-                layer = lyr.Layer.ValueAt(timing);
-                sort = (int)lyr.Sort.ValueAt(timing);
-                alpha = lyr.Alpha.ValueAt(timing) / 255f;
-
-                lyr.UpdateLayer(layer, sort, alpha);
+                foreach (var note in Services.Chart.GetTimingGroup(ni.GroupNumber).GetRenderingNotes())
+                {
+                    NoteChannel.CurrentNote = note;
+                    UpdateOnce();
+                    NoteChannel.CurrentNote = null;
+                }
+            }
+            else
+            {
+                UpdateOnce();
             }
 
             if (this is ITextController txt && txt.EnableTextModule)

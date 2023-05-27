@@ -86,5 +86,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [EmmyDoc("Create a periodic sine channel")]
         public static SineChannel Sine(ValueChannel period, ValueChannel min, ValueChannel max, ValueChannel offset)
             => new SineChannel(period, min, max, offset);
+
+        [EmmyDoc("Create a channel which returns the current timing")]
+        public static TimingChannel Timing()
+            => new TimingChannel();
+
+        [EmmyDoc("Create a channel which returns the timing of the given note")]
+        public static NoteTimingChannel NoteTiming()
+            => new NoteTimingChannel();
     }
 }
