@@ -110,6 +110,9 @@ namespace ArcCreate.Gameplay.Data
                 Vector3 arctapPos = new Vector3(arctap.WorldX, arctap.WorldY, 0);
                 Vector3 direction = arctapPos - basePos;
 
+                Color thisConnectionColor = connectionColor;
+                thisConnectionColor.a *= Mathf.Min(color.a, groupProperties.GetColor(arctap).a);
+
                 Matrix4x4 lineMatrix = matrix * Matrix4x4.TRS(
                     pos: Vector3.zero,
                     q: Quaternion.LookRotation(direction, Vector3.up),

@@ -107,7 +107,7 @@ namespace ArcCreate.Gameplay.Data
             Matrix4x4 shadowMatrix = matrix * Matrix4x4.Translate(new Vector3(0, -pos.y, 0));
 
             float alpha = ArcFormula.CalculateFadeOutAlpha(z);
-            Color color = groupProperties.Color;
+            Color color = groupProperties.GetColor(this);
             color.a *= alpha;
 
             Services.Render.DrawArcTap(isSfx, texture, matrix, color, IsSelected);

@@ -538,8 +538,9 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 noteIndividualGroups.Add(group.GroupNumber, c);
                 return c;
             }
-            catch
+            catch (Exception e)
             {
+                Debug.LogException(e);
                 return null;
             }
         }

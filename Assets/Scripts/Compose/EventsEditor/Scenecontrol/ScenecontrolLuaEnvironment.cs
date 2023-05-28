@@ -7,6 +7,7 @@ using ArcCreate.Compose.Navigation;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Gameplay.Scenecontrol;
 using ArcCreate.Utility.Lua;
+using EmmySharp;
 using MoonSharp.Interpreter;
 using UnityEngine;
 
@@ -96,7 +97,10 @@ namespace ArcCreate.Compose.EventsEditor
                 .Build(Path.GetDirectoryName(Services.Project.CurrentProject.Path));
         }
 
-        public void AddScenecontrol(string name, DynValue argNames, DynValue scDef)
+        public void AddScenecontrol(
+            string name,
+            [EmmyType(Type = typeof(string[]))] DynValue argNames,
+            [EmmyType(Type = typeof(Action<LuaScenecontrol>))] DynValue scDef)
         {
             if (scenecontrolTypes.ContainsKey(name))
             {

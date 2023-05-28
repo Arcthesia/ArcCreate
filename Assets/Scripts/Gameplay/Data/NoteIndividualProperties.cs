@@ -23,9 +23,15 @@ namespace ArcCreate.Gameplay.Data
             properties = null;
         }
 
+        public void Clear()
+        {
+            properties.Clear();
+        }
+
         /// <summary>
         /// Get the properties for a given note, which can be modified
-        /// for use later on.
+        /// for use later on. Returns `null` if <see cref="IsEnabled"/>
+        /// returns false.
         /// </summary>
         /// <returns>The properties which are associated with a note.</returns>
         /// <param name="note">The note to find the properties of.</param>

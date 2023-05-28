@@ -170,7 +170,7 @@ namespace ArcCreate.Gameplay.Data
             }
 
             alpha *= Values.MaxHoldAlpha;
-            Color color = groupProperties.Color;
+            Color color = groupProperties.GetColor(this);
             color.a *= alpha;
 
             float from = 0;

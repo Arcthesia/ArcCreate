@@ -10,12 +10,444 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using MoonSharp.Interpreter;
+using UnityEngine;
 
 namespace EmmySharp
 {
+    public abstract class EmmyType
+    {
+        public virtual IEnumerable<EmmyType> Constituents
+        {
+            get
+            {
+                yield return this;
+            }
+        }
+
+        public static EmmyType From<T>()
+            => From(typeof(T));
+
+        public static EmmyType Void()
+            => Raw("nil");
+
+        public static EmmyType Integer()
+            => Raw("integer");
+
+        public static EmmyType Float()
+            => Raw("number");
+
+        public static EmmyType Bool()
+            => Raw("boolean");
+
+        public static EmmyType String()
+            => Raw("string");
+
+        public static EmmyType Any()
+            => Raw("any");
+
+        public static EmmyType From(Type ty)
+        {
+            if (ty == typeof(void))
+            {
+                return Void();
+            }
+            else if (ty == typeof(short) || ty == typeof(int) || ty == typeof(long)
+            || ty == typeof(ushort) || ty == typeof(uint) || ty == typeof(ulong))
+            {
+                return Integer();
+            }
+            else if (ty == typeof(float) || ty == typeof(double) || ty == typeof(decimal))
+            {
+                return Float();
+            }
+            else if (ty == typeof(bool))
+            {
+                return Bool();
+            }
+            else if (ty == typeof(string))
+            {
+                return String();
+            }
+            else if (ty == typeof(object) || ty == typeof(DynValue))
+            {
+                return Any();
+            }
+            else if (ty.IsArray)
+            {
+                var inner = From(ty.GetElementType());
+                return inner == null ? null : Array(inner);
+            }
+            else if (ty.IsGenericType && ty.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                var inner = From(ty.GetGenericArguments()[0]);
+                return inner == null ? null : Nullable(inner);
+            }
+            else if (ty.IsGenericType && ty.GetGenericTypeDefinition() == typeof(List<>))
+            {
+                var inner = From(ty.GetGenericArguments()[0]);
+                return inner == null ? null : Array(inner);
+            }
+            else if (ty.IsGenericType && ty.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+            {
+                var key = From(ty.GetGenericArguments()[0]);
+                var value = From(ty.GetGenericArguments()[1]);
+
+                if (key == null || value == null)
+                {
+                    return null;
+                }
+
+                return Table(key, value);
+            }
+            else if (typeof(Delegate).IsAssignableFrom(ty))
+            {
+                var invoke = ty.GetMethod("Invoke");
+                var iparams = invoke.GetParameters();
+
+                if (iparams.Any(p => p.ParameterType == ty))
+                {
+                    throw new InvalidOperationException("Cannot create a function type which is self-referential!");
+                }
+
+                var ret = From(invoke.ReturnType);
+                var par = iparams.Select(p => new EmmyValue { Type = From(p.ParameterType), Name = p.Name })
+                    .ToArray();
+
+                if (ret == null || par.Any(p => p.Type == null))
+                {
+                    return null;
+                }
+
+                return Function(ret, par);
+            }
+            else if (ty.Visible())
+            {
+                return new WrapperType { Type = ty };
+            }
+
+            return null;
+        }
+
+        public static EmmyType Array(EmmyType inner)
+        {
+            return new ArrayType { Inner = inner };
+        }
+
+        public static EmmyType Nullable(EmmyType inner)
+        {
+            return new NullableType { Inner = inner };
+        }
+
+        public static EmmyType Table(EmmyType key, EmmyType value)
+        {
+            return new TableType { Key = key, Value = value };
+        }
+
+        public static EmmyType Table(IReadOnlyDictionary<string, EmmyType> fields)
+        {
+            return new TableLiteralType { Fields = fields };
+        }
+
+        public static EmmyType Alias(string name, EmmyType inner)
+        {
+            return new AliasType { Name = name, Inner = inner };
+        }
+
+        public static EmmyType Option(params EmmyType[] types)
+        {
+            return new OptionType { Options = types };
+        }
+
+        public static EmmyType Option(params string[] literals)
+        {
+            return Option(literals.Select(Literal).ToArray());
+        }
+
+        public static EmmyType Function(EmmyType ret, params EmmyValue[] parameters)
+        {
+            return new FunctionType { Return = ret, Parameters = parameters };
+        }
+
+        public static EmmyType Function(params EmmyValue[] parameters)
+        {
+            return new FunctionType { Return = null, Parameters = parameters };
+        }
+
+        public static EmmyType Literal(string s)
+        {
+            return new LiteralStringType { Value = s };
+        }
+
+        public static EmmyType Raw(string s)
+        {
+            return new RawType { Text = s };
+        }
+
+        public virtual string GetDefinition()
+            => string.Empty;
+
+        public abstract override string ToString();
+
+        private class WrapperType : EmmyType
+        {
+            public Type Type { get; set; }
+
+            public override string ToString()
+            {
+                return Type.Name;
+            }
+        }
+
+        private class AliasType : EmmyType
+        {
+            public string Name { get; set; }
+
+            public EmmyType Inner { get; set; }
+
+            public override IEnumerable<EmmyType> Constituents
+            {
+                get
+                {
+                    yield return this;
+                    yield return Inner;
+                }
+            }
+
+            public override string GetDefinition()
+            {
+                return "---@alias " + Name + " " + Inner.ToString();
+            }
+
+            public override string ToString()
+            {
+                return Name;
+            }
+        }
+
+        private class NullableType : EmmyType
+        {
+            public EmmyType Inner { get; set; }
+
+            public override IEnumerable<EmmyType> Constituents
+            {
+                get
+                {
+                    yield return Inner;
+                }
+            }
+
+            public override string ToString()
+            {
+                return Inner.ToString() + "?";
+            }
+        }
+
+        private class ArrayType : EmmyType
+        {
+            public EmmyType Inner { get; set; }
+
+            public override IEnumerable<EmmyType> Constituents
+            {
+                get
+                {
+                    yield return Inner;
+                }
+            }
+
+            public override string ToString()
+            {
+                return Inner.ToString() + "[]";
+            }
+        }
+
+        private class OptionType : EmmyType
+        {
+            public IReadOnlyList<EmmyType> Options { get; set; }
+
+            public override IEnumerable<EmmyType> Constituents
+            {
+                get
+                {
+                    foreach (var item in Options)
+                    {
+                        yield return item;
+                    }
+                }
+            }
+
+            public override string ToString()
+            {
+                return "(" + string.Join(" | ", Options) + ")";
+            }
+        }
+
+        private class LiteralStringType : EmmyType
+        {
+            public string Value { get; set; }
+
+            public override string ToString()
+            {
+                return $"\"{Value}\"";
+            }
+        }
+
+        private class RawType : EmmyType
+        {
+            public string Text { get; set; }
+
+            public override string ToString()
+            {
+                return Text;
+            }
+        }
+
+        private class TableLiteralType : EmmyType
+        {
+            public override IEnumerable<EmmyType> Constituents
+            {
+                get
+                {
+                    foreach (var f in Fields.Values)
+                    {
+                        yield return f;
+                    }
+                }
+            }
+
+            public IReadOnlyDictionary<string, EmmyType> Fields { get; set; }
+
+            public override string ToString()
+            {
+                return $"{{{string.Join(", ", Fields.Select(kvp => $"{kvp.Key}: {kvp.Value}"))}}}";
+            }
+        }
+
+        private class TableType : EmmyType
+        {
+            public override IEnumerable<EmmyType> Constituents
+            {
+                get
+                {
+                    yield return Key;
+                    yield return Value;
+                }
+            }
+
+            public EmmyType Key { get; set; }
+
+            public EmmyType Value { get; set; }
+
+            public override string ToString()
+            {
+                return $"table<{Key}, {Value}>";
+            }
+        }
+
+        private class FunctionType : EmmyType
+        {
+            public override IEnumerable<EmmyType> Constituents
+            {
+                get
+                {
+                    foreach (var v in Parameters)
+                    {
+                        yield return v.Type;
+                    }
+
+                    yield return Return;
+                }
+            }
+
+            public IReadOnlyList<EmmyValue> Parameters { get; set; }
+
+            public EmmyType Return { get; set; }
+
+            public override string ToString()
+            {
+                var ret = "fun(" + string.Join(", ", Parameters.Select(p => p.Name + ": " + p.Type.ToString())) + ")";
+                if (Return != null)
+                {
+                    ret += " : " + Return.ToString();
+                }
+
+                return ret;
+            }
+        }
+    }
+
+    public class EmmyValue
+    {
+        public string Name { get; set; }
+
+        public string Doc { get; set; }
+
+        public virtual EmmyType Type { get; set; }
+
+        public bool ParamHasDefaultValue { get; set; }
+    }
+
+    public class EmmyFunction : EmmyValue
+    {
+        public IReadOnlyList<EmmyValue> Parameters { get; set; }
+
+        public EmmyType Return { get; set; }
+
+        public override EmmyType Type
+        {
+            get => EmmyType.Function(Return, Parameters.ToArray());
+            set => throw new InvalidOperationException();
+        }
+    }
+
+    public class EmmyClass
+    {
+        public string Doc { get; set; }
+
+        public string Name { get; set; }
+
+        public bool IsStatic { get; set; }
+
+        public bool IsSingleton { get; set; }
+
+        public EmmyClass Base { get; set; }
+
+        public IReadOnlyList<EmmyValue> Members { get; set; }
+
+        public IReadOnlyList<EmmyValue> Statics { get; set; }
+    }
+
     public class EmmySharpBuilder
     {
-        private readonly StringBuilder builder = new StringBuilder();
+        private readonly StringBuilder outputBuilder = new StringBuilder();
+
+        private readonly HashSet<EmmyType> constituentTypes = new HashSet<EmmyType>();
+        private readonly Dictionary<Type, EmmyClass> classes = new Dictionary<Type, EmmyClass>();
+        private readonly List<EmmyValue> values = new List<EmmyValue>();
+
+        private readonly Dictionary<string, EmmyType> aliases = new Dictionary<string, EmmyType>();
+
+        private void Add(EmmyValue value)
+        {
+            values.Add(value);
+
+            foreach (var t in value.Type.Constituents)
+            {
+                constituentTypes.Add(t);
+            }
+        }
+
+        private void Add(Type source, EmmyClass classs)
+        {
+            classes[source] = classs;
+
+            foreach (var v in classs.Members.Concat(classs.Statics))
+            {
+                foreach (var t in v.Type.Constituents)
+                {
+                    constituentTypes.Add(t);
+                }
+            }
+        }
 
         /// <summary>
         /// Get an emmy sharp builder which contains type information about the
@@ -36,14 +468,34 @@ namespace EmmySharp
         /// </summary>
         /// <returns>The content string.</returns>
         public override string ToString()
-            => builder.ToString();
+        {
+            outputBuilder.Clear();
+            outputBuilder.AppendLine("---@meta").AppendLine();
+
+            foreach (var consType in constituentTypes.Where(t => t != null))
+            {
+                outputBuilder.Append(consType.GetDefinition());
+            }
+
+            foreach (var freeValue in values)
+            {
+                RenderValue(freeValue);
+            }
+
+            foreach (var cls in classes.Values)
+            {
+                RenderClass(cls);
+            }
+
+            return outputBuilder.ToString();
+        }
 
         /// <summary>
         /// Append documentation. If null is provided, do nothing.
         /// </summary>
         /// <param name="doc">The document to append.</param>
         /// <returns>The builder instance.</returns>
-        public EmmySharpBuilder AppendDoc(string doc)
+        private EmmySharpBuilder RenderDoc(string doc)
         {
             if (doc is null)
             {
@@ -52,7 +504,7 @@ namespace EmmySharp
 
             foreach (var line in doc.Split(Environment.NewLine.ToCharArray()))
             {
-                builder.AppendLine("---" + line);
+                outputBuilder.AppendLine("---" + line);
             }
 
             return this;
@@ -62,22 +514,27 @@ namespace EmmySharp
         /// Append a static value specification to this builder.
         /// </summary>
         /// <param name="value">The value to append.</param>
-        /// <param name="baseTy">The base type.</param>
+        /// <param name="baseV">The base value.</param>
         /// <returns>The builder instance.</returns>
-        public EmmySharpBuilder AppendStaticValue(EmmySharpValue value, Type baseTy = null)
+        private EmmySharpBuilder RenderValue(EmmyValue value, string baseV = null)
         {
-            AppendDoc(value.Doc);
-            builder.Append("---@type ");
-            AppendTypeName(value.Type, value.Options);
-            builder.AppendLine();
-
-            if (baseTy != null)
+            if (value is EmmyFunction f)
             {
-                builder.Append(baseTy.Name + ".");
+                return RenderFunction(f, baseV);
             }
 
-            builder.AppendLine(value.Name.ToCamelCase() + " = nil");
-            builder.AppendLine();
+            RenderDoc(value.Doc);
+            outputBuilder.Append("---@type ");
+            outputBuilder.Append(value.Type);
+            outputBuilder.AppendLine();
+
+            if (baseV != null)
+            {
+                outputBuilder.Append(baseV + ".");
+            }
+
+            outputBuilder.AppendLine(value.Name + " = nil");
+            outputBuilder.AppendLine();
 
             return this;
         }
@@ -87,12 +544,13 @@ namespace EmmySharp
         /// </summary>
         /// <param name="field">The field to append.</param>
         /// <returns>The builder instance.</returns>
-        public EmmySharpBuilder AppendField(EmmySharpValue field)
+        private EmmySharpBuilder RenderField(EmmyValue field)
         {
-            AppendDoc(field.Doc);
-            builder.Append("---@field public " + field.Name.ToCamelCase() + " ");
-            AppendTypeName(field.Type, field.Options);
-            builder.AppendLine();
+            outputBuilder.Append("---@field public " + field.Name + " ");
+            outputBuilder.Append(field.Type);
+            outputBuilder.Append(' ');
+            outputBuilder.Append(field.Doc?.Replace(Environment.NewLine, "\n"));
+            outputBuilder.AppendLine();
 
             return this;
         }
@@ -100,226 +558,127 @@ namespace EmmySharp
         /// <summary>
         /// Append a class definition (static or otherwise) to this builder.
         /// </summary>
-        /// <param name="type">The class type to append.</param>
-        /// <param name="values">List of values.</param>
         /// <returns>The builder instance.</returns>
-        public EmmySharpBuilder AppendClassDefinition(Type type, IEnumerable<EmmySharpValue> values)
+        private EmmySharpBuilder RenderClass(EmmyClass cls)
         {
-            AppendDoc(type.EmmyDoc());
-            string alias = type.EmmyAlias();
-            builder
-                .AppendLine($"{alias ?? type.Name} = {{}}")
+            RenderDoc(cls.Doc);
+            outputBuilder
+                .AppendLine($"{cls.Name} = {{}}")
                 .AppendLine();
 
-            var staticValues = values.Where(f => f.IsStatic).ToArray();
-
-            foreach (var staticVal in staticValues)
+            foreach (var staticVal in cls.IsSingleton ? cls.Statics.Concat(cls.Members) : cls.Statics)
             {
-                AppendStaticValue(staticVal, type);
+                RenderValue(staticVal, cls.Name);
             }
-
-            bool singleton = type.IsDefined(typeof(EmmySingletonAttribute));
 
             // Ignore instance values and table for static classes
-            if (!type.IsAbstract || !type.IsSealed)
+            if (!cls.IsStatic && !cls.IsSingleton)
             {
-                AppendDoc(type.EmmyDoc());
-                builder.Append($"---@class {alias ?? type.Name}");
+                RenderDoc(cls.Doc);
+                outputBuilder.Append($"---@class {cls.Name}");
 
-                if (type.BaseType != typeof(object) && Attribute.IsDefined(type.BaseType, typeof(MoonSharpUserDataAttribute)))
+                if (cls.Base != null)
                 {
-                    string baseAlias = type.BaseType.EmmyAlias();
-                    builder.Append($" : {baseAlias ?? type.BaseType.Name}");
+                    outputBuilder.Append($" : {cls.Base.Name}");
                 }
 
-                builder.AppendLine();
+                outputBuilder.AppendLine();
 
-                foreach (var field in values.Where(f => !f.IsStatic))
+                foreach (var field in cls.Members)
                 {
-                    AppendField(field);
+                    if (!(field is EmmyFunction))
+                    {
+                        RenderField(field);
+                    }
                 }
 
-                if (!singleton)
+                outputBuilder.AppendLine($"local {cls.Name}__inst = {{}}");
+                outputBuilder.AppendLine();
+
+                foreach (var field in cls.Members)
                 {
-                    builder.AppendLine($"{alias ?? type.Name}__inst = {{}}");
-                    builder.AppendLine();
+                    if (field is EmmyFunction f)
+                    {
+                        RenderFunction(f, $"{cls.Name}__inst");
+                    }
                 }
-            }
-            else if (staticValues.Length != 0)
-            {
-                builder.AppendLine();
             }
 
             return this;
         }
+
+        private EmmyFunction LoadMethod(MethodInfo met)
+        {
+            return new EmmyFunction
+            {
+                Doc = met.EmmyDoc(),
+                Name = met.EmmyName(camelCase: true),
+                Parameters = met.GetParameters()
+                    .Select(p => new EmmyValue { Doc = p.EmmyDoc(), Name = p.EmmyName(p.Name), Type = p.GetEmmyType(p.ParameterType, aliases), ParamHasDefaultValue = p.HasDefaultValue })
+                    .ToArray(),
+                Return = met.ReturnParameter.GetEmmyType(met.ReturnType, aliases),
+            };
+        }
+
+        public EmmySharpBuilder AppendFunction(MethodInfo met)
+        {
+            Add(LoadMethod(met));
+
+            return this;
+        }
+
+        public EmmySharpBuilder AppendFunction<T>(string name)
+            => AppendFunction(typeof(T).GetMethod(name));
 
         /// <summary>
         /// Append a function with the given documentation. If this function belongs to a type,
         /// pass it as the member type.
         /// </summary>
-        /// <param name="method">The method to append.</param>
-        /// <param name="memberType">The member type.</param>
         /// <returns>The builder instance.</returns>
-        public EmmySharpBuilder AppendFunction(MethodInfo method, Type memberType = null)
+        private EmmySharpBuilder RenderFunction(EmmyFunction function, string baseV = "")
         {
-            AppendDoc(method.EmmyDoc());
+            RenderDoc(function.Doc);
 
-            var parameters = method.GetParameters();
-
-            foreach (var p in parameters)
+            foreach (var p in function.Parameters)
             {
-                builder.Append($"---@param {p.Name} ");
-                AppendTypeName(p.ParameterType, p.EmmyChoice());
-                builder.AppendLine();
+                outputBuilder.Append($"---@param {p.Name}{(p.ParamHasDefaultValue ? "?" : "")} ");
+                outputBuilder.Append(p.Type);
+                outputBuilder.Append(' ');
+                outputBuilder.Append(p.Doc);
+                outputBuilder.AppendLine();
             }
 
-            if (method.ReturnType != typeof(void))
+            if (function.Return != null)
             {
-                builder.Append($"---@return ");
-                AppendTypeName(method.ReturnType, method.ReturnTypeCustomAttributes.EmmyChoice());
-                builder.AppendLine();
+                outputBuilder.Append($"---@return ");
+                outputBuilder.Append(function.Return);
+                outputBuilder.AppendLine();
             }
 
-            builder.Append("function ");
+            outputBuilder.Append("function ");
 
-            if (memberType != null)
+            if (!string.IsNullOrEmpty(baseV))
             {
-                string memberTypeAlias = memberType.EmmyAlias();
-                builder.Append(memberTypeAlias ?? memberType.Name);
+                outputBuilder.Append(baseV);
+                outputBuilder.Append('.');
+            }
 
-                bool singleton = memberType.IsDefined(typeof(EmmySingletonAttribute));
-                if (!method.IsStatic && !singleton)
+            outputBuilder.Append(function.Name).Append('(');
+
+            for (var i = 0; i < function.Parameters.Count; i++)
+            {
+                var p = function.Parameters[i];
+
+                outputBuilder.Append(p.Name);
+                if (i != function.Parameters.Count - 1)
                 {
-                    builder.Append("__inst");
-                }
-
-                builder.Append('.');
-            }
-
-            string alias = method.EmmyAlias();
-            builder.Append(alias ?? method.Name.ToCamelCase()).Append('(');
-
-            for (var i = 0; i < parameters.Length; i++)
-            {
-                var p = parameters[i];
-                string paramName = RenameAvoidKeyword(p.Name);
-
-                builder.Append(paramName);
-                if (i != parameters.Length - 1)
-                {
-                    builder.Append(", ");
+                    outputBuilder.Append(", ");
                 }
             }
 
-            builder
+            outputBuilder
                 .AppendLine(") end")
                 .AppendLine();
-
-            return this;
-        }
-
-        /// <summary>
-        /// Appends the type name of the given type.
-        /// This function may 'error out', in which case an erroneous (but still legal)
-        /// type will be appended and a warning printed to the console's standard error.
-        /// </summary>
-        /// <param name="ty">Type to append.</param>
-        /// <param name="options">List of options.</param>
-        /// <returns>The builder instance.</returns>
-        public EmmySharpBuilder AppendTypeName(Type ty, string[] options = null)
-        {
-            if (ty == typeof(short) || ty == typeof(int) || ty == typeof(long)
-            || ty == typeof(ushort) || ty == typeof(uint) || ty == typeof(ulong))
-            {
-                builder.Append("integer");
-            }
-            else if (ty == typeof(float) || ty == typeof(double) || ty == typeof(decimal))
-            {
-                builder.Append("number");
-            }
-            else if (ty == typeof(bool))
-            {
-                builder.Append("boolean");
-            }
-            else if (ty == typeof(string))
-            {
-                if (options != null)
-                {
-                    builder
-                        .Append('(')
-                        .Append(string.Join(" | ", options.Select(t => $"'{t}'")))
-                        .Append(')');
-                }
-                else
-                {
-                    builder.Append("string");
-                }
-            }
-            else if (ty == typeof(object))
-            {
-                builder.Append("any");
-            }
-            else if (ty.IsArray)
-            {
-                AppendTypeName(ty.GetElementType(), options);
-                builder.Append("[]");
-            }
-            else if (ty.IsGenericType && ty.GetGenericTypeDefinition() == typeof(List<>))
-            {
-                AppendTypeName(ty.GetGenericArguments()[0], options);
-                builder.Append("[]");
-            }
-            else if (ty.IsGenericType && ty.GetGenericTypeDefinition() == typeof(Dictionary<,>))
-            {
-                builder.Append("table<");
-                AppendTypeName(ty.GetGenericArguments()[0], options);
-                builder.Append(", ");
-                AppendTypeName(ty.GetGenericArguments()[1], options);
-                builder.Append('>');
-            }
-            else if (Attribute.IsDefined(ty, typeof(MoonSharpUserDataAttribute)))
-            {
-                builder.Append(ty.Name);
-            }
-            else if (typeof(Delegate).IsAssignableFrom(ty))
-            {
-                var invoke = ty.GetMethod("Invoke");
-                var iparams = invoke.GetParameters();
-
-                builder.Append("fun(");
-                for (var i = 0; i < iparams.Length; i++)
-                {
-                    var p = iparams[i];
-
-                    if (p.ParameterType == ty)
-                    {
-                        Console.Error.WriteLine($"[ERROR]: Cannot generate emmylua for type {ty.FullName} since it is a recursive delegate type, falling back to 'fun(...):any'");
-                        builder.Append(") : any");
-                        return this;
-                    }
-
-                    builder.Append(p.Name + ":");
-                    AppendTypeName(p.ParameterType, p.EmmyChoice());
-
-                    if (i != iparams.Length - 1)
-                    {
-                        builder.Append(", ");
-                    }
-                }
-
-                builder.Append(')');
-
-                if (invoke.ReturnType != typeof(void))
-                {
-                    builder.Append(" : ");
-                    AppendTypeName(invoke.ReturnType, options);
-                }
-            }
-            else
-            {
-                Console.Error.WriteLine($"[ERROR]: Cannot generate emmylua for type {ty.FullName}, falling back to type 'any'");
-                builder.Append("any");
-            }
 
             return this;
         }
@@ -331,35 +690,84 @@ namespace EmmySharp
         /// <returns>The builder instance.</returns>
         public EmmySharpBuilder AppendType(Type type)
         {
-            var fields = new List<EmmySharpValue>();
-
-            foreach (var val in type.GetFields()
-                .Where(t => t.IsPublic)
-                .Where(t => t.DeclaringType == type)
-                .Where(t => !Attribute.IsDefined(t, typeof(MoonSharpHiddenAttribute))))
+            EmmyClass BuildClass(Type ty)
             {
-                fields.Add(new EmmySharpValue(val.EmmyDoc(), val.Name, val.FieldType, val.EmmyChoice(), val.IsStatic));
+                if (ty.IsConstructedGenericType)
+                {
+                    ty = ty.GetGenericTypeDefinition();
+                }
+
+                var cls = new EmmyClass { Name = ty.EmmyName() };
+
+                if (ty.BaseType != null && ty.BaseType.GetAttrOrNull<MoonSharpUserDataAttribute>() != null)
+                {
+                    var baseTy = ty.BaseType;
+
+                    if (baseTy.IsConstructedGenericType)
+                    {
+                        // TODO: support real generics
+                        baseTy = baseTy.GetGenericTypeDefinition();
+                    }
+
+                    if (!classes.TryGetValue(ty.BaseType, out var baseCls))
+                    {
+                        baseCls = BuildClass(ty.BaseType);
+                    }
+
+                    cls.Base = baseCls;
+                }
+
+                var members = new List<EmmyValue>();
+                var statics = new List<EmmyValue>();
+
+                cls.Members = members;
+                cls.Statics = statics;
+
+                foreach (var val in ty.GetFields()
+                    .Where(t => t.IsPublic)
+                    .Where(t => t.DeclaringType == ty)
+                    .Where(EmmyHelpers.Visible))
+                {
+                    (val.IsStatic ? statics : members).Add(new EmmyValue
+                    {
+                        Doc = val.EmmyDoc(),
+                        Name = val.EmmyName(camelCase: true),
+                        Type = val.GetEmmyType(val.FieldType, aliases),
+                    });
+                }
+
+                foreach (var val in ty.GetProperties()
+                    .Where(t => t.GetAccessors().First().IsPublic)
+                    .Where(t => t.DeclaringType == ty)
+                    .Where(EmmyHelpers.Visible))
+                {
+                    (val.GetAccessors().First().IsStatic ? statics : members).Add(new EmmyValue
+                    {
+                        Doc = val.EmmyDoc(),
+                        Name = val.EmmyName(camelCase: true),
+                        Type = val.GetEmmyType(val.PropertyType, aliases),
+                    });
+                }
+
+                foreach (var met in ty.GetMethods()
+                    .Where(t => t.IsPublic)
+                    .Where(t => !t.IsSpecialName)
+                    .Where(t => t.DeclaringType == ty)
+                    .Where(EmmyHelpers.Visible))
+                {
+                    // TODO: handle operators
+                    (met.IsStatic ? statics : members).Add(LoadMethod(met));
+                }
+
+                cls.IsStatic = ty.IsAbstract && ty.IsSealed;
+                cls.IsSingleton = ty.GetAttrOrNull<EmmySingletonAttribute>() != null;
+
+                Add(ty, cls);
+
+                return cls;
             }
 
-            foreach (var val in type.GetProperties()
-                .Where(t => t.GetAccessors().Any(a => a.IsPublic))
-                .Where(t => t.DeclaringType == type)
-                .Where(t => !Attribute.IsDefined(t, typeof(MoonSharpHiddenAttribute))))
-            {
-                fields.Add(new EmmySharpValue(val.EmmyDoc(), val.Name, val.PropertyType, val.EmmyChoice(), val.GetGetMethod().IsStatic));
-            }
-
-            AppendClassDefinition(type, fields);
-
-            foreach (var met in type.GetMethods()
-                .Where(t => t.IsPublic)
-                .Where(t => !t.IsSpecialName)
-                .Where(t => t.DeclaringType == type)
-                .Where(t => !Attribute.IsDefined(t, typeof(MoonSharpHiddenAttribute))))
-            {
-                AppendFunction(met, type);
-            }
-
+            BuildClass(type);
             return this;
         }
 
@@ -371,6 +779,13 @@ namespace EmmySharp
         public EmmySharpBuilder AppendType<T>()
             => AppendType(typeof(T));
 
+        public EmmySharpBuilder AppendAlias(string name, EmmyType type)
+        {
+            aliases.Add(name, EmmyType.Alias(name, type));
+
+            return this;
+        }
+
         /// <summary>
         /// Append all type information from the given assembly, including types not added to MoonSharp,
         /// which fall under the given group.
@@ -381,8 +796,8 @@ namespace EmmySharp
         public EmmySharpBuilder AppendGroup(Assembly assembly, string group)
         {
             foreach (var ty in assembly.GetTypes()
-                .Where(t => Attribute.IsDefined(t, typeof(EmmyGroupAttribute)))
-                .Where(t => ((EmmyGroupAttribute)Attribute.GetCustomAttribute(t, typeof(EmmyGroupAttribute))).GroupName == group))
+                .Where(EmmyHelpers.Visible)
+                .Where(t => t.GetAttrOrNull<EmmyGroupAttribute>()?.GroupName == group))
             {
                 AppendType(ty);
             }
@@ -406,7 +821,7 @@ namespace EmmySharp
         /// <returns>The builder instance.</returns>
         public EmmySharpBuilder AppendAssembly(Assembly assembly)
         {
-            foreach (var ty in assembly.GetTypes().Where(t => Attribute.IsDefined(t, typeof(MoonSharpUserDataAttribute))))
+            foreach (var ty in assembly.GetTypes().Where(EmmyHelpers.Visible))
             {
                 AppendType(ty);
             }
@@ -436,38 +851,8 @@ namespace EmmySharp
 
             filepath = Path.Combine(filepath, "lib.lua");
             File.WriteAllText(filepath, c);
-        }
 
-        private string RenameAvoidKeyword(string name)
-        {
-            switch (name)
-            {
-                case "and":
-                case "break":
-                case "do":
-                case "else":
-                case "elseif":
-                case "end":
-                case "false":
-                case "for":
-                case "function":
-                case "goto":
-                case "if":
-                case "in":
-                case "local":
-                case "nil":
-                case "not":
-                case "or":
-                case "repeat":
-                case "return":
-                case "then":
-                case "true":
-                case "until":
-                case "while":
-                    return "_" + name;
-                default:
-                    return name;
-            }
+            Debug.Log("Built emmylua to " + filepath);
         }
     }
 }

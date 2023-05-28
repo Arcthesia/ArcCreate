@@ -253,8 +253,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 }
             }
 
+            // Debug.Log("updating controller . . . ");
+
             if (this is INoteIndividualController ni)
             {
+                // Debug.Log("updating note individual controller . . . ");
+
                 foreach (var note in Services.Chart.GetTimingGroup(ni.GroupNumber).GetRenderingNotes())
                 {
                     NoteChannel.CurrentNote = note;
@@ -483,6 +487,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
+        [MoonSharpHidden]
         public List<object> SerializeProperties(ScenecontrolSerialization serialization)
         {
             List<object> result = new List<object>
@@ -591,6 +596,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return result;
         }
 
+        [MoonSharpHidden]
         public void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization)
         {
             customParent = deserialization.GetUnitFromId<Controller>(properties[0]);

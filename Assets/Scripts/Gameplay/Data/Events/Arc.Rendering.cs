@@ -183,7 +183,7 @@ namespace ArcCreate.Gameplay.Data
                 alpha = EndTiming - Timing <= 1 ? Values.MaxArcAlpha / 2 : Values.MaxArcAlpha;
             }
 
-            Color color = groupProperties.Color;
+            Color color = groupProperties.GetColor(this);
             color.a *= Mathf.Min(alpha, arcGroupAlpha);
 
             int clipToTiming;
@@ -244,7 +244,7 @@ namespace ArcCreate.Gameplay.Data
             if (!groupProperties.NoHeightIndicator && (clipToTiming <= Timing || groupProperties.NoClip) && ShouldDrawHeightIndicator)
             {
                 Matrix4x4 heightIndicatorMatrix = Matrix4x4.Scale(new Vector3(1, pos.y - (Values.TraceMeshOffset / 2), 1));
-                Services.Render.DrawHeightIndicator(matrix * heightIndicatorMatrix, heightIndicatorColor * groupProperties.Color);
+                Services.Render.DrawHeightIndicator(matrix * heightIndicatorMatrix, heightIndicatorColor * color);
             }
 
             if (!groupProperties.NoHead && (clipToTiming <= Timing || groupProperties.NoClip) && IsFirstArcOfGroup)
@@ -261,7 +261,7 @@ namespace ArcCreate.Gameplay.Data
 
             if (!groupProperties.NoArcCap && shouldDrawArcCap)
             {
-                Services.Render.DrawArcCap(arcCap, matrix * arcCapMatrix, arcCapColor * groupProperties.Color, isControllerMode);
+                Services.Render.DrawArcCap(arcCap, matrix * arcCapMatrix, arcCapColor * color, isControllerMode);
             }
 
             if (currentTiming <= longParticleUntil && currentTiming >= Timing && currentTiming <= EndTiming)

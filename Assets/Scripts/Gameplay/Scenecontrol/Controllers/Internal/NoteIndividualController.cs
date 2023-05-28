@@ -104,8 +104,22 @@ namespace ArcCreate.Gameplay.Scenecontrol
         }
 
         [MoonSharpHidden]
+        public void Clear()
+        {
+            TimingGroup.GroupProperties.IndividualOverrides.Clear();
+        }
+
+        [MoonSharpHidden]
         public void UpdateColor(Color color)
         {
+            if (NoteChannel.CurrentNote is null)
+            {
+                Clear();
+                return;
+            }
+
+            // Debug.Log("updating color for note @ " + NoteChannel.CurrentNote.Timing + "; " + color);
+
             TimingGroup.GroupProperties.IndividualOverrides.UseColor = true;
             CurrentProperties.Color = color;
         }
