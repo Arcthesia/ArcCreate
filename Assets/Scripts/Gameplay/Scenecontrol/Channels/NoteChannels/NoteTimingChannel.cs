@@ -20,7 +20,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         }
 
         public override float ValueAt(int timing)
-            => NoteChannel.CurrentNote?.Timing ?? 0;
+            => NoteIndividualController.CurrentNote?.Timing ?? 0;
 
         protected override IEnumerable<ValueChannel> GetChildrenChannels()
         {

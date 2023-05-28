@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
-
     [MoonSharpUserData]
     public class TimingChannel : ValueChannel
     {

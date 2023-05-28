@@ -1,5 +1,6 @@
 using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.Data;
+using EmmySharp;
 using MoonSharp.Interpreter;
 using UnityEngine;
 
@@ -15,6 +16,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
         private ValueChannel colorV;
         private ValueChannel colorA;
         private ValueChannel colorS;
+
+        public static Note CurrentNote { get; set; }
 
         public int GroupNumber => TimingGroup.GroupNumber;
 
@@ -99,9 +102,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             get
             {
-                return TimingGroup.GroupProperties.IndividualOverrides.PropertiesFor(NoteChannel.CurrentNote);
+                return TimingGroup.GroupProperties.IndividualOverrides.PropertiesFor(CurrentNote);
             }
         }
+
+        [EmmyDoc("Create a channel which returns the timing of the given note")]
+        public static NoteTimingChannel NoteTiming()
+            => new NoteTimingChannel();
 
         [MoonSharpHidden]
         public void Clear()
@@ -112,13 +119,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [MoonSharpHidden]
         public void UpdateColor(Color color)
         {
-            if (NoteChannel.CurrentNote is null)
+            if (CurrentNote is null)
             {
                 Clear();
                 return;
             }
-
-            // Debug.Log("updating color for note @ " + NoteChannel.CurrentNote.Timing + "; " + color);
 
             TimingGroup.GroupProperties.IndividualOverrides.UseColor = true;
             CurrentProperties.Color = color;

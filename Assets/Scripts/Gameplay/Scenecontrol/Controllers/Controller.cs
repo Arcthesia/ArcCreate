@@ -253,17 +253,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 }
             }
 
-            // Debug.Log("updating controller . . . ");
-
             if (this is INoteIndividualController ni)
             {
-                // Debug.Log("updating note individual controller . . . ");
-
                 foreach (var note in Services.Chart.GetTimingGroup(ni.GroupNumber).GetRenderingNotes())
                 {
-                    NoteChannel.CurrentNote = note;
+                    NoteIndividualController.CurrentNote = note;
                     UpdateOnce();
-                    NoteChannel.CurrentNote = null;
+                    NoteIndividualController.CurrentNote = null;
                 }
             }
             else

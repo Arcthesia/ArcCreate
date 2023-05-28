@@ -90,9 +90,5 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [EmmyDoc("Create a channel which returns the current timing")]
         public static TimingChannel Timing()
             => new TimingChannel();
-
-        [EmmyDoc("Create a channel which returns the timing of the given note")]
-        public static NoteTimingChannel NoteTiming()
-            => new NoteTimingChannel();
     }
 }
