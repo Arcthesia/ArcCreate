@@ -106,10 +106,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
-        [EmmyDoc("Create a channel which returns the timing of the given note")]
-        public static NoteTimingChannel NoteTiming()
-            => new NoteTimingChannel();
-
         [MoonSharpHidden]
         public void Clear()
         {

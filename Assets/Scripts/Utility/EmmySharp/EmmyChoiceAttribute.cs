@@ -7,7 +7,6 @@ using System;
 
 namespace EmmySharp
 {
-    [Obsolete("Prefer EmmyType with \"Alias = . . .\" or \"Raw = . . .\"")]
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.ReturnValue | AttributeTargets.Property | AttributeTargets.Field)]
     public class EmmyChoiceAttribute : Attribute
     {

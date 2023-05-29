@@ -1,7 +1,9 @@
+using MoonSharp.Interpreter;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay
 {
+    [MoonSharpUserData]
     public static class Values
     {
         // Playfield
@@ -56,17 +58,17 @@ namespace ArcCreate.Gameplay
         public const int BeatlineThickness = 20;
 
         // Judgement
-        public const int ScoreModifyDelay = 500;
-        public const int ArcLockDuration = 500;
-        public const int ArcGraceDuration = 600;
-        public const int ArcRedFlashCycle = 500;
-        public const float ComboLostFlashDuration = 0.1f;
+        [MoonSharpHidden] public const int ScoreModifyDelay = 500;
+        [MoonSharpHidden] public const int ArcLockDuration = 500;
+        [MoonSharpHidden] public const int ArcGraceDuration = 600;
+        [MoonSharpHidden] public const int ArcRedFlashCycle = 500;
+        [MoonSharpHidden] public const float ComboLostFlashDuration = 0.1f;
         public const float ArcHitboxX = 1.9f;
         public const float ArcHitboxY = 2.5f;
         public const float ArcTapHitboxX = 3.02f;
         public const float ArcTapHitboxYDown = 3.1f;
         public const float ArcTapHitboxYUp = 2.5f;
-        public const float MinLongNoteTimeIncrement = 0.1f;
+        [MoonSharpHidden] public const float MinLongNoteTimeIncrement = 0.1f;
 
         // Camera
         public const float CameraY = 9f;
@@ -80,50 +82,50 @@ namespace ArcCreate.Gameplay
         public const float CameraArcPosScalar = 0.05f;
 
         // Strings
-        public const string EarlyText = "EARLY";
-        public const string LateText = "LATE";
-        public const string BeatlinePoolName = "beatline";
-        public const string TapParticlePoolName = "tapparticle";
-        public const string ArcParticlePoolName = "arcparticle";
-        public const string HoldParticlePoolName = "holdparticle";
+        [MoonSharpHidden] public const string EarlyText = "EARLY";
+        [MoonSharpHidden] public const string LateText = "LATE";
+        [MoonSharpHidden] public const string BeatlinePoolName = "beatline";
+        [MoonSharpHidden] public const string TapParticlePoolName = "tapparticle";
+        [MoonSharpHidden] public const string ArcParticlePoolName = "arcparticle";
+        [MoonSharpHidden] public const string HoldParticlePoolName = "holdparticle";
 
         // I sure hope no charter will make use of lane -2147483648
-        public const int InvalidLane = int.MinValue;
+        [MoonSharpHidden] public const int InvalidLane = int.MinValue;
 
-        public const int DelayBeforeAudioStart = 2000;
+        [MoonSharpHidden] public const int DelayBeforeAudioStart = 2000;
 
-        public const int DelayBeforeAudioResume = 200;
+        [MoonSharpHidden] public const int DelayBeforeAudioResume = 200;
 
-        public static int ChartAudioOffset { get; internal set; } = 0;
+        [MoonSharpHidden] public static int ChartAudioOffset { get; internal set; } = 0;
 
-        public static float BaseBpm { get; set; } = 100;
+        [MoonSharpHidden] public static float BaseBpm { get; set; } = 100;
 
-        public static float TimingPointDensity { get; set; } = 1;
+        [MoonSharpHidden] public static float TimingPointDensity { get; set; } = 1;
 
-        public static Color[] DefaultDifficultyColors { get; set; } = new Color[] { };
+        [MoonSharpHidden] public static Color[] DefaultDifficultyColors { get; set; } = new Color[] { };
 
-        public static float LaneFrom { get; set; } = 1;
+        [MoonSharpHidden] public static float LaneFrom { get; set; } = 1;
 
-        public static float LaneTo { get; set; } = 4;
+        [MoonSharpHidden] public static float LaneTo { get; set; } = 4;
 
-        public static bool EnableColliderGeneration { get; set; } = false;
+        [MoonSharpHidden] public static bool EnableColliderGeneration { get; set; } = false;
 
-        public static bool EnableArcRebuildSegment { get; set; } = true;
+        [MoonSharpHidden] public static bool EnableArcRebuildSegment { get; set; } = true;
 
-        public static Vector2 LaneScreenHitboxBase { get; set; } = Vector2.one;
+        [MoonSharpHidden] public static Vector2 LaneScreenHitboxBase { get; set; } = Vector2.one;
 
-        public static Vector2 ScreenSizeBase { get; set; } = Vector2.one;
+        [MoonSharpHidden] public static Vector2 ScreenSizeBase { get; set; } = Vector2.one;
 
-        public static Vector2 ScreenSize { get; set; } = Vector2.one;
+        [MoonSharpHidden] public static Vector2 ScreenSize { get; set; } = Vector2.one;
 
-        public static float LaneScreenHitboxHorizontal => LaneScreenHitboxBase.x * ScreenSize.x / ScreenSizeBase.x;
+        [MoonSharpHidden] public static float LaneScreenHitboxHorizontal => LaneScreenHitboxBase.x * ScreenSize.x / ScreenSizeBase.x;
 
-        public static float LaneScreenHitboxVertical => LaneScreenHitboxBase.y * ScreenSize.y / ScreenSizeBase.y;
+        [MoonSharpHidden] public static float LaneScreenHitboxVertical => LaneScreenHitboxBase.y * ScreenSize.y / ScreenSizeBase.y;
 
-        public static bool EnablePauseMenu { get; internal set; } = true;
+        [MoonSharpHidden] public static bool EnablePauseMenu { get; internal set; } = true;
 
-        public static bool ShouldNotifyOnAudioEnd { get; internal set; } = false;
+        [MoonSharpHidden] public static bool ShouldNotifyOnAudioEnd { get; internal set; } = false;
 
-        public static int RetryCount { get; internal set; } = 0;
+        [MoonSharpHidden] public static int RetryCount { get; internal set; } = 0;
     }
 }

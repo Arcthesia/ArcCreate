@@ -53,29 +53,29 @@ namespace EmmySharp
         {
             EmmyType GetTypeNoMod()
             {
-                var attr = p.GetAttrOrNull<EmmyTypeAttribute>();
+                var typeAttr = p.GetAttrOrNull<EmmyTypeAttribute>();
 
-                if (attr is null)
+                if (typeAttr is null)
                 {
-                    return EmmyType.From(baseType);
-                }
+                    var choicesAttr = p.GetAttrOrNull<EmmyChoiceAttribute>();
 
-                if (attr.Alias is null && attr.Type is null)
-                {
-                    return EmmyType.Raw(attr.Raw);
-                }
-                else if (attr.Type is null)
-                {
-                    if (!aliases.TryGetValue(attr.Alias, out var ty))
+                    if (choicesAttr is null)
                     {
-                        throw new InvalidOperationException($"Cannot find emmy alias {attr.Alias} in current context!");
+                        return EmmyType.From(baseType);
                     }
-
-                    return ty;
+                    else
+                    {
+                        return EmmyType.Option(choicesAttr.Values);
+                    }
                 }
                 else
                 {
-                    return EmmyType.From(attr.Type);
+                    if (typeAttr.Raw is null)
+                    {
+                        return EmmyType.From(typeAttr.Type);
+                    }
+
+                    return EmmyType.Raw(typeAttr.Raw);
                 }
             }
 

@@ -48,6 +48,7 @@ namespace ArcCreate.Compose.EventsEditor
         public void SetupScript(Script script)
         {
             script.Globals["Channel"] = new ValueChannelBuilder();
+            script.Globals["NoteData"] = new NoteChannelBuilder();
             script.Globals["StringChannel"] = new StringChannelBuilder();
             script.Globals["TextChannel"] = new TextChannelBuilder();
             script.Globals["Trigger"] = new TriggerBuilder();
@@ -85,22 +86,26 @@ namespace ArcCreate.Compose.EventsEditor
             ExecuteEvents();
         }
 
-        public void GenerateEmmyLua()
+        public void GenerateEmmyLua(string file = null)
         {
             Assembly scAssembly = Assembly.GetAssembly(typeof(ScenecontrolService));
             LuaRunner.GetCommonEmmySharp()
+                .AppendAlias("ScenecontrolArgs", EmmyType.Table(
+                    ("timing", EmmyType.Integer),
+                    ("timingGroup", EmmyType.Integer),
+                    ("args", EmmyType.Array(EmmyType.Option(EmmyType.Integer, EmmyType.String)))))
                 .AppendAssembly(scAssembly)
-                .AppendFunction(typeof(ScenecontrolLuaEnvironment).GetMethod("AddScenecontrol"))
-                .AppendFunction(typeof(ScenecontrolLuaEnvironment).GetMethod("Notify"))
-                .AppendFunction(typeof(ScenecontrolLuaEnvironment).GetMethod("NotifyWarn"))
-                .AppendFunction(typeof(ScenecontrolLuaEnvironment).GetMethod("NotifyError"))
-                .Build(Path.GetDirectoryName(Services.Project.CurrentProject.Path));
+                .AppendFunction<ScenecontrolLuaEnvironment>("AddScenecontrol")
+                .AppendFunction<ScenecontrolLuaEnvironment>("Notify")
+                .AppendFunction<ScenecontrolLuaEnvironment>("NotifyWarn")
+                .AppendFunction<ScenecontrolLuaEnvironment>("NotifyError")
+                .Build(file ?? Path.GetDirectoryName(Services.Project.CurrentProject.Path));
         }
 
         public void AddScenecontrol(
             string name,
-            [EmmyType(Type = typeof(string[]))] DynValue argNames,
-            [EmmyType(Type = typeof(Action<LuaScenecontrol>))] DynValue scDef)
+            [EmmyType(typeof(string[]))] DynValue argNames,
+            [EmmyType("ScenecontrolArgs")] DynValue scDef)
         {
             if (scenecontrolTypes.ContainsKey(name))
             {

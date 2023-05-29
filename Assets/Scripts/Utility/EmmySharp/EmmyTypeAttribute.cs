@@ -10,10 +10,18 @@ namespace EmmySharp
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.ReturnValue)]
     public class EmmyTypeAttribute : Attribute
     {
-        public string Alias { get; set; }
+        public EmmyTypeAttribute(Type type)
+        {
+            Type = type;
+        }
 
-        public string Raw { get; set; }
+        public EmmyTypeAttribute(string raw)
+        {
+            Raw = raw;
+        }
 
-        public Type Type { get; set; }
+        public Type Type { get; }
+
+        public string Raw { get; }
     }
 }

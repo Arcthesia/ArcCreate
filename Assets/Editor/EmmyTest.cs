@@ -13,14 +13,8 @@ namespace ArcCreate.EditorScripts
         [MenuItem("ArcCreate/TestEmmy/Scenecontrol")]
         public static void GenerateTestScenecontrolEmmy()
         {
-            Assembly scAssembly = Assembly.GetAssembly(typeof(ScenecontrolService));
-            var emmy = LuaRunner.GetCommonEmmySharp();
-            emmy.AppendAssembly(scAssembly);
-            emmy.AppendFunction(typeof(ScenecontrolLuaEnvironment).GetMethod("AddScenecontrol"));
-            emmy.AppendFunction(typeof(ScenecontrolLuaEnvironment).GetMethod("Notify"));
-            emmy.AppendFunction(typeof(ScenecontrolLuaEnvironment).GetMethod("NotifyWarn"));
-            emmy.AppendFunction(typeof(ScenecontrolLuaEnvironment).GetMethod("NotifyError"));
-            emmy.Build(Path.GetDirectoryName(Application.dataPath));
+            ScenecontrolLuaEnvironment env = new ScenecontrolLuaEnvironment();
+            env.GenerateEmmyLua(Path.Combine(Application.dataPath, ".."));
         }
     }
 }

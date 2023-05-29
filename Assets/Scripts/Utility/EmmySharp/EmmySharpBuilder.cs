@@ -27,50 +27,50 @@ namespace EmmySharp
         public static EmmyType From<T>()
             => From(typeof(T));
 
-        public static EmmyType Void()
+        public static EmmyType Void
             => Raw("nil");
 
-        public static EmmyType Integer()
+        public static EmmyType Integer
             => Raw("integer");
 
-        public static EmmyType Float()
+        public static EmmyType Float
             => Raw("number");
 
-        public static EmmyType Bool()
+        public static EmmyType Bool
             => Raw("boolean");
 
-        public static EmmyType String()
+        public static EmmyType String
             => Raw("string");
 
-        public static EmmyType Any()
+        public static EmmyType Any
             => Raw("any");
 
         public static EmmyType From(Type ty)
         {
             if (ty == typeof(void))
             {
-                return Void();
+                return Void;
             }
             else if (ty == typeof(short) || ty == typeof(int) || ty == typeof(long)
             || ty == typeof(ushort) || ty == typeof(uint) || ty == typeof(ulong))
             {
-                return Integer();
+                return Integer;
             }
             else if (ty == typeof(float) || ty == typeof(double) || ty == typeof(decimal))
             {
-                return Float();
+                return Float;
             }
             else if (ty == typeof(bool))
             {
-                return Bool();
+                return Bool;
             }
             else if (ty == typeof(string))
             {
-                return String();
+                return String;
             }
             else if (ty == typeof(object) || ty == typeof(DynValue))
             {
-                return Any();
+                return Any;
             }
             else if (ty.IsArray)
             {
@@ -143,9 +143,9 @@ namespace EmmySharp
             return new TableType { Key = key, Value = value };
         }
 
-        public static EmmyType Table(IReadOnlyDictionary<string, EmmyType> fields)
+        public static EmmyType Table(params (string name, EmmyType type)[] fields)
         {
-            return new TableLiteralType { Fields = fields };
+            return new TableLiteralType { Fields = fields.ToDictionary(p => p.name, p => p.type) };
         }
 
         public static EmmyType Alias(string name, EmmyType inner)
@@ -472,9 +472,14 @@ namespace EmmySharp
             outputBuilder.Clear();
             outputBuilder.AppendLine("---@meta").AppendLine();
 
-            foreach (var consType in constituentTypes.Where(t => t != null))
+            foreach (var consType in constituentTypes)
             {
-                outputBuilder.Append(consType.GetDefinition());
+                var definition = consType.GetDefinition();
+
+                if (!string.IsNullOrEmpty(definition))
+                {
+                    outputBuilder.AppendLine(definition).AppendLine();
+                }
             }
 
             foreach (var freeValue in values)
@@ -699,7 +704,7 @@ namespace EmmySharp
 
                 var cls = new EmmyClass { Name = ty.EmmyName() };
 
-                if (ty.BaseType != null && ty.BaseType.GetAttrOrNull<MoonSharpUserDataAttribute>() != null)
+                if (ty.BaseType != null && ty.BaseType.Visible())
                 {
                     var baseTy = ty.BaseType;
 
@@ -781,7 +786,13 @@ namespace EmmySharp
 
         public EmmySharpBuilder AppendAlias(string name, EmmyType type)
         {
-            aliases.Add(name, EmmyType.Alias(name, type));
+            var alias = EmmyType.Alias(name, type);
+            aliases[name] = alias;
+
+            foreach (var constituent in alias.Constituents)
+            {
+                constituentTypes.Add(constituent);
+            }
 
             return this;
         }

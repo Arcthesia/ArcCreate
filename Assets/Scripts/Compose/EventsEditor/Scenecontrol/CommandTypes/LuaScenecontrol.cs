@@ -1,8 +1,10 @@
+using EmmySharp;
 using MoonSharp.Interpreter;
 
 namespace ArcCreate.Compose.EventsEditor
 {
     [MoonSharpUserData]
+    [EmmyAlias("ScenecontrolArgs")]
     internal class LuaScenecontrol
     {
         public int Timing { get; set; }
