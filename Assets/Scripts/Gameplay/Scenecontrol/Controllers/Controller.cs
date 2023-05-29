@@ -130,10 +130,14 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 txt.EnableTextModule = txt2.EnableTextModule;
             }
 
+            if (this is IAngleController a && controller is IAngleController a2)
+            {
+                a.AngleX = a2.AngleX;
+                a.AngleY = a2.AngleY;
+            }
+
             if (this is INoteGroupController tg && controller is INoteGroupController tg2)
             {
-                tg.AngleX = tg2.AngleX;
-                tg.AngleY = tg2.AngleY;
                 tg.RotationIndividualX = tg2.RotationIndividualX;
                 tg.RotationIndividualY = tg2.RotationIndividualY;
                 tg.RotationIndividualZ = tg2.RotationIndividualZ;
@@ -193,7 +197,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 return;
             }
 
-            void UpdateOnce()
+            // Potentially individual updates
+            void UpdateMaybeIndividual()
             {
                 if (this is IPositionController pos && pos.EnablePositionModule)
                 {
@@ -251,6 +256,14 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
                     lyr.UpdateLayer(layer, sort, alpha);
                 }
+
+                if (this is IAngleController a && a.EnableAngleModule)
+                {
+                    float x = a.AngleX.ValueAt(timing);
+                    float y = a.AngleY.ValueAt(timing);
+
+                    a.UpdateAngle(x, y);
+                }
             }
 
             if (this is INoteIndividualController ni)
@@ -258,15 +271,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 foreach (var note in Services.Chart.GetTimingGroup(ni.GroupNumber).GetRenderingNotes())
                 {
                     NoteIndividualController.CurrentNote = note;
-                    UpdateOnce();
+                    UpdateMaybeIndividual();
                     NoteIndividualController.CurrentNote = null;
                 }
             }
             else
             {
-                UpdateOnce();
+                UpdateMaybeIndividual();
             }
 
+            // Definitely non-individual updates
             if (this is ITextController txt && txt.EnableTextModule)
             {
                 float lineSpacing = txt.DefaultLineSpacing;
@@ -297,10 +311,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 scale.y = tg.ScaleIndividualY.ValueAt(timing);
                 scale.z = tg.ScaleIndividualZ.ValueAt(timing);
 
-                angle.x = tg.AngleX.ValueAt(timing);
-                angle.y = tg.AngleY.ValueAt(timing);
-
-                tg.UpdateNoteGroup(Quaternion.Euler(rotation), scale, angle);
+                tg.UpdateNoteGroup(Quaternion.Euler(rotation), scale);
             }
 
             if (this is ICameraController cam && cam.EnableCameraModule)
@@ -372,6 +383,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             Active = new ConstantChannel(DefaultActive ? 1 : 0);
             SetActive(DefaultActive);
+
             if (this is IPositionController pos)
             {
                 pos.UpdatePosition(pos.DefaultTranslation, pos.DefaultRotation, pos.DefaultScale);
@@ -423,11 +435,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 txt.EnableTextModule = false;
             }
 
+            if (this is IAngleController a)
+            {
+                a.UpdateAngle(0, 0);
+                a.AngleX = new ConstantChannel(0);
+                a.AngleY = new ConstantChannel(0);
+            }
+
             if (this is INoteGroupController tg)
             {
-                tg.UpdateNoteGroup(Quaternion.identity, Vector3.one, Vector2.zero);
-                tg.AngleX = new ConstantChannel(0);
-                tg.AngleY = new ConstantChannel(0);
+                tg.UpdateNoteGroup(Quaternion.identity, Vector3.one);
                 tg.RotationIndividualX = new ConstantChannel(0);
                 tg.RotationIndividualY = new ConstantChannel(0);
                 tg.RotationIndividualZ = new ConstantChannel(0);
@@ -535,11 +552,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 result.Add(txt.CustomFont);
             }
 
+            if (this is IAngleController a)
+            {
+                result.Add(a.EnableAngleModule);
+                result.Add(serialization.AddUnitAndGetId(a.AngleX));
+                result.Add(serialization.AddUnitAndGetId(a.AngleY));
+            }
+
             if (this is INoteGroupController tg)
             {
                 result.Add(tg.EnableNoteGroupModule);
-                result.Add(serialization.AddUnitAndGetId(tg.AngleX));
-                result.Add(serialization.AddUnitAndGetId(tg.AngleY));
                 result.Add(serialization.AddUnitAndGetId(tg.RotationIndividualX));
                 result.Add(serialization.AddUnitAndGetId(tg.RotationIndividualY));
                 result.Add(serialization.AddUnitAndGetId(tg.RotationIndividualZ));
@@ -652,11 +674,17 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 txt.EnableTextModule = enable;
             }
 
+            if (this is IAngleController a)
+            {
+                bool enable = (bool)properties[offset++];
+                a.AngleX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                a.AngleY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                a.EnableAngleModule = enable;
+            }
+
             if (this is INoteGroupController tg)
             {
                 bool enable = (bool)properties[offset++];
-                tg.AngleX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
-                tg.AngleY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
                 tg.RotationIndividualX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
                 tg.RotationIndividualY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
                 tg.RotationIndividualZ = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);

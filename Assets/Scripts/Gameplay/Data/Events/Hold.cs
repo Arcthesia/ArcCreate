@@ -100,7 +100,7 @@ namespace ArcCreate.Gameplay.Data
             float z = ZPos(fp);
             float endZ = EndZPos(fp);
             Vector3 basePos = new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
-            pos = (TimingGroupInstance.GroupProperties.FallDirection * z) + basePos;
+            pos = (TimingGroupInstance.GroupProperties.GetFallDirection(this) * z) + basePos;
             scl = TimingGroupInstance.GroupProperties.ScaleIndividual;
             scl.z *= z - endZ;
         }
@@ -136,12 +136,12 @@ namespace ArcCreate.Gameplay.Data
 
             float z = ZPos(currentFloorPosition);
             float endZ = EndZPos(currentFloorPosition);
-            Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
+            Vector3 pos = (groupProperties.GetFallDirection(this) * z) + new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
-            Matrix4x4 matrix = groupProperties.GroupMatrix
+            Matrix4x4 matrix = groupProperties.GetMatrix(this)
                              * Matrix4x4.TRS(pos, rot, scl)
-                             * MatrixUtility.Shear(groupProperties.FallDirection * (z - endZ));
+                             * MatrixUtility.Shear(groupProperties.GetFallDirection(this) * (z - endZ));
 
             float alpha = 1;
             if (highlight)

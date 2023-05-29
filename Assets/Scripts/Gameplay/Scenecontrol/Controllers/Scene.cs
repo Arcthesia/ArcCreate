@@ -324,6 +324,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
             spriteCache.Clear();
             noteGroups.Clear();
+            noteIndividualGroups.Clear();
         }
 
         [MoonSharpHidden]

@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using ArcCreate.ChartFormat;
 using ArcCreate.Gameplay.Skin;
 using UnityEngine;
@@ -87,23 +88,36 @@ namespace ArcCreate.Gameplay.Data
 
         public NoteIndividualProperties IndividualOverrides { get; set; } = new NoteIndividualProperties();
 
-        public Vector3 FallDirection
+        public Vector3 GetFallDirection(Note note = null)
         {
-            get
-            {
-                float angleXf = 90.0f - AngleX - SCAngleX;
-                float angleYf = AngleY + SCAngleY;
+            float angleXf = 90.0f - GetAngleX(note);
+            float angleYf = GetAngleY(note);
 
-                float x = Mathf.Sin(angleXf * Mathf.Deg2Rad) * Mathf.Sin(angleYf * Mathf.Deg2Rad);
-                float y = -Mathf.Cos(angleXf * Mathf.Deg2Rad);
-                float z = Mathf.Sin(angleXf * Mathf.Deg2Rad) * Mathf.Cos(angleYf * Mathf.Deg2Rad);
-                return new Vector3(x, y, z);
-            }
+            float x = Mathf.Sin(angleXf * Mathf.Deg2Rad) * Mathf.Sin(angleYf * Mathf.Deg2Rad);
+            float y = -Mathf.Cos(angleXf * Mathf.Deg2Rad);
+            float z = Mathf.Sin(angleXf * Mathf.Deg2Rad) * Mathf.Cos(angleYf * Mathf.Deg2Rad);
+
+            return new Vector3(x, y, z);
         }
 
         public Color GetColor(Note note)
         {
-            return GetNIProperty(note, this.Color, ni => ni.UseColor, n => n.Color);
+            return Color * GetNIProperty(note, Color.white, ni => ni.UseColor, n => n.Color);
+        }
+
+        public Matrix4x4 GetMatrix(Note note)
+        {
+            return GroupMatrix * GetNIProperty(note, Matrix4x4.identity, ni => ni.UsePosition, n => n.Matrix);
+        }
+
+        public float GetAngleX(Note note)
+        {
+            return AngleX + SCAngleX + GetNIProperty(note, 0, ni => ni.UseAngle, n => n.Angles.x);
+        }
+
+        public float GetAngleY(Note note)
+        {
+            return AngleY + SCAngleY + GetNIProperty(note, 0, ni => ni.UseAngle, n => n.Angles.y);
         }
 
         public RawTimingGroup ToRaw()
@@ -129,16 +143,22 @@ namespace ArcCreate.Gameplay.Data
         /// <summary>
         /// Get a property which may be overriden on a per-note basis.
         /// </summary>
-        private T GetNIProperty<T>(Note note, T sharedValue, Predicate<NoteIndividualProperties> nienabled, Func<NoteProperties, T> nivalue)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private T GetNIProperty<T>(Note note, T defaultValue, Predicate<NoteIndividualProperties> nienabled, Func<NoteProperties, T> nivalue)
         {
+            if (note is null)
+            {
+                return defaultValue;
+            }
+
             if (!IndividualOverrides.IsEnabled)
             {
-                return sharedValue;
+                return defaultValue;
             }
 
             if (!nienabled(IndividualOverrides))
             {
-                return sharedValue;
+                return defaultValue;
             }
 
             var ni = IndividualOverrides.PropertiesFor(note);

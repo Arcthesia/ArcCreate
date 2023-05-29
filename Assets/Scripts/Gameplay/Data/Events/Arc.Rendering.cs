@@ -137,7 +137,7 @@ namespace ArcCreate.Gameplay.Data
             double fp = TimingGroupInstance.GetFloorPosition(timing);
             float z = ZPos(fp);
             Vector3 basePos = new Vector3(ArcFormula.ArcXToWorld(XStart), ArcFormula.ArcYToWorld(YStart), 0);
-            pos = (TimingGroupInstance.GroupProperties.FallDirection * z) + basePos;
+            pos = (TimingGroupInstance.GroupProperties.GetFallDirection(this) * z) + basePos;
             scl = TimingGroupInstance.GroupProperties.ScaleIndividual;
         }
 
@@ -146,10 +146,10 @@ namespace ArcCreate.Gameplay.Data
             float z = ZPos(currentFloorPosition);
 
             Vector3 basePos = new Vector3(ArcFormula.ArcXToWorld(XStart), ArcFormula.ArcYToWorld(YStart), 0);
-            Vector3 pos = (groupProperties.FallDirection * z) + basePos;
+            Vector3 pos = (groupProperties.GetFallDirection(this) * z) + basePos;
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
-            Matrix4x4 matrix = groupProperties.GroupMatrix * Matrix4x4.TRS(pos, rot, scl);
+            Matrix4x4 matrix = groupProperties.GetMatrix(this) * Matrix4x4.TRS(pos, rot, scl);
 
             float alpha = 1;
             float redArcValue = Services.Skin.GetRedArcValue(Color);
@@ -204,7 +204,7 @@ namespace ArcCreate.Gameplay.Data
                 currentFloorPosition,
                 clipToTiming,
                 clipToFloorPosition,
-                groupProperties.FallDirection,
+                groupProperties.GetFallDirection(this),
                 z,
                 groupProperties.NoClip);
 
@@ -222,7 +222,7 @@ namespace ArcCreate.Gameplay.Data
                     continue;
                 }
 
-                var (bodyMatrix, shadowMatrix) = segment.GetMatrices(currentFloorPosition, groupProperties.FallDirection, z, pos.y);
+                var (bodyMatrix, shadowMatrix) = segment.GetMatrices(currentFloorPosition, groupProperties.GetFallDirection(this), z, pos.y);
                 if (IsTrace)
                 {
                     Services.Render.DrawTraceSegment(matrix * bodyMatrix, color, IsSelected);

@@ -94,8 +94,18 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     return new SumChannel();
                 case "channel.timing":
                     return new TimingChannel();
+
+                // Note channels
                 case "channel.note.timing":
                     return new NoteTimingChannel();
+                case "channel.note.floorpos":
+                    return new NoteFloorPositionChannel();
+                case "channel.note.x":
+                    return new NoteXPositionChannel();
+                case "channel.note.y":
+                    return new NoteYPositionChannel();
+                case "channel.note.z":
+                    return new NoteZPositionChannel();
 
                 // Triggers channels
                 case "channel.trigger.accumulate":

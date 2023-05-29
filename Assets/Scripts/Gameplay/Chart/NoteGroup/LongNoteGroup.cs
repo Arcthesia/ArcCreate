@@ -14,13 +14,13 @@ namespace ArcCreate.Gameplay.Chart
     {
         private readonly RangeTree<Note> timingTree = new RangeTree<Note>();
         private readonly RangeTree<Note> floorPositionTree = new RangeTree<Note>();
-        private readonly List<Note> lastRenderingNotes = new List<Note>();
+        private readonly List<Note> renderingNotes = new List<Note>(TimingGroup.RenderingNotesPreallocCount);
 
         protected RangeTree<Note> TimingTree => timingTree;
 
         protected RangeTree<Note> FloorPositionTree => floorPositionTree;
 
-        protected List<Note> LastRenderingNotes => lastRenderingNotes;
+        protected List<Note> RenderingNotes => renderingNotes;
 
         public override void UpdateJudgement(int timing, double floorPosition, GroupProperties groupProperties)
         {
@@ -42,9 +42,9 @@ namespace ArcCreate.Gameplay.Chart
             }
         }
 
-        public override void UpdateRender(int timing, double floorPosition, GroupProperties groupProperties)
+        public override void UpdateRenderingNotes(int timing, double floorPosition, GroupProperties groupProperties)
         {
-            lastRenderingNotes.Clear();
+            renderingNotes.Clear();
             if (Notes.Count == 0 || !groupProperties.Visible)
             {
                 return;
@@ -64,8 +64,15 @@ namespace ArcCreate.Gameplay.Chart
             while (notesInRange.MoveNext())
             {
                 var note = notesInRange.Current;
-                lastRenderingNotes.Add(note);
-                note.UpdateRender(timing, floorPosition, groupProperties);
+                renderingNotes.Add(note);
+            }
+        }
+
+        public override void Render(int timing, double floorPosition, GroupProperties groupProperties)
+        {
+            for (int i = 0; i < renderingNotes.Count; i++)
+            {
+                renderingNotes[i].UpdateRender(timing, floorPosition, groupProperties);
             }
         }
 
@@ -168,6 +175,6 @@ namespace ArcCreate.Gameplay.Chart
             }
         }
 
-        public override IEnumerable<Note> GetRenderingNotes() => lastRenderingNotes;
+        public override IReadOnlyList<Note> GetRenderingNotes() => renderingNotes;
     }
 }

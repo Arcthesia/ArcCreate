@@ -442,17 +442,25 @@ namespace ArcCreate.Gameplay.Chart
             }
         }
 
-        public void UpdateChartRender(int currentTiming)
+        public void UpdateRenderingNotes(int currentTiming)
         {
             for (int i = 0; i < timingGroups.Count; i++)
             {
                 TimingGroup tg = timingGroups[i];
-                tg.UpdateGroupRender(currentTiming);
+                tg.UpdateRenderingNotes(currentTiming);
 
                 if (i == 0)
                 {
                     beatlineDisplay.UpdateBeatlines(tg.GetFloorPosition(currentTiming));
                 }
+            }
+        }
+
+        public void Render(int currentTiming)
+        {
+            for (int i = 0; i < timingGroups.Count; i++)
+            {
+                timingGroups[i].Render(currentTiming);
             }
         }
 

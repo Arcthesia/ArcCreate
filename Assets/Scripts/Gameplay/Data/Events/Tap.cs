@@ -63,7 +63,7 @@ namespace ArcCreate.Gameplay.Data
         {
             float z = ZPos(TimingGroupInstance.GetFloorPosition(timing));
             Vector3 basePos = new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
-            pos = (TimingGroupInstance.GroupProperties.FallDirection * z) + basePos;
+            pos = (TimingGroupInstance.GroupProperties.GetFallDirection(this) * z) + basePos;
             scl = TimingGroupInstance.GroupProperties.ScaleIndividual;
             scl.z *= ArcFormula.CalculateTapSizeScalar(z);
         }
@@ -91,11 +91,11 @@ namespace ArcCreate.Gameplay.Data
 
             float z = ZPos(currentFloorPosition);
             Vector3 basePos = new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
-            Vector3 pos = (groupProperties.FallDirection * z) + basePos;
+            Vector3 pos = (groupProperties.GetFallDirection(this) * z) + basePos;
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
             scl.z *= ArcFormula.CalculateTapSizeScalar(z);
-            Matrix4x4 matrix = groupProperties.GroupMatrix * Matrix4x4.TRS(pos, rot, scl);
+            Matrix4x4 matrix = groupProperties.GetMatrix(this) * Matrix4x4.TRS(pos, rot, scl);
 
             float alpha = ArcFormula.CalculateFadeOutAlpha(z);
             Color color = groupProperties.GetColor(this);

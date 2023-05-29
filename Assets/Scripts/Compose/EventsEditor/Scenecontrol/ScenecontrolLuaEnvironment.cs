@@ -105,7 +105,7 @@ namespace ArcCreate.Compose.EventsEditor
         public void AddScenecontrol(
             string name,
             [EmmyType(typeof(string[]))] DynValue argNames,
-            [EmmyType("ScenecontrolArgs")] DynValue scDef)
+            [EmmyType("fun(args: ScenecontrolArgs)")] DynValue scDef)
         {
             if (scenecontrolTypes.ContainsKey(name))
             {

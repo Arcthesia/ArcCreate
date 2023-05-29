@@ -7,7 +7,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 {
     [MoonSharpUserData]
     [EmmyDoc("Controller for a timing group")]
-    public class NoteGroupController : Controller, IPositionController, INoteGroupController, IColorController
+    public class NoteGroupController : Controller, IPositionController, INoteGroupController, IColorController, IAngleController
     {
         private ValueChannel translationX;
         private ValueChannel translationY;
@@ -132,7 +132,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             set
             {
                 angleX = value;
-                EnableNoteGroupModule = true;
+                EnableAngleModule = true;
             }
         }
 
@@ -142,7 +142,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             set
             {
                 angleY = value;
-                EnableNoteGroupModule = true;
+                EnableAngleModule = true;
             }
         }
 
@@ -290,6 +290,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public bool EnableColorModule { get; set; }
 
+        public bool EnableAngleModule { get; set; }
+
         [MoonSharpHidden]
         public void UpdateColor(Color color)
         {
@@ -297,12 +299,17 @@ namespace ArcCreate.Gameplay.Scenecontrol
         }
 
         [MoonSharpHidden]
-        public void UpdateNoteGroup(Quaternion rotation, Vector3 scale, Vector2 angle)
+        public void UpdateNoteGroup(Quaternion rotation, Vector3 scale)
         {
-            TimingGroup.GroupProperties.SCAngleX = angle.x;
-            TimingGroup.GroupProperties.SCAngleY = angle.y;
             TimingGroup.GroupProperties.RotationIndividual = rotation;
             TimingGroup.GroupProperties.ScaleIndividual = scale;
+        }
+
+        [MoonSharpHidden]
+        public void UpdateAngle(float x, float y)
+        {
+            TimingGroup.GroupProperties.SCAngleX = x;
+            TimingGroup.GroupProperties.SCAngleY = y;
         }
 
         [MoonSharpHidden]

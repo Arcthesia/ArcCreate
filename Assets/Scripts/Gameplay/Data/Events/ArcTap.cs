@@ -68,7 +68,9 @@ namespace ArcCreate.Gameplay.Data
             double fp = TimingGroupInstance.GetFloorPosition(timing);
             float z = ZPos(fp);
             Vector3 basePos = new Vector3(WorldX, WorldY, 0);
-            pos = (TimingGroupInstance.GroupProperties.FallDirection * z) + basePos;
+            pos = (TimingGroupInstance.GroupProperties.GetFallDirection(this) * z) + basePos;
+
+            // TODO: this code (and other segments like it) fail to account for per-note data
             scl = TimingGroupInstance.GroupProperties.ScaleIndividual;
         }
 
@@ -100,10 +102,10 @@ namespace ArcCreate.Gameplay.Data
             }
 
             float z = ZPos(currentFloorPosition);
-            Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(WorldX, WorldY, 0);
+            Vector3 pos = (groupProperties.GetFallDirection(this) * z) + new Vector3(WorldX, WorldY, 0);
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
-            Matrix4x4 matrix = groupProperties.GroupMatrix * Matrix4x4.TRS(pos, rot, scl);
+            Matrix4x4 matrix = groupProperties.GetMatrix(this) * Matrix4x4.TRS(pos, rot, scl);
             Matrix4x4 shadowMatrix = matrix * Matrix4x4.Translate(new Vector3(0, -pos.y, 0));
 
             float alpha = ArcFormula.CalculateFadeOutAlpha(z);

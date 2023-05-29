@@ -14,7 +14,7 @@ namespace ArcCreate.Gameplay.Chart
     {
         private CachedBisect<Note, int> timingSearch;
         private CachedBisect<Note, double> floorPositionSearch;
-        private readonly List<Note> lastRenderingNotes = new List<Note>();
+        private readonly List<Note> renderingNotes = new List<Note>(TimingGroup.RenderingNotesPreallocCount);
 
         public override int ComboAt(int timing)
         {
@@ -44,9 +44,9 @@ namespace ArcCreate.Gameplay.Chart
             }
         }
 
-        public override void UpdateRender(int timing, double floorPosition, GroupProperties groupProperties)
+        public override void UpdateRenderingNotes(int timing, double floorPosition, GroupProperties groupProperties)
         {
-            lastRenderingNotes.Clear();
+            renderingNotes.Clear();
             if (Notes.Count == 0 || !groupProperties.Visible)
             {
                 return;
@@ -71,9 +71,16 @@ namespace ArcCreate.Gameplay.Chart
                     break;
                 }
 
-                note.UpdateRender(timing, floorPosition, groupProperties);
-                lastRenderingNotes.Add(note);
+                renderingNotes.Add(note);
                 renderIndex++;
+            }
+        }
+
+        public override void Render(int timing, double floorPosition, GroupProperties groupProperties)
+        {
+            for (int i = 0; i < renderingNotes.Count; i++)
+            {
+                renderingNotes[i].UpdateRender(timing, floorPosition, groupProperties);
             }
         }
 
@@ -123,6 +130,6 @@ namespace ArcCreate.Gameplay.Chart
             }
         }
 
-        public override IEnumerable<Note> GetRenderingNotes() => lastRenderingNotes;
+        public override IReadOnlyList<Note> GetRenderingNotes() => renderingNotes;
     }
 }

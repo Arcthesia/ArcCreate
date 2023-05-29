@@ -8,6 +8,21 @@ namespace ArcCreate.Utility.Extension
     public static class CollectionExtension
     {
         /// <summary>
+        /// Add all the elements from one list to another without
+        /// any conversion to IEnumerable.
+        /// </summary>
+        /// <param name="list">The list to add to.</param>
+        /// <param name="other">The source list to take elements from.</param>
+        /// <typeparam name="T">The type of the element in each list.</typeparam>
+        public static void FastAddRange<T>(this IList<T> list, IReadOnlyList<T> other)
+        {
+            for (int i = 0; i < other.Count; i++)
+            {
+                list.Add(other[i]);
+            }
+        }
+
+        /// <summary>
         /// Whether or not the index is outside the range of the collection.
         /// </summary>
         /// <param name="collection">The collection.</param>

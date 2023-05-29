@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ArcCreate.ChartFormat;
+using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.Skin;
 using UnityEngine;
 
@@ -13,19 +14,23 @@ namespace ArcCreate.Gameplay.Data
 
         public bool UseColor { get; set; } = false;
 
-        public void Enable()
+        public bool UsePosition { get; set; } = false;
+
+        public bool UseAngle { get; set; } = false;
+
+        public void Enable(TimingGroup timinggroup)
         {
             properties = new Dictionary<Note, NoteProperties>();
+
+            foreach (var note in timinggroup.GetAllNotes())
+            {
+                properties[note] = new NoteProperties();
+            }
         }
 
         public void Disable()
         {
             properties = null;
-        }
-
-        public void Clear()
-        {
-            properties.Clear();
         }
 
         /// <summary>
@@ -49,6 +54,30 @@ namespace ArcCreate.Gameplay.Data
             }
 
             return prop;
+        }
+
+        public void SetAllColors(Color color)
+        {
+            foreach (var props in properties.Values)
+            {
+                props.Color = color;
+            }
+        }
+
+        public void SetAllMatrices(Matrix4x4 matrix)
+        {
+            foreach (var props in properties.Values)
+            {
+                props.Matrix = matrix;
+            }
+        }
+
+        public void SetAllAngles(Vector2 xy)
+        {
+            foreach (var props in properties.Values)
+            {
+                props.Angles = xy;
+            }
         }
     }
 }
