@@ -67,6 +67,11 @@ namespace ArcCreate.Compose.EventsEditor
                 return new ConstantChannel((float)dyn.Number);
             });
 
+            Script.GlobalOptions.CustomConverters.SetScriptToClrCustomConversion(DataType.Boolean, typeof(BooleanChannel), dyn =>
+            {
+                return new BooleanConstantChannel(dyn.CastToBool());
+            });
+
             Script.GlobalOptions.CustomConverters.SetScriptToClrCustomConversion(DataType.String, typeof(StringChannel), dyn =>
             {
                 return StringChannelBuilder.Constant(dyn.String);

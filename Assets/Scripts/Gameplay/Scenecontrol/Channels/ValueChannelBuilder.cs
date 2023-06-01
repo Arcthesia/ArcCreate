@@ -87,8 +87,72 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public static SineChannel Sine(ValueChannel period, ValueChannel min, ValueChannel max, ValueChannel offset)
             => new SineChannel(period, min, max, offset);
 
+        [EmmyDoc("Create a pure sine channel")]
+        public static PureSineChannel Sine(ValueChannel input)
+            => new PureSineChannel(input);
+
+        [EmmyDoc("Create a pure cosine channel")]
+        public static PureCosChannel Cos(ValueChannel input)
+            => new PureCosChannel(input);
+
+        [EmmyDoc("Create an absolute value channel")]
+        public static AbsChannel Abs(ValueChannel input)
+            => new AbsChannel(input);
+
+        [EmmyDoc("Shift the timing input of a channel by another channel's output")]
+        public static TimeShiftChannel TimeShift(ValueChannel value, ValueChannel shift)
+            => new TimeShiftChannel(value, shift);
+
+        [EmmyDoc("Scale the timing input of a channel by another channel's output")]
+        public static TimeScaleChannel TimeScale(ValueChannel value, ValueChannel scale)
+            => new TimeScaleChannel(value, scale);
+
+        [EmmyDoc("Chain two channels together by sampling the outer channel with the result of the inner")]
+        public static ChainChannel Chain(ValueChannel outer, ValueChannel inner)
+            => new ChainChannel(outer, inner);
+
         [EmmyDoc("Create a channel which returns the current timing")]
         public static TimingChannel Timing()
             => new TimingChannel();
+
+        [EmmyDoc("Inverts a boolean channel")]
+        public static NotChannel Not(BooleanChannel input)
+            => new NotChannel(input);
+
+        [EmmyDoc("Ands two boolean channel")]
+        public static AndChannel And(BooleanChannel a, BooleanChannel b)
+            => new AndChannel(a, b);
+
+        [EmmyDoc("Ors two boolean channel")]
+        public static OrChannel Or(BooleanChannel a, BooleanChannel b)
+            => new OrChannel(a, b);
+
+        [EmmyDoc("Checks if two channels are equal")]
+        public static BooleanChannel Equal(ValueChannel a, ValueChannel b)
+            => new NumericalComparisonChannel(a, b, ComparisonType.Equals);
+
+        [EmmyDoc("Checks if two string channels are equal")]
+        public static BooleanChannel Equal(StringChannel a, StringChannel b)
+            => new StringComparisonChannel(a, b, ComparisonType.Equals);
+
+        [EmmyDoc("Switches between one channel to another based on a condition")]
+        public static ValueChannel IfElse(BooleanChannel condition, ValueChannel onTrue, ValueChannel onFalse)
+            => new IfElseChannel(condition, onTrue, onFalse);
+
+        [EmmyDoc("Checks if one channel is greater than another")]
+        public static BooleanChannel GreaterThan(ValueChannel a, ValueChannel b)
+            => new NumericalComparisonChannel(a, b, ComparisonType.GreaterThan);
+
+        [EmmyDoc("Checks if one channel is greater than or equal to another")]
+        public static BooleanChannel GreaterEqual(ValueChannel a, ValueChannel b)
+            => new NumericalComparisonChannel(a, b, ComparisonType.GreaterEqual);
+
+        [EmmyDoc("Checks if one channel is greater than another")]
+        public static BooleanChannel LessThan(ValueChannel a, ValueChannel b)
+            => new NumericalComparisonChannel(a, b, ComparisonType.LessThan);
+
+        [EmmyDoc("Checks if one channel is greater than or equal to another")]
+        public static BooleanChannel LessEqual(ValueChannel a, ValueChannel b)
+            => new NumericalComparisonChannel(a, b, ComparisonType.LessEqual);
     }
 }

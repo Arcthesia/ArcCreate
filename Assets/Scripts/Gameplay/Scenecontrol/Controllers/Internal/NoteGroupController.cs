@@ -1,4 +1,5 @@
 using ArcCreate.Gameplay.Chart;
+using ArcCreate.Utility;
 using EmmySharp;
 using MoonSharp.Interpreter;
 using UnityEngine;
@@ -318,7 +319,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             transform.localPosition = translation;
             transform.localRotation = rotation;
             transform.localScale = scale;
-            TimingGroup.GroupProperties.GroupMatrix = Matrix4x4.TRS(translation, rotation, scale);
+            TimingGroup.GroupProperties.GroupTransform = new TRS(translation, rotation, scale);
         }
 
         protected override void SetActive(bool active)

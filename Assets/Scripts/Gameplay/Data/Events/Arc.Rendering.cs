@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
 using ArcCreate.Gameplay.Render;
 using ArcCreate.Gameplay.Utility;
+using ArcCreate.Utility;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
@@ -146,10 +147,12 @@ namespace ArcCreate.Gameplay.Data
             float z = ZPos(currentFloorPosition);
 
             Vector3 basePos = new Vector3(ArcFormula.ArcXToWorld(XStart), ArcFormula.ArcYToWorld(YStart), 0);
-            Vector3 pos = (groupProperties.GetFallDirection(this) * z) + basePos;
-            Quaternion rot = groupProperties.RotationIndividual;
-            Vector3 scl = groupProperties.ScaleIndividual;
-            Matrix4x4 matrix = groupProperties.GetMatrix(this) * Matrix4x4.TRS(pos, rot, scl);
+            TRS noteTransformation =
+                TRS.TranslateOnly((groupProperties.GetFallDirection(this) * z) + basePos)
+                + groupProperties.GetNoteTransform(this);
+            TRS transformation = noteTransformation * groupProperties.GroupTransform;
+
+            Matrix4x4 matrix = transformation.Matrix;
 
             float alpha = 1;
             float redArcValue = Services.Skin.GetRedArcValue(Color);
@@ -222,7 +225,7 @@ namespace ArcCreate.Gameplay.Data
                     continue;
                 }
 
-                var (bodyMatrix, shadowMatrix) = segment.GetMatrices(currentFloorPosition, groupProperties.GetFallDirection(this), z, pos.y);
+                var (bodyMatrix, shadowMatrix) = segment.GetMatrices(currentFloorPosition, groupProperties.GetFallDirection(this), z, transformation.Translation.y, noteTransformation.Scale);
                 if (IsTrace)
                 {
                     Services.Render.DrawTraceSegment(matrix * bodyMatrix, color, IsSelected);
@@ -243,7 +246,7 @@ namespace ArcCreate.Gameplay.Data
 
             if (!groupProperties.NoHeightIndicator && (clipToTiming <= Timing || groupProperties.NoClip) && ShouldDrawHeightIndicator)
             {
-                Matrix4x4 heightIndicatorMatrix = Matrix4x4.Scale(new Vector3(1, pos.y - (Values.TraceMeshOffset / 2), 1));
+                Matrix4x4 heightIndicatorMatrix = Matrix4x4.Scale(new Vector3(1, transformation.Translation.y - (Values.TraceMeshOffset / 2), 1));
                 Services.Render.DrawHeightIndicator(matrix * heightIndicatorMatrix, heightIndicatorColor * color);
             }
 
@@ -269,7 +272,7 @@ namespace ArcCreate.Gameplay.Data
                 Services.Particle.PlayArcParticle(
                     Color,
                     firstArcOfBranch ?? this,
-                    new Vector3(WorldXAt(currentTiming), WorldYAt(currentTiming), 0));
+                    new Vector2(ArcXAt(currentTiming), ArcYAt(currentTiming)));
             }
         }
 

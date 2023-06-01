@@ -6,7 +6,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 {
     [MoonSharpUserData]
     [EmmyDoc("Channel defining text at any given input value. Used for controlling TextController's text content")]
-    public abstract class TextChannel : ISerializableUnit
+    public abstract class TextChannel : ISerializableUnit, IChannel
     {
         public abstract int MaxLength { get; }
 

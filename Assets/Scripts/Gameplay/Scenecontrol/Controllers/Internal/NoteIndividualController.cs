@@ -1,5 +1,6 @@
 using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.Data;
+using ArcCreate.Utility;
 using EmmySharp;
 using MoonSharp.Interpreter;
 using UnityEngine;
@@ -258,16 +259,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [MoonSharpHidden]
         public void UpdatePosition(Vector3 translation, Quaternion rotation, Vector3 scale)
         {
-            Matrix4x4 mat = Matrix4x4.TRS(translation, rotation, scale);
+            TRS trs = new TRS(translation, rotation, scale);
 
             if (CurrentNote is null)
             {
-                TimingGroup.GroupProperties.IndividualOverrides.SetAllMatrices(mat);
+                TimingGroup.GroupProperties.IndividualOverrides.SetAllTransforms(trs);
                 return;
             }
 
             TimingGroup.GroupProperties.IndividualOverrides.UsePosition = true;
-            CurrentProperties.Matrix = mat;
+            CurrentProperties.Transform = trs;
         }
 
         [MoonSharpHidden]

@@ -210,23 +210,19 @@ namespace ArcCreate.Gameplay
             return duration < 1000 ? length : length * 2;
         }
 
-        public static Vector3 WorldPosition(Note note)
+        public static Vector2 UnmodifiedWorldPosition(Note note)
         {
-            var ct = Services.Audio.ChartTiming;
-            var cf = note.TimingGroupInstance.GetFloorPosition(ct);
-            var z = note.ZPos(cf);
-
             switch (note)
             {
                 case Tap t:
-                    return new Vector3(LaneToWorldX(t.Lane), 0, z);
+                    return new Vector2(LaneToWorldX(t.Lane), 0);
                 case Hold h:
-                    return new Vector3(LaneToWorldX(h.Lane), 0, z);
+                    return new Vector2(LaneToWorldX(h.Lane), 0);
 
                 case ArcTap at:
-                    return new Vector3(at.WorldX, at.WorldY, z);
+                    return new Vector2(at.WorldX, at.WorldY);
                 case Arc a:
-                    return new Vector3(a.WorldXAt(a.Timing), a.WorldYAt(a.Timing), z);
+                    return new Vector2(a.WorldXAt(a.Timing), a.WorldYAt(a.Timing));
 
                 default:
                     throw new InvalidOperationException($"Unknown note type {note.GetType()}");

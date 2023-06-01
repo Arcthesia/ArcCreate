@@ -28,5 +28,21 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [EmmyDoc("Channel which returns the z-position of a given note at its start time.")]
         public static NoteZPositionChannel Z()
             => new NoteZPositionChannel();
+
+        [EmmyDoc("Channel which returns the signed time until a given note is started.")]
+        public static SumChannel Delta()
+            => Timing() - ValueChannelBuilder.Timing();
+
+        [EmmyDoc("Channel which returns the signed time until a given note is started.")]
+        public static NoteIDChannel ID()
+            => new NoteIDChannel();
+
+        [EmmyDoc("Channel which returns if a note is an arc")]
+        public static NoteIsArcChannel IsArc()
+            => new NoteIsArcChannel();
+
+        [EmmyDoc("Channel which returns the type of a note")]
+        public static NoteTypeChannel Type()
+            => new NoteTypeChannel();
     }
 }

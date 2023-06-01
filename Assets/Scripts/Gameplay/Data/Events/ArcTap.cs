@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
 using ArcCreate.Gameplay.Render;
+using ArcCreate.Utility;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
@@ -102,11 +103,13 @@ namespace ArcCreate.Gameplay.Data
             }
 
             float z = ZPos(currentFloorPosition);
-            Vector3 pos = (groupProperties.GetFallDirection(this) * z) + new Vector3(WorldX, WorldY, 0);
-            Quaternion rot = groupProperties.RotationIndividual;
-            Vector3 scl = groupProperties.ScaleIndividual;
-            Matrix4x4 matrix = groupProperties.GetMatrix(this) * Matrix4x4.TRS(pos, rot, scl);
-            Matrix4x4 shadowMatrix = matrix * Matrix4x4.Translate(new Vector3(0, -pos.y, 0));
+            TRS noteTransform =
+                TRS.TranslateOnly((groupProperties.GetFallDirection(this) * z) + new Vector3(WorldX, WorldY, 0))
+                + groupProperties.GetNoteTransform(this);
+            TRS transform = noteTransform * groupProperties.GroupTransform;
+
+            Matrix4x4 matrix = transform.Matrix;
+            Matrix4x4 shadowMatrix = matrix * Matrix4x4.Translate(new Vector3(0, -transform.Translation.y, 0));
 
             float alpha = ArcFormula.CalculateFadeOutAlpha(z);
             Color color = groupProperties.GetColor(this);

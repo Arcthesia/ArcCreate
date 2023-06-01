@@ -136,12 +136,13 @@ namespace ArcCreate.Gameplay.Data
 
             float z = ZPos(currentFloorPosition);
             float endZ = EndZPos(currentFloorPosition);
-            Vector3 pos = (groupProperties.GetFallDirection(this) * z) + new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
-            Quaternion rot = groupProperties.RotationIndividual;
-            Vector3 scl = groupProperties.ScaleIndividual;
-            Matrix4x4 matrix = groupProperties.GetMatrix(this)
-                             * Matrix4x4.TRS(pos, rot, scl)
-                             * MatrixUtility.Shear(groupProperties.GetFallDirection(this) * (z - endZ));
+
+            TRS noteTransform =
+                TRS.TranslateOnly((groupProperties.GetFallDirection(this) * z) + new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0))
+                + groupProperties.GetNoteTransform(this);
+            TRS transform = noteTransform * groupProperties.GroupTransform;
+
+            Matrix4x4 matrix = transform * MatrixUtility.Shear(groupProperties.GetFallDirection(this) * (z - endZ));
 
             float alpha = 1;
             if (highlight)

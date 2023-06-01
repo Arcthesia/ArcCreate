@@ -26,7 +26,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 return 0;
             }
 
-            return ArcFormula.WorldPosition(NoteIndividualController.CurrentNote).z;
+            return NoteIndividualController.CurrentNote.ZPos(
+                NoteIndividualController.CurrentNote.TimingGroupInstance.GetFloorPosition(timing));
         }
 
         protected override IEnumerable<ValueChannel> GetChildrenChannels()

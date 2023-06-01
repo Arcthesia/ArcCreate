@@ -2,6 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using ArcCreate.ChartFormat;
 using ArcCreate.Gameplay.Skin;
+using ArcCreate.Utility;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
@@ -82,7 +83,7 @@ namespace ArcCreate.Gameplay.Data
 
         public float SCAngleY { get; set; } = 0;
 
-        public Matrix4x4 GroupMatrix { get; set; } = Matrix4x4.identity;
+        public TRS GroupTransform { get; set; } = TRS.identity;
 
         public bool Visible { get; set; } = true;
 
@@ -105,9 +106,10 @@ namespace ArcCreate.Gameplay.Data
             return Color * GetNIProperty(note, Color.white, ni => ni.UseColor, n => n.Color);
         }
 
-        public Matrix4x4 GetMatrix(Note note)
+        public TRS GetNoteTransform(Note note)
         {
-            return GroupMatrix * GetNIProperty(note, Matrix4x4.identity, ni => ni.UsePosition, n => n.Matrix);
+            return GetNIProperty(note, TRS.identity, ni => ni.UsePosition, n => n.Transform)
+                + new TRS(default, RotationIndividual, ScaleIndividual);
         }
 
         public float GetAngleX(Note note)

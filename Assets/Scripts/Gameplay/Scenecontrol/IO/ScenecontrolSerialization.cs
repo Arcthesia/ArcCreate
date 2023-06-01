@@ -81,6 +81,22 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     return "channel.sum";
                 case TimingChannel timing:
                     return "channel.timing";
+                case AbsChannel abs:
+                    return "channel.abs";
+                case TimeScaleChannel ts:
+                    return "channel.time.scale";
+                case TimeShiftChannel tsh:
+                    return "channel.time.shift";
+                case PureSineChannel ps:
+                    return "channel.time.chain";
+                case ChainChannel chain:
+                    return "channel.puresine";
+                case PureCosChannel pc:
+                    return "channel.purecos";
+                case ModuloChannel pc:
+                    return "channel.modulo";
+                case IfElseChannel ie:
+                    return "channel.ifelse";
 
                 // Note channels
                 case NoteTimingChannel nTiming:
@@ -93,6 +109,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     return "channel.note.y";
                 case NoteZPositionChannel nz:
                     return "channel.note.z";
+                case NoteIDChannel id:
+                    return "channel.note.id";
+                case NoteIsArcChannel arc:
+                    return "channel.note.isarc";
+                case NoteTypeChannel type:
+                    return "channel.note.type";
 
                 // Trigger channels
                 case AccumulatingTriggerChannel accum:
@@ -115,6 +137,20 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     return "channel.text.concat";
                 case ValueToTextChannel valuetext:
                     return "channel.text.value";
+
+                // Boolean channels
+                case BooleanConstantChannel bconst:
+                    return "channel.bool.constant";
+                case NotChannel not:
+                    return "channel.bool.not";
+                case AndChannel and:
+                    return "channel.bool.and";
+                case OrChannel or:
+                    return "channel.bool.or";
+                case NumericalComparisonChannel ncomp:
+                    return "channel.bool.comp.num";
+                case StringComparisonChannel scomp:
+                    return "channel.bool.comp.str";
 
                 // Contexts
                 case DropRateChannel droprate:
@@ -146,6 +182,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 case ObserveTrigger tobserve:
                     return "trigger.observe";
                 default:
+
                     if (unit is ISceneController controller)
                     {
                         string name = controller?.SerializedType;

@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using ArcCreate.ChartFormat;
 using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.Skin;
+using ArcCreate.Utility;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
@@ -64,11 +66,11 @@ namespace ArcCreate.Gameplay.Data
             }
         }
 
-        public void SetAllMatrices(Matrix4x4 matrix)
+        public void SetAllTransforms(TRS transform)
         {
             foreach (var props in properties.Values)
             {
-                props.Matrix = matrix;
+                props.Transform = transform;
             }
         }
 

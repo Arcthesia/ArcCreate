@@ -94,6 +94,22 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     return new SumChannel();
                 case "channel.timing":
                     return new TimingChannel();
+                case "channel.puresine":
+                    return new PureSineChannel();
+                case "channel.purecos":
+                    return new PureCosChannel();
+                case "channel.modulo":
+                    return new ModuloChannel();
+                case "channel.abs":
+                    return new AbsChannel();
+                case "channel.time.shift":
+                    return new TimeShiftChannel();
+                case "channel.time.scale":
+                    return new TimeScaleChannel();
+                case "channel.chain":
+                    return new ChainChannel();
+                case "channel.ifelse":
+                    return new IfElseChannel();
 
                 // Note channels
                 case "channel.note.timing":
@@ -106,6 +122,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     return new NoteYPositionChannel();
                 case "channel.note.z":
                     return new NoteZPositionChannel();
+                case "channel.note.id":
+                    return new NoteIDChannel();
+                case "channel.note.isarc":
+                    return new NoteIsArcChannel();
+                case "channel.note.type":
+                    return new NoteTypeChannel();
 
                 // Triggers channels
                 case "channel.trigger.accumulate":
@@ -128,6 +150,20 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     return new ConcatTextChannel();
                 case "channel.text.value":
                     return new ValueToTextChannel();
+
+                // Boolean channels
+                case "channel.bool.constant":
+                    return new BooleanConstantChannel();
+                case "channel.bool.not":
+                    return new NotChannel();
+                case "channel.bool.and":
+                    return new AndChannel();
+                case "channel.bool.or":
+                    return new OrChannel();
+                case "channel.bool.comp.num":
+                    return new NumericalComparisonChannel();
+                case "channel.bool.comp.str":
+                    return new StringComparisonChannel();
 
                 // Contexts
                 case "channel.context.droprate":

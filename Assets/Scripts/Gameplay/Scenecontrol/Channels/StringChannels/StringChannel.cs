@@ -6,7 +6,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 {
     [MoonSharpUserData]
     [EmmyDoc("Channel defining a string value at any given input timing value")]
-    public abstract class StringChannel : ISerializableUnit
+    public abstract class StringChannel : ISerializableUnit, IChannel
     {
         public abstract string ValueAt(int timing);
 

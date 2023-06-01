@@ -26,7 +26,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 return 0;
             }
 
-            return ArcFormula.WorldPosition(NoteIndividualController.CurrentNote).y;
+            return ArcFormula.UnmodifiedWorldPosition(NoteIndividualController.CurrentNote).y;
         }
 
         protected override IEnumerable<ValueChannel> GetChildrenChannels()
