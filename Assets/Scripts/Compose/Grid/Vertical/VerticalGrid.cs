@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.Gameplay.Scenecontrol;
@@ -10,6 +11,8 @@ namespace ArcCreate.Compose.Grid
     {
         public static readonly Rect DefaultArea = new Rect(-0.5f, -0.2f, 2, 1);
         public const float DefaultSnapTolerance = 1f;
+        public const float DefaultIncrementX = 0.125f;
+        public const float DefaultIncrementY = 0.25f;
 
         [SerializeField] private Color defaultLineColor;
         [SerializeField] private Color defaultPanelColor;
@@ -28,6 +31,7 @@ namespace ArcCreate.Compose.Grid
         private float snapTolerance;
         private bool scaleGridToSkyInput;
         private float verticalScale = 1;
+        private Rect area;
 
         public static Color DefaultLineColor { get; private set; }
 
@@ -35,6 +39,7 @@ namespace ArcCreate.Compose.Grid
 
         public void LoadGridSettings(Rect area, Color panelColor, float snapTolerance, List<Line> lines, List<Area> areas, bool scaleGridToSkyInput)
         {
+            this.area = area;
             this.lines = lines.Where(def => def.Interactable).ToList();
             decorativeLines = lines.Where(def => !def.Interactable).ToList();
             cachedIntersections = VerticalGridHelper.PrecalculateIntersections(this.lines);
@@ -78,6 +83,11 @@ namespace ArcCreate.Compose.Grid
             verticalPanel.sharedMesh = verticalCollider.sharedMesh;
 
             verticalPanelRenderer.sharedMaterial = Instantiate(verticalPanelRenderer.sharedMaterial);
+        }
+
+        public (float fromX, float fromY, float toX, float toY) GetBounds()
+        {
+            return (area.xMin, area.yMin, area.xMax, area.yMax);
         }
 
         private void ResizeCollider(Rect area)

@@ -135,7 +135,7 @@ namespace ArcCreate.Compose.Macros
         }
 
         [EditorAction("SelectLane", false)]
-        [SubAction("Confirm", false, "<u-mouse1>")]
+        [SubAction("Confirm", false, "<mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
         [WhitelistScopes(typeof(Timeline.TimelineService), typeof(Grid.GridService), typeof(Cursor.CursorService))]
         public async UniTask SelectLaneAction(EditorAction action)
@@ -163,7 +163,7 @@ namespace ArcCreate.Compose.Macros
         }
 
         [EditorAction("SelectPosition", false)]
-        [SubAction("Confirm", false, "<u-mouse1>")]
+        [SubAction("Confirm", false, "<mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
         [WhitelistScopes(typeof(Timeline.TimelineService), typeof(Grid.GridService), typeof(Cursor.CursorService))]
         public async UniTask SelectPositionAction(EditorAction action)
@@ -193,7 +193,7 @@ namespace ArcCreate.Compose.Macros
         }
 
         [EditorAction("SelectTiming", false)]
-        [SubAction("Confirm", false, "<u-mouse1>")]
+        [SubAction("Confirm", false, "<mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
         [WhitelistScopes(typeof(Timeline.TimelineService), typeof(Grid.GridService), typeof(Cursor.CursorService))]
         public async UniTask SelectTimingAction(EditorAction action)

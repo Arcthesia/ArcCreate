@@ -30,6 +30,7 @@ namespace ArcCreate.Compose.Selection
         private float latestSelectedDistance = 0;
         private bool rangeSelected;
         private readonly RaycastHit[] hitResults = new RaycastHit[32];
+        private readonly HashSet<Note> search = new HashSet<Note>();
 
         public event Action<HashSet<Note>> OnSelectionChange;
 
@@ -45,7 +46,7 @@ namespace ArcCreate.Compose.Selection
             }
         }
 
-        [EditorAction("Single", false, "<u-mouse1>")]
+        [EditorAction("Single", false, "<mouse1>")]
         [RequireGameplayLoaded]
         public async UniTask SelectSingle()
         {
@@ -105,7 +106,7 @@ namespace ArcCreate.Compose.Selection
             OnSelectionChange?.Invoke(selectedNotes);
         }
 
-        [EditorAction("Toggle", false, "<c-u-mouse1>")]
+        [EditorAction("Toggle", false, "<c-mouse1>")]
         [RequireGameplayLoaded]
         public async UniTask ToggleNoteSelection()
         {
@@ -142,6 +143,80 @@ namespace ArcCreate.Compose.Selection
             rangeSelectPreview.gameObject.SetActive(false);
             UpdateInspector();
             OnSelectionChange?.Invoke(selectedNotes);
+        }
+
+        [EditorAction("ArcChain", false, "c")]
+        [RequireGameplayLoaded]
+        [RequireSelection]
+        public void SelectArcChain()
+        {
+            search.Clear();
+            foreach (Note note in selectedNotes)
+            {
+                if (note is Arc arc && !search.Contains(arc))
+                {
+                    search.Add(arc);
+                    Arc a = arc.NextArc;
+                    while (a != null)
+                    {
+                        search.Add(a);
+                        a = a.NextArc;
+                    }
+
+                    a = arc.PreviousArc;
+                    while (a != null)
+                    {
+                        search.Add(a);
+                        a = a.PreviousArc;
+                    }
+                }
+            }
+
+            foreach (Note note in search)
+            {
+                AddNoteToSelection(note);
+            }
+        }
+
+        [EditorAction("ToggleArcTapAndArc", false, "v")]
+        public void SwitchSelectArcAndArcTap()
+        {
+            search.Clear();
+            bool arcExistsInSelection = false;
+            foreach (Note note in selectedNotes)
+            {
+                if (note is Arc arc)
+                {
+                    arcExistsInSelection = true;
+                }
+            }
+
+            if (arcExistsInSelection)
+            {
+                foreach (Note note in selectedNotes)
+                {
+                    if (note is Arc arc)
+                    {
+                        var ats = Services.Gameplay.Chart.GetAll<ArcTap>().Where(at => at.Arc == arc);
+                        foreach (ArcTap at in ats)
+                        {
+                            search.Add(at);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (Note note in selectedNotes)
+                {
+                    if (note is ArcTap arctap)
+                    {
+                        search.Add(arctap.Arc);
+                    }
+                }
+            }
+
+            SetSelection(search);
         }
 
         public void RemoveFromSelection(IEnumerable<ArcEvent> events)
@@ -249,7 +324,9 @@ namespace ArcCreate.Compose.Selection
         private bool TryGetNoteUnderCursor(out Note note, SelectionMode selectionMode)
         {
             if (EventSystem.current.currentSelectedGameObject != null
-             || (Settings.InputMode.Value != (int)InputMode.Auto && Settings.InputMode.Value != (int)InputMode.AutoController))
+             || (Settings.InputMode.Value != (int)InputMode.Auto
+                && Settings.InputMode.Value != (int)InputMode.AutoController
+                && Settings.InputMode.Value != (int)InputMode.Idle))
             {
                 note = null;
                 return false;

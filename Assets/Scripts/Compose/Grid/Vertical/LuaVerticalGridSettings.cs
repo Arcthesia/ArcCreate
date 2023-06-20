@@ -10,7 +10,7 @@ namespace ArcCreate.Compose.Grid
     [MoonSharpUserData]
     public class LuaVerticalGridSettings : IVerticalGridSettings, IScriptSetup
     {
-        public LuaVerticalGridSettings(string settings, int instructionLimit = 3000)
+        public LuaVerticalGridSettings(string settings, int instructionLimit = int.MaxValue)
         {
             try
             {
@@ -36,6 +36,10 @@ namespace ArcCreate.Compose.Grid
         public List<Area> Areas { get; private set; } = new List<Area>();
 
         public float SnapTolerance { get; set; } = VerticalGrid.DefaultSnapTolerance;
+
+        public float IncrementX { get; set; } = VerticalGrid.DefaultIncrementX;
+
+        public float IncrementY { get; set; } = VerticalGrid.DefaultIncrementY;
 
         [MoonSharpHidden]
         public void SetupScript(Script script)

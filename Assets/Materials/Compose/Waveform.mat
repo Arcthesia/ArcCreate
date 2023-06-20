@@ -72,7 +72,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _ToSample: 10478160
+    - _ToSample: 27056608
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:

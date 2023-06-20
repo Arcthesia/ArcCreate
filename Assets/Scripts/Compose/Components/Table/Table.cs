@@ -17,6 +17,7 @@ namespace ArcCreate.Compose.Components
         [SerializeField] private int maxRowCount = 50;
         [SerializeField] private Scrollbar verticalScrollbar;
         [SerializeField] private ScrollReceiver scrollReceiver;
+        [SerializeField] private Button deselectButton;
         private T selected;
 
         private float prevHeight;
@@ -157,6 +158,11 @@ namespace ArcCreate.Compose.Components
             RebuildRows();
 
             rowHeight = rowPrefab.GetComponent<RectTransform>().rect.height;
+
+            if (deselectButton != null)
+            {
+                deselectButton.onClick.AddListener(DeselectItem);
+            }
         }
 
         protected virtual void OnDestroy()
@@ -164,6 +170,11 @@ namespace ArcCreate.Compose.Components
             verticalScrollbar.onValueChanged.RemoveListener(OnVerticalScrollbar);
             scrollReceiver.OnScroll -= OnScroll;
             Pools.Destroy<Row<T>>(rowPrefab.name);
+
+            if (deselectButton != null)
+            {
+                deselectButton.onClick.RemoveListener(DeselectItem);
+            }
         }
 
         protected virtual void UpdateRowHighlight()
@@ -251,6 +262,15 @@ namespace ArcCreate.Compose.Components
         private void ClampStartPos()
         {
             StartPos = Mathf.Clamp(StartPos, 0, Mathf.Max(0, data.Count - rows.Count));
+        }
+
+        private void DeselectItem()
+        {
+            Selected = default;
+            foreach (var row in rows)
+            {
+                row.Highlighted = false;
+            }
         }
     }
 }

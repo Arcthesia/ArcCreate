@@ -292,27 +292,171 @@ Compose:
   Grid:
     # Please modify the comment lines only (lines beginning with '--')
     DefaultScript: |-
-      -- This is a lua script
+      -- THIS IS A LUA SCRIPT. See full documentation at: https://github.com/Arcthesia/ArcCreate/wiki/Grid-settings
+      -- CONFIGURATION
+      -- Choose one of the following template: 4k, 6k, oob4k, oob6k
+      local useTemplate = "4k"
+      local spacing = {
+          x = 0.125,
+          y = 0.25,
+      }
 
-      -- Set the collider area with four values
-      -- (corner1.x, corner2.x, corner1.y, corner2.y)
-      grid.setCollider(-0.5, 1.5, -0.2, 1)
+      -- Change grid color here
+      local color = {
+          ftr = {
+              area = rgba(0, 200, 0, 48),
+              boundary = rgba(65, 180, 66, 100),
+          },
+          byd = {
+              area = rgba(150, 130, 22, 64),
+              boundary = rgba(150, 180, 108, 200),
+          },
+          unsafe = {
+              area = rgba(230, 30, 22, 48),
+              boundary = rgba(200, 60, 50, 200),
+          },
+          lines = rgba(150, 150, 150, 50),
+          panel = rgba(255, 255, 255, 16),
+      }
 
-      -- Set the grid's background color
-      grid.setPanelColor(rgba(255, 255, 255, 16))
-      
-      -- Draw lines with four values
-      -- (point1.x, point2.x, point1.y, point2.y)
-      grid.drawLine(-0.5, 1.5, -0.2, -0.2, defaultColor)
+      -- INTERNAL
+      local templates = {}
+      templates["4k"] = {
+          left = -0.5,
+          right = 1.5,
+          top = 1,
+          bottom = -0.2,
 
-      -- You can also use for loops
-      for x = -0.5, 1.5, 0.125 do
-        grid.drawLine(x, x, -0.2, 1, defaultColor)
+          mainLeft = -0.5,
+          mainRight = 1.5,
+          mainTop = 1,
+          mainBottom = 0,
+
+          lane = -0.2,
+          ftrLeft = 0,
+          ftrRight = 1,
+          bydLeft = -0.25,
+          bydRight = 1.25
+      }
+      templates["6k"] = {
+          left = -1,
+          right = 2,
+          top = 1,
+          bottom = -0.2 / 1.61,
+
+          mainLeft = -1,
+          mainRight = 2,
+          mainTop = 1,
+          mainBottom = 0,
+
+          lane = -0.2 / 1.61,
+          ftrLeft = -0.25,
+          ftrRight = 1.25,
+          bydLeft = -0.625,
+          bydRight = 1.625
+      }
+      templates["oob4k"] = {
+          left = -4,
+          right = 5,
+          top = 5,
+          bottom = -0.2,
+
+          mainLeft = -0.5,
+          mainRight = 1.5,
+          mainTop = 1,
+          mainBottom = 0,
+
+          lane = -0.2,
+          ftrLeft = 0,
+          ftrRight = 1,
+          bydLeft = -0.25,
+          bydRight = 1.25
+      }
+      templates["oob6k"] = {
+          left = -4,
+          right = 5,
+          top = 5,
+          bottom = -0.2 / 1.61,
+
+          mainLeft = -1,
+          mainRight = 2,
+          mainTop = 1,
+          mainBottom = 0,
+
+          lane = -0.2 / 1.61,
+          ftrLeft = -0.25,
+          ftrRight = 1.25,
+          bydLeft = -0.625,
+          bydRight = 1.625
+      }
+
+      local config = templates[useTemplate]
+
+      local function drawLines(color, points, isLoop)
+          for i = 1, #points - 1 do
+              grid.drawLineDecorative(points[i], points[i+1], color)
+          end
+          if isLoop then
+              grid.drawLineDecorative(points[#points], points[1], color)
+          end
       end
 
-      for y = 0, 1, 0.25 do
-        grid.drawLine(-0.5, 1.5, y, y, defaultColor)
+      local ftrTL = xy(config.ftrLeft, config.mainTop)
+      local ftrTR = xy(config.ftrRight, config.mainTop)
+      local bydTL = xy(config.bydLeft, config.mainTop)
+      local bydTR = xy(config.bydRight, config.mainTop)
+      local gridBR = xy(config.mainRight, config.mainBottom)
+      local gridBL = xy(config.mainLeft, config.mainBottom)
+      local gridTL = xy(config.mainLeft, config.mainTop)
+      local gridTR = xy(config.mainRight, config.mainTop)
+      local trackL = xy(config.mainLeft, config.lane)
+      local trackR = xy(config.mainRight, config.lane)
+
+      grid.setCollider(config.left, config.right, config.bottom, config.top)
+      grid.setPanelColor(color.panel)
+
+      grid.drawArea(color.ftr.area, ftrTL, ftrTR, gridBR, gridBL)
+      drawLines(color.ftr.boundary, {ftrTL, ftrTR, gridBR, gridBL}, true)
+
+      grid.drawArea(color.byd.area, bydTL, ftrTL, gridBL)
+      grid.drawArea(color.byd.area, ftrTR, bydTR, gridBR)
+      drawLines(color.byd.boundary, {ftrTL, bydTL, gridBL}, false)
+      drawLines(color.byd.boundary, {ftrTR, bydTR, gridBR}, false)
+
+      grid.drawArea(color.unsafe.area, bydTL, gridTL, gridBL)
+      grid.drawArea(color.unsafe.area, gridTR, bydTR, gridBR)
+      grid.drawArea(color.unsafe.area, gridBL, gridBR, trackR, trackL)
+      drawLines(color.unsafe.boundary, {bydTL, gridTL, gridBL}, false)
+      drawLines(color.unsafe.boundary, {bydTR, gridTR, gridBR}, false)
+      drawLines(color.unsafe.boundary, {gridBR, trackR, trackL, gridBL}, false)
+
+      grid.drawLine(config.left, config.left, config.bottom, config.top, color.lines)
+      for x = config.mainLeft - spacing.x, config.left + spacing.x, -spacing.x do
+          grid.drawLine(x, x, config.bottom, config.top, color.lines)
       end
+
+      for x = config.mainLeft, config.mainRight, spacing.x do
+          grid.drawLine(x, x, config.bottom, config.top, color.lines)
+      end
+
+      for x = config.mainRight + spacing.x, config.right - spacing.x, spacing.x do
+          grid.drawLine(x, x, config.bottom, config.top, color.lines)
+      end
+      grid.drawLine(config.right, config.right, config.bottom, config.top, color.lines)
+
+      grid.drawLine(config.left, config.right, config.bottom, config.bottom, color.lines)
+      for y = config.mainBottom - spacing.y, config.bottom + spacing.y, -spacing.y do
+          grid.drawLine(config.left, config.right, y, y, color.lines)
+      end
+
+      for y = config.mainBottom, config.mainTop, spacing.y do
+          grid.drawLine(config.left, config.right, y, y, color.lines)
+      end
+
+      for y = config.mainTop + spacing.y, config.top - spacing.y, spacing.y do
+          grid.drawLine(config.left, config.right, y, y, color.lines)
+      end
+      grid.drawLine(config.left, config.right, config.top, config.top, color.lines)
   # Texts that appear on the editor UI
   UI:
     Common:

@@ -39,16 +39,16 @@ namespace ArcCreate.Compose.Grid
 
         public static GridSettings GetSlot(int slot) => SettingSlots[Mathf.Clamp(slot, 0, 9)];
 
-        public IVerticalGridSettings GetVerticalSettings(string fallbackScript)
+        public IVerticalGridSettings GetVerticalSettings(string defaultScript)
         {
-            if (UseDefaultSettings.Value)
-            {
-                return new DefaultVerticalGridSettings();
-            }
-
             try
             {
-                return new LuaVerticalGridSettings(ScriptWithFallback(fallbackScript));
+                if (UseDefaultSettings.Value)
+                {
+                    return new LuaVerticalGridSettings(defaultScript);
+                }
+
+                return new LuaVerticalGridSettings(ScriptWithFallback(defaultScript));
             }
             catch (Exception e)
             {

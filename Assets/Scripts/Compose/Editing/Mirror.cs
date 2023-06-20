@@ -3,7 +3,6 @@ using ArcCreate.Compose.History;
 using ArcCreate.Compose.Navigation;
 using ArcCreate.Compose.Selection;
 using ArcCreate.Gameplay.Data;
-using Cysharp.Threading.Tasks;
 
 namespace ArcCreate.Compose.Editing
 {
@@ -54,26 +53,26 @@ namespace ArcCreate.Compose.Editing
         }
 
         [EditorAction("Horizontal", true, "m")]
-        [SelectionService.RequireSelection]
+        [NoteModifyTarget.RequireTarget]
         public void MirrorHorizontal()
         {
-            MirrorHorizontal(Services.Selection.SelectedNotes, true);
+            MirrorHorizontal(GetTargetNotes(), true);
         }
 
         [EditorAction("HorizontalNoColorSwitch", true, "<c-m>")]
-        [SelectionService.RequireSelection]
+        [NoteModifyTarget.RequireTarget]
         public void MirrorHorizontalNoColorSwitch()
         {
-            MirrorHorizontal(Services.Selection.SelectedNotes, false);
+            MirrorHorizontal(GetTargetNotes(), false);
         }
 
         [EditorAction("Vertical", true, "<a-m>")]
-        [SelectionService.RequireSelection]
+        [NoteModifyTarget.RequireTarget]
         public void MirrorVertical()
         {
-            HashSet<Note> selected = Services.Selection.SelectedNotes;
+            IEnumerable<Note> notes = GetTargetNotes();
             List<(ArcEvent instance, ArcEvent newValue)> events = new List<(ArcEvent, ArcEvent)>();
-            foreach (ArcEvent ev in selected)
+            foreach (ArcEvent ev in notes)
             {
                 if (ev is Arc a)
                 {
@@ -84,6 +83,7 @@ namespace ArcCreate.Compose.Editing
                 }
             }
 
+            NoteModifyTarget.MarkCurrentAsModified();
             if (events.Count > 0)
             {
                 Services.History.AddCommand(new EventCommand(
@@ -95,5 +95,7 @@ namespace ArcCreate.Compose.Editing
                 Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.Mirror.CannotMirror"));
             }
         }
+
+        private IEnumerable<Note> GetTargetNotes() => NoteModifyTarget.Current ?? Services.Selection.SelectedNotes;
     }
 }

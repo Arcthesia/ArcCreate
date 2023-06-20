@@ -123,10 +123,10 @@ namespace ArcCreate.Compose.Editing
         [RequireGameplayLoaded]
         public void SwitchArcMode()
         {
-            var selectedArcs = GetSelectedArcs();
+            var selectedArcs = GetModifyTargetArcs();
             if (selectedArcs.Count > 0)
             {
-                ModifySelectedArcs(a => a.IsTrace = !a.IsTrace);
+                ModifyTargetArcs(a => a.IsTrace = !a.IsTrace);
                 return;
             }
 
@@ -145,10 +145,10 @@ namespace ArcCreate.Compose.Editing
         [RequireGameplayLoaded]
         public void SwitchArcColor()
         {
-            var selectedArcs = GetSelectedArcs();
+            var selectedArcs = GetModifyTargetArcs();
             if (selectedArcs.Count > 0)
             {
-                ModifySelectedArcs(a => a.Color = 1 - a.Color, a => a.Color == 0 || a.Color == 1);
+                ModifyTargetArcs(a => a.Color = 1 - a.Color, a => a.Color == 0 || a.Color == 1);
                 return;
             }
 
@@ -162,10 +162,10 @@ namespace ArcCreate.Compose.Editing
         [RequireGameplayLoaded]
         public void SwitchArcType()
         {
-            var selectedArcs = GetSelectedArcs();
+            var selectedArcs = GetModifyTargetArcs();
             if (selectedArcs.Count > 0)
             {
-                ModifySelectedArcs(a => a.LineType = SwitchLineType(a.LineType));
+                ModifyTargetArcs(a => a.LineType = SwitchLineType(a.LineType));
                 return;
             }
 
@@ -176,10 +176,10 @@ namespace ArcCreate.Compose.Editing
         [RequireGameplayLoaded]
         public void CycleArcType()
         {
-            var selectedArcs = GetSelectedArcs();
+            var selectedArcs = GetModifyTargetArcs();
             if (selectedArcs.Count > 0)
             {
-                ModifySelectedArcs(a => a.LineType = CycleLineType(a.LineType));
+                ModifyTargetArcs(a => a.LineType = CycleLineType(a.LineType));
                 return;
             }
 
@@ -190,10 +190,10 @@ namespace ArcCreate.Compose.Editing
         [RequireGameplayLoaded]
         public void CycleArcTypeReversed()
         {
-            var selectedArcs = GetSelectedArcs();
+            var selectedArcs = GetModifyTargetArcs();
             if (selectedArcs.Count > 0)
             {
-                ModifySelectedArcs(a => a.LineType = CycleLineTypeReversed(a.LineType));
+                ModifyTargetArcs(a => a.LineType = CycleLineTypeReversed(a.LineType));
                 return;
             }
 
@@ -242,19 +242,25 @@ namespace ArcCreate.Compose.Editing
 
         private void SetType(ArcLineType type)
         {
-            var selectedArcs = GetSelectedArcs();
+            var selectedArcs = GetModifyTargetArcs();
             if (selectedArcs.Count > 0)
             {
-                ModifySelectedArcs(a => a.LineType = type, a => a.LineType != type);
+                ModifyTargetArcs(a => a.LineType = type, a => a.LineType != type);
             }
 
             Values.CreateArcTypeMode.Value = type;
         }
 
-        private void ModifySelectedArcs(Action<Arc> modifier, Func<Arc, bool> requirement = null)
+        private List<Arc> GetModifyTargetArcs()
+        {
+            IEnumerable<Note> notes = NoteModifyTarget.Current ?? Services.Selection.SelectedNotes;
+            return notes.Where(n => n is Arc).Cast<Arc>().ToList();
+        }
+
+        private void ModifyTargetArcs(Action<Arc> modifier, Func<Arc, bool> requirement = null)
         {
             List<(ArcEvent instance, ArcEvent newValue)> batch = new List<(ArcEvent instance, ArcEvent newValue)>();
-            foreach (var note in Services.Selection.SelectedNotes)
+            foreach (var note in GetModifyTargetArcs())
             {
                 if (note is Arc arc && (requirement?.Invoke(arc) ?? true))
                 {
@@ -264,6 +270,7 @@ namespace ArcCreate.Compose.Editing
                 }
             }
 
+            NoteModifyTarget.MarkCurrentAsModified();
             if (batch.Count > 0)
             {
                 Services.History.AddCommand(new EventCommand(
@@ -318,11 +325,6 @@ namespace ArcCreate.Compose.Editing
                 case ArcLineType.SoSi: return ArcLineType.SiSo;
                 default: return ArcLineType.S;
             }
-        }
-
-        private List<Arc> GetSelectedArcs()
-        {
-            return Services.Selection.SelectedNotes.Where(n => n is Arc).Cast<Arc>().ToList();
         }
 
         private void Awake()

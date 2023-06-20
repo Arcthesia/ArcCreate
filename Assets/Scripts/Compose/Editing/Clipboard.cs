@@ -44,13 +44,12 @@ namespace ArcCreate.Compose.Editing
         [SubAction("Confirm", false, "<mouse1>")]
         [SubAction("Mirror", false, "m")]
         [SubAction("Cancel", true, "<esc>")]
-        [WhitelistScopes(typeof(Grid.GridService), typeof(Timeline.TimelineService))]
+        [WhitelistScopes(typeof(Grid.GridService), typeof(Timeline.TimelineService), typeof(NotePallete), typeof(Mirror))]
         public async UniTask Paste(EditorAction action)
         {
             SubAction confirm = action.GetSubAction("Confirm");
-            SubAction mirror = action.GetSubAction("Mirror");
             SubAction cancel = action.GetSubAction("Cancel");
-            await StartPasting(defaultClipboard, confirm, mirror, cancel);
+            await StartPasting(defaultClipboard, confirm, cancel);
         }
 
         [EditorAction("Clear", true)]
@@ -109,101 +108,101 @@ namespace ArcCreate.Compose.Editing
         [SubAction("Confirm", false, "<mouse1>")]
         [SubAction("Mirror", false, "m")]
         [SubAction("Cancel", true, "<esc>")]
-        [WhitelistScopes(typeof(Grid.GridService), typeof(Timeline.TimelineService))]
+        [WhitelistScopes(typeof(Grid.GridService), typeof(Timeline.TimelineService), typeof(NotePallete), typeof(Mirror))]
         public async UniTask NamedPaste(EditorAction action)
         {
             KeyCode name = await GetKeyboardInput();
             if (namedClipboards.TryGetValue(name, out var notes))
             {
                 SubAction confirm = action.GetSubAction("Confirm");
-                SubAction mirror = action.GetSubAction("Mirror");
                 SubAction cancel = action.GetSubAction("Cancel");
-                await StartPasting(notes, confirm, mirror, cancel);
+                await StartPasting(notes, confirm, cancel);
             }
         }
 
-        private async UniTask StartPasting(HashSet<Note> notes, SubAction confirm, SubAction mirror, SubAction cancel)
+        private async UniTask StartPasting(HashSet<Note> notes, SubAction confirm, SubAction cancel)
         {
             List<Note> newNotes = new List<Note>(MakePaste(notes));
             EventCommand command = new EventCommand(
                 name: I18n.S("Compose.Notify.History.Paste"),
                 add: newNotes);
 
-            int minTiming = int.MaxValue;
-            Note anchorNote = newNotes[0];
-            for (int i = 0; i < newNotes.Count; i++)
+            using (var modify = new NoteModifyTarget(newNotes))
             {
-                Note note = newNotes[i];
-                if (note.Timing < minTiming)
+                int minTiming = int.MaxValue;
+                Note anchorNote = newNotes[0];
+                for (int i = 0; i < newNotes.Count; i++)
                 {
-                    minTiming = note.Timing;
-                    anchorNote = note;
-                }
-            }
-
-            command.Execute();
-            Services.Gameplay.Chart.EnableColliderGeneration = false;
-            Services.Gameplay.Chart.EnableArcRebuildSegment = false;
-
-            var (success, timing) = await Services.Cursor.RequestTimingSelection(
-                confirm,
-                cancel,
-                update: t =>
-                {
-                    bool mirrored = mirror.WasExecuted;
-                    ApplyTimingToPastingNotes(t, newNotes, anchorNote);
-                    if (mirrored)
+                    Note note = newNotes[i];
+                    if (note.Timing < minTiming)
                     {
-                        Services.Gameplay.Chart.EnableArcRebuildSegment = true;
-                        Mirror.MirrorHorizontal(newNotes, true);
+                        minTiming = note.Timing;
+                        anchorNote = note;
                     }
+                }
 
+                command.Execute();
+                Services.Gameplay.Chart.EnableColliderGeneration = false;
+                Services.Gameplay.Chart.EnableArcRebuildSegment = false;
+
+                var (success, timing) = await Services.Cursor.RequestTimingSelection(
+                    confirm,
+                    cancel,
+                    update: t =>
+                    {
+                        bool changed = modify.WasModified;
+                        ApplyTimingToPastingNotes(t, newNotes, anchorNote);
+                        if (changed)
+                        {
+                            Services.Gameplay.Chart.EnableArcRebuildSegment = true;
+                        }
+
+                        Services.Gameplay.Chart.UpdateEvents(newNotes);
+
+                        if (changed)
+                        {
+                            Services.Gameplay.Chart.EnableArcRebuildSegment = false;
+                        }
+                    });
+                if (success)
+                {
+                    Services.Gameplay.Chart.EnableColliderGeneration = true;
+                    Services.Gameplay.Chart.EnableArcRebuildSegment = true;
+                    ApplyTimingToPastingNotes(timing, newNotes, anchorNote);
                     Services.Gameplay.Chart.UpdateEvents(newNotes);
 
-                    if (mirrored)
+                    List<Arc> extraArc = new List<Arc>();
+                    foreach (var note in newNotes)
                     {
-                        Services.Gameplay.Chart.EnableArcRebuildSegment = false;
+                        if (note is ArcTap at && (at.Timing < at.Arc.Timing || at.Timing > at.Arc.EndTiming))
+                        {
+                            Arc newArc = at.Arc.Clone() as Arc;
+                            at.Arc = newArc;
+                            newArc.Timing = newArc.Timing - minTiming + timing;
+                            newArc.EndTiming = newArc.EndTiming - minTiming + timing;
+                            extraArc.Add(newArc);
+                        }
                     }
-                });
 
-            if (success)
-            {
-                Services.Gameplay.Chart.EnableColliderGeneration = true;
-                Services.Gameplay.Chart.EnableArcRebuildSegment = true;
-                ApplyTimingToPastingNotes(timing, newNotes, anchorNote);
-                Services.Gameplay.Chart.UpdateEvents(newNotes);
-
-                List<Arc> extraArc = new List<Arc>();
-                foreach (var note in newNotes)
-                {
-                    if (note is ArcTap at && (at.Timing < at.Arc.Timing || at.Timing > at.Arc.EndTiming))
+                    if (extraArc.Count > 0)
                     {
-                        Arc newArc = at.Arc.Clone() as Arc;
-                        at.Arc = newArc;
-                        newArc.Timing = newArc.Timing - minTiming + timing;
-                        newArc.EndTiming = newArc.EndTiming - minTiming + timing;
-                        extraArc.Add(newArc);
+                        command.Undo();
+                        newNotes.AddRange(extraArc);
+                        command = new EventCommand(
+                            name: I18n.S("Compose.Notify.History.Paste"),
+                            add: newNotes);
+
+                        command.Execute();
                     }
+
+                    Services.History.AddCommandWithoutExecuting(command);
                 }
-
-                if (extraArc.Count > 0)
+                else
                 {
+                    Services.Gameplay.Chart.EnableColliderGeneration = true;
+                    Services.Gameplay.Chart.EnableArcRebuildSegment = true;
                     command.Undo();
-                    newNotes.AddRange(extraArc);
-                    command = new EventCommand(
-                        name: I18n.S("Compose.Notify.History.Paste"),
-                        add: newNotes);
-
-                    command.Execute();
                 }
-
-                Services.History.AddCommandWithoutExecuting(command);
-            }
-            else
-            {
-                Services.Gameplay.Chart.EnableColliderGeneration = true;
-                Services.Gameplay.Chart.EnableArcRebuildSegment = true;
-                command.Undo();
             }
         }
 

@@ -11,6 +11,10 @@ namespace ArcCreate.Compose.Grid
 
         float SnapTolerance { get; }
 
+        float IncrementX { get; }
+
+        float IncrementY { get; }
+
         List<Line> Lines { get; }
 
         List<Area> Areas { get; }

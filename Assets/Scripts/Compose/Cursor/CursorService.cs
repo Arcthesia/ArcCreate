@@ -28,9 +28,6 @@ namespace ArcCreate.Compose.Cursor
         private Vector2 selectingVerticalPoint;
         private Vector3 cursorWorldPosition;
         private int showVerticalAtTiming;
-        private Action onRemoveDigit;
-        private Action onTypedValueConfirm;
-        private Action<string> onClipboard;
 
         public bool EnableLaneCursor
         {
@@ -59,12 +56,6 @@ namespace ArcCreate.Compose.Cursor
                 confirm: confirm,
                 cancel: cancel,
                 selector: () => selectingTiming,
-                isValidTypedChar: char.IsDigit,
-                convertTypedStringToValue: (s) =>
-                {
-                    bool valid = Evaluator.TryInt(s, out int val);
-                    return (valid, val);
-                },
                 update: update,
                 constraint: constraint);
 
@@ -83,12 +74,6 @@ namespace ArcCreate.Compose.Cursor
                 confirm: confirm,
                 cancel: cancel,
                 selector: () => selectingLane,
-                isValidTypedChar: char.IsDigit,
-                convertTypedStringToValue: (s) =>
-                {
-                    bool valid = Evaluator.TryInt(s, out int val);
-                    return (valid, val);
-                },
                 update: update,
                 constraint: (lane) => (constraint?.Invoke(lane) ?? true) && lane >= Gameplay.Values.LaneFrom && lane <= Gameplay.Values.LaneTo);
 
@@ -109,19 +94,6 @@ namespace ArcCreate.Compose.Cursor
                 confirm: confirm,
                 cancel: cancel,
                 selector: () => selectingVerticalPoint,
-                isValidTypedChar: (c) => char.IsDigit(c) || c == ',' || c == '.',
-                convertTypedStringToValue: (s) =>
-                {
-                    string[] split = s.Split(',');
-                    if (split.Length != 2)
-                    {
-                        return (false, default);
-                    }
-
-                    float y = default;
-                    bool valid = Evaluator.TryFloat(split[0], out float x) && Evaluator.TryFloat(split[1], out y);
-                    return (valid, new Vector2(x, y));
-                },
                 update: update,
                 constraint: constraint);
 
@@ -129,30 +101,9 @@ namespace ArcCreate.Compose.Cursor
             return result;
         }
 
-        [EditorAction("RemoveDigit", false, "<backspace>")]
-        [RequireTyping]
-        public void TypedValueRemoveDigit()
-        {
-            onRemoveDigit?.Invoke();
-        }
-
-        [EditorAction("ConfirmTypedValue", false, "<cr>")]
-        [RequireTyping]
-        public void ConfirmTypedValue()
-        {
-            onTypedValueConfirm?.Invoke();
-        }
-
-        [EditorAction("PasteToTypedValue", false, "<c-v>")]
-        [RequireTyping]
-        public void PasteToTypedValue()
-        {
-            onClipboard?.Invoke(GUIUtility.systemCopyBuffer);
-        }
-
 #if UNITY_EDITOR
         [EditorAction("Test", false, "tv")]
-        [SubAction("Confirm", false, "<cr>", "<u-mouse1>")]
+        [SubAction("Confirm", false, "<cr>", "<mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
         [WhitelistScopes(typeof(CursorService), typeof(Grid.GridService))]
         public async UniTask TestCursor(EditorAction action)
@@ -287,10 +238,6 @@ namespace ArcCreate.Compose.Cursor
             cursorVerticalX.gameObject.SetActive(true);
             cursorVerticalY.gameObject.SetActive(true);
 
-            // TODO: Extend for 6k
-            float minLane = -8.5f;
-            float maxLane = 8.5f;
-
             Vector2 snapped = Services.Grid.SnapPointToGridIfEnabled(hit.point);
             float verticalScale = verticalCollider.transform.localScale.y;
 
@@ -303,13 +250,14 @@ namespace ArcCreate.Compose.Cursor
                 snapped.y /= verticalScale;
             }
 
+            (float fromX, float fromY, float toX, float toY) = Services.Grid.GetVerticalGridBound();
             cursorVerticalX.DrawLine(
-                from: new Vector3(snapped.x, 0, 0),
-                to: new Vector3(snapped.x, Gameplay.Values.ArcY1, 0));
+                from: new Vector3(snapped.x, fromY, 0),
+                to: new Vector3(snapped.x, toY, 0));
 
             cursorVerticalY.DrawLine(
-                from: new Vector3(minLane, snapped.y, 0),
-                to: new Vector3(maxLane, snapped.y, 0));
+                from: new Vector3(fromX, snapped.y, 0),
+                to: new Vector3(toX, snapped.y, 0));
             cursorWorldPosition.x = snapped.x;
 
             cursorWorldPosition.y = snapped.y;
@@ -338,44 +286,11 @@ namespace ArcCreate.Compose.Cursor
             SubAction confirm,
             SubAction cancel,
             Func<T> selector,
-            Func<char, bool> isValidTypedChar,
-            Func<string, (bool, T)> convertTypedStringToValue,
             Action<T> update = null,
             Func<T, bool> constraint = null)
         {
             T result = default;
             bool resultSet = false;
-
-            // Printing the value every time anyway, StringBuilder doesn't help
-            string typedValue = "";
-            bool typedValueConfirmed = false;
-            RequireTypingAttribute.IsTyping = true;
-
-            void RemoveDigit()
-            {
-                typedValue = typedValue.Remove(typedValue.Length - 1, 1);
-                Services.Popups.Notify(Popups.Severity.Info, typedValue);
-            }
-
-            void ConfirmTypedValue()
-            {
-                typedValueConfirmed = true;
-            }
-
-            void PasteClipboard(string clipboard)
-            {
-                (bool valid, T value) = convertTypedStringToValue.Invoke(clipboard);
-                if (valid)
-                {
-                    typedValue = clipboard;
-                    Services.Popups.Notify(Popups.Severity.Info, typedValue);
-                }
-            }
-
-            // Keyboard.current.onTextInput += OnType;
-            onRemoveDigit += RemoveDigit;
-            onTypedValueConfirm += ConfirmTypedValue;
-            onClipboard += PasteClipboard;
 
             bool wasSuccessful = false;
             while (true)
@@ -387,25 +302,6 @@ namespace ArcCreate.Compose.Cursor
                     result = selecting;
                     resultSet = true;
                     update?.Invoke(result);
-                }
-
-                if (typedValueConfirmed)
-                {
-                    string str = typedValue;
-                    (bool validString, T value) = convertTypedStringToValue.Invoke(str);
-
-                    if (validString && (constraint?.Invoke(value) ?? true))
-                    {
-                        wasSuccessful = true;
-                        result = value;
-                        resultSet = true;
-                        break;
-                    }
-                    else
-                    {
-                        Services.Popups.Notify(Popups.Severity.Error, typedValue);
-                        typedValueConfirmed = false;
-                    }
                 }
 
                 if (confirm.WasExecuted)
@@ -420,71 +316,10 @@ namespace ArcCreate.Compose.Cursor
                     break;
                 }
 
-                if (Input.anyKeyDown)
-                {
-                    foreach (KeyCode k in Enum.GetValues(typeof(KeyCode)))
-                    {
-                        if (Input.GetKeyDown(k)
-                        && ConvertKeyCodeToChar(k, out char c))
-                        {
-                            if (isValidTypedChar.Invoke(c))
-                            {
-                                typedValue += c;
-                                Services.Popups.Notify(Popups.Severity.Info, typedValue);
-                            }
-                        }
-                    }
-                }
-
                 await UniTask.NextFrame();
             }
 
-            RequireTypingAttribute.IsTyping = false;
-            onRemoveDigit -= RemoveDigit;
-            onTypedValueConfirm -= ConfirmTypedValue;
-            onClipboard -= PasteClipboard;
             return (wasSuccessful, result);
-        }
-
-        private bool ConvertKeyCodeToChar(KeyCode k, out char c)
-        {
-            c = default;
-            string str = k.ToString().ToLower();
-
-            switch (k)
-            {
-                case KeyCode.Comma:
-                    c = ',';
-                    return true;
-                case KeyCode.Period:
-                    c = '.';
-                    return true;
-            }
-
-            if (str.StartsWith("alpha"))
-            {
-                str = str.Substring("alpha".Length);
-            }
-
-            if (str.StartsWith("keypad"))
-            {
-                str = str.Substring("keypad".Length);
-            }
-
-            if (str.Length == 1)
-            {
-                c = str[0];
-                return true;
-            }
-
-            return false;
-        }
-
-        private class RequireTypingAttribute : ContextRequirementAttribute
-        {
-            public static bool IsTyping { get; set; } = false;
-
-            public override bool CheckRequirement() => IsTyping;
         }
     }
 }

@@ -56,7 +56,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _AudioLength: 24078944
+    - _AudioLength: 11645382
     - _BumpScale: 1
     - _CurrentTimingSample: 0
     - _Cutoff: 0.5
@@ -69,8 +69,8 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _RepeatSampleFrom: 1172358
-    - _RepeatSampleTo: 4750026
+    - _RepeatSampleFrom: 88641
+    - _RepeatSampleTo: 787718
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

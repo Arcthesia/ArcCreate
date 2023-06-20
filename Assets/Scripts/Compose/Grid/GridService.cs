@@ -107,6 +107,11 @@ namespace ArcCreate.Compose.Grid
             IsGridEnabled = slotSwitched || !IsGridEnabled;
         }
 
+        public (float fromX, float fromY, float toX, float toY) GetVerticalGridBound()
+        {
+            return verticalGrid.GetBounds();
+        }
+
         private void LoadGridSlot(int slot)
         {
             GridSettings settings = GridSettings.GetSlot(slot);

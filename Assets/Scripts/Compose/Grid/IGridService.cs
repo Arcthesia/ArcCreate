@@ -66,5 +66,11 @@ namespace ArcCreate.Compose.Grid
         /// <param name="point">The base point to snap.</param>
         /// <returns>The closest point on the vertical grid.</returns>
         Vector2 SnapPointToGrid(Vector2 point);
+
+        /// <summary>
+        /// Get the bounds of the vertical grid.
+        /// </summary>
+        /// <returns>Coordinates of the bound.</returns>
+        (float fromX, float fromY, float toX, float toY) GetVerticalGridBound();
     }
 }

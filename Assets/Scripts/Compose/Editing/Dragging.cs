@@ -3,7 +3,6 @@ using System.Linq;
 using ArcCreate.Compose.Grid;
 using ArcCreate.Compose.History;
 using ArcCreate.Compose.Navigation;
-using ArcCreate.Compose.Selection;
 using ArcCreate.Compose.Timeline;
 using ArcCreate.Gameplay;
 using ArcCreate.Gameplay.Data;
@@ -25,13 +24,12 @@ namespace ArcCreate.Compose.Editing
         [EditorAction("Timing", false, "<a-mouse1>")]
         [SubAction("Confirm", false, "<u-mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
-        [SelectionService.RequireSelection]
         [WhitelistScopes(typeof(GridService), typeof(TimelineService))]
         public async UniTask DragTiming(EditorAction action)
         {
             SubAction confirm = action.GetSubAction("Confirm");
             SubAction cancel = action.GetSubAction("Cancel");
-            HashSet<Note> selection = Services.Selection.SelectedNotes;
+            IEnumerable<Note> selection = GetSelection();
 
             Services.Cursor.EnableLaneCursor = true;
             Services.Cursor.ForceUpdateLaneCursor();
@@ -164,13 +162,12 @@ namespace ArcCreate.Compose.Editing
         [EditorAction("Position", false, "<s-mouse1>")]
         [SubAction("Confirm", false, "<u-mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
-        [SelectionService.RequireSelection]
         [WhitelistScopes(typeof(GridService), typeof(TimelineService))]
         public async UniTask DragPosition(EditorAction action)
         {
             SubAction confirm = action.GetSubAction("Confirm");
             SubAction cancel = action.GetSubAction("Cancel");
-            HashSet<Note> selection = Services.Selection.SelectedNotes;
+            IEnumerable<Note> selection = GetSelection();
 
             Vector2 mousePos = Input.mousePosition;
             int closestTiming = 0;
@@ -572,6 +569,18 @@ namespace ArcCreate.Compose.Editing
 
             screenPos = Services.Gameplay.Camera.GameplayCamera.WorldToScreenPoint(worldPosition);
             return true;
+        }
+
+        private IEnumerable<Note> GetSelection()
+        {
+            if (Services.Selection.SelectedNotes?.Count > 0)
+            {
+                return Services.Selection.SelectedNotes;
+            }
+            else
+            {
+                return Services.Gameplay.Chart.GetRenderingNotes();
+            }
         }
     }
 }

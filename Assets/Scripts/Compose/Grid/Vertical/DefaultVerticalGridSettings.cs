@@ -53,5 +53,9 @@ namespace ArcCreate.Compose.Grid
         }
 
         public List<Area> Areas => new List<Area>();
+
+        public float IncrementX => VerticalGrid.DefaultIncrementX;
+
+        public float IncrementY => VerticalGrid.DefaultIncrementY;
     }
 }
