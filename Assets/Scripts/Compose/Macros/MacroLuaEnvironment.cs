@@ -208,7 +208,7 @@ namespace ArcCreate.Compose.Macros
         }
 
         [EmmyDoc("Add a folder with an icon. The icon should be a material icon unicode value e.g e2c7.")]
-        public void AddFolderWithIcon(string parentId, string id, string displayName, string icon)
+        public void AddFolderWithIcon(string parentId, string id, string icon, string displayName)
         {
         }
 

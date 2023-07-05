@@ -16,7 +16,7 @@ namespace ArcCreate.Compose.Macros
         {
             base.SetupField(field, request);
             constraint = field.FieldConstraint;
-            textField.text = field.DefaultValue?.String;
+            textField.text = field.DefaultValue?.CastToString() ?? "";
 
             switch (constraint.Type)
             {

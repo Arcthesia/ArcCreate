@@ -8,8 +8,14 @@ namespace ArcCreate.Compose.Macros
     [EmmyGroup("Macros")]
     public class TrackInput
     {
-        [EmmyDoc("Request a timing selection. Returned value is accessed through the key \"timing\"")]
+        [EmmyDoc("DEPRECATED. showVertical is no longer supported")]
         public static MacroRequest RequestTiming(bool showVertical = false, string notification = null)
+        {
+            return RequestTiming(notification);
+        }
+
+        [EmmyDoc("Request a timing selection. Returned value is accessed through the key \"timing\"")]
+        public static MacroRequest RequestTiming(string notification = null)
         {
             MacroRequest request = new MacroRequest();
             if (notification != null)
@@ -21,7 +27,7 @@ namespace ArcCreate.Compose.Macros
                 Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.Macros.Select.Timing"));
             }
 
-            Services.Macros.RequestTrackTiming(request, showVertical);
+            Services.Macros.RequestTrackTiming(request);
             return request;
         }
 

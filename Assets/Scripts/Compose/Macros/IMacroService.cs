@@ -12,6 +12,6 @@ namespace ArcCreate.Compose.Macros
 
         void RequestTrackPosition(MacroRequest request, int timing);
 
-        void RequestTrackTiming(MacroRequest request, bool showVertical);
+        void RequestTrackTiming(MacroRequest request);
     }
 }

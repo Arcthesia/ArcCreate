@@ -34,7 +34,7 @@ namespace ArcCreate.Compose.Macros
         private Pool<Cell> macroCellPool;
 
         private (EventSelectionConstraint constraint, EventSelectionRequest request, bool selectSingle) currentSelectionRequest;
-        private (MacroRequest request, int timing, bool showVertical) currentMacroRequest;
+        private (MacroRequest request, int timing) currentMacroRequest;
 
         private MacroLuaEnvironment macroEnvironment;
 
@@ -48,7 +48,6 @@ namespace ArcCreate.Compose.Macros
 
             macroEnvironment.RunMacro(macro).Forget();
             macroPicker.SetLastRunMacro(macro);
-            HideFullList();
         }
 
         public void CreateDialog(string dialogTitle, DialogField[] fields, MacroRequest request)
@@ -129,7 +128,7 @@ namespace ArcCreate.Compose.Macros
 
         public void RequestTrackLane(MacroRequest request)
         {
-            currentMacroRequest = (request, 0, false);
+            currentMacroRequest = (request, 0);
             Services.Navigation.StartAction("Macros.SelectLane");
             macroEnvironment.WaitForRequest(request);
         }
@@ -142,7 +141,7 @@ namespace ArcCreate.Compose.Macros
         {
             SubAction confirm = action.GetSubAction("Confirm");
             SubAction cancel = action.GetSubAction("Cancel");
-            var (request, _, _) = currentMacroRequest;
+            var (request, _) = currentMacroRequest;
 
             (bool success, int lane) = await Services.Cursor.RequestLaneSelection(confirm, cancel);
             if (!success)
@@ -157,7 +156,7 @@ namespace ArcCreate.Compose.Macros
 
         public void RequestTrackPosition(MacroRequest request, int timing)
         {
-            currentMacroRequest = (request, timing, false);
+            currentMacroRequest = (request, timing);
             Services.Navigation.StartAction("Macros.SelectPosition");
             macroEnvironment.WaitForRequest(request);
         }
@@ -170,7 +169,7 @@ namespace ArcCreate.Compose.Macros
         {
             SubAction confirm = action.GetSubAction("Confirm");
             SubAction cancel = action.GetSubAction("Cancel");
-            var (request, timing, _) = currentMacroRequest;
+            var (request, timing) = currentMacroRequest;
 
             (bool success, Vector2 position) = await Services.Cursor.RequestVerticalSelection(confirm, cancel, timing);
             if (!success)
@@ -185,9 +184,9 @@ namespace ArcCreate.Compose.Macros
             request.Complete = true;
         }
 
-        public void RequestTrackTiming(MacroRequest request, bool showVertical)
+        public void RequestTrackTiming(MacroRequest request)
         {
-            currentMacroRequest = (request, 0, showVertical);
+            currentMacroRequest = (request, 0);
             Services.Navigation.StartAction("Macros.SelectTiming");
             macroEnvironment.WaitForRequest(request);
         }
@@ -200,9 +199,8 @@ namespace ArcCreate.Compose.Macros
         {
             SubAction confirm = action.GetSubAction("Confirm");
             SubAction cancel = action.GetSubAction("Cancel");
-            var (request, _, showVertical) = currentMacroRequest;
+            var (request, _) = currentMacroRequest;
 
-            Services.Grid.IsGridEnabled = showVertical;
             (bool success, int timing) = await Services.Cursor.RequestTimingSelection(confirm, cancel);
             if (!success)
             {

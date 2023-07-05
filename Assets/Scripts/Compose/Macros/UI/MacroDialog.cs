@@ -61,6 +61,7 @@ namespace ArcCreate.Compose.Macros
 
                 BaseField f = go.GetComponent<BaseField>();
                 f.SetupField(field, request);
+                f.UpdateResult();
                 f.Tooltip = tooltip;
                 currentFields.Add(f);
             }
