@@ -245,6 +245,9 @@ namespace ArcCreate.Compose.Cursor
                 Gameplay.ArcFormula.WorldXToArc(snapped.x),
                 Gameplay.ArcFormula.WorldYToArc(snapped.y));
 
+            selectingVerticalPoint.x = Mathf.Round(selectingVerticalPoint.x * 1000) / 1000;
+            selectingVerticalPoint.y = Mathf.Round(selectingVerticalPoint.y * 1000) / 1000;
+
             if (verticalScale > Mathf.Epsilon)
             {
                 snapped.y /= verticalScale;

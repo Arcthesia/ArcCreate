@@ -196,6 +196,7 @@ namespace ArcCreate.Compose.Selection
             groupField.OnValueChanged += OnGroupField;
             selectArcButton.onClick.AddListener(OnSelectArcButton);
             selectArcTapButton.onClick.AddListener(OnSelectArcTapButton);
+            gameplayData.OnChartEdit += Rebuild;
         }
 
         private void OnDestroy()
@@ -215,6 +216,7 @@ namespace ArcCreate.Compose.Selection
             groupField.OnValueChanged -= OnGroupField;
             selectArcButton.onClick.RemoveListener(OnSelectArcButton);
             selectArcTapButton.onClick.RemoveListener(OnSelectArcTapButton);
+            gameplayData.OnChartEdit -= Rebuild;
         }
 
         private void OnTimingField(string value)

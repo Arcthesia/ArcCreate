@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using ArcCreate.Compose.History;
 using ArcCreate.Compose.Navigation;
-using ArcCreate.Compose.Selection;
 using ArcCreate.Gameplay.Data;
 
 namespace ArcCreate.Compose.Editing
@@ -9,61 +8,18 @@ namespace ArcCreate.Compose.Editing
     [EditorScope("Mirror")]
     public class Mirror
     {
-        public static void MirrorHorizontal(IEnumerable<Note> notes, bool switchColor)
-        {
-            List<(ArcEvent instance, ArcEvent newValue)> events = new List<(ArcEvent, ArcEvent)>();
-            foreach (ArcEvent ev in notes)
-            {
-                switch (ev)
-                {
-                    case Tap t:
-                        Tap newTap = t.Clone() as Tap;
-                        newTap.Lane = 5 - newTap.Lane;
-                        events.Add((t, newTap));
-                        break;
-                    case Hold h:
-                        Hold newHold = h.Clone() as Hold;
-                        newHold.Lane = 5 - newHold.Lane;
-                        events.Add((h, newHold));
-                        break;
-                    case Arc a:
-                        Arc newArc = a.Clone() as Arc;
-                        newArc.XStart = 1 - newArc.XStart;
-                        newArc.XEnd = 1 - newArc.XEnd;
-                        if (switchColor)
-                        {
-                            newArc.Color = (newArc.Color == 0 || newArc.Color == 1) ? 1 - newArc.Color : newArc.Color;
-                        }
-
-                        events.Add((a, newArc));
-                        break;
-                }
-            }
-
-            if (events.Count > 0)
-            {
-                Services.History.AddCommand(new EventCommand(
-                    name: I18n.S("Compose.Notify.History.Mirror.Horizontal"),
-                    update: events));
-            }
-            else
-            {
-                Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.Mirror.Actions.CannotMirror"));
-            }
-        }
-
         [EditorAction("Horizontal", true, "m")]
         [NoteModifyTarget.RequireTarget]
         public void MirrorHorizontal()
         {
-            MirrorHorizontal(GetTargetNotes(), true);
+            MirrorHorizontal(true);
         }
 
         [EditorAction("HorizontalNoColorSwitch", true, "<c-m>")]
         [NoteModifyTarget.RequireTarget]
         public void MirrorHorizontalNoColorSwitch()
         {
-            MirrorHorizontal(GetTargetNotes(), false);
+            MirrorHorizontal(false);
         }
 
         [EditorAction("Vertical", true, "<a-m>")]
@@ -93,6 +49,51 @@ namespace ArcCreate.Compose.Editing
             else
             {
                 Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.Mirror.CannotMirror"));
+            }
+        }
+
+        private void MirrorHorizontal(bool switchColor)
+        {
+            IEnumerable<Note> notes = GetTargetNotes();
+            List<(ArcEvent instance, ArcEvent newValue)> events = new List<(ArcEvent, ArcEvent)>();
+            foreach (ArcEvent ev in notes)
+            {
+                switch (ev)
+                {
+                    case Tap t:
+                        Tap newTap = t.Clone() as Tap;
+                        newTap.Lane = 5 - newTap.Lane;
+                        events.Add((t, newTap));
+                        break;
+                    case Hold h:
+                        Hold newHold = h.Clone() as Hold;
+                        newHold.Lane = 5 - newHold.Lane;
+                        events.Add((h, newHold));
+                        break;
+                    case Arc a:
+                        Arc newArc = a.Clone() as Arc;
+                        newArc.XStart = 1 - newArc.XStart;
+                        newArc.XEnd = 1 - newArc.XEnd;
+                        if (switchColor)
+                        {
+                            newArc.Color = (newArc.Color == 0 || newArc.Color == 1) ? 1 - newArc.Color : newArc.Color;
+                        }
+
+                        events.Add((a, newArc));
+                        break;
+                }
+            }
+
+            NoteModifyTarget.MarkCurrentAsModified();
+            if (events.Count > 0)
+            {
+                Services.History.AddCommand(new EventCommand(
+                    name: I18n.S("Compose.Notify.History.Mirror.Horizontal"),
+                    update: events));
+            }
+            else
+            {
+                Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.Mirror.Actions.CannotMirror"));
             }
         }
 
