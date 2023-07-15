@@ -191,7 +191,7 @@ namespace ArcCreate.Compose.EventsEditor
                 if (File.Exists(perChartPath))
                 {
                     lastPath = perChartPath;
-                    LuaRunner.RunScript(File.ReadAllText(perChartPath), this, InstructionLimit, new ScriptLoader(perChartPath));
+                    LuaRunner.RunScript(File.ReadAllText(perChartPath), this, InstructionLimit, new ScriptLoader(folderPath));
                 }
             }
             catch (Exception e)
