@@ -45,6 +45,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public static ProductChannel operator /(ValueChannel a, ValueChannel b) => a * new InverseChannel(b);
 
+        public static ModuloChannel operator %(ValueChannel a, float b) => a % new ConstantChannel(b);
+
+        public static ModuloChannel operator %(float a, ValueChannel b) => new ConstantChannel(a) % b;
+
+        public static ModuloChannel operator %(ValueChannel a, ValueChannel b) => new ModuloChannel(a, b);
+
         [EmmyDoc("Gets the value of this channel at the provided timing point")]
         public abstract float ValueAt(int timing);
 

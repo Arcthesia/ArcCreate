@@ -71,6 +71,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     return "channel.noise";
                 case ProductChannel product:
                     return "channel.product";
+                case ModuloChannel moduluo:
+                    return "channel.modulo";
                 case RandomChannel random:
                     return "channel.random";
                 case SawChannel saw:
