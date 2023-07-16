@@ -27,6 +27,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             for (int i = 0; i < triggers.Length; i++)
             {
                 triggers[i] = deserialization.GetUnitFromId<Trigger>(properties[i]);
+                triggers[i].BindToChannel(this);
             }
         }
 

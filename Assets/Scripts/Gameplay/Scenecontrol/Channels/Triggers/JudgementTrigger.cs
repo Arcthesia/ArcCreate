@@ -122,6 +122,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 Value = value,
                 Duration = duration ?? ValueChannel.ConstantOneChannel,
                 Easing = Easing.FromString(easing),
+                EasingString = easing,
             };
 
             return this;
@@ -219,7 +220,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 Value = deserialization.GetUnitFromId<ValueChannel>(properties[7]),
                 Duration = deserialization.GetUnitFromId<ValueChannel>(properties[8]),
                 EasingString = (string)properties[9],
-                Easing = Easing.FromString((string)properties[10]),
+                Easing = Easing.FromString((string)properties[9]),
             };
         }
     }
