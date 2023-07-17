@@ -4,9 +4,10 @@ using MoonSharp.Interpreter;
 
 namespace ArcCreate.Gameplay.Scenecontrol
 {
+    [SerializationExempt]
     [MoonSharpUserData]
     [EmmyDoc("A generic channel that defines a value for a given input timing value")]
-    public abstract class ValueChannel : ISerializableUnit
+    public abstract class ValueChannel : ISerializableUnit, IChannel
     {
         [MoonSharpHidden]
         public static ValueChannel ConstantZeroChannel { get; } = new ConstantChannel(0);
@@ -44,6 +45,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public static ProductChannel operator /(float b, ValueChannel a) => new ConstantChannel(b) * new InverseChannel(a);
 
         public static ProductChannel operator /(ValueChannel a, ValueChannel b) => a * new InverseChannel(b);
+
+        public static ModuloChannel operator %(ValueChannel a, ValueChannel b) => new ModuloChannel(a, b);
+
+        public static ModuloChannel operator %(float a, ValueChannel b) => new ModuloChannel(new ConstantChannel(a), b);
+
+        public static ModuloChannel operator %(ValueChannel a, float b) => new ModuloChannel(a, new ConstantChannel(b));
 
         [EmmyDoc("Gets the value of this channel at the provided timing point")]
         public abstract float ValueAt(int timing);

@@ -354,7 +354,7 @@ namespace ArcCreate.Compose.Editing
             float z = cursorPosition.z;
 
             GroupProperties groupProperties = Services.Gameplay.Chart.GetTimingGroup(tg).GroupProperties;
-            Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(ArcFormula.LaneToWorldX(cursorLane), 0, 0);
+            Vector3 pos = (groupProperties.GetFallDirection() * z) + new Vector3(ArcFormula.LaneToWorldX(cursorLane), 0, 0);
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
 
@@ -373,11 +373,11 @@ namespace ArcCreate.Compose.Editing
                     previewHold.localScale = scl;
                     break;
                 case CreateNoteMode.Arc:
-                    pos = (groupProperties.FallDirection * z) + new Vector3(cursorPosition.x, 1, 0);
+                    pos = (groupProperties.GetFallDirection() * z) + new Vector3(cursorPosition.x, 1, 0);
                     previewArc.localPosition = pos;
                     break;
                 case CreateNoteMode.Trace:
-                    pos = (groupProperties.FallDirection * z) + new Vector3(cursorPosition.x, 1, 0);
+                    pos = (groupProperties.GetFallDirection() * z) + new Vector3(cursorPosition.x, 1, 0);
                     previewTrace.localPosition = pos;
                     break;
                 case CreateNoteMode.ArcTap:
@@ -424,7 +424,7 @@ namespace ArcCreate.Compose.Editing
                         previewArcTap.gameObject.SetActive(true);
                         float worldX = parentArc.WorldXAt(cursorTiming);
                         float worldY = parentArc.WorldYAt(cursorTiming);
-                        pos = (groupProperties.FallDirection * z) + new Vector3(worldX, worldY, 0);
+                        pos = (groupProperties.GetFallDirection() * z) + new Vector3(worldX, worldY, 0);
                         previewArcTap.localPosition = pos;
                         previewArcTap.localRotation = rot;
                         previewArcTap.localScale = scl;

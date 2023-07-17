@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
 using UnityEngine;
 
@@ -207,6 +208,25 @@ namespace ArcCreate.Gameplay
         {
             float length = Values.ArcSegmentLength / arcResolution;
             return duration < 1000 ? length : length * 2;
+        }
+
+        public static Vector2 UnmodifiedWorldPosition(Note note)
+        {
+            switch (note)
+            {
+                case Tap t:
+                    return new Vector2(LaneToWorldX(t.Lane), 0);
+                case Hold h:
+                    return new Vector2(LaneToWorldX(h.Lane), 0);
+
+                case ArcTap at:
+                    return new Vector2(at.WorldX, at.WorldY);
+                case Arc a:
+                    return new Vector2(a.WorldXAt(a.Timing), a.WorldYAt(a.Timing));
+
+                default:
+                    throw new InvalidOperationException($"Unknown note type {note.GetType()}");
+            }
         }
     }
 }

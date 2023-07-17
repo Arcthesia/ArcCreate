@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Lua;
 using MoonSharp.Interpreter;
 using UnityEngine;
@@ -129,10 +130,14 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 txt.EnableTextModule = txt2.EnableTextModule;
             }
 
+            if (this is IAngleController a && controller is IAngleController a2)
+            {
+                a.AngleX = a2.AngleX;
+                a.AngleY = a2.AngleY;
+            }
+
             if (this is INoteGroupController tg && controller is INoteGroupController tg2)
             {
-                tg.AngleX = tg2.AngleX;
-                tg.AngleY = tg2.AngleY;
                 tg.RotationIndividualX = tg2.RotationIndividualX;
                 tg.RotationIndividualY = tg2.RotationIndividualY;
                 tg.RotationIndividualZ = tg2.RotationIndividualZ;
@@ -192,63 +197,90 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 return;
             }
 
-            if (this is IPositionController pos && pos.EnablePositionModule)
+            // Potentially individual updates
+            void UpdateMaybeIndividual()
             {
-                Vector3 translation = pos.DefaultTranslation;
-                Vector3 rotation = pos.DefaultRotation.eulerAngles;
-                Vector3 scale = pos.DefaultScale;
-
-                translation.x = pos.TranslationX.ValueAt(timing);
-                translation.y = pos.TranslationY.ValueAt(timing);
-                translation.z = pos.TranslationZ.ValueAt(timing);
-
-                rotation.x = pos.RotationX.ValueAt(timing);
-                rotation.y = pos.RotationY.ValueAt(timing);
-                rotation.z = pos.RotationZ.ValueAt(timing);
-
-                scale.x = pos.ScaleX.ValueAt(timing);
-                scale.y = pos.ScaleY.ValueAt(timing);
-                scale.z = pos.ScaleZ.ValueAt(timing);
-
-                pos.UpdatePosition(translation, Quaternion.Euler(rotation), scale);
-            }
-
-            if (this is IColorController col && col.EnableColorModule)
-            {
-                RGBA color = new RGBA(col.DefaultColor);
-                HSVA modify = new HSVA(0, 0, 0, 1)
+                if (this is IPositionController pos && pos.EnablePositionModule)
                 {
-                    H = col.ColorH.ValueAt(timing),
-                    S = col.ColorS.ValueAt(timing),
-                    V = col.ColorV.ValueAt(timing),
-                };
+                    Vector3 translation = pos.DefaultTranslation;
+                    Vector3 rotation = pos.DefaultRotation.eulerAngles;
+                    Vector3 scale = pos.DefaultScale;
 
-                color.R = col.ColorR.ValueAt(timing);
-                color.G = col.ColorG.ValueAt(timing);
-                color.B = col.ColorB.ValueAt(timing);
-                color.A = col.ColorA.ValueAt(timing);
+                    translation.x = pos.TranslationX.ValueAt(timing);
+                    translation.y = pos.TranslationY.ValueAt(timing);
+                    translation.z = pos.TranslationZ.ValueAt(timing);
 
-                HSVA hsva = Convert.RGBAToHSVA(color);
-                hsva.H = (hsva.H + modify.H) % 360;
-                hsva.S = Mathf.Clamp(hsva.S + modify.S, 0, 1);
-                hsva.V = Mathf.Clamp(hsva.V + modify.V, 0, 1);
+                    rotation.x = pos.RotationX.ValueAt(timing);
+                    rotation.y = pos.RotationY.ValueAt(timing);
+                    rotation.z = pos.RotationZ.ValueAt(timing);
 
-                col.UpdateColor(Convert.HSVAToRGBA(hsva).ToColor());
+                    scale.x = pos.ScaleX.ValueAt(timing);
+                    scale.y = pos.ScaleY.ValueAt(timing);
+                    scale.z = pos.ScaleZ.ValueAt(timing);
+
+                    pos.UpdatePosition(translation, Quaternion.Euler(rotation), scale);
+                }
+
+                if (this is IColorController col && col.EnableColorModule)
+                {
+                    RGBA color = new RGBA(col.DefaultColor);
+                    HSVA modify = new HSVA(0, 0, 0, 1)
+                    {
+                        H = col.ColorH.ValueAt(timing),
+                        S = col.ColorS.ValueAt(timing),
+                        V = col.ColorV.ValueAt(timing),
+                    };
+
+                    color.R = col.ColorR.ValueAt(timing);
+                    color.G = col.ColorG.ValueAt(timing);
+                    color.B = col.ColorB.ValueAt(timing);
+                    color.A = col.ColorA.ValueAt(timing);
+
+                    HSVA hsva = Convert.RGBAToHSVA(color);
+                    hsva.H = (hsva.H + modify.H) % 360;
+                    hsva.S = Mathf.Clamp(hsva.S + modify.S, 0, 1);
+                    hsva.V = Mathf.Clamp(hsva.V + modify.V, 0, 1);
+
+                    col.UpdateColor(Convert.HSVAToRGBA(hsva).ToColor());
+                }
+
+                if (this is ILayerController lyr && lyr.EnableLayerModule)
+                {
+                    string layer = lyr.DefaultLayer;
+                    int sort = lyr.DefaultSort;
+                    float alpha = lyr.DefaultAlpha;
+
+                    layer = lyr.Layer.ValueAt(timing);
+                    sort = (int)lyr.Sort.ValueAt(timing);
+                    alpha = lyr.Alpha.ValueAt(timing) / 255f;
+
+                    lyr.UpdateLayer(layer, sort, alpha);
+                }
+
+                if (this is IAngleController a && a.EnableAngleModule)
+                {
+                    float x = a.AngleX.ValueAt(timing);
+                    float y = a.AngleY.ValueAt(timing);
+
+                    a.UpdateAngle(x, y);
+                }
             }
 
-            if (this is ILayerController lyr && lyr.EnableLayerModule)
+            if (this is INoteIndividualController ni)
             {
-                string layer = lyr.DefaultLayer;
-                int sort = lyr.DefaultSort;
-                float alpha = lyr.DefaultAlpha;
-
-                layer = lyr.Layer.ValueAt(timing);
-                sort = (int)lyr.Sort.ValueAt(timing);
-                alpha = lyr.Alpha.ValueAt(timing) / 255f;
-
-                lyr.UpdateLayer(layer, sort, alpha);
+                foreach (var note in Services.Chart.GetTimingGroup(ni.GroupNumber).GetRenderingNotes())
+                {
+                    NoteIndividualController.CurrentNote = note;
+                    UpdateMaybeIndividual();
+                    NoteIndividualController.CurrentNote = null;
+                }
+            }
+            else
+            {
+                UpdateMaybeIndividual();
             }
 
+            // Definitely non-individual updates
             if (this is ITextController txt && txt.EnableTextModule)
             {
                 float lineSpacing = txt.DefaultLineSpacing;
@@ -279,10 +311,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 scale.y = tg.ScaleIndividualY.ValueAt(timing);
                 scale.z = tg.ScaleIndividualZ.ValueAt(timing);
 
-                angle.x = tg.AngleX.ValueAt(timing);
-                angle.y = tg.AngleY.ValueAt(timing);
-
-                tg.UpdateNoteGroup(Quaternion.Euler(rotation), scale, angle);
+                tg.UpdateNoteGroup(Quaternion.Euler(rotation), scale);
             }
 
             if (this is ICameraController cam && cam.EnableCameraModule)
@@ -354,6 +383,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             Active = new ConstantChannel(DefaultActive ? 1 : 0);
             SetActive(DefaultActive);
+
             if (this is IPositionController pos)
             {
                 pos.UpdatePosition(pos.DefaultTranslation, pos.DefaultRotation, pos.DefaultScale);
@@ -405,11 +435,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 txt.EnableTextModule = false;
             }
 
+            if (this is IAngleController a)
+            {
+                a.UpdateAngle(0, 0);
+                a.AngleX = new ConstantChannel(0);
+                a.AngleY = new ConstantChannel(0);
+            }
+
             if (this is INoteGroupController tg)
             {
-                tg.UpdateNoteGroup(Quaternion.identity, Vector3.one, Vector2.zero);
-                tg.AngleX = new ConstantChannel(0);
-                tg.AngleY = new ConstantChannel(0);
+                tg.UpdateNoteGroup(Quaternion.identity, Vector3.one);
                 tg.RotationIndividualX = new ConstantChannel(0);
                 tg.RotationIndividualY = new ConstantChannel(0);
                 tg.RotationIndividualZ = new ConstantChannel(0);
@@ -465,6 +500,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
+        [MoonSharpHidden]
         public List<object> SerializeProperties(ScenecontrolSerialization serialization)
         {
             List<object> result = new List<object>
@@ -516,11 +552,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 result.Add(txt.CustomFont);
             }
 
+            if (this is IAngleController a)
+            {
+                result.Add(a.EnableAngleModule);
+                result.Add(serialization.AddUnitAndGetId(a.AngleX));
+                result.Add(serialization.AddUnitAndGetId(a.AngleY));
+            }
+
             if (this is INoteGroupController tg)
             {
                 result.Add(tg.EnableNoteGroupModule);
-                result.Add(serialization.AddUnitAndGetId(tg.AngleX));
-                result.Add(serialization.AddUnitAndGetId(tg.AngleY));
                 result.Add(serialization.AddUnitAndGetId(tg.RotationIndividualX));
                 result.Add(serialization.AddUnitAndGetId(tg.RotationIndividualY));
                 result.Add(serialization.AddUnitAndGetId(tg.RotationIndividualZ));
@@ -573,6 +614,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return result;
         }
 
+        [MoonSharpHidden]
         public void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization)
         {
             customParent = deserialization.GetUnitFromId<Controller>(properties[0]);
@@ -632,11 +674,17 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 txt.EnableTextModule = enable;
             }
 
+            if (this is IAngleController a)
+            {
+                bool enable = (bool)properties[offset++];
+                a.AngleX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                a.AngleY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                a.EnableAngleModule = enable;
+            }
+
             if (this is INoteGroupController tg)
             {
                 bool enable = (bool)properties[offset++];
-                tg.AngleX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
-                tg.AngleY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
                 tg.RotationIndividualX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
                 tg.RotationIndividualY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
                 tg.RotationIndividualZ = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);

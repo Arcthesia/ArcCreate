@@ -149,6 +149,7 @@ namespace Tests.Unit
             }
         }
 
+        [SerializationExempt]
         private class ManualChannel : ValueChannel
         {
             public float Value { get; set; }

@@ -7,6 +7,7 @@ using ArcCreate.Compose.Navigation;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Gameplay.Scenecontrol;
 using ArcCreate.Utility.Lua;
+using EmmySharp;
 using MoonSharp.Interpreter;
 using UnityEngine;
 
@@ -47,6 +48,7 @@ namespace ArcCreate.Compose.EventsEditor
         public void SetupScript(Script script)
         {
             script.Globals["Channel"] = new ValueChannelBuilder();
+            script.Globals["NoteData"] = new NoteChannelBuilder();
             script.Globals["StringChannel"] = new StringChannelBuilder();
             script.Globals["TextChannel"] = new TextChannelBuilder();
             script.Globals["Trigger"] = new TriggerBuilder();
@@ -63,6 +65,11 @@ namespace ArcCreate.Compose.EventsEditor
             Script.GlobalOptions.CustomConverters.SetScriptToClrCustomConversion(DataType.Number, typeof(ValueChannel), dyn =>
             {
                 return new ConstantChannel((float)dyn.Number);
+            });
+
+            Script.GlobalOptions.CustomConverters.SetScriptToClrCustomConversion(DataType.Boolean, typeof(BooleanChannel), dyn =>
+            {
+                return new BooleanConstantChannel(dyn.CastToBool());
             });
 
             Script.GlobalOptions.CustomConverters.SetScriptToClrCustomConversion(DataType.String, typeof(StringChannel), dyn =>
@@ -84,19 +91,26 @@ namespace ArcCreate.Compose.EventsEditor
             ExecuteEvents();
         }
 
-        public void GenerateEmmyLua()
+        public void GenerateEmmyLua(string file = null)
         {
             Assembly scAssembly = Assembly.GetAssembly(typeof(ScenecontrolService));
             LuaRunner.GetCommonEmmySharp()
+                .AppendAlias("ScenecontrolArgs", EmmyType.Table(
+                    ("timing", EmmyType.Integer),
+                    ("timingGroup", EmmyType.Integer),
+                    ("args", EmmyType.Array(EmmyType.Option(EmmyType.Integer, EmmyType.String)))))
                 .AppendAssembly(scAssembly)
-                .AppendFunction(typeof(ScenecontrolLuaEnvironment).GetMethod("AddScenecontrol"))
-                .AppendFunction(typeof(ScenecontrolLuaEnvironment).GetMethod("Notify"))
-                .AppendFunction(typeof(ScenecontrolLuaEnvironment).GetMethod("NotifyWarn"))
-                .AppendFunction(typeof(ScenecontrolLuaEnvironment).GetMethod("NotifyError"))
-                .Build(Path.GetDirectoryName(Services.Project.CurrentProject.Path));
+                .AppendFunction<ScenecontrolLuaEnvironment>("AddScenecontrol")
+                .AppendFunction<ScenecontrolLuaEnvironment>("Notify")
+                .AppendFunction<ScenecontrolLuaEnvironment>("NotifyWarn")
+                .AppendFunction<ScenecontrolLuaEnvironment>("NotifyError")
+                .Build(file ?? Path.GetDirectoryName(Services.Project.CurrentProject.Path));
         }
 
-        public void AddScenecontrol(string name, DynValue argNames, DynValue scDef)
+        public void AddScenecontrol(
+            string name,
+            [EmmyType(typeof(string[]))] DynValue argNames,
+            [EmmyType("fun(args: ScenecontrolArgs)")] DynValue scDef)
         {
             if (scenecontrolTypes.ContainsKey(name))
             {

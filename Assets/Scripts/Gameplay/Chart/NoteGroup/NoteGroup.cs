@@ -153,7 +153,15 @@ namespace ArcCreate.Gameplay.Chart
         /// <param name="timing">The timing value.</param>
         /// <param name="floorPosition">Floor position value corresponding to the timing value.</param>
         /// <param name="groupProperties">The group properties of the notes' timing group.</param>
-        public abstract void UpdateRender(int timing, double floorPosition, GroupProperties groupProperties);
+        public abstract void UpdateRenderingNotes(int timing, double floorPosition, GroupProperties groupProperties);
+
+        /// <summary>
+        /// Actually render the notes for this frame.
+        /// </summary>
+        /// <param name="timing">The timing value.</param>
+        /// <param name="floorPosition">Floor position value corresponding to the timing value.</param>
+        /// <param name="groupProperties">The group properties of the notes' timing group.</param>
+        public abstract void Render(int timing, double floorPosition, GroupProperties groupProperties);
 
         /// <summary>
         /// Called every time there's a change to the note list.
@@ -185,7 +193,7 @@ namespace ArcCreate.Gameplay.Chart
         /// Find all rendering notes.
         /// </summary>
         /// <returns>List of rendering notes.</returns>
-        public abstract IEnumerable<Note> GetRenderingNotes();
+        public abstract IReadOnlyList<Note> GetRenderingNotes();
 
         /// <summary>
         /// Called after notes are loaded into the group.

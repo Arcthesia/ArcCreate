@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
 using ArcCreate.Gameplay.Render;
+using ArcCreate.Utility;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
@@ -63,7 +64,7 @@ namespace ArcCreate.Gameplay.Data
         {
             float z = ZPos(TimingGroupInstance.GetFloorPosition(timing));
             Vector3 basePos = new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
-            pos = (TimingGroupInstance.GroupProperties.FallDirection * z) + basePos;
+            pos = (TimingGroupInstance.GroupProperties.GetFallDirection(this) * z) + basePos;
             scl = TimingGroupInstance.GroupProperties.ScaleIndividual;
             scl.z *= ArcFormula.CalculateTapSizeScalar(z);
         }
@@ -91,14 +92,20 @@ namespace ArcCreate.Gameplay.Data
 
             float z = ZPos(currentFloorPosition);
             Vector3 basePos = new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
-            Vector3 pos = (groupProperties.FallDirection * z) + basePos;
-            Quaternion rot = groupProperties.RotationIndividual;
-            Vector3 scl = groupProperties.ScaleIndividual;
-            scl.z *= ArcFormula.CalculateTapSizeScalar(z);
-            Matrix4x4 matrix = groupProperties.GroupMatrix * Matrix4x4.TRS(pos, rot, scl);
+
+            TRS noteTransform =
+                TRS.TranslateOnly((groupProperties.GetFallDirection(this) * z) + basePos)
+                + groupProperties.GetNoteTransform(this);
+            noteTransform.Scale = new Vector3(
+                noteTransform.Scale.x,
+                noteTransform.Scale.y,
+                noteTransform.Scale.z * ArcFormula.CalculateTapSizeScalar(z));
+
+            TRS transform = noteTransform * groupProperties.GroupTransform;
+            Matrix4x4 matrix = transform.Matrix;
 
             float alpha = ArcFormula.CalculateFadeOutAlpha(z);
-            Color color = groupProperties.Color;
+            Color color = groupProperties.GetColor(this);
             Color connectionColor = connectionLineColor;
             color.a *= alpha;
             connectionColor.a *= alpha;
@@ -109,6 +116,9 @@ namespace ArcCreate.Gameplay.Data
             {
                 Vector3 arctapPos = new Vector3(arctap.WorldX, arctap.WorldY, 0);
                 Vector3 direction = arctapPos - basePos;
+
+                Color thisConnectionColor = connectionColor;
+                thisConnectionColor.a *= Mathf.Min(color.a, groupProperties.GetColor(arctap).a);
 
                 Matrix4x4 lineMatrix = matrix * Matrix4x4.TRS(
                     pos: Vector3.zero,

@@ -6,9 +6,9 @@ namespace ArcCreate.Gameplay.Chart
 {
     public class ArcNoteGroup : LongNoteGroup<Arc>, IComparer<Arc>
     {
-        public override void UpdateRender(int timing, double floorPosition, GroupProperties groupProperties)
+        public override void UpdateRenderingNotes(int timing, double floorPosition, GroupProperties groupProperties)
         {
-            LastRenderingNotes.Clear();
+            RenderingNotes.Clear();
             if (Notes.Count == 0 || !groupProperties.Visible)
             {
                 return;
@@ -32,19 +32,13 @@ namespace ArcCreate.Gameplay.Chart
             while (notesInRange.MoveNext())
             {
                 var note = notesInRange.Current;
-                LastRenderingNotes.Add(note);
+                RenderingNotes.Add(note);
                 note.RecalculateDepth(camera, nearClipPlane, farClipPlane, floorPosition);
             }
 
-            if (LastRenderingNotes.Count < 100)
+            if (RenderingNotes.Count < 100)
             {
-                LastRenderingNotes.Sort(this);
-            }
-
-            for (int i = LastRenderingNotes.Count - 1; i >= 0; i--)
-            {
-                Arc note = LastRenderingNotes[i];
-                note.UpdateRender(timing, floorPosition, groupProperties);
+                RenderingNotes.Sort(this);
             }
         }
 

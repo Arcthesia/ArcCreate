@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.ChartFormat;
 using ArcCreate.Gameplay.Data;
+using ArcCreate.Utility.Extension;
 
 namespace ArcCreate.Gameplay.Chart
 {
@@ -10,11 +11,15 @@ namespace ArcCreate.Gameplay.Chart
     /// </summary>
     public partial class TimingGroup
     {
+        public const int RenderingNotesPreallocCount = 40;
+
         private TapNoteGroup taps;
         private HoldNoteGroup holds;
         private ArcNoteGroup arcs;
         private ArcTapNoteGroup arcTaps;
         private GroupProperties groupProperties;
+
+        private readonly List<Note> renderingNotes = new List<Note>(RenderingNotesPreallocCount * 4);
 
         public TimingGroup(int tg)
         {
@@ -28,6 +33,49 @@ namespace ArcCreate.Gameplay.Chart
         public List<ArcEvent> ReferenceEvents { get; private set; }
 
         public bool IsVisible { get; set; } = true;
+
+        /// <summary>
+        /// Enable note-individual parameter overrides for this timing group.
+        /// </summary>
+        public void EnableIndividualOverrides()
+        {
+            GroupProperties.IndividualOverrides.Enable(this);
+        }
+
+        /// <summary>
+        /// Disable note-individual parameter overrides for this timing group.
+        /// </summary>
+        public void DisableIndividualOverrides()
+        {
+            GroupProperties.IndividualOverrides.Disable();
+        }
+
+        /// <summary>
+        /// Get a temporary enumerable of every note in this timing group.
+        /// </summary>
+        /// <returns>The temporary enumerable.</returns>
+        public IEnumerable<Note> GetAllNotes()
+        {
+            foreach (var tap in taps.Notes)
+            {
+                yield return tap;
+            }
+
+            foreach (var hold in holds.Notes)
+            {
+                yield return hold;
+            }
+
+            foreach (var arctap in arcTaps.Notes)
+            {
+                yield return arctap;
+            }
+
+            foreach (var arc in arcs.Notes)
+            {
+                yield return arc;
+            }
+        }
 
         /// <summary>
         /// Load a timing group data representation into this instance.
@@ -67,6 +115,7 @@ namespace ArcCreate.Gameplay.Chart
             arcTaps = new ArcTapNoteGroup();
 
             groupProperties = new GroupProperties();
+
             timings = new List<TimingEvent>
             {
                 new TimingEvent
@@ -107,7 +156,7 @@ namespace ArcCreate.Gameplay.Chart
             arcTaps.UpdateJudgement(timing, floorPosition, groupProperties);
         }
 
-        public void UpdateGroupRender(int timing)
+        public void UpdateRenderingNotes(int timing)
         {
             if (!IsVisible)
             {
@@ -115,10 +164,30 @@ namespace ArcCreate.Gameplay.Chart
             }
 
             double floorPosition = GetFloorPosition(timing);
-            taps.UpdateRender(timing, floorPosition, groupProperties);
-            holds.UpdateRender(timing, floorPosition, groupProperties);
-            arcs.UpdateRender(timing, floorPosition, groupProperties);
-            arcTaps.UpdateRender(timing, floorPosition, groupProperties);
+            taps.UpdateRenderingNotes(timing, floorPosition, groupProperties);
+            holds.UpdateRenderingNotes(timing, floorPosition, groupProperties);
+            arcs.UpdateRenderingNotes(timing, floorPosition, groupProperties);
+            arcTaps.UpdateRenderingNotes(timing, floorPosition, groupProperties);
+
+            renderingNotes.Clear();
+            renderingNotes.FastAddRange(taps.GetRenderingNotes());
+            renderingNotes.FastAddRange(holds.GetRenderingNotes());
+            renderingNotes.FastAddRange(arcs.GetRenderingNotes());
+            renderingNotes.FastAddRange(arcTaps.GetRenderingNotes());
+        }
+
+        public void Render(int timing)
+        {
+            if (!IsVisible)
+            {
+                return;
+            }
+
+            double floorPosition = GetFloorPosition(timing);
+            taps.Render(timing, floorPosition, groupProperties);
+            holds.Render(timing, floorPosition, groupProperties);
+            arcs.Render(timing, floorPosition, groupProperties);
+            arcTaps.Render(timing, floorPosition, groupProperties);
         }
 
         /// <summary>
@@ -323,27 +392,7 @@ namespace ArcCreate.Gameplay.Chart
         /// </summary>
         /// <returns>List of rendering notes.</returns>
         public IEnumerable<Note> GetRenderingNotes()
-        {
-            foreach (var note in taps.GetRenderingNotes())
-            {
-                yield return note;
-            }
-
-            foreach (var note in holds.GetRenderingNotes())
-            {
-                yield return note;
-            }
-
-            foreach (var note in arcTaps.GetRenderingNotes())
-            {
-                yield return note;
-            }
-
-            foreach (var note in arcs.GetRenderingNotes())
-            {
-                yield return note;
-            }
-        }
+            => renderingNotes;
 
         /// <summary>
         /// Clear notes from this timing gruop and destroy all notes.

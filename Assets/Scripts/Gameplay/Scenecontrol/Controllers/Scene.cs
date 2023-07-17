@@ -260,6 +260,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [MoonSharpHidden] public GameObject SpritePrefab;
         [MoonSharpHidden] public GameObject TextPrefab;
         [MoonSharpHidden] public GameObject GroupPrefab;
+        [MoonSharpHidden] public GameObject IndividualPrefab;
 
         [Header("Materials")]
         [MoonSharpHidden] public Material DefaultMaterial;
@@ -295,6 +296,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         private readonly Dictionary<SpriteDefinition, Sprite> spriteCache = new Dictionary<SpriteDefinition, Sprite>();
         private readonly Dictionary<int, NoteGroupController> noteGroups = new Dictionary<int, NoteGroupController>();
+        private readonly Dictionary<int, NoteIndividualController> noteIndividualGroups = new Dictionary<int, NoteIndividualController>();
         private readonly List<UniTask<Sprite>> spriteTasks = new List<UniTask<Sprite>>();
         private CancellationTokenSource cts = new CancellationTokenSource();
 
@@ -322,6 +324,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
             spriteCache.Clear();
             noteGroups.Clear();
+            noteIndividualGroups.Clear();
         }
 
         [MoonSharpHidden]
@@ -516,6 +519,33 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
+        [EmmyDoc("Creates a note individual controller for a timing group")]
+        public NoteIndividualController GetNoteIndividual(int tg)
+        {
+            if (noteIndividualGroups.TryGetValue(tg, out var cached))
+            {
+                return cached;
+            }
+
+            try
+            {
+                var group = Services.Chart.GetTimingGroup(tg);
+                group.EnableIndividualOverrides();
+                NoteIndividualController c = Instantiate(IndividualPrefab, transform).GetComponent<NoteIndividualController>();
+                c.TimingGroup = group;
+                c.SerializedType = $"ni.{group.GroupNumber}";
+                c.Start();
+                Services.Scenecontrol.AddReferencedController(c);
+                noteIndividualGroups.Add(group.GroupNumber, c);
+                return c;
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                return null;
+            }
+        }
+
         [MoonSharpHidden]
         public Controller CreateFromTypeName(string type)
         {
@@ -706,6 +736,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     return CameraCanvas;
                 case "tg":
                     return GetNoteGroup(int.Parse(arg));
+                case "ni":
+                    return GetNoteIndividual(int.Parse(arg));
                 default:
                     return null;
             }

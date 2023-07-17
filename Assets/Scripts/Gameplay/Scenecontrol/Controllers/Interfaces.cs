@@ -10,6 +10,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
         bool DefaultActive { get; }
     }
 
+    public interface INoteIndividualController : IController
+    {
+        int GroupNumber { get; }
+    }
+
     public interface IPositionController : IController
     {
         bool EnablePositionModule { get; set; }
@@ -110,13 +115,20 @@ namespace ArcCreate.Gameplay.Scenecontrol
         void ApplyCustomFont(string font);
     }
 
-    public interface INoteGroupController : IController
+    public interface IAngleController : IController 
     {
-        bool EnableNoteGroupModule { get; set; }
-
+        bool EnableAngleModule { get; set; }
+        
         ValueChannel AngleX { get; set; }
 
         ValueChannel AngleY { get; set; }
+
+        void UpdateAngle(float x, float y);
+    }
+
+    public interface INoteGroupController : IController
+    {
+        bool EnableNoteGroupModule { get; set; }
 
         ValueChannel RotationIndividualX { get; set; }
 
@@ -130,7 +142,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         ValueChannel ScaleIndividualZ { get; set; }
 
-        void UpdateNoteGroup(Quaternion rotation, Vector3 scale, Vector2 angle);
+        void UpdateNoteGroup(Quaternion rotation, Vector3 scale);
     }
 
     public interface ICameraController : IController
