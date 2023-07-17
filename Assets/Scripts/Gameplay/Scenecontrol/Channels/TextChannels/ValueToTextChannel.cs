@@ -11,7 +11,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         private ValueChannel source;
         private char[] charArray;
         private int precision;
-        private float prevValue;
+        private float prevValue = float.NaN;
         private int prevLength;
 
         public ValueToTextChannel()

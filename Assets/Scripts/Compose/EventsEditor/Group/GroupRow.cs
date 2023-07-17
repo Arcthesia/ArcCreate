@@ -152,36 +152,28 @@ namespace ArcCreate.Compose.EventsEditor
 
         private void OnProperties(string value)
         {
-            try
+            // Hooking group editting to HistoryService is considered. But it seems very hard...
+            RawTimingGroup group = RawTimingGroup.Parse(value).UnwrapOrElse(e =>
             {
-                // Hooking group editting to HistoryService is considered. But it seems very hard...
-                RawTimingGroup group = new RawTimingGroup(value)
-                {
-                    Name = Reference.GroupProperties.Name,
-                    File = Reference.GroupProperties.FileName,
-                };
-                Reference.SetGroupProperties(new Gameplay.Data.GroupProperties(group));
-
-                Values.ProjectModified = true;
-
-                Debug.Log(I18n.S(
-                    "Compose.Notify.GroupTable.EditGroup", new Dictionary<string, object>
-                    {
-                        { "Number", Reference.GroupNumber },
-                    }));
-                Values.OnEditAction?.Invoke();
-            }
-            catch (ChartFormatException e)
-            {
+                propertiesField.text = Reference.GroupProperties.ToRaw().ToStringWithoutName();
                 throw new ComposeException(I18n.S("Compose.Exception.InvalidGroupProperties", new Dictionary<string, object>
                 {
                     { "Message", e.Message },
                 }));
-            }
-            finally
-            {
-                propertiesField.text = Reference.GroupProperties.ToRaw().ToStringWithoutName();
-            }
+            });
+
+            group.File = Reference.GroupProperties.FileName;
+            Reference.SetGroupProperties(new Gameplay.Data.GroupProperties(group));
+
+            Values.ProjectModified = true;
+
+            Debug.Log(I18n.S(
+                "Compose.Notify.GroupTable.EditGroup", new Dictionary<string, object>
+                {
+                        { "Number", Reference.GroupNumber },
+                }));
+            Values.OnEditAction?.Invoke();
+            propertiesField.text = Reference.GroupProperties.ToRaw().ToStringWithoutName();
         }
 
         private void OnVisiblity(bool vis)

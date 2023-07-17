@@ -1,8 +1,19 @@
+Parsing:
+  # Exception messages for parsing strings
+  Exception:
+    CharacterNotFound: Could not find character "{0}".
+    InvalidConversionToInt: Could not convert "{0}" to integer.
+    InvalidConversionToBool: Could not convert "{0}" to boolean.
+    InvalidConversionToFloat: Could not convert "{0}" to float.
+
 Format:
   # Exception messages while parsing chart files
   Exception:
-    Message: |-
-      An exception occured while reading the chart file {File}
+    File: |-
+      An exception occured while reading the chart file {File}:
+      {Error}
+    SingleErrorFormat: |-
+      -----
       At: line {LineNumber}
       While parsing event of type: {EventType}
       With the following: "{Content}".
@@ -12,8 +23,6 @@ Format:
       Exception: {Exception}
       Stack trace:
       {StackTrace}
-    WrongSyntax: |-
-      Wrong or incomplete syntax.
     InvalidHeader: |-
       Invalid header line.
     ArcColorNegative: |-
@@ -32,8 +41,6 @@ Format:
       Invalid timing group symbol pairing. Make sure to enclose timing group definitions properly with "};".
     DivisorNegative: |-
       Divisor property of timing event can not be negative.
-    BaseBPMZero: |-
-      Base BPM can not be zero.
     DurationNegative: |-
       Duration of this event type can not be negative.
     DurationZero: |-
@@ -42,6 +49,9 @@ Format:
       ArcTap is outside the timing range of its parent Arc.
     TimingGroupPropertiesInvalid: |-
       Invalid timing group properties definition.
+    ReferencedFileError: |-
+      Can not load the referenced chart file:
+      {0}
   Warning:
     HoldTooShort:
       Hold note's duration is shorter than 17ms.
@@ -240,10 +250,7 @@ Compose:
         Either fix this in a separate text editor, or close this dialog and use the "<> {TabName}" panel.
         
         Details:
-        Line number: {LineNumber}
-        LineContent: "{Content}".
-        Event type: {EventType}
-        {Exception}
+        {0}
       Confirm: Confirm
     Macros:
       Title: Macros

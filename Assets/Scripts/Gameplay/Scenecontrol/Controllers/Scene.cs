@@ -4,7 +4,6 @@ using System.IO;
 using System.Threading;
 using ArcCreate.ChartFormat;
 using ArcCreate.Utility.Lua;
-using ArcCreate.Utility.Parser;
 using Cysharp.Threading.Tasks;
 using EmmySharp;
 using MoonSharp.Interpreter;
@@ -532,12 +531,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
             string def = string.Empty;
             string arg = string.Empty;
-            StringParser parser = new StringParser(type);
 
-            if (type.Contains("."))
+            int dotIndex = type.IndexOf(".");
+            if (dotIndex != -1)
             {
-                def = parser.ReadString(".");
-                arg = parser.ReadString();
+                def = type.Substring(0, dotIndex);
+                arg = type.Substring(dotIndex + 1);
             }
             else
             {

@@ -21,24 +21,17 @@ namespace Tests.Unit
         [TestCase(0, -1, 3)]
         public void ParseTiming(int timing, int bpm, int bpl)
         {
-            RawTiming e = reader.ParseTiming($"timing({timing},{bpm},{bpl});", 0);
+            RawTiming e = reader.ParseTiming($"timing({timing},{bpm},{bpl});", 0).UnwrapOrElse(AssertFail<RawTiming>);
 
             Assert.That(e.Timing, Is.EqualTo(timing));
             Assert.That(e.Bpm, Is.EqualTo(bpm));
             Assert.That(e.Divisor, Is.EqualTo(bpl));
         }
 
-        [TestCase(0, 0, 4)]
-        [TestCase(0, 0, 0)]
         [TestCase(0, 100, -1)]
-        public void ParseTimingFail(int timing, int bpm, int bpl)
+        public void ParseTimingFail_DivisorNegative(int timing, int bpm, int bpl)
         {
-            Assert.That(
-                () =>
-                {
-                    RawTiming e = reader.ParseTiming($"timing({timing},{bpm},{bpl});", 0);
-                },
-                Throws.Exception.TypeOf<ChartFormatException>());
+            AssertError(reader.ParseTiming($"timing({timing},{bpm},{bpl});", 0), ChartError.Kind.DivisorNegative);
         }
 
         [TestCase(0, 0)]
@@ -46,7 +39,7 @@ namespace Tests.Unit
         [TestCase(1000, 4)]
         public void ParseTap(int timing, int lane)
         {
-            RawTap e = reader.ParseTap($"({timing},{lane});", 0);
+            RawTap e = reader.ParseTap($"({timing},{lane});", 0).UnwrapOrElse(AssertFail<RawTap>);
 
             Assert.That(e.Timing, Is.EqualTo(timing));
             Assert.That(e.Lane, Is.EqualTo(lane));
@@ -56,7 +49,7 @@ namespace Tests.Unit
         [TestCase(0, 1000, 0)]
         public void ParseHold(int timing, int endTiming, int lane)
         {
-            RawHold e = reader.ParseHold($"hold({timing},{endTiming},{lane});", 0);
+            RawHold e = reader.ParseHold($"hold({timing},{endTiming},{lane});", 0).UnwrapOrElse(AssertFail<RawHold>);
 
             Assert.That(e.Timing, Is.EqualTo(timing));
             Assert.That(e.EndTiming, Is.EqualTo(endTiming));
@@ -64,14 +57,15 @@ namespace Tests.Unit
         }
 
         [TestCase(0, 0, 4)]
-        [TestCase(1000, 0, 4)]
-        public void ParseHoldFail(int timing, int endTiming, int lane)
+        public void ParseHoldFail_DurationZero(int timing, int endTiming, int lane)
         {
-            Assert.That(
-                () =>
-                {
-                    RawHold e = reader.ParseHold($"hold({timing},{endTiming},{lane});", 0);
-                }, Throws.Exception.TypeOf<ChartFormatException>());
+            AssertError(reader.ParseHold($"hold({timing},{endTiming},{lane});", 0), ChartError.Kind.DurationZero);
+        }
+
+        [TestCase(1000, 0, 4)]
+        public void ParseHoldFail_DurationNegative(int timing, int endTiming, int lane)
+        {
+            AssertError(reader.ParseHold($"hold({timing},{endTiming},{lane});", 0), ChartError.Kind.DurationNegative);
         }
 
         [TestCase(0, 1000, 0, 0, 1, 1, "b", 0, true, "sfx.wav")]
@@ -82,7 +76,8 @@ namespace Tests.Unit
         public void ParseArc(int timing, int endTiming, float xS, float xE, float yS, float yE, string type, int color, bool isTrace, string sfx)
         {
             RawArc e = reader.ParseArc(
-                $"arc({timing},{endTiming},{xS},{xE},{type},{yS},{yE},{color},{sfx},{(isTrace ? "true" : "false")});", 0);
+                $"arc({timing},{endTiming},{xS},{xE},{type},{yS},{yE},{color},{sfx},{(isTrace ? "true" : "false")});", 0)
+                .UnwrapOrElse(AssertFail<RawArc>);
 
             Assert.That(e.Timing, Is.EqualTo(timing));
             Assert.That(e.EndTiming, Is.EqualTo(endTiming));
@@ -97,14 +92,11 @@ namespace Tests.Unit
         }
 
         [TestCase(1000, 0, 0, 0, 1, 1, "b", 0, true, "none")]
-        public void ParseArcFail(int timing, int endTiming, float xS, float xE, float yS, float yE, string type, int color, bool isTrace, string sfx)
+        public void ParseArcFail_DurationNegative(int timing, int endTiming, float xS, float xE, float yS, float yE, string type, int color, bool isTrace, string sfx)
         {
-            Assert.That(
-                () =>
-                {
-                    RawArc e = reader.ParseArc(
-                        $"arc({timing},{endTiming},{xS},{xE},{type},{yS},{yE},{color},{sfx},{(isTrace ? "true" : "false")});", 0);
-                }, Throws.Exception.TypeOf<ChartFormatException>());
+            AssertError(
+                reader.ParseArc($"arc({timing},{endTiming},{xS},{xE},{type},{yS},{yE},{color},{sfx},{(isTrace ? "true" : "false")});", 0),
+                ChartError.Kind.DurationNegative);
         }
 
         [TestCase(0, 1000, new int[] { 0 })]
@@ -122,33 +114,31 @@ namespace Tests.Unit
             arctapString = arctapString.Substring(0, arctapString.Length - 1);
 
             RawArc e = reader.ParseArc(
-                $"arc({start},{end},0,0,b,0,0,0,none,true)[{arctapString}];", 0);
+                $"arc({start},{end},0,0,b,0,0,0,none,true)[{arctapString}];", 0)
+                .UnwrapOrElse(AssertFail<RawArc>);
 
             Assert.That(e.ArcTaps, Has.Count.EqualTo(timings.Length));
             for (int i = 0; i < timings.Length; i++)
             {
-                Assert.That(e.ArcTaps[i], Is.EqualTo(timings[i]));
+                Assert.That(e.ArcTaps[i].Timing, Is.EqualTo(timings[i]));
             }
         }
 
         [TestCase(0, 1000, new int[] { -1 })]
         [TestCase(0, 1000, new int[] { 1001 })]
-        public void ParseArcTapFail(int start, int end, int[] timings)
+        public void ParseArcTapFail_OutOfRange(int start, int end, int[] timings)
         {
-            Assert.That(
-                () =>
-                {
-                    string arctapString = "";
-                    foreach (int t in timings)
-                    {
-                        arctapString += $"arctap({t}),";
-                    }
+            string arctapString = "";
+            foreach (int t in timings)
+            {
+                arctapString += $"arctap({t}),";
+            }
 
-                    arctapString = arctapString.Substring(0, arctapString.Length - 1);
+            arctapString = arctapString.Substring(0, arctapString.Length - 1);
 
-                    RawArc e = reader.ParseArc(
-                        $"arc({start},{end},0,0,b,0,0,0,none,true)[{arctapString}];", 0);
-                }, Throws.Exception.TypeOf<ChartFormatException>());
+            AssertError(
+                reader.ParseArc($"arc({start},{end},0,0,b,0,0,0,none,true)[{arctapString}];", 0),
+                ChartError.Kind.ArcTapOutOfRange);
         }
 
         [TestCase(0, 0, 0, 0, 0, 0, 0, "l", 1)]
@@ -159,7 +149,7 @@ namespace Tests.Unit
         public void ParseCamera(int start, float x, float y, float z, float rx, float ry, float rz, string type, int duration)
         {
             RawCamera e = reader.ParseCamera(
-                $"camera({start},{x},{y},{z},{rx},{ry},{rz},{type},{duration});", 0);
+                $"camera({start},{x},{y},{z},{rx},{ry},{rz},{type},{duration});", 0).UnwrapOrElse(AssertFail<RawCamera>);
 
             Assert.That(e.Timing, Is.EqualTo(start));
             Assert.That(e.Move.x, Is.EqualTo(x));
@@ -173,14 +163,11 @@ namespace Tests.Unit
         }
 
         [TestCase(0, 0, 0, 0, 0, 0, 0, "l", -1)]
-        public void ParseCameraFail(int start, float x, float y, float z, float rx, float ry, float rz, string type, int duration)
+        public void ParseCameraFail_DurationNegative(int start, float x, float y, float z, float rx, float ry, float rz, string type, int duration)
         {
-            Assert.That(
-                () =>
-                {
-                    RawCamera e = reader.ParseCamera(
-                        $"camera({start},{x},{y},{z},{rx},{ry},{rz},{type},{duration});", 0);
-                }, Throws.Exception.TypeOf<ChartFormatException>());
+            AssertError(
+                reader.ParseCamera($"camera({start},{x},{y},{z},{rx},{ry},{rz},{type},{duration});", 0),
+                ChartError.Kind.DurationNegative);
         }
 
         [TestCase(new object[] { 0, 100 })]
@@ -191,7 +178,7 @@ namespace Tests.Unit
         {
             string argString = string.Join(",", args.Select(o => (o is string) ? $"\"{o}\"" : o.ToString()));
             RawSceneControl e = reader.ParseSceneControl(
-                $"scenecontrol(0,test,{argString});", 0);
+                $"scenecontrol(0,test,{argString});", 0).UnwrapOrElse(AssertFail<RawSceneControl>);
 
             Assert.That(e.Timing, Is.EqualTo(0));
             Assert.That(e.SceneControlTypeName, Is.EqualTo("test"));
@@ -206,7 +193,7 @@ namespace Tests.Unit
         public void ParseSceneControlNoArgs()
         {
             RawSceneControl e = reader.ParseSceneControl(
-                $"scenecontrol(0,test);", 0);
+                $"scenecontrol(0,test);", 0).UnwrapOrElse(AssertFail<RawSceneControl>);
 
             Assert.That(e.Timing, Is.EqualTo(0));
             Assert.That(e.SceneControlTypeName, Is.EqualTo("test"));
@@ -217,7 +204,7 @@ namespace Tests.Unit
         public void ParseTimingGroupNoProperty()
         {
             RawTimingGroup e = reader.ParseTimingGroup(
-                "timinggroup(){");
+                "timinggroup(){", 0).UnwrapOrElse(AssertFail<RawTimingGroup>);
 
             Assert.That(e.NoInput, Is.False);
             Assert.That(e.NoClip, Is.False);
@@ -230,7 +217,7 @@ namespace Tests.Unit
         public void ParseTimingGroupOneProperty()
         {
             RawTimingGroup e = reader.ParseTimingGroup(
-                "timinggroup(noinput){");
+                "timinggroup(noinput){", 0).UnwrapOrElse(AssertFail<RawTimingGroup>);
 
             Assert.That(e.NoInput, Is.True);
         }
@@ -239,7 +226,7 @@ namespace Tests.Unit
         public void ParseTimingGroupNumericProperty()
         {
             RawTimingGroup e = reader.ParseTimingGroup(
-                "timinggroup(angleX=30){");
+                "timinggroup(angleX=30){", 0).UnwrapOrElse(AssertFail<RawTimingGroup>);
 
             Assert.That(e.AngleX, Is.EqualTo(30));
         }
@@ -248,7 +235,7 @@ namespace Tests.Unit
         public void ParseTimingGroupMultipleProperty()
         {
             RawTimingGroup e = reader.ParseTimingGroup(
-                "timinggroup(angleY=30,noclip){");
+                "timinggroup(angleY=30,noclip){", 0).UnwrapOrElse(AssertFail<RawTimingGroup>);
 
             Assert.That(e.NoClip, Is.True);
             Assert.That(e.AngleY, Is.EqualTo(30));
@@ -260,7 +247,7 @@ namespace Tests.Unit
         public void ParseInclude(string path)
         {
             string f = reader.ParseInclude(
-                $"include({path});");
+                $"include({path});", 0).UnwrapOrElse(AssertFail<string>);
 
             Assert.That(f, Is.EqualTo(path));
         }
@@ -270,11 +257,24 @@ namespace Tests.Unit
         [TestCase("dir/file.aff")]
         public void ParseFragment(string path)
         {
-            (int t, string f) = reader.ParseFragment(
-                $"fragment(1000, {path});");
+            RawFragment frag = reader.ParseFragment(
+                $"fragment(1000, {path});", 0).UnwrapOrElse(AssertFail<RawFragment>);
 
-            Assert.That(t, Is.EqualTo(1000));
-            Assert.That(f, Is.EqualTo(path));
+            Assert.That(frag.Timing, Is.EqualTo(1000));
+            Assert.That(frag.File, Is.EqualTo(path));
+        }
+
+        private T AssertFail<T>(ChartError e)
+        {
+            Assert.Fail(e.Message);
+            return default;
+        }
+
+        private void AssertError<T>(Result<T, ChartError> res, ChartError.Kind kind)
+        {
+            Assert.That(res.IsError, Is.True);
+            Assert.That(res.Error, Is.InstanceOf<ChartError>());
+            Assert.That(res.Error.ErrorKind, Is.EqualTo(kind));
         }
     }
 }

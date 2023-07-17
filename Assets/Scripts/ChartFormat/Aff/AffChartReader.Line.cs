@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using ArcCreate.Utility.Parser;
@@ -17,22 +16,20 @@ namespace ArcCreate.ChartFormat
         /// <param name="line">The string to parse.</param>
         /// <param name="lineNumber">The line number of the event.</param>
         /// <returns>The parsed object.</returns>
-        public RawTiming ParseTiming(string line, int lineNumber)
+        public Result<RawTiming, ChartError> ParseTiming(string line, int lineNumber)
         {
             StringParser s = new StringParser(line);
             s.Skip("timing(".Length);
-            int tick = s.ReadInt(",");
-            float bpm = s.ReadFloat(",");
-            float divisor = s.ReadFloat(")");
+            if (!s.ReadInt(",").TryUnwrap(out TextSpan<int> tick, out ParsingError e)
+             || !s.ReadFloat(",").TryUnwrap(out TextSpan<float> bpm, out e)
+             || !s.ReadFloat(")").TryUnwrap(out TextSpan<float> divisor, out e))
+            {
+                return ChartError.Parsing(line, lineNumber, RawEventType.Timing, e);
+            }
 
             if (divisor < 0)
             {
-                throw new ChartFormatException(I18n.S("Format.Exception.DivisorNegative"));
-            }
-
-            if (tick == 0 && bpm == 0)
-            {
-                throw new ChartFormatException(I18n.S("Format.Exception.BaseBpmNegative"));
+                return ChartError.Property(line, lineNumber, RawEventType.Timing, divisor.StartPos, divisor.Length, ChartError.Kind.DivisorNegative);
             }
 
             return new RawTiming()
@@ -52,16 +49,20 @@ namespace ArcCreate.ChartFormat
         /// <param name="line">The string to parse.</param>
         /// <param name="lineNumber">The line number of the event.</param>
         /// <returns>The parsed object.</returns>
-        public RawTap ParseTap(string line, int lineNumber)
+        public Result<RawTap, ChartError> ParseTap(string line, int lineNumber)
         {
             StringParser s = new StringParser(line);
             s.Skip(1);
-            int tick = s.ReadInt(",");
-            int track = s.ReadInt(")");
+            if (!s.ReadInt(",").TryUnwrap(out TextSpan<int> tick, out ParsingError e)
+             || !s.ReadInt(")").TryUnwrap(out TextSpan<int> lane, out e))
+            {
+                return ChartError.Parsing(line, lineNumber, RawEventType.Tap, e);
+            }
+
             return new RawTap()
             {
                 Timing = tick,
-                Lane = track,
+                Lane = lane,
                 Type = RawEventType.Tap,
                 TimingGroup = CurrentTimingGroup,
                 Line = lineNumber,
@@ -74,16 +75,26 @@ namespace ArcCreate.ChartFormat
         /// <param name="line">The string to parse.</param>
         /// <param name="lineNumber">The line number of the event.</param>
         /// <returns>The parsed object.</returns>
-        public RawHold ParseHold(string line, int lineNumber)
+        public Result<RawHold, ChartError> ParseHold(string line, int lineNumber)
         {
             StringParser s = new StringParser(line);
             s.Skip("hold(".Length);
-            int tick = s.ReadInt(",");
-            int endtick = s.ReadInt(",");
-            int track = s.ReadInt(")");
+            if (!s.ReadInt(",").TryUnwrap(out TextSpan<int> tick, out ParsingError e)
+             || !s.ReadInt(",").TryUnwrap(out TextSpan<int> endtick, out e)
+             || !s.ReadInt(")").TryUnwrap(out TextSpan<int> track, out e))
+            {
+                return ChartError.Parsing(line, lineNumber, RawEventType.Hold, e);
+            }
+
             if (endtick <= tick)
             {
-                throw new ChartFormatException(I18n.S("Format.Exception.DurationNegative"));
+                return ChartError.Property(
+                    line,
+                    lineNumber,
+                    RawEventType.Hold,
+                    tick.StartPos,
+                    endtick.StartPos + endtick.Length - tick.StartPos,
+                    endtick == tick ? ChartError.Kind.DurationZero : ChartError.Kind.DurationNegative);
             }
 
             return new RawHold()
@@ -104,39 +115,47 @@ namespace ArcCreate.ChartFormat
         /// <param name="line">The string to parse.</param>
         /// <param name="lineNumber">The line number of the event.</param>
         /// <returns>The parsed object.</returns>
-        public RawArc ParseArc(string line, int lineNumber)
+        public Result<RawArc, ChartError> ParseArc(string line, int lineNumber)
         {
             StringParser s = new StringParser(line);
             s.Skip("arc(".Length);
-            int tick = s.ReadInt(",");
-            int endtick = s.ReadInt(",");
-            float startx = s.ReadFloat(",");
-            float endx = s.ReadFloat(",");
-            string linetype = s.ReadString(",");
-            float starty = s.ReadFloat(",");
-            float endy = s.ReadFloat(",");
-            int color = s.ReadInt(",");
-            string effect = s.ReadString(",");
-            bool istrace = s.ReadBool(")");
+            if (!s.ReadInt(",").TryUnwrap(out TextSpan<int> tick, out ParsingError e)
+             || !s.ReadInt(",").TryUnwrap(out TextSpan<int> endtick, out e)
+             || !s.ReadFloat(",").TryUnwrap(out TextSpan<float> startx, out e)
+             || !s.ReadFloat(",").TryUnwrap(out TextSpan<float> endx, out e)
+             || !s.ReadString(",").TryUnwrap(out TextSpan<string> linetype, out e)
+             || !s.ReadFloat(",").TryUnwrap(out TextSpan<float> starty, out e)
+             || !s.ReadFloat(",").TryUnwrap(out TextSpan<float> endy, out e)
+             || !s.ReadInt(",").TryUnwrap(out TextSpan<int> color, out e)
+             || !s.ReadString(",").TryUnwrap(out TextSpan<string> effect, out e)
+             || !s.ReadBool(")").TryUnwrap(out TextSpan<bool> istrace, out e))
+            {
+                return ChartError.Parsing(line, lineNumber, RawEventType.Arc, e);
+            }
+
             List<RawArcTap> arctap = null;
 
             if (color < 0)
             {
-                throw new ChartFormatException(I18n.S("Format.Exception.ArcColorNegative"));
+                return ChartError.Property(line, lineNumber, RawEventType.Arc, color.StartPos, color.Length, ChartError.Kind.ArcColorNegative);
             }
 
-            if (s.Current != ";")
+            if (s.Current != ';')
             {
                 arctap = new List<RawArcTap>();
                 while (true)
                 {
                     int startCharPos = s.Pos + 1;
                     s.Skip("[arctap(".Length);
-                    int timing = s.ReadInt(")");
-                    int endCharPos = s.Pos;
+                    if (!s.ReadInt(")").TryUnwrap(out TextSpan<int> timing, out ParsingError ae))
+                    {
+                        return ChartError.Parsing(line, lineNumber, RawEventType.ArcTap, ae);
+                    }
+
+                    int length = s.Pos - startCharPos;
                     if (timing < tick || timing > endtick)
                     {
-                        throw new ChartFormatException(I18n.S("Format.Exception.ArcTapOutOfRange"), startCharPos, endCharPos);
+                        return ChartError.Property(line, lineNumber, RawEventType.ArcTap, timing.StartPos, timing.Length, ChartError.Kind.ArcTapOutOfRange);
                     }
 
                     arctap.Add(new RawArcTap
@@ -146,9 +165,10 @@ namespace ArcCreate.ChartFormat
                         TimingGroup = CurrentTimingGroup,
                         Line = lineNumber,
                         CharacterStart = startCharPos,
-                        CharacterEnd = endCharPos,
+                        Length = length,
                     });
-                    if (s.Current != ",")
+
+                    if (s.Current != ',')
                     {
                         break;
                     }
@@ -157,7 +177,13 @@ namespace ArcCreate.ChartFormat
 
             if (endtick < tick)
             {
-                throw new ChartFormatException(I18n.S("Format.Exception.DurationNegative"));
+                return ChartError.Property(
+                    line,
+                    lineNumber,
+                    RawEventType.Arc,
+                    tick.StartPos,
+                    endtick.StartPos + endtick.Length - tick.StartPos,
+                    ChartError.Kind.DurationNegative);
             }
 
             return new RawArc()
@@ -186,19 +212,29 @@ namespace ArcCreate.ChartFormat
         /// <param name="line">The string to parse.</param>
         /// <param name="lineNumber">The line number of the event.</param>
         /// <returns>The parsed object.</returns>
-        public RawCamera ParseCamera(string line, int lineNumber)
+        public Result<RawCamera, ChartError> ParseCamera(string line, int lineNumber)
         {
             StringParser s = new StringParser(line);
             s.Skip("camera(".Length);
-            int tick = s.ReadInt(",");
-            Vector3 move = new Vector3(s.ReadFloat(","), s.ReadFloat(","), s.ReadFloat(","));
-            Vector3 rotate = new Vector3(s.ReadFloat(","), s.ReadFloat(","), s.ReadFloat(","));
-            string type = s.ReadString(",");
-            int duration = s.ReadInt(")");
+            if (!s.ReadInt(",").TryUnwrap(out TextSpan<int> tick, out ParsingError e)
+             || !s.ReadFloat(",").TryUnwrap(out TextSpan<float> mx, out e)
+             || !s.ReadFloat(",").TryUnwrap(out TextSpan<float> my, out e)
+             || !s.ReadFloat(",").TryUnwrap(out TextSpan<float> mz, out e)
+             || !s.ReadFloat(",").TryUnwrap(out TextSpan<float> rx, out e)
+             || !s.ReadFloat(",").TryUnwrap(out TextSpan<float> ry, out e)
+             || !s.ReadFloat(",").TryUnwrap(out TextSpan<float> rz, out e)
+             || !s.ReadString(",").TryUnwrap(out TextSpan<string> type, out e)
+             || !s.ReadInt(")").TryUnwrap(out TextSpan<int> duration, out e))
+            {
+                return ChartError.Parsing(line, lineNumber, RawEventType.Camera, e);
+            }
+
+            Vector3 move = new Vector3(mx, my, mz);
+            Vector3 rotate = new Vector3(rx, ry, rz);
 
             if (duration < 0)
             {
-                throw new ChartFormatException(I18n.S("Format.Exception.DurationNegative"));
+                return ChartError.Property(line, lineNumber, RawEventType.Camera, duration.StartPos, duration.Length, ChartError.Kind.DurationNegative);
             }
 
             return new RawCamera()
@@ -221,126 +257,149 @@ namespace ArcCreate.ChartFormat
         /// <param name="line">The string to parse.</param>
         /// <param name="lineNumber">The line number of the event.</param>
         /// <returns>The parsed object.</returns>
-        public RawSceneControl ParseSceneControl(string line, int lineNumber)
+        public Result<RawSceneControl, ChartError> ParseSceneControl(string line, int lineNumber)
         {
-            try
+            StringParser s = new StringParser(line);
+            s.Skip("scenecontrol(".Length);
+            if (!s.ReadInt(",").TryUnwrap(out TextSpan<int> tick, out ParsingError e)
+             || !s.ReadString(")").TryUnwrap(out TextSpan<string> parameters, out e))
             {
-                StringParser s = new StringParser(line);
-                s.Skip("scenecontrol(".Length);
-                int tick = s.ReadInt(",");
-                string type = s.ReadString(",").Trim();
+                return ChartError.Parsing(line, lineNumber, RawEventType.SceneControl, e);
+            }
 
-                string parameterString = s.ReadString();
-                parameterString = parameterString.Substring(0, parameterString.LastIndexOf(')'));
-                string[] split = parameterString.Split(',');
+            string parametersString = parameters.Value + ",";
+            StringParser p = new StringParser(parametersString);
+            string currentString = "";
+            List<object> args = new List<object>();
 
-                List<object> parameters = new List<object>();
+            if (!p.ReadString(",").TryUnwrap(out TextSpan<string> type, out e))
+            {
+                return ChartError.Parsing(line, lineNumber, RawEventType.SceneControl, e);
+            }
 
-                string currentString = "";
-                foreach (string rawparam in split)
+            while (!p.HasEnded)
+            {
+                if (!p.ReadString(",").TryUnwrap(out TextSpan<string> rawParamSpan, out e))
                 {
-                    bool isStart = rawparam[0] == '\"';
-                    bool isEnd = rawparam[rawparam.Length - 1] == '\"'
-                              && rawparam.Length >= 2
-                              && rawparam[rawparam.Length - 2] != '\\';
-
-                    if (isStart)
-                    {
-                        currentString = rawparam;
-                    }
-                    else if (currentString.Length > 0)
-                    {
-                        currentString += "," + rawparam;
-                    }
-
-                    if (currentString.Length == 0)
-                    {
-                        if (!Evaluator.TryFloat(rawparam, out float val))
-                        {
-                            throw new ArgumentException(rawparam);
-                        }
-
-                        parameters.Add(val);
-                    }
-                    else if (isEnd)
-                    {
-                        string param = currentString.Substring(1, currentString.Length - 2);
-                        param = param.Replace("\\\"", "\"");
-                        parameters.Add(param);
-                        currentString = "";
-                    }
+                    return ChartError.Parsing(line, lineNumber, RawEventType.SceneControl, e);
                 }
 
-                return new RawSceneControl()
+                string rawParam = rawParamSpan.Value;
+                bool isStart = rawParam[0] == '\"';
+                bool isEnd = rawParam.Length >= 2
+                          && rawParam[rawParam.Length - 1] == '\"'
+                          && rawParam[rawParam.Length - 2] != '\\';
+
+                if (isStart)
                 {
-                    Timing = tick,
-                    Type = RawEventType.SceneControl,
-                    Arguments = parameters,
-                    SceneControlTypeName = type,
-                    TimingGroup = CurrentTimingGroup,
-                    Line = lineNumber,
-                };
+                    currentString = rawParam;
+                }
+                else if (currentString.Length > 0)
+                {
+                    currentString += "," + rawParam;
+                }
+
+                if (currentString.Length == 0)
+                {
+                    if (!Evaluator.TryFloat(rawParam, out float val))
+                    {
+                        return ChartError.Parsing(
+                            line,
+                            lineNumber,
+                            RawEventType.SceneControl,
+                            new ParsingError(
+                                rawParamSpan,
+                                rawParamSpan.StartPos,
+                                rawParamSpan.Length,
+                                ParsingError.Kind.InvalidConversionToFloat));
+                    }
+
+                    args.Add(val);
+                }
+                else if (isEnd)
+                {
+                    string param = currentString.Substring(1, currentString.Length - 2);
+                    param = param.Replace("\\\"", "\"");
+                    args.Add(param);
+                    currentString = "";
+                }
             }
-            catch (Exception)
+
+            return new RawSceneControl()
             {
-                // 0 arguments
-                StringParser s = new StringParser(line);
-                s.Skip("scenecontrol(".Length);
-                int tick = s.ReadInt(",");
-                string type = s.ReadString(")");
-                List<object> parameters = new List<object>();
-                return new RawSceneControl()
-                {
-                    Timing = tick,
-                    Type = RawEventType.SceneControl,
-                    Arguments = parameters,
-                    SceneControlTypeName = type,
-                    TimingGroup = CurrentTimingGroup,
-                    Line = lineNumber,
-                };
-            }
+                Timing = tick,
+                Type = RawEventType.SceneControl,
+                Arguments = args,
+                SceneControlTypeName = type,
+                TimingGroup = CurrentTimingGroup,
+                Line = lineNumber,
+            };
         }
 
         /// <summary>
         /// Parse a timing group aff line of the format "timinggroup([property],...){".
         /// </summary>
         /// <param name="line">The string to parse.</param>
+        /// <param name="lineNumber">Line number of the string.</param>
         /// <param name="path">The path of the file this group was read from.</param>
         /// <returns>The parsed object.</returns>
-        public RawTimingGroup ParseTimingGroup(string line, string path = "")
+        public Result<RawTimingGroup, ChartError> ParseTimingGroup(string line, int lineNumber, string path = "")
         {
             StringParser s = new StringParser(line);
             s.Skip("timinggroup(".Length);
-            string properties = s.ReadString(")");
-            var prop = new RawTimingGroup(properties) { File = path };
-            return prop;
+            if (!s.ReadString(")").TryUnwrap(out TextSpan<string> properties, out ParsingError e))
+            {
+                return ChartError.Parsing(line, lineNumber, RawEventType.TimingGroup, e);
+            }
+
+            if (!RawTimingGroup.Parse(properties, lineNumber).TryUnwrap(out RawTimingGroup tg, out ChartError ce))
+            {
+                return ce;
+            }
+
+            tg.File = path;
+            return tg;
         }
 
         /// <summary>
         /// Parse a include aff line of the format "include([reference]);".
         /// </summary>
         /// <param name="line">The string to parse.</param>
+        /// <param name="lineNumber">Line number of the string.</param>
         /// <returns>The referenced file name.</returns>
-        public string ParseInclude(string line)
+        public Result<string, ChartError> ParseInclude(string line, int lineNumber)
         {
             StringParser s = new StringParser(line);
             s.Skip("include(".Length);
-            string fileName = s.ReadString(")").Trim();
-            return fileName;
+            if (!s.ReadString(")").TryUnwrap(out TextSpan<string> fileName, out ParsingError e))
+            {
+                return ChartError.Parsing(line, lineNumber, RawEventType.Include, e);
+            }
+
+            return fileName.Value.Trim();
         }
 
         /// <summary>
         /// Parse a fragment aff line of the format "fragment([offset],[reference]);".
         /// </summary>
         /// <param name="line">The string to parse.</param>
+        /// <param name="lineNumber">Line number of the string.</param>
         /// <returns>A tuple of the timing offset and referenced file name.</returns>
-        public (int timing, string fileName) ParseFragment(string line)
+        public Result<RawFragment, ChartError> ParseFragment(string line, int lineNumber)
         {
             StringParser s = new StringParser(line);
             s.Skip("fragment(".Length);
-            int baseTiming = s.ReadInt(",");
-            string fileName = s.ReadString(")").Trim();
-            return (baseTiming, fileName);
+            if (!s.ReadInt(",").TryUnwrap(out TextSpan<int> baseTiming, out ParsingError e)
+             || !s.ReadString(")").TryUnwrap(out TextSpan<string> fileName, out e))
+            {
+                return ChartError.Parsing(line, lineNumber, RawEventType.Fragment, e);
+            }
+
+            return new RawFragment
+            {
+                Timing = baseTiming,
+                File = fileName.Value.Trim(),
+            };
         }
 
         private string SwitchFileName(string currentPath, string target)

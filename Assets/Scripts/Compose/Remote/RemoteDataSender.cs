@@ -261,11 +261,6 @@ namespace ArcCreate.Compose.Remote
             return BitConverter.GetBytes(val);
         }
 
-        private byte[] FromFloat(float val)
-        {
-            return BitConverter.GetBytes(val);
-        }
-
         private byte[] FromBool(bool val)
         {
             return BitConverter.GetBytes(val);

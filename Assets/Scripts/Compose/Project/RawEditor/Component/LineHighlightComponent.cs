@@ -16,21 +16,22 @@ namespace ArcCreate.Compose.Project
         private string text;
         private Severity severity;
 
-        public void SetPosition(TMP_InputField inputField, int lineNumber, int startCharPos, int endCharPos)
+        public void SetPosition(TMP_InputField inputField, Option<int> lineNumber, Option<int> startCharPos, Option<int> length)
         {
             if (rect == null)
             {
                 rect = GetComponent<RectTransform>();
             }
 
+            int lineNumVal = lineNumber.Or(0);
             TMP_LineInfo[] lineInfoArray = inputField.textComponent.textInfo.lineInfo;
-            lineNumber = Mathf.Clamp(lineNumber - 1, 0, lineInfoArray.Length - 1);
-            TMP_LineInfo lineInfo = lineInfoArray[lineNumber];
+            lineNumber = Mathf.Clamp(lineNumVal - 1, 0, lineInfoArray.Length - 1);
+            TMP_LineInfo lineInfo = lineInfoArray[lineNumVal];
 
             float ascender = lineInfo.ascender;
             float descender = lineInfo.descender;
 
-            if (startCharPos == 0 && endCharPos == -1)
+            if (!startCharPos.HasValue)
             {
                 rect.anchorMin = new Vector2(0, 0.5f);
                 rect.anchorMax = new Vector2(1, 0.5f);
@@ -42,8 +43,8 @@ namespace ArcCreate.Compose.Project
             else
             {
                 TMP_CharacterInfo[] charInfoArray = inputField.textComponent.textInfo.characterInfo;
-                int leftIndex = lineInfo.firstCharacterIndex + startCharPos;
-                int rightIndex = lineInfo.firstCharacterIndex + endCharPos;
+                int leftIndex = lineInfo.firstCharacterIndex + startCharPos.Value;
+                int rightIndex = length.HasValue ? (lineInfo.firstCharacterIndex + length.Value) : lineInfo.lastCharacterIndex;
                 float left = (leftIndex >= 0 && leftIndex < charInfoArray.Length) ? charInfoArray[leftIndex].topLeft.x : 0;
                 float right = (rightIndex >= 0 && rightIndex < charInfoArray.Length) ? charInfoArray[rightIndex].topRight.x : 0;
 

@@ -17,7 +17,6 @@ namespace ArcCreate.Compose.EventsEditor
 #endif
     public class ScenecontrolLuaEnvironment : IScriptSetup
     {
-        public const int InstructionLimit = int.MaxValue;
         private readonly ScenecontrolTable scTable;
         private readonly Dictionary<string, IScenecontrolType> scenecontrolTypes = new Dictionary<string, IScenecontrolType>();
 
@@ -185,13 +184,13 @@ namespace ArcCreate.Compose.EventsEditor
                 if (File.Exists(initPath))
                 {
                     lastPath = initPath;
-                    LuaRunner.RunScript(File.ReadAllText(initPath), this, InstructionLimit, new ScriptLoader(folderPath));
+                    LuaRunner.RunScript(File.ReadAllText(initPath), this, new ScriptLoader(folderPath));
                 }
 
                 if (File.Exists(perChartPath))
                 {
                     lastPath = perChartPath;
-                    LuaRunner.RunScript(File.ReadAllText(perChartPath), this, InstructionLimit, new ScriptLoader(perChartPath));
+                    LuaRunner.RunScript(File.ReadAllText(perChartPath), this, new ScriptLoader(perChartPath));
                 }
             }
             catch (Exception e)

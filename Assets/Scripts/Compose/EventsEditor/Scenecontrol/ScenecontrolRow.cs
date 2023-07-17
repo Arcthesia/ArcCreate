@@ -202,15 +202,13 @@ namespace ArcCreate.Compose.EventsEditor
 
         private void OnEndEdit(string val)
         {
-            try
+            if (!Evaluator.TryInt(timingField.text, out int timing))
             {
-                int timing = Evaluator.Int(timingField.text);
-                string[] args = fields.Select(field => field.text).ToArray();
-                RegisterChange(timing, args);
+                return;
             }
-            catch (Exception)
-            {
-            }
+
+            string[] args = fields.Select(field => field.text).ToArray();
+            RegisterChange(timing, args);
         }
 
         private void OnFieldSelect(string arg)

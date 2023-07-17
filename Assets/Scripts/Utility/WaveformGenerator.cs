@@ -106,6 +106,11 @@ namespace ArcCreate.Utility
 
         public static int SecondToSample(float seconds, AudioClip clip)
         {
+            if (clip == null || Mathf.Approximately(clip.length, 0))
+            {
+                return 0;
+            }
+
             float samplePerSecond = clip.samples / clip.length;
             return (int)(samplePerSecond * clip.channels * seconds);
         }

@@ -212,8 +212,8 @@ namespace Tests.Unit
 
             Assert.That(reader.TimingGroups, Has.Count.EqualTo(3));
             Assert.That(reader.TimingGroups[0].File, Is.EqualTo("2.aff"));
-            Assert.That(reader.TimingGroups[1].File, Is.EqualTo("dir/incl1.aff"));
-            Assert.That(reader.TimingGroups[2].File, Is.EqualTo("dir/incl2.aff"));
+            Assert.That(reader.TimingGroups[1].File, Is.EqualTo("dir/incl1.aff").Or.EqualTo("dir\\incl1.aff"));
+            Assert.That(reader.TimingGroups[2].File, Is.EqualTo("dir/incl2.aff").Or.EqualTo("dir\\incl2.aff"));
             Assert.That(reader.TimingGroups[1].Editable, Is.True);
             Assert.That(reader.TimingGroups[2].Editable, Is.True);
         }
@@ -261,8 +261,8 @@ namespace Tests.Unit
 
             Assert.That(reader.TimingGroups, Has.Count.EqualTo(3));
             Assert.That(reader.TimingGroups[0].File, Is.EqualTo("2.aff"));
-            Assert.That(reader.TimingGroups[1].File, Is.EqualTo("dir/frag1.aff"));
-            Assert.That(reader.TimingGroups[2].File, Is.EqualTo("dir/frag2.aff"));
+            Assert.That(reader.TimingGroups[1].File, Is.EqualTo("dir/frag1.aff").Or.EqualTo("dir\\frag1.aff"));
+            Assert.That(reader.TimingGroups[2].File, Is.EqualTo("dir/frag2.aff").Or.EqualTo("dir\\frag2.aff"));
             Assert.That(reader.TimingGroups[1].Editable, Is.False);
             Assert.That(reader.TimingGroups[2].Editable, Is.False);
         }
@@ -279,11 +279,7 @@ namespace Tests.Unit
                 "(1000,1);\n" +
                 "include(2.aff);");
 
-            Assert.That(
-                () =>
-                {
-                    reader.Parse();
-                }, Throws.Exception.TypeOf<ChartFormatException>());
+            AssertError(reader.Parse(), ChartError.Kind.ReferencedFileError);
         }
 
         [Test]
@@ -298,11 +294,7 @@ namespace Tests.Unit
                 "incl.aff",
                 "(1000,1);");
 
-            Assert.That(
-                () =>
-                {
-                    reader.Parse();
-                }, Throws.Exception.TypeOf<ChartFormatException>());
+            AssertError(reader.Parse(), ChartError.Kind.IncludeReferencedMultipleTimes);
         }
 
         [Test]
@@ -317,11 +309,7 @@ namespace Tests.Unit
                 "frag.aff",
                 "(1000,1);");
 
-            Assert.That(
-                () =>
-                {
-                    reader.Parse();
-                }, Throws.Exception.TypeOf<ChartFormatException>());
+            AssertError(reader.Parse(), ChartError.Kind.IncludeAReferencedFragment);
         }
 
         [Test]
@@ -336,11 +324,7 @@ namespace Tests.Unit
                 "incl.aff",
                 "(1000,1);");
 
-            Assert.That(
-                () =>
-                {
-                    reader.Parse();
-                }, Throws.Exception.TypeOf<ChartFormatException>());
+            AssertError(reader.Parse(), ChartError.Kind.IncludeReferencedMultipleTimes);
         }
 
         [Test]
@@ -359,11 +343,7 @@ namespace Tests.Unit
                 "(1000,1);\n" +
                 "include(incl.aff);");
 
-            Assert.That(
-                () =>
-                {
-                    reader.Parse();
-                }, Throws.Exception.TypeOf<ChartFormatException>());
+            AssertError(reader.Parse(), ChartError.Kind.ReferencedFileError);
         }
 
         private void SetupFakeFile(string path, string content)
@@ -374,11 +354,26 @@ namespace Tests.Unit
                 "timing(0,100.00,4.00);\n" +
                 content;
             fileAccess.ReadFileByLines(path).Returns(content.Split('\n'));
+            fileAccess.ReadFileByLines(path.Replace("/", "\\")).Returns(content.Split('\n'));
         }
 
         private List<RawTap> GetRawTapList(ChartReader reader)
         {
             return reader.Events.Where(e => e is RawTap).Cast<RawTap>().ToList();
+        }
+
+        private void AssertError(Result<ChartFileErrors> res, ChartError.Kind kind)
+        {
+            Assert.That(res.IsError, Is.True);
+            Assert.That(res.Error, Is.InstanceOf<ChartFileErrors>());
+
+            bool hasErrorKind = false;
+            foreach (var e in res.Error.Errors)
+            {
+                hasErrorKind = hasErrorKind || (e.ErrorKind == kind);
+            }
+
+            Assert.That(hasErrorKind, Is.True);
         }
     }
 }

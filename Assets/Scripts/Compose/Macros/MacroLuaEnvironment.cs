@@ -14,8 +14,6 @@ namespace ArcCreate.Compose.Macros
 {
     public class MacroLuaEnvironment : IScriptSetup
     {
-        public const int InstructionLimit = int.MaxValue;
-
         private readonly Dictionary<string, MacroDefinition> macros = new Dictionary<string, MacroDefinition>();
         private readonly List<MacroDefinition> macrosTree = new List<MacroDefinition>();
         private readonly MacroPicker picker;
@@ -58,7 +56,7 @@ namespace ArcCreate.Compose.Macros
             {
                 Script script = new Script();
                 UserData.RegisterAssembly();
-                LuaRunner.RunScript(File.ReadAllText(path), this, InstructionLimit, new ScriptLoader(Path.GetDirectoryName(path)));
+                LuaRunner.RunScript(File.ReadAllText(path), this, new ScriptLoader(Path.GetDirectoryName(path)));
             }
             catch (Exception e)
             {
@@ -202,6 +200,7 @@ namespace ArcCreate.Compose.Macros
             UpdateMacroTree();
         }
 
+#pragma warning disable
         [EmmyDoc("Add a macro with an icon. The icon should be a material icon unicode value e.g e2c7.")]
         public void AddMacroWithIcon(string parentId, string id, string displayName, string icon, DynValue macroDef)
         {
@@ -221,6 +220,7 @@ namespace ArcCreate.Compose.Macros
         public void AddFolder(string parentId, string id, string displayName)
         {
         }
+#pragma warning restore
 
         [EmmyDoc("Remove a macro. Does nothing if the macro has not been added.")]
         public void RemoveMacro(string id)

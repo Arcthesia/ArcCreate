@@ -5,9 +5,9 @@ namespace ArcCreate.Compose.Project
     public struct ChartFault
     {
         public Severity Severity;
-        public int LineNumber;
-        public int StartCharPos;
-        public int EndCharPos;
+        public Option<int> LineNumber;
+        public Option<int> StartCharPos;
+        public Option<int> Length;
         public string Description;
     }
 }

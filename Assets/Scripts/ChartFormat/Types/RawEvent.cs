@@ -12,6 +12,6 @@ namespace ArcCreate.ChartFormat
 
         public int CharacterStart { get; set; } = 0;
 
-        public int CharacterEnd { get; set; } = -1;
+        public int Length { get; set; } = -1;
     }
 }

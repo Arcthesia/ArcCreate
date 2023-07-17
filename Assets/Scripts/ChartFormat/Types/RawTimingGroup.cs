@@ -22,95 +22,6 @@ namespace ArcCreate.ChartFormat
             Side = SideOverride.None;
         }
 
-        public RawTimingGroup(string def, int line = 0)
-        {
-            if (def == "")
-            {
-                return;
-            }
-
-            string[] split = def.Split(',');
-            foreach (string optRaw in split)
-            {
-                string opt = optRaw.Trim().ToLower();
-                if (opt.Contains("="))
-                {
-                    string[] tokens = opt.Split('=');
-                    string type = tokens[0];
-                    string value = tokens[1];
-
-                    bool valid;
-                    float val;
-                    switch (type)
-                    {
-                        case "name":
-                            Name = value.Trim('"');
-                            break;
-                        case "anglex":
-                            valid = Evaluator.TryFloat(value, out val);
-                            AngleX = valid ? val : 0;
-                            break;
-                        case "angley":
-                            valid = Evaluator.TryFloat(value, out val);
-                            AngleY = valid ? val : 0;
-                            break;
-                        case "arcresolution":
-                            valid = Evaluator.TryFloat(value, out val);
-                            val = UnityEngine.Mathf.Clamp(val, 0, 10);
-                            ArcResolution = valid ? val : 1;
-                            break;
-                        default:
-                            throw new ChartFormatException(
-                                RawEventType.TimingGroup,
-                                opt,
-                                File,
-                                line,
-                                I18n.S("Format.Exception.TimingGroupPropertiesInvalid"));
-                    }
-                }
-                else
-                {
-                    switch (opt)
-                    {
-                        case "noinput":
-                            NoInput = true;
-                            break;
-                        case "noclip":
-                            NoClip = true;
-                            break;
-                        case "noheightindicator":
-                            NoHeightIndicator = true;
-                            break;
-                        case "nohead":
-                            NoHead = true;
-                            break;
-                        case "noshadow":
-                            NoShadow = true;
-                            break;
-                        case "noarccap":
-                            NoArcCap = true;
-                            break;
-                        case "light":
-                            Side = SideOverride.Light;
-                            break;
-                        case "conflict":
-                            Side = SideOverride.Conflict;
-                            break;
-                        case "fadingholds":
-                            FadingHolds = true;
-                            break;
-                        default:
-                            throw new ChartFormatException(
-                                RawEventType.TimingGroup,
-                                opt,
-                                File,
-                                line,
-                                I18n.S("Format.Exception.TimingGroupPropertiesInvalid"));
-                    }
-                }
-            }
-        }
-
         public string Name { get; set; } = null;
 
         public bool NoInput { get; set; } = false;
@@ -138,6 +49,106 @@ namespace ArcCreate.ChartFormat
         public string File { get; set; } = "";
 
         public bool Editable { get; set; } = true;
+
+        public static Result<RawTimingGroup, ChartError> Parse(string def, int lineNumber = 0)
+        {
+            var tg = new RawTimingGroup();
+            if (def == "")
+            {
+                return tg;
+            }
+
+            def += ",";
+            StringParser parser = new StringParser(def);
+            while (!parser.HasEnded)
+            {
+                if (!parser.ReadString(",").TryUnwrap(out TextSpan<string> optRaw, out ParsingError e))
+                {
+                    return ChartError.Parsing(def, lineNumber, RawEventType.TimingGroup, e);
+                }
+
+                string opt = optRaw.Value.Trim().ToLower();
+                if (opt.Contains("="))
+                {
+                    string[] tokens = opt.Split('=');
+                    string type = tokens[0];
+                    string value = tokens[1];
+
+                    bool valid;
+                    float val;
+                    switch (type)
+                    {
+                        case "name":
+                            tg.Name = value.Trim('"');
+                            break;
+                        case "anglex":
+                            valid = Evaluator.TryFloat(value, out val);
+                            tg.AngleX = valid ? val : 0;
+                            break;
+                        case "angley":
+                            valid = Evaluator.TryFloat(value, out val);
+                            tg.AngleY = valid ? val : 0;
+                            break;
+                        case "arcresolution":
+                            valid = Evaluator.TryFloat(value, out val);
+                            val = UnityEngine.Mathf.Clamp(val, 0, 10);
+                            tg.ArcResolution = valid ? val : 1;
+                            break;
+                        default:
+                            return ChartError.Property(
+                                def,
+                                lineNumber,
+                                RawEventType.TimingGroup,
+                                optRaw.StartPos,
+                                optRaw.Length,
+                                ChartError.Kind.TimingGroupPropertiesInvalid);
+                    }
+                }
+                else
+                {
+                    switch (opt)
+                    {
+                        case "noinput":
+                            tg.NoInput = true;
+                            break;
+                        case "noclip":
+                            tg.NoClip = true;
+                            break;
+                        case "noheightindicator":
+                            tg.NoHeightIndicator = true;
+                            break;
+                        case "nohead":
+                            tg.NoHead = true;
+                            break;
+                        case "noshadow":
+                            tg.NoShadow = true;
+                            break;
+                        case "noarccap":
+                            tg.NoArcCap = true;
+                            break;
+                        case "light":
+                            tg.Side = SideOverride.Light;
+                            break;
+                        case "conflict":
+                            tg.Side = SideOverride.Conflict;
+                            break;
+                        case "fadingholds":
+                            tg.FadingHolds = true;
+                            break;
+                        default:
+                            return ChartError.Property(
+                                def,
+                                lineNumber,
+                                RawEventType.TimingGroup,
+                                optRaw.StartPos,
+                                optRaw.Length,
+                                ChartError.Kind.TimingGroupPropertiesInvalid);
+                    }
+                }
+            }
+
+            return tg;
+        }
 
         public override string ToString()
         {

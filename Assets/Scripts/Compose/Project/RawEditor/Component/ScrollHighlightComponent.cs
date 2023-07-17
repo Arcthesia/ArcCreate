@@ -12,7 +12,7 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private Color[] colors;
         private RectTransform rect;
 
-        public void SetPosition(TMP_InputField inputField, int lineNumber)
+        public void SetPosition(TMP_InputField inputField, Option<int> lineNumber)
         {
             if (rect == null)
             {
@@ -20,8 +20,9 @@ namespace ArcCreate.Compose.Project
             }
 
             int lineCount = inputField.textComponent.textInfo.lineCount;
-            lineNumber = Mathf.Clamp(lineNumber, 1, lineCount);
-            float ratio = (float)lineNumber / lineCount;
+            int lineNumVal = lineNumber.Or(0);
+            lineNumber = Mathf.Clamp(lineNumVal, 1, lineCount);
+            float ratio = (float)lineNumVal / lineCount;
 
             rect.anchorMin = new Vector2(rect.anchorMin.x, 1 - ratio);
             rect.anchorMax = new Vector2(rect.anchorMax.x, 1 - ratio);

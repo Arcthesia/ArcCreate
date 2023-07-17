@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using ArcCreate.ChartFormat;
 using ArcCreate.Compose.Navigation;
 using ArcCreate.Compose.Popups;
@@ -397,25 +398,18 @@ namespace ArcCreate.Compose.Project
 
             rawEditor.LoadFromPath(path);
 
-            try
+            ChartReader reader = ChartReaderFactory.GetReader(new PhysicalFileAccess(), path);
+            Result<ChartFileErrors> parseResult = reader.Parse();
+
+            if (parseResult.IsOk)
             {
-                ChartReader reader = ChartReaderFactory.GetReader(new PhysicalFileAccess(), path);
-                reader.Parse();
                 gameplayData.LoadChart(reader, "file:///" + Path.GetDirectoryName(path));
             }
-            catch (ChartFormatException ex)
+            else
             {
                 Services.Popups.CreateTextDialog(
                     title: I18n.S("Compose.Dialog.LoadChartError.Title"),
-                    content: I18n.S("Compose.Dialog.LoadChartError.Content", new Dictionary<string, object>
-                    {
-                        { "ChartPath", chart.ChartPath },
-                        { "TabName", I18n.S("Compose.UI.PanelNames.RawEditor") },
-                        { "Exception", ex.Reason },
-                        { "LineNumber", ex.LineNumber },
-                        { "EventType", ex.Type },
-                        { "Content", ex.Content },
-                    }),
+                    content: I18n.S("Compose.Dialog.LoadChartError.Content", parseResult.Error.Message),
                     new ButtonSetting
                     {
                         Text = I18n.S("Compose.Dialog.LoadChartError.Confirm"),
@@ -423,23 +417,21 @@ namespace ArcCreate.Compose.Project
                         ButtonColor = ButtonColor.Highlight,
                     });
             }
-            finally
-            {
-                OnChartLoad?.Invoke(chart);
-                Values.ProjectModified = false;
 
-                Debug.Log(
-                    I18n.S("Compose.Notify.Project.OpenChart", new Dictionary<string, object>()
-                    {
-                    { "Path", chart.ChartPath },
-                    }));
+            OnChartLoad?.Invoke(chart);
+            Values.ProjectModified = false;
 
-                autosaveHelper?.Dispose();
-                autosaveHelper = null;
-                if (Settings.ShouldAutosave.Value)
+            Debug.Log(
+                I18n.S("Compose.Notify.Project.OpenChart", new Dictionary<string, object>()
                 {
-                    autosaveHelper = new AutosaveHelper(this, Settings.AutosaveInterval.Value);
-                }
+                    { "Path", chart.ChartPath },
+                }));
+
+            autosaveHelper?.Dispose();
+            autosaveHelper = null;
+            if (Settings.ShouldAutosave.Value)
+            {
+                autosaveHelper = new AutosaveHelper(this, Settings.AutosaveInterval.Value);
             }
         }
 

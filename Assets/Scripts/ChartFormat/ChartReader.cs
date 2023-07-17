@@ -50,11 +50,14 @@ namespace ArcCreate.ChartFormat
         /// <summary>
         /// Start parsing with the provided <see cref="FullPath"/> and <see cref="Filename"/>.
         /// </summary>
-        public void Parse()
+        /// <returns>Result containing any errors found within the chart file.</returns>
+        public Result<ChartFileErrors> Parse()
         {
+            List<ChartError> errors = new List<ChartError>();
             TotalTimingGroup = 1;
             CurrentTimingGroup = 0;
             TimingGroups.Add(new RawTimingGroup() { File = Filename });
+            AllIncludes.Add(Filename);
 
             string[] lines = FileAccess.ReadFileByLines(FullPath);
             bool atHeader = true;
@@ -63,7 +66,12 @@ namespace ArcCreate.ChartFormat
                 string line = lines[i].Trim();
                 if (atHeader)
                 {
-                    ParseHeaderLine(line, FullPath, i, out bool endOfHeader);
+                    Result<ChartError> result = ParseHeaderLine(line, i, FullPath, out bool endOfHeader);
+                    if (result.IsError)
+                    {
+                        errors.Add(result.Error);
+                    }
+
                     if (endOfHeader)
                     {
                         atHeader = false;
@@ -71,7 +79,11 @@ namespace ArcCreate.ChartFormat
                 }
                 else
                 {
-                    ParseLine(line, FullPath, i);
+                    var result = ParseLine(line, FullPath, i);
+                    if (result.IsError)
+                    {
+                        errors.Add(result.Error);
+                    }
                 }
             }
 
@@ -109,31 +121,28 @@ namespace ArcCreate.ChartFormat
                 TimingGroups.AddRange(reference.TimingGroups);
             }
 
-            FinalValidity();
+            var r = FinalValidity();
+            if (r.IsError)
+            {
+                errors.Add(r.Error);
+            }
+
             Events.Sort((RawEvent a, RawEvent b) => { return a.Timing.CompareTo(b.Timing); });
-        }
-
-        public abstract void ParseLine(string line, string path, int lineNumber);
-
-        public abstract void ParseHeaderLine(string line, string path, int lineNumber, out bool endOfHeader);
-
-        public virtual void FinalValidity()
-        {
-            bool foundBaseTiming = false;
-            foreach (var ev in Events)
+            if (errors.Count > 0)
             {
-                if (ev is RawTiming && ev.TimingGroup == 0 && ev.Timing == 0)
-                {
-                    foundBaseTiming = true;
-                    break;
-                }
+                return new ChartFileErrors(Filename, errors);
             }
-
-            if (!foundBaseTiming)
+            else
             {
-                throw new ChartFormatException(I18n.S("Format.Exception.BaseTimingInvalid"));
+                return Result<ChartFileErrors>.Ok();
             }
         }
+
+        public abstract Result<ChartError> ParseLine(string line, string path, int lineNumber);
+
+        public abstract Result<ChartError> ParseHeaderLine(string line, int lineNumber, string path, out bool endOfHeader);
+
+        public abstract Result<ChartError> FinalValidity();
 
         /// <summary>
         /// Inject include and fragment references to this reader's blocklist.

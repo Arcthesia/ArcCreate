@@ -8,11 +8,13 @@ namespace ArcCreate.Compose.Macros
     [EmmyGroup("Macros")]
     public class TrackInput
     {
+#pragma warning disable
         [EmmyDoc("DEPRECATED. showVertical is no longer supported")]
         public static MacroRequest RequestTiming(bool showVertical = false, string notification = null)
         {
             return RequestTiming(notification);
         }
+#pragma warning restore
 
         [EmmyDoc("Request a timing selection. Returned value is accessed through the key \"timing\"")]
         public static MacroRequest RequestTiming(string notification = null)

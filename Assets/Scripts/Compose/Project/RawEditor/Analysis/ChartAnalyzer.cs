@@ -48,79 +48,20 @@ namespace ArcCreate.Compose.Project
         {
             try
             {
-                int i = 0;
-                int lineNumber = 0;
-                bool atHeader = true;
                 ChartReader reader = ChartReaderFactory.GetReader(new VirtualFileAccess(chart), path);
-
-                while (true)
+                Result<ChartFileErrors> parseResult = reader.Parse();
+                if (parseResult.IsError)
                 {
-                    int nextLineBreak = chart.IndexOf('\n', i);
-                    if (nextLineBreak < 0 || nextLineBreak >= chart.Length)
+                    foreach (var e in parseResult.Error.Errors)
                     {
-                        IsComplete = true;
-                        break;
-                    }
-
-                    string line = chart.Substring(i, nextLineBreak - i).Trim();
-                    i = nextLineBreak + 1;
-                    lineNumber++;
-
-                    try
-                    {
-                        if (atHeader)
-                        {
-                            reader.ParseHeaderLine(line, path, lineNumber, out bool endOfHeader);
-                            if (endOfHeader)
-                            {
-                                atHeader = false;
-                            }
-                        }
-                        else
-                        {
-                            reader.ParseLine(line, path, lineNumber);
-                        }
-                    }
-                    catch (ChartFormatException ex)
-                    {
-                        HasError = true;
                         faultQueue.Enqueue(new ChartFault
                         {
                             Severity = Severity.Error,
-                            LineNumber = ex.LineNumber,
-                            StartCharPos = ex.StartCharPos,
-                            EndCharPos = ex.EndCharPos,
-                            Description = ex.Reason,
+                            LineNumber = e.LineNumber,
+                            StartCharPos = e.StartPosition,
+                            Length = e.Length,
+                            Description = e.Message,
                         });
-
-                        if (ex.ShouldAbort)
-                        {
-                            IsComplete = true;
-                            return;
-                        }
-                    }
-                }
-
-                try
-                {
-                    reader.FinalValidity();
-                }
-                catch (ChartFormatException ex)
-                {
-                    HasError = true;
-                    faultQueue.Enqueue(new ChartFault
-                    {
-                        Severity = Severity.Error,
-                        LineNumber = ex.LineNumber,
-                        StartCharPos = ex.StartCharPos,
-                        EndCharPos = ex.EndCharPos,
-                        Description = ex.Reason,
-                    });
-
-                    if (ex.ShouldAbort)
-                    {
-                        IsComplete = true;
-                        return;
                     }
                 }
 
@@ -139,7 +80,7 @@ namespace ArcCreate.Compose.Project
                                 Severity = Severity.Warning,
                                 LineNumber = h.Line,
                                 StartCharPos = h.CharacterStart,
-                                EndCharPos = h.CharacterEnd,
+                                Length = h.Length,
                                 Description = I18n.S("Format.Warning.HoldTooShort"),
                             });
                         }
@@ -160,7 +101,7 @@ namespace ArcCreate.Compose.Project
                                         Severity = Severity.Warning,
                                         LineNumber = h.Line,
                                         StartCharPos = h.CharacterStart,
-                                        EndCharPos = h.CharacterEnd,
+                                        Length = h.Length,
                                         Description = I18n.S("Format.Warning.TapJudgementOverlap"),
                                     });
                                     break;
@@ -189,7 +130,7 @@ namespace ArcCreate.Compose.Project
                                         Severity = Severity.Warning,
                                         LineNumber = t.Line,
                                         StartCharPos = t.CharacterStart,
-                                        EndCharPos = t.CharacterEnd,
+                                        Length = t.Length,
                                         Description = I18n.S("Format.Warning.TapJudgementOverlap"),
                                     });
                                     break;
@@ -227,7 +168,7 @@ namespace ArcCreate.Compose.Project
                                             Severity = Severity.Warning,
                                             LineNumber = at.Line,
                                             StartCharPos = at.CharacterStart,
-                                            EndCharPos = at.CharacterEnd,
+                                            Length = at.Length,
                                             Description = I18n.S("Format.Warning.TapJudgementOverlap"),
                                         });
                                         break;

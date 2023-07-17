@@ -15,9 +15,8 @@ namespace ArcCreate.Utility.Lua
         /// </summary>
         /// <param name="script">The script to run.</param>
         /// <param name="setup">The object to setup the script, for binding methods.</param>
-        /// <param name="limitInstructionCountTo">The instruction limit.</param>
         /// <param name="scriptLoader">The script loader instance for loading script from file system.</param>
-        public static void RunScript(string script, IScriptSetup setup, int limitInstructionCountTo = int.MaxValue, FileSystemScriptLoader scriptLoader = null)
+        public static void RunScript(string script, IScriptSetup setup, FileSystemScriptLoader scriptLoader = null)
         {
             Script scriptObject = new Script();
             Script.GlobalOptions.RethrowExceptionNested = true;
@@ -36,8 +35,6 @@ namespace ArcCreate.Utility.Lua
 
             RegisterCommon(scriptObject);
             setup.SetupScript(scriptObject);
-
-            scriptObject.AttachDebugger(new LimitInstructionDebugger(limitInstructionCountTo));
             scriptObject.DoString(script);
         }
 

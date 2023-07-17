@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using ArcCreate.Utility.Parser;
 
@@ -24,168 +23,198 @@ namespace ArcCreate.ChartFormat
             AudioOffset = 0;
         }
 
-        public override void ParseLine(string line, string path, int lineNumber)
+        public override Result<ChartError> ParseLine(string line, string path, int lineNumber)
         {
             RawEventType type = DetermineType(line);
-            try
+            switch (type)
             {
-                switch (type)
-                {
-                    case RawEventType.Timing:
-                        Events.Add(ParseTiming(line, lineNumber));
-                        break;
-
-                    case RawEventType.Tap:
-                        Events.Add(ParseTap(line, lineNumber));
-                        break;
-
-                    case RawEventType.Hold:
-                        Events.Add(ParseHold(line, lineNumber));
-                        break;
-
-                    case RawEventType.Arc:
-                        Events.Add(ParseArc(line, lineNumber));
-                        break;
-
-                    case RawEventType.Camera:
-                        Events.Add(ParseCamera(line, lineNumber));
-                        break;
-
-                    case RawEventType.SceneControl:
-                        Events.Add(ParseSceneControl(line, lineNumber));
-                        break;
-
-                    case RawEventType.TimingGroup:
-                        TotalTimingGroup++;
-                        CurrentTimingGroup = TotalTimingGroup - 1;
-                        TimingGroups.Add(ParseTimingGroup(line, Filename));
-                        break;
-
-                    case RawEventType.TimingGroupEnd:
-                        CurrentTimingGroup = 0;
-                        break;
-
-                    case RawEventType.Include:
-                        string inclPath = ParseInclude(line);
-                        string fullInclPath = SwitchFileName(FullPath, inclPath);
-
-                        if (AllIncludes.Contains(fullInclPath))
-                        {
-                            throw new ChartFormatException(
-                                RawEventType.Include,
-                                line,
-                                path,
-                                lineNumber,
-                                I18n.S("Format.Exception.IncludeReferencedMultipleTimes"));
-                        }
-
-                        if (AllFragments.Contains(fullInclPath))
-                        {
-                            throw new ChartFormatException(
-                                RawEventType.Fragment,
-                                line,
-                                path,
-                                lineNumber,
-                                I18n.S("Format.Exception.IncludeAReferencedFragment"));
-                        }
-
-                        AddInclude(inclPath);
-                        break;
-
-                    case RawEventType.Fragment:
-                        (int timing, string fragPath) = ParseFragment(line);
-                        string fullFragPath = SwitchFileName(FullPath, fragPath);
-
-                        if (AllIncludes.Contains(fullFragPath))
-                        {
-                            throw new ChartFormatException(
-                                RawEventType.Fragment,
-                                line,
-                                path,
-                                lineNumber,
-                                I18n.S("Format.Exception.IncludeReferencedMultipleTimes"));
-                        }
-
-                        AddFragment(timing, fragPath);
-                        break;
-                }
-            }
-            catch (ChartFormatException ex)
-            {
-                throw new ChartFormatException(type, line, path, lineNumber, ex.Reason, ex.ShouldAbort, ex.StartCharPos, ex.EndCharPos);
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                throw new ChartFormatException(type, line, path, lineNumber, I18n.S("Format.Exception.WrongSyntax"));
-            }
-            catch (Exception ex)
-            {
-                throw new ChartFormatException(I18n.S(
-                    "Format.Exception.UnknownException",
-                    new Dictionary<string, object>()
+                case RawEventType.Timing:
+                    if (!ParseTiming(line, lineNumber).TryUnwrap(out RawTiming timing, out ChartError e))
                     {
-                        { "Exception", ex.Message },
-                        { "StackTrace", ex.StackTrace },
-                    }));
+                        return e;
+                    }
+
+                    Events.Add(timing);
+                    break;
+
+                case RawEventType.Tap:
+                    if (!ParseTap(line, lineNumber).TryUnwrap(out RawTap tap, out e))
+                    {
+                        return e;
+                    }
+
+                    Events.Add(tap);
+                    break;
+
+                case RawEventType.Hold:
+                    if (!ParseHold(line, lineNumber).TryUnwrap(out RawHold hold, out e))
+                    {
+                        return e;
+                    }
+
+                    Events.Add(hold);
+                    break;
+
+                case RawEventType.Arc:
+                    if (!ParseArc(line, lineNumber).TryUnwrap(out RawArc arc, out e))
+                    {
+                        return e;
+                    }
+
+                    Events.Add(arc);
+                    break;
+
+                case RawEventType.Camera:
+                    if (!ParseCamera(line, lineNumber).TryUnwrap(out RawCamera cam, out e))
+                    {
+                        return e;
+                    }
+
+                    Events.Add(cam);
+                    break;
+
+                case RawEventType.SceneControl:
+                    if (!ParseSceneControl(line, lineNumber).TryUnwrap(out RawSceneControl sc, out e))
+                    {
+                        return e;
+                    }
+
+                    Events.Add(sc);
+                    break;
+
+                case RawEventType.TimingGroup:
+                    TotalTimingGroup++;
+                    CurrentTimingGroup = TotalTimingGroup - 1;
+                    if (!ParseTimingGroup(line, lineNumber, Filename).TryUnwrap(out RawTimingGroup tg, out e))
+                    {
+                        return e;
+                    }
+
+                    TimingGroups.Add(tg);
+                    break;
+
+                case RawEventType.TimingGroupEnd:
+                    CurrentTimingGroup = 0;
+                    break;
+
+                case RawEventType.Include:
+                    if (!ParseInclude(line, lineNumber).TryUnwrap(out string inclPath, out e))
+                    {
+                        return e;
+                    }
+
+                    string fullInclPath = SwitchFileName(FullPath, inclPath);
+
+                    if (AllIncludes.Contains(fullInclPath))
+                    {
+                        return ChartError.Property(
+                            line,
+                            lineNumber,
+                            RawEventType.Include,
+                            0,
+                            line.Length,
+                            ChartError.Kind.IncludeReferencedMultipleTimes);
+                    }
+
+                    if (AllFragments.Contains(fullInclPath))
+                    {
+                        return ChartError.Property(
+                            line,
+                            lineNumber,
+                            RawEventType.Fragment,
+                            0,
+                            line.Length,
+                            ChartError.Kind.IncludeAReferencedFragment);
+                    }
+
+                    var includeResult = AddInclude(inclPath);
+                    if (includeResult.IsError)
+                    {
+                        return ChartError.ReferencedFile(line, lineNumber, RawEventType.Include, includeResult.Error);
+                    }
+
+                    break;
+
+                case RawEventType.Fragment:
+                    if (!ParseFragment(line, lineNumber).TryUnwrap(out RawFragment fragment, out e))
+                    {
+                        return e;
+                    }
+
+                    string fullFragPath = SwitchFileName(FullPath, fragment.File);
+
+                    if (AllIncludes.Contains(fullFragPath))
+                    {
+                        return ChartError.Property(
+                            line,
+                            lineNumber,
+                            RawEventType.Fragment,
+                            0,
+                            line.Length,
+                            ChartError.Kind.IncludeReferencedMultipleTimes);
+                    }
+
+                    var fragmentResult = AddFragment(fragment.Timing, fragment.File);
+                    if (fragmentResult.IsError)
+                    {
+                        return ChartError.ReferencedFile(line, lineNumber, RawEventType.Fragment, fragmentResult.Error);
+                    }
+
+                    break;
             }
+
+            return Result<ChartError>.Ok();
         }
 
-        public override void ParseHeaderLine(string line, string path, int lineNumber, out bool endOfHeader)
+        public override Result<ChartError> ParseHeaderLine(string line, int lineNumber, string path, out bool endOfHeader)
         {
-            if (line.StartsWith("AudioOffset"))
+            endOfHeader = line == "-";
+            if (endOfHeader)
             {
-                if (!Evaluator.TryInt(line.Substring("AudioOffset:".Length), out int offset))
-                {
-                    throw new ChartFormatException(
-                        RawEventType.Header,
-                        line,
-                        path,
-                        lineNumber,
-                        I18n.S("Format.Exception.AudioOffsetInvalid"));
-                }
+                return Result<ChartError>.Ok();
+            }
 
-                endOfHeader = false;
-                AudioOffset = offset;
-            }
-            else if (line.StartsWith("TimingPointDensityFactor"))
+            StringParser s = new StringParser(line);
+            if (!s.ReadString(":").TryUnwrap(out TextSpan<string> headerType, out ParsingError e))
             {
-                if (!Evaluator.TryFloat(line.Substring("TimingPointDensityFactor:".Length), out float density))
-                {
-                    throw new ChartFormatException(
-                        RawEventType.Header,
-                        line,
-                        path,
-                        lineNumber,
-                        I18n.S("Format.Exception.TimingPointDensityFactorInvalid"));
-                }
+                return ChartError.Parsing(line, lineNumber, RawEventType.Header, e);
+            }
 
-                endOfHeader = false;
-                TimingPointDensity = density;
-            }
-            else if (line == "-")
+            switch (headerType)
             {
-                endOfHeader = true;
+                case "AudioOffset":
+                    if (!s.ReadInt().TryUnwrap(out TextSpan<int> offset, out e))
+                    {
+                        return ChartError.Parsing(line, lineNumber, RawEventType.Header, e);
+                    }
+
+                    AudioOffset = offset;
+                    return Result<ChartError>.Ok();
+
+                case "TimingPointDensityFactor":
+                case "TimingPointsDensityFactor":
+                    if (!s.ReadFloat().TryUnwrap(out TextSpan<float> density, out e))
+                    {
+                        return ChartError.Parsing(line, lineNumber, RawEventType.Header, e);
+                    }
+
+                    TimingPointDensity = density;
+                    return Result<ChartError>.Ok();
             }
-            else
-            {
-                throw new ChartFormatException(
-                    RawEventType.Header,
-                    line,
-                    path,
-                    lineNumber,
-                    I18n.S("Format.Exception.InvalidHeaderLine"),
-                    shouldAbort: true);
-            }
+
+            return ChartError.Property(line, lineNumber, RawEventType.Header, 0, line.Length, ChartError.Kind.InvalidHeader);
         }
 
-        public override void FinalValidity()
+        public override Result<ChartError> FinalValidity()
         {
-            base.FinalValidity();
-
             if (CurrentTimingGroup != 0)
             {
-                throw new ChartFormatException(I18n.S("Format.Exception.TimingGroupPairInvalid"));
+                return ChartError.Format(
+                    RawEventType.TimingGroup,
+                    ChartError.Kind.TimingGroupPairInvalid);
             }
+
+            return Result<ChartError>.Ok();
         }
 
         private RawEventType DetermineType(string line)
@@ -234,7 +263,7 @@ namespace ArcCreate.ChartFormat
             return RawEventType.Unknown;
         }
 
-        private void AddInclude(string file)
+        private Result<ChartFileErrors> AddInclude(string file)
         {
             AllIncludes.Add(SwitchFileName(FullPath, file));
             Events.Add(new RawInclude()
@@ -247,7 +276,12 @@ namespace ArcCreate.ChartFormat
 
             ChartReader extReader = ChartReaderFactory.GetReader(FileAccess, FullPath, file);
             extReader.BlockReferences(AllIncludes, AllFragments);
-            extReader.Parse();
+            Result<ChartFileErrors> parseResult = extReader.Parse();
+            if (parseResult.IsError)
+            {
+                return parseResult.Error;
+            }
+
             foreach (RawTimingGroup group in extReader.TimingGroups)
             {
                 group.Editable = true;
@@ -255,9 +289,10 @@ namespace ArcCreate.ChartFormat
             }
 
             References.Add(extReader);
+            return Result<ChartFileErrors>.Ok();
         }
 
-        private void AddFragment(int timing, string file)
+        private Result<ChartFileErrors> AddFragment(int timing, string file)
         {
             AllFragments.Add(SwitchFileName(FullPath, file));
             Events.Add(new RawFragment()
@@ -270,7 +305,12 @@ namespace ArcCreate.ChartFormat
 
             ChartReader extReader = ChartReaderFactory.GetReader(FileAccess, FullPath, file);
             extReader.BlockReferences(AllIncludes, AllFragments);
-            extReader.Parse();
+            Result<ChartFileErrors> parseResult = extReader.Parse();
+            if (parseResult.IsError)
+            {
+                return parseResult.Error;
+            }
+
             foreach (RawTimingGroup group in extReader.TimingGroups)
             {
                 group.Editable = false;
@@ -296,6 +336,7 @@ namespace ArcCreate.ChartFormat
             }
 
             References.Add(extReader);
+            return Result<ChartFileErrors>.Ok();
         }
     }
 }

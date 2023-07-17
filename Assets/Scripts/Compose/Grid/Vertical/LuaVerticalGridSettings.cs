@@ -10,12 +10,12 @@ namespace ArcCreate.Compose.Grid
     [MoonSharpUserData]
     public class LuaVerticalGridSettings : IVerticalGridSettings, IScriptSetup
     {
-        public LuaVerticalGridSettings(string settings, int instructionLimit = int.MaxValue)
+        public LuaVerticalGridSettings(string settings)
         {
             try
             {
                 UserData.RegisterAssembly();
-                LuaRunner.RunScript(settings, this, instructionLimit);
+                LuaRunner.RunScript(settings, this);
             }
             catch (InstructionLimitReachedException e)
             {

@@ -219,7 +219,7 @@ namespace ArcCreate.Compose.Macros
             };
         }
 
-        [EmmyDoc("Create a timing group property object. Properties are defined with a table.Returned group's number is -1.")]
+        [EmmyDoc("Create a timing group property object. Properties are defined with a table. Returned group's number is -1.")]
         public static LuaTimingGroup CreateTimingGroupProperty(Dictionary<string, DynValue> properties)
         {
             string name = null;
@@ -236,69 +236,63 @@ namespace ArcCreate.Compose.Macros
             string side = "none";
             string file = "";
 
-            if (properties.TryGetValue("name", out DynValue nameDV))
+            foreach (var pair in properties)
             {
-                name = nameDV.String;
-            }
+                DynValue val = pair.Value;
+                switch (pair.Key.ToLower())
+                {
+                    case "name":
+                        name = val.String;
+                        break;
 
-            if (properties.TryGetValue("noInput", out DynValue noInputDV))
-            {
-                noInput = noInputDV.Boolean;
-            }
+                    case "noinput":
+                        noInput = val.Boolean;
+                        break;
 
-            if (properties.TryGetValue("noClip", out DynValue noClipDV))
-            {
-                noClip = noClipDV.Boolean;
-            }
+                    case "noclip":
+                        noClip = val.Boolean;
+                        break;
 
-            if (properties.TryGetValue("noHeightIndicator", out DynValue noHeightIndicatorDV))
-            {
-                noHeightIndicator = noHeightIndicatorDV.Boolean;
-            }
+                    case "noheightindicator":
+                        noHeightIndicator = val.Boolean;
+                        break;
 
-            if (properties.TryGetValue("noShadow", out DynValue noShadowDV))
-            {
-                noShadow = noShadowDV.Boolean;
-            }
+                    case "noshadow":
+                        noShadow = val.Boolean;
+                        break;
 
-            if (properties.TryGetValue("noHead", out DynValue noHeadDV))
-            {
-                noHead = noHeadDV.Boolean;
-            }
+                    case "nohead":
+                        noHead = val.Boolean;
+                        break;
 
-            if (properties.TryGetValue("noArcCap", out DynValue noArcCapDV))
-            {
-                noArcCap = noArcCapDV.Boolean;
-            }
+                    case "noarccap":
+                        noArcCap = val.Boolean;
+                        break;
 
-            if (properties.TryGetValue("fadingHolds", out DynValue fadingHoldsDV))
-            {
-                fadingHolds = fadingHoldsDV.Boolean;
-            }
+                    case "fadingholds":
+                        fadingHolds = val.Boolean;
+                        break;
 
-            if (properties.TryGetValue("arcResolution", out DynValue arcResolutionDV))
-            {
-                arcResolution = (float)arcResolutionDV.Number;
-            }
+                    case "arcresolution":
+                        arcResolution = (float)val.Number;
+                        break;
 
-            if (properties.TryGetValue("angleX", out DynValue angleXDV))
-            {
-                angleX = (float)angleXDV.Number;
-            }
+                    case "anglex":
+                        angleX = (float)val.Number;
+                        break;
 
-            if (properties.TryGetValue("angleY", out DynValue angleYDV))
-            {
-                angleY = (float)angleYDV.Number;
-            }
+                    case "angley":
+                        angleY = (float)val.Number;
+                        break;
 
-            if (properties.TryGetValue("side", out DynValue sideDV))
-            {
-                side = sideDV.String;
-            }
+                    case "side":
+                        side = val.String;
+                        break;
 
-            if (properties.TryGetValue("file", out DynValue fileDV))
-            {
-                file = fileDV.String;
+                    case "file":
+                        file = val.String;
+                        break;
+                }
             }
 
             int num = -1;
@@ -325,7 +319,7 @@ namespace ArcCreate.Compose.Macros
         [EmmyDoc("Create a timing group property object. Properties are defined with a string whose format is the same as .aff chart format. Returned group's number is -1")]
         public static LuaTimingGroup CreateTimingGroupProperty(string properties = "")
         {
-            RawTimingGroup prop = new RawTimingGroup(properties);
+            RawTimingGroup prop = RawTimingGroup.Parse(properties).UnwrapOrElse(e => throw new Exception(e.Message));
             return new LuaTimingGroup(-1, prop);
         }
 
