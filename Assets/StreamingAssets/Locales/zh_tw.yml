@@ -1,17 +1,16 @@
 Format:
   # Exception messages while parsing chart files
   Exception:
-    Message: |-
+    File: |-
       讀取譜面檔案:{File} 時發生了錯誤。
+    SingleErrorFormat: |-
       行數: {LineNumber}
       解析事件型態: {EventType}
       內容: "{Content}"
       肇因: {Reason}
-    UnknownException: |-
-      未知的錯誤。
-      錯誤: {Exception}
-      堆疊追蹤 (Stack Trace):
-      {StackTrace}
+    SingleErrorShortFormat: |-
+      解析事件型態: {EventType}
+      肇因: {Reason}
     WrongSyntax: |-
       錯誤或是不完整的語法。
     InvalidHeader: |-

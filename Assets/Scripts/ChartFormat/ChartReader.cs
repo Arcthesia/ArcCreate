@@ -142,7 +142,25 @@ namespace ArcCreate.ChartFormat
 
         public abstract Result<ChartError> ParseHeaderLine(string line, int lineNumber, string path, out bool endOfHeader);
 
-        public abstract Result<ChartError> FinalValidity();
+        public virtual Result<ChartError> FinalValidity()
+        {
+            bool foundBaseTiming = false;
+            foreach (var ev in Events)
+            {
+                if (ev is RawTiming && ev.TimingGroup == 0 && ev.Timing == 0)
+                {
+                    foundBaseTiming = true;
+                    break;
+                }
+            }
+
+            if (!foundBaseTiming)
+            {
+                return ChartError.Format(RawEventType.Timing, ChartError.Kind.BaseTimingInvalid);
+            }
+
+            return Result<ChartError>.Ok();
+        }
 
         /// <summary>
         /// Inject include and fragment references to this reader's blocklist.

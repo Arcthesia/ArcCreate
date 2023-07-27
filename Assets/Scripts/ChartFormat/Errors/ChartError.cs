@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ArcCreate.Utility.Parser;
 
 namespace ArcCreate.ChartFormat
@@ -7,7 +8,7 @@ namespace ArcCreate.ChartFormat
     /// </summary>
     public class ChartError : Error
     {
-        private string message;
+        private string reason;
 
         public enum Kind
         {
@@ -24,6 +25,7 @@ namespace ArcCreate.ChartFormat
             IncludeReferencedMultipleTimes,
             IncludeAReferencedFragment,
             TimingGroupPropertiesInvalid,
+            BaseTimingInvalid,
         }
 
         public Option<string> LineContent { get; private set; }
@@ -38,7 +40,26 @@ namespace ArcCreate.ChartFormat
 
         public Kind ErrorKind { get; private set; }
 
-        public override string Message => message;
+        public override string Message
+            => LineNumber.HasValue && LineContent.HasValue ? MessageFull : MessageShort;
+
+        public string MessageShort
+            => I18n.S("Format.Exception.SingleErrorShortFormat", new Dictionary<string, object>()
+            {
+                { "EventType", EventType },
+                { "Reason", reason },
+            });
+
+        public string MessageFull
+            => I18n.S("Format.Exception.SingleErrorFormat", new Dictionary<string, object>()
+            {
+                { "LineNumber", LineNumber.Map(x => x.ToString()).Or("Unknown") },
+                { "EventType", EventType },
+                { "Content", LineContent.Or("Unknown") },
+                { "Reason", reason },
+            });
+
+        public string Reason => reason;
 
         public static ChartError Property(string lineContent, int lineNumber, RawEventType eventType, Option<int> startPosition, Option<int> length, Kind kind)
         {
@@ -50,7 +71,7 @@ namespace ArcCreate.ChartFormat
                 StartPosition = startPosition,
                 Length = length,
                 ErrorKind = kind,
-                message = I18n.S($"Format.Exception.{kind}"),
+                reason = I18n.S($"Format.Exception.{kind}"),
             };
         }
 
@@ -64,7 +85,7 @@ namespace ArcCreate.ChartFormat
                 StartPosition = Option<int>.None(),
                 Length = Option<int>.None(),
                 ErrorKind = kind,
-                message = I18n.S($"Format.Exception.{kind}"),
+                reason = I18n.S($"Format.Exception.{kind}"),
             };
         }
 
@@ -78,7 +99,7 @@ namespace ArcCreate.ChartFormat
                 StartPosition = parsingError.StartCharPos,
                 Length = parsingError.Length,
                 ErrorKind = Kind.Parsing,
-                message = parsingError.Message,
+                reason = parsingError.Message,
             };
         }
 
@@ -92,7 +113,7 @@ namespace ArcCreate.ChartFormat
                 StartPosition = 0,
                 Length = lineContent.Length,
                 ErrorKind = Kind.ReferencedFileError,
-                message = I18n.S($"Format.Exception.ReferencedFileError", errors.Message),
+                reason = I18n.S($"Format.Exception.ReferencedFileError", errors.Message),
             };
         }
     }

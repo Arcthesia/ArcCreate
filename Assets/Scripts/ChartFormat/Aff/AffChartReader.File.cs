@@ -207,6 +207,12 @@ namespace ArcCreate.ChartFormat
 
         public override Result<ChartError> FinalValidity()
         {
+            var b = base.FinalValidity();
+            if (b.IsError)
+            {
+                return b;
+            }
+
             if (CurrentTimingGroup != 0)
             {
                 return ChartError.Format(

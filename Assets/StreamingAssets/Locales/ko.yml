@@ -1,11 +1,15 @@
 Format:
   # 채보 파일 파싱 중에 나오는 에러 메시지들
   Exception:
-    Message: |-
+    File: |-
       채보 파일({File})을 읽는 중 예외가 발생했습니다.
+    SingleErrorFormat: |-
       예외가 발생한 줄 번호: {LineNumber}
       예외가 발생한 이벤트 타입: {EventType}
       예외가 발생한 구문: "{Content}".
+      예외 텍스트: {Reason}
+    SingleErrorShortFormat: |-
+      예외가 발생한 이벤트 타입: {EventType}
       예외 텍스트: {Reason}
     ArcColorNegative: |-
       아크 색의 ID는 음수가 될 수 없습니다.

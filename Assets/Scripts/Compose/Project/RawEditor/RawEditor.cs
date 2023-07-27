@@ -1,20 +1,19 @@
+using System;
 using System.IO;
 using System.Threading;
 using ArcCreate.ChartFormat;
 using ArcCreate.Gameplay;
+using ArcCreate.Utility;
 using Cysharp.Threading.Tasks;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Project
 {
     public class RawEditor : MonoBehaviour
     {
         [SerializeField] private GameplayData gameplayData;
-        [SerializeField] private TMP_InputField inputField;
-        [SerializeField] private Scrollbar horizontalScrollbar;
-        [SerializeField] private long maxFileLength = 100000;
+        [SerializeField] private FastInputField inputField;
+        [SerializeField] private long maxFileLength = 1000000;
         [SerializeField] private GameObject disabledNotify;
 
         [Header("Components")]
@@ -29,11 +28,6 @@ namespace ArcCreate.Compose.Project
         private string absoluteMainChartPath;
         private string currentMainChartPath;
         private string rawChartData;
-        private RectTransform inputRect;
-        private RectTransform textRect;
-        private RectTransform rect;
-        private RectTransform caretRect;
-        private Vector2 previousSize;
 
         private readonly ChartAnalyzer analyzer = new ChartAnalyzer();
         private bool analyzeOnNextEnable;
@@ -48,13 +42,14 @@ namespace ArcCreate.Compose.Project
             this.absoluteMainChartPath = absoluteMainChartPath;
             currentMainChartPath = Path.GetFileName(absoluteMainChartPath);
 
-            if (!gameObject.activeInHierarchy)
+            if (!transform.parent.gameObject.activeInHierarchy)
             {
                 loadFromPathOnNextEnable = true;
                 return;
             }
 
-            bool tooLarge = new FileInfo(absoluteMainChartPath).Length > maxFileLength;
+            long fileSize = new FileInfo(absoluteMainChartPath).Length;
+            bool tooLarge = fileSize > maxFileLength;
             if (tooLarge)
             {
                 gameObject.SetActive(false);
@@ -62,6 +57,7 @@ namespace ArcCreate.Compose.Project
                 return;
             }
 
+            gameObject.SetActive(true);
             disabledNotify.SetActive(false);
             rawChartData = File.ReadAllText(absoluteMainChartPath);
             UpdateDisplay();
@@ -81,13 +77,12 @@ namespace ArcCreate.Compose.Project
             Values.OnEditAction += ReloadEditor;
             inputField.onEndEdit.AddListener(OnEndEdit);
             inputField.onValueChanged.AddListener(OnValueChanged);
-            horizontalScrollbar.onValueChanged.AddListener(OnHorizontalScroll);
+            inputField.OnScrollVerticalChanged += OnInputFieldScrollVertical;
+            inputField.OnScrollHorizontalChanged += OnInputFieldScrollHorizontal;
 
-            inputRect = inputField.GetComponent<RectTransform>();
-            rect = GetComponent<RectTransform>();
-            textRect = inputField.textComponent.GetComponent<RectTransform>();
+            inputField.textComponent.horizontalOverflow = HorizontalWrapMode.Overflow;
+            inputField.textComponent.verticalOverflow = VerticalWrapMode.Truncate;
 
-            inputField.textComponent.enableWordWrapping = false;
             lineHighlightPool = Pools.New<LineHighlightComponent>("RawEditor.LineHighlight", lineHighlightPrefab, lineHighlightParent, 10);
             scrollHighlightPool = Pools.New<ScrollHighlightComponent>("RawEditor.ScrollHighlight", scrollHighlightPrefab, scrollHighlightParent, 10);
         }
@@ -97,24 +92,26 @@ namespace ArcCreate.Compose.Project
             Values.OnEditAction -= ReloadEditor;
             inputField.onEndEdit.RemoveListener(OnEndEdit);
             inputField.onValueChanged.RemoveListener(OnValueChanged);
-            horizontalScrollbar.onValueChanged.RemoveListener(OnHorizontalScroll);
+            inputField.OnScrollVerticalChanged -= OnInputFieldScrollVertical;
+            inputField.OnScrollHorizontalChanged -= OnInputFieldScrollHorizontal;
         }
 
         private void Update()
         {
-            inputField.textComponent.enabled = inputRect.rect.size == previousSize;
-            lineHighlightParent.anchoredPosition = textRect.anchoredPosition;
-            if (inputRect.rect.size != previousSize)
-            {
-                float width = inputField.textComponent.preferredWidth;
-                horizontalScrollbar.size = Mathf.Clamp(rect.rect.size.x / width, 0, 1);
-            }
-
-            previousSize = inputRect.rect.size;
             if (analyzer.CheckQueue(out var fault))
             {
                 DisplayFault(fault);
             }
+        }
+
+        private void OnInputFieldScrollVertical(float y)
+        {
+            lineHighlightParent.anchoredPosition = new Vector2(lineHighlightParent.anchoredPosition.x, y);
+        }
+
+        private void OnInputFieldScrollHorizontal(float x)
+        {
+            lineHighlightParent.anchoredPosition = new Vector2(x, lineHighlightParent.anchoredPosition.x);
         }
 
         private void OnEnable()
@@ -136,19 +133,11 @@ namespace ArcCreate.Compose.Project
 
             if (analyzeOnNextEnable)
             {
-                cts.Cancel();
-                cts.Dispose();
-                cts = new CancellationTokenSource();
-                Analyze(cts.Token).Forget();
+                Analyze();
                 analyzeOnNextEnable = false;
             }
 
-            lineHighlightParent.SetAsFirstSibling();
-            var caret = GetComponentInChildren<TMP_SelectionCaret>();
-            if (caret != null)
-            {
-                caret.raycastTarget = false;
-            }
+            lineHighlightParent.SetAsLastSibling();
         }
 
         private void ReloadEditor()
@@ -172,16 +161,10 @@ namespace ArcCreate.Compose.Project
         private void UpdateDisplay()
         {
             inputField.text = rawChartData;
-            float width = inputField.textComponent.preferredWidth;
-            horizontalScrollbar.size = Mathf.Clamp(rect.rect.size.x / width, 0, 1);
-
-            cts.Cancel();
-            cts.Dispose();
-            cts = new CancellationTokenSource();
-            Analyze(cts.Token).Forget();
+            Analyze();
         }
 
-        private async UniTask Analyze(CancellationToken ct)
+        private void Analyze()
         {
             if (!gameObject.activeInHierarchy)
             {
@@ -192,21 +175,6 @@ namespace ArcCreate.Compose.Project
             ClearHighlights();
             analyzer.Stop();
             analyzer.Start(rawChartData, currentMainChartPath);
-            await UniTask.WaitUntil(() => analyzer.IsComplete, cancellationToken: ct).SuppressCancellationThrow();
-        }
-
-        private void OnHorizontalScroll(float val)
-        {
-            float width = inputField.textComponent.preferredWidth;
-            float x = val * width;
-
-            if (caretRect == null)
-            {
-                caretRect = GetComponentInChildren<TMP_SelectionCaret>().GetComponent<RectTransform>();
-            }
-
-            textRect.anchoredPosition = new Vector2(-x, textRect.anchoredPosition.y);
-            caretRect.anchoredPosition = new Vector2(-x, textRect.anchoredPosition.y);
         }
 
         private void OnEndEdit(string val)
@@ -214,27 +182,34 @@ namespace ArcCreate.Compose.Project
             if (applyChangeOnNextEndEdit)
             {
                 applyChangeOnNextEndEdit = false;
-                rawChartData = val;
                 cts.Cancel();
                 cts.Dispose();
                 cts = new CancellationTokenSource();
 
-                ClearHighlights();
-                analyzer.Stop();
-                analyzer.Start(rawChartData, currentMainChartPath);
-                while (true)
-                {
-                    if (analyzer.HasError)
-                    {
-                        return;
-                    }
+                OnEndEditTask(val, cts.Token).Forget();
+            }
+        }
 
-                    if (analyzer.IsComplete)
-                    {
-                        ApplyChanges();
-                        return;
-                    }
+        private async UniTask OnEndEditTask(string val, CancellationToken ct)
+        {
+            rawChartData = val;
+            ClearHighlights();
+            analyzer.Stop();
+            analyzer.Start(rawChartData, currentMainChartPath);
+            while (true)
+            {
+                if (analyzer.HasError || ct.IsCancellationRequested)
+                {
+                    return;
                 }
+
+                if (analyzer.IsComplete)
+                {
+                    ApplyChanges();
+                    return;
+                }
+
+                await UniTask.NextFrame();
             }
         }
 
@@ -262,25 +237,16 @@ namespace ArcCreate.Compose.Project
             ClearHighlights();
             analyzer.Stop();
             analyzer.Start(rawChartData, currentMainChartPath);
-            while (true)
-            {
-                await UniTask.NextFrame();
-
-                if (ct.IsCancellationRequested || analyzer.IsComplete)
-                {
-                    return;
-                }
-            }
         }
 
         private void DisplayFault(ChartFault fault)
         {
             LineHighlightComponent line = lineHighlightPool.Get();
-            line.SetPosition(inputField, fault.LineNumber, fault.StartCharPos, fault.Length);
+            line.SetPosition(inputField.TextGenerator, fault.LineNumber, fault.StartCharPos, fault.Length);
             line.SetContent(fault.Severity, fault.Description);
 
             ScrollHighlightComponent scroll = scrollHighlightPool.Get();
-            scroll.SetPosition(inputField, fault.LineNumber);
+            scroll.SetPosition(inputField.TextGenerator, fault.LineNumber);
             scroll.SetSeverity(fault.Severity);
         }
 

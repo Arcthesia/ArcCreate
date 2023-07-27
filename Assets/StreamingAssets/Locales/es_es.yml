@@ -1,17 +1,16 @@
 Format:
   # Exception messages while parsing chart files
   Exception:
-    Message: |-
-      Ha ocurrido una excepción mientras se cargaba el archivo de mapa {File}
+    File: |-
+      Ha ocurrido una excepción mientras se cargaba el archivo de mapa {File}:
+    SingleErrorFormat: |-
       en: línea {LineNumber}
       Mientras se analizaba evento de tipo: {EventType}
       Con el siguiente: "{Content}".
       {Reason}
-    UnknownException: |-
-      Excepción desconocida.
-      Excepción: {Exception}
-      Stack trace:
-      {StackTrace}
+    SingleErrorShortFormat: |-
+      Mientras se analizaba evento de tipo: {EventType}
+      {Reason}
     WrongSyntax: |-
       Sintaxis errónea o incompleta.
     InvalidHeader: |-

@@ -409,7 +409,12 @@ namespace ArcCreate.Compose.Project
             {
                 Services.Popups.CreateTextDialog(
                     title: I18n.S("Compose.Dialog.LoadChartError.Title"),
-                    content: I18n.S("Compose.Dialog.LoadChartError.Content", parseResult.Error.Message),
+                    content: I18n.S("Compose.Dialog.LoadChartError.Content", new Dictionary<string, object>
+                    {
+                        { "ChartPath", path },
+                        { "TabName", I18n.S("Compose.UI.PanelNames.RawEditor") },
+                        { "Content", parseResult.Error.Message },
+                    }),
                     new ButtonSetting
                     {
                         Text = I18n.S("Compose.Dialog.LoadChartError.Confirm"),

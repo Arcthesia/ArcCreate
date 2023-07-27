@@ -60,7 +60,7 @@ namespace ArcCreate.Compose.Project
                             LineNumber = e.LineNumber,
                             StartCharPos = e.StartPosition,
                             Length = e.Length,
-                            Description = e.Message,
+                            Description = e.Reason,
                         });
                     }
                 }
@@ -183,8 +183,11 @@ namespace ArcCreate.Compose.Project
             }
             catch (Exception e)
             {
-                IsComplete = true;
                 Debug.LogError(e);
+            }
+            finally
+            {
+                IsComplete = true;
             }
         }
     }

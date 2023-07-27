@@ -28,16 +28,16 @@
 Format:
   # Exception messages while parsing chart files
   Exception:
-    Message: |-
-      譜面ファイルを読み込み中にエラーが発生しました。
-      ファイル: "{File}" {LineNumber}行目
+    File: |-
+      譜面ファイル "{File}" を読み込み中にエラーが発生しました。
+    SingleErrorFormat: |-
+      {LineNumber}行目
       イベントタイプ: {EventType}
       処理中の行: "{Content}"
       {Reason}
-    UnknownException: |-
-      不明なエラー: {Exception}
-      -
-      {StackTrace}
+    SingleErrorShortFormat: |-
+      イベントタイプ: {EventType}
+      {Reason}
     WrongSyntax: |-
       構文が間違っているか不完全です。
     InvalidHeader: |-

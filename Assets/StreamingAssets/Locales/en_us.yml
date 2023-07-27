@@ -13,10 +13,12 @@ Format:
       An exception occured while reading the chart file {File}:
       {Error}
     SingleErrorFormat: |-
-      -----
       At: line {LineNumber}
       While parsing event of type: {EventType}
       With the following: "{Content}".
+      {Reason}
+    SingleErrorShortFormat: |-
+      While parsing event of type: {EventType}
       {Reason}
     UnknownException: |-
       Unknown exception.
@@ -250,7 +252,7 @@ Compose:
         Either fix this in a separate text editor, or close this dialog and use the "<> {TabName}" panel.
         
         Details:
-        {0}
+        {Content}
       Confirm: Confirm
     Macros:
       Title: Macros
@@ -546,7 +548,7 @@ Compose:
           No project loaded.
           Create or open a new project
         RawEditorFileTooLarge: |-
-          Text editor is disabled for files larger than 100kb
+          Text editor is disabled for files larger than 1000kb
         Shutter: Shutter
         ShowShutter: Show shutter
         HideShutter: Hide shutter

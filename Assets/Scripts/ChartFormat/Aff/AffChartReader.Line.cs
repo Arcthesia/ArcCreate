@@ -309,7 +309,7 @@ namespace ArcCreate.ChartFormat
                             RawEventType.SceneControl,
                             new ParsingError(
                                 rawParamSpan,
-                                rawParamSpan.StartPos,
+                                rawParamSpan.StartPos + parameters.StartPos,
                                 rawParamSpan.Length,
                                 ParsingError.Kind.InvalidConversionToFloat));
                     }
@@ -352,9 +352,15 @@ namespace ArcCreate.ChartFormat
                 return ChartError.Parsing(line, lineNumber, RawEventType.TimingGroup, e);
             }
 
-            if (!RawTimingGroup.Parse(properties, lineNumber).TryUnwrap(out RawTimingGroup tg, out ChartError ce))
+            if (!RawTimingGroup.Parse(properties).TryUnwrap(out RawTimingGroup tg, out ChartError ce))
             {
-                return ce;
+                return ChartError.Property(
+                    line,
+                    lineNumber,
+                    RawEventType.TimingGroup,
+                    ce.StartPosition.Or(0) + properties.StartPos,
+                    ce.Length,
+                    ce.ErrorKind);
             }
 
             tg.File = path;

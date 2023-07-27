@@ -7,17 +7,17 @@
 Format:
   # 解析谱面文件时发生的错误
   Exception:
-    Message: |-
+    File: |-
       读取谱面文件{File}时发生错误
+    SingleErrorFormat: |-
       错误位于第{LineNumber}行的{EventType}事件
       语句内容："{Content}"
       错误原因：
       {Reason}
-    UnknownException: |-
-      未知错误。
-      错误类型：{Exception}
-      堆栈追踪（错误报告）：
-      {StackTrace}
+    SingleErrorShortFormat: |-
+      {EventType}事件
+      错误原因：
+      {Reason}
     WrongSyntax: |-
       语法错误或语句不完整。
     InvalidHeader: |-

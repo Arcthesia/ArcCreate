@@ -12,14 +12,14 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private Color[] colors;
         private RectTransform rect;
 
-        public void SetPosition(TMP_InputField inputField, Option<int> lineNumber)
+        public void SetPosition(TextGenerator gen, Option<int> lineNumber)
         {
             if (rect == null)
             {
                 rect = GetComponent<RectTransform>();
             }
 
-            int lineCount = inputField.textComponent.textInfo.lineCount;
+            int lineCount = gen.lineCount;
             int lineNumVal = lineNumber.Or(0);
             lineNumber = Mathf.Clamp(lineNumVal, 1, lineCount);
             float ratio = (float)lineNumVal / lineCount;

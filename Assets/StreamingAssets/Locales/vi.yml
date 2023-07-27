@@ -1,11 +1,15 @@
 Format:
   # Exception messages while parsing chart files
   Exception:
-    Message: |-
+    File: |-
       An exception occured while reading the chart file {File}
+    SingleErrorFormat: |-
       At: line {LineNumber}
       While parsing event of type: {EventType}
       With the following: "{Content}".
+      {Reason}
+    SingleErrorShortFormat: |-
+      While parsing event of type: {EventType}
       {Reason}
     ArcColorNegative: |-
       Arc color id can not be negative.

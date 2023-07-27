@@ -1,5 +1,5 @@
+using System.Collections.Generic;
 using ArcCreate.Compose.Popups;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,6 +9,8 @@ namespace ArcCreate.Compose.Project
     [RequireComponent(typeof(RectTransform))]
     public class LineHighlightComponent : MonoBehaviour, IPointerEnterHandler
     {
+        private const float MinWidth = 10;
+
         [SerializeField] private Image background;
         [SerializeField] private Color[] colors;
 
@@ -16,7 +18,7 @@ namespace ArcCreate.Compose.Project
         private string text;
         private Severity severity;
 
-        public void SetPosition(TMP_InputField inputField, Option<int> lineNumber, Option<int> startCharPos, Option<int> length)
+        public void SetPosition(TextGenerator gen, Option<int> lineNumber, Option<int> startCharPos, Option<int> length)
         {
             if (rect == null)
             {
@@ -24,34 +26,48 @@ namespace ArcCreate.Compose.Project
             }
 
             int lineNumVal = lineNumber.Or(0);
-            TMP_LineInfo[] lineInfoArray = inputField.textComponent.textInfo.lineInfo;
-            lineNumber = Mathf.Clamp(lineNumVal - 1, 0, lineInfoArray.Length - 1);
-            TMP_LineInfo lineInfo = lineInfoArray[lineNumVal];
+            IList<UILineInfo> lineInfoArray = gen.lines;
+            if (lineInfoArray.Count <= 0)
+            {
+                return;
+            }
 
-            float ascender = lineInfo.ascender;
-            float descender = lineInfo.descender;
+            lineNumVal = Mathf.Clamp(lineNumVal, 0, lineInfoArray.Count - 1);
+            UILineInfo lineInfo = lineInfoArray[lineNumVal];
+            UILineInfo firstLineInfo = lineInfoArray[0];
+
+            float ascender = firstLineInfo.topY - lineInfo.topY;
 
             if (!startCharPos.HasValue)
             {
-                rect.anchorMin = new Vector2(0, 0.5f);
-                rect.anchorMax = new Vector2(1, 0.5f);
+                rect.anchorMin = new Vector2(0, 1f);
+                rect.anchorMax = new Vector2(1, 1f);
                 rect.offsetMin = new Vector2(0, rect.offsetMin.y);
                 rect.offsetMax = new Vector2(0, rect.offsetMax.y);
-                rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, ascender);
-                rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Mathf.Abs(ascender - descender));
+                rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, -ascender);
+                rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, lineInfo.height);
             }
             else
             {
-                TMP_CharacterInfo[] charInfoArray = inputField.textComponent.textInfo.characterInfo;
-                int leftIndex = lineInfo.firstCharacterIndex + startCharPos.Value;
-                int rightIndex = length.HasValue ? (lineInfo.firstCharacterIndex + length.Value) : lineInfo.lastCharacterIndex;
-                float left = (leftIndex >= 0 && leftIndex < charInfoArray.Length) ? charInfoArray[leftIndex].topLeft.x : 0;
-                float right = (rightIndex >= 0 && rightIndex < charInfoArray.Length) ? charInfoArray[rightIndex].topRight.x : 0;
+                IList<UICharInfo> charInfoArray = gen.characters;
 
-                rect.anchorMin = new Vector2(0.5f, 0.5f);
-                rect.anchorMax = new Vector2(0.5f, 0.5f);
-                rect.anchoredPosition = new Vector2((left + right) / 2, ascender);
-                rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Mathf.Abs(ascender - descender));
+                int nextLineStartIdx = gen.characterCount - 1;
+                if (lineNumVal + 1 < gen.lineCount)
+                {
+                    nextLineStartIdx = lineInfoArray[lineNumVal + 1].startCharIdx - 1;
+                }
+
+                int leftIndex = lineInfo.startCharIdx + startCharPos.Value;
+                int rightIndex = length.HasValue ? (leftIndex + length.Value - 1) : nextLineStartIdx;
+                rightIndex = Mathf.Max(leftIndex + 1, rightIndex);
+
+                float left = (leftIndex >= 0 && leftIndex < charInfoArray.Count) ? charInfoArray[leftIndex].cursorPos.x : 0;
+                float right = (rightIndex >= 0 && rightIndex < charInfoArray.Count) ? charInfoArray[rightIndex].cursorPos.x + charInfoArray[rightIndex].charWidth : left + MinWidth;
+
+                rect.anchorMin = new Vector2(0f, 1f);
+                rect.anchorMax = new Vector2(0f, 1f);
+                rect.anchoredPosition = new Vector2((left + right) / 2, -ascender);
+                rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, lineInfo.height);
                 rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Mathf.Abs(right - left));
             }
         }

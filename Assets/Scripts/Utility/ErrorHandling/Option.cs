@@ -23,4 +23,9 @@ public readonly struct Option<T>
     {
         return HasValue ? Value : alternate;
     }
+
+    public Option<R> Map<R>(System.Func<T, R> mapper)
+    {
+        return HasValue ? Option<R>.Some(mapper.Invoke(Value)) : Option<R>.None();
+    }
 }
