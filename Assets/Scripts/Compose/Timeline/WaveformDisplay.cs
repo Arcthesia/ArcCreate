@@ -47,7 +47,7 @@ namespace ArcCreate.Compose.Timeline
             OnWaveformDrag?.Invoke(local.x);
         }
 
-        public void OnPointerClick(BaseEventData eventData)
+        public void OnPointerDown(BaseEventData eventData)
         {
             var ev = eventData as PointerEventData;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(container, ev.position, editorCamera, out Vector2 local);

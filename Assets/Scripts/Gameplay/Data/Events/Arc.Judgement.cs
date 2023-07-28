@@ -117,7 +117,7 @@ namespace ArcCreate.Gameplay.Data
                 SetGroupHighlight(true, currentTiming + Values.HoldParticlePersistDuration);
                 if (!hasBeenHitOnce)
                 {
-                    Services.Hitsound.PlayArcHitsound();
+                    Services.Hitsound.PlayArcHitsound(Timing);
                 }
 
                 hasBeenHitOnce = true;

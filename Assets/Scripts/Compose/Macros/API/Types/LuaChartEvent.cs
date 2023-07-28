@@ -16,6 +16,7 @@ namespace ArcCreate.Compose.Macros
 
         public bool Attached => Instance != null;
 
+        [MoonSharpHidden]
         public ArcEvent Instance { get; protected set; } = null;
 
         [EmmyDoc("Create a copy of an event.")]
@@ -72,6 +73,12 @@ namespace ArcCreate.Compose.Macros
         public void SetInstance(ArcEvent e)
         {
             Instance = e;
+        }
+
+        [EmmyDoc("Check if the attached instance equals that of another event")]
+        public bool InstanceEquals(LuaChartEvent ev)
+        {
+            return Instance == ev.Instance;
         }
     }
 }

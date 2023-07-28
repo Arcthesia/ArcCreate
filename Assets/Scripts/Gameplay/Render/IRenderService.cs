@@ -17,7 +17,7 @@ namespace ArcCreate.Gameplay.Render
 
         void DrawArcHead(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y);
 
-        void DrawArcSegment(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y);
+        void DrawArcSegment(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y, float depth);
 
         void DrawArcShadow(Matrix4x4 matrix, Color color);
 
@@ -35,7 +35,7 @@ namespace ArcCreate.Gameplay.Render
 
         void DrawTraceHead(Matrix4x4 matrix, Color color, bool selected);
 
-        void DrawTraceSegment(Matrix4x4 matrix, Color color, bool selected);
+        void DrawTraceSegment(Matrix4x4 matrix, Color color, bool selected, float depth);
 
         void DrawTraceShadow(Matrix4x4 matrix, Color color);
 

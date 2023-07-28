@@ -48,6 +48,7 @@ namespace ArcCreate.Compose.Rendering
         [SubAction("Cancel", false, "<esc>")]
         public async UniTask StartRender(EditorAction editorAction)
         {
+            Services.Gameplay.Audio.Pause();
             SubAction cancel = editorAction.GetSubAction("Cancel");
 
             string outputPath = Shell.SaveFileDialog(

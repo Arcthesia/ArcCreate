@@ -208,6 +208,11 @@ namespace ArcCreate.Gameplay.GameplayCamera
             UpdateCameraTilt();
         }
 
+        public float CalculateDepthSquared(Vector3 fromPos)
+        {
+            return (backgroundCamera.transform.localPosition - fromPos).sqrMagnitude;
+        }
+
         private void UpdateBackgroundCanvas()
         {
             backgroundRect.pivot = new Vector2(0.5f, Mathf.Lerp(0.87f, 0.5f, AspectAdjustment));

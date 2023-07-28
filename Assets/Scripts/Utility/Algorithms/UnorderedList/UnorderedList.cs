@@ -44,6 +44,11 @@ namespace ArcCreate.Utility
             list.RemoveAt(list.Count - 1);
         }
 
+        public bool Contains(T element)
+        {
+            return list.Contains(element);
+        }
+
         public void Clear()
         {
             list.Clear();

@@ -157,14 +157,14 @@ namespace ArcCreate.Compose.Selection
                 {
                     search.Add(arc);
                     Arc a = arc.NextArc;
-                    while (a != null)
+                    while (a != null && !search.Contains(a))
                     {
                         search.Add(a);
                         a = a.NextArc;
                     }
 
                     a = arc.PreviousArc;
-                    while (a != null)
+                    while (a != null && !search.Contains(a))
                     {
                         search.Add(a);
                         a = a.PreviousArc;
@@ -359,6 +359,12 @@ namespace ArcCreate.Compose.Selection
                     continue;
                 }
 
+                if (hit.point.z >= Gameplay.Values.TrackLengthBackward
+                 || hit.point.z <= -Gameplay.Values.TrackLengthForward)
+                {
+                    continue;
+                }
+
                 if (hit.transform.TryGetComponent<NoteCollider>(out var collider))
                 {
                     note = collider.Note;
@@ -367,14 +373,24 @@ namespace ArcCreate.Compose.Selection
                         continue;
                     }
 
-                    if (note is Arc arc)
+                    int timing = Services.Gameplay.Audio.ChartTiming;
+
+                    if (note is LongNote l)
                     {
-                        int timing = Services.Gameplay.Audio.ChartTiming;
-                        float arcStartZ = arc.ZPos(arc.TimingGroupInstance.GetFloorPosition(timing));
-                        if (hit.point.z * arcStartZ > 0 && arc.Timing < timing)
+                        if (l.EndTiming < timing)
                         {
                             continue;
                         }
+
+                        float startZ = l.ZPos(l.TimingGroupInstance.GetFloorPosition(timing));
+                        if (hit.point.z * startZ > 0 && l.Timing < timing)
+                        {
+                            continue;
+                        }
+                    }
+                    else if (note.Timing < timing)
+                    {
+                        continue;
                     }
 
                     switch (selectionMode)

@@ -133,7 +133,7 @@ namespace ArcCreate.Data
             for (int i = s.Length - 1; i >= 0; i--)
             {
                 sb.Insert(0, s[i]);
-                if ((i + 1) % 3 == 0 && i != 0)
+                if ((s.Length - i) % 3 == 0 && i != 0)
                 {
                     sb.Insert(0, '\'');
                 }

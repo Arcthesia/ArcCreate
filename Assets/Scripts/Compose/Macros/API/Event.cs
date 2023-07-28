@@ -234,7 +234,7 @@ namespace ArcCreate.Compose.Macros
             float angleX = 0;
             float angleY = 0;
             string side = "none";
-            string file = "";
+            string file = Services.Gameplay.Chart.GetTimingGroup(0).GroupProperties.FileName;
 
             foreach (var pair in properties)
             {
@@ -320,6 +320,7 @@ namespace ArcCreate.Compose.Macros
         public static LuaTimingGroup CreateTimingGroupProperty(string properties = "")
         {
             RawTimingGroup prop = RawTimingGroup.Parse(properties).UnwrapOrElse(e => throw new Exception(e.Message));
+            prop.File = Services.Gameplay.Chart.GetTimingGroup(0).GroupProperties.FileName;
             return new LuaTimingGroup(-1, prop);
         }
 

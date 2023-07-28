@@ -157,7 +157,7 @@ namespace ArcCreate.Compose.Grid
                 int timing = Services.Gameplay.Chart.GetTimingGroup(Values.EditingTimingGroup.Value)
                     .GetTimingFromZPosition(verticalCollider.transform.localPosition.z);
                 verticalScale = skyInputY.ValueAt(timing) / Gameplay.Values.ArcY1;
-                verticalCollider.transform.localScale = new Vector3(1, verticalScale, 1);
+                verticalCollider.transform.localScale = new Vector3(1, verticalScale, 0.001f);
             }
             else
             {

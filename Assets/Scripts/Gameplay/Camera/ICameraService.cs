@@ -74,5 +74,7 @@ namespace ArcCreate.Gameplay.GameplayCamera
         void SetPropertiesExternal(float fieldOfView, float tiltFactor);
 
         void SetTransformExternal(Vector3 translation, Quaternion rotation);
+
+        float CalculateDepthSquared(Vector3 vector3);
     }
 }

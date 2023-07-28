@@ -22,7 +22,6 @@ namespace ArcCreate.Gameplay.Data
         private Mesh colliderMesh;
         private Texture arcCap;
         private Color heightIndicatorColor;
-        private Vector3 midPointPos;
         private readonly List<ArcSegmentData> segments = new List<ArcSegmentData>();
 
         // Avoid infinite recursion
@@ -223,9 +222,12 @@ namespace ArcCreate.Gameplay.Data
                 }
 
                 var (bodyMatrix, shadowMatrix) = segment.GetMatrices(currentFloorPosition, groupProperties.FallDirection, z, pos.y);
+                Vector3 midpoint = pos + ((segment.StartPosition + segment.EndPosition) / 2);
+                midpoint.z = (zPos + endZPos) / 2;
+                float depth = Services.Camera.CalculateDepthSquared(midpoint);
                 if (IsTrace)
                 {
-                    Services.Render.DrawTraceSegment(matrix * bodyMatrix, color, IsSelected);
+                    Services.Render.DrawTraceSegment(matrix * bodyMatrix, color, IsSelected, depth);
                     if (!groupProperties.NoShadow)
                     {
                         Services.Render.DrawTraceShadow(matrix * shadowMatrix, color);
@@ -233,7 +235,7 @@ namespace ArcCreate.Gameplay.Data
                 }
                 else
                 {
-                    Services.Render.DrawArcSegment(Color, highlight, matrix * bodyMatrix, color, IsSelected, redArcValue, basePos.y + segment.EndPosition.y);
+                    Services.Render.DrawArcSegment(Color, highlight, matrix * bodyMatrix, color, IsSelected, redArcValue, basePos.y + segment.EndPosition.y, depth);
                     if (!groupProperties.NoShadow)
                     {
                         Services.Render.DrawArcShadow(matrix * shadowMatrix, color);
@@ -271,14 +273,6 @@ namespace ArcCreate.Gameplay.Data
                     firstArcOfBranch ?? this,
                     new Vector3(WorldXAt(currentTiming), WorldYAt(currentTiming), 0));
             }
-        }
-
-        public void RecalculateDepth(Vector3 camPos, float nearClipPlane, float farClipPlane, double currentFloorPosition)
-        {
-            Vector3 midPoint = midPointPos;
-            midPoint.z = ArcFormula.FloorPositionToZ(midPointPos.z - currentFloorPosition);
-            float dist = (camPos - midPoint).magnitude;
-            CurrentDepth = Mathf.InverseLerp(nearClipPlane, farClipPlane, dist);
         }
 
         public int CompareTo(INote other)
@@ -411,9 +405,6 @@ namespace ArcCreate.Gameplay.Data
                     segments[i] = segment;
                 }
             }
-
-            int midTiming = (Timing + EndTiming) / 2;
-            midPointPos = new Vector3(WorldXAt(midTiming), WorldYAt(midTiming), (float)TimingGroupInstance.GetFloorPosition(midTiming));
         }
 
         private (bool shouldDrawArcCap, Matrix4x4 arcCapMatrix, Vector4 arcCapColor) UpdateSegmentsAndArcCap(

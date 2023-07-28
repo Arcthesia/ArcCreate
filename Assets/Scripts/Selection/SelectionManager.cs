@@ -1,12 +1,9 @@
-using System;
 using ArcCreate.Data;
 using ArcCreate.Gameplay;
 using ArcCreate.SceneTransition;
-using ArcCreate.Selection.Interface;
 using ArcCreate.Storage;
 using ArcCreate.Storage.Data;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ArcCreate.Selection
 {

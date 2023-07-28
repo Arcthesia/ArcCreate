@@ -698,7 +698,7 @@ Compose:
     # Toolbox panel
     Toolbox:
       Pallete:
-        Name: Pallete
+        Name: Palette
         Arc: Arc
         Trace: Trace
         Tap: Tap

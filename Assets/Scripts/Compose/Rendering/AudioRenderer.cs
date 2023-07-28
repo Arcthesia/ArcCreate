@@ -52,18 +52,19 @@ namespace ArcCreate.Compose.Rendering
         public void CreateAudio()
         {
             // Get list of notes
-            List<Note> tapSound = new List<Note>();
-            List<Note> arcSound = new List<Note>();
             Dictionary<string, List<Note>> sfxSound = new Dictionary<string, List<Note>>();
 
             int startRange = startTiming - audioOffset;
             int endRange = endTiming - audioOffset;
 
-            tapSound.AddRange(Services.Gameplay.Chart.GetAll<Tap>().Where((n) => n.Timing >= startRange && n.Timing <= endRange && !n.NoInput));
-            tapSound.AddRange(Services.Gameplay.Chart.GetAll<Hold>().Where((n) => n.Timing >= startRange && n.Timing <= endRange && !n.NoInput));
-            arcSound.AddRange(Services.Gameplay.Chart.GetAll<Arc>().Where((n) => n.Timing >= startRange && n.Timing <= endRange && n.Timing < n.EndTiming && !n.IsTrace && !n.NoInput));
+            Gameplay.IChartControl chart = Services.Gameplay.Chart;
+            IEnumerable<Tap> taps = chart.GetAll<Tap>().Where((n) => n.Timing >= startRange && n.Timing <= endRange && !n.NoInput);
+            IEnumerable<Hold> holds = chart.GetAll<Hold>().Where((n) => n.Timing >= startRange && n.Timing <= endRange && !n.NoInput);
+            IEnumerable<Arc> arcs = chart.GetAll<Arc>().Where((n) => n.Timing >= startRange && n.Timing <= endRange && n.Timing < n.EndTiming && !n.IsTrace && !n.NoInput);
+            IEnumerable<ArcTap> arctaps = chart.GetAll<ArcTap>().Where((n) => n.Timing >= startRange && n.Timing <= endRange && !n.NoInput);
 
-            IEnumerable<ArcTap> arctaps = Services.Gameplay.Chart.GetAll<ArcTap>().Where((n) => n.Timing >= startRange && n.Timing <= endRange && !n.NoInput);
+            HashSet<int> tapSoundTimings = new HashSet<int>(taps.Select(n => n.Timing).Union(holds.Select(h => h.Timing)));
+            HashSet<int> arcSoundTimings = new HashSet<int>(arcs.Select(a => a.Timing));
 
             foreach (ArcTap at in arctaps)
             {
@@ -80,11 +81,11 @@ namespace ArcCreate.Compose.Rendering
                 }
                 else
                 {
-                    arcSound.Add(at);
+                    arcSoundTimings.Add(at.Timing);
                 }
             }
 
-            Debug.Log("Creating tapsound audio for " + (tapSound.Count + arcSound.Count + sfxSound.Count) + " notes.");
+            Debug.Log("Creating tapsound audio for " + (tapSoundTimings.Count + arcSoundTimings.Count + sfxSound.Count) + " notes.");
 
             int channels = tapAudio.channels;
             int frequency = tapAudio.frequency;
@@ -155,9 +156,9 @@ namespace ArcCreate.Compose.Rendering
                 }
             }
 
-            foreach (Note n in tapSound)
+            foreach (int t in tapSoundTimings)
             {
-                int start = TimingToSampleIndex(n.Timing, channels, frequency);
+                int start = TimingToSampleIndex(t, channels, frequency);
                 for (int i = 0; i < tap.Length; i++)
                 {
                     if (start + i < samples.Length)
@@ -167,9 +168,9 @@ namespace ArcCreate.Compose.Rendering
                 }
             }
 
-            foreach (Note n in arcSound)
+            foreach (int t in arcSoundTimings)
             {
-                int start = TimingToSampleIndex(n.Timing, channels, frequency);
+                int start = TimingToSampleIndex(t, channels, frequency);
                 for (int i = 0; i < arc.Length; i++)
                 {
                     if (start + i < samples.Length)

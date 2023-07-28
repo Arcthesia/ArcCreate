@@ -6,48 +6,6 @@ namespace ArcCreate.Gameplay.Chart
 {
     public class ArcNoteGroup : LongNoteGroup<Arc>, IComparer<Arc>
     {
-        public override void UpdateRender(int timing, double floorPosition, GroupProperties groupProperties)
-        {
-            LastRenderingNotes.Clear();
-            if (Notes.Count == 0 || !groupProperties.Visible)
-            {
-                return;
-            }
-
-            double fpDistForward = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLengthForward));
-            double fpDistBackward = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLengthBackward));
-            double renderFrom =
-                (groupProperties.NoInput && !groupProperties.NoClip) ?
-                floorPosition :
-                floorPosition - fpDistBackward;
-            double renderTo = floorPosition + fpDistForward;
-
-            var notesInRange = FloorPositionTree[renderFrom, renderTo];
-
-            // Update notes
-            Camera cam = Services.Camera.GameplayCamera;
-            Vector3 camera = cam.transform.position;
-            float farClipPlane = cam.farClipPlane;
-            float nearClipPlane = cam.nearClipPlane;
-            while (notesInRange.MoveNext())
-            {
-                var note = notesInRange.Current;
-                LastRenderingNotes.Add(note);
-                note.RecalculateDepth(camera, nearClipPlane, farClipPlane, floorPosition);
-            }
-
-            if (LastRenderingNotes.Count < 100)
-            {
-                LastRenderingNotes.Sort(this);
-            }
-
-            for (int i = LastRenderingNotes.Count - 1; i >= 0; i--)
-            {
-                Arc note = LastRenderingNotes[i];
-                note.UpdateRender(timing, floorPosition, groupProperties);
-            }
-        }
-
         public override void SetupNotes()
         {
             for (int i = 0; i < Notes.Count; i++)

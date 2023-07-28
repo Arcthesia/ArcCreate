@@ -79,10 +79,11 @@ namespace ArcCreate.Compose.Editing
 
         private async UniTask CreateHold(SubAction confirm, SubAction cancel)
         {
+            int timing1 = Services.Cursor.CursorTiming;
             Hold hold = new Hold()
             {
-                Timing = Services.Cursor.CursorTiming,
-                EndTiming = Services.Cursor.CursorTiming + 1,
+                Timing = timing1,
+                EndTiming = timing1 + 1,
                 Lane = Services.Cursor.CursorLane,
                 TimingGroup = Values.EditingTimingGroup.Value,
             };
@@ -96,21 +97,23 @@ namespace ArcCreate.Compose.Editing
             using (new NoteModifyTarget(new List<Note> { hold }))
             {
                 previewHold.gameObject.SetActive(false);
-                var (success, endTiming) = await Services.Cursor.RequestTimingSelection(
+                var (success, timing2) = await Services.Cursor.RequestTimingSelection(
                     confirm,
                     cancel,
                     update: t =>
                     {
-                        hold.EndTiming = t;
+                        hold.Timing = Mathf.Min(timing1, t);
+                        hold.EndTiming = Mathf.Max(timing1, t);
                         Services.Gameplay.Chart.UpdateEvents(events);
                     },
-                    constraint: t => t > hold.Timing);
+                    constraint: t => t != timing1);
                 previewHold.gameObject.SetActive(false);
                 Services.Cursor.EnableLaneCursor = true;
 
                 if (success)
                 {
-                    hold.EndTiming = endTiming;
+                    hold.Timing = Mathf.Min(timing1, timing2);
+                    hold.EndTiming = Mathf.Max(timing1, timing2);
                     Services.History.AddCommandWithoutExecuting(command);
                 }
                 else
@@ -122,10 +125,11 @@ namespace ArcCreate.Compose.Editing
 
         private async UniTask CreateArc(bool isArc, SubAction confirm, SubAction cancel)
         {
+            int timing1 = Services.Cursor.CursorTiming;
             Arc arc = new Arc()
             {
-                Timing = Services.Cursor.CursorTiming,
-                EndTiming = Services.Cursor.CursorTiming + 1,
+                Timing = timing1,
+                EndTiming = timing1 + 1,
                 LineType = Values.CreateArcTypeMode.Value,
                 Color = Values.CreateArcColorMode.Value,
                 Sfx = "none",
@@ -142,67 +146,85 @@ namespace ArcCreate.Compose.Editing
             using (new NoteModifyTarget(new List<Note> { arc }))
             {
                 (isArc ? previewArc : previewTrace).gameObject.SetActive(false);
-                var (startPosSuccess, startPos) = await Services.Cursor.RequestVerticalSelection(
+                var (pos1Success, pos1) = await Services.Cursor.RequestVerticalSelection(
                     confirm,
                     cancel,
                     showGridAtTiming: arc.Timing,
-                    update: pos =>
+                    update: p =>
                     {
-                        arc.XStart = pos.x;
-                        arc.YStart = pos.y;
-                        arc.XEnd = pos.x;
-                        arc.YEnd = pos.y;
+                        arc.XStart = p.x;
+                        arc.YStart = p.y;
+                        arc.XEnd = p.x;
+                        arc.YEnd = p.y;
                         Services.Gameplay.Chart.UpdateEvents(events);
                     });
 
-                if (!startPosSuccess)
+                if (!pos1Success)
                 {
                     command.Undo();
                     return;
                 }
                 else
                 {
-                    arc.XStart = startPos.x;
-                    arc.YStart = startPos.y;
+                    arc.XStart = pos1.x;
+                    arc.YStart = pos1.y;
                 }
 
-                var (endTimingSuccess, endTiming) = await Services.Cursor.RequestTimingSelection(
+                var (timing2Success, timing2) = await Services.Cursor.RequestTimingSelection(
                     confirm,
                     cancel,
                     update: t =>
                     {
-                        arc.EndTiming = t;
+                        arc.Timing = Mathf.Min(timing1, t);
+                        arc.EndTiming = Mathf.Max(timing1, t);
                         Services.Gameplay.Chart.UpdateEvents(events);
-                    },
-                    constraint: t => t >= arc.Timing);
+                    });
 
-                if (!endTimingSuccess)
+                if (!timing2Success)
                 {
                     command.Undo();
                     return;
                 }
                 else
                 {
-                    arc.EndTiming = endTiming;
+                    arc.Timing = Mathf.Min(timing1, timing2);
+                    arc.EndTiming = Mathf.Max(timing1, timing2);
                 }
 
-                var (endPosSuccess, endPos) = await Services.Cursor.RequestVerticalSelection(
+                var (pos2Success, pos2) = await Services.Cursor.RequestVerticalSelection(
                     confirm,
                     cancel,
-                    showGridAtTiming: arc.EndTiming,
-                    update: position =>
+                    showGridAtTiming: timing2,
+                    update: p =>
                     {
-                        arc.XEnd = position.x;
-                        arc.YEnd = position.y;
+                        if (timing1 <= timing2)
+                        {
+                            arc.XEnd = p.x;
+                            arc.YEnd = p.y;
+                        }
+                        else
+                        {
+                            arc.XStart = p.x;
+                            arc.YStart = p.y;
+                        }
+
                         Services.Gameplay.Chart.UpdateEvents(events);
                     });
                 (isArc ? previewArc : previewTrace).gameObject.SetActive(false);
                 Services.Cursor.EnableLaneCursor = true;
 
-                if (endPosSuccess)
+                if (pos2Success)
                 {
-                    arc.XEnd = endPos.x;
-                    arc.YEnd = endPos.y;
+                    if (timing1 <= timing2)
+                    {
+                        arc.XEnd = pos2.x;
+                        arc.YEnd = pos2.y;
+                    }
+                    else
+                    {
+                        arc.XStart = pos2.x;
+                        arc.YStart = pos2.y;
+                    }
 
                     Services.History.AddCommandWithoutExecuting(command);
                 }

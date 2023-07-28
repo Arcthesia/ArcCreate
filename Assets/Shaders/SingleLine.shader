@@ -61,6 +61,7 @@
 				p.y %= 1;
 				p.y += _Offset; 
 				float4 c= tex2D(_MainTex,p) * i.color;
+				c.a *= 0.75;
 				return c;
 			}
 			ENDCG

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311956, g: 0.3807402, b: 0.35872734, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -13584,7 +13584,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4de9bb88ef1e5ce408e8578a634c0022, type: 2}
   - {fileID: 11400000, guid: 8e1b79a1e2e79ce4cb9a42747a7b4203, type: 2}
   defaultTraceColor: {r: 0.5686275, g: 0.47058824, b: 0.6666667, a: 0.47843137}
-  defaultShadowColor: {r: 0.3529412, g: 0.3529412, b: 0.3529412, a: 0.3529412}
+  defaultShadowColor: {r: 0.3529412, g: 0.3529412, b: 0.3529412, a: 0.23529412}
   defaultArcColors:
   - {r: 0.047058824, g: 0.83137256, b: 0.83137256, a: 0.8509804}
   - {r: 1, g: 0.5882353, b: 0.8627451, a: 0.8509804}

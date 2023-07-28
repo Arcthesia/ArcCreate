@@ -82,7 +82,7 @@ namespace ArcCreate.Gameplay.Data
 
             if (currentTiming >= Timing && !sfxPlayed)
             {
-                Services.Hitsound.PlayArcTapHitsound(Sfx, isFromJudgement: false);
+                Services.Hitsound.PlayArcTapHitsound(Timing, Sfx, isFromJudgement: false);
                 sfxPlayed = true;
             }
         }
@@ -129,7 +129,7 @@ namespace ArcCreate.Gameplay.Data
 
             if (!result.IsMiss())
             {
-                Services.Hitsound.PlayArcTapHitsound(Sfx, isFromJudgement: true);
+                Services.Hitsound.PlayArcTapHitsound(Timing, Sfx, isFromJudgement: true);
             }
         }
 

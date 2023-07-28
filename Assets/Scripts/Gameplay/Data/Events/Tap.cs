@@ -129,7 +129,7 @@ namespace ArcCreate.Gameplay.Data
             if (!result.IsMiss())
             {
                 Services.InputFeedback.LaneFeedback(Lane);
-                Services.Hitsound.PlayTapHitsound();
+                Services.Hitsound.PlayTapHitsound(Timing);
             }
         }
 

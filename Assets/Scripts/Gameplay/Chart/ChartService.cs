@@ -69,6 +69,7 @@ namespace ArcCreate.Gameplay.Chart
             Services.Judgement.ResetJudge();
             Services.Scenecontrol.UpdateScenecontrol(timing);
             Services.Camera.UpdateCamera(timing);
+            Services.Hitsound.ResetHitsoundHistory();
         }
 
         public IEnumerable<T> FindByTiming<T>(int from, int to)
@@ -276,15 +277,15 @@ namespace ArcCreate.Gameplay.Chart
                 gameplayData.NotifyChartScenecontrolEdit();
             }
 
-            if (e.Any(n => n is TimingEvent))
-            {
-                gameplayData.NotifyChartTimingEdit();
-            }
-
             for (int i = 0; i < timingGroups.Count; i++)
             {
                 TimingGroup tg = timingGroups[i];
                 tg.AddEvents(e.Where(n => n.TimingGroup == tg.GroupNumber));
+            }
+
+            if (e.Any(n => n is TimingEvent))
+            {
+                gameplayData.NotifyChartTimingEdit();
             }
 
             gameplayData.NotifyChartEdit();
@@ -307,15 +308,15 @@ namespace ArcCreate.Gameplay.Chart
                 gameplayData.NotifyChartScenecontrolEdit();
             }
 
-            if (e.Any(n => n is TimingEvent))
-            {
-                gameplayData.NotifyChartTimingEdit();
-            }
-
             for (int i = 0; i < timingGroups.Count; i++)
             {
                 TimingGroup tg = timingGroups[i];
                 tg.RemoveEvents(e.Where(n => n.TimingGroup == tg.GroupNumber));
+            }
+
+            if (e.Any(n => n is TimingEvent))
+            {
+                gameplayData.NotifyChartTimingEdit();
             }
 
             gameplayData.NotifyChartEdit();
@@ -336,11 +337,6 @@ namespace ArcCreate.Gameplay.Chart
             {
                 Services.Scenecontrol.Change(scEvents);
                 gameplayData.NotifyChartScenecontrolEdit();
-            }
-
-            if (e.Any(n => n is TimingEvent))
-            {
-                gameplayData.NotifyChartTimingEdit();
             }
 
             List<ArcEvent> tgChanged = e.Where(n => n.TimingGroupChanged).ToList();
@@ -399,6 +395,11 @@ namespace ArcCreate.Gameplay.Chart
             {
                 TimingGroup tg = timingGroups[i];
                 tg.UpdateEvents(tgUnchanged.Where(n => n.TimingGroup == tg.GroupNumber));
+            }
+
+            if (e.Any(n => n is TimingEvent))
+            {
+                gameplayData.NotifyChartTimingEdit();
             }
 
             gameplayData.NotifyChartEdit();

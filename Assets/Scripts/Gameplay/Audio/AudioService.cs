@@ -147,6 +147,7 @@ namespace ArcCreate.Gameplay.Audio
         public void SetAudioTimingSilent(int timing)
         {
             audioTiming = timing;
+            UpdateSlider(timing);
         }
 
         public void UpdateTime()

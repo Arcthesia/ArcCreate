@@ -217,7 +217,7 @@ namespace ArcCreate.Utility
             float width = contentSize.x + marginLeft + marginRight;
             float x = val * (width - Rect.rect.size.x);
             TextRect.anchoredPosition = new Vector2(-x + marginLeft, TextRect.anchoredPosition.y);
-            OnScrollHorizontalChanged.Invoke(-x + marginLeft);
+            OnScrollHorizontalChanged?.Invoke(-x + marginLeft);
         }
 
         private void OnVerticalScrollbar(float val)
@@ -255,7 +255,7 @@ namespace ArcCreate.Utility
             float newx = TextRect.anchoredPosition.x + dx;
             newx = Mathf.Clamp(newx, -width, 0);
             TextRect.anchoredPosition = new Vector2(newx + marginLeft, TextRect.anchoredPosition.y);
-            OnScrollHorizontalChanged.Invoke(newx + marginLeft);
+            OnScrollHorizontalChanged?.Invoke(newx + marginLeft);
             horizontalScrollbar.SetValueWithoutNotify(-newx / width);
         }
 
@@ -317,7 +317,7 @@ namespace ArcCreate.Utility
             UILineInfo startLine = gen.lines[line];
             float y = firstLine.topY - startLine.topY;
             float val = y / (contentSize.y - gen.rectExtents.size.y);
-            OnScrollVerticalChanged.Invoke(y);
+            OnScrollVerticalChanged?.Invoke(y);
             verticalScrollbar.SetValueWithoutNotify(val);
         }
 

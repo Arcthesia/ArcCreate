@@ -37,6 +37,9 @@ namespace ArcCreate.Gameplay.Render
         private InstancedRendererPool connectionLineDrawer;
 
         // Arc & trace
+        private readonly List<ArcDrawCall> queuedArcDrawCalls = new List<ArcDrawCall>();
+        private readonly List<ArcDrawCall> queuedTraceDrawCalls = new List<ArcDrawCall>();
+        private readonly IComparer<ArcDrawCall> arcDrawCallComparer = new ArcDrawCallComparer();
         private InstancedRendererPool arcSegmentDrawer;
         private InstancedRendererPool arcHeadDrawer;
         private readonly Dictionary<Texture, InstancedRendererPool> arcCapDrawers = new Dictionary<Texture, InstancedRendererPool>();
@@ -96,17 +99,29 @@ namespace ArcCreate.Gameplay.Render
             connectionLineDrawer.RegisterInstance(matrix, color);
         }
 
-        public void DrawArcSegment(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y)
+        public void DrawArcSegment(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y, float depth)
         {
             (Color high, Color low) = Services.Skin.GetArcColor(colorId);
             color *= Color.Lerp(Color.Lerp(low, high, (y - 1) / 4.5f), Color.red, redValue);
             Vector4 properties = new Vector4(selected ? 1 : 0, highlight ? 1 : 0, 0, 0);
-            arcSegmentDrawer.RegisterInstance(matrix, color, properties);
+            queuedArcDrawCalls.Add(new ArcDrawCall
+            {
+                Matrix = matrix,
+                Color = color,
+                Properties = properties,
+                Depth = depth,
+            });
         }
 
-        public void DrawTraceSegment(Matrix4x4 matrix, Color color, bool selected)
+        public void DrawTraceSegment(Matrix4x4 matrix, Color color, bool selected, float depth)
         {
-            traceSegmentDrawer.RegisterInstance(matrix, color, new Vector4(selected ? 1 : 0, 0, 0, 0));
+            queuedTraceDrawCalls.Add(new ArcDrawCall
+            {
+                Matrix = matrix,
+                Color = color,
+                Properties = new Vector4(selected ? 1 : 0, 0, 0, 0),
+                Depth = depth,
+            });
         }
 
         public void DrawArcShadow(Matrix4x4 matrix, Color color)
@@ -196,7 +211,18 @@ namespace ArcCreate.Gameplay.Render
             traceShadowDrawer.Draw(notesCamera, layer);
             arcShadowDrawer.Draw(notesCamera, layer);
 
+            queuedTraceDrawCalls.Sort(arcDrawCallComparer);
+            foreach (var call in queuedTraceDrawCalls)
+            {
+                traceSegmentDrawer.RegisterInstance(
+                    call.Matrix,
+                    call.Color,
+                    call.Properties);
+            }
+
             traceSegmentDrawer.Draw(notesCamera, layer);
+            queuedTraceDrawCalls.Clear();
+
             traceHeadDrawer.Draw(notesCamera, layer);
             arctapShadowDrawer.Draw(notesCamera, layer);
 
@@ -206,7 +232,17 @@ namespace ArcCreate.Gameplay.Render
                 pair.Value.Draw(notesCamera, layer);
             }
 
+            queuedArcDrawCalls.Sort(arcDrawCallComparer);
+            foreach (var call in queuedArcDrawCalls)
+            {
+                arcSegmentDrawer.RegisterInstance(
+                    call.Matrix,
+                    call.Color,
+                    call.Properties);
+            }
+
             arcSegmentDrawer.Draw(notesCamera, layer);
+            queuedArcDrawCalls.Clear();
 
             foreach (var pair in arctapDrawers)
             {

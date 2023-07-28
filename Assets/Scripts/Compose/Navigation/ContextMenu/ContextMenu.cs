@@ -70,17 +70,13 @@ namespace ArcCreate.Compose.Navigation
 
             if (optionsExist)
             {
-                while (true)
-                {
-                    parent.gameObject.SetActive(true);
-                    await UniTask.WaitUntil(() => close.WasExecuted);
+                parent.gameObject.SetActive(true);
+                await UniTask.WaitUntil(() => close.WasExecuted);
 
-                    // No button pressed
-                    if (EventSystem.current.currentSelectedGameObject == null)
-                    {
-                        CloseContextMenu();
-                        return;
-                    }
+                // No button pressed
+                if (EventSystem.current.currentSelectedGameObject == null)
+                {
+                    CloseContextMenu();
                 }
             }
         }

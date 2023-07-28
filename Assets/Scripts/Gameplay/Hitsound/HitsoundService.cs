@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using ArcCreate.ChartFormat;
 using ArcCreate.Gameplay.Data;
+using ArcCreate.Utility;
 using ArcCreate.Utility.ExternalAssets;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -22,6 +23,8 @@ namespace ArcCreate.Gameplay.Hitsound
         private bool muted = false;
 
         private readonly Dictionary<string, AudioClip> sfxClips = new Dictionary<string, AudioClip>();
+        private readonly UnorderedList<int> playedTapHitsoundTimings = new UnorderedList<int>(30);
+        private readonly UnorderedList<int> playedArcHitsoundTimings = new UnorderedList<int>(30);
 
         public bool IsLoaded { get; private set; }
 
@@ -31,23 +34,35 @@ namespace ArcCreate.Gameplay.Hitsound
 
         public Dictionary<string, AudioClip> SfxAudioClips => sfxClips;
 
-        public void PlayTapHitsound()
+        public void PlayTapHitsound(int timing)
         {
             if (Services.Audio.IsPlaying && !muted)
             {
+                if (playedTapHitsoundTimings.Contains(timing))
+                {
+                    return;
+                }
+
+                playedTapHitsoundTimings.Add(timing);
                 hitsoundPlayer?.PlayTap();
             }
         }
 
-        public void PlayArcHitsound()
+        public void PlayArcHitsound(int timing)
         {
             if (Services.Audio.IsPlaying && !muted)
             {
+                if (playedArcHitsoundTimings.Contains(timing))
+                {
+                    return;
+                }
+
+                playedArcHitsoundTimings.Add(timing);
                 hitsoundPlayer?.PlayArc();
             }
         }
 
-        public void PlayArcTapHitsound(string sfx, bool isFromJudgement)
+        public void PlayArcTapHitsound(int timing, string sfx, bool isFromJudgement)
         {
             if (Services.Audio.IsPlaying)
             {
@@ -57,7 +72,7 @@ namespace ArcCreate.Gameplay.Hitsound
                 }
                 else if (!muted && isFromJudgement)
                 {
-                    PlayArcHitsound();
+                    PlayArcHitsound(timing);
                 }
             }
         }
@@ -109,6 +124,18 @@ namespace ArcCreate.Gameplay.Hitsound
             IsLoaded = true;
         }
 
+        public void UpdateHitsoundHistory(int currentTiming)
+        {
+            PurgeOldSoundPlayedTimings(currentTiming, playedArcHitsoundTimings, Values.HoldMissLateJudgeWindow);
+            PurgeOldSoundPlayedTimings(currentTiming, playedTapHitsoundTimings, Values.HoldMissLateJudgeWindow);
+        }
+
+        public void ResetHitsoundHistory()
+        {
+            playedTapHitsoundTimings.Clear();
+            playedArcHitsoundTimings.Clear();
+        }
+
         private async UniTask LoadCustomSfx(string sfx, string uri)
         {
             try
@@ -142,6 +169,17 @@ namespace ArcCreate.Gameplay.Hitsound
             Settings.EffectAudio.OnValueChanged.AddListener(OnEffectAudioSettings);
             OnEffectAudioSettings(Settings.EffectAudio.Value);
             LoadExternalClips().Forget();
+        }
+
+        private void PurgeOldSoundPlayedTimings(int currentTiming, UnorderedList<int> list, int delay)
+        {
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                if (list[i] < currentTiming - delay)
+                {
+                    list.RemoveAt(i);
+                }
+            }
         }
 
         private async UniTask LoadExternalClips()
