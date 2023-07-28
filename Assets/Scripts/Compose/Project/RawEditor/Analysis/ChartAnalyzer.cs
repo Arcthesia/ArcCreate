@@ -48,7 +48,7 @@ namespace ArcCreate.Compose.Project
         {
             try
             {
-                ChartReader reader = ChartReaderFactory.GetReader(new VirtualFileAccess(chart), path);
+                ChartReader reader = ChartReaderFactory.GetReader(new RawEditorFileAccess(chart, path), path);
                 Result<ChartFileErrors> parseResult = reader.Parse();
                 if (parseResult.IsError)
                 {

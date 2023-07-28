@@ -26,7 +26,6 @@ namespace ArcCreate.Compose.Project
         private Pool<ScrollHighlightComponent> scrollHighlightPool;
 
         private string absoluteMainChartPath;
-        private string currentMainChartPath;
         private string rawChartData;
 
         private readonly ChartAnalyzer analyzer = new ChartAnalyzer();
@@ -40,7 +39,6 @@ namespace ArcCreate.Compose.Project
         public void LoadFromPath(string absoluteMainChartPath)
         {
             this.absoluteMainChartPath = absoluteMainChartPath;
-            currentMainChartPath = Path.GetFileName(absoluteMainChartPath);
 
             if (!transform.parent.gameObject.activeInHierarchy)
             {
@@ -66,9 +64,9 @@ namespace ArcCreate.Compose.Project
         private void ApplyChanges()
         {
             int timing = Services.Gameplay.Audio.AudioTiming;
-            ChartReader reader = ChartReaderFactory.GetReader(new VirtualFileAccess(rawChartData), currentMainChartPath);
+            ChartReader reader = ChartReaderFactory.GetReader(new RawEditorFileAccess(rawChartData, absoluteMainChartPath), absoluteMainChartPath);
             reader.Parse();
-            gameplayData.LoadChart(reader, "file:///" + Path.GetDirectoryName(currentMainChartPath));
+            gameplayData.LoadChart(reader, "file:///" + Path.GetDirectoryName(absoluteMainChartPath));
             Services.Gameplay.Audio.AudioTiming = timing;
         }
 
@@ -148,9 +146,9 @@ namespace ArcCreate.Compose.Project
                 return;
             }
 
-            var chartData = new RawEventsBuilder().GetEvents(Path.GetFileName(currentMainChartPath), false);
+            var chartData = new RawEventsBuilder().GetEvents(Path.GetFileName(absoluteMainChartPath), false);
             rawChartData = new ChartSerializer(null, "").WriteToString(
-                currentMainChartPath,
+                absoluteMainChartPath,
                 gameplayData.AudioOffset.Value,
                 gameplayData.TimingPointDensityFactor.Value,
                 chartData);
@@ -174,7 +172,7 @@ namespace ArcCreate.Compose.Project
 
             ClearHighlights();
             analyzer.Stop();
-            analyzer.Start(rawChartData, currentMainChartPath);
+            analyzer.Start(rawChartData, absoluteMainChartPath);
         }
 
         private void OnEndEdit(string val)
@@ -195,7 +193,7 @@ namespace ArcCreate.Compose.Project
             rawChartData = val;
             ClearHighlights();
             analyzer.Stop();
-            analyzer.Start(rawChartData, currentMainChartPath);
+            analyzer.Start(rawChartData, absoluteMainChartPath);
             while (true)
             {
                 if (analyzer.HasError || ct.IsCancellationRequested)
@@ -236,7 +234,7 @@ namespace ArcCreate.Compose.Project
             rawChartData = val;
             ClearHighlights();
             analyzer.Stop();
-            analyzer.Start(rawChartData, currentMainChartPath);
+            analyzer.Start(rawChartData, absoluteMainChartPath);
         }
 
         private void DisplayFault(ChartFault fault)

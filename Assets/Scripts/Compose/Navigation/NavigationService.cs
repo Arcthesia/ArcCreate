@@ -10,6 +10,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using YamlDotNet.RepresentationModel;
 
 namespace ArcCreate.Compose.Navigation
@@ -133,7 +134,8 @@ namespace ArcCreate.Compose.Navigation
         {
             if (EventSystem.current.currentSelectedGameObject != null)
             {
-                if (EventSystem.current.currentSelectedGameObject.GetComponent<TMP_InputField>() != null)
+                if (EventSystem.current.currentSelectedGameObject.GetComponent<TMP_InputField>() != null
+                 || EventSystem.current.currentSelectedGameObject.GetComponent<InputField>() != null)
                 {
                     return false;
                 }
