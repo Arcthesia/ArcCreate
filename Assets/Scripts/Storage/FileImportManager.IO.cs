@@ -249,6 +249,7 @@ namespace ArcCreate.Storage
             string yaml = File.ReadAllText(importYaml.FullName);
             var deserializer = new DeserializerBuilder()
                 .WithNamingConvention(new CamelCaseNamingConvention())
+                .IgnoreUnmatchedProperties()
                 .Build();
             List<ImportInformation> imports = deserializer.Deserialize<List<ImportInformation>>(yaml);
 

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using ArcCreate.ChartFormat;
 using ArcCreate.Compose.Navigation;
 using ArcCreate.Compose.Popups;
@@ -37,6 +36,8 @@ namespace ArcCreate.Compose.Project
         private AutosaveHelper autosaveHelper;
 
         public event Action<ChartSettings> OnChartLoad;
+
+        public event Action<ProjectSettings> OnProjectLoad;
 
         public ProjectSettings CurrentProject { get; private set; }
 
@@ -284,6 +285,7 @@ namespace ArcCreate.Compose.Project
 
             currentChartPath.text = CurrentChart.ChartPath;
             LoadChart(CurrentChart);
+            OnProjectLoad.Invoke(CurrentProject);
 
             Debug.Log(
                 I18n.S("Compose.Notify.Project.OpenProject", new Dictionary<string, object>()
@@ -316,6 +318,7 @@ namespace ArcCreate.Compose.Project
                 string content = File.ReadAllText(path);
                 var deserializer = new DeserializerBuilder()
                     .WithNamingConvention(new CamelCaseNamingConvention())
+                    .IgnoreUnmatchedProperties()
                     .Build();
                 return deserializer.Deserialize<ProjectSettings>(content);
             }

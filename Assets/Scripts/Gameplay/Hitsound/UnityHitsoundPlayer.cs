@@ -13,6 +13,12 @@ namespace ArcCreate.Gameplay.Hitsound
             this.audioSource = audioSource;
         }
 
+        public float Volume
+        {
+            get => audioSource.volume;
+            set => audioSource.volume = value;
+        }
+
         public void Dispose()
         {
         }
@@ -35,11 +41,6 @@ namespace ArcCreate.Gameplay.Hitsound
         public void PlayTap()
         {
             audioSource.PlayOneShot(tapClip);
-        }
-
-        public void SetVolume(float v)
-        {
-            audioSource.volume = v;
         }
     }
 }

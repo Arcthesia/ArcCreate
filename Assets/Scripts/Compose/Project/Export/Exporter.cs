@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using ArcCreate.ChartFormat;
 using ArcCreate.Data;
 using ArcCreate.Storage;
 using ArcCreate.Utility;
@@ -46,29 +47,76 @@ namespace ArcCreate.Compose.Project
                 .Build();
             string infoYaml = serializer.Serialize(info);
 
+            EditorProjectSettings editorProjectSettings = project.EditorSettings;
+            project.EditorSettings = null;
+            string projectYaml = serializer.Serialize(project);
+            project.EditorSettings = editorProjectSettings;
+
             try
             {
                 using (FileStream zipStream = new FileStream(outputPath, FileMode.Create))
                 {
                     using (ZipArchive zip = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
                     {
-                        ZipArchiveEntry importInfo = zip.CreateEntry(ImportInformation.FileName);
-                        using (Stream importStream = importInfo.Open())
+                        ZipArchiveEntry importInfoZipEntry = zip.CreateEntry(ImportInformation.FileName);
+                        using (Stream importInfoStream = importInfoZipEntry.Open())
                         {
-                            using (StreamWriter writer = new StreamWriter(importStream))
+                            using (StreamWriter writer = new StreamWriter(importInfoStream))
                             {
                                 writer.Write(infoYaml);
                                 writer.Flush();
                             }
                         }
 
-                        var projectDir = new DirectoryInfo(Path.GetDirectoryName(project.Path));
-                        WriteDirectoryToZip(projectDir, zip, subdir, new List<string>()
+                        string projectDir = Path.GetDirectoryName(project.Path);
+                        HashSet<string> referencedFiles = new HashSet<string>();
+                        foreach (var chart in project.Charts)
                         {
-                            outputPath,
-                            "remote.aff",
-                            "remote.sc.json",
-                        });
+                            foreach (var file in chart.GetReferencedFiles())
+                            {
+                                referencedFiles.Add(file);
+                            }
+
+                            string chartPath = Path.Combine(projectDir, chart.ChartPath);
+                            ChartReader reader = ChartReaderFactory.GetReader(new PhysicalFileAccess(), chartPath);
+                            reader.Parse();
+                            foreach (var file in reader.GetReferencedFiles())
+                            {
+                                referencedFiles.Add(file);
+                            }
+
+                            string scJsonPath = Path.ChangeExtension(chart.ChartPath, ".sc.json");
+                            string scJsonPathFull = Path.Combine(projectDir, scJsonPath);
+                            if (File.Exists(scJsonPathFull))
+                            {
+                                WriteFileToZip(zip, subdir, scJsonPathFull, scJsonPath);
+                            }
+                        }
+
+                        foreach (var file in referencedFiles)
+                        {
+                            if (file == null)
+                            {
+                                continue;
+                            }
+
+                            string sourcePath = Path.Combine(projectDir, file);
+                            if (File.Exists(sourcePath))
+                            {
+                                WriteFileToZip(zip, subdir, Path.Combine(projectDir, file), file);
+                            }
+                        }
+
+                        string projectZipPath = Path.Combine(subdir, Path.GetFileName(project.Path)).Replace("\\", "/");
+                        ZipArchiveEntry projectZipEntry = zip.CreateEntry(projectZipPath);
+                        using (Stream projectStream = projectZipEntry.Open())
+                        {
+                            using (StreamWriter writer = new StreamWriter(projectStream))
+                            {
+                                writer.Write(projectYaml);
+                                writer.Flush();
+                            }
+                        }
                     }
                 }
 
@@ -86,30 +134,9 @@ namespace ArcCreate.Compose.Project
             }
         }
 
-        private void WriteDirectoryToZip(DirectoryInfo projectDir, ZipArchive zip, string subdir, List<string> blockedPaths)
+        private void WriteFileToZip(ZipArchive zip, string subdir, string sourcePath, string targetPath)
         {
-            foreach (FileInfo file in projectDir.EnumerateFiles())
-            {
-                if (!blockedPaths.Contains(file.FullName) && !file.FullName.EndsWith(".arcpkg") && !file.FullName.EndsWith(".mp4"))
-                {
-                    WriteFileToZip(zip, file.FullName, Path.Combine(subdir, file.Name));
-                }
-            }
-
-            foreach (DirectoryInfo dir in projectDir.EnumerateDirectories())
-            {
-                if (dir.Name[0] == '.' || dir.Name == "Arcade")
-                {
-                    continue;
-                }
-
-                WriteDirectoryToZip(dir, zip, Path.Combine(subdir, dir.Name), blockedPaths);
-            }
-        }
-
-        private void WriteFileToZip(ZipArchive zip, string sourcePath, string targetPath)
-        {
-            targetPath = targetPath.Replace("\\", "/");
+            targetPath = Path.Combine(subdir, targetPath).Replace("\\", "/");
             ZipArchiveEntry entry = zip.CreateEntry(targetPath);
             using (Stream entryStream = entry.Open())
             {

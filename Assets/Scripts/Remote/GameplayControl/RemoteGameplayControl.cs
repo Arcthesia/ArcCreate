@@ -245,6 +245,7 @@ namespace ArcCreate.Remote.Gameplay
                 string metadata = req.downloadHandler.text;
                 var deserializer = new DeserializerBuilder()
                     .WithNamingConvention(new CamelCaseNamingConvention())
+                    .IgnoreUnmatchedProperties()
                     .Build();
                 ProjectSettings projectSettings = deserializer.Deserialize<ProjectSettings>(metadata);
 

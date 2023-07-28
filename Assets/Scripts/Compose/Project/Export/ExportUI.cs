@@ -21,23 +21,62 @@ namespace ArcCreate.Compose.Project
         private void Awake()
         {
             confirmButton.onClick.AddListener(StartExport);
-            publisherField.onValueChanged.AddListener(OnInfochange);
-            packageNameField.onValueChanged.AddListener(OnInfochange);
+            publisherField.onValueChanged.AddListener(OnInfoChange);
+            packageNameField.onValueChanged.AddListener(OnInfoChange);
+            Services.Project.OnProjectLoad += OnProjectChange;
         }
 
         private void OnDestroy()
         {
             confirmButton.onClick.RemoveListener(StartExport);
-            publisherField.onValueChanged.RemoveListener(OnInfochange);
-            packageNameField.onValueChanged.RemoveListener(OnInfochange);
+            publisherField.onValueChanged.RemoveListener(OnInfoChange);
+            packageNameField.onValueChanged.RemoveListener(OnInfoChange);
+            Services.Project.OnProjectLoad -= OnProjectChange;
         }
 
-        private void OnInfochange(string arg)
+        private void OnProjectChange(ProjectSettings settings)
         {
-            identifierPreview.text = I18n.S("Compose.UI.Export.Package.Identifier", $"{publisherField.text}.{packageNameField.text}");
-            bool valid = !string.IsNullOrEmpty(publisherField.text) && !string.IsNullOrEmpty(packageNameField.text);
+            if (settings.EditorSettings != null)
+            {
+                if (!string.IsNullOrWhiteSpace(settings.EditorSettings.LastUsedPublisher))
+                {
+                    publisherField.text = settings.EditorSettings.LastUsedPublisher;
+                }
+                else
+                {
+                    publisherField.text = "";
+                }
+
+                if (!string.IsNullOrWhiteSpace(settings.EditorSettings.LastUsedPackageName))
+                {
+                    packageNameField.text = settings.EditorSettings.LastUsedPackageName;
+                }
+                else
+                {
+                    packageNameField.text = "";
+                }
+
+                versionField.text = settings.EditorSettings.LastUsedVersionNumber.ToString();
+            }
+            else
+            {
+                publisherField.text = "";
+                packageNameField.text = "";
+                versionField.text = "0";
+            }
+
+            if (string.IsNullOrWhiteSpace(publisherField.text) && !string.IsNullOrWhiteSpace(Settings.LastUsedPublisherName.Value))
+            {
+                publisherField.text = Settings.LastUsedPublisherName.Value;
+            }
+        }
+
+        private void OnInfoChange(string arg)
+        {
+            bool valid = !string.IsNullOrWhiteSpace(publisherField.text) && !string.IsNullOrWhiteSpace(packageNameField.text);
             requiredIndicator.SetActive(!valid);
             identifierPreview.gameObject.SetActive(valid);
+            identifierPreview.text = I18n.S("Compose.UI.Export.Package.Identifier", $"{publisherField.text}.{packageNameField.text}");
         }
 
         private void StartExport()
@@ -47,7 +86,7 @@ namespace ArcCreate.Compose.Project
             Evaluator.TryInt(versionField.text, out int version);
             DateTime builtAt = DateTime.UtcNow;
 
-            if (string.IsNullOrEmpty(publisher) || string.IsNullOrEmpty(package))
+            if (string.IsNullOrWhiteSpace(publisher) || string.IsNullOrWhiteSpace(package))
             {
                 requiredIndicator.SetActive(true);
                 return;
@@ -63,15 +102,20 @@ namespace ArcCreate.Compose.Project
                 Path.GetDirectoryName(proj.Path),
                 $"{publisher}.{package}");
 
-            if (string.IsNullOrEmpty(outputPath))
+            if (string.IsNullOrWhiteSpace(outputPath))
             {
                 return;
             }
 
-            if (Values.ProjectModified)
+            proj.EditorSettings = new EditorProjectSettings
             {
-                Services.Project.SaveProject();
-            }
+                LastUsedPublisher = publisher,
+                LastUsedPackageName = package,
+                LastUsedVersionNumber = version,
+            };
+
+            Settings.LastUsedPublisherName.Value = publisher;
+            Services.Project.SaveProject();
 
             new Exporter(proj, publisher, package, version).Export(outputPath);
         }

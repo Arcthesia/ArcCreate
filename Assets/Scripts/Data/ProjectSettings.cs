@@ -12,6 +12,8 @@ namespace ArcCreate.Data
 
         public List<ChartSettings> Charts { get; set; }
 
+        public EditorProjectSettings EditorSettings { get; set; }
+
         public ChartSettings GetClosestDifficultyToChart(ChartSettings selectedChart)
         {
             if (selectedChart == null)

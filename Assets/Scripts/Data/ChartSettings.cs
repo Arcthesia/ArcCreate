@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace ArcCreate.Data
 {
     public class ChartSettings
@@ -69,6 +71,15 @@ namespace ArcCreate.Data
                 PreviewStart = PreviewStart,
                 PreviewEnd = PreviewEnd,
             };
+        }
+
+        public IEnumerable<string> GetReferencedFiles()
+        {
+            yield return ChartPath;
+            yield return AudioPath;
+            yield return JacketPath;
+            yield return BackgroundPath;
+            yield return VideoPath;
         }
 
         public bool IsSameDifficulty(ChartSettings other, bool parseDifficutyName = true)

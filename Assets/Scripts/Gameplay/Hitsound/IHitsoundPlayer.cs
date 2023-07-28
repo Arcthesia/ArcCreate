@@ -5,6 +5,8 @@ namespace ArcCreate.Gameplay.Hitsound
 {
     public interface IHitsoundPlayer : IDisposable
     {
+        float Volume { get; set; }
+
         void LoadTap(AudioClip clip);
 
         void LoadArc(AudioClip clip);
@@ -12,7 +14,5 @@ namespace ArcCreate.Gameplay.Hitsound
         void PlayTap();
 
         void PlayArc();
-
-        void SetVolume(float v);
     }
 }

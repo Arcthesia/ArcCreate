@@ -13,6 +13,12 @@ namespace ArcCreate.Gameplay.Hitsound
         private readonly NativeSource arcSource;
         private readonly NativeSource tapSource;
 
+        public float Volume
+        {
+            get => volume;
+            set => volume = value;
+        }
+
         public NativeAudioHitsoundPlayer()
         {
             if (!initialized)
@@ -58,11 +64,6 @@ namespace ArcCreate.Gameplay.Hitsound
         {
             arcSource.Play(arcClip);
             arcSource.SetVolume(volume);
-        }
-
-        public void SetVolume(float volume)
-        {
-            this.volume = volume;
         }
     }
 }

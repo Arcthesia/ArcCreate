@@ -20,7 +20,6 @@ namespace ArcCreate.Gameplay.Hitsound
         private ExternalAudioClip tapClipLoader;
         private ExternalAudioClip arcClipLoader;
         private IHitsoundPlayer hitsoundPlayer;
-        private bool muted = false;
 
         private readonly Dictionary<string, AudioClip> sfxClips = new Dictionary<string, AudioClip>();
         private readonly UnorderedList<int> playedTapHitsoundTimings = new UnorderedList<int>(30);
@@ -34,9 +33,11 @@ namespace ArcCreate.Gameplay.Hitsound
 
         public Dictionary<string, AudioClip> SfxAudioClips => sfxClips;
 
+        private bool IsMuted => hitsoundPlayer == null || Mathf.Approximately(hitsoundPlayer.Volume, 0);
+
         public void PlayTapHitsound(int timing)
         {
-            if (Services.Audio.IsPlaying && !muted)
+            if (Services.Audio.IsPlaying && !IsMuted)
             {
                 if (playedTapHitsoundTimings.Contains(timing))
                 {
@@ -50,7 +51,7 @@ namespace ArcCreate.Gameplay.Hitsound
 
         public void PlayArcHitsound(int timing)
         {
-            if (Services.Audio.IsPlaying && !muted)
+            if (Services.Audio.IsPlaying && !IsMuted)
             {
                 if (playedArcHitsoundTimings.Contains(timing))
                 {
@@ -66,11 +67,11 @@ namespace ArcCreate.Gameplay.Hitsound
         {
             if (Services.Audio.IsPlaying)
             {
-                if ((muted ^ isFromJudgement) && !string.IsNullOrEmpty(sfx) && sfxClips.TryGetValue(sfx, out AudioClip clip))
+                if ((IsMuted ^ isFromJudgement) && !string.IsNullOrEmpty(sfx) && sfxClips.TryGetValue(sfx, out AudioClip clip))
                 {
                     musicAudioSource.PlayOneShot(clip);
                 }
-                else if (!muted && isFromJudgement)
+                else if (!IsMuted && isFromJudgement)
                 {
                     PlayArcHitsound(timing);
                 }
@@ -205,8 +206,7 @@ namespace ArcCreate.Gameplay.Hitsound
         private void OnEffectAudioSettings(float volume)
         {
             volume = Mathf.Clamp(volume, 0, 1);
-            hitsoundPlayer.SetVolume(volume);
-            muted = Mathf.Approximately(volume, 0);
+            hitsoundPlayer.Volume = volume;
         }
     }
 }

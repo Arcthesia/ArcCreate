@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace ArcCreate.ChartFormat
@@ -171,6 +172,36 @@ namespace ArcCreate.ChartFormat
         {
             AllIncludes.UnionWith(includes);
             AllFragments.UnionWith(fragments);
+        }
+
+        public IEnumerable<string> GetReferencedFiles()
+        {
+            HashSet<string> files = new HashSet<string>();
+            foreach (var tg in TimingGroups)
+            {
+                files.Add(tg.File);
+            }
+
+            foreach (var ev in Events)
+            {
+                if (ev is RawArc a && !string.IsNullOrWhiteSpace(a.Sfx) && a.Sfx != "none")
+                {
+                    string sfx = a.Sfx;
+                    if (sfx.EndsWith("_wav"))
+                    {
+                        sfx = sfx.Substring(0, sfx.Length - "_wav".Length) + ".wav";
+                    }
+
+                    if (!sfx.EndsWith(".wav"))
+                    {
+                        sfx = sfx + ".wav";
+                    }
+
+                    files.Add(sfx);
+                }
+            }
+
+            return files;
         }
     }
 }

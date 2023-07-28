@@ -13,6 +13,11 @@ namespace ArcCreate.Compose.Project
         event Action<ChartSettings> OnChartLoad;
 
         /// <summary>
+        /// Event invoked after a project has been loaded.
+        /// </summary>
+        event Action<ProjectSettings> OnProjectLoad;
+
+        /// <summary>
         /// Gets the current project settings.
         /// </summary>
         ProjectSettings CurrentProject { get; }

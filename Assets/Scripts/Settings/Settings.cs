@@ -65,6 +65,8 @@ namespace ArcCreate
         public static readonly IntSetting BackupCount = new IntSetting("Editor.Backup.Count", 10);
         public static readonly BoolSetting SyncToDSPTime = new BoolSetting("Editor.SyncToDSPTime", false);
 
+        public static readonly StringSetting LastUsedPublisherName = new StringSetting("Editor.Export.LastUsedPublisherName", null);
+
         [RuntimeInitializeOnLoadMethod]
         public static void OnInitialize()
         {
