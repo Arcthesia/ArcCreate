@@ -10,8 +10,13 @@ namespace ArcCreate.ChartFormat
             return "file:///" + Uri.EscapeUriString(path.Replace("\\", "/"));
         }
 
-        public string[] ReadFileByLines(string path)
+        public Option<string[]> ReadFileByLines(string path)
         {
+            if (!File.Exists(path))
+            {
+                return Option<string[]>.None();
+            }
+
             return File.ReadAllLines(path);
         }
 

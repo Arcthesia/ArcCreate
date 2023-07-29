@@ -6,7 +6,7 @@ namespace ArcCreate.ChartFormat
     {
         string GetFileUri(string path);
 
-        string[] ReadFileByLines(string path);
+        Option<string[]> ReadFileByLines(string path);
 
         StreamWriter WriteFile(string path);
     }

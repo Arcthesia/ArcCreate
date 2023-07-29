@@ -26,6 +26,7 @@ namespace ArcCreate.ChartFormat
             IncludeAReferencedFragment,
             TimingGroupPropertiesInvalid,
             BaseTimingInvalid,
+            FileDoesNotExist,
         }
 
         public Option<string> LineContent { get; private set; }

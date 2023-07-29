@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Threading;
 using ArcCreate.ChartFormat;
@@ -15,6 +14,7 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private FastInputField inputField;
         [SerializeField] private long maxFileLength = 1000000;
         [SerializeField] private GameObject disabledNotify;
+        [SerializeField] private FaultNavigation faultNavigation;
 
         [Header("Components")]
         [SerializeField] private GameObject lineHighlightPrefab;
@@ -246,12 +246,15 @@ namespace ArcCreate.Compose.Project
             ScrollHighlightComponent scroll = scrollHighlightPool.Get();
             scroll.SetPosition(inputField.TextGenerator, fault.LineNumber);
             scroll.SetSeverity(fault.Severity);
+
+            faultNavigation.RegisterFault(fault);
         }
 
         private void ClearHighlights()
         {
             lineHighlightPool.ReturnAll();
             scrollHighlightPool.ReturnAll();
+            faultNavigation.Clear();
         }
     }
 }

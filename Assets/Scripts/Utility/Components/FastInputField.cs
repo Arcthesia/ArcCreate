@@ -29,6 +29,8 @@ namespace ArcCreate.Utility
         private Vector2 contentSize;
         private Vector2 previousSize;
         private bool textHasChanged;
+        private bool shouldJumpToPosition;
+        private int pendingJumpToPosition;
 
         public event Action<float> OnScrollVerticalChanged;
 
@@ -60,6 +62,19 @@ namespace ArcCreate.Utility
 
                 return textRect;
             }
+        }
+
+        public int GetCharacterPosition(int line, int charId)
+        {
+            UILineInfo lineInfo = cachedInputTextGenerator.lines[Mathf.Clamp(line, 0, cachedInputTextGenerator.lineCount - 1)];
+            return lineInfo.startCharIdx + charId;
+        }
+
+        public void SetCurrentPosition(int position)
+        {
+            ActivateInputField();
+            shouldJumpToPosition = true;
+            pendingJumpToPosition = position;
         }
 
         public void OnScroll(PointerEventData eventData)
@@ -204,6 +219,17 @@ namespace ArcCreate.Utility
                 UpdateContentSizes();
                 UpdateScrollbarSizes();
                 textHasChanged = false;
+            }
+
+            base.LateUpdate();
+
+            if (shouldJumpToPosition)
+            {
+                caretSelectPositionInternal = pendingJumpToPosition;
+                caretPositionInternal = pendingJumpToPosition;
+
+                shouldJumpToPosition = false;
+                UpdateLabel();
             }
         }
 

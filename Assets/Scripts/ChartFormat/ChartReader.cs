@@ -60,11 +60,17 @@ namespace ArcCreate.ChartFormat
             TimingGroups.Add(new RawTimingGroup() { File = Filename });
             AllIncludes.Add(Filename);
 
-            string[] lines = FileAccess.ReadFileByLines(FullPath);
-            bool atHeader = true;
-            for (int i = 0; i < lines.Length; i++)
+            Option<string[]> lines = FileAccess.ReadFileByLines(FullPath);
+            if (!lines.HasValue)
             {
-                string line = lines[i].Trim();
+                errors.Add(ChartError.Format(RawEventType.Unknown, ChartError.Kind.FileDoesNotExist));
+                return new ChartFileErrors(Filename, errors);
+            }
+
+            bool atHeader = true;
+            for (int i = 0; i < lines.Value.Length; i++)
+            {
+                string line = lines.Value[i].Trim();
                 if (atHeader)
                 {
                     Result<ChartError> result = ParseHeaderLine(line, i, FullPath, out bool endOfHeader);

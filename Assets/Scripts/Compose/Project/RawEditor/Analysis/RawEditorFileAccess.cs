@@ -21,7 +21,7 @@ namespace ArcCreate.Compose.Project
             return "file:///" + Uri.EscapeUriString(path.Replace("\\", "/"));
         }
 
-        public string[] ReadFileByLines(string path)
+        public Option<string[]> ReadFileByLines(string path)
         {
             if (path == chartPath)
             {

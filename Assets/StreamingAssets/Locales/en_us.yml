@@ -54,6 +54,8 @@ Format:
     ReferencedFileError: |-
       Can not load the referenced chart file:
       {0}
+    FileDoesNotExist: |-
+      Chart file does not exist.
   Warning:
     HoldTooShort:
       Hold note's duration is shorter than 17ms.
