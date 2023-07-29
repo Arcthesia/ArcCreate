@@ -122,7 +122,6 @@ Compose:
           
   # 通知消息
   Notify:
-    GameplayLoaded: 游玩场景加载成功
     FreeCameraEditHelp: |-
       正在启动自由camera视角（鼠标悬停查看更多信息）
       

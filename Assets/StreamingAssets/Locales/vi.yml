@@ -104,7 +104,6 @@ Compose:
           
   # Notification messages
   Notify:
-    GameplayLoaded: Gameplay scene loaded successfully
     FreeCameraEditHelp: |-
       Khởi động máy quay tự do (Giữ để xem thêm)
       

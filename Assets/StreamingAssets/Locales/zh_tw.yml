@@ -112,7 +112,6 @@ Compose:
 
   # Notification messages
   Notify:
-    GameplayLoaded: 成功載入遊戲場景
     FreeCameraEditHelp: |-
       開始移動相機 (將游標放在此訊息以獲得更多資訊)
 

@@ -54,7 +54,6 @@ namespace ArcCreate.Compose
             gameplay.ShouldNotifyOnAudioEnd = false;
             gameplay.Chart.EnableColliderGeneration = true;
             Shutter.Instance.SetTargetCamera(gameplay.Camera.UICamera, "Topmost");
-            Debug.Log(I18n.S("Compose.Notify.GameplayLoaded"));
         }
 
         private void OnLog(string condition, string stackTrace, LogType type)

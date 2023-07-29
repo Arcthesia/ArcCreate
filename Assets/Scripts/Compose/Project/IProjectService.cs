@@ -62,5 +62,11 @@ namespace ArcCreate.Compose.Project
         /// Save the current project.
         /// </summary>
         void SaveProject();
+
+        /// <summary>
+        /// Load a project from a project file on disk.
+        /// </summary>
+        /// <param name="projectPath">Path to the project file.</param>
+        void OpenProject(string projectPath);
     }
 }

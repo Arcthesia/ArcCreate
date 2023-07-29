@@ -124,7 +124,6 @@ Compose:
           
   # Notification messages
   Notify:
-    GameplayLoaded: Gameplay scene loaded successfully
     FreeCameraEditHelp: |-
       Starting free camera (hover for more info)
       
@@ -727,6 +726,11 @@ Compose:
       Actions:
         SelectArc: Select parent arc
         SelectArctap: Select sky notes
+    Startup:
+      Discord: Join our Discord
+      Kofi: Support us on Ko-fi
+      Version: "Version: {0}"
+      Recent: Recently opened
 
 Remote:
   Exception:

@@ -107,7 +107,6 @@ Compose:
           
   # Notification messages
   Notify:
-    GameplayLoaded: 게임플레이 씬 성공적으로 로드됨
     FreeCameraEditHelp: |-
       자유 카메라 시작됨 (자세한 정보는 마우스를 올려보십시오)
       

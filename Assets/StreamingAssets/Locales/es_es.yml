@@ -111,7 +111,6 @@ Compose:
             
   # Notification messages
   Notify:
-    GameplayLoaded: Escena de juego cargada con éxito
     FreeCameraEditHelp: |-
       Iniciando cámara libre (pasa el cursor para más info)
       

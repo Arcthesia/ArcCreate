@@ -197,6 +197,42 @@ namespace ArcCreate.Compose.Project
             SerializeProject(CurrentProject);
         }
 
+        public void OpenProject(string path)
+        {
+            ProjectSettings project = DeserializeProject(path);
+            project.Path = path;
+            CurrentProject = project;
+
+            if (project.Charts.Count == 0)
+            {
+                throw new ComposeException(I18n.S("Compose.Exception.NoChartIncluded"));
+            }
+
+            CurrentChart = project.Charts[0];
+            foreach (ChartSettings chart in project.Charts)
+            {
+                if (chart.ChartPath == project.LastOpenedChartPath)
+                {
+                    CurrentChart = chart;
+                }
+            }
+
+            chartPicker.SetOptions(CurrentProject.Charts, CurrentChart);
+
+            toggleInteractiveCanvas.interactable = true;
+            noProjectLoadedHint.SetActive(false);
+
+            currentChartPath.text = CurrentChart.ChartPath;
+            LoadChart(CurrentChart);
+            OnProjectLoad.Invoke(CurrentProject);
+
+            Debug.Log(
+                I18n.S("Compose.Notify.Project.OpenProject", new Dictionary<string, object>()
+                {
+                    { "Path", path },
+                }));
+        }
+
         private void OnOpenConfirmed()
         {
             string path = Shell.OpenFileDialog(
@@ -256,42 +292,6 @@ namespace ArcCreate.Compose.Project
             {
                 autosaveHelper = new AutosaveHelper(this, value);
             }
-        }
-
-        private void OpenProject(string path)
-        {
-            ProjectSettings project = DeserializeProject(path);
-            project.Path = path;
-            CurrentProject = project;
-
-            if (project.Charts.Count == 0)
-            {
-                throw new ComposeException(I18n.S("Compose.Exception.NoChartIncluded"));
-            }
-
-            CurrentChart = project.Charts[0];
-            foreach (ChartSettings chart in project.Charts)
-            {
-                if (chart.ChartPath == project.LastOpenedChartPath)
-                {
-                    CurrentChart = chart;
-                }
-            }
-
-            chartPicker.SetOptions(CurrentProject.Charts, CurrentChart);
-
-            toggleInteractiveCanvas.interactable = true;
-            noProjectLoadedHint.SetActive(false);
-
-            currentChartPath.text = CurrentChart.ChartPath;
-            LoadChart(CurrentChart);
-            OnProjectLoad.Invoke(CurrentProject);
-
-            Debug.Log(
-                I18n.S("Compose.Notify.Project.OpenProject", new Dictionary<string, object>()
-                {
-                    { "Path", path },
-                }));
         }
 
         private void SerializeProject(ProjectSettings projectSettings)
