@@ -140,12 +140,11 @@ namespace ArcCreate.Storage
             Option<string> videoPath = chart.VideoPath == null ? null : level.GetRealPath(chart.VideoPath);
             if (enableVideoBackground && videoPath.HasValue)
             {
-                string videoUri = "file:///" + Uri.EscapeDataString(videoPath.Value.Replace("\\", "/"));
-                gameplayData.VideoBackgroundUrl.Value = videoUri;
+                gameplayData.LoadVideoBackground(videoPath.Value.Replace("\\", "/"), false);
             }
             else
             {
-                gameplayData.VideoBackgroundUrl.Value = null;
+                gameplayData.LoadVideoBackground(null, false);
             }
         }
     }

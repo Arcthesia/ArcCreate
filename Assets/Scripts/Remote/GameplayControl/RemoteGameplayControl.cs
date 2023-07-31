@@ -309,10 +309,7 @@ namespace ArcCreate.Remote.Gameplay
                         gameplayData.DifficultyColor.Value = c;
 
                         bool enableVideoBackground = !string.IsNullOrEmpty(chartSettings.VideoPath);
-                        if (enableVideoBackground)
-                        {
-                            gameplayData.VideoBackgroundUrl.Value = enableVideoBackground ? GetURI("video") : null;
-                        }
+                        gameplayData.LoadVideoBackground(enableVideoBackground ? GetURI("video") : null, true);
 
                         break;
                     }

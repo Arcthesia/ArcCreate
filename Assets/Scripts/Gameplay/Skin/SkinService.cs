@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ArcCreate.Data;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.SceneTransition;
 using ArcCreate.Utility.ExternalAssets;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Video;
 
 namespace ArcCreate.Gameplay.Skin
 {
@@ -25,6 +27,8 @@ namespace ArcCreate.Gameplay.Skin
         [SerializeField] private SpriteRenderer trackExtraEdgeR;
         [SerializeField] private SpriteRenderer[] criticalLines = new SpriteRenderer[4];
         [SerializeField] private SpriteSO jacketShadowSO;
+        [SerializeField] private SpriteRenderer videoBackgroundRenderer;
+        [SerializeField] private VideoPlayer videoBackground;
 
         [Header("Skin Options")]
         [SerializeField] private List<AlignmentOption> alignmentOptions;
@@ -347,6 +351,22 @@ namespace ArcCreate.Gameplay.Skin
         {
             int i = Mathf.Clamp(colorId, 0, arcColors.Count - 1);
             return (arcLowDesaturatedColors[i], arcLowColors[i]);
+        }
+
+        public void SetVideoBackground(string path, bool isUri)
+        {
+            videoBackground.enabled = !string.IsNullOrEmpty(path);
+            videoBackgroundRenderer.enabled = !string.IsNullOrEmpty(path);
+
+            if (!string.IsNullOrEmpty(path))
+            {
+                path = isUri ? Uri.EscapeUriString(path.Replace("\\", "/")) : path.Replace("\\", "/");
+                videoBackground.url = isUri ? path : "file://" + path;
+                if (Application.platform == RuntimePlatform.Android && Constants.AndroidVersionCode >= 29)
+                {
+                    videoBackground.url = path;
+                }
+            }
         }
 
         private void Awake()

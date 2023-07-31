@@ -79354,6 +79354,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8702318924406431456, guid: f10ded37d04631cba8515737f485b462,
         type: 3}
+      propertyPath: isLocalFileSelector
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8702318924406431456, guid: f10ded37d04631cba8515737f485b462,
+        type: 3}
       propertyPath: acceptedExtensions.Array.size
       value: 12
       objectReference: {fileID: 0}

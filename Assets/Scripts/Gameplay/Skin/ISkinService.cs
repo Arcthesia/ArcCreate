@@ -1,4 +1,4 @@
-using ArcCreate.Gameplay.Data;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Skin
@@ -38,5 +38,7 @@ namespace ArcCreate.Gameplay.Skin
         (Color high, Color low) GetArcColor(int colorId);
 
         (Color color1, Color color2) GetArcParticleColor(int colorId);
+
+        void SetVideoBackground(string path, bool isUri);
     }
 }

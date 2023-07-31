@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ArcCreate.Data;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -94,6 +95,7 @@ namespace ArcCreate.Gameplay.Audio
                 if (IsPlaying)
                 {
                     audioSource.Stop();
+                    videoPlayer.Pause();
                     Play(audioTiming, 0);
                 }
 
@@ -207,6 +209,11 @@ namespace ArcCreate.Gameplay.Audio
         {
             lastPausedTiming = audioTiming;
             audioSource.Stop();
+            if (videoPlayer.enabled)
+            {
+                videoPlayer.Pause();
+            }
+
             if (returnOnPause)
             {
                 lastPausedTiming = onPauseReturnTo;
@@ -219,6 +226,11 @@ namespace ArcCreate.Gameplay.Audio
         public void Stop()
         {
             audioSource.Stop();
+            if (videoPlayer.enabled)
+            {
+                videoPlayer.Stop();
+            }
+
             lastPausedTiming = 0;
             AudioTiming = 0;
 
@@ -320,8 +332,22 @@ namespace ArcCreate.Gameplay.Audio
                 audioSource.Play();
             }
 
+            if (videoPlayer.enabled)
+            {
+                StartDelayedVideoPlayback(timing, delay).Forget();
+            }
+
             SetEnableAutorotation(false);
             audioEndReported = false;
+        }
+
+        private async UniTask StartDelayedVideoPlayback(int timing, int delay)
+        {
+            DateTime startTime = DateTime.Now;
+            videoPlayer.Prepare();
+            await UniTask.WhenAll(UniTask.Delay(delay), UniTask.WaitUntil(() => videoPlayer.isPrepared));
+            videoPlayer.Play();
+            videoPlayer.time = Mathf.Clamp(((timing - delay) / 1000f) + (DateTime.Now - startTime).Seconds, 0, (float)videoPlayer.length);
         }
 
         private void Awake()

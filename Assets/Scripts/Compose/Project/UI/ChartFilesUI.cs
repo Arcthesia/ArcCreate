@@ -1,6 +1,7 @@
 using ArcCreate.Compose.Components;
 using ArcCreate.Data;
 using ArcCreate.Gameplay;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace ArcCreate.Compose.Project
@@ -25,7 +26,11 @@ namespace ArcCreate.Compose.Project
 
             if (video.CurrentPath != null)
             {
-                GameplayData.VideoBackgroundUrl.Value = "file:///" + video.CurrentPath.FullPath.Replace("\\", "/");
+                GameplayData.LoadVideoBackground(video.CurrentPath.FullPath.Replace("\\", "/"), false);
+            }
+            else
+            {
+                GameplayData.LoadVideoBackground(null, false);
             }
         }
 
@@ -95,12 +100,12 @@ namespace ArcCreate.Compose.Project
             if (path == null)
             {
                 Target.VideoPath = null;
-                GameplayData.VideoBackgroundUrl.Value = null;
+                GameplayData.LoadVideoBackground(null, false);
                 return;
             }
 
             Target.VideoPath = path.ShortenedPath;
-            GameplayData.VideoBackgroundUrl.Value = "file:///" + path.FullPath.Replace("\\", "/");
+            GameplayData.LoadVideoBackground(path.FullPath.Replace("\\", "/"), false);
 
             Values.ProjectModified = true;
         }

@@ -3460,8 +3460,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 600956901}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalScale: {x: 160, y: 160, z: 100}
   m_Children: []
   m_Father: {fileID: 1426965556}
   m_RootOrder: 1
@@ -3469,7 +3469,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 2048, y: 1536}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &600956903
 SpriteRenderer:
@@ -3507,10 +3507,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 4203131
+  m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 60ec4d2a20505ed4983a1875e88ac3e7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 675e6f7a013d0d042a1684f3dc384e63, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -3528,7 +3528,7 @@ VideoPlayer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 600956901}
-  m_Enabled: 1
+  m_Enabled: 0
   m_VideoClip: {fileID: 0}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
@@ -3539,7 +3539,7 @@ VideoPlayer:
   m_TargetMaterialProperty: _MainTex
   m_RenderMode: 3
   m_AspectRatio: 2
-  m_DataSource: 0
+  m_DataSource: 1
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 0
   m_TargetAudioSources:
@@ -3553,7 +3553,7 @@ VideoPlayer:
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
-  m_WaitForFirstFrame: 0
+  m_WaitForFirstFrame: 1
   m_FrameReadyEventEnabled: 0
 --- !u!114 &600956905
 MonoBehaviour:
@@ -4119,7 +4119,6 @@ GameObject:
   - component: {fileID: 744329226}
   - component: {fileID: 744329227}
   - component: {fileID: 744329229}
-  - component: {fileID: 744329228}
   - component: {fileID: 744329230}
   m_Layer: 0
   m_Name: AudioService
@@ -4155,43 +4154,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 744329229}
-  videoPlayer: {fileID: 744329228}
+  videoPlayer: {fileID: 600956904}
   gameplayData: {fileID: 11400000, guid: ae19a07671eb9dc748d6346649a697b7, type: 2}
   timingSlider: {fileID: 1838480513}
---- !u!328 &744329228
-VideoPlayer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 744329225}
-  m_Enabled: 1
-  m_VideoClip: {fileID: 0}
-  m_TargetCameraAlpha: 1
-  m_TargetCamera3DLayout: 0
-  m_TargetCamera: {fileID: 0}
-  m_TargetTexture: {fileID: 0}
-  m_TimeReference: 0
-  m_TargetMaterialRenderer: {fileID: 600956903}
-  m_TargetMaterialProperty: _MainTex
-  m_RenderMode: 3
-  m_AspectRatio: 2
-  m_DataSource: 0
-  m_PlaybackSpeed: 1
-  m_AudioOutputMode: 0
-  m_TargetAudioSources:
-  - {fileID: 744329229}
-  m_DirectAudioVolumes:
-  - 1
-  m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
-  m_PlayOnAwake: 0
-  m_SkipOnDrop: 1
-  m_Looping: 0
-  m_WaitForFirstFrame: 1
-  m_FrameReadyEventEnabled: 0
 --- !u!82 &744329229
 AudioSource:
   m_ObjectHideFlags: 0
@@ -13548,6 +13513,8 @@ MonoBehaviour:
   - {fileID: 5387788}
   - {fileID: 494440779}
   jacketShadowSO: {fileID: 11400000, guid: 87bb86310a4e98348915ef433efa2753, type: 2}
+  videoBackgroundRenderer: {fileID: 600956903}
+  videoBackground: {fileID: 600956904}
   alignmentOptions:
   - {fileID: 11400000, guid: 5addfb3e558b39f498d54a0ef0e03353, type: 2}
   - {fileID: 11400000, guid: a38eba22a187e044ea1801e95ec9ae6c, type: 2}
@@ -13630,8 +13597,7 @@ MonoBehaviour:
   gameplayData: {fileID: 11400000, guid: ae19a07671eb9dc748d6346649a697b7, type: 2}
   jacketSO: {fileID: 11400000, guid: f891964018fd9694e809f066d5cc42a5, type: 2}
   background: {fileID: 431220131}
-  videoBackgroundRenderer: {fileID: 600956901}
-  videoBackground: {fileID: 600956904}
+  videobackground: {fileID: 600956903}
   titleSO: {fileID: 11400000, guid: 363d41aaacc710c48a7ba463234804ea, type: 2}
   composerSO: {fileID: 11400000, guid: 8fa009c365becf9439b7df7055ef9aa9, type: 2}
   illustratorSO: {fileID: 11400000, guid: 955659b8f14e8cb4786e57c919033252, type: 2}

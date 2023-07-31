@@ -292,6 +292,11 @@ namespace ArcCreate.Gameplay
             }
         }
 
+        public void LoadVideoBackground(string path, bool isUri)
+        {
+            Services.Skin.SetVideoBackground(path, isUri);
+        }
+
         internal async UniTask StartLoadingAudio(string path)
         {
             using (UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(

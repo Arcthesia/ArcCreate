@@ -1,9 +1,7 @@
-using System;
 using ArcCreate.SceneTransition;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Video;
 
 namespace ArcCreate.Gameplay.Skin
 {
@@ -12,8 +10,7 @@ namespace ArcCreate.Gameplay.Skin
         [SerializeField] private GameplayData gameplayData;
         [SerializeField] private SpriteSO jacketSO;
         [SerializeField] private Image background;
-        [SerializeField] private GameObject videoBackgroundRenderer;
-        [SerializeField] private VideoPlayer videoBackground;
+        [SerializeField] private SpriteRenderer videobackground;
         [SerializeField] private StringSO titleSO;
         [SerializeField] private StringSO composerSO;
         [SerializeField] private StringSO illustratorSO;
@@ -28,7 +25,6 @@ namespace ArcCreate.Gameplay.Skin
             gameplayData.Background.OnValueChange += OnBackground;
             gameplayData.DifficultyName.OnValueChange += OnDifficulty;
             gameplayData.DifficultyColor.OnValueChange += OnDifficultyColor;
-            gameplayData.VideoBackgroundUrl.OnValueChange += OnVideoBackground;
             gameplayData.Title.OnValueChange += OnTitle;
             gameplayData.Composer.OnValueChange += OnComposer;
             gameplayData.Illustrator.OnValueChange += OnIllustrator;
@@ -42,7 +38,6 @@ namespace ArcCreate.Gameplay.Skin
             gameplayData.Background.OnValueChange -= OnBackground;
             gameplayData.DifficultyName.OnValueChange -= OnDifficulty;
             gameplayData.DifficultyColor.OnValueChange -= OnDifficultyColor;
-            gameplayData.VideoBackgroundUrl.OnValueChange -= OnVideoBackground;
             gameplayData.Title.OnValueChange -= OnTitle;
             gameplayData.Composer.OnValueChange -= OnComposer;
             gameplayData.Illustrator.OnValueChange -= OnIllustrator;
@@ -75,16 +70,6 @@ namespace ArcCreate.Gameplay.Skin
             titleSO.Value = value;
         }
 
-        private void OnVideoBackground(string value)
-        {
-            if (!string.IsNullOrEmpty(value))
-            {
-                videoBackground.url = value;
-            }
-
-            videoBackgroundRenderer.SetActive(string.IsNullOrEmpty(value));
-        }
-
         private void OnDifficultyColor(Color value)
         {
             difficultyColor.color = value;
@@ -98,6 +83,7 @@ namespace ArcCreate.Gameplay.Skin
         private void OnBackground(Sprite value)
         {
             background.sprite = value;
+            videobackground.sprite = value;
         }
 
         private void OnJacket(Sprite value)
