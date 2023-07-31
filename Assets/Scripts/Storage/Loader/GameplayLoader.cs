@@ -38,32 +38,36 @@ namespace ArcCreate.Storage
 
         private async UniTask LoadAudio(LevelStorage level, ChartSettings chart)
         {
-            string audioPath = level.GetRealPath(chart.AudioPath);
-            string uri = "file:///" + Uri.EscapeDataString(audioPath.Replace("\\", "/"));
-            await gameplayData.LoadAudioFromHttp(uri, System.IO.Path.GetExtension(audioPath));
+            Option<string> audioPath = level.GetRealPath(chart.AudioPath);
+            if (!audioPath.HasValue)
+            {
+                throw new Exception("Audio file does not exist");
+            }
+
+            string uri = "file:///" + Uri.EscapeDataString(audioPath.Value.Replace("\\", "/"));
+            await gameplayData.LoadAudioFromHttp(uri, Path.GetExtension(audioPath.Value));
         }
 
         private async UniTask LoadBackground(LevelStorage level, ChartSettings chart)
         {
-            string bgPath = level.GetRealPath(chart.BackgroundPath);
-            if (string.IsNullOrEmpty(bgPath))
+            Option<string> bgPath = level.GetRealPath(chart.BackgroundPath);
+            if (!bgPath.HasValue)
             {
                 gameplayData.SetDefaultBackground();
                 return;
             }
 
-            string uri = "file:///" + Uri.EscapeDataString(bgPath.Replace("\\", "/"));
+            string uri = "file:///" + Uri.EscapeDataString(bgPath.Value.Replace("\\", "/"));
             await gameplayData.LoadBackgroundFromHttp(uri);
         }
 
         private void LoadScenecontrol(LevelStorage level, ChartSettings chart)
         {
             StorageFileAccessWrapper fileAccess = new StorageFileAccessWrapper(level);
-            string scJsonPath = Path.GetFileNameWithoutExtension(chart.ChartPath) + ".sc.json";
-            string scJsonRealPath = level.GetRealPath(scJsonPath);
-            if (scJsonRealPath != null)
+            Option<string> scJsonRealPath = level.GetRealPath(Path.ChangeExtension(chart.ChartPath, ".sc.json"));
+            if (scJsonRealPath.HasValue)
             {
-                string json = File.ReadAllText(scJsonRealPath);
+                string json = File.ReadAllText(scJsonRealPath.Value);
                 gameplayControl.Scenecontrol.Import(json, fileAccess);
             }
 
@@ -133,10 +137,10 @@ namespace ArcCreate.Storage
             gameplayData.DifficultyColor.Value = c;
 
             bool enableVideoBackground = !string.IsNullOrEmpty(chart.VideoPath);
-            string videoPath = chart.VideoPath == null ? null : level.GetRealPath(chart.VideoPath);
-            if (enableVideoBackground && videoPath != null)
+            Option<string> videoPath = chart.VideoPath == null ? null : level.GetRealPath(chart.VideoPath);
+            if (enableVideoBackground && videoPath.HasValue)
             {
-                string videoUri = "file:///" + Uri.EscapeDataString(videoPath.Replace("\\", "/"));
+                string videoUri = "file:///" + Uri.EscapeDataString(videoPath.Value.Replace("\\", "/"));
                 gameplayData.VideoBackgroundUrl.Value = videoUri;
             }
             else

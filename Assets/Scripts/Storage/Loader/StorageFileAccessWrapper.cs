@@ -16,24 +16,24 @@ namespace ArcCreate.Storage
 
         public string GetFileUri(string path)
         {
-            string realPath = level.GetRealPath(path);
-            if (realPath == null)
+            Option<string> realPath = level.GetRealPath(path);
+            if (!realPath.HasValue)
             {
                 return null;
             }
 
-            return "file:///" + Uri.EscapeUriString(realPath.Replace("\\", "/"));
+            return "file:///" + Uri.EscapeUriString(realPath.Value.Replace("\\", "/"));
         }
 
         public Option<string[]> ReadFileByLines(string path)
         {
-            string realPath = level.GetRealPath(path);
-            if (realPath == null || !File.Exists(realPath))
+            Option<string> realPath = level.GetRealPath(path);
+            if (!realPath.HasValue)
             {
                 return Option<string[]>.None();
             }
 
-            return File.ReadAllLines(realPath);
+            return File.ReadAllLines(realPath.Value);
         }
 
         public StreamWriter WriteFile(string path)

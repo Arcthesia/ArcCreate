@@ -113,8 +113,8 @@ namespace ArcCreate.Storage
         private async UniTask ImportDirectory(DirectoryInfo dir, bool isImportingDefaultPackage)
         {
             var pendingConflicts = new List<IStorageUnit>();
-            var identifierToData = new Dictionary<string, IStorageUnit>();
-            var toStore = new List<IStorageUnit>();
+            var identifierToAssetMap = new Dictionary<string, (IStorageUnit asset, DirectoryInfo directory)>();
+            var toStore = new List<(IStorageUnit asset, DirectoryInfo directory)>();
             var toDelete = new List<IStorageUnit>();
 
             if (!isImportingDefaultPackage)
@@ -123,17 +123,17 @@ namespace ArcCreate.Storage
                 await UniTask.NextFrame();
             }
 
-            var (importingData, importingFileReferences) = ReadItemsFromDirectory(dir);
-            foreach (var item in importingData)
+            List<(IStorageUnit asset, DirectoryInfo directory)> importingData = ReadItemsFromDirectory(dir);
+            foreach (var (asset, directory) in importingData)
             {
-                item.IsDefaultAsset = isImportingDefaultPackage;
+                asset.IsDefaultAsset = isImportingDefaultPackage;
             }
 
             // Detect duplicate identifier within the same importing package file
             HashSet<string> ids = new HashSet<string>();
-            foreach (IStorageUnit item in importingData)
+            foreach (var (asset, directory) in importingData)
             {
-                string id = item.Identifier;
+                string id = asset.Identifier;
                 if (ids.Contains(id))
                 {
                     throw new FileLoadException($"Invalid package: Duplicate identifier deteced within the same package: {id}");
@@ -149,17 +149,17 @@ namespace ArcCreate.Storage
                 await UniTask.NextFrame();
             }
 
-            foreach (IStorageUnit data in importingData)
+            foreach (var (asset, directory) in importingData)
             {
-                identifierToData.Add(data.Identifier, data);
-                IStorageUnit conflict = data.GetConflictingIdentifier();
+                identifierToAssetMap.Add(asset.Identifier, (asset, directory));
+                IStorageUnit conflict = asset.GetConflictingIdentifier();
                 if (conflict != null)
                 {
                     pendingConflicts.Add(conflict);
                 }
                 else
                 {
-                    toStore.Add(data);
+                    toStore.Add((asset, directory));
                 }
             }
 
@@ -169,19 +169,19 @@ namespace ArcCreate.Storage
             {
                 foreach (var conflict in pendingConflicts)
                 {
-                    IStorageUnit replaceWith = identifierToData[conflict.Identifier];
+                    var (asset, directory) = identifierToAssetMap[conflict.Identifier];
                     bool shouldReplace =
-                        replaceWith.Version >= conflict.Version
-                        || await PromptConflictToUser(replaceWith, conflict);
+                        asset.Version >= conflict.Version
+                        || await PromptConflictToUser(asset, conflict);
                     if (shouldReplace)
                     {
                         toDelete.Add(conflict);
-                        toStore.Add(replaceWith);
-                        replaceWith.IsDefaultAsset = conflict.IsDefaultAsset;
+                        toStore.Add((asset, directory));
+                        asset.IsDefaultAsset = conflict.IsDefaultAsset;
                     }
                     else
                     {
-                        toStore.Remove(replaceWith);
+                        toStore.Remove((asset, directory));
                     }
                 }
             }
@@ -198,21 +198,16 @@ namespace ArcCreate.Storage
                 item.Delete();
             }
 
-            foreach (IStorageUnit item in toStore)
+            foreach (var (asset, directory) in toStore)
             {
                 if (!isImportingDefaultPackage)
                 {
-                    ShowLoading(I18n.S("Storage.Loading.StoreAsset", item.Identifier));
+                    ShowLoading(I18n.S("Storage.Loading.StoreAsset", asset.Identifier));
                     await UniTask.NextFrame();
                 }
 
-                item.Insert();
-                foreach (string rawVirtualPath in item.FileReferences)
-                {
-                    string virtualPath = string.Join("/", item.Type, item.Identifier, rawVirtualPath);
-                    string realPath = Path.Combine(dir.FullName, importingFileReferences[string.Join("/", item.Identifier, rawVirtualPath)]);
-                    FileStorage.ImportFile(realPath, virtualPath);
-                }
+                asset.Insert();
+                MoveDirectory(directory, new DirectoryInfo(asset.GetParentDirectory()));
             }
 
             if (!isImportingDefaultPackage)
@@ -230,19 +225,46 @@ namespace ArcCreate.Storage
 
             if (!isImportingDefaultPackage)
             {
-                ShowSummary(toStore);
+                ShowSummary(toStore.Select(((IStorageUnit asset, DirectoryInfo dir) tuple) => tuple.asset).ToList());
             }
 
             HideLoading();
+        }
+
+        private void MoveDirectory(DirectoryInfo from, DirectoryInfo to)
+        {
+            Stack<DirectoryInfo> stack = new Stack<DirectoryInfo>();
+            stack.Push(from);
+            while (stack.Count > 0)
+            {
+                DirectoryInfo dir = stack.Pop();
+                foreach (var subdir in dir.EnumerateDirectories())
+                {
+                    stack.Push(subdir);
+                }
+
+                foreach (var file in dir.EnumerateFiles())
+                {
+                    string relativeToRoot = file.FullName.Substring(from.FullName.Length).TrimStart('/', '\\');
+                    string target = Path.Combine(to.FullName, relativeToRoot);
+                    if (!Directory.Exists(Path.GetDirectoryName(target)))
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(target));
+                    }
+
+                    file.CopyTo(target);
+                }
+            }
+
+            from.Delete(true);
         }
 
         /// <summary>
         /// Reads the directory and return all items along with their file references.
         /// </summary>
         /// <param name="parentDirectory">The directory to read from.</param>
-        /// <returns>List of all importing assets and list of files for each asset.</returnx>
-        private (List<IStorageUnit> importingData, Dictionary<string, string> fileReferences)
-            ReadItemsFromDirectory(DirectoryInfo parentDirectory)
+        /// <returns>List of all importing assets and directory of the asset.</returnx>
+        private List<(IStorageUnit asset, DirectoryInfo directory)> ReadItemsFromDirectory(DirectoryInfo parentDirectory)
         {
             // Read import info
             FileInfo importYaml = parentDirectory.EnumerateFiles().First(file => file.Name == ImportInformation.FileName);
@@ -253,9 +275,7 @@ namespace ArcCreate.Storage
                 .Build();
             List<ImportInformation> imports = deserializer.Deserialize<List<ImportInformation>>(yaml);
 
-            Dictionary<string, string> fileReferences = new Dictionary<string, string>();
-            List<IStorageUnit> importingData = new List<IStorageUnit>();
-
+            List<(IStorageUnit, DirectoryInfo)> importingData = new List<(IStorageUnit, DirectoryInfo)>();
             foreach (ImportInformation import in imports)
             {
                 IStorageUnit storage = null;
@@ -297,37 +317,13 @@ namespace ArcCreate.Storage
                 {
                     storage.Identifier = import.Identifier;
                     storage.Version = import.Version;
-                    storage.FileReferences = new List<string>();
                     storage.AddedDate = DateTime.UtcNow;
-
-                    Stack<DirectoryInfo> directoriesToImport = new Stack<DirectoryInfo>();
                     DirectoryInfo root = new DirectoryInfo(Path.Combine(parentDirectory.FullName, import.Directory));
-                    directoriesToImport.Push(root);
-
-                    while (directoriesToImport.Count > 0)
-                    {
-                        DirectoryInfo dir = directoriesToImport.Pop();
-                        foreach (var subdir in dir.EnumerateDirectories())
-                        {
-                            directoriesToImport.Push(subdir);
-                        }
-
-                        foreach (var file in dir.EnumerateFiles())
-                        {
-                            string relativeToRoot = file.FullName.Substring(root.FullName.Length).TrimStart('/', '\\');
-                            if (relativeToRoot != import.SettingsFile)
-                            {
-                                storage.FileReferences.Add(relativeToRoot);
-                                fileReferences.Add(string.Join("/", storage.Identifier, relativeToRoot), file.FullName);
-                            }
-                        }
-                    }
-
-                    importingData.Add(storage);
+                    importingData.Add((storage, root));
                 }
             }
 
-            return (importingData, fileReferences);
+            return importingData;
         }
     }
 }

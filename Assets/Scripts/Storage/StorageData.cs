@@ -121,13 +121,14 @@ namespace ArcCreate.Storage
 
         public async UniTask AssignTexture(RawImage image, IStorageUnit storage, string jacketPath)
         {
-            jacketPath = storage.GetRealPath(jacketPath);
-            if (jacketPath == null)
+            Option<string> realJacketPath = storage.GetRealPath(jacketPath);
+            if (!realJacketPath.HasValue)
             {
                 image.texture = defaultJacket;
                 return;
             }
 
+            jacketPath = realJacketPath.Value;
             Incompletable<Texture> cachedTexture = JacketCache.Get(jacketPath);
             if (cachedTexture != null)
             {
@@ -182,11 +183,13 @@ namespace ArcCreate.Storage
 
         public bool TryAssignTextureFromCache(RawImage jacket, IStorageUnit level, string jacketPath)
         {
-            jacketPath = level.GetRealPath(jacketPath);
-            if (jacketPath == null)
+            Option<string> realJacketPath = level.GetRealPath(jacketPath);
+            if (!realJacketPath.HasValue)
             {
                 return false;
             }
+
+            jacketPath = realJacketPath.Value;
 
             Incompletable<Texture> texture = JacketCache.Get(jacketPath);
             if (texture != null && texture.Completed && texture.IsSuccess && texture.Value != null)
@@ -201,12 +204,13 @@ namespace ArcCreate.Storage
 
         public async UniTask<AudioClip> GetAudioClipStreaming(IStorageUnit level, string audioPath)
         {
-            audioPath = level.GetRealPath(audioPath);
-            if (audioPath == null)
+            Option<string> realAudioPath = level.GetRealPath(audioPath);
+            if (!realAudioPath.HasValue)
             {
                 return null;
             }
 
+            audioPath = realAudioPath.Value;
             Incompletable<AudioClip> cachedClip = AudioClipCache.Get(audioPath);
             if (cachedClip != null)
             {

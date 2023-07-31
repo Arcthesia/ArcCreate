@@ -68,12 +68,21 @@ namespace ArcCreate.Storage
             bool outdatedInternalPackage = PlayerPrefs.GetInt("CurrentInternalPackageVersion", -1) < InternalPackageVersion;
             if (!dbExists || outdatedInternalPackage)
             {
-                if (Directory.Exists(FileStatics.FileStoragePath))
+                if (!dbExists)
                 {
-                    Directory.Delete(FileStatics.FileStoragePath, true);
+                    if (Directory.Exists(FileStatics.FileStoragePathLegacy))
+                    {
+                        Directory.Delete(FileStatics.FileStoragePathLegacy, true);
+                    }
+
+                    if (Directory.Exists(FileStatics.FileStoragePath))
+                    {
+                        Directory.Delete(FileStatics.FileStoragePath, true);
+                    }
                 }
 
                 Database.Initialize();
+                FileStorage.MigrateToNewStorage();
                 if (Application.platform == RuntimePlatform.Android)
                 {
                     Debug.Log("Detected Android platform. Using UnityWebRequest to fetch default package");
@@ -90,6 +99,7 @@ namespace ArcCreate.Storage
             {
                 Debug.Log("db file exists at " + FileStatics.DatabasePath);
                 Database.Initialize();
+                FileStorage.MigrateToNewStorage();
                 storageData.NotifyStorageChange();
             }
         }

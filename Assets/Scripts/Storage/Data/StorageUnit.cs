@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UltraLiteDB;
 
 namespace ArcCreate.Storage.Data
@@ -13,8 +14,6 @@ namespace ArcCreate.Storage.Data
 
         public int Version { get; set; }
 
-        public List<string> FileReferences { get; set; }
-
         public DateTime AddedDate { get; set; }
 
         public abstract string Type { get; }
@@ -23,9 +22,10 @@ namespace ArcCreate.Storage.Data
 
         public void Delete()
         {
-            foreach (string refr in FileReferences)
+            string dir = GetParentDirectory();
+            if (Directory.Exists(dir))
             {
-                FileStorage.DeleteReference(string.Join("/", Type, Identifier, refr));
+                Directory.Delete(dir, true);
             }
 
             Database.Current.GetCollection<T>().Delete(Id);
@@ -41,9 +41,25 @@ namespace ArcCreate.Storage.Data
             Database.Current.GetCollection<T>().Insert(this as T);
         }
 
-        public string GetRealPath(string virtualPath)
+        public string GetParentDirectory()
         {
-            return FileStorage.GetFilePath(string.Join("/", Type, Identifier, virtualPath));
+            return Path.Combine(FileStatics.FileStoragePath, Type, Identifier);
+        }
+
+        public Option<string> GetRealPath(string relativePath)
+        {
+            if (relativePath == null)
+            {
+                return Option<string>.None();
+            }
+
+            string realPath = Path.Combine(GetParentDirectory(), relativePath);
+            if (!File.Exists(realPath))
+            {
+                return Option<string>.None();
+            }
+
+            return realPath;
         }
 
         public virtual bool ValidateSelf(out string reason)

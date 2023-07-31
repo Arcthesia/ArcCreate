@@ -6,7 +6,8 @@ namespace ArcCreate.Storage
     public static class FileStatics
     {
         public const string Database = "arccreate.litedb";
-        public const string FileStorage = "storage";
+        public const string FileStorageLegacy = "storage";
+        public const string FileStorage = "files";
         public const string Level = "level";
         public const string Pack = "pack";
         public const string DefaultPackage = "default.arcpkg";
@@ -19,6 +20,7 @@ namespace ArcCreate.Storage
 #endif
 
         public static readonly string DatabasePath = Path.Combine(RootPath, Database);
+        public static readonly string FileStoragePathLegacy = Path.Combine(RootPath, FileStorageLegacy);
         public static readonly string FileStoragePath = Path.Combine(RootPath, FileStorage);
         public static readonly string DefaultPackagePath = Path.Combine(Application.streamingAssetsPath, DefaultPackage);
 

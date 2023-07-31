@@ -13,8 +13,6 @@ namespace ArcCreate.Storage.Data
 
         bool IsDefaultAsset { get; set; }
 
-        List<string> FileReferences { get; set; }
-
         DateTime AddedDate { get; set; }
 
         string Type { get; }
@@ -27,6 +25,8 @@ namespace ArcCreate.Storage.Data
 
         bool ValidateSelf(out string reason);
 
-        string GetRealPath(string virtualPath);
+        string GetParentDirectory();
+
+        Option<string> GetRealPath(string relativePath);
     }
 }
