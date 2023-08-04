@@ -2012,7 +2012,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 25, y: -200.00002}
+  m_AnchoredPosition: {x: 25, y: -200}
   m_SizeDelta: {x: 300, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &377893499
@@ -3016,6 +3016,7 @@ GameObject:
   - component: {fileID: 537426952}
   - component: {fileID: 537426954}
   - component: {fileID: 537426955}
+  - component: {fileID: 537426956}
   m_Layer: 10
   m_Name: DifficultyImage
   m_TagString: Untagged
@@ -3109,6 +3110,19 @@ MonoBehaviour:
   isPersistent: 1
   rectTransform: {fileID: 537426951}
   image: {fileID: 537426952}
+--- !u!114 &537426956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 537426950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cbfe8b194858b6429ffc33b91cb5f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorSO: {fileID: 11400000, guid: d1fd32a8f162255428b01dba751cadf7, type: 2}
 --- !u!1 &541294086
 GameObject:
   m_ObjectHideFlags: 0
@@ -4265,6 +4279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd4e3a85ac2dead249aca5f400349bb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  retryCount: {fileID: 11400000, guid: 5fac5bcaa225d7e428f4c4c8bd5f54a5, type: 2}
   gameplayData: {fileID: 11400000, guid: ae19a07671eb9dc748d6346649a697b7, type: 2}
   pauseButton: {fileID: 1843374748}
   pauseButtonRect: {fileID: 1843374747}
@@ -8246,7 +8261,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 25, y: -200.00002}
+  m_AnchoredPosition: {x: 25, y: -200}
   m_SizeDelta: {x: 300, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1409023644
@@ -12326,6 +12341,7 @@ GameObject:
   - component: {fileID: 1987312594}
   - component: {fileID: 1987312593}
   - component: {fileID: 1987312595}
+  - component: {fileID: 1987312596}
   m_Layer: 10
   m_Name: DifficultyText
   m_TagString: Untagged
@@ -12465,6 +12481,19 @@ MonoBehaviour:
   textComponent: {fileID: 1987312593}
   rectTransform: {fileID: 1987312592}
   gameplayData: {fileID: 11400000, guid: ae19a07671eb9dc748d6346649a697b7, type: 2}
+--- !u!114 &1987312596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1987312591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 073b49fc68b58fd42b77f5604ba150fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stringSO: {fileID: 11400000, guid: a5374b8b408aa6643b2a4b8e20c1cfaa, type: 2}
 --- !u!1 &2001664968
 GameObject:
   m_ObjectHideFlags: 0
@@ -13500,6 +13529,7 @@ MonoBehaviour:
   singleLineL: {fileID: 1966378483}
   singleLineR: {fileID: 401828842}
   comboText: {fileID: 1502162281}
+  themeGroup: {fileID: 11400000, guid: a79174d1ffba9ac4a817b2913bf924d2, type: 2}
   trackExtraL: {fileID: 142010982}
   trackExtraR: {fileID: 1830139708}
   track: {fileID: 1445769243}
@@ -13512,7 +13542,6 @@ MonoBehaviour:
   - {fileID: 2103231689}
   - {fileID: 5387788}
   - {fileID: 494440779}
-  jacketShadowSO: {fileID: 11400000, guid: 87bb86310a4e98348915ef433efa2753, type: 2}
   videoBackgroundRenderer: {fileID: 600956903}
   videoBackground: {fileID: 600956904}
   alignmentOptions:
@@ -13603,8 +13632,8 @@ MonoBehaviour:
   illustratorSO: {fileID: 11400000, guid: 955659b8f14e8cb4786e57c919033252, type: 2}
   charterSO: {fileID: 11400000, guid: 6da6e53bfac950742a3939124ad6f2cc, type: 2}
   aliasSO: {fileID: 11400000, guid: f10ee7d9b9ec2b3d388db0c4f6a60245, type: 2}
-  difficultyText: {fileID: 1987312593}
-  difficultyColor: {fileID: 537426952}
+  difficultySO: {fileID: 11400000, guid: a5374b8b408aa6643b2a4b8e20c1cfaa, type: 2}
+  difficultyColorSO: {fileID: 11400000, guid: d1fd32a8f162255428b01dba751cadf7, type: 2}
 --- !u!1 &2131211024
 GameObject:
   m_ObjectHideFlags: 0

@@ -785,18 +785,18 @@ Gameplay:
         Charter: Không rõ
       Charter: 'Charter: {0}'
     Sort:
-      addeddate: "Sắp xếp: Ngày thêm"
-      charter: "Sắp xếp: Charter"
-      composer: "Sắp xếp: Nhạc sĩ"
-      difficulty: "Sắp xếp: Độ khó"
-      grade: "Sắp xếp: Thành tích"
-      playcount: "Sắp xếp: Lượt chơi"
-      score: "Sắp xếp: Điểm"
-      title: "Sắp xếp: Tên màn"
+      addeddate: Ngày thêm
+      charter: Charter
+      composer: Nhạc sĩ
+      difficulty: Độ khó
+      grade: Thành tích
+      playcount: Lượt chơi
+      score: Điểm
+      title: Tên màn
     Group:
-      none: "Nhóm: không"
-      difficulty: "Nhóm: Độ khó"
-      grade: "Nhóm: Điểm"
+      none: không
+      difficulty: Độ khó
+      grade: Điểm
     Settings:
       Name: Cài đặt
       Language: Ngôn ngữ

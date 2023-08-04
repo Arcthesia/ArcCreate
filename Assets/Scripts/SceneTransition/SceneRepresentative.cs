@@ -70,13 +70,9 @@ namespace ArcCreate.SceneTransition
                 {
                     StartCoroutine(EndOfFrame(OnNoBootScene));
                     StartCoroutine(EndOfFrame(() => SceneManager.LoadSceneAsync(SceneNames.BootScene, LoadSceneMode.Additive)));
-                    SceneTransitionManager.StartBootSceneDev(this);
-                }
-                else
-                {
-                    StartCoroutine(EndOfFrame(NotifyManager));
                 }
 
+                SceneTransitionManager.StartBootSceneDev(this);
                 return;
             }
 

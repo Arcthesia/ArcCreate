@@ -87685,6 +87685,7 @@ MonoBehaviour:
   accent: {fileID: 1034482339}
   track: {fileID: 1730517850}
   singleLine: {fileID: 242594688}
+  themeGroup: {fileID: 11400000, guid: a79174d1ffba9ac4a817b2913bf924d2, type: 2}
 --- !u!1 &1919300218
 GameObject:
   m_ObjectHideFlags: 0

@@ -24,6 +24,7 @@ namespace ArcCreate.Storage
 
         public async UniTask Load(LevelStorage level, ChartSettings chart)
         {
+            await UniTask.DelayFrame(5);
             LoadMetadata(level, chart);
             LoadChart(level, chart);
             LoadScenecontrol(level, chart);

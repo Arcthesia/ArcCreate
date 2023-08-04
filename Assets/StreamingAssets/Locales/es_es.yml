@@ -814,20 +814,20 @@ Gameplay:
         Charter: Desconocido
       Charter: 'Creador: {0}'
     Sort:
-      addeddate: "<size=10.5>Orden: Fecha añadida</size>"
-      charter: "Orden: Creador"
-      composer: "Orden: Compositor"
-      difficulty: "Orden: Dificultad"
-      grade: "Orden: Calificación"
-      playcount: "<size=11>Orden: Veces jugada</size>"
+      addeddate: Fecha añadida
+      charter: Creador
+      composer: Compositor
+      difficulty: Dificultad
+      grade: Calificación
+      playcount: Veces jugada
       score: "Orden: Puntuación"
-      title: "Orden: Título"
+      title: Título
     Group:
-      none: "Grupo: Ninguno"
-      difficulty: "Grupo: Dificultad"
-      grade: "Grupo: Calificación"
-      rank: "Grupo: Rango"
-      charter: "Grupo: Creador"
+      none: Ninguno
+      difficulty: Dificultad
+      grade: Calificación
+      rank: Rango
+      charter: Creador
     Settings:
       Name: Ajustes
       Language: Idioma

@@ -11,12 +11,19 @@ namespace ArcCreate.Selection
     {
         [SerializeField] private GameplayData gameplayData;
         [SerializeField] private StorageData storageData;
+        [SerializeField] private Camera selectionCamera;
+
+        public override void OnNoBootScene()
+        {
+            StartCoroutine(EndOfFrame(() => TransitionScene.Instance.SetTargetCamera(selectionCamera, "Default")));
+        }
 
         protected override void OnSceneLoad()
         {
             gameplayData.EnablePracticeMode.Value = false;
             storageData.SelectedPack.OnValueChange += OnPackChange;
             storageData.SelectedChart.OnValueChange += OnChartChange;
+            StartCoroutine(EndOfFrame(() => TransitionScene.Instance.SetTargetCamera(selectionCamera, "Default")));
         }
 
         private void OnDestroy()

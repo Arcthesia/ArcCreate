@@ -19,7 +19,7 @@ namespace ArcCreate.Selection.Interface
             set
             {
                 baseGraphic.DOColor(value, tweenDuration).SetEase(tweenEase);
-                gradietntGraphic.DOColor(InterfaceUtility.DarkenDiffColor(value), tweenDuration).SetEase(tweenEase);
+                gradietntGraphic.DOColor(InterfaceUtility.LightenDiffColor(value), tweenDuration).SetEase(tweenEase);
             }
         }
     }

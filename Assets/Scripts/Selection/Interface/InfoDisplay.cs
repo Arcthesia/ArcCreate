@@ -5,6 +5,8 @@ using ArcCreate.Data;
 using ArcCreate.SceneTransition;
 using ArcCreate.Storage;
 using ArcCreate.Storage.Data;
+using ArcCreate.Utility;
+using ArcCreate.Utility.Extension;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -33,24 +35,23 @@ namespace ArcCreate.Selection.Interface
 
         [Header("Images")]
         [SerializeField] private RawImage jacket;
-        [SerializeField] private RawImage[] backgrounds;
-        [SerializeField] private Image side;
-        [SerializeField] private Sprite[] sideSprites;
-        [SerializeField] private Texture[] defaultBackgrounds;
 
         [Header("Score")]
         [SerializeField] private TMP_Text score;
         [SerializeField] private GradeDisplay gradeDisplay;
 
-        [Header("Shutter")]
-        [SerializeField] private SpriteSO shutterJacketSprite;
-        [SerializeField] private StringSO shutterTitle;
-        [SerializeField] private StringSO shutterComposer;
-        [SerializeField] private StringSO shutterIllustrator;
-        [SerializeField] private StringSO shutterCharter;
-        [SerializeField] private StringSO shutterAlias;
-        [SerializeField] private SpriteSO shutterJacketShadowSprite;
-        [SerializeField] private Sprite[] jacketShadowSprites;
+        [Header("Transition")]
+        [SerializeField] private SpriteSO transitionJacketSprite;
+        [SerializeField] private StringSO transitionTitle;
+        [SerializeField] private StringSO transitionComposer;
+        [SerializeField] private StringSO transitionIllustrator;
+        [SerializeField] private StringSO transitionCharter;
+        [SerializeField] private StringSO transitionAlias;
+        [SerializeField] private StringSO transitionDifficulty;
+        [SerializeField] private ColorSO transitionDifficultyColor;
+        [SerializeField] private StringSO transitionPlayCount;
+        [SerializeField] private StringSO transitionRetryCount;
+        [SerializeField] private ThemeGroup themeGroup;
 
         [Header("Exception")]
         [SerializeField] private Dialog exceptionDialog;
@@ -115,15 +116,19 @@ namespace ArcCreate.Selection.Interface
             bpm.text = string.IsNullOrEmpty(chart.BpmText) ? "BPM: " + chart.BaseBpm.ToString() : "BPM: " + chart.BpmText;
             charter.text = string.IsNullOrEmpty(chart.Charter) ? I18n.S("Gameplay.Selection.Info.Undefined.Charter") : I18n.S("Gameplay.Selection.Info.Charter", chart.Charter);
 
-            shutterTitle.Value = title.text;
-            shutterComposer.Value = composer.text;
-            shutterIllustrator.Value = chart.Illustrator;
-            shutterCharter.Value = chart.Charter;
-            shutterAlias.Value = chart.Alias;
+            transitionTitle.Value = title.text;
+            transitionComposer.Value = composer.text;
+            transitionIllustrator.Value = chart.Illustrator;
+            transitionCharter.Value = chart.Charter;
+            transitionAlias.Value = chart.Alias;
+            transitionDifficulty.Value = chart.Difficulty;
 
-            score.text = history.BestScorePlayOrDefault.FormattedScore;
-            gradeDisplay.Display(history.BestScorePlayOrDefault.Grade);
+            PlayResult playResult = history.BestScorePlayOrDefault;
+            score.text = playResult.FormattedScore;
+            gradeDisplay.Display(playResult.Grade);
             gradeDisplay.gameObject.SetActive(history.PlayCount > 0);
+            transitionPlayCount.Value = TextFormat.FormatPlayCount(history.PlayCount + 1);
+            transitionRetryCount.Value = TextFormat.FormatRetryCount(1);
 
             string sideString = (chart.Skin?.Side ?? "").ToLower();
 
@@ -142,44 +147,18 @@ namespace ArcCreate.Selection.Interface
                 Texture texture = jacket.texture;
                 storage.EnsurePersistent(texture);
                 jacketSprite = Sprite.Create(texture as Texture2D, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                shutterJacketSprite.Value = jacketSprite;
+                transitionJacketSprite.Value = jacketSprite;
             });
-            foreach (var bg in backgrounds)
-            {
-                switch (sideString)
-                {
-                    case "light":
-                        bg.texture = defaultBackgrounds[0];
-                        break;
-                    case "conflict":
-                        bg.texture = defaultBackgrounds[1];
-                        break;
-                    case "colorless":
-                        bg.texture = defaultBackgrounds[2];
-                        break;
-                    default:
-                        bg.texture = defaultBackgrounds[0];
-                        break;
-                }
-            }
 
             switch (sideString)
             {
-                case "light":
-                    side.sprite = sideSprites[0];
-                    shutterJacketShadowSprite.Value = jacketShadowSprites[0];
-                    break;
                 case "conflict":
-                    side.sprite = sideSprites[1];
-                    shutterJacketShadowSprite.Value = jacketShadowSprites[1];
+                    themeGroup.Value = Theme.Dark;
                     break;
+                case "light":
                 case "colorless":
-                    side.sprite = sideSprites[2];
-                    shutterJacketShadowSprite.Value = jacketShadowSprites[2];
-                    break;
                 default:
-                    side.sprite = sideSprites[0];
-                    shutterJacketShadowSprite.Value = jacketShadowSprites[0];
+                    themeGroup.Value = Theme.Light;
                     break;
             }
 
@@ -189,6 +168,7 @@ namespace ArcCreate.Selection.Interface
 
             ColorUtility.TryParseHtmlString(chart.DifficultyColor, out Color currDiffColor);
             diffColors[0].Color = currDiffColor;
+            transitionDifficultyColor.Value = currDiffColor;
 
             int i = 1;
 

@@ -8,28 +8,34 @@ namespace ArcCreate.Utility.Animation
     public class RectSizeAnimator : ScriptedAnimatorComponent
     {
         [SerializeField] private Vector2 animationSizeMultiplier = new Vector3(1.3f, 1.3f, 1);
+        [SerializeField] private float delay = 0;
         [SerializeField] private float animationDuration = 0.3f;
         [SerializeField] private Ease animationEase = Ease.OutCubic;
         [SerializeField] private Vector2 defaultSize;
         private RectTransform rect;
 
-        public override float AnimationLength => animationDuration;
+        public override float AnimationLength => animationDuration + delay;
 
         public override Tween GetShowTween()
         {
             rect.sizeDelta = defaultSize.Multiply(animationSizeMultiplier);
-            return rect.DOSizeDelta(defaultSize, animationDuration).SetEase(animationEase);
+            return rect.DOSizeDelta(defaultSize, animationDuration).SetEase(animationEase).SetDelay(delay);
         }
 
         public override Tween GetHideTween()
         {
             rect.sizeDelta = defaultSize;
-            return rect.DOSizeDelta(defaultSize.Multiply(animationSizeMultiplier), animationDuration).SetEase(animationEase);
+            return rect.DOSizeDelta(defaultSize.Multiply(animationSizeMultiplier), animationDuration).SetEase(animationEase).SetDelay(delay);
         }
 
         public override void RegisterDefaultValues()
         {
             defaultSize = rect.sizeDelta;
+        }
+
+        public void SetDefaultSize(Vector2 size)
+        {
+            defaultSize = size;
         }
 
         public override void Reset()

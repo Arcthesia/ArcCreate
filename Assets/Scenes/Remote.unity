@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311926, g: 0.38073993, b: 0.35872683, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -130,7 +130,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 373070171}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Sliding Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -168,7 +168,7 @@ GameObject:
   - component: {fileID: 515692917}
   - component: {fileID: 515692919}
   - component: {fileID: 515692918}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Scrollbar Vertical
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -237,7 +237,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1284971658}
   m_HandleRect: {fileID: 1284971657}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -265,7 +265,7 @@ GameObject:
   - component: {fileID: 599639840}
   - component: {fileID: 599639839}
   - component: {fileID: 599639838}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Receiving
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -400,7 +400,7 @@ GameObject:
   - component: {fileID: 677931762}
   - component: {fileID: 677931764}
   - component: {fileID: 677931763}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Content
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -423,7 +423,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 210}
+  m_AnchoredPosition: {x: 0, y: 209.99998}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &677931763
@@ -478,7 +478,7 @@ GameObject:
   - component: {fileID: 699957039}
   - component: {fileID: 699957042}
   - component: {fileID: 699957041}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -595,7 +595,7 @@ GameObject:
   - component: {fileID: 773915174}
   - component: {fileID: 773915179}
   - component: {fileID: 773915178}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Listening
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -650,7 +650,7 @@ Canvas:
   m_GameObject: {fileID: 773915173}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -734,7 +734,7 @@ GameObject:
   - component: {fileID: 843559165}
   - component: {fileID: 843559168}
   - component: {fileID: 843559167}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Scroll View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -860,7 +860,7 @@ GameObject:
   - component: {fileID: 981153709}
   - component: {fileID: 981153708}
   - component: {fileID: 981153707}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: MessageText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1010,7 +1010,7 @@ GameObject:
   - component: {fileID: 1101440136}
   - component: {fileID: 1101440135}
   - component: {fileID: 1101440134}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: StartManualIP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1144,7 +1144,7 @@ GameObject:
   - component: {fileID: 1154528090}
   - component: {fileID: 1154528089}
   - component: {fileID: 1154528088}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: LogDisplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1199,7 +1199,7 @@ Canvas:
   m_GameObject: {fileID: 1154528087}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -1287,6 +1287,10 @@ MonoBehaviour:
   startManualIpButton: {fileID: 1101440135}
   returnToSelectButton: {fileID: 1996877759}
   remoteGameplayControl: {fileID: 901374135}
+  canvases:
+  - {fileID: 1154528090}
+  - {fileID: 773915176}
+  - {fileID: 599639842}
 --- !u!1 &1284971656
 GameObject:
   m_ObjectHideFlags: 0
@@ -1298,7 +1302,7 @@ GameObject:
   - component: {fileID: 1284971657}
   - component: {fileID: 1284971659}
   - component: {fileID: 1284971658}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1373,7 +1377,7 @@ GameObject:
   - component: {fileID: 1411708977}
   - component: {fileID: 1411708976}
   - component: {fileID: 1411708978}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: Log
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1521,7 +1525,7 @@ GameObject:
   - component: {fileID: 1509841685}
   - component: {fileID: 1509841687}
   - component: {fileID: 1509841686}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Status
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1661,7 +1665,7 @@ GameObject:
   - component: {fileID: 1530892036}
   - component: {fileID: 1530892035}
   - component: {fileID: 1530892037}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: MessageText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1809,7 +1813,7 @@ GameObject:
   - component: {fileID: 1622012875}
   - component: {fileID: 1622012877}
   - component: {fileID: 1622012876}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: Loading
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1944,7 +1948,7 @@ GameObject:
   - component: {fileID: 1706480998}
   - component: {fileID: 1706480997}
   - component: {fileID: 1706480996}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Viewport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2033,7 +2037,7 @@ GameObject:
   - component: {fileID: 1996877761}
   - component: {fileID: 1996877760}
   - component: {fileID: 1996877759}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: ReturnToSelect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2173,7 +2177,7 @@ GameObject:
   - component: {fileID: 3794688810198112920}
   - component: {fileID: 3794688810198112921}
   - component: {fileID: 3794688810198113017}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: StartNewSession
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2306,7 +2310,7 @@ GameObject:
   - component: {fileID: 7718139699233057778}
   - component: {fileID: 7718139699233057779}
   - component: {fileID: 7718139699233057780}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: MessageText
   m_TagString: Untagged
   m_Icon: {fileID: 0}

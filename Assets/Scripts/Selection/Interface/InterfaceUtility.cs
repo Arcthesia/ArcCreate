@@ -5,9 +5,9 @@ namespace ArcCreate.Selection.Interface
 {
     public static class InterfaceUtility
     {
-        public const float HueShift = -0.002777f;
-        public const float SatShift = 0.07f;
-        public const float ValueShift = -0.15f;
+        public const float HueShift = 0f;
+        public const float SatShift = -0.01f;
+        public const float ValueShift = 0.35f;
 
         public static string AlignedDiffNumber(string number)
         {
@@ -25,7 +25,7 @@ namespace ArcCreate.Selection.Interface
             return number;
         }
 
-        public static Color DarkenDiffColor(Color color)
+        public static Color LightenDiffColor(Color color)
         {
             Color.RGBToHSV(color, out float h, out float s, out float v);
             Color rgb = Color.HSVToRGB(h + HueShift, s + SatShift, v + ValueShift);

@@ -825,20 +825,20 @@ Gameplay:
         Charter: 未知
       Charter: '谱师：{0}'
     Sort:
-      addeddate: "排序：添加时间"
-      charter: "排序：谱师"
-      composer: "排序：曲师"
-      difficulty: "排序：难度"
-      grade: "排序：评级"
-      playcount: "排序：游玩次数"
-      score: "排序：分数"
-      title: "排序：标题"
+      addeddate: 添加时间
+      charter: 谱师
+      composer: 曲师
+      difficulty: 难度
+      grade: 评级
+      playcount: 游玩次数
+      score: 分数
+      title: 标题
     Group:
-      none: "分组：无"
-      difficulty: "分组：难度"
-      grade: "分组：评级"
-      rank: "分组：通关状态"
-      charter: "分组：谱师"
+      none: 无
+      difficulty: 难度
+      grade: 评级
+      rank: 通关状态
+      charter: 谱师
     Settings:
       Name: 设置
       Language: 语言

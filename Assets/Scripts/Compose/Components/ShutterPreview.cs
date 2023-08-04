@@ -10,13 +10,17 @@ namespace ArcCreate.Compose.Components
         [SerializeField] private Button showButton;
         [SerializeField] private Button hideButton;
 
-        private ITransition transition;
+        private TransitionSequence transition;
 
-        private ITransition Transition
+        private TransitionSequence Transition
         {
             get
             {
-                transition = transition ?? new ShutterWithInfoTransition();
+                transition = transition ?? new TransitionSequence()
+                    .OnBoth()
+                    .AddTransition(new InfoTransition())
+                    .AddTransition(new DecorationTransition())
+                    .AddTransition(new TriangleTileTransition());
 
                 return transition;
             }
@@ -37,15 +41,14 @@ namespace ArcCreate.Compose.Components
 
         private void ShowShutter()
         {
-            Transition.EnableGameObject();
-            Transition.StartTransition();
+            Transition.Show().Forget();
             showButton.gameObject.SetActive(false);
             hideButton.gameObject.SetActive(true);
         }
 
         private void HideShutter()
         {
-            Transition.EndTransition().ContinueWith(Transition.DisableGameObject);
+            Transition.Hide().Forget();
             showButton.gameObject.SetActive(true);
             hideButton.gameObject.SetActive(false);
         }

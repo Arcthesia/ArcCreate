@@ -1,5 +1,6 @@
 using ArcCreate.Gameplay.Audio.Practice;
 using ArcCreate.SceneTransition;
+using ArcCreate.Utility.Extension;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +9,7 @@ namespace ArcCreate.Gameplay.Audio
 {
     public class PauseMenu : MonoBehaviour
     {
+        [SerializeField] private StringSO retryCount;
         [SerializeField] private GameplayData gameplayData;
         [SerializeField] private Button pauseButton;
         [SerializeField] private RectTransform pauseButtonRect;
@@ -18,6 +20,7 @@ namespace ArcCreate.Gameplay.Audio
         [SerializeField] private Button[] returnButtons;
         [SerializeField] private PracticeMenu practiceMenu;
         [SerializeField] private GameObject pauseControl;
+        private TransitionSequence retryTransition;
 
         private void Awake()
         {
@@ -40,6 +43,12 @@ namespace ArcCreate.Gameplay.Audio
             Application.focusChanged += OnFocusChange;
             gameplayData.EnablePracticeMode.OnValueChange += SetPracticeMode;
             SetPracticeMode(gameplayData.EnablePracticeMode.Value);
+
+            retryTransition = new TransitionSequence()
+                .OnBoth()
+                .AddTransition(new TriangleTileTransition(true))
+                .AddTransition(new PlayRetryCountTransition())
+                .AddTransition(new DecorationTransition());
         }
 
         private void OnDestroy()
@@ -104,6 +113,7 @@ namespace ArcCreate.Gameplay.Audio
         private void OnRetryButton()
         {
             Values.RetryCount += 1;
+            retryCount.Value = TextFormat.FormatRetryCount(Values.RetryCount + 1);
             pauseScreen.SetActive(false);
             Services.Judgement.RefreshInputHandler();
             StartRetry().Forget();
@@ -111,11 +121,9 @@ namespace ArcCreate.Gameplay.Audio
 
         private async UniTask StartRetry()
         {
-            ITransition transition = new ShutterTransition(500);
-            transition.EnableGameObject();
-            await transition.StartTransition();
+            await retryTransition.Show();
             Services.Audio.AudioTiming = -Values.DelayBeforeAudioStart;
-            await transition.EndTransition();
+            await retryTransition.Hide();
             if (!pauseScreen.activeInHierarchy)
             {
                 Services.Audio.PlayWithDelay(0, Values.DelayBeforeAudioStart);
@@ -133,7 +141,12 @@ namespace ArcCreate.Gameplay.Audio
 
         private void OnReturnButton()
         {
-            SceneTransitionManager.Instance.SetTransition(new ShutterTransition());
+            TransitionSequence transition = new TransitionSequence()
+                .OnShow()
+                .AddTransition(new TriangleTileTransition())
+                .OnBoth()
+                .AddTransition(new DecorationTransition());
+            SceneTransitionManager.Instance.SetTransition(transition);
             SceneTransitionManager.Instance.SwitchScene(SceneNames.SelectScene).Forget();
         }
 

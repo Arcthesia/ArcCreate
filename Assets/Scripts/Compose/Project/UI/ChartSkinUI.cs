@@ -1,6 +1,9 @@
+using System;
 using ArcCreate.Compose.Components;
 using ArcCreate.Data;
+using ArcCreate.Utility;
 using UnityEngine;
+using UnityScript.Steps;
 
 namespace ArcCreate.Compose.Project
 {
@@ -12,6 +15,7 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private OptionsPanel accent;
         [SerializeField] private OptionsPanel track;
         [SerializeField] private OptionsPanel singleLine;
+        [SerializeField] private ThemeGroup themeGroup;
 
         protected override void ApplyChartSettings(ChartSettings chart)
         {
@@ -22,7 +26,7 @@ namespace ArcCreate.Compose.Project
             track.SetValueWithoutNotify(chart.Skin?.Track);
             singleLine.SetValueWithoutNotify(chart.Skin?.SingleLine);
 
-            Services.Gameplay.Skin.AlignmentSkin = chart.Skin?.Side;
+            ApplySide(chart.Skin?.Side);
             Services.Gameplay.Skin.NoteSkin = chart.Skin?.Note;
             Services.Gameplay.Skin.ParticleSkin = chart.Skin?.Particle;
             Services.Gameplay.Skin.AccentSkin = chart.Skin?.Accent;
@@ -55,9 +59,25 @@ namespace ArcCreate.Compose.Project
         {
             CreateSkinObjectIfNull();
             Target.Skin.Side = value;
-            Services.Gameplay.Skin.AlignmentSkin = value;
+            ApplySide(value);
 
             Values.ProjectModified = true;
+        }
+
+        private void ApplySide(string value)
+        {
+            Services.Gameplay.Skin.AlignmentSkin = value;
+            switch (Services.Gameplay.Skin.AlignmentSkin)
+            {
+                case "conflict":
+                    themeGroup.Value = Theme.Dark;
+                    break;
+                case "light":
+                case "colorless":
+                default:
+                    themeGroup.Value = Theme.Light;
+                    break;
+            }
         }
 
         private void OnNote(string value)

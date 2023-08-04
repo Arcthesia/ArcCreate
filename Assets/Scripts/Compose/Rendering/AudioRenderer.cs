@@ -15,13 +15,14 @@ namespace ArcCreate.Compose.Rendering
         private readonly AudioClip songAudio;
         private readonly AudioClip tapAudio;
         private readonly AudioClip arcAudio;
-        private readonly AudioClip shutterCloseAudio;
-        private readonly AudioClip shutterOpenAudio;
+        private readonly AudioClip renderStartAudio;
+        private readonly AudioClip gameplayLoadCompleteAudio;
         private readonly Dictionary<string, AudioClip> sfxAudio;
         private readonly int startTiming;
         private readonly int endTiming;
         private readonly int audioOffset;
-        private readonly bool showShutter;
+        private readonly bool showTransition;
+        private readonly TransitionSequence transitionSequence;
 
         public AudioRenderer(
             int startTiming,
@@ -30,10 +31,11 @@ namespace ArcCreate.Compose.Rendering
             AudioClip songAudio,
             AudioClip tapAudio,
             AudioClip arcAudio,
-            AudioClip shutterCloseAudio,
-            AudioClip shutterOpenAudio,
+            AudioClip renderStartAudio,
+            AudioClip gameplayLoadCompleteAudio,
             Dictionary<string, AudioClip> sfxAudio,
-            bool showShutter)
+            bool showTransition,
+            TransitionSequence transitionSequence)
         {
             this.startTiming = startTiming;
             this.endTiming = endTiming;
@@ -41,10 +43,11 @@ namespace ArcCreate.Compose.Rendering
             this.songAudio = songAudio;
             this.tapAudio = tapAudio;
             this.arcAudio = arcAudio;
-            this.shutterCloseAudio = shutterCloseAudio;
-            this.shutterOpenAudio = shutterOpenAudio;
+            this.renderStartAudio = renderStartAudio;
+            this.gameplayLoadCompleteAudio = gameplayLoadCompleteAudio;
             this.sfxAudio = sfxAudio;
-            this.showShutter = showShutter;
+            this.showTransition = showTransition;
+            this.transitionSequence = transitionSequence;
         }
 
         public List<string> SfxAudioList => sfxAudio.Keys.ToList();
@@ -89,8 +92,8 @@ namespace ArcCreate.Compose.Rendering
 
             int channels = tapAudio.channels;
             int frequency = tapAudio.frequency;
-            if (arcAudio.channels != channels || shutterCloseAudio.channels != channels || shutterOpenAudio.channels != channels
-            || arcAudio.frequency != frequency || shutterCloseAudio.frequency != frequency || shutterOpenAudio.frequency != frequency)
+            if (arcAudio.channels != channels || renderStartAudio.channels != channels || gameplayLoadCompleteAudio.channels != channels
+            || arcAudio.frequency != frequency || renderStartAudio.frequency != frequency || gameplayLoadCompleteAudio.frequency != frequency)
             {
                 throw new Exception("Internal audio error: Internal sfx wav have differing frequency and channels count");
             }
@@ -104,8 +107,8 @@ namespace ArcCreate.Compose.Rendering
                 sfx.Add(sa.Key, GetSamples(sa.Value));
             }
 
-            float[] shutterClose = GetSamples(shutterCloseAudio);
-            float[] shutterOpen = GetSamples(shutterOpenAudio);
+            float[] renderStart = GetSamples(renderStartAudio);
+            float[] gameplayLoadComplete = GetSamples(gameplayLoadCompleteAudio);
             float effectVolume = Settings.EffectAudio.Value;
             if (Settings.InputMode.Value != (int)InputMode.Auto && Settings.InputMode.Value != (int)InputMode.AutoController)
             {
@@ -114,9 +117,9 @@ namespace ArcCreate.Compose.Rendering
 
             // Combine
             float audioLength = (endTiming - startTiming) / 1000f;
-            if (showShutter)
+            if (showTransition)
             {
-                audioLength += Shutter.FullSequenceMs / 1000f;
+                audioLength += transitionSequence.FullSequenceSeconds;
             }
 
             float[] samples = new float[(int)(audioLength * frequency) * channels];
@@ -142,17 +145,17 @@ namespace ArcCreate.Compose.Rendering
                 Debug.Log($"Prepared {s.Key} sfx samples array of size: {sfxSamples[s.Key].Length}");
             }
 
-            if (showShutter)
+            if (showTransition)
             {
-                for (int i = 0; i < shutterClose.Length; i++)
+                for (int i = 0; i < renderStart.Length; i++)
                 {
-                    samples[i] = shutterClose[i];
+                    samples[i] = renderStart[i];
                 }
 
-                int shutterOpenOffset = (int)((Shutter.DurationMs + Shutter.WaitBetweenMs) / 1000f * frequency) * channels;
-                for (int i = 0; i < shutterOpen.Length; i++)
+                int shutterOpenOffset = (int)((transitionSequence.ShowDurationSeconds + transitionSequence.WaitDurationSeconds) * frequency) * channels;
+                for (int i = 0; i < gameplayLoadComplete.Length; i++)
                 {
-                    samples[i + shutterOpenOffset] = shutterOpen[i];
+                    samples[i + shutterOpenOffset] = gameplayLoadComplete[i];
                 }
             }
 
@@ -267,9 +270,9 @@ namespace ArcCreate.Compose.Rendering
         private int TimingToSampleIndex(int timing, int channels, int frequency)
         {
             int offset = audioOffset;
-            if (showShutter)
+            if (showTransition)
             {
-                offset += Shutter.FullSequenceMs;
+                offset += transitionSequence.FullSequenceMs;
             }
 
             int samples = (int)((timing - startTiming + offset) / 1000f * frequency);
@@ -286,7 +289,7 @@ namespace ArcCreate.Compose.Rendering
         private float[] GetSongSamples(AudioClip clip)
         {
             int start = startTiming;
-            int offset = showShutter ? Shutter.FullSequenceMs : 0;
+            int offset = showTransition ? transitionSequence.FullSequenceMs : 0;
             if (start < 0)
             {
                 offset += -start;

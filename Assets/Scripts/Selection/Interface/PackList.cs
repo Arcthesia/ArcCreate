@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ArcCreate.SceneTransition;
 using ArcCreate.Storage;
@@ -22,6 +23,7 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private float autoScrollDuration = 0.3f;
         [SerializeField] private ScriptedAnimator packListAnimator;
         [SerializeField] private ScriptedAnimator levelListAnimator;
+        [SerializeField] private ScriptedAnimator hideUIAnimator;
         [SerializeField] private CanvasGroup packListCanvasGroup;
         [SerializeField] private Button backToPackListButton;
         [SerializeField] private Button allSongsPack;
@@ -45,6 +47,7 @@ namespace ArcCreate.Selection.Interface
             packCellPool = Pools.New<Cell>("PackCell", packCellPrefab, scroll.transform, 5);
 
             storageData.OnStorageChange += RebuildList;
+            storageData.OnSwitchToGameplayScene += HideUI;
             storageData.SelectedPack.OnValueChange += OnSelectedPack;
             backToPackListButton.onClick.AddListener(BackToPackList);
             allSongsPack.onClick.AddListener(SelectAllSongsPack);
@@ -58,7 +61,7 @@ namespace ArcCreate.Selection.Interface
 
             if (lastWasInPackList)
             {
-                BackToPackList();
+                StartupAnimation().Forget();
             }
             else
             {
@@ -66,11 +69,26 @@ namespace ArcCreate.Selection.Interface
             }
         }
 
+        private async UniTask StartupAnimation()
+        {
+            hideUIAnimator.HideImmediate();
+            packListAnimator.HideImmediate();
+            await UniTask.DelayFrame(2);
+            Services.Select.ClearSelection();
+            packListAnimator.Show();
+            hideUIAnimator.Show();
+            levelListAnimator.HideImmediate();
+            packListCanvasGroup.interactable = true;
+            packListCanvasGroup.blocksRaycasts = true;
+            lastWasInPackList = true;
+        }
+
         private void OnDestroy()
         {
             Pools.Destroy<Cell>("PackCell");
 
             storageData.OnStorageChange -= RebuildList;
+            storageData.OnSwitchToGameplayScene -= HideUI;
             storageData.SelectedPack.OnValueChange -= OnSelectedPack;
             backToPackListButton.onClick.RemoveListener(BackToPackList);
             allSongsPack.onClick.RemoveListener(SelectAllSongsPack);
@@ -83,10 +101,30 @@ namespace ArcCreate.Selection.Interface
             storageData.SelectedPack.Value = null;
         }
 
+        private void HideUI()
+        {
+            if (packListAnimator.IsShown)
+            {
+                packListAnimator.Hide();
+            }
+
+            if (levelListAnimator.IsShown)
+            {
+                levelListAnimator.Hide();
+            }
+
+            hideUIAnimator.Hide();
+        }
+
         private void SwitchToRemoteScene()
         {
             Services.Select.ClearSelection();
-            SceneTransitionManager.Instance.SetTransition(new ShutterTransition(1000));
+            HideUI();
+            TransitionSequence sequence = new TransitionSequence()
+                .OnBoth()
+                .AddTransition(new TriangleTileTransition())
+                .AddTransition(new DecorationTransition());
+            SceneTransitionManager.Instance.SetTransition(sequence);
             SceneTransitionManager.Instance.SwitchScene(SceneNames.RemoteScene).Forget();
         }
 

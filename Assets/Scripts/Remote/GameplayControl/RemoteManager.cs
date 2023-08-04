@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -27,13 +28,14 @@ namespace ArcCreate.Remote.Gameplay
         [SerializeField] private Button startManualIpButton;
         [SerializeField] private Button returnToSelectButton;
         [SerializeField] private RemoteGameplayControl remoteGameplayControl;
+        [SerializeField] private Canvas[] canvases;
         private readonly List<RemoteDeviceRow> rows = new List<RemoteDeviceRow>();
 
         private IGameplayControl gameplay;
         private BroadcastReceiver broadcastReceiver;
         private MessageChannel channel;
         private readonly BroadcastSender broadcastSender = new BroadcastSender(Ports.Compose);
-        private readonly CancellationTokenSource cts = new CancellationTokenSource();
+        private CancellationTokenSource cts = new CancellationTokenSource();
 
         public void Process(RemoteControl control, byte[] message)
         {
@@ -56,6 +58,7 @@ namespace ArcCreate.Remote.Gameplay
         public override void OnUnloadScene()
         {
             cts.Dispose();
+            cts = new CancellationTokenSource();
             startNewSessionButton.onClick.RemoveListener(OnStartNewSessionButton);
             startManualIpButton.onClick.RemoveListener(OnStartManualIP);
             returnToSelectButton.onClick.RemoveListener(OnReturnToSelect);
@@ -76,7 +79,12 @@ namespace ArcCreate.Remote.Gameplay
 
         private void OnReturnToSelect()
         {
-            SceneTransitionManager.Instance.SetTransition(new ShutterTransition());
+            TransitionSequence transition = new TransitionSequence()
+                .OnShow()
+                .AddTransition(new TriangleTileTransition())
+                .OnBoth()
+                .AddTransition(new DecorationTransition());
+            SceneTransitionManager.Instance.SetTransition(transition);
             SceneTransitionManager.Instance.SwitchScene(SceneNames.SelectScene).Forget();
         }
 
@@ -93,6 +101,8 @@ namespace ArcCreate.Remote.Gameplay
             }
 
             cts.Cancel();
+            cts.Dispose();
+            cts = new CancellationTokenSource();
             rows.Clear();
 
             startManualIpButton.gameObject.SetActive(false);
@@ -169,7 +179,13 @@ namespace ArcCreate.Remote.Gameplay
             gameplay.ShouldNotifyOnAudioEnd = false;
             gameplay.Chart.EnableColliderGeneration = false;
             remoteGameplayControl.SetGameplay(gameplay);
-            Debug.Log(I18n.S("Compose.Notify.GameplayLoaded"));
+            foreach (var canvas in canvases)
+            {
+                canvas.renderMode = RenderMode.ScreenSpaceCamera;
+                canvas.worldCamera = gameplay.Camera.UICamera;
+                canvas.sortingLayerName = "Topmost";
+                canvas.sortingOrder = 98;
+            }
 
             StartListeningForBroadcast();
         }
@@ -217,6 +233,9 @@ namespace ArcCreate.Remote.Gameplay
             }
 
             cts.Cancel();
+            cts.Dispose();
+            cts = new CancellationTokenSource();
+
             rows.Clear();
             Debug.Log($"Gameplay: Stopped listening");
         }

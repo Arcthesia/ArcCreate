@@ -24,7 +24,7 @@ namespace ArcCreate.SceneTransition
     {
         private static SceneRepresentative currentSceneRepresentative;
         private static string currentScene;
-        private ITransition transition;
+        private TransitionSequence transition;
         private TransitionState transitionState = TransitionState.Idle;
 
         private SceneRepresentative loadingSceneRep;
@@ -36,6 +36,8 @@ namespace ArcCreate.SceneTransition
 
         public TransitionState TransitionState => transitionState;
 
+        public bool IsTransitioning => transitionState != TransitionState.Idle;
+
         /// <summary>
         /// Called if game started without boot scene.
         /// </summary>
@@ -43,13 +45,13 @@ namespace ArcCreate.SceneTransition
         public static void StartBootSceneDev(SceneRepresentative rep)
         {
             currentSceneRepresentative = rep;
-            currentScene = SceneManager.GetActiveScene().name;
+            currentScene = rep.gameObject.scene.name;
         }
 
-        public void SetTransition(ITransition newTransition)
+        public void SetTransition(TransitionSequence transition)
         {
-            transition?.DisableGameObject();
-            transition = newTransition;
+            this.transition?.DisableGameObject();
+            this.transition = transition;
         }
 
         /// <summary>
@@ -62,18 +64,16 @@ namespace ArcCreate.SceneTransition
         /// <returns>UniTask instance.</returns>
         public async UniTask SwitchScene(string sceneName, Func<SceneRepresentative, UniTask> passData = null, Action<Exception> onException = null)
         {
-            if (transitionState != TransitionState.Idle)
-            {
-                throw new Exception("Transition already in progress but another one is trying to start.");
-            }
-
+            await UniTask.WaitUntil(() => transitionState == TransitionState.Idle);
             transitionState = TransitionState.Starting;
 
-            transition.EnableGameObject();
-            await transition.StartTransition();
+            if (transition != null)
+            {
+                await transition.Show();
+                transitionState = TransitionState.Waiting;
+            }
 
-            transitionState = TransitionState.Waiting;
-            UniTask waitTask = UniTask.Delay(transition.WaitDurationMs);
+            UniTask waitTask = UniTask.Delay(transition?.WaitDurationMs ?? 0);
             SceneRepresentative rep = await LoadScene(sceneName);
 
             try
@@ -99,10 +99,13 @@ namespace ArcCreate.SceneTransition
                 transitionState = TransitionState.Ending;
 
                 await UniTask.NextFrame();
-                await transition.EndTransition();
+                if (transition != null)
+                {
+                    await transition.Hide();
+                }
+
                 OnTransitionEnd?.Invoke();
                 OnTransitionEnd = null;
-                transition.DisableGameObject();
                 transitionState = TransitionState.Idle;
             }
         }

@@ -70,7 +70,7 @@ Material:
     - _OcclusionStrength: 1
     - _Opacity: 1
     - _Parallax: 0.02
-    - _Range: 0.2
+    - _Range: 0.1
     - _Size: 2.2
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1

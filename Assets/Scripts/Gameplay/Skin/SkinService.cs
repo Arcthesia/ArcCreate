@@ -4,6 +4,7 @@ using System.Linq;
 using ArcCreate.Data;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.SceneTransition;
+using ArcCreate.Utility;
 using ArcCreate.Utility.ExternalAssets;
 using Cysharp.Threading.Tasks;
 using TMPro;
@@ -20,13 +21,13 @@ namespace ArcCreate.Gameplay.Skin
         [SerializeField] private SpriteRenderer singleLineL;
         [SerializeField] private SpriteRenderer singleLineR;
         [SerializeField] private TMP_Text comboText;
+        [SerializeField] private ThemeGroup themeGroup;
         [SerializeField] private SpriteRenderer trackExtraL;
         [SerializeField] private SpriteRenderer trackExtraR;
         [SerializeField] private SpriteRenderer track;
         [SerializeField] private SpriteRenderer trackExtraEdgeL;
         [SerializeField] private SpriteRenderer trackExtraEdgeR;
         [SerializeField] private SpriteRenderer[] criticalLines = new SpriteRenderer[4];
-        [SerializeField] private SpriteSO jacketShadowSO;
         [SerializeField] private SpriteRenderer videoBackgroundRenderer;
         [SerializeField] private VideoPlayer videoBackground;
 
@@ -82,8 +83,6 @@ namespace ArcCreate.Gameplay.Skin
                 AlignmentOption alignmentOpt = alignmentOptions.FirstOrDefault(opt => opt.Name == value);
                 alignmentOpt = alignmentOpt != null ? alignmentOpt : alignmentOptions[0];
                 currentAlignment = alignmentOpt;
-
-                jacketShadowSO.Value = alignmentOpt.JacketShadowSkin.Value;
 
                 // A bit jank but yeah
                 NoteSkin = currentNoteOption;

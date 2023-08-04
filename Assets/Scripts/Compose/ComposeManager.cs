@@ -53,7 +53,7 @@ namespace ArcCreate.Compose
             gameplay.EnablePauseMenu = false;
             gameplay.ShouldNotifyOnAudioEnd = false;
             gameplay.Chart.EnableColliderGeneration = true;
-            Shutter.Instance.SetTargetCamera(gameplay.Camera.UICamera, "Topmost");
+            TransitionScene.Instance.SetTargetCamera(gameplay.Camera.UICamera, "Topmost", 99);
         }
 
         private void OnLog(string condition, string stackTrace, LogType type)

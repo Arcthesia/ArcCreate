@@ -129,7 +129,7 @@ namespace ArcCreate.Selection.Interface
             cts.Dispose();
             cts = new CancellationTokenSource();
 
-            if (level != currentlyPlaying.level || chart.AudioPath != currentlyPlaying.audioPath)
+            if (!InterfaceUtility.AreTheSame(level, currentlyPlaying.level) || chart.AudioPath != currentlyPlaying.audioPath)
             {
                 PlayPreviewAudio(level, chart, cts.Token).Forget();
             }

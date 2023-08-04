@@ -90,6 +90,13 @@ namespace ArcCreate.Selection.Interface
             lastWasInLevelList = true;
             if (pack == null)
             {
+                var (level, chart) = storageData.GetLastSelectedChart(null);
+                if (level != null && chart != null)
+                {
+                    currentLevel = level;
+                    storageData.SelectedChart.Value = (level, chart);
+                }
+
                 RebuildList();
                 currentPack = pack;
                 return;
@@ -251,6 +258,11 @@ namespace ArcCreate.Selection.Interface
                     item = scroll.Hierarchy[i];
                     break;
                 }
+            }
+
+            if (item == null)
+            {
+                return;
             }
 
             float scrollFrom = scroll.Value;

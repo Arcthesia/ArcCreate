@@ -1,4 +1,5 @@
 using ArcCreate.SceneTransition;
+using ArcCreate.Utility;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,8 +17,8 @@ namespace ArcCreate.Gameplay.Skin
         [SerializeField] private StringSO illustratorSO;
         [SerializeField] private StringSO charterSO;
         [SerializeField] private StringSO aliasSO;
-        [SerializeField] private TMP_Text difficultyText;
-        [SerializeField] private Image difficultyColor;
+        [SerializeField] private StringSO difficultySO;
+        [SerializeField] private ColorSO difficultyColorSO;
 
         private void Awake()
         {
@@ -72,12 +73,12 @@ namespace ArcCreate.Gameplay.Skin
 
         private void OnDifficultyColor(Color value)
         {
-            difficultyColor.color = value;
+            difficultyColorSO.Value = value;
         }
 
         private void OnDifficulty(string value)
         {
-            difficultyText.text = value;
+            difficultySO.Value = value;
         }
 
         private void OnBackground(Sprite value)

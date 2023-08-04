@@ -19,13 +19,18 @@ namespace ArcCreate.Selection.Interface
         private static Pool<DifficultyCell> difficultyCellPool;
         [SerializeField] private StorageData storage;
         [SerializeField] private SelectableStorage selectable;
+        [SerializeField] private Image border;
         [SerializeField] private TMP_Text title;
         [SerializeField] private TMP_Text composer;
         [SerializeField] private TMP_Text difficulty;
         [SerializeField] private RawImage jacket;
+        [SerializeField] private RawImage jacketFill;
         [SerializeField] private DifficultyCell difficultyBackground;
+        [SerializeField] private Image difficultyImageNormal;
+        [SerializeField] private Image difficultyImageSelected;
         [SerializeField] private ClearResultDisplay clearResult;
         [SerializeField] private GradeDisplay grade;
+        [SerializeField] private GameObject newIndicator;
         [SerializeField] private Transform difficultyCellParent;
         [SerializeField] private GameObject playIndicate;
 
@@ -41,6 +46,7 @@ namespace ArcCreate.Selection.Interface
         private ChartSettings visibleChart;
         private Vector2 defaultSizeDelta;
         private bool isSelected;
+        private Color diffColor;
 
         public void OnPointerClick(PointerEventData eventData)
         {
@@ -67,6 +73,8 @@ namespace ArcCreate.Selection.Interface
             selectable.StorageUnit = level;
             visibleChart = data.ChartToDisplay;
 
+            ColorUtility.TryParseHtmlString(visibleChart.DifficultyColor, out diffColor);
+            difficultyBackground.Color = diffColor;
             UpdateSelectedStateImmediate(InterfaceUtility.AreTheSame(level, storage.SelectedChart.Value.level));
             if (isSelected)
             {
@@ -80,14 +88,13 @@ namespace ArcCreate.Selection.Interface
         public override async UniTask LoadCellFully(CellData cellData, CancellationToken cancellationToken)
         {
             await storage.AssignTexture(jacket, level, visibleChart.JacketPath);
+            jacketFill.texture = jacket.texture;
         }
 
         private void SetInfo()
         {
             title.text = visibleChart.Title;
             composer.text = visibleChart.Composer;
-            ColorUtility.TryParseHtmlString(visibleChart.DifficultyColor, out Color color);
-            difficultyBackground.Color = color;
 
             (string name, string number) = visibleChart.ParseDifficultyName(maxNumberLength: 3);
             difficulty.text = string.IsNullOrEmpty(number) ? name : InterfaceUtility.AlignedDiffNumber(number);
@@ -115,10 +122,12 @@ namespace ArcCreate.Selection.Interface
                 MarkFullyLoaded();
             }
 
+            jacketFill.texture = jacket.texture;
             grade.Display(playHistory.BestScorePlayOrDefault.Grade);
             clearResult.Display(playHistory.BestResultPlayOrDefault.ClearResult);
             grade.gameObject.SetActive(playHistory.PlayCount > 0);
             clearResult.gameObject.SetActive(playHistory.PlayCount > 0);
+            newIndicator.SetActive(playHistory.PlayCount <= 0);
         }
 
         private void Awake()
@@ -144,6 +153,12 @@ namespace ArcCreate.Selection.Interface
             difficulty.gameObject.SetActive(!isSelected);
 
             rect.DOSizeDelta(isSelected ? selectedSizeDelta : defaultSizeDelta, animationDuration).SetEase(animationEase);
+            border.DOColor(isSelected ? Color.white : new Color(1, 1, 1, 0.5f), animationDuration).SetEase(animationEase);
+
+            Color diffColorClear = diffColor;
+            diffColorClear.a = 0;
+            difficultyImageNormal.DOColor(isSelected ? diffColorClear : diffColor, animationDuration).SetEase(animationEase);
+            difficultyImageSelected.DOColor(isSelected ? diffColor : diffColorClear, animationDuration).SetEase(animationEase);
             this.isSelected = isSelected;
         }
 
@@ -155,6 +170,18 @@ namespace ArcCreate.Selection.Interface
             rect.DOKill();
             rect.localScale = Vector3.one;
             rect.sizeDelta = isSelected ? selectedSizeDelta : defaultSizeDelta;
+
+            border.DOKill();
+            border.color = isSelected ? Color.white : new Color(1, 1, 1, 0.5f);
+
+            Color diffColorClear = diffColor;
+            diffColorClear.a = 0;
+
+            difficultyImageNormal.DOKill();
+            difficultyImageNormal.color = isSelected ? diffColorClear : diffColor;
+
+            difficultyImageSelected.DOKill();
+            difficultyImageSelected.color = isSelected ? diffColor : diffColorClear;
             this.isSelected = isSelected;
         }
     }

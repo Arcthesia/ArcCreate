@@ -861,20 +861,20 @@ Gameplay:
         Charter: Unknown
       Charter: 'Charter: {0}'
     Sort:
-      addeddate: "Sort: Added date"
-      charter: "Sort: Charter"
-      composer: "Sort: Composer"
-      difficulty: "Sort: Difficulty"
-      grade: "Sort: Grade"
-      playcount: "Sort: Play count"
-      score: "Sort: Score"
-      title: "Sort: Title"
+      addeddate: Added date
+      charter: Charter
+      composer: Composer
+      difficulty: Difficulty
+      grade: Grade
+      playcount: Play count
+      score: Score
+      title: Title
     Group:
-      none: "Group: None"
-      difficulty: "Group: Difficulty"
-      grade: "Group: Grade"
-      rank: "Group: Rank"
-      charter: "Group: Charter"
+      none: None
+      difficulty: Difficulty
+      grade: Grade
+      rank: Rank
+      charter: Charter
     Settings:
       Name: Settings
       Language: Language

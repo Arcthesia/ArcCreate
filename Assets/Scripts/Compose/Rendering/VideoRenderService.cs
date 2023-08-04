@@ -40,6 +40,7 @@ namespace ArcCreate.Compose.Rendering
         [SerializeField] private Button cancelButton;
 
         private CancellationTokenSource cts = new CancellationTokenSource();
+        private TransitionSequence transitionSequence;
 
         private int from;
         private int to;
@@ -66,14 +67,15 @@ namespace ArcCreate.Compose.Rendering
             AudioRenderer audioRenderer = new AudioRenderer(
                 startTiming: from,
                 endTiming: to,
-                showShutter: showShutterToggle.isOn,
+                showTransition: showShutterToggle.isOn,
                 audioOffset: gameplayData.AudioOffset.Value,
                 songAudio: gameplayData.AudioClip.Value,
                 tapAudio: Services.Gameplay.Audio.TapHitsoundClip,
                 arcAudio: Services.Gameplay.Audio.ArcHitsoundClip,
-                shutterCloseAudio: Shutter.ExternalStartAudio.Value,
-                shutterOpenAudio: Shutter.ExternalOpenAudio.Value,
-                sfxAudio: Services.Gameplay.Audio.SfxAudioClips);
+                renderStartAudio: TransitionScene.ExternalRenderStartAudio.Value,
+                gameplayLoadCompleteAudio: TransitionScene.ExternalGameplayLoadCompleteAudio.Value,
+                sfxAudio: Services.Gameplay.Audio.SfxAudioClips,
+                transitionSequence: transitionSequence);
 
             try
             {
@@ -104,7 +106,8 @@ namespace ArcCreate.Compose.Rendering
                 to: to,
                 showShutter: showShutterToggle.isOn,
                 audioRenderer: audioRenderer,
-                gameplayViewport: gameplayViewport))
+                gameplayViewport: gameplayViewport,
+                transitionSequence: transitionSequence))
             {
                 renderPreview.texture = renderer.Texture2D;
 
@@ -159,6 +162,13 @@ namespace ArcCreate.Compose.Rendering
                 Application.platform == RuntimePlatform.WindowsEditor
                 || Application.platform == RuntimePlatform.WindowsPlayer ?
                 new string[] { "exe" } : new string[0];
+
+            transitionSequence = new TransitionSequence()
+                .OnBoth()
+                .AddTransition(new TriangleTileTransition())
+                .AddTransition(new DecorationTransition())
+                .AddTransition(new InfoTransition())
+                .SetWaitDuration(2000);
         }
 
         private void OnDestroy()

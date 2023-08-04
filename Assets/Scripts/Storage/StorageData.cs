@@ -41,7 +41,7 @@ namespace ArcCreate.Storage
 
         public UltraLiteCollection<PackStorage> PackCollection { get; private set; }
 
-        public bool IsTransitioning { get; private set; }
+        public bool IsTransitioning => SceneTransitionManager.Instance != null && SceneTransitionManager.Instance.IsTransitioning;
 
         public bool IsLoaded => LevelCollection != null && PackCollection != null;
 
@@ -111,7 +111,6 @@ namespace ArcCreate.Storage
             SelectedChart.SetValueWithoutNotify(GetLastSelectedChart(SelectedPack.Value?.Identifier));
 
             OnStorageChange?.Invoke();
-            IsTransitioning = false;
         }
 
         public void NotifyOpenFilePicker()
@@ -259,16 +258,28 @@ namespace ArcCreate.Storage
 
         public void SwitchToPlayScene((LevelStorage level, ChartSettings chart) selection)
         {
-            if (IsTransitioning)
+            if (SceneTransitionManager.Instance.IsTransitioning)
             {
                 return;
             }
 
             currentGameplayChart = selection;
             var (level, chart) = selection;
-            SceneTransitionManager.Instance.SetTransition(new ShutterWithInfoTransition());
+            TransitionSequence sequence = new TransitionSequence()
+                .OnShow()
+                .AddTransition(new TriangleTileTransition())
+                .AddTransition(new DecorationTransition())
+                .AddTransition(new InfoTransition())
+                .OnHide()
+                .AddTransition(new InfoTransition())
+                .AddTransitionReversed(new PlayRetryCountTransition())
+                .AddTransition(new PlayRetryCountTransition(), 1000)
+                .AddTransition(new TriangleTileTransition(), 1000)
+                .AddTransition(new DecorationTransition(), 1000)
+                .SetWaitDuration(2000);
+
+            SceneTransitionManager.Instance.SetTransition(sequence);
             IGameplayControl gameplay = null;
-            IsTransitioning = true;
             OnSwitchToGameplayScene?.Invoke();
             SceneTransitionManager.Instance.SwitchScene(
                 SceneNames.GameplayScene,
@@ -283,13 +294,10 @@ namespace ArcCreate.Storage
                         gameplay.Audio.AudioTiming = -Values.DelayBeforeAudioStart;
                         gameplay.Audio.PlaybackSpeed = 1;
                     }
-
-                    IsTransitioning = false;
                 },
                 e =>
                 {
                     OnSwitchToGameplaySceneException?.Invoke(e);
-                    IsTransitioning = false;
                 })
                 .ContinueWith(() => gameplay?.Audio.PlayWithDelay(0, Values.DelayBeforeAudioStart));
 
@@ -299,7 +307,10 @@ namespace ArcCreate.Storage
 
         public void SwitchToResultScene(LevelStorage level, ChartSettings chart, PlayResult result)
         {
-            SceneTransitionManager.Instance.SetTransition(new ShutterTransition(500));
+            TransitionSequence transition = new TransitionSequence()
+                .OnShow()
+                .AddTransition(new TriangleTileTransition());
+            SceneTransitionManager.Instance.SetTransition(transition);
             SceneTransitionManager.Instance.SwitchScene(
                 SceneNames.ResultScene,
                 (rep) =>

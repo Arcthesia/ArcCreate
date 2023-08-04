@@ -820,20 +820,20 @@ Gameplay:
         Charter: 未知
       Charter: "譜師: {0}"
     Sort:
-      addeddate: "排序: 新增日期"
-      charter: "排序: 譜師"
-      composer: "排序: 曲師"
-      difficulty: "排序: 難度"
-      grade: "排序: 評級"
-      playcount: "排序: 遊玩次數"
-      score: "排序: 分數"
-      title: "排序: 曲名"
+      addeddate: 新增日期
+      charter: 譜師
+      composer: 曲師
+      difficulty: 難度
+      grade: 評級
+      playcount: 遊玩次數
+      score: 分數
+      title: 曲名
     Group:
-      none: "群組: 無"
-      difficulty: "群組: 難度"
-      grade: "群組: 評級"
-      rank: "群組: 通關狀態"
-      charter: "群組: 譜師"
+      none: 無
+      difficulty: 難度
+      grade: 評級
+      rank: 通關狀態
+      charter: 譜師
     Settings:
       Name: 設定
       Language: 語言設定

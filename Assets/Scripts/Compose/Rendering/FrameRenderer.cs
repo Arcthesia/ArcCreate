@@ -28,6 +28,7 @@ namespace ArcCreate.Compose.Rendering
         private readonly int width;
         private readonly int height;
         private readonly bool showShutter;
+        private readonly TransitionSequence transitionSequence;
         private byte[] cachedByteArray;
 
         public FrameRenderer(
@@ -41,7 +42,8 @@ namespace ArcCreate.Compose.Rendering
             int to,
             AudioRenderer audioRenderer,
             bool showShutter,
-            GameplayViewport gameplayViewport)
+            GameplayViewport gameplayViewport,
+            TransitionSequence transitionSequence)
         {
             this.audioRenderer = audioRenderer;
             this.width = width;
@@ -52,6 +54,7 @@ namespace ArcCreate.Compose.Rendering
             this.crf = crf;
             this.fps = fps;
             this.gameplayViewport = gameplayViewport;
+            this.transitionSequence = transitionSequence;
 
             startRenderingTime = from / 1000f;
             endRenderingTime = to / 1000f;
@@ -83,7 +86,6 @@ namespace ArcCreate.Compose.Rendering
                 return;
             }
 
-            ITransition shutterTransition = new ShutterWithInfoTransition();
             RenderTexture activeRT = RenderTexture.active;
             gameplayViewport.enabled = false;
             Services.Gameplay.SetCameraViewportRect(new Rect(0, 0, 1, 1));
@@ -124,19 +126,17 @@ namespace ArcCreate.Compose.Rendering
                 float bonusDuration = 0;
                 if (showShutter)
                 {
-                    shutterTransition.EnableGameObject();
-                    shutterTransition
-                        .StartTransition()
-                        .ContinueWith(() => UniTask.Delay(shutterTransition.WaitDurationMs))
-                        .ContinueWith(shutterTransition.EndTransition)
+                    transitionSequence
+                        .Show()
+                        .ContinueWith(() => UniTask.Delay(transitionSequence.WaitDurationMs))
+                        .ContinueWith(transitionSequence.Hide)
                         .ContinueWith(() =>
                         {
                             shouldUpdateTiming = true;
-                            shutterTransition.DisableGameObject();
                         }).AttachExternalCancellation(token).Forget();
 
-                    unityStartTime += Shutter.FullSequenceSeconds;
-                    bonusDuration = Shutter.FullSequenceSeconds;
+                    unityStartTime += transitionSequence.FullSequenceSeconds;
+                    bonusDuration = transitionSequence.FullSequenceSeconds;
                 }
                 else
                 {
@@ -225,7 +225,7 @@ namespace ArcCreate.Compose.Rendering
 
                 Time.captureFramerate = 0;
                 Time.timeScale = 1;
-                shutterTransition.EndTransition().ContinueWith(shutterTransition.DisableGameObject).Forget();
+                transitionSequence.Hide().Forget();
                 gameplayViewport.enabled = true;
                 Services.Gameplay.Audio.IsRendering = false;
             }

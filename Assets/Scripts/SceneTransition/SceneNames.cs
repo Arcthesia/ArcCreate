@@ -3,6 +3,7 @@
     public static class SceneNames
     {
         public const string BootScene = "Boot";
+        public const string GreetingScene = "Greeting";
         public const string ComposeScene = "Compose";
         public const string GameplayScene = "Gameplay";
         public const string RemoteScene = "Remote";
@@ -13,7 +14,7 @@
 #if UNITY_EDITOR || UNITY_STANDALONE
         public const string DefaultScene = ComposeScene;
 #else
-        public const string DefaultScene = SelectScene;
+        public const string DefaultScene = GreetingScene;
 #endif
 
 #if UNITY_EDITOR || !UNITY_STANDALONE
