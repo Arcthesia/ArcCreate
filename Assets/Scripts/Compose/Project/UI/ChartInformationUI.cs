@@ -29,6 +29,7 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private TMP_InputField timingPointDensityFactor;
         [SerializeField] private TMP_InputField chartConstant;
         [SerializeField] private TMP_InputField difficultyName;
+        [SerializeField] private TMP_InputField searchTags;
         [SerializeField] private ColorInputField difficultyColor;
         [SerializeField] private List<Button> diffColorPresets;
 
@@ -44,6 +45,7 @@ namespace ArcCreate.Compose.Project
             chartConstant.text = chart.ChartConstant.ToString();
             difficultyName.text = chart.Difficulty ?? "";
             chartOffset.text = GameplayData.AudioOffset.Value.ToString();
+            searchTags.text = chart.SearchTags ?? "";
 
             chart.DifficultyColor.ConvertHexToColor(out Color c);
             difficultyColor.SetValue(c);
@@ -91,6 +93,7 @@ namespace ArcCreate.Compose.Project
             bpmText.onEndEdit.AddListener(OnBpmText);
             previewStart.onEndEdit.AddListener(OnPreviewRange);
             previewEnd.onEndEdit.AddListener(OnPreviewRange);
+            searchTags.onEndEdit.AddListener(OnSearchTags);
 
             GameplayData.AudioOffset.OnValueChange += OnGameplayAudioOffset;
             chartOffset.onEndEdit.AddListener(OnChartOffset);
@@ -127,6 +130,7 @@ namespace ArcCreate.Compose.Project
             bpmText.onEndEdit.RemoveListener(OnBpmText);
             previewStart.onEndEdit.RemoveListener(OnPreviewRange);
             previewEnd.onEndEdit.RemoveListener(OnPreviewRange);
+            searchTags.onEndEdit.RemoveListener(OnSearchTags);
 
             GameplayData.AudioOffset.OnValueChange -= OnGameplayAudioOffset;
             chartOffset.onEndEdit.RemoveListener(OnChartOffset);
@@ -379,10 +383,18 @@ namespace ArcCreate.Compose.Project
 
                 Target.PreviewEnd = Mathf.Clamp(Target.PreviewEnd, Mathf.Min(Target.PreviewStart + Constants.MinPreviewSegmentLengthMs, audioLength), audioLength);
                 Target.PreviewStart = Mathf.Clamp(Target.PreviewStart, 0, Mathf.Max(Target.PreviewEnd - Constants.MinPreviewSegmentLengthMs, 0));
+
+                Values.ProjectModified = true;
             }
 
             previewStart.text = Target.PreviewStart.ToString();
             previewEnd.text = Target.PreviewEnd.ToString();
+        }
+
+        private void OnSearchTags(string tags)
+        {
+            Target.SearchTags = tags;
+            Values.ProjectModified = true;
         }
 
         private void OnAudioClip(AudioClip clip)

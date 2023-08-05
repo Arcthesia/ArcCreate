@@ -1,3 +1,4 @@
+using System;
 using ArcCreate.Data;
 using ArcCreate.Gameplay;
 using ArcCreate.SceneTransition;
@@ -15,7 +16,7 @@ namespace ArcCreate.Selection
 
         public override void OnNoBootScene()
         {
-            StartCoroutine(EndOfFrame(() => TransitionScene.Instance.SetTargetCamera(selectionCamera, "Default")));
+            TransitionScene.Instance.SetTargetCamera(selectionCamera, "Default");
         }
 
         protected override void OnSceneLoad()
@@ -23,13 +24,21 @@ namespace ArcCreate.Selection
             gameplayData.EnablePracticeMode.Value = false;
             storageData.SelectedPack.OnValueChange += OnPackChange;
             storageData.SelectedChart.OnValueChange += OnChartChange;
-            StartCoroutine(EndOfFrame(() => TransitionScene.Instance.SetTargetCamera(selectionCamera, "Default")));
+            storageData.OnSwitchToGameplaySceneException += OnGameplayException;
+            TransitionScene.Instance.SetTargetCamera(selectionCamera, "Default");
+            TransitionScene.Instance.TriangleTileGameObject.SetActive(true);
         }
 
         private void OnDestroy()
         {
             storageData.SelectedPack.OnValueChange -= OnPackChange;
             storageData.SelectedChart.OnValueChange -= OnChartChange;
+            storageData.OnSwitchToGameplaySceneException += OnGameplayException;
+        }
+
+        private void OnGameplayException(Exception exception)
+        {
+            TransitionScene.Instance.SetTargetCamera(selectionCamera, "Default");
         }
 
         private void OnPackChange(PackStorage pack)

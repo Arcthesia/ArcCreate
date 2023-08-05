@@ -23,8 +23,11 @@
         "WindowsStandalone64"
     ],
     "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "DOTween.dll",
+        "FuzzySharp.dll"
+    ],
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],

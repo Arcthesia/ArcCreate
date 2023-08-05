@@ -522,6 +522,7 @@ Compose:
         ChartOffset: Chart Offset
         TimingPointDensityFactor: Judge Density
         ChartConstant: Chart Constant
+        SearchTags: Search tags
         DifficultyName: Difficulty Name
         DifficultyColor: Difficulty Color
         Files: Files

@@ -31,6 +31,12 @@ namespace ArcCreate.SceneTransition
         {
         }
 
+        protected IEnumerator NextFrame(Action action)
+        {
+            yield return null;
+            action.Invoke();
+        }
+
         protected IEnumerator EndOfFrame(Action action)
         {
             yield return new WaitForEndOfFrame();
@@ -53,7 +59,7 @@ namespace ArcCreate.SceneTransition
 
         private void Awake()
         {
-            StartCoroutine(EndOfFrame(OnSceneLoad));
+            StartCoroutine(NextFrame(OnSceneLoad));
             if (SceneTransitionManager.Instance == null)
             {
                 bool bootSceneFound = false;
@@ -68,10 +74,16 @@ namespace ArcCreate.SceneTransition
 
                 if (!bootSceneFound)
                 {
-                    StartCoroutine(EndOfFrame(OnNoBootScene));
-                    StartCoroutine(EndOfFrame(() => SceneManager.LoadSceneAsync(SceneNames.BootScene, LoadSceneMode.Additive)));
+                    StartCoroutine(NextFrame(OnNoBootScene));
+                    SceneManager.LoadScene(SceneNames.BootScene, LoadSceneMode.Additive);
                 }
 
+                SceneTransitionManager.StartBootSceneDev(this);
+                return;
+            }
+
+            if (!SceneTransitionManager.Instance.SceneRegistered)
+            {
                 SceneTransitionManager.StartBootSceneDev(this);
                 return;
             }

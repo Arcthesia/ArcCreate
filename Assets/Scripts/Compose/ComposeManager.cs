@@ -54,6 +54,7 @@ namespace ArcCreate.Compose
             gameplay.ShouldNotifyOnAudioEnd = false;
             gameplay.Chart.EnableColliderGeneration = true;
             TransitionScene.Instance.SetTargetCamera(gameplay.Camera.UICamera, "Topmost", 99);
+            TransitionScene.Instance.TriangleTileGameObject.SetActive(false);
         }
 
         private void OnLog(string condition, string stackTrace, LogType type)

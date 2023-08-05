@@ -46,6 +46,8 @@ namespace ArcCreate.Data
 
         public int PreviewEnd { get; set; }
 
+        public string SearchTags { get; set; }
+
         public ChartSettings Clone()
         {
             return new ChartSettings()
@@ -64,12 +66,14 @@ namespace ArcCreate.Data
                 Skin = Skin,
                 Colors = Colors,
                 LastWorkingTiming = LastWorkingTiming,
+                ChartPath = ChartPath,
                 AudioPath = AudioPath,
                 JacketPath = JacketPath,
                 BackgroundPath = BackgroundPath,
                 VideoPath = VideoPath,
                 PreviewStart = PreviewStart,
                 PreviewEnd = PreviewEnd,
+                SearchTags = SearchTags,
             };
         }
 

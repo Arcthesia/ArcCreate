@@ -38,6 +38,8 @@ namespace ArcCreate.SceneTransition
 
         public bool IsTransitioning => transitionState != TransitionState.Idle;
 
+        public bool SceneRegistered => currentSceneRepresentative != null;
+
         /// <summary>
         /// Called if game started without boot scene.
         /// </summary>
@@ -75,6 +77,7 @@ namespace ArcCreate.SceneTransition
 
             UniTask waitTask = UniTask.Delay(transition?.WaitDurationMs ?? 0);
             SceneRepresentative rep = await LoadScene(sceneName);
+            Exception ex = null;
 
             try
             {
@@ -89,7 +92,7 @@ namespace ArcCreate.SceneTransition
             }
             catch (Exception e)
             {
-                onException?.Invoke(e);
+                ex = e;
                 Debug.LogError(e);
                 await SceneManager.UnloadSceneAsync(sceneName);
             }
@@ -102,6 +105,11 @@ namespace ArcCreate.SceneTransition
                 if (transition != null)
                 {
                     await transition.Hide();
+                }
+
+                if (ex != null)
+                {
+                    onException?.Invoke(ex);
                 }
 
                 OnTransitionEnd?.Invoke();
@@ -162,10 +170,6 @@ namespace ArcCreate.SceneTransition
             {
                 SceneManager.LoadScene(SceneNames.DefaultScene, LoadSceneMode.Additive);
                 currentScene = SceneNames.DefaultScene;
-            }
-            else
-            {
-                currentSceneRepresentative.OnNoBootScene();
             }
         }
 

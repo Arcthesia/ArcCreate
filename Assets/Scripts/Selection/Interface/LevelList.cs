@@ -5,6 +5,7 @@ using ArcCreate.Storage;
 using ArcCreate.Storage.Data;
 using ArcCreate.Utility.InfiniteScroll;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 
 namespace ArcCreate.Selection.Interface
@@ -15,6 +16,7 @@ namespace ArcCreate.Selection.Interface
 
         [SerializeField] private StorageData storageData;
         [SerializeField] private InfiniteScroll scroll;
+        [SerializeField] private LevelListOptions options;
         [SerializeField] private RectTransform scrollRect;
         [SerializeField] private GameObject levelCellPrefab;
         [SerializeField] private GameObject difficultyCellPrefab;
@@ -29,15 +31,13 @@ namespace ArcCreate.Selection.Interface
         private LevelStorage currentLevel;
         private Tween scrollTween;
 
-        private IGroupStrategy groupStrategy;
-        private ISortStrategy sortStrategy;
-
         public static float LevelCellSize { get; set; }
 
         public static float GroupCellSize { get; set; }
 
         private void Awake()
         {
+            options.Setup();
             Pools.New<Cell>("LevelCell", levelCellPrefab, scroll.transform, 5);
             Pools.New<DifficultyCell>("DifficultyCell", difficultyCellPrefab, scroll.transform, 30);
             Pools.New<Cell>("GroupCell", groupCellPrefab, scroll.transform, 3);
@@ -45,11 +45,7 @@ namespace ArcCreate.Selection.Interface
             storageData.OnStorageChange += OnStorageChange;
             storageData.SelectedChart.OnValueChange += OnSelectedChart;
             storageData.SelectedPack.OnValueChange += OnSelectedPack;
-
-            Settings.SelectionGroupStrategy.OnValueChanged.AddListener(OnGroupStrategyChanged);
-            Settings.SelectionSortStrategy.OnValueChanged.AddListener(OnSortStrategyChanged);
-            SetGroupStrategy(Settings.SelectionGroupStrategy.Value);
-            SetSortStrategy(Settings.SelectionSortStrategy.Value);
+            options.OnNeedRebuild += RebuildList;
 
             LevelCellSize = levelCellSize;
             GroupCellSize = groupCellSize;
@@ -71,9 +67,7 @@ namespace ArcCreate.Selection.Interface
             storageData.OnStorageChange -= OnStorageChange;
             storageData.SelectedChart.OnValueChange -= OnSelectedChart;
             storageData.SelectedPack.OnValueChange -= OnSelectedPack;
-
-            Settings.SelectionGroupStrategy.OnValueChanged.RemoveListener(OnGroupStrategyChanged);
-            Settings.SelectionSortStrategy.OnValueChanged.RemoveListener(OnSortStrategyChanged);
+            options.OnNeedRebuild -= RebuildList;
 
             scroll.OnPointerEvent -= KillTween;
         }
@@ -143,77 +137,6 @@ namespace ArcCreate.Selection.Interface
             currentLevel = level;
         }
 
-        private void OnGroupStrategyChanged(string strat)
-        {
-            SetGroupStrategy(strat);
-            RebuildList();
-        }
-
-        private void SetGroupStrategy(string strat)
-        {
-            switch (strat)
-            {
-                case NoGroup.Typename:
-                    groupStrategy = new NoGroup();
-                    break;
-                case GroupByGrade.Typename:
-                    groupStrategy = new GroupByGrade();
-                    break;
-                case GroupByRank.Typename:
-                    groupStrategy = new GroupByRank();
-                    break;
-                case GroupByDifficulty.Typename:
-                    groupStrategy = new GroupByDifficulty();
-                    break;
-                case GroupByCharter.Typename:
-                    groupStrategy = new GroupByCharter();
-                    break;
-                default:
-                    groupStrategy = new NoGroup();
-                    break;
-            }
-        }
-
-        private void OnSortStrategyChanged(string strat)
-        {
-            SetSortStrategy(strat);
-            RebuildList();
-        }
-
-        private void SetSortStrategy(string strat)
-        {
-            switch (strat)
-            {
-                case SortByAddedDate.Typename:
-                    sortStrategy = new SortByAddedDate();
-                    break;
-                case SortByDifficulty.Typename:
-                    sortStrategy = new SortByDifficulty();
-                    break;
-                case SortByGrade.Typename:
-                    sortStrategy = new SortByGrade();
-                    break;
-                case SortByScore.Typename:
-                    sortStrategy = new SortByScore();
-                    break;
-                case SortByTitle.Typename:
-                    sortStrategy = new SortByTitle();
-                    break;
-                case SortByComposer.Typename:
-                    sortStrategy = new SortByComposer();
-                    break;
-                case SortByCharter.Typename:
-                    sortStrategy = new SortByCharter();
-                    break;
-                case SortByPlayCount.Typename:
-                    sortStrategy = new SortByPlayCount();
-                    break;
-                default:
-                    sortStrategy = new SortByDifficulty();
-                    break;
-            }
-        }
-
         private void RebuildList()
         {
             if (!lastWasInLevelList)
@@ -222,6 +145,11 @@ namespace ArcCreate.Selection.Interface
             }
 
             int prevCount = scroll.Data.Count;
+            if (storageData.SelectedPack.Value != null)
+            {
+                storageData.FetchLevelsForPack(storageData.SelectedPack.Value);
+            }
+
             List<LevelStorage> levels = (storageData.SelectedPack.Value?.Levels ?? storageData.GetAllLevels())?.ToList();
             if (levels?.Count == 0)
             {
@@ -229,8 +157,20 @@ namespace ArcCreate.Selection.Interface
                 return;
             }
 
-            List<CellData> data = LevelListBuilder.Build(levels, storageData.SelectedChart.Value.chart, groupStrategy, sortStrategy);
-            scroll.SetData(data);
+            if (string.IsNullOrWhiteSpace(options.SearchQuery))
+            {
+                List<CellData> data = LevelListBuilder.Build(
+                    levels,
+                    storageData.SelectedChart.Value.chart,
+                    options.GroupStrategy,
+                    options.SortStrategy);
+                scroll.SetData(data);
+            }
+            else
+            {
+                List<CellData> data = LevelListBuilder.Filter(levels, storageData.SelectedChart.Value.chart, options.SearchQuery);
+                scroll.SetData(data);
+            }
 
             // Only play animation on the second load onward
             if (prevCount > 0)

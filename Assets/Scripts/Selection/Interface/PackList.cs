@@ -53,6 +53,7 @@ namespace ArcCreate.Selection.Interface
             allSongsPack.onClick.AddListener(SelectAllSongsPack);
             remotePack.onClick.AddListener(SwitchToRemoteScene);
             loadChartsPack.onClick.AddListener(OpenChartPicker);
+            storageData.OnSwitchToGameplaySceneException += OnGameplayException;
 
             if (storageData.IsLoaded)
             {
@@ -94,11 +95,34 @@ namespace ArcCreate.Selection.Interface
             allSongsPack.onClick.RemoveListener(SelectAllSongsPack);
             remotePack.onClick.RemoveListener(SwitchToRemoteScene);
             loadChartsPack.onClick.RemoveListener(OpenChartPicker);
+            storageData.OnSwitchToGameplaySceneException -= OnGameplayException;
         }
 
         private void SelectAllSongsPack()
         {
             storageData.SelectedPack.Value = null;
+        }
+
+        private void OnGameplayException(Exception e)
+        {
+            ShowUI();
+        }
+
+        private void ShowUI()
+        {
+            if (lastWasInPackList)
+            {
+                packListAnimator.Show();
+            }
+            else
+            {
+                levelListAnimator.Show();
+            }
+
+            hideUIAnimator.Show();
+            new TransitionSequence()
+                .AddTransition(new TriangleTileTransition())
+                .Show().Forget();
         }
 
         private void HideUI()

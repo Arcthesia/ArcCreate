@@ -13,7 +13,7 @@ namespace ArcCreate.SceneTransition
         [SerializeField] private ScriptedAnimator proceedAnimator;
         [SerializeField] private Camera greetingCamera;
 
-        private void Start()
+        protected override void OnSceneLoad()
         {
             TransitionScene.Instance.SetTargetCamera(greetingCamera);
             TransitionScene.Instance.TriangleTileGameObject.SetActive(true);
