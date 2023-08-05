@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.Data;
+using ArcCreate.Storage.Data;
 using ArcCreate.Utility.InfiniteScroll;
 
 namespace ArcCreate.Selection.Interface
@@ -24,12 +25,12 @@ namespace ArcCreate.Selection.Interface
                 .ToList();
 
             // Sort to folders
-            string cname = GetName(cells[0].PlayHistory.BestScorePlayOrDefault.Grade);
+            string cname = GetName(cells[0].PlayHistory);
             groups.Add((cname, new List<LevelCellData>()));
 
             foreach (LevelCellData level in cells)
             {
-                string name = GetName(level.PlayHistory.BestScorePlayOrDefault.Grade);
+                string name = GetName(level.PlayHistory);
                 if (name != cname)
                 {
                     cname = name;
@@ -55,8 +56,14 @@ namespace ArcCreate.Selection.Interface
             return groupCells;
         }
 
-        private string GetName(Grade grade)
+        private string GetName(PlayHistory history)
         {
+            if (history.PlayCount == 0)
+            {
+                return "New";
+            }
+
+            Grade grade = history.BestScorePlayOrDefault.Grade;
             switch (grade)
             {
                 case Grade.D:
