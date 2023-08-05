@@ -522,7 +522,7 @@ Compose:
         ChartOffset: Chart Offset
         TimingPointDensityFactor: Judge Density
         ChartConstant: Chart Constant
-        SearchTags: Search tags
+        SearchTags: Search Tags
         DifficultyName: Difficulty Name
         DifficultyColor: Difficulty Color
         Files: Files
@@ -551,10 +551,10 @@ Compose:
           Create or open a new project
         RawEditorFileTooLarge: |-
           Text editor is disabled for files larger than 1000kb
-        Shutter: Shutter
-        ShowShutter: Show shutter
-        HideShutter: Hide shutter
-        PreviewSegment: Preview segment
+        Shutter: Transition
+        ShowShutter: Show Transition
+        HideShutter: Hide Transition
+        PreviewSegment: Preview Segment
         CustomChartPath: Use custom (advanced)
       Options:
         Inherit: Inherit

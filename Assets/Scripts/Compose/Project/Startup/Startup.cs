@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using ArcCreate.Data;
@@ -29,16 +28,7 @@ namespace ArcCreate.Compose.Project
             }
 
             Services.Project.OnProjectLoad += OnProjectLoad;
-
-            string[] args = Environment.GetCommandLineArgs();
-            if (args.Length >= 2 && File.Exists(args[1]) && args[1].EndsWith(".arcproj"))
-            {
-                Services.Project.OpenProject(args[1]);
-            }
-            else
-            {
-                AssignRecentProjects();
-            }
+            AssignRecentProjects();
         }
 
         private void OnDestroy()

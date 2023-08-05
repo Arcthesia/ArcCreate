@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using ArcCreate.Compose.Popups;
 using ArcCreate.Gameplay;
 using ArcCreate.SceneTransition;
@@ -8,11 +10,6 @@ namespace ArcCreate.Compose
 {
     public class ComposeManager : SceneRepresentative
     {
-        public override void OnNoBootScene()
-        {
-            LoadGameplayScene();
-        }
-
         public override void OnUnloadScene()
         {
             Application.logMessageReceived -= OnLog;
@@ -44,6 +41,7 @@ namespace ArcCreate.Compose
                 {
                     var gameplayControl = rep as IGameplayControl;
                     UseGameplay(gameplayControl);
+                    StartCheckingStartupArgs();
                 }).Forget();
         }
 
@@ -55,6 +53,15 @@ namespace ArcCreate.Compose
             gameplay.Chart.EnableColliderGeneration = true;
             TransitionScene.Instance.SetTargetCamera(gameplay.Camera.UICamera, "Topmost", 99);
             TransitionScene.Instance.TriangleTileGameObject.SetActive(false);
+        }
+
+        private void StartCheckingStartupArgs()
+        {
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length >= 2 && File.Exists(args[1]) && args[1].EndsWith(".arcproj"))
+            {
+                Services.Project.OpenProject(args[1]);
+            }
         }
 
         private void OnLog(string condition, string stackTrace, LogType type)
