@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using ArcCreate.Data;
 using ArcCreate.Selection.Select;
+using ArcCreate.Selection.SoundEffect;
 using ArcCreate.Storage;
 using ArcCreate.Storage.Data;
 using ArcCreate.Utility.InfiniteScroll;
@@ -62,6 +63,7 @@ namespace ArcCreate.Selection.Interface
             else
             {
                 storage.SelectedChart.Value = (level, visibleChart);
+                Services.SoundEffect.Play(Sound.CellSelect);
             }
         }
 

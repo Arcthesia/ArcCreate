@@ -1,5 +1,6 @@
 using System.Threading;
 using ArcCreate.Selection.Select;
+using ArcCreate.Selection.SoundEffect;
 using ArcCreate.Storage;
 using ArcCreate.Storage.Data;
 using ArcCreate.Utility.InfiniteScroll;
@@ -56,6 +57,7 @@ namespace ArcCreate.Selection.Interface
             }
 
             storage.SelectedPack.Value = pack;
+            Services.SoundEffect.Play(Sound.CellSelect);
         }
     }
 }

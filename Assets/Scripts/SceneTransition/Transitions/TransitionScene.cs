@@ -18,9 +18,11 @@ namespace ArcCreate.SceneTransition
         [SerializeField] private Canvas[] canvases;
 
         [Header("Audio")]
+        [SerializeField] private AudioSource audioSource;
         [SerializeField] private AudioClip renderStartAudio;
         [SerializeField] private AudioClip enterGameplayAudio;
         [SerializeField] private AudioClip gameplayLoadCompleteAudio;
+        [SerializeField] private AudioClip retryAudio;
         [SerializeField] private AudioClip generalTransitionAudio;
 
         [Header("TriangleTile")]
@@ -54,6 +56,15 @@ namespace ArcCreate.SceneTransition
         private Color lastColor1;
         private Color lastColor2;
 
+        public enum Sound
+        {
+            RenderStart,
+            EnterGameplay,
+            GameplayLoadComplete,
+            Retry,
+            General,
+        }
+
         public static TransitionScene Instance { get; private set; }
 
         public static ExternalAudioClip ExternalRenderStartAudio { get; set; }
@@ -63,6 +74,8 @@ namespace ArcCreate.SceneTransition
         public static ExternalAudioClip ExternalGameplayLoadCompleteAudio { get; set; }
 
         public static ExternalAudioClip ExternalGeneralTransitionAudio { get; set; }
+
+        public static ExternalAudioClip ExternalRetryAudio { get; set; }
 
         public GameObject TriangleTileGameObject => triangleTileImage.gameObject;
 
@@ -131,6 +144,28 @@ namespace ArcCreate.SceneTransition
 
         public UniTask HideDecoration() => HideAnimation(decorationAnimator);
 
+        public void PlaySoundEffect(Sound sound)
+        {
+            switch (sound)
+            {
+                case Sound.RenderStart:
+                    audioSource.PlayOneShot(ExternalRenderStartAudio.Value);
+                    return;
+                case Sound.EnterGameplay:
+                    audioSource.PlayOneShot(ExternalEnterGameplayAudio.Value);
+                    return;
+                case Sound.GameplayLoadComplete:
+                    audioSource.PlayOneShot(ExternalGameplayLoadCompleteAudio.Value);
+                    return;
+                case Sound.Retry:
+                    audioSource.PlayOneShot(ExternalRetryAudio.Value);
+                    return;
+                case Sound.General:
+                    audioSource.PlayOneShot(ExternalGeneralTransitionAudio.Value);
+                    return;
+            }
+        }
+
         public void SetTargetCamera(Camera camera, string layer = null, int order = 0)
         {
             foreach (var canvas in canvases)
@@ -174,11 +209,13 @@ namespace ArcCreate.SceneTransition
             ExternalEnterGameplayAudio = new ExternalAudioClip(enterGameplayAudio, "AudioClips");
             ExternalGameplayLoadCompleteAudio = new ExternalAudioClip(gameplayLoadCompleteAudio, "AudioClips");
             ExternalGeneralTransitionAudio = new ExternalAudioClip(generalTransitionAudio, "AudioClips");
+            ExternalRetryAudio = new ExternalAudioClip(retryAudio, "AudioClips");
 
             ExternalRenderStartAudio.Load().Forget();
             ExternalEnterGameplayAudio.Load().Forget();
             ExternalGameplayLoadCompleteAudio.Load().Forget();
             ExternalGeneralTransitionAudio.Load().Forget();
+            ExternalRetryAudio.Load().Forget();
         }
 
         private void OnDestroy()
@@ -193,6 +230,7 @@ namespace ArcCreate.SceneTransition
             ExternalEnterGameplayAudio.Unload();
             ExternalGameplayLoadCompleteAudio.Unload();
             ExternalGeneralTransitionAudio.Unload();
+            ExternalRetryAudio.Unload();
         }
 
         private void OnThemeChange(Theme theme)

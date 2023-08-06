@@ -3,7 +3,9 @@ using ArcCreate.Data;
 using ArcCreate.SceneTransition;
 using ArcCreate.Storage;
 using ArcCreate.Storage.Data;
+using ArcCreate.Utility.Animation;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +16,7 @@ namespace ArcCreate.Selection.Interface
     {
         [SerializeField] private StorageData storage;
         [SerializeField] private Camera resultCamera;
+        [SerializeField] private ScriptedAnimator animator;
         [SerializeField] private TMP_Text title;
         [SerializeField] private TMP_Text composer;
         [SerializeField] private Image difficulty;
@@ -89,6 +92,7 @@ namespace ArcCreate.Selection.Interface
             aliasRect.offsetMax = new Vector2(aliasRect.offsetMax.x, -charterName.preferredHeight);
 
             audioPreview.PlayPreviewAudio(level, chart, cts.Token).Forget();
+            animator.Show();
         }
 
         public override void PassData(params object[] args)
@@ -112,15 +116,18 @@ namespace ArcCreate.Selection.Interface
         {
             returnButton.onClick.AddListener(ReturnToPreviousScene);
             retryButton.onClick.AddListener(RetryChart);
+            animator.HideImmediate();
             TransitionScene.Instance.SetTargetCamera(resultCamera, "Default");
         }
 
         private void ReturnToPreviousScene()
         {
-            // lol
-            TransitionSequence transition = new TransitionSequence();
-            SceneTransitionManager.Instance.SetTransition(transition);
-            SceneTransitionManager.Instance.SwitchScene(SceneNames.SelectScene).Forget();
+            animator.GetHideTween(out float _).Play().OnComplete(() =>
+            {
+                TransitionSequence transition = new TransitionSequence();
+                SceneTransitionManager.Instance.SetTransition(transition);
+                SceneTransitionManager.Instance.SwitchScene(SceneNames.SelectScene).Forget();
+            });
         }
 
         private void RetryChart()

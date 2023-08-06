@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50a84c7d0f4d10d43a384aed0d9b9d1c, type: 3}
-  m_Name: Grid
+  m_Name: Corner3
   m_EditorClassIdentifier: 
   colors:
   - Theme: 0
-    Color: {r: 0.14983091, g: 0.14983091, b: 0.3490566, a: 0.8}
+    Color: {r: 0.28947368, g: 0.28947368, b: 0.4, a: 0.5019608}
   - Theme: 1
-    Color: {r: 0.9636103, g: 0.8537736, b: 1, a: 0.5019608}
+    Color: {r: 0.25522876, g: 0.20882353, b: 0.2784314, a: 0.6}
   fallback: {r: 1, g: 1, b: 1, a: 1}

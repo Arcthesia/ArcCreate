@@ -1,4 +1,5 @@
 using System.Threading;
+using ArcCreate.Selection.SoundEffect;
 using ArcCreate.Storage;
 using ArcCreate.Utility.InfiniteScroll;
 using Cysharp.Threading.Tasks;
@@ -32,6 +33,7 @@ namespace ArcCreate.Selection.Interface
             ToggleCollapse();
             expandedIcon.SetActive(!HierarchyData.IsCollapsed);
             collapsedIcon.SetActive(HierarchyData.IsCollapsed);
+            Services.SoundEffect.Play(Sound.CellSelect);
         }
 
         public override void SetCellData(CellData cellData)

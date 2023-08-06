@@ -45,8 +45,10 @@ namespace ArcCreate.Gameplay.Audio
             SetPracticeMode(gameplayData.EnablePracticeMode.Value);
 
             retryTransition = new TransitionSequence()
+                .OnShow()
+                .AddTransition(new SoundTransition(TransitionScene.Sound.Retry))
                 .OnBoth()
-                .AddTransition(new TriangleTileTransition(true))
+                .AddTransition(new TriangleTileTransition())
                 .AddTransition(new PlayRetryCountTransition())
                 .AddTransition(new DecorationTransition());
         }

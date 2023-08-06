@@ -18,13 +18,13 @@ namespace ArcCreate.EditorScripts
             if (GUILayout.Button("Show animation"))
             {
                 animator.SetupComponents();
-                RunTween(animator.GetShowTween(out float duration), duration);
+                RunTween(animator.GetShowTween(out float duration));
             }
 
             if (GUILayout.Button("Hide animation"))
             {
                 animator.SetupComponents();
-                RunTween(animator.GetHideTween(out float duration), duration);
+                RunTween(animator.GetHideTween(out float duration));
             }
 
             GUILayout.EndHorizontal();
@@ -45,12 +45,11 @@ namespace ArcCreate.EditorScripts
             GUILayout.EndHorizontal();
         }
 
-        private async void RunTween(Tween tween, float duration)
+        private void RunTween(Tween tween)
         {
+            DOTweenEditorPreview.Stop();
             DOTweenEditorPreview.PrepareTweenForPreview(tween);
             DOTweenEditorPreview.Start();
-            await System.Threading.Tasks.Task.Delay((int)(duration * 1000));
-            DOTweenEditorPreview.Stop();
         }
     }
 }

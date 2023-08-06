@@ -267,15 +267,17 @@ namespace ArcCreate.Storage
             var (level, chart) = selection;
             TransitionSequence sequence = new TransitionSequence()
                 .OnShow()
+                .AddTransition(new SoundTransition(TransitionScene.Sound.EnterGameplay))
                 .AddTransition(new TriangleTileTransition())
                 .AddTransition(new DecorationTransition())
                 .AddTransition(new InfoTransition())
                 .OnHide()
+                .AddTransition(new SoundTransition(TransitionScene.Sound.GameplayLoadComplete))
                 .AddTransition(new InfoTransition())
                 .AddTransitionReversed(new PlayRetryCountTransition())
-                .AddTransition(new PlayRetryCountTransition(), 1000)
-                .AddTransition(new TriangleTileTransition(), 1000)
-                .AddTransition(new DecorationTransition(), 1000)
+                .AddTransition(new PlayRetryCountTransition(), 1200)
+                .AddTransition(new TriangleTileTransition(), 1200)
+                .AddTransition(new DecorationTransition(), 1200)
                 .SetWaitDuration(2000);
 
             SceneTransitionManager.Instance.SetTransition(sequence);

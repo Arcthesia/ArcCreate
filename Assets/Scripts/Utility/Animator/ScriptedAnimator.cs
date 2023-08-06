@@ -91,7 +91,7 @@ namespace ArcCreate.Utility.Animation
             Sequence sequence = DOTween.Sequence();
             foreach (var c in components)
             {
-                sequence = sequence.Join(c.GetShowTween());
+                sequence = sequence.Insert(0, c.GetShowTween());
             }
 
             duration = length;
@@ -108,7 +108,7 @@ namespace ArcCreate.Utility.Animation
             Sequence sequence = DOTween.Sequence();
             foreach (var c in components)
             {
-                sequence = sequence.Join(c.GetHideTween());
+                sequence = sequence.Insert(0, c.GetHideTween());
             }
 
             duration = length;
