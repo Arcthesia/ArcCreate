@@ -1,8 +1,7 @@
-using ArcCreate.SceneTransition;
 using ArcCreate.Utility.Animation;
 using UnityEngine;
 
-namespace ArcCreate.Utility
+namespace ArcCreate.SceneTransition
 {
     public class FitToContentText : ReactiveText
     {

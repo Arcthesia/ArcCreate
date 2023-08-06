@@ -309,7 +309,9 @@ namespace ArcCreate.Storage
         {
             TransitionSequence transition = new TransitionSequence()
                 .OnShow()
-                .AddTransition(new TriangleTileTransition());
+                .AddTransition(new TriangleTileTransition())
+                .OnBoth()
+                .AddTransition(new DecorationTransition());
             SceneTransitionManager.Instance.SetTransition(transition);
             SceneTransitionManager.Instance.SwitchScene(
                 SceneNames.ResultScene,

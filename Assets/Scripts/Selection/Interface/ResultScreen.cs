@@ -13,11 +13,17 @@ namespace ArcCreate.Selection.Interface
     public class ResultScreen : SceneRepresentative
     {
         [SerializeField] private StorageData storage;
+        [SerializeField] private Camera resultCamera;
         [SerializeField] private TMP_Text title;
         [SerializeField] private TMP_Text composer;
-        [SerializeField] private DifficultyCell difficulty;
+        [SerializeField] private Image difficulty;
         [SerializeField] private TMP_Text difficultyText;
+        [SerializeField] private GameObject charterFrame;
+        [SerializeField] private RectTransform charterRect;
         [SerializeField] private TMP_Text charterName;
+        [SerializeField] private GameObject aliasFrame;
+        [SerializeField] private RectTransform aliasRect;
+        [SerializeField] private TMP_Text aliasName;
         [SerializeField] private RawImage jacket;
         [SerializeField] private TMP_Text perfectEarly;
         [SerializeField] private TMP_Text perfectTotal;
@@ -34,10 +40,6 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private TMP_Text bestScore;
         [SerializeField] private TMP_Text scoreIncrease;
         [SerializeField] private TMP_Text score;
-        [SerializeField] private Image background;
-        [SerializeField] private Sprite[] backgroundSprites;
-        [SerializeField] private Image side;
-        [SerializeField] private Sprite[] sideSprites;
         [SerializeField] private GradeDisplay gradeDisplay;
         [SerializeField] private ClearResultDisplay clearResultDisplay;
         [SerializeField] private Button returnButton;
@@ -54,7 +56,7 @@ namespace ArcCreate.Selection.Interface
             title.text = chart.Title;
             composer.text = chart.Composer;
             ColorUtility.TryParseHtmlString(chart.DifficultyColor, out Color c);
-            difficulty.Color = c;
+            difficulty.color = c;
             difficultyText.text = chart.Difficulty;
             storage.ReleasePersistent(jacket.texture);
             storage.AssignTexture(jacket, level, chart.JacketPath).Forget();
@@ -71,28 +73,6 @@ namespace ArcCreate.Selection.Interface
             maxCombo.text = play.MaxCombo.ToString();
             gradeDisplay.Display(play.Grade);
             clearResultDisplay.Display(play.ClearResult);
-
-            string sideString = (chart.Skin?.Side ?? "").ToLower();
-            switch (sideString)
-            {
-                case "light":
-                    side.sprite = sideSprites[0];
-                    background.sprite = backgroundSprites[0];
-                    break;
-                case "conflict":
-                    side.sprite = sideSprites[1];
-                    background.sprite = backgroundSprites[1];
-                    break;
-                case "colorless":
-                    side.sprite = sideSprites[2];
-                    background.sprite = backgroundSprites[2];
-                    break;
-                default:
-                    side.sprite = sideSprites[0];
-                    background.sprite = backgroundSprites[0];
-                    break;
-            }
-
             playCount.text = play.PlayCount.ToString();
             retryCount.text = play.RetryCount.ToString();
 
@@ -102,16 +82,11 @@ namespace ArcCreate.Selection.Interface
             scoreIncrease.text = (current >= best ? "+" : "") + PlayResult.FormatScore(current - best);
             score.text = PlayResult.FormatScore(current);
 
-            charterName.gameObject.SetActive(!string.IsNullOrEmpty(chart.Charter));
-            if (!string.IsNullOrEmpty(chart.Alias))
-            {
-                charterName.text = $"{chart.Charter}\n<b>{I18n.S("Shutter.Alias")}</b>\n{chart.Alias}";
-            }
-
-            if (string.IsNullOrEmpty(chart.Alias) || charterName.preferredHeight > charterName.GetComponent<RectTransform>().rect.height)
-            {
-                charterName.text = $"<b>{I18n.S("Shutter.Charter")}</b>\n{chart.Charter}";
-            }
+            charterFrame.SetActive(!string.IsNullOrEmpty(chart.Charter));
+            aliasFrame.SetActive(!string.IsNullOrEmpty(chart.Alias));
+            charterName.text = chart.Charter ?? string.Empty;
+            aliasName.text = chart.Alias ?? string.Empty;
+            aliasRect.offsetMax = new Vector2(aliasRect.offsetMax.x, -charterName.preferredHeight);
 
             audioPreview.PlayPreviewAudio(level, chart, cts.Token).Forget();
         }
@@ -137,10 +112,14 @@ namespace ArcCreate.Selection.Interface
         {
             returnButton.onClick.AddListener(ReturnToPreviousScene);
             retryButton.onClick.AddListener(RetryChart);
+            TransitionScene.Instance.SetTargetCamera(resultCamera, "Default");
         }
 
         private void ReturnToPreviousScene()
         {
+            // lol
+            TransitionSequence transition = new TransitionSequence();
+            SceneTransitionManager.Instance.SetTransition(transition);
             SceneTransitionManager.Instance.SwitchScene(SceneNames.SelectScene).Forget();
         }
 
