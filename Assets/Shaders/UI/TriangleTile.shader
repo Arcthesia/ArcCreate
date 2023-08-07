@@ -51,7 +51,7 @@ Shader "UI/TriangleTile"
 			float4 frag (v2f i) : SV_Target
 			{ 
                 const float sqrt3 = 1.73205080757;
-                float2 screenPos = float2((i.screenPos.x - 0.5) * 720 * _ScreenParams.x / _ScreenParams.y, (i.screenPos.y - 0.5) * 1280 * _ScreenParams.y / _ScreenParams.x);
+                float2 screenPos = float2((i.screenPos.x - 0.5) * 720 * _ScreenParams.x / _ScreenParams.y, (i.screenPos.y - 0.5) * 720);
                 float edgeLength = _Scale;
 
                 // a, b, c are coordinates on the 3 axises on the triangular tile

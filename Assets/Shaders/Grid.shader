@@ -65,8 +65,8 @@ Shader "Particles/Grid"
 			half4 frag(v2f IN) : SV_Target
 			{
 				float2 screenCoord = IN.screenPos.xy / IN.screenPos.w;
-				screenCoord.y = screenCoord.y * _ScreenParams.y / _GridTex_TexelSize.w / 2 % 1;
-				screenCoord.x = screenCoord.x * _ScreenParams.x / _GridTex_TexelSize.z / 2 % 1;
+				screenCoord.y = screenCoord.y * 720 / _GridTex_TexelSize.w / 2 % 1;
+				screenCoord.x = screenCoord.x * 720 * _ScreenParams.x / _ScreenParams.y / _GridTex_TexelSize.z / 2 % 1;
 				half4 grid = tex2D(_GridTex, screenCoord);
 				half4 mask = tex2D(_MainTex, IN.texcoord);
 				half4 c = grid * mask;
@@ -118,8 +118,8 @@ Shader "Particles/Grid"
 			half4 frag(v2f IN) : SV_Target
 			{
 				float2 screenCoord = IN.screenPos.xy / IN.screenPos.w;
-				screenCoord.y = screenCoord.y * _ScreenParams.y / _GridTex_TexelSize.w / 2 % 1;
-				screenCoord.x = screenCoord.x * _ScreenParams.x / _GridTex_TexelSize.z / 2 % 1;
+				screenCoord.y = screenCoord.y * 720 / _GridTex_TexelSize.w / 2 % 1;
+				screenCoord.x = screenCoord.x * 720 * _ScreenParams.x / _ScreenParams.y / _GridTex_TexelSize.z / 2 % 1;
 				half4 grid = tex2D(_GridTex, screenCoord);
 				half4 mask = tex2D(_MainTex, IN.texcoord);
 				half4 c = grid * mask;

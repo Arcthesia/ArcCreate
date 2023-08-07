@@ -387,6 +387,7 @@ namespace ArcCreate.Gameplay.Audio
             {
                 PlayResult result = Services.Score.GetPlayResult();
                 gameplayData.NotifyPlayComplete(result);
+                SetEnableAutorotation(true);
             }
 
             audioEndReported = true;
