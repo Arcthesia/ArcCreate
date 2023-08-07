@@ -3316,7 +3316,7 @@ MonoBehaviour:
   gameplayLoadCompleteAudio: {fileID: 8300000, guid: ed455981ea06f1d47b19a5df223ea448,
     type: 3}
   retryAudio: {fileID: 8300000, guid: 24ec627cde6d15248acfe17be44dae80, type: 3}
-  generalTransitionAudio: {fileID: 8300000, guid: 49c9d1bef8b4f6a1893bdceae0c92c61,
+  generalTransitionAudio: {fileID: 8300000, guid: 24ec627cde6d15248acfe17be44dae80,
     type: 3}
   preGreetingColor1: {r: 0, g: 0, b: 0, a: 1}
   preGreetingColor2: {r: 0, g: 0, b: 0, a: 1}

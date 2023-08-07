@@ -841,13 +841,19 @@ Gameplay:
     DeleteConfirmation: |-
       Are you sure you want to delete the following assets?
       Your score will not be deleted.
+    PackDeleteConfirmation: |-
+      You are deleting the pack:
+      <color=#FFFFFFB4>{0}</color>
+      Do you want to also delete all levels belonging to this pack, or keep the levels and delete this pack only?
     CannotDeleteDefault: |-
       Default assets cannot be deleted.
     EnablePractice: |-
       Practice mode enabled for next play.
     Action:
+      Copy: Copy
       Delete: Delete
       Cancel: Cancel
+      Keep: Keep
       Done: Done
     List:
       RemoteTestplay: Remote Testplay
