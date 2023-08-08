@@ -93,6 +93,8 @@ namespace ArcCreate.Compose.Project
                             }
                         }
 
+                        AddAllFilesInDirectory(projectDir, "Scenecontrol", referencedFiles);
+
                         foreach (var file in referencedFiles)
                         {
                             if (file == null)
@@ -131,6 +133,28 @@ namespace ArcCreate.Compose.Project
                 }
 
                 Debug.LogError(e);
+            }
+        }
+
+        private void AddAllFilesInDirectory(string projectDir, string includeDir, HashSet<string> referencedFiles)
+        {
+            projectDir = new DirectoryInfo(projectDir).FullName;
+            Stack<DirectoryInfo> stack = new Stack<DirectoryInfo>();
+            DirectoryInfo dir = new DirectoryInfo(Path.Combine(projectDir, includeDir));
+            stack.Push(dir);
+            while (stack.Count > 0)
+            {
+                DirectoryInfo d = stack.Pop();
+                foreach (var subdir in d.EnumerateDirectories())
+                {
+                    stack.Push(subdir);
+                }
+
+                foreach (var file in d.EnumerateFiles())
+                {
+                    string relativeToProjectDir = file.FullName.Substring(0, projectDir.Length);
+                    referencedFiles.Add(relativeToProjectDir);
+                }
             }
         }
 

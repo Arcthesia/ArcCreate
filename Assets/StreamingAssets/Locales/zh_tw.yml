@@ -870,6 +870,7 @@ Gameplay:
         EarlyLateDisplayDetail: 調整 Early/Late 位置。
         LimitFramerate: 限制幀率
         LimitFramerateDetail: 限制幀率至60FPS以減少電池消耗，可能會增加延遲。
+      Interface:
         ShowFPS: 顯示幀率
         ShowFPSDetail: 調整幀率顯示。
         ShowDebug: 顯示除錯訊息

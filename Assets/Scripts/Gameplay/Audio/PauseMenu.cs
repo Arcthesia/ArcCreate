@@ -1,3 +1,4 @@
+using System;
 using ArcCreate.Gameplay.Audio.Practice;
 using ArcCreate.SceneTransition;
 using ArcCreate.Utility.Extension;
@@ -20,6 +21,8 @@ namespace ArcCreate.Gameplay.Audio
         [SerializeField] private Button[] returnButtons;
         [SerializeField] private PracticeMenu practiceMenu;
         [SerializeField] private GameObject pauseControl;
+        [SerializeField] private GameObject normalLayout;
+        [SerializeField] private GameObject reversedLayout;
         private TransitionSequence retryTransition;
 
         private void Awake()
@@ -44,6 +47,9 @@ namespace ArcCreate.Gameplay.Audio
             gameplayData.EnablePracticeMode.OnValueChange += SetPracticeMode;
             SetPracticeMode(gameplayData.EnablePracticeMode.Value);
 
+            Settings.SwitchResumeAndRetryPosition.OnValueChanged.AddListener(OnSwitchLayoutSettings);
+            OnSwitchLayoutSettings(Settings.SwitchResumeAndRetryPosition.Value);
+
             retryTransition = new TransitionSequence()
                 .OnShow()
                 .AddTransition(new SoundTransition(TransitionScene.Sound.Retry))
@@ -51,6 +57,12 @@ namespace ArcCreate.Gameplay.Audio
                 .AddTransition(new TriangleTileTransition())
                 .AddTransition(new PlayRetryCountTransition())
                 .AddTransition(new DecorationTransition());
+        }
+
+        private void OnSwitchLayoutSettings(bool reversed)
+        {
+            normalLayout.SetActive(!reversed);
+            reversedLayout.SetActive(reversed);
         }
 
         private void OnDestroy()

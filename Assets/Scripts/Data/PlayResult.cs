@@ -26,6 +26,10 @@ namespace ArcCreate.Data
 
         public int RetryCount { get; set; }
 
+        public double OffsetMean { get; set; } = 0;
+
+        public double OffsetStd { get; set; } = 0;
+
         public float GaugeValue { get; set; }
 
         public float GaugeClearRequirement { get; set; }

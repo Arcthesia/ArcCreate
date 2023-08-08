@@ -37,6 +37,7 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private TMP_Text missEarly;
         [SerializeField] private TMP_Text missTotal;
         [SerializeField] private TMP_Text missLate;
+        [SerializeField] private TMP_Text offsetInfo;
         [SerializeField] private TMP_Text maxCombo;
         [SerializeField] private TMP_Text playCount;
         [SerializeField] private TMP_Text retryCount;
@@ -84,6 +85,8 @@ namespace ArcCreate.Selection.Interface
             bestScore.text = PlayResult.FormatScore(best);
             scoreIncrease.text = (current >= best ? "+" : "") + PlayResult.FormatScore(current - best);
             score.text = PlayResult.FormatScore(current);
+            offsetInfo.gameObject.SetActive(Settings.DisplayMsDifference.Value);
+            offsetInfo.text = $"AVG: {play.OffsetMean:f2}  STD: {play.OffsetStd:f2}";
 
             charterFrame.SetActive(!string.IsNullOrEmpty(chart.Charter));
             aliasFrame.SetActive(!string.IsNullOrEmpty(chart.Alias));

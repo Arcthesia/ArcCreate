@@ -23,11 +23,12 @@ namespace ArcCreate.Gameplay.Particle
 
         /// <summary>
         /// Play a text (e.g "Perfect") particle. The coordinate will be translated to screen-space coordinate.
-        /// Additionally display the "EARLY" / "LATE" text if judgement matches.
+        /// Additionally display the "EARLY" / "LATE" text if judgement matches, or if DisplayMsDifference is on, will display the ms offset.
         /// </summary>
         /// <param name="worldPosition">The world-space coordinate.</param>
         /// <param name="result">Judgement to play.</param>
-        void PlayTextParticle(Vector3 worldPosition, JudgementResult result);
+        /// <param name="offset">Offset from theoretical timing.</param>
+        void PlayTextParticle(Vector3 worldPosition, JudgementResult result, Option<int> offset);
 
         /// <summary>
         /// Play an arc note particle. The coordinate will be translated to screen-space coordinate.

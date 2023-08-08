@@ -833,6 +833,7 @@ Gameplay:
         EarlyLateDisplayDetail: Vị trí của Late/Early
         LimitFramerate: Giới hạn khung hình
         LimitFramerateDetail: Giới hạn khung hình xuống 60 FPS để tiết kiệm pin. Có thể tăng độ trễ.
+      Interface:
         ShowFPS: Hiện FPS
         ShowFPSDetail: Cho bạn thấy FPS hiện tại.
         ShowDebug: Hiện thông tin gỡ lỗi

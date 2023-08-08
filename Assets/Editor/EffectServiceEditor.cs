@@ -46,7 +46,7 @@ namespace ArcCreate.EditorScripts
 
             if (GUILayout.Button("Play text effect"))
             {
-                effect.PlayTextParticle(new Vector3(x, y), result);
+                effect.PlayTextParticle(new Vector3(x, y), result, Option<int>.None());
             }
 
             GUILayout.EndHorizontal();

@@ -61,7 +61,7 @@ namespace ArcCreate.Gameplay.Audio.Practice
 
         private void ChangeSpeed()
         {
-            float speed = Services.Audio.PlaybackSpeed;
+            float speed = gameplayData.PlaybackSpeed.Value;
             float nextSpeed = (Mathf.Floor(speed / speedIncrement) - 1) * speedIncrement;
             if (nextSpeed <= 0)
             {
@@ -69,7 +69,7 @@ namespace ArcCreate.Gameplay.Audio.Practice
             }
 
             speedText.text = nextSpeed.ToString("f2") + "x";
-            Services.Audio.PlaybackSpeed = nextSpeed;
+            gameplayData.PlaybackSpeed.Value = nextSpeed;
         }
 
         private void TurnRepeatOff()

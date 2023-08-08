@@ -875,6 +875,7 @@ Gameplay:
         EarlyLateDisplayDetail: 调节过早/过晚提示的位置
         LimitFramerate: 限制帧率
         LimitFramerateDetail: 限制帧率为60帧以省电。可能会增加延迟。
+      Interface:
         ShowFPS: 显示FPS
         ShowFPSDetail: 开关FPS显示
         ShowDebug: 显示调试信息

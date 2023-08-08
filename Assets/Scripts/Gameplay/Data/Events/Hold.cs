@@ -236,7 +236,7 @@ namespace ArcCreate.Gameplay.Data
                 highlight = false;
                 if (isJudgement)
                 {
-                    Services.Score.ProcessJudgement(JudgementResult.MissLate);
+                    Services.Score.ProcessJudgement(JudgementResult.MissLate, Option<int>.None());
                     if (!spawnedParticleThisFrame)
                     {
                         PlayParticle(JudgementResult.MissLate);
@@ -250,7 +250,7 @@ namespace ArcCreate.Gameplay.Data
                 highlight = true;
                 if (isJudgement)
                 {
-                    Services.Score.ProcessJudgement(JudgementResult.Max);
+                    Services.Score.ProcessJudgement(JudgementResult.Max, Option<int>.None());
                     if (!spawnedParticleThisFrame)
                     {
                         PlayParticle(JudgementResult.Max);
@@ -306,7 +306,7 @@ namespace ArcCreate.Gameplay.Data
 
         private void PlayParticle(JudgementResult result)
         {
-            Services.Particle.PlayTextParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0), result);
+            Services.Particle.PlayTextParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0), result, Option<int>.None());
         }
     }
 }

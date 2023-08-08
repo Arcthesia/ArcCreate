@@ -498,6 +498,13 @@ Compose:
         Open: Open
         Save: Save
         InputMode: Input Mode
+        InputModeOptions:
+          auto: Auto
+          autocontroller: Auto (Controller)
+          touch: Touch
+          controller: Controller
+          mouse: Mouse
+          idle: Idle
         FullScreen: Full Screen
         ToggleFullScreenHint: Press F11 to toggle full screen mode.
         Chart: Chart
@@ -656,6 +663,18 @@ Compose:
           AspectRatio: Aspect Ratio
           Indicator: Indicator
           MaxIndicator: Enable max indicator
+          Colorblind: Use colorblind arc colors
+          ScoreDisplay: Score display
+        Judgement:
+          Name: Judgement
+          NotUsedInAutoOrIdle: "These options take no effect in auto or idle mode:"
+          EarlyLatePosition: Early/Late position
+          ShowMsDifference: Show ms difference
+          ShowJudgement: "Show judgement:"
+          ShowMax: Perfect (Max)
+          ShowPerfect: Perfect (Early/Late)
+          ShowGood: Good
+          ShowMiss: Miss
         Grid:
           Name: Grid
           Slot: Slot
@@ -679,6 +698,7 @@ Compose:
         Input:
           Name: Input
           ReloadKeybinds: Reload keybinds
+          AllowCreatingNotesBackward: Allow creating notes backward
         Files:
           Name: Files
           Backup: Create backup on save
@@ -919,8 +939,23 @@ Gameplay:
         MaxDisplayDetail: Toggle max score indicator display.
         EarlyLateDisplay: Early/Late display
         EarlyLateDisplayDetail: Adjust early/late text position.
+        ScoreDisplay: Score display
         LimitFramerate: Limit framerate
         LimitFramerateDetail: Limit display framerate to 60 FPS to preserve battery life. Might increase latency.
+      Judgement:
+        Name: Judgement
+        ShowMsDifference: Display miliseconds differences
+        ShowMsDifferenceDetail: Display exact miliseconds differences instead of EARLY / LATE.
+        ShowMax: Display Perfect (Max) judgement
+        ShowPerfect: Display Perfect (Early / Late) judgement
+        ShowGood: Display Good judgement
+        ShowMiss: Display Miss judgement
+      Interface:
+        Name: Interface
+        ForceTheme: Force UI Theme
+        ForceThemeDetail: Set the UI to display a theme regardless of selected chart.
+        SwitchResumeAndRetry: Switch Resume and Retry position
+        SwitchResumeAndRetryDetail: Switch the positions of Resume and Retry buttons within the Pause screen.
         ShowFPS: Show FPS
         ShowFPSDetail: Toggle FPS display.
         ShowDebug: Show debug information
@@ -933,6 +968,20 @@ Gameplay:
         middle: Middle
         bottom: Bottom
         top: Top
+      ScoreDisplay:
+        default: Default
+        predictive: Predictive
+        difference: Difference
+        decrease: Decrease
+      ScoreDisplayDetails:
+        default: The default display mode. Score increases as you hit notes.
+        predictive: Score displays distance to the closest Grade threshold.
+        difference: Score shows difference to theoretically perfect score.
+        decrease: Score starts at max value and decreases.
+      ForceTheme:
+        default: Default
+        light: Light
+        dark: Dark
 
 Shutter:
   Composer: Music

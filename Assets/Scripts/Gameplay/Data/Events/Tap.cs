@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
-using ArcCreate.Gameplay.Render;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
@@ -122,8 +121,8 @@ namespace ArcCreate.Gameplay.Data
         {
             JudgementResult result = offset.CalculateJudgeResult();
             Services.Particle.PlayTapParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0), result);
-            Services.Particle.PlayTextParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0), result);
-            Services.Score.ProcessJudgement(result);
+            Services.Particle.PlayTextParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0), result, offset);
+            Services.Score.ProcessJudgement(result, offset);
             isHit = true;
 
             if (!result.IsMiss())

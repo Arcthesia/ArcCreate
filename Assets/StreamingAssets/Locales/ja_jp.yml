@@ -916,6 +916,7 @@ Gameplay:
         EarlyLateDisplayDetail: Early/Lateの位置を調整します。
         LimitFramerate: FPS制限
         LimitFramerateDetail: FPSを60に制限します。バッテリーの消費が抑えられますが、遅延が増加する場合があります。
+      Interface:
         ShowFPS: FPSを表示
         ShowFPSDetail: FPSの表示/非表示を切り替えます。
         ShowDebug: デバッグ情報を表示

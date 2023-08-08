@@ -19,6 +19,8 @@ namespace ArcCreate.Compose.Editing
 
         private readonly HashSet<Arc> selectedArcs = new HashSet<Arc>();
 
+        private bool AllowCreatingNoteBackwards => Settings.AllowCreatingNotesBackward.Value;
+
         [EditorAction("Start", false, "<mouse1>")]
         [SubAction("Confirm", false, "<mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
@@ -106,7 +108,7 @@ namespace ArcCreate.Compose.Editing
                         hold.EndTiming = Mathf.Max(timing1, t);
                         Services.Gameplay.Chart.UpdateEvents(events);
                     },
-                    constraint: t => t != timing1);
+                    constraint: t => t != timing1 && (AllowCreatingNoteBackwards || t > timing1));
                 previewHold.gameObject.SetActive(false);
                 Services.Cursor.EnableLaneCursor = true;
 
@@ -178,7 +180,8 @@ namespace ArcCreate.Compose.Editing
                         arc.Timing = Mathf.Min(timing1, t);
                         arc.EndTiming = Mathf.Max(timing1, t);
                         Services.Gameplay.Chart.UpdateEvents(events);
-                    });
+                    },
+                    constraint: t => AllowCreatingNoteBackwards || t >= timing1);
 
                 if (!timing2Success)
                 {

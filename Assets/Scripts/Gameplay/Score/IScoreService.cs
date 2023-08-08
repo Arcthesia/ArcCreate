@@ -27,7 +27,8 @@ namespace ArcCreate.Gameplay.Score
         /// Process one or multiple judgement events.
         /// </summary>
         /// <param name="result">The result of the judgement.</param>
-        void ProcessJudgement(JudgementResult result);
+        /// <param name="offset">The optional offset from theoretical timing of the judgement.</param>
+        void ProcessJudgement(JudgementResult result, Option<int> offset);
 
         /// <summary>
         /// Set the score and combo counter to the state with the specified combo counts. Used for auto mode.

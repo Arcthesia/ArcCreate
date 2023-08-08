@@ -22,4 +22,31 @@ namespace ArcCreate.Data
         D = 0,
         Unknown = -1,
     }
+
+#pragma warning disable
+    public static class ClearResultUtility
+#pragma warning restore
+    {
+        public static string GetText(this Grade grade)
+        {
+            switch (grade)
+            {
+                case Grade.EXPlus:
+                    return "EX+";
+                case Grade.EX:
+                    return "EX";
+                case Grade.AA:
+                    return "AA";
+                case Grade.A:
+                    return "A";
+                case Grade.B:
+                    return "B";
+                case Grade.C:
+                    return "C";
+                case Grade.D:
+                default:
+                    return "D";
+            }
+        }
+    }
 }

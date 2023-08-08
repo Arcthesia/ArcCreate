@@ -111,7 +111,15 @@ namespace ArcCreate.Gameplay
         /// </summary>
         public State<string> VideoBackgroundUrl { get; } = new State<string>();
 
+        /// <summary>
+        /// Whether or not to enable practice mode for gameplay scene.
+        /// </summary>
         public State<bool> EnablePracticeMode { get; } = new State<bool>(false);
+
+        /// <summary>
+        /// The audio playback speed.
+        /// </summary>
+        public State<float> PlaybackSpeed { get; } = new State<float>(1);
 #pragma warning restore
 
         /// <summary>

@@ -20,6 +20,16 @@ namespace ArcCreate
         public static readonly IntSetting ViewportAspectRatioSetting = new IntSetting("ViewportAspectRatioSetting", 0);
         public static readonly BoolSetting ShowGameplayDebug = new BoolSetting("ShowGameplayDebug", false);
         public static readonly IntSetting InputMode = new IntSetting("Gameplay.InputMode", 0);
+        public static readonly IntSetting ForceTheme = new IntSetting("UI.ForceTheme", 0);
+        public static readonly IntSetting ScoreDisplayMode = new IntSetting("UI.ScoreDisplayMode", 0);
+        public static readonly BoolSetting SwitchResumeAndRetryPosition = new BoolSetting("UI.SwitchResumeAndRetryPosition", false);
+
+        // Judgement
+        public static readonly BoolSetting ShowMaxJudgement = new BoolSetting("Gameplay.Judgement.ShowMax", true);
+        public static readonly BoolSetting ShowPerfectJudgement = new BoolSetting("Gameplay.Judgement.ShowPerfect", true);
+        public static readonly BoolSetting ShowGoodJudgement = new BoolSetting("Gameplay.Judgement.ShowGood", true);
+        public static readonly BoolSetting ShowMissJudgement = new BoolSetting("Gameplay.Judgement.ShowMiss", true);
+        public static readonly BoolSetting DisplayMsDifference = new BoolSetting("Gameplay.Judgement.DisplayMsDifference", false);
 
         // Audio
         public static readonly IntSetting GlobalAudioOffset = new IntSetting("GlobalAudioOffset", 0);
@@ -52,7 +62,7 @@ namespace ArcCreate
         public static readonly IntSetting RenderHeight = new IntSetting("RenderPreferences.Height", 1080);
         public static readonly FloatSetting DownscaleFactor = new FloatSetting("RenderPreferences.DownscaleFactor", 1.0f);
         public static readonly StringSetting FFmpegPath = new StringSetting("RenderPreferences.FFmpegPath", "ffmpeg");
-        public static readonly BoolSetting EnableEasterEggs = new BoolSetting("Fun.EasterEggs", Application.isEditor);
+        public static readonly StringSetting LastUsedPublisherName = new StringSetting("Editor.Export.LastUsedPublisherName", null);
 
         // Selection
         public static readonly StringSetting SelectionGroupStrategy = new StringSetting("Selection.Group", "none");
@@ -64,8 +74,8 @@ namespace ArcCreate
         public static readonly BoolSetting ShouldBackup = new BoolSetting("Editor.Backup.Enable", true);
         public static readonly IntSetting BackupCount = new IntSetting("Editor.Backup.Count", 10);
         public static readonly BoolSetting SyncToDSPTime = new BoolSetting("Editor.SyncToDSPTime", false);
-
-        public static readonly StringSetting LastUsedPublisherName = new StringSetting("Editor.Export.LastUsedPublisherName", null);
+        public static readonly BoolSetting AllowCreatingNotesBackward = new BoolSetting("Editor.AllowCreatingNotesBackward", true);
+        public static readonly BoolSetting EnableEasterEggs = new BoolSetting("Fun.EasterEggs", Application.isEditor);
 
         [RuntimeInitializeOnLoadMethod]
         public static void OnInitialize()

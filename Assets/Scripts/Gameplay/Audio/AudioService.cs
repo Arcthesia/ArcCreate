@@ -103,21 +103,6 @@ namespace ArcCreate.Gameplay.Audio
             }
         }
 
-        public float PlaybackSpeed
-        {
-            get => playbackSpeed;
-            set
-            {
-                playbackSpeed = value;
-                audioSource.pitch = value;
-                if (IsPlayingAndNotStationary && (Application.isMobilePlatform || Settings.SyncToDSPTime.Value))
-                {
-                    Pause();
-                    ResumeWithDelay(200, false);
-                }
-            }
-        }
-
         public int AudioLength { get; private set; }
 
         public bool IsPlaying => audioSource.isPlaying;
@@ -355,12 +340,26 @@ namespace ArcCreate.Gameplay.Audio
             gameplayData.AudioClip.OnValueChange += OnClipLoad;
             Settings.MusicAudio.OnValueChanged.AddListener(OnMusicAudioSettings);
             OnMusicAudioSettings(Settings.MusicAudio.Value);
+            gameplayData.PlaybackSpeed.OnValueChange += OnPlaybackSpeedChange;
+            OnPlaybackSpeedChange(gameplayData.PlaybackSpeed.Value);
         }
 
         private void OnDestroy()
         {
             gameplayData.AudioClip.OnValueChange -= OnClipLoad;
             Settings.MusicAudio.OnValueChanged.RemoveListener(OnMusicAudioSettings);
+            gameplayData.PlaybackSpeed.OnValueChange -= OnPlaybackSpeedChange;
+        }
+
+        private void OnPlaybackSpeedChange(float value)
+        {
+            playbackSpeed = value;
+            audioSource.pitch = value;
+            if (IsPlayingAndNotStationary && (Application.isMobilePlatform || Settings.SyncToDSPTime.Value))
+            {
+                Pause();
+                ResumeWithDelay(200, false);
+            }
         }
 
         private void OnClipLoad(AudioClip clip)

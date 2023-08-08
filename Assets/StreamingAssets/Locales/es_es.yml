@@ -864,6 +864,7 @@ Gameplay:
         EarlyLateDisplayDetail: Ajusta la posición de los textos EARLY/LATE.
         LimitFramerate: <size=10>Limitar velocidad de fotogramas</size>
         LimitFramerateDetail: <size=10>Limita velocidad de fotogramas a 60 FPS para preservar la duración de la batería. Podría aumentar la latencia.</size>
+      Interface:
         ShowFPS: Mostrar FPS
         ShowFPSDetail: Activa la visualización de FPS.
         ShowDebug: <size=10>Mostrar información de depuración</size>

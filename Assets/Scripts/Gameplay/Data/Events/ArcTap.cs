@@ -123,8 +123,8 @@ namespace ArcCreate.Gameplay.Data
         {
             JudgementResult result = offset.CalculateJudgeResult();
             Services.Particle.PlayTapParticle(new Vector3(WorldX, WorldY), result);
-            Services.Particle.PlayTextParticle(new Vector3(WorldX, WorldY), result);
-            Services.Score.ProcessJudgement(result);
+            Services.Particle.PlayTextParticle(new Vector3(WorldX, WorldY), result, offset);
+            Services.Score.ProcessJudgement(result, offset);
             isHit = true;
 
             if (!result.IsMiss())

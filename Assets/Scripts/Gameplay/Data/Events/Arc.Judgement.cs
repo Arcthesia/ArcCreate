@@ -105,11 +105,11 @@ namespace ArcCreate.Gameplay.Data
                 {
                     if (!spawnedParticleThisFrame)
                     {
-                        Services.Particle.PlayTextParticle(currentPos, JudgementResult.MissLate);
+                        Services.Particle.PlayTextParticle(currentPos, JudgementResult.MissLate, Option<int>.None());
                         spawnedParticleThisFrame = true;
                     }
 
-                    Services.Score.ProcessJudgement(JudgementResult.MissLate);
+                    Services.Score.ProcessJudgement(JudgementResult.MissLate, Option<int>.None());
                 }
             }
             else if (currentTiming <= EndTiming + Values.HoldMissLateJudgeWindow)
@@ -126,11 +126,11 @@ namespace ArcCreate.Gameplay.Data
                 {
                     if (!spawnedParticleThisFrame)
                     {
-                        Services.Particle.PlayTextParticle(currentPos, JudgementResult.Max);
+                        Services.Particle.PlayTextParticle(currentPos, JudgementResult.Max, Option<int>.None());
                         spawnedParticleThisFrame = true;
                     }
 
-                    Services.Score.ProcessJudgement(JudgementResult.Max);
+                    Services.Score.ProcessJudgement(JudgementResult.Max, Option<int>.None());
                 }
             }
         }

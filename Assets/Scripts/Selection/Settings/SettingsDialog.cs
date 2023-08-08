@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using ArcCreate.Data;
 using ArcCreate.Gameplay;
 using ArcCreate.Utility;
@@ -11,13 +12,14 @@ namespace ArcCreate.Selection.Interface
 {
     public class SettingsDialog : Dialog
     {
+        [SerializeField] private ThemeGroup themeGroup;
         [SerializeField] private GameplayData gameplayData;
 
         [Header("Gameplay")]
         [SerializeField] private Button decreaseSpeedButton;
         [SerializeField] private Button increateSpeedButton;
         [SerializeField] private TMP_Text noteSpeedText;
-        [SerializeField] private Toggle earlyLatePerfectToggle;
+        [SerializeField] private SettingsToggle earlyLatePerfectSetting;
         [SerializeField] private Button enablePracticeButton;
         [SerializeField] private Button disablePracticeButton;
         [SerializeField] private ScriptedAnimator practiceAnimation;
@@ -36,63 +38,72 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private Dialog setupOffsetDialog;
 
         [Header("Visual")]
-        [SerializeField] private Toggle colorblindModeToggle;
-        [SerializeField] private Button changeFrPmDisplayPositionButton;
-        [SerializeField] private TMP_Text frPmDisplayPositionText;
-        [SerializeField] private Button changeLateEarlyPositionButton;
-        [SerializeField] private TMP_Text lateEarlyPositionText;
-        [SerializeField] private Toggle maxIndicatorToggle;
-        [SerializeField] private Toggle limitFrameRateToggle;
-        [SerializeField] private Toggle showFpsToggle;
-        [SerializeField] private Toggle showDebug;
+        [SerializeField] private SettingsToggle colorblindModeSetting;
+        [SerializeField] private SettingsEnum frPmDisplayPositionSetting;
+        [SerializeField] private SettingsEnum lateEarlyPositionSetting;
+        [SerializeField] private SettingsToggle maxIndicatorSetting;
+        [SerializeField] private SettingsToggle limitFrameRateSetting;
+        [SerializeField] private SettingsEnum scoreDisplaySetting;
+        [SerializeField] private List<ScoreDisplayPreviewItem> scoreDisplayPreviews;
+
+        [Header("Judgement")]
+        [SerializeField] private SettingsToggle showMsDifferenceSetting;
+        [SerializeField] private SettingsToggle showMaxSetting;
+        [SerializeField] private SettingsToggle showPerfectSetting;
+        [SerializeField] private SettingsToggle showGoodSetting;
+        [SerializeField] private SettingsToggle showMissSetting;
+
+        [Header("Interface")]
+        [SerializeField] private SettingsEnum forceUIThemeSetting;
+        [SerializeField] private SettingsToggle switchResumeAndRetrySetting;
+        [SerializeField] private SettingsToggle showFpsSetting;
+        [SerializeField] private SettingsToggle showDebugSetting;
 
         protected override void Awake()
         {
             base.Awake();
             decreaseSpeedButton.onClick.AddListener(OnDecreaseSpeedButton);
             increateSpeedButton.onClick.AddListener(OnIncreateSpeedButton);
-            earlyLatePerfectToggle.onValueChanged.AddListener(OnEarlyLatePerfectToggle);
             increaseNoteVolumeButton.onClick.AddListener(OnIncreaseNoteVolumeButton);
             decreaseNoteVolumeButton.onClick.AddListener(OnDecreaseNoteVolumeButton);
             increaseMusicVolumeButton.onClick.AddListener(OnIncreaseMusicVolumeButton);
             decreaseMusicVolumeButton.onClick.AddListener(OnDecreaseMusicVolumeButton);
             increaseOffsetButton.onClick.AddListener(OnIncreaseOffsetButton);
             decreaseOffsetButton.onClick.AddListener(OnDecreaseOffsetButton);
-            colorblindModeToggle.onValueChanged.AddListener(OnColorblindModeToggle);
-            changeFrPmDisplayPositionButton.onClick.AddListener(OnFrPmDisplayButton);
-            changeLateEarlyPositionButton.onClick.AddListener(OnChangeLateEarlyPositionButton);
-            limitFrameRateToggle.onValueChanged.AddListener(OnLimitFrameRateToggle);
-            showFpsToggle.onValueChanged.AddListener(OnShowFpsToggle);
-            showDebug.onValueChanged.AddListener(OnShowDebugToggle);
-            maxIndicatorToggle.onValueChanged.AddListener(OnMaxIndicatorToggle);
             enablePracticeButton.onClick.AddListener(EnablePractice);
             disablePracticeButton.onClick.AddListener(DisablePractice);
 
             Settings.DropRate.OnValueChanged.AddListener(OnDropRateSettings);
-            Settings.ShowEarlyLatePerfect.OnValueChanged.AddListener(OnShowEarlyLatePerfectSettings);
             Settings.MusicAudio.OnValueChanged.AddListener(OnMusicAudioSettings);
             Settings.EffectAudio.OnValueChanged.AddListener(OnEffectAudioSettings);
             Settings.GlobalAudioOffset.OnValueChanged.AddListener(OnGlobalAudioOffsetSettings);
-            Settings.EnableColorblind.OnValueChanged.AddListener(OnEnableColorblindSettings);
-            Settings.FrPmIndicatorPosition.OnValueChanged.AddListener(OnFrPmIndicatorPositionSettings);
-            Settings.LateEarlyTextPosition.OnValueChanged.AddListener(OnLateEarlyTextPositionSettings);
-            Settings.LimitFrameRate.OnValueChanged.AddListener(OnLimitFrameRateSettings);
-            Settings.ShowFPSCounter.OnValueChanged.AddListener(OnShowFPSCounterSettings);
-            Settings.ShowGameplayDebug.OnValueChanged.AddListener(OnShowDebugSettings);
-            Settings.EnableMaxIndicator.OnValueChanged.AddListener(OnMaxIndicatorSettings);
+            Settings.ScoreDisplayMode.OnValueChanged.AddListener(ChangeScoreDisplayPreview);
+            Settings.ForceTheme.OnValueChanged.AddListener(OnForceThemeSettings);
 
             OnDropRateSettings(Settings.DropRate.Value);
-            OnShowEarlyLatePerfectSettings(Settings.ShowEarlyLatePerfect.Value);
             OnMusicAudioSettings(Settings.MusicAudio.Value);
             OnEffectAudioSettings(Settings.EffectAudio.Value);
             OnGlobalAudioOffsetSettings(Settings.GlobalAudioOffset.Value);
-            OnEnableColorblindSettings(Settings.EnableColorblind.Value);
-            OnFrPmIndicatorPositionSettings(Settings.FrPmIndicatorPosition.Value);
-            OnLateEarlyTextPositionSettings(Settings.LateEarlyTextPosition.Value);
-            OnLimitFrameRateSettings(Settings.LimitFrameRate.Value);
-            OnShowFPSCounterSettings(Settings.ShowFPSCounter.Value);
-            OnShowDebugSettings(Settings.ShowGameplayDebug.Value);
-            OnMaxIndicatorSettings(Settings.EnableMaxIndicator.Value);
+            ChangeScoreDisplayPreview(Settings.ScoreDisplayMode.Value);
+            OnForceThemeSettings(Settings.ForceTheme.Value);
+
+            earlyLatePerfectSetting.Setup(Settings.ShowEarlyLatePerfect);
+            colorblindModeSetting.Setup(Settings.EnableColorblind);
+            frPmDisplayPositionSetting.Setup(Settings.FrPmIndicatorPosition, typeof(FrPmPosition), "Gameplay.Selection.Settings.FrPmPosition");
+            earlyLatePerfectSetting.Setup(Settings.ShowEarlyLatePerfect);
+            lateEarlyPositionSetting.Setup(Settings.LateEarlyTextPosition, typeof(EarlyLateTextPosition), "Gameplay.Selection.Settings.EarlyLateTextPosition");
+            limitFrameRateSetting.Setup(Settings.LimitFrameRate);
+            showFpsSetting.Setup(Settings.ShowFPSCounter);
+            showDebugSetting.Setup(Settings.ShowGameplayDebug);
+            maxIndicatorSetting.Setup(Settings.EnableMaxIndicator);
+            scoreDisplaySetting.Setup(Settings.ScoreDisplayMode, typeof(ScoreDisplayMode), "Gameplay.Selection.Settings.ScoreDisplay");
+            showMsDifferenceSetting.Setup(Settings.DisplayMsDifference);
+            showMaxSetting.Setup(Settings.ShowMaxJudgement);
+            showPerfectSetting.Setup(Settings.ShowPerfectJudgement);
+            showGoodSetting.Setup(Settings.ShowGoodJudgement);
+            showMissSetting.Setup(Settings.ShowMissJudgement);
+            forceUIThemeSetting.Setup(Settings.ForceTheme, typeof(ForceUIThemeMode), "Gameplay.Selection.Settings.ForceTheme");
+            switchResumeAndRetrySetting.Setup(Settings.SwitchResumeAndRetryPosition);
 
             // setupOffsetButton.onClick.AddListener(setupOffsetDialog.Show);
         }
@@ -102,33 +113,21 @@ namespace ArcCreate.Selection.Interface
             base.OnDestroy();
             decreaseSpeedButton.onClick.RemoveListener(OnDecreaseSpeedButton);
             increateSpeedButton.onClick.RemoveListener(OnIncreateSpeedButton);
-            earlyLatePerfectToggle.onValueChanged.RemoveListener(OnEarlyLatePerfectToggle);
             increaseNoteVolumeButton.onClick.RemoveListener(OnIncreaseNoteVolumeButton);
             decreaseNoteVolumeButton.onClick.RemoveListener(OnDecreaseNoteVolumeButton);
             increaseMusicVolumeButton.onClick.RemoveListener(OnIncreaseMusicVolumeButton);
             decreaseMusicVolumeButton.onClick.RemoveListener(OnDecreaseMusicVolumeButton);
             increaseOffsetButton.onClick.RemoveListener(OnIncreaseOffsetButton);
             decreaseOffsetButton.onClick.RemoveListener(OnDecreaseOffsetButton);
-            colorblindModeToggle.onValueChanged.RemoveListener(OnColorblindModeToggle);
-            changeFrPmDisplayPositionButton.onClick.RemoveListener(OnFrPmDisplayButton);
-            changeLateEarlyPositionButton.onClick.RemoveListener(OnChangeLateEarlyPositionButton);
-            limitFrameRateToggle.onValueChanged.RemoveListener(OnLimitFrameRateToggle);
-            showFpsToggle.onValueChanged.RemoveListener(OnShowFpsToggle);
-            maxIndicatorToggle.onValueChanged.RemoveListener(OnMaxIndicatorToggle);
             enablePracticeButton.onClick.RemoveListener(EnablePractice);
-            disablePracticeButton.onClick.AddListener(DisablePractice);
+            disablePracticeButton.onClick.RemoveListener(DisablePractice);
 
             Settings.DropRate.OnValueChanged.RemoveListener(OnDropRateSettings);
-            Settings.ShowEarlyLatePerfect.OnValueChanged.RemoveListener(OnShowEarlyLatePerfectSettings);
             Settings.MusicAudio.OnValueChanged.RemoveListener(OnMusicAudioSettings);
             Settings.EffectAudio.OnValueChanged.RemoveListener(OnEffectAudioSettings);
             Settings.GlobalAudioOffset.OnValueChanged.RemoveListener(OnGlobalAudioOffsetSettings);
-            Settings.EnableColorblind.OnValueChanged.RemoveListener(OnEnableColorblindSettings);
-            Settings.FrPmIndicatorPosition.OnValueChanged.RemoveListener(OnFrPmIndicatorPositionSettings);
-            Settings.LateEarlyTextPosition.OnValueChanged.RemoveListener(OnLateEarlyTextPositionSettings);
-            Settings.LimitFrameRate.OnValueChanged.RemoveListener(OnLimitFrameRateSettings);
-            Settings.ShowFPSCounter.OnValueChanged.RemoveListener(OnShowFPSCounterSettings);
-            Settings.EnableMaxIndicator.OnValueChanged.RemoveListener(OnMaxIndicatorSettings);
+            Settings.ScoreDisplayMode.OnValueChanged.RemoveListener(ChangeScoreDisplayPreview);
+            Settings.ForceTheme.OnValueChanged.RemoveListener(OnForceThemeSettings);
 
             // setupOffsetButton.onClick.RemoveListener(setupOffsetDialog.Show);
         }
@@ -136,11 +135,6 @@ namespace ArcCreate.Selection.Interface
         private void OnDropRateSettings(int value)
         {
             noteSpeedText.text = (value / Constants.DropRateScalar).ToString("F1");
-        }
-
-        private void OnShowEarlyLatePerfectSettings(bool value)
-        {
-            earlyLatePerfectToggle.SetIsOnWithoutNotify(value);
         }
 
         private void OnMusicAudioSettings(float value)
@@ -158,43 +152,6 @@ namespace ArcCreate.Selection.Interface
             offsetText.text = value.ToString();
         }
 
-        private void OnEnableColorblindSettings(bool value)
-        {
-            colorblindModeToggle.SetIsOnWithoutNotify(value);
-        }
-
-        private void OnFrPmIndicatorPositionSettings(int value)
-        {
-            FrPmPosition position = (FrPmPosition)value;
-            frPmDisplayPositionText.text = I18n.S($"Gameplay.Selection.Settings.FrPmPosition.{position.ToString().ToLower()}");
-        }
-
-        private void OnLateEarlyTextPositionSettings(int value)
-        {
-            EarlyLateTextPosition position = (EarlyLateTextPosition)value;
-            lateEarlyPositionText.text = I18n.S($"Gameplay.Selection.Settings.EarlyLateTextPosition.{position.ToString().ToLower()}");
-        }
-
-        private void OnLimitFrameRateSettings(bool value)
-        {
-            limitFrameRateToggle.SetIsOnWithoutNotify(value);
-        }
-
-        private void OnShowFPSCounterSettings(bool value)
-        {
-            showFpsToggle.SetIsOnWithoutNotify(value);
-        }
-
-        private void OnShowDebugSettings(bool value)
-        {
-            showDebug.SetIsOnWithoutNotify(value);
-        }
-
-        private void OnMaxIndicatorSettings(bool value)
-        {
-            maxIndicatorToggle.SetIsOnWithoutNotify(value);
-        }
-
         private void OnDecreaseSpeedButton()
         {
             Settings.DropRate.Value = (int)Mathf.Clamp(Settings.DropRate.Value - (Constants.DropRateScalar / 10), Constants.MinDropRate, Constants.MaxDropRate);
@@ -203,11 +160,6 @@ namespace ArcCreate.Selection.Interface
         private void OnIncreateSpeedButton()
         {
             Settings.DropRate.Value = (int)Mathf.Clamp(Settings.DropRate.Value + (Constants.DropRateScalar / 10), Constants.MinDropRate, Constants.MaxDropRate);
-        }
-
-        private void OnEarlyLatePerfectToggle(bool value)
-        {
-            Settings.ShowEarlyLatePerfect.Value = value;
         }
 
         private void OnIncreaseNoteVolumeButton()
@@ -240,41 +192,6 @@ namespace ArcCreate.Selection.Interface
             Settings.GlobalAudioOffset.Value = Settings.GlobalAudioOffset.Value - 1;
         }
 
-        private void OnColorblindModeToggle(bool value)
-        {
-            Settings.EnableColorblind.Value = value;
-        }
-
-        private void OnFrPmDisplayButton()
-        {
-            Settings.FrPmIndicatorPosition.Value = (Settings.FrPmIndicatorPosition.Value + 1) % 3;
-        }
-
-        private void OnChangeLateEarlyPositionButton()
-        {
-            Settings.LateEarlyTextPosition.Value = (Settings.LateEarlyTextPosition.Value + 1) % 3;
-        }
-
-        private void OnLimitFrameRateToggle(bool value)
-        {
-            Settings.LimitFrameRate.Value = value;
-        }
-
-        private void OnShowFpsToggle(bool value)
-        {
-            Settings.ShowFPSCounter.Value = value;
-        }
-
-        private void OnShowDebugToggle(bool value)
-        {
-            Settings.ShowGameplayDebug.Value = value;
-        }
-
-        private void OnMaxIndicatorToggle(bool value)
-        {
-            Settings.EnableMaxIndicator.Value = value;
-        }
-
         private void EnablePractice()
         {
             gameplayData.EnablePracticeMode.Value = true;
@@ -286,6 +203,39 @@ namespace ArcCreate.Selection.Interface
         {
             gameplayData.EnablePracticeMode.Value = false;
             practiceAnimation.Hide();
+        }
+
+        private void ChangeScoreDisplayPreview(int val)
+        {
+            ScoreDisplayMode mode = (ScoreDisplayMode)val;
+            foreach (var item in scoreDisplayPreviews)
+            {
+                item.GameObject.SetActive(mode == item.Mode);
+            }
+        }
+
+        private void OnForceThemeSettings(int value)
+        {
+            switch ((ForceUIThemeMode)Settings.ForceTheme.Value)
+            {
+                case ForceUIThemeMode.Light:
+                    themeGroup.OverrideValue = Theme.Light;
+                    break;
+                case ForceUIThemeMode.Dark:
+                    themeGroup.OverrideValue = Theme.Dark;
+                    break;
+                default:
+                    themeGroup.OverrideValue = Option<Theme>.None();
+                    break;
+            }
+        }
+
+        [Serializable]
+        private struct ScoreDisplayPreviewItem
+        {
+            public ScoreDisplayMode Mode;
+
+            public GameObject GameObject;
         }
     }
 }

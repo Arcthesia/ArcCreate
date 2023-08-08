@@ -23,4 +23,19 @@ namespace ArcCreate
         Mouse = 4,
         Idle = 5,
     }
+
+    public enum ForceUIThemeMode
+    {
+        Default = 0,
+        Light = 1,
+        Dark = 2,
+    }
+
+    public enum ScoreDisplayMode
+    {
+        Default = 0,
+        Predictive = 1,
+        Difference = 2,
+        Decrease = 3,
+    }
 }

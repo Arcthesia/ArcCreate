@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using ArcCreate.Data;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Gameplay.Judgement;
+using ArcCreate.Utility.Extension;
 using ArcCreate.Utility.ExternalAssets;
 using Cysharp.Threading.Tasks;
 using TMPro;
@@ -56,6 +58,7 @@ namespace ArcCreate.Gameplay.Particle
         private Pool<Particle> arcParticlePool;
         private Pool<Particle> holdParticlePool;
         private float lastEarlyLateRealTime = float.MinValue;
+        private readonly char[] offsetCharArray = new char[8];
 
         private readonly Dictionary<LongNote, ParticleSchedule> playingArcParticles
             = new Dictionary<LongNote, ParticleSchedule>(4);
@@ -143,9 +146,17 @@ namespace ArcCreate.Gameplay.Particle
             ps.Play();
         }
 
-        public void PlayTextParticle(Vector3 worldPosition, JudgementResult result)
+        public void PlayTextParticle(Vector3 worldPosition, JudgementResult result, Option<int> offset)
         {
             Material mat = PerfectMaterial;
+
+            if ((!Settings.ShowMaxJudgement.Value && result.IsMax())
+             || (!Settings.ShowPerfectJudgement.Value && result.IsPerfect() && !result.IsMax())
+             || (!Settings.ShowGoodJudgement.Value && result.IsGood())
+             || (!Settings.ShowMissJudgement.Value && result.IsMiss()))
+            {
+                return;
+            }
 
             if (result.IsPerfect())
             {
@@ -170,13 +181,31 @@ namespace ArcCreate.Gameplay.Particle
 
             if (result.IsEarly() && (result.IsGood() || Settings.ShowEarlyLatePerfect.Value))
             {
-                earlyLateText.SetText(Values.EarlyText);
+                if (Settings.DisplayMsDifference.Value && offset.HasValue)
+                {
+                    SetOffsetNumber(offsetCharArray, offset.Value, out int length);
+                    earlyLateText.SetCharArray(offsetCharArray, offsetCharArray.Length - length, length);
+                }
+                else
+                {
+                    earlyLateText.SetText(Values.EarlyText);
+                }
+
                 earlyLateText.color = earlyColor;
                 lastEarlyLateRealTime = Time.time;
             }
             else if (result.IsLate() && (result.IsGood() || Settings.ShowEarlyLatePerfect.Value))
             {
-                earlyLateText.SetText(Values.LateText);
+                if (Settings.DisplayMsDifference.Value && offset.HasValue)
+                {
+                    SetOffsetNumber(offsetCharArray, offset.Value, out int length);
+                    earlyLateText.SetCharArray(offsetCharArray, offsetCharArray.Length - length, length);
+                }
+                else
+                {
+                    earlyLateText.SetText(Values.LateText);
+                }
+
                 earlyLateText.color = lateColor;
                 lastEarlyLateRealTime = Time.time;
             }
@@ -387,6 +416,26 @@ namespace ArcCreate.Gameplay.Particle
         {
             Vector2 viewport = gameplayCamera.WorldToViewportPoint(world);
             return new Vector2(viewport.x * screenParticlesRect.rect.width, viewport.y * screenParticlesRect.rect.height);
+        }
+
+        private void SetOffsetNumber(char[] charArray, int value, out int length)
+        {
+            charArray.SetNumberDigitsToArray(value, out length);
+            if (value >= 0)
+            {
+                length++;
+                charArray[charArray.Length - length] = '+';
+            }
+
+            for (int i = 3; i < charArray.Length; i++)
+            {
+                charArray[i - 3] = charArray[i];
+            }
+
+            charArray[charArray.Length - 3] = ' ';
+            charArray[charArray.Length - 2] = 'm';
+            charArray[charArray.Length - 1] = 's';
+            length += 3;
         }
     }
 }

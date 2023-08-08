@@ -65,7 +65,8 @@
 			{
 				fixed3 hsv = rgb2hsv(c.rgb);
 				if(c.r<0.5) hsv.r += 0.1f;
-				else hsv.g += 1.2f;
+				else if(hsv.g < 1) hsv.g += 1.2f;
+				else hsv.b -= 0.2f;
 				return half4(hsv2rgb(hsv),c.a);
 			}
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.Data;
 using ArcCreate.Gameplay.Data;
-using ArcCreate.SceneTransition;
 using ArcCreate.Utility;
 using ArcCreate.Utility.ExternalAssets;
 using Cysharp.Threading.Tasks;
@@ -44,6 +43,8 @@ namespace ArcCreate.Gameplay.Skin
         [SerializeField] private Color defaultShadowColor;
         [SerializeField] private List<Color> defaultArcColors;
         [SerializeField] private List<Color> defaultArcLowColors;
+        [SerializeField] private List<Color> defaultArcColorblindColors;
+        [SerializeField] private List<Color> defaultArcLowColorblindColors;
         [SerializeField] private Color unknownArcColor;
         [SerializeField] private Color unknownArcLowColor;
 
@@ -301,10 +302,24 @@ namespace ArcCreate.Gameplay.Skin
             int max = Mathf.Min(arcs.Count, arcLows.Count);
             for (int i = 0; i < max; i++)
             {
-                arcColors.Add(arcs[i]);
-                arcLowColors.Add(arcLows[i]);
-                arcLowDesaturatedColors.Add(Desaturate(arcLows[i]));
-                redArcValues.Add(0);
+                if (Settings.EnableColorblind.Value
+                 && i >= 0
+                 && i < defaultArcColorblindColors.Count
+                 && arcs[i] == defaultArcColors[i]
+                 && arcLows[i] == defaultArcLowColors[i])
+                {
+                    arcColors.Add(defaultArcColorblindColors[i]);
+                    arcLowColors.Add(defaultArcLowColorblindColors[i]);
+                    arcLowDesaturatedColors.Add(Desaturate(defaultArcLowColorblindColors[i]));
+                    redArcValues.Add(0);
+                }
+                else
+                {
+                    arcColors.Add(arcs[i]);
+                    arcLowColors.Add(arcLows[i]);
+                    arcLowDesaturatedColors.Add(Desaturate(arcLows[i]));
+                    redArcValues.Add(0);
+                }
             }
         }
 
@@ -372,7 +387,9 @@ namespace ArcCreate.Gameplay.Skin
         {
             traceColorShaderId = Shader.PropertyToID("_TraceColor");
             shadowColorShaderId = Shader.PropertyToID("_ShadowColor");
+
             Settings.InputMode.OnValueChanged.AddListener(ReloadNoteSkin);
+            Settings.EnableColorblind.OnValueChanged.AddListener(OnColorBlindSetting);
 
             arcMaterial = Instantiate(arcMaterial);
             traceMaterial = Instantiate(traceMaterial);
@@ -483,6 +500,7 @@ namespace ArcCreate.Gameplay.Skin
         private void OnDestroy()
         {
             Settings.InputMode.OnValueChanged.RemoveListener(ReloadNoteSkin);
+            Settings.EnableColorblind.OnValueChanged.RemoveListener(OnColorBlindSetting);
 
             Destroy(arcMaterial);
             Destroy(traceMaterial);
@@ -521,6 +539,25 @@ namespace ArcCreate.Gameplay.Skin
             arcTexture.Unload();
             arctapShadowTexture.Unload();
             heightIndicatorTexture.Unload();
+        }
+
+        private void OnColorBlindSetting(bool on)
+        {
+            for (int i = 0; i < Mathf.Min(defaultArcColorblindColors.Count, arcColors.Count); i++)
+            {
+                if (on && arcColors[i] == defaultArcColors[i] && arcLowColors[i] == defaultArcLowColors[i])
+                {
+                    arcColors[i] = defaultArcColorblindColors[i];
+                    arcLowColors[i] = defaultArcLowColorblindColors[i];
+                    arcLowDesaturatedColors[i] = Desaturate(defaultArcLowColorblindColors[i]);
+                }
+                else if (!on && arcColors[i] == defaultArcColorblindColors[i] && arcLowColors[i] == defaultArcLowColorblindColors[i])
+                {
+                    arcColors[i] = defaultArcColors[i];
+                    arcLowColors[i] = defaultArcLowColors[i];
+                    arcLowDesaturatedColors[i] = Desaturate(defaultArcLowColors[i]);
+                }
+            }
         }
 
         private void ReloadNoteSkin(int inputMode)

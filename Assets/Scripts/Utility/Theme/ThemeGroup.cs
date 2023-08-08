@@ -10,6 +10,7 @@ namespace ArcCreate.Utility
         [SerializeField] private Theme defaultTheme;
 
         private Theme value;
+        private Option<Theme> overrideValue;
 
         public Theme Value
         {
@@ -17,8 +18,17 @@ namespace ArcCreate.Utility
             set
             {
                 this.value = value;
-                OnValueChange.Invoke(value);
-                PlayerPrefs.SetInt(playerPrefKey, (int)value);
+                Update();
+            }
+        }
+
+        public Option<Theme> OverrideValue
+        {
+            get => overrideValue;
+            set
+            {
+                overrideValue = value;
+                Update();
             }
         }
 
@@ -28,6 +38,18 @@ namespace ArcCreate.Utility
         }
 
         public OnChangeEvent OnValueChange { get; set; } = new OnChangeEvent();
+
+        private void Update()
+        {
+            Theme theme = value;
+            if (overrideValue.HasValue)
+            {
+                theme = overrideValue.Value;
+            }
+
+            OnValueChange.Invoke(theme);
+            PlayerPrefs.SetInt(playerPrefKey, (int)theme);
+        }
 
         public class OnChangeEvent : UnityEvent<Theme>
         {

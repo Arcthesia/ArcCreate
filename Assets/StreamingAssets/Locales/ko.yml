@@ -844,6 +844,7 @@ Gameplay:
         EarlyLateDisplayDetail: Early/Late 판정의 표시 위치를 변경합니다.
         LimitFramerate: 프레임 제한
         LimitFramerateDetail: 최대 FPS를 60으로 설정합니다. 전력을 아낄 수 있으나, 레이턴시가 늘어날 수 있습니다.
+      Interface:
         ShowFPS: FPS 표시
         ShowFPSDetail: FPS 표시 여부를 설정합니다.
         ShowDebug: 디버그 정보 표시
