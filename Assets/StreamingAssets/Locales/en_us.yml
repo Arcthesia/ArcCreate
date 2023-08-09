@@ -591,6 +591,9 @@ Compose:
         TimingGroup: Group
         Density: Density
         PlaybackSpeed: Speed
+      Timestamp:
+        Name: Timestamp
+        DefaultMessage: Timestamp {0}
     # Events editor panel
     EventsEditor:
       Label:

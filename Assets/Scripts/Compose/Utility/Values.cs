@@ -32,6 +32,7 @@ namespace ArcCreate.Compose
 
         // Pools
         public const string TickPoolName = "TickPool";
+        public const string TimestampPoolName = "TimestampPool";
         public const string BeatlinePoolName = "EditorBeatlinePool";
         public const string ColliderPoolName = "NoteColliderPool";
 
@@ -55,6 +56,8 @@ namespace ArcCreate.Compose
         public static float LaneToX { get; set; } = 8.5f;
 
         public static bool ProjectModified { get; set; } = false;
+
+        public static bool LockTimestampEditing { get; set; }
 
         public static string ScenecontrolFolder
             => Path.Combine(Path.GetDirectoryName(Services.Project.CurrentProject.Path), "Scenecontrol");

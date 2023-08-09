@@ -1,5 +1,6 @@
 using System;
 using ArcCreate.Utility.Parser;
+using Cysharp.Threading.Tasks.Triggers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,13 +13,14 @@ namespace ArcCreate.Compose.Timeline
     public class Marker : MonoBehaviour, IDragHandler, IEndDragHandler
     {
         [SerializeField] private TMP_InputField timingField;
+        [SerializeField] private RectTransform textArea;
         [SerializeField] private RectTransform numberBackground;
         [SerializeField] private float spacing;
         [SerializeField] private bool useChartTiming;
-        [SerializeField] private Camera editorCamera;
 
         private RectTransform rectTransform;
         private RectTransform parentRectTransform;
+        private RectTransform[] textRectTransform = new RectTransform[0];
         private bool queueTimingEdit = false;
         private int previousOffset;
 
@@ -59,7 +61,11 @@ namespace ArcCreate.Compose.Timeline
             screenPos.y = Mathf.Clamp(screenPos.y, 0, Screen.height);
 
             float parentWidth = parentRectTransform.rect.width;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRectTransform, screenPos, editorCamera, out Vector2 local);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                parentRectTransform,
+                screenPos,
+                eventData.pressEventCamera,
+                out Vector2 local);
             local.x = Mathf.Clamp(local.x, -parentWidth, parentWidth);
             SetDragPosition(local.x);
             IsDragging = true;
@@ -83,6 +89,8 @@ namespace ArcCreate.Compose.Timeline
             {
                 UpdatePosition();
             }
+
+            textRectTransform = textArea.GetComponentsInChildren<RectTransform>();
         }
 
         public void SetDragPosition(float x)
@@ -105,6 +113,12 @@ namespace ArcCreate.Compose.Timeline
         private void AlignNumberBackground()
         {
             rectTransform.sizeDelta = new Vector2(timingField.preferredWidth + spacing, numberBackground.sizeDelta.y);
+            for (int i = 0; i < textRectTransform.Length; i++)
+            {
+                RectTransform rect = textRectTransform[i];
+                rect.anchoredPosition = Vector2.zero;
+            }
+
             float numWidth = numberBackground.rect.width / 2;
             float parentWidth = parentRectTransform.rect.width / 2;
             float x = rectTransform.anchoredPosition.x;
@@ -128,6 +142,7 @@ namespace ArcCreate.Compose.Timeline
             rectTransform = GetComponent<RectTransform>();
             timingField.onEndEdit.AddListener(OnTimingField);
             parentRectTransform = transform.parent.GetComponent<RectTransform>();
+            textRectTransform = textArea.GetComponentsInChildren<RectTransform>();
         }
 
         private void OnDestroy()
