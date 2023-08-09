@@ -32,6 +32,8 @@ namespace ArcCreate.Compose.Rendering
         [SerializeField] private Button startButton;
         [SerializeField] private MarkerRange renderRangeMarker;
         [SerializeField] private GameplayViewport gameplayViewport;
+        [SerializeField] private StringSO retryCount;
+        [SerializeField] private StringSO playCount;
 
         [Header("Render in progress")]
         [SerializeField] private GameObject renderInProgressIndicator;
@@ -40,7 +42,6 @@ namespace ArcCreate.Compose.Rendering
         [SerializeField] private Button cancelButton;
 
         private CancellationTokenSource cts = new CancellationTokenSource();
-        private TransitionSequence transitionSequence;
 
         private int from;
         private int to;
@@ -51,6 +52,18 @@ namespace ArcCreate.Compose.Rendering
         {
             Services.Gameplay.Audio.Pause();
             SubAction cancel = editorAction.GetSubAction("Cancel");
+            TransitionSequence transitionSequence = new TransitionSequence()
+                .OnShow()
+                .AddTransition(new TriangleTileTransition())
+                .AddTransition(new DecorationTransition())
+                .AddTransition(new InfoTransition())
+                .OnHide()
+                .AddTransition(new InfoTransition())
+                .AddTransitionReversed(new PlayRetryCountTransition())
+                .AddTransition(new PlayRetryCountTransition(), 1200)
+                .AddTransition(new TriangleTileTransition(), 1200)
+                .AddTransition(new DecorationTransition(), 1200)
+                .SetWaitDuration(2000);
 
             string outputPath = Shell.SaveFileDialog(
                 "Video",
@@ -87,6 +100,8 @@ namespace ArcCreate.Compose.Rendering
                 return;
             }
 
+            playCount.Value = "AUTOPLAY";
+            retryCount.Value = string.Empty;
             cts.Dispose();
             cts = new CancellationTokenSource();
             renderInProgressIndicator.SetActive(true);
@@ -162,13 +177,6 @@ namespace ArcCreate.Compose.Rendering
                 Application.platform == RuntimePlatform.WindowsEditor
                 || Application.platform == RuntimePlatform.WindowsPlayer ?
                 new string[] { "exe" } : new string[0];
-
-            transitionSequence = new TransitionSequence()
-                .OnBoth()
-                .AddTransition(new TriangleTileTransition())
-                .AddTransition(new DecorationTransition())
-                .AddTransition(new InfoTransition())
-                .SetWaitDuration(2000);
         }
 
         private void OnDestroy()

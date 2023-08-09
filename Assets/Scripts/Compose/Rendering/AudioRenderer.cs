@@ -149,13 +149,14 @@ namespace ArcCreate.Compose.Rendering
             {
                 for (int i = 0; i < renderStart.Length; i++)
                 {
-                    samples[i] = renderStart[i];
+                    samples[i] += renderStart[i];
                 }
 
-                int shutterOpenOffset = (int)((transitionSequence.ShowDurationSeconds + transitionSequence.WaitDurationSeconds) * frequency) * channels;
+                int shutterOpenOffset =
+                    (int)((transitionSequence.ShowDurationSeconds + transitionSequence.WaitDurationSeconds) * frequency) * channels;
                 for (int i = 0; i < gameplayLoadComplete.Length; i++)
                 {
-                    samples[i + shutterOpenOffset] = gameplayLoadComplete[i];
+                    samples[i + shutterOpenOffset] += gameplayLoadComplete[i];
                 }
             }
 

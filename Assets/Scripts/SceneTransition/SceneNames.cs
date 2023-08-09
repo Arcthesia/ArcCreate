@@ -11,7 +11,9 @@
         public const string ResultScene = "Result";
         public const string StorageScene = "Storage";
 
-#if UNITY_EDITOR || UNITY_STANDALONE
+#if UNITY_EDITOR
+        public const string DefaultScene = GreetingScene;
+#elif UNITY_STANDALONE
         public const string DefaultScene = ComposeScene;
 #else
         public const string DefaultScene = GreetingScene;
