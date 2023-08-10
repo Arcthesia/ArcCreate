@@ -8,6 +8,7 @@ using ArcCreate.Utility.ExternalAssets;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Video;
 
 namespace ArcCreate.Gameplay.Skin
@@ -28,6 +29,8 @@ namespace ArcCreate.Gameplay.Skin
         [SerializeField] private SpriteRenderer trackExtraEdgeR;
         [SerializeField] private SpriteRenderer[] criticalLines = new SpriteRenderer[4];
         [SerializeField] private SpriteRenderer videoBackgroundRenderer;
+        [SerializeField] private Image infoPanel;
+        [SerializeField] private Image pauseButton;
         [SerializeField] private VideoPlayer videoBackground;
 
         [Header("Skin Options")]
@@ -91,6 +94,8 @@ namespace ArcCreate.Gameplay.Skin
                 TrackSkin = currentTrackOption;
                 SingleLineSkin = currentSingleLineOption;
                 AccentSkin = currentAccentOption;
+                infoPanel.sprite = alignmentOpt.InfoPanelSprite.Value;
+                pauseButton.sprite = alignmentOpt.PauseButtonSprite.Value;
                 gameplayData.NotifySkinValuesChange();
             }
         }

@@ -21,5 +21,6 @@ MonoBehaviour:
     type: 2}
   DefaultAccentOption: {fileID: 11400000, guid: aa40234e61d2c7e41917eff6ce98b951,
     type: 2}
-  jacketShadowSkin: {fileID: 21300000, guid: 65956d8c8387acebbaceb5e4d2f61803, type: 3}
   defaultBackground: {fileID: 21300000, guid: f92423c6f3c16544e9637413403e5511, type: 3}
+  infoPanelSprite: {fileID: 21300000, guid: 31505b3ad29e3674e92c9e73aac5618d, type: 3}
+  pauseButtonSprite: {fileID: 21300000, guid: 1b9a75c877dd6584a9f72834381a5cca, type: 3}

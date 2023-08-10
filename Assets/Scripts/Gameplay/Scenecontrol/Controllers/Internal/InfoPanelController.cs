@@ -9,6 +9,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
     public class InfoPanelController : ImageController
     {
 #pragma warning disable
+        [SerializeField] private TextController scoreTitle;
+        [EmmyDoc("Gets the score title text controller")]
+        public TextController ScoreTitle
+        {
+            get
+            {
+                Services.Scenecontrol.AddReferencedController(scoreTitle);
+                return scoreTitle;
+            }
+        }
         [SerializeField] private TextController score;
         [EmmyDoc("Gets the score text controller")]
         public TextController Score
@@ -17,6 +27,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
             {
                 Services.Scenecontrol.AddReferencedController(score);
                 return score;
+            }
+        }
+        [SerializeField] private ImageController jacketBackground;
+        [EmmyDoc("Gets the jacket background image controller")]
+        public ImageController JacketBackground
+        {
+            get
+            {
+                Services.Scenecontrol.AddReferencedController(jacketBackground);
+                return jacketBackground;
             }
         }
         [SerializeField] private ImageController jacket;

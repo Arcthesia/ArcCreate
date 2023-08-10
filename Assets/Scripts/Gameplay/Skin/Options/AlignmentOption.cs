@@ -16,22 +16,34 @@ namespace ArcCreate.Gameplay.Skin
         public SingleLineOption DefaultSingleLineOption;
         public AccentOption DefaultAccentOption;
         [SerializeField] public Sprite defaultBackground;
+        [SerializeField] public Sprite infoPanelSprite;
+        [SerializeField] public Sprite pauseButtonSprite;
 
         public ExternalSprite DefaultBackground { get; private set; }
+
+        public ExternalSprite InfoPanelSprite { get; private set; }
+
+        public ExternalSprite PauseButtonSprite { get; private set; }
 
         internal void RegisterExternalSkin()
         {
             DefaultBackground = new ExternalSprite(defaultBackground, "DefaultBackgrounds");
+            InfoPanelSprite = new ExternalSprite(infoPanelSprite, "HUD");
+            PauseButtonSprite = new ExternalSprite(pauseButtonSprite, "HUD");
         }
 
         internal async UniTask LoadExternalSkin()
         {
             await DefaultBackground.Load();
+            await InfoPanelSprite.Load();
+            await PauseButtonSprite.Load();
         }
 
         internal void UnloadExternalSkin()
         {
             DefaultBackground.Unload();
+            InfoPanelSprite.Unload();
+            PauseButtonSprite.Unload();
         }
     }
 }

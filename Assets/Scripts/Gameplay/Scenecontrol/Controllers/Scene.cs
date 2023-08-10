@@ -39,6 +39,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 return combo;
             }
         }
+        [SerializeField] private TextController scoreTitle;
+        [EmmyDoc("Gets the score title text controller")]
+        public TextController ScoreTitle
+        {
+            get
+            {
+                Services.Scenecontrol.AddReferencedController(scoreTitle);
+                return scoreTitle;
+            }
+        }
         [SerializeField] private TextController score;
         [EmmyDoc("Gets the score text controller")]
         public TextController Score
@@ -47,6 +57,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
             {
                 Services.Scenecontrol.AddReferencedController(score);
                 return score;
+            }
+        }
+        [SerializeField] private ImageController jacketBackground;
+        [EmmyDoc("Gets the jacket background image controller")]
+        public ImageController JacketBackground
+        {
+            get
+            {
+                Services.Scenecontrol.AddReferencedController(jacketBackground);
+                return jacketBackground;
             }
         }
         [SerializeField] private ImageController jacket;
@@ -614,10 +634,14 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     return GameplayCamera;
                 case "combo":
                     return Combo;
+                case "scoreTitle":
+                    return ScoreTitle;
                 case "score":
                     return Score;
                 case "jacket":
                     return Jacket;
+                case "jacketBg":
+                    return JacketBackground;
                 case "title":
                     return Title;
                 case "composer":
@@ -838,6 +862,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
             gameplayCamera.SerializedType = "camera";
             combo.SerializedType = "combo";
             score.SerializedType = "score";
+            scoreTitle.SerializedType = "scoreTitle";
+            jacketBackground.SerializedType = "jacketBg";
             jacket.SerializedType = "jacket";
             title.SerializedType = "title";
             composer.SerializedType = "composer";

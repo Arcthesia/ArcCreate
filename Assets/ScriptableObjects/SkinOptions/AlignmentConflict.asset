@@ -21,5 +21,6 @@ MonoBehaviour:
     type: 2}
   DefaultAccentOption: {fileID: 11400000, guid: 2051f235d7fdb9f4eb62731dd20fbb37,
     type: 2}
-  Theme: 1
   defaultBackground: {fileID: 21300000, guid: 675e6f7a013d0d042a1684f3dc384e63, type: 3}
+  infoPanelSprite: {fileID: 21300000, guid: d62eeb0b5034fc54495044480a8d67fe, type: 3}
+  pauseButtonSprite: {fileID: 21300000, guid: 70ad9522eb5adc841b151cba96cde7bc, type: 3}
