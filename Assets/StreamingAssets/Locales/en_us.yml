@@ -717,9 +717,6 @@ Compose:
           Name: Track scrolling
           Threshold: Threshold
           MaxMovement: Max movement
-        Credits:
-          Name: Credits
-          View: See credits
     # Toolbox panel
     Toolbox:
       Pallete:
@@ -1018,3 +1015,41 @@ Storage:
     DeleteAsset: Deleting asset {0}
     StoreAsset: Storing asset {0}
     Finalizing: Finalizing
+  
+Credits:
+  Name: Credits
+  View: See Credits
+  Content: |-
+    <size=33><b>Lead Programming</b></size>
+    0thElement
+
+    <size=33><b>Programming</b></size>
+    Arke12917
+    floofer++
+    recharge-sp
+
+    <size=33><b>Visual Design</b></size>
+    Alaiskai
+    Ragnarok VII
+    0thElement
+    Exiony
+    yojohanshinwataikei
+
+    <size=33><b>Sound Design</b></size>
+    SpoonierThanThou
+
+    <size=33><b>Localization</b></size>
+    Japanese: rassvet2
+    Spanish: Alaiskai
+    Vietnamese: Himori
+    Chinese (simplified): HaloSense
+    Chinese (traditional): Sylvexia
+
+    <size=33><b>Quality Assurance</b></size>
+    ZydeKun
+    and everyone at the Arcthesia community!
+
+    <size=33><b>Special thanks to our Supporters</b></size>
+    Alaiskai
+    Yut0124
+    Zeurunix

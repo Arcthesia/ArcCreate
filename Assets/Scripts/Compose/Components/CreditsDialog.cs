@@ -8,8 +8,6 @@ namespace ArcCreate.Compose.Components
 {
     public class CreditsDialog : Dialog
     {
-        private static readonly string CreditsPath = Path.Combine(Application.streamingAssetsPath, "credits.txt");
-
         [SerializeField] private RectTransform contentRect;
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private TMP_Text text;
@@ -22,8 +20,6 @@ namespace ArcCreate.Compose.Components
 
         public override void Open()
         {
-            text.text = File.ReadAllText(CreditsPath);
-
             base.Open();
             contentRect.localScale = animationStartScale;
             contentRect.DOScale(Vector3.one, animationScaleDuration).SetEase(animationScaleEasing);

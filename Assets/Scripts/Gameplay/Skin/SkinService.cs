@@ -563,6 +563,8 @@ namespace ArcCreate.Gameplay.Skin
                     arcLowDesaturatedColors[i] = Desaturate(defaultArcLowColors[i]);
                 }
             }
+
+            Services.Chart?.ReloadSkin();
         }
 
         private void ReloadNoteSkin(int inputMode)

@@ -664,9 +664,6 @@ Compose:
           Name: Desplazamiento de pista
           Threshold: Umbral
           MaxMovement: <size=9>Movimiento máximo</size>
-        Credits:
-          Name: Créditos
-          View: Ver créditos
     # Toolbox panel
     Toolbox:
       Pallete:
@@ -910,3 +907,7 @@ Storage:
     DeleteAsset: Eliminando activo {0}
     StoreAsset: Almacenando activo {0}
     Finalizing: Finalizando  
+
+Credits:
+  Name: Créditos
+  View: Ver créditos

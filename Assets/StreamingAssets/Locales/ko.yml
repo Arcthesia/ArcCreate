@@ -645,9 +645,6 @@ Compose:
           Name: 트랙 스크롤
           Threshold: 스크롤 임계치
           MaxMovement: 스크롤 속도
-        Credits:
-          Name: 크레딧
-          View: 크레딧 보기
     # Toolbox panel
     Toolbox:
       Pallete:
@@ -890,3 +887,7 @@ Storage:
     DeleteAsset: 애셋 삭제 중... ({0})
     StoreAsset: 애셋 저장 중... ({0})
     Finalizing: 마무리 작업 중...
+
+Credits:
+  Name: 크레딧
+  View: 크레딧 보기

@@ -29,6 +29,26 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 return score;
             }
         }
+        [SerializeField] private TextController predictedGrade;
+        [EmmyDoc("Gets the grade text controller, displayed when score mode is Predicitve")]
+        public TextController PredictedGrade
+        {
+            get
+            {
+                Services.Scenecontrol.AddReferencedController(predictedGrade);
+                return predictedGrade;
+            }
+        }
+        [SerializeField] private ImageController predictedGradeBackground;
+        [EmmyDoc("Gets the background image for grade text controller, displayed when score mode is Predicitve")]
+        public ImageController PredictedGradeBackground
+        {
+            get
+            {
+                Services.Scenecontrol.AddReferencedController(predictedGradeBackground);
+                return predictedGradeBackground;
+            }
+        }
         [SerializeField] private ImageController jacketBackground;
         [EmmyDoc("Gets the jacket background image controller")]
         public ImageController JacketBackground

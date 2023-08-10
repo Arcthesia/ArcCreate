@@ -635,9 +635,6 @@ Compose:
           Name: Track scrolling
           Threshold: Threshold
           MaxMovement: Max movement
-        Credits:
-          Name: Credits
-          View: See credits
     # Toolbox panel
     Toolbox:
       Pallete:
@@ -879,3 +876,7 @@ Storage:
     DeleteAsset: Đang xóa asset {0}
     StoreAsset: Đang trữ asset {0}
     Finalizing: Kết thúc tiến trình
+
+Credits:
+  Name: Credits
+  View: See credits

@@ -675,9 +675,6 @@ Compose:
           Name: 轨道滚动
           Threshold: 阈值
           MaxMovement: 最大移动量
-        Credits:
-          Name: 制作组名单
-          View: 查看制作组名单
     # 工具箱面板
     Toolbox:
       Pallete:
@@ -921,3 +918,7 @@ Storage:
     DeleteAsset: 正在删除资源{0}
     StoreAsset: 正在保存资源{0}
     Finalizing: 即将完成
+
+Credits:
+  Name: 制作组名单
+  View: 查看制作组名单

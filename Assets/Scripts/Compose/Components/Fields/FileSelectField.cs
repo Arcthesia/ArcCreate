@@ -109,9 +109,13 @@ namespace ArcCreate.Compose.Components
             }
 
             bool found = false;
+            print(path);
+
             if (isLocalFileSelector)
             {
-                if (File.Exists(path))
+                // The weirdest bug ever. If ArcCreate launched in a directory and base.ogg is containeed in that directory, then
+                // File.Exists("base.ogg") is returned true which messes with everything.
+                if (File.Exists(path) && !File.Exists(Path.Combine(Environment.CurrentDirectory, path)))
                 {
                     FilePath newFilePath = FilePath.Local(CurrentProjectFolder, path);
                     if (newFilePath.ShouldCopy)

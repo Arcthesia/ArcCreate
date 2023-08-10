@@ -247,7 +247,7 @@ namespace ArcCreate.Gameplay.Score
                         for (int i = 0; i < cachedGradeOptions.Length; i++)
                         {
                             Grade option = cachedGradeOptions[i];
-                            if ((int)option == 0)
+                            if (option == Grade.D || option == Grade.Unknown)
                             {
                                 continue;
                             }
@@ -346,11 +346,9 @@ namespace ArcCreate.Gameplay.Score
         {
             Settings.EnableMaxIndicator.OnValueChanged.AddListener(OnEnableMaxIndicatorSettings);
             Settings.FrPmIndicatorPosition.OnValueChanged.AddListener(OnFrPmPositionSettings);
-            Settings.ScoreDisplayMode.OnValueChanged.AddListener(OnScoreDisplayMode);
 
             OnEnableMaxIndicatorSettings(Settings.EnableMaxIndicator.Value);
             OnFrPmPositionSettings(Settings.FrPmIndicatorPosition.Value);
-            OnScoreDisplayMode(Settings.ScoreDisplayMode.Value);
 
             cachedGradeOptions = (Grade[])Enum.GetValues(typeof(Grade));
         }
@@ -359,13 +357,6 @@ namespace ArcCreate.Gameplay.Score
         {
             Settings.EnableMaxIndicator.OnValueChanged.RemoveListener(OnEnableMaxIndicatorSettings);
             Settings.FrPmIndicatorPosition.OnValueChanged.RemoveListener(OnFrPmPositionSettings);
-            Settings.ScoreDisplayMode.OnValueChanged.RemoveListener(OnScoreDisplayMode);
-        }
-
-        private void OnScoreDisplayMode(int v)
-        {
-            ScoreDisplayMode mode = (ScoreDisplayMode)v;
-            predictedGradeParent.SetActive(mode == ScoreDisplayMode.Predictive);
         }
 
         private void OnEnableMaxIndicatorSettings(bool enable)

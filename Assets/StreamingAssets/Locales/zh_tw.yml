@@ -669,9 +669,6 @@ Compose:
           Name: 捲動軌道
           Threshold: 門檻值
           MaxMovement: 最大移動
-        Credits:
-          Name: 致謝名單
-          View: 查看致謝名單
     # Toolbox panel
     Toolbox:
       Pallete:
@@ -914,4 +911,9 @@ Storage:
     DeleteAsset: 刪除譜面資料 {0}
     StoreAsset: 儲存譜面資料 {0}
     Finalizing: 完成中...
+
+Credits:
+  Name: 致謝名單
+  View: 查看致謝名單
+
 # First Edited by sylvex - 2023/4/25

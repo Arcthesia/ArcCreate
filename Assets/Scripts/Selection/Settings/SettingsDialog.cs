@@ -23,6 +23,9 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private Button enablePracticeButton;
         [SerializeField] private Button disablePracticeButton;
         [SerializeField] private ScriptedAnimator practiceAnimation;
+        [SerializeField] private Button openCreditButton;
+        [SerializeField] private Button closeCreditButton;
+        [SerializeField] private ScriptedAnimator creditAnimation;
 
         [Header("Audio")]
         [SerializeField] private Button increaseNoteVolumeButton;
@@ -105,6 +108,9 @@ namespace ArcCreate.Selection.Interface
             forceUIThemeSetting.Setup(Settings.ForceTheme, typeof(ForceUIThemeMode), "Gameplay.Selection.Settings.ForceTheme");
             switchResumeAndRetrySetting.Setup(Settings.SwitchResumeAndRetryPosition);
 
+            openCreditButton.onClick.AddListener(creditAnimation.Show);
+            closeCreditButton.onClick.AddListener(creditAnimation.Hide);
+
             // setupOffsetButton.onClick.AddListener(setupOffsetDialog.Show);
         }
 
@@ -128,6 +134,9 @@ namespace ArcCreate.Selection.Interface
             Settings.GlobalAudioOffset.OnValueChanged.RemoveListener(OnGlobalAudioOffsetSettings);
             Settings.ScoreDisplayMode.OnValueChanged.RemoveListener(ChangeScoreDisplayPreview);
             Settings.ForceTheme.OnValueChanged.RemoveListener(OnForceThemeSettings);
+
+            openCreditButton.onClick.RemoveListener(creditAnimation.Show);
+            closeCreditButton.onClick.RemoveListener(creditAnimation.Hide);
 
             // setupOffsetButton.onClick.RemoveListener(setupOffsetDialog.Show);
         }

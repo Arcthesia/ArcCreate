@@ -71,11 +71,6 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: Library
-          key: Library-Android
-
-      - uses: actions/cache@v2
-        with:
-          path: Library
           key:
             Library-Android-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |

@@ -166,6 +166,7 @@ namespace ArcCreate.Compose.Timeline
             ProjectSettings proj = Services.Project.CurrentProject;
             ChartSettings chart = Services.Project.CurrentChart;
             if (proj.EditorSettings == null
+             || proj.EditorSettings.Timestamps == null
              || !proj.EditorSettings.Timestamps.TryGetValue(chart.ChartPath, out timestamps))
             {
                 return false;

@@ -710,9 +710,6 @@ Compose:
           Name: Track
           Threshold: 閾値
           MaxMovement: 最大
-        Credits:
-          Name: クレジット
-          View: クレジットを確認
     # Toolbox panel
     Toolbox:
       Pallete: # 翻訳しない
@@ -962,3 +959,7 @@ Storage:
     DeleteAsset: アセット"{0}"を削除中
     StoreAsset: アセット"{0}"を保存中
     Finalizing: インポート完了
+
+Credits:
+  Name: クレジット
+  View: クレジットを確認

@@ -120,7 +120,6 @@ namespace ArcCreate.Compose.Components
             int i = 1;
             while (File.Exists(AddNumberIdentifierToPath(FullPath, i)))
             {
-                UnityEngine.Debug.Log(FullPath);
                 i += 1;
             }
 

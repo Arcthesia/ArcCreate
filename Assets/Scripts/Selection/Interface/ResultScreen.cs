@@ -86,7 +86,7 @@ namespace ArcCreate.Selection.Interface
             scoreIncrease.text = (current >= best ? "+" : "") + PlayResult.FormatScore(current - best);
             score.text = PlayResult.FormatScore(current);
             offsetInfo.gameObject.SetActive(Settings.DisplayMsDifference.Value);
-            offsetInfo.text = $"AVG: {play.OffsetMean:f2}  STD: {play.OffsetStd:f2}";
+            offsetInfo.text = $"AVG: {play.OffsetMean:f2}ms  ST: {play.OffsetStd:f2}ms";
 
             charterFrame.SetActive(!string.IsNullOrEmpty(chart.Charter));
             aliasFrame.SetActive(!string.IsNullOrEmpty(chart.Alias));
