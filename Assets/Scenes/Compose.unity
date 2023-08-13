@@ -5821,11 +5821,11 @@ RectTransform:
   m_Father: {fileID: 1105044086}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 13, y: -6}
-  m_Pivot: {x: 1, y: 0.5}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &130224693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22172,7 +22172,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 30, y: 0}
+  m_AnchoredPosition: {x: 5, y: 0}
   m_SizeDelta: {x: 13, y: -6}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &378537895
@@ -35024,7 +35024,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1240612873}
+    m_TransformParent: {fileID: 2101601325}
     m_Modifications:
     - target: {fileID: 6258816204915290024, guid: b478ebaa3ae36f1fe9dc18ef70e70acc,
         type: 3}
@@ -35049,7 +35049,7 @@ PrefabInstance:
     - target: {fileID: 6258816205848568549, guid: b478ebaa3ae36f1fe9dc18ef70e70acc,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6258816205848568549, guid: b478ebaa3ae36f1fe9dc18ef70e70acc,
         type: 3}
@@ -54598,7 +54598,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 4.999939, y: 0}
+  m_AnchoredPosition: {x: 20, y: 0}
   m_SizeDelta: {x: 25, y: -6}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1046594485
@@ -57165,7 +57165,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -5, y: 0}
+  m_AnchoredPosition: {x: -65, y: 0}
   m_SizeDelta: {x: 45, y: -10}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1105044087
@@ -62420,8 +62420,6 @@ RectTransform:
   m_Children:
   - {fileID: 5857211232614397819}
   - {fileID: 1591073118}
-  - {fileID: 635970000}
-  - {fileID: 1962886211}
   - {fileID: 1808856015}
   m_Father: {fileID: 2101601325}
   m_RootOrder: 1
@@ -83011,7 +83009,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1931281401}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.9732926
+  m_Size: 0.97329265
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -86932,7 +86930,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 342982843}
   m_HandleRect: {fileID: 342982842}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -87737,7 +87735,7 @@ RectTransform:
   - {fileID: 2122448800}
   - {fileID: 1046594484}
   m_Father: {fileID: 1240612873}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -92761,7 +92759,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1240612873}
+    m_TransformParent: {fileID: 2101601325}
     m_Modifications:
     - target: {fileID: 6258816204915290024, guid: b478ebaa3ae36f1fe9dc18ef70e70acc,
         type: 3}
@@ -92791,7 +92789,7 @@ PrefabInstance:
     - target: {fileID: 6258816205848568549, guid: b478ebaa3ae36f1fe9dc18ef70e70acc,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6258816205848568549, guid: b478ebaa3ae36f1fe9dc18ef70e70acc,
         type: 3}
@@ -93593,11 +93591,11 @@ RectTransform:
   m_Father: {fileID: 1105044086}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 25, y: -6}
-  m_Pivot: {x: 0, y: 0.5}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1979949368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98623,6 +98621,8 @@ RectTransform:
   - {fileID: 1330349839}
   - {fileID: 1240612873}
   - {fileID: 1105044086}
+  - {fileID: 635970000}
+  - {fileID: 1962886211}
   m_Father: {fileID: 1790867617}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

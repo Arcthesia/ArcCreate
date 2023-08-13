@@ -141,6 +141,11 @@ namespace ArcCreate.Compose.Project
             projectDir = new DirectoryInfo(projectDir).FullName;
             Stack<DirectoryInfo> stack = new Stack<DirectoryInfo>();
             DirectoryInfo dir = new DirectoryInfo(Path.Combine(projectDir, includeDir));
+            if (!dir.Exists)
+            {
+                return;
+            }
+
             stack.Push(dir);
             while (stack.Count > 0)
             {

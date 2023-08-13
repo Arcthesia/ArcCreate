@@ -5,6 +5,7 @@ using ArcCreate.Data;
 using ArcCreate.Gameplay;
 using ArcCreate.SceneTransition;
 using ArcCreate.Storage.Data;
+using ArcCreate.Utility.Extension;
 using ArcCreate.Utility.LRUCache;
 using Cysharp.Threading.Tasks;
 using UltraLiteDB;
@@ -23,6 +24,8 @@ namespace ArcCreate.Storage
         private static readonly HashSet<UnityEngine.Object> QueuedForDelete = new HashSet<UnityEngine.Object>();
         [SerializeField] private Texture defaultJacket;
         [SerializeField] private GameplayData gameplayData;
+        [SerializeField] private StringSO transitionPlayCount;
+        [SerializeField] private StringSO transitionRetryCount;
         private (LevelStorage level, ChartSettings chart) currentGameplayChart;
 
         public event Action OnStorageChange;
@@ -265,6 +268,19 @@ namespace ArcCreate.Storage
 
             currentGameplayChart = selection;
             var (level, chart) = selection;
+
+            if (!gameplayData.EnablePracticeMode.Value)
+            {
+                PlayHistory history = PlayHistory.GetHistoryForChart(level.Identifier, chart.ChartPath);
+                transitionPlayCount.Value = TextFormat.FormatPlayCount(history.PlayCount + 1);
+                transitionRetryCount.Value = TextFormat.FormatRetryCount(1);
+            }
+            else
+            {
+                transitionPlayCount.Value = "PRACTICE MODE";
+                transitionRetryCount.Value = string.Empty;
+            }
+
             TransitionSequence sequence = new TransitionSequence()
                 .OnShow()
                 .AddTransition(new SoundTransition(TransitionScene.Sound.EnterGameplay))

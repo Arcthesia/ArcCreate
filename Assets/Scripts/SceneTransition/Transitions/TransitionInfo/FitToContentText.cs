@@ -21,7 +21,7 @@ namespace ArcCreate.SceneTransition
             rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, h);
             rect.gameObject.SetActive(!string.IsNullOrEmpty(text));
 
-            float shrink = Mathf.Clamp(w / CachedText.preferredWidth, 0.5f, 1);
+            float shrink = Mathf.Clamp(w / (CachedText.preferredWidth + padding.x), 0.25f, 1);
             textRect.localScale = new Vector3(shrink, 1, 1);
             if (animator != null)
             {

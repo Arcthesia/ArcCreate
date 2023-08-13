@@ -4,6 +4,7 @@ using ArcCreate.SceneTransition;
 using ArcCreate.Storage;
 using ArcCreate.Storage.Data;
 using ArcCreate.Utility.Animation;
+using ArcCreate.Utility.Extension;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
@@ -48,6 +49,8 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private ClearResultDisplay clearResultDisplay;
         [SerializeField] private Button returnButton;
         [SerializeField] private Button retryButton;
+        [SerializeField] private StringSO transitionPlayCount;
+        [SerializeField] private StringSO transitionRetryCount;
         [SerializeField] private AudioPreview audioPreview;
         private LevelStorage currentLevel;
         private ChartSettings currentChart;
@@ -86,7 +89,7 @@ namespace ArcCreate.Selection.Interface
             scoreIncrease.text = (current >= best ? "+" : "") + PlayResult.FormatScore(current - best);
             score.text = PlayResult.FormatScore(current);
             offsetInfo.gameObject.SetActive(Settings.DisplayMsDifference.Value);
-            offsetInfo.text = $"AVG: {play.OffsetMean:f2}ms  ST: {play.OffsetStd:f2}ms";
+            offsetInfo.text = $"AVG: {play.OffsetMean:f2}ms  SD: {play.OffsetStd:f2}ms";
 
             charterFrame.SetActive(!string.IsNullOrEmpty(chart.Charter));
             aliasFrame.SetActive(!string.IsNullOrEmpty(chart.Alias));
@@ -137,7 +140,14 @@ namespace ArcCreate.Selection.Interface
         {
             if (currentLevel != null && currentChart != null)
             {
-                storage.SwitchToPlayScene((currentLevel, currentChart));
+                PlayHistory history = PlayHistory.GetHistoryForChart(currentLevel.Identifier, currentChart.ChartPath);
+                transitionPlayCount.Value = TextFormat.FormatPlayCount(history.PlayCount + 1);
+                transitionRetryCount.Value = TextFormat.FormatRetryCount(1);
+
+                animator.GetHideTween(out float _).Play().OnComplete(() =>
+                {
+                    storage.SwitchToPlayScene((currentLevel, currentChart));
+                });
             }
         }
     }

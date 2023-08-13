@@ -6,7 +6,6 @@ using ArcCreate.SceneTransition;
 using ArcCreate.Storage;
 using ArcCreate.Storage.Data;
 using ArcCreate.Utility;
-using ArcCreate.Utility.Extension;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -49,8 +48,6 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private StringSO transitionAlias;
         [SerializeField] private StringSO transitionDifficulty;
         [SerializeField] private ColorSO transitionDifficultyColor;
-        [SerializeField] private StringSO transitionPlayCount;
-        [SerializeField] private StringSO transitionRetryCount;
         [SerializeField] private ThemeGroup themeGroup;
 
         [Header("Exception")]
@@ -127,8 +124,6 @@ namespace ArcCreate.Selection.Interface
             score.text = playResult.FormattedScore;
             gradeDisplay.Display(playResult.Grade);
             gradeDisplay.gameObject.SetActive(history.PlayCount > 0);
-            transitionPlayCount.Value = TextFormat.FormatPlayCount(history.PlayCount + 1);
-            transitionRetryCount.Value = TextFormat.FormatRetryCount(1);
 
             string sideString = (chart.Skin?.Side ?? "").ToLower();
 
