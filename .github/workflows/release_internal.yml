@@ -60,7 +60,6 @@ jobs:
     name: Build For Android Platform
     runs-on: ubuntu-latest
     steps:
-      - uses: jlumbroso/free-disk-space@v1.2.0
       - uses: actions/checkout@v3
           
       - name: Decrypt & extract secrets
