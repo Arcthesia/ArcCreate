@@ -8,7 +8,7 @@ namespace ArcCreate
         public static readonly StringSetting Locale = new StringSetting("Locale", "en_us");
 
         // Gameplay
-        public static readonly IntSetting DropRate = new IntSetting("DropRate", 150);
+        public static readonly IntSetting DropRate = new IntSetting("DropRate", 150, 0);
         public static readonly BoolSetting ShowEarlyLatePerfect = new BoolSetting("ShowEarlyLate", true);
         public static readonly BoolSetting EnableColorblind = new BoolSetting("EnableColorblind", false);
         public static readonly IntSetting FrPmIndicatorPosition = new IntSetting(
@@ -23,6 +23,7 @@ namespace ArcCreate
         public static readonly IntSetting ForceTheme = new IntSetting("UI.ForceTheme", 0);
         public static readonly IntSetting ScoreDisplayMode = new IntSetting("UI.ScoreDisplayMode", 0);
         public static readonly BoolSetting SwitchResumeAndRetryPosition = new BoolSetting("UI.SwitchResumeAndRetryPosition", false);
+        public static readonly BoolSetting MirrorNotes = new BoolSetting("Gameplay.Mirror", false);
 
         // Judgement
         public static readonly BoolSetting ShowMaxJudgement = new BoolSetting("Gameplay.Judgement.ShowMax", true);
@@ -33,11 +34,11 @@ namespace ArcCreate
 
         // Audio
         public static readonly IntSetting GlobalAudioOffset = new IntSetting("GlobalAudioOffset", 0);
-        public static readonly FloatSetting MusicAudio = new FloatSetting("SoundPreferences.ChartAudio", 1f);
-        public static readonly FloatSetting EffectAudio = new FloatSetting("SoundPreferences.EffectAudio", 0.4f);
+        public static readonly FloatSetting MusicAudio = new FloatSetting("SoundPreferences.ChartAudio", 1f, 0, 1);
+        public static readonly FloatSetting EffectAudio = new FloatSetting("SoundPreferences.EffectAudio", 0.4f, 0, 2);
 
         // Display
-        public static readonly IntSetting Framerate = new IntSetting("DisplayFramerate", -1);
+        public static readonly IntSetting Framerate = new IntSetting("DisplayFramerate", -1, 0, 360);
         public static readonly BoolSetting VSync = new BoolSetting("EnableVSync", false);
         public static readonly BoolSetting LimitFrameRate = new BoolSetting("LimitFrameRate", false);
         public static readonly BoolSetting ShowFPSCounter = new BoolSetting("ShowFrameCounter", false);
@@ -57,10 +58,9 @@ namespace ArcCreate
         // Export
         public static readonly IntSetting ChartSortMode = new IntSetting("ChartSortMode", 0);
         public static readonly FloatSetting FPS = new FloatSetting("RenderPreferences.FPS", 60);
-        public static readonly IntSetting CRF = new IntSetting("RenderPreferences.CRF", 25);
-        public static readonly IntSetting RenderWidth = new IntSetting("RenderPreferences.Width", 1920);
-        public static readonly IntSetting RenderHeight = new IntSetting("RenderPreferences.Height", 1080);
-        public static readonly FloatSetting DownscaleFactor = new FloatSetting("RenderPreferences.DownscaleFactor", 1.0f);
+        public static readonly IntSetting CRF = new IntSetting("RenderPreferences.CRF", 25, 0, 51);
+        public static readonly IntSetting RenderWidth = new IntSetting("RenderPreferences.Width", 1920, 0);
+        public static readonly IntSetting RenderHeight = new IntSetting("RenderPreferences.Height", 1080, 0);
         public static readonly StringSetting FFmpegPath = new StringSetting("RenderPreferences.FFmpegPath", "ffmpeg");
         public static readonly StringSetting LastUsedPublisherName = new StringSetting("Editor.Export.LastUsedPublisherName", null);
 
@@ -70,9 +70,9 @@ namespace ArcCreate
 
         // Editor
         public static readonly BoolSetting ShouldAutosave = new BoolSetting("Editor.Autosave.Enable", true);
-        public static readonly IntSetting AutosaveInterval = new IntSetting("Editor.Autosave.Interval", 300);
+        public static readonly IntSetting AutosaveInterval = new IntSetting("Editor.Autosave.Interval", 300, 10);
         public static readonly BoolSetting ShouldBackup = new BoolSetting("Editor.Backup.Enable", true);
-        public static readonly IntSetting BackupCount = new IntSetting("Editor.Backup.Count", 10);
+        public static readonly IntSetting BackupCount = new IntSetting("Editor.Backup.Count", 10, 1);
         public static readonly BoolSetting SyncToDSPTime = new BoolSetting("Editor.SyncToDSPTime", false);
         public static readonly BoolSetting AllowCreatingNotesBackward = new BoolSetting("Editor.AllowCreatingNotesBackward", true);
         public static readonly BoolSetting EnableEasterEggs = new BoolSetting("Fun.EasterEggs", Application.isEditor);

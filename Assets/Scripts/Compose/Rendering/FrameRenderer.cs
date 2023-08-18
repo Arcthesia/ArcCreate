@@ -225,7 +225,7 @@ namespace ArcCreate.Compose.Rendering
 
                 Time.captureFramerate = 0;
                 Time.timeScale = 1;
-                transitionSequence.Hide().Forget();
+                transitionSequence.DisableGameObject();
                 gameplayViewport.enabled = true;
                 Services.Gameplay.Audio.IsRendering = false;
             }

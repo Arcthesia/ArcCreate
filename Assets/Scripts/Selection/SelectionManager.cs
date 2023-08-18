@@ -21,12 +21,12 @@ namespace ArcCreate.Selection
 
         protected override void OnSceneLoad()
         {
-            gameplayData.EnablePracticeMode.Value = false;
             storageData.SelectedPack.OnValueChange += OnPackChange;
             storageData.SelectedChart.OnValueChange += OnChartChange;
             storageData.OnSwitchToGameplaySceneException += OnGameplayException;
             TransitionScene.Instance.SetTargetCamera(selectionCamera, "Default");
             TransitionScene.Instance.TriangleTileGameObject.SetActive(true);
+            TransitionScene.Instance.EnsureDefaultTriangleScale();
         }
 
         private void OnDestroy()

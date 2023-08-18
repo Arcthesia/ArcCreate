@@ -30,6 +30,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public static ScreenIs16By9Channel Is16By9 => new ScreenIs16By9Channel();
 
+        public static IsMirrorOnChannel IsMirrorOn => new IsMirrorOnChannel();
+
         public ValueChannel LaneFrom
         {
             get => laneFrom;

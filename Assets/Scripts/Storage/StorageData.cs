@@ -269,16 +269,21 @@ namespace ArcCreate.Storage
             currentGameplayChart = selection;
             var (level, chart) = selection;
 
-            if (!gameplayData.EnablePracticeMode.Value)
+            if (gameplayData.EnableAutoplayMode.Value)
+            {
+                transitionPlayCount.Value = "AUTOPLAY";
+                transitionRetryCount.Value = string.Empty;
+            }
+            else if (gameplayData.EnablePracticeMode.Value)
+            {
+                transitionPlayCount.Value = "PRACTICE MODE";
+                transitionRetryCount.Value = string.Empty;
+            }
+            else
             {
                 PlayHistory history = PlayHistory.GetHistoryForChart(level.Identifier, chart.ChartPath);
                 transitionPlayCount.Value = TextFormat.FormatPlayCount(history.PlayCount + 1);
                 transitionRetryCount.Value = TextFormat.FormatRetryCount(1);
-            }
-            else
-            {
-                transitionPlayCount.Value = "PRACTICE MODE";
-                transitionRetryCount.Value = string.Empty;
             }
 
             TransitionSequence sequence = new TransitionSequence()
@@ -323,7 +328,7 @@ namespace ArcCreate.Storage
             gameplayData.OnPlayComplete += OnPlayComplete;
         }
 
-        public void SwitchToResultScene(LevelStorage level, ChartSettings chart, PlayResult result)
+        public void SwitchToResultScene(LevelStorage level, ChartSettings chart, PlayResult result, bool isAuto)
         {
             TransitionSequence transition = new TransitionSequence()
                 .OnShow()
@@ -335,7 +340,7 @@ namespace ArcCreate.Storage
                 SceneNames.ResultScene,
                 (rep) =>
                 {
-                    rep.PassData(level, chart, result);
+                    rep.PassData(level, chart, result, isAuto);
                     return default;
                 }).Forget();
         }
@@ -431,11 +436,15 @@ namespace ArcCreate.Storage
         {
             var (currentLevel, currentChart) = currentGameplayChart;
             PlayHistory history = PlayHistory.GetHistoryForChart(currentLevel.Identifier, currentChart.ChartPath);
-            result.BestScore = history.BestScorePlayOrDefault.Score;
-            result.PlayCount = history.PlayCount + 1;
-            history.AddPlay(result);
-            history.Save();
-            SwitchToResultScene(currentLevel, currentChart, result);
+            if (!gameplayData.EnableAutoplayMode.Value && !gameplayData.EnablePracticeMode.Value)
+            {
+                result.BestScore = history.BestScorePlayOrDefault.Score;
+                result.PlayCount = history.PlayCount + 1;
+                history.AddPlay(result);
+                history.Save();
+            }
+
+            SwitchToResultScene(currentLevel, currentChart, result, gameplayData.EnableAutoplayMode.Value);
         }
 
         private class Incompletable<T>

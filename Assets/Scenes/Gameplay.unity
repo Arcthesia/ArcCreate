@@ -8169,6 +8169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b9b721f421f965418f5485e4ed9d28c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameplayData: {fileID: 11400000, guid: ae19a07671eb9dc748d6346649a697b7, type: 2}
   gameplayCamera: {fileID: 613949612}
   skyInput: {fileID: 658714733}
   debug: {fileID: 1558319368}

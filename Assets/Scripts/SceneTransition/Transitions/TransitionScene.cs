@@ -111,6 +111,12 @@ namespace ArcCreate.SceneTransition
             AnimateTriangleTileScale(greetingTriangleScale, defaultTriangleScale, true);
         }
 
+        public void EnsureDefaultTriangleScale()
+        {
+            float currentScale = triangleTileImage.material.GetFloat(scaleShaderId);
+            AnimateTriangleTileScale(currentScale, defaultTriangleScale, false);
+        }
+
         public async UniTask ShowTriangleTile(bool inOutVariant)
         {
             StopAllAnimations();

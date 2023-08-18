@@ -20,9 +20,6 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private Button increateSpeedButton;
         [SerializeField] private TMP_Text noteSpeedText;
         [SerializeField] private SettingsToggle earlyLatePerfectSetting;
-        [SerializeField] private Button enablePracticeButton;
-        [SerializeField] private Button disablePracticeButton;
-        [SerializeField] private ScriptedAnimator practiceAnimation;
         [SerializeField] private Button openCreditButton;
         [SerializeField] private Button closeCreditButton;
         [SerializeField] private ScriptedAnimator creditAnimation;
@@ -73,8 +70,6 @@ namespace ArcCreate.Selection.Interface
             decreaseMusicVolumeButton.onClick.AddListener(OnDecreaseMusicVolumeButton);
             increaseOffsetButton.onClick.AddListener(OnIncreaseOffsetButton);
             decreaseOffsetButton.onClick.AddListener(OnDecreaseOffsetButton);
-            enablePracticeButton.onClick.AddListener(EnablePractice);
-            disablePracticeButton.onClick.AddListener(DisablePractice);
 
             Settings.DropRate.OnValueChanged.AddListener(OnDropRateSettings);
             Settings.MusicAudio.OnValueChanged.AddListener(OnMusicAudioSettings);
@@ -125,8 +120,6 @@ namespace ArcCreate.Selection.Interface
             decreaseMusicVolumeButton.onClick.RemoveListener(OnDecreaseMusicVolumeButton);
             increaseOffsetButton.onClick.RemoveListener(OnIncreaseOffsetButton);
             decreaseOffsetButton.onClick.RemoveListener(OnDecreaseOffsetButton);
-            enablePracticeButton.onClick.RemoveListener(EnablePractice);
-            disablePracticeButton.onClick.RemoveListener(DisablePractice);
 
             Settings.DropRate.OnValueChanged.RemoveListener(OnDropRateSettings);
             Settings.MusicAudio.OnValueChanged.RemoveListener(OnMusicAudioSettings);
@@ -199,19 +192,6 @@ namespace ArcCreate.Selection.Interface
         private void OnDecreaseOffsetButton()
         {
             Settings.GlobalAudioOffset.Value = Settings.GlobalAudioOffset.Value - 1;
-        }
-
-        private void EnablePractice()
-        {
-            gameplayData.EnablePracticeMode.Value = true;
-            practiceAnimation.Show();
-            Hide();
-        }
-
-        private void DisablePractice()
-        {
-            gameplayData.EnablePracticeMode.Value = false;
-            practiceAnimation.Hide();
         }
 
         private void ChangeScoreDisplayPreview(int val)

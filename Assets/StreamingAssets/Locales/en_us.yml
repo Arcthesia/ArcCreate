@@ -914,8 +914,8 @@ Gameplay:
         EarlyLatePerfectDisplayDetail: |-
           Change whether or not to display early/late perfect judgements.
         EnablePractice: Enable practice mode
-        EnablePracticeDetail: Enable practice mode for next play
-        EnablePracticeButton: Enable
+        ShowMsDifference: Display miliseconds differences
+        ShowMsDifferenceDetail: Display exact miliseconds differences instead of EARLY / LATE.
       Audio:
         Name: Audio
         Offset: Offset
@@ -944,8 +944,6 @@ Gameplay:
         LimitFramerateDetail: Limit display framerate to 60 FPS to preserve battery life. Might increase latency.
       Judgement:
         Name: Judgement
-        ShowMsDifference: Display miliseconds differences
-        ShowMsDifferenceDetail: Display exact miliseconds differences instead of EARLY / LATE.
         ShowMax: Display Perfect (Max) judgement
         ShowPerfect: Display Perfect (Early / Late) judgement
         ShowGood: Display Good judgement

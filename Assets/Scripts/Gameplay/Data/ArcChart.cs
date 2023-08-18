@@ -133,6 +133,29 @@ namespace ArcCreate.Gameplay.Data
                         break;
                 }
             }
+
+            if (Settings.MirrorNotes.Value)
+            {
+                foreach (ChartTimingGroup tg in TimingGroups)
+                {
+                    foreach (var tap in tg.Taps)
+                    {
+                        tap.Lane = 5 - tap.Lane;
+                    }
+
+                    foreach (var hold in tg.Holds)
+                    {
+                        hold.Lane = 5 - hold.Lane;
+                    }
+
+                    foreach (var arc in tg.Arcs)
+                    {
+                        arc.XStart = 1 - arc.XStart;
+                        arc.XEnd = 1 - arc.XEnd;
+                        arc.Color = arc.Color == 0 ? 1 : (arc.Color == 1 ? 0 : arc.Color);
+                    }
+                }
+            }
         }
 
         public int AudioOffset { get; private set; }

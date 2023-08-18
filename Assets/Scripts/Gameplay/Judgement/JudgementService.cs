@@ -6,6 +6,7 @@ namespace ArcCreate.Gameplay.Judgement
 {
     public class JudgementService : MonoBehaviour, IJudgementService
     {
+        [SerializeField] private GameplayData gameplayData;
         [SerializeField] private Camera gameplayCamera;
         [SerializeField] private Transform skyInput;
         [SerializeField] private JudgementDebug debug;
@@ -14,6 +15,7 @@ namespace ArcCreate.Gameplay.Judgement
         private readonly UnorderedList<ArcJudgementRequest> arcRequests = new UnorderedList<ArcJudgementRequest>(32);
         private readonly UnorderedList<ArcTapJudgementRequest> arcTapRequests = new UnorderedList<ArcTapJudgementRequest>(32);
         private IInputHandler inputHandler;
+        private IInputHandler autoHandler = new AutoInputHandler();
         private bool isAuto;
 
         public float SkyInputY => skyInput.position.y;
@@ -70,15 +72,17 @@ namespace ArcCreate.Gameplay.Judgement
                 return;
             }
 
-            if (!isAuto)
+            bool forceAuto = gameplayData.EnableAutoplayMode.Value;
+            if (!isAuto && !forceAuto)
             {
                 PruneExpiredRequests(currentTiming);
             }
 
-            inputHandler.PollInput();
-            inputHandler.HandleTapRequests(currentTiming, laneTapRequests, arcTapRequests);
-            inputHandler.HandleLaneHoldRequests(currentTiming, laneHoldRequests);
-            inputHandler.HandleArcRequests(currentTiming, arcRequests);
+            IInputHandler handler = forceAuto ? autoHandler : inputHandler;
+            handler.PollInput();
+            handler.HandleTapRequests(currentTiming, laneTapRequests, arcTapRequests);
+            handler.HandleLaneHoldRequests(currentTiming, laneHoldRequests);
+            handler.HandleArcRequests(currentTiming, arcRequests);
         }
 
         public void RefreshInputHandler()

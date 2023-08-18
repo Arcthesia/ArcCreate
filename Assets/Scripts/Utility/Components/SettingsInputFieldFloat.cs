@@ -30,12 +30,12 @@ namespace ArcCreate
 
         private void Awake()
         {
-            Input.onValueChanged.AddListener(OnUIChange);
+            Input.onEndEdit.AddListener(OnUIChange);
         }
 
         private void OnDestroy()
         {
-            Input.onValueChanged.RemoveListener(OnUIChange);
+            Input.onEndEdit.RemoveListener(OnUIChange);
             setting?.OnValueChanged.RemoveListener(OnSettingChange);
         }
 

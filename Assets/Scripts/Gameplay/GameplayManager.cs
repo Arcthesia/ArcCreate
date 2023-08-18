@@ -94,7 +94,7 @@ namespace ArcCreate.Gameplay
             Time.timeScale = 1;
             Services.Judgement.SetDebugDisplayMode(Settings.ShowGameplayDebug.Value);
             Values.RetryCount = 0;
-            StartCoroutine(NextFrame(() => TransitionScene.Instance.SetTargetCamera(overlayCamera, "Topmost", 99)));
+            TransitionScene.Instance.SetTargetCamera(overlayCamera, "Topmost", 99);
         }
 
         private async UniTask ImportTestChartAndroid(string path)

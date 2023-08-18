@@ -89,7 +89,7 @@ namespace ArcCreate.Gameplay.Data
             get
             {
                 float angleXf = 90.0f - AngleX - SCAngleX;
-                float angleYf = AngleY + SCAngleY;
+                float angleYf = (AngleY + SCAngleY) * (Settings.MirrorNotes.Value ? -1 : 1);
 
                 float x = Mathf.Sin(angleXf * Mathf.Deg2Rad) * Mathf.Sin(angleYf * Mathf.Deg2Rad);
                 float y = -Mathf.Cos(angleXf * Mathf.Deg2Rad);

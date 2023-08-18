@@ -52,11 +52,13 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private StringSO transitionPlayCount;
         [SerializeField] private StringSO transitionRetryCount;
         [SerializeField] private AudioPreview audioPreview;
+        [SerializeField] private GameObject playCountParent;
+        [SerializeField] private GameObject autoNotifParent;
         private LevelStorage currentLevel;
         private ChartSettings currentChart;
         private CancellationTokenSource cts = new CancellationTokenSource();
 
-        public void Display(LevelStorage level, ChartSettings chart, PlayResult play)
+        public void Display(LevelStorage level, ChartSettings chart, PlayResult play, bool isAuto)
         {
             currentLevel = level;
             currentChart = chart;
@@ -83,6 +85,9 @@ namespace ArcCreate.Selection.Interface
             playCount.text = play.PlayCount.ToString();
             retryCount.text = play.RetryCount.ToString();
 
+            playCountParent.SetActive(!isAuto);
+            autoNotifParent.SetActive(isAuto);
+
             double best = play.BestScore;
             double current = play.Score;
             bestScore.text = PlayResult.FormatScore(best);
@@ -106,7 +111,8 @@ namespace ArcCreate.Selection.Interface
             LevelStorage level = args[0] as LevelStorage;
             ChartSettings chart = args[1] as ChartSettings;
             PlayResult result = (PlayResult)args[2];
-            Display(level, chart, result);
+            bool isAuto = (bool)args[3];
+            Display(level, chart, result, isAuto);
         }
 
         public override void OnUnloadScene()
@@ -144,10 +150,8 @@ namespace ArcCreate.Selection.Interface
                 transitionPlayCount.Value = TextFormat.FormatPlayCount(history.PlayCount + 1);
                 transitionRetryCount.Value = TextFormat.FormatRetryCount(1);
 
-                animator.GetHideTween(out float _).Play().OnComplete(() =>
-                {
-                    storage.SwitchToPlayScene((currentLevel, currentChart));
-                });
+                animator.Hide();
+                storage.SwitchToPlayScene((currentLevel, currentChart));
             }
         }
     }

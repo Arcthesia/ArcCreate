@@ -117,6 +117,11 @@ namespace ArcCreate.Gameplay
         public State<bool> EnablePracticeMode { get; } = new State<bool>(false);
 
         /// <summary>
+        /// Whether or not to force enable autoplay mode for gameplay scene.
+        /// </summary>
+        public State<bool> EnableAutoplayMode { get; } = new State<bool>(false);
+
+        /// <summary>
         /// The audio playback speed.
         /// </summary>
         public State<float> PlaybackSpeed { get; } = new State<float>(1);
