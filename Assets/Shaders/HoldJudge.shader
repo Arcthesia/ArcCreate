@@ -53,6 +53,7 @@ Shader "Gameplay/HoldJudge"
                 fixed4 frag (v2f i) : SV_Target
                 {
                     half4 prev = i.color * tex2D(_MainTex, i.texcoord);
+                    prev.a *= 1.25;
                     fixed4 col = lerp(half4(1,1,1,1), prev, prev.a);
                     return col;
                 }
@@ -99,6 +100,7 @@ Shader "Gameplay/HoldJudge"
                 fixed4 frag (v2f i) : SV_Target
                 {
                     fixed4 col = 2.0f * i.color * _TintColor * tex2D(_MainTex, i.texcoord);
+                    col.a *= 1.25;
                     col.a = saturate(col.a); // alpha should not have double-brightness applied to it, but we can't fix that legacy behavior without breaking everyone's effects, so instead clamp the output to get sensible HDR behavior (case 967476)
                     return col;
                 }

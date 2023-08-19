@@ -232,6 +232,7 @@ namespace ArcCreate.SceneTransition
             ExternalGameplayLoadCompleteAudio.Load().Forget();
             ExternalGeneralTransitionAudio.Load().Forget();
             ExternalRetryAudio.Load().Forget();
+            transitionCamera.fieldOfView = Mathf.Lerp(50, 65, ((transitionCamera.pixelHeight / (transitionCamera.pixelWidth / 16f)) - 9) / 3f);
         }
 
         private void OnDestroy()
