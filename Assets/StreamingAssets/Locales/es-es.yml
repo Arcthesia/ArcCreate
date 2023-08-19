@@ -911,3 +911,12 @@ Storage:
 Credits:
   Name: Créditos
   View: Ver créditos
+  Role:
+    LeadProgramming: a
+    Programming: Proga
+    VisualDesign: Visa
+    SoundDesign: Souna
+    Localization: Loca
+    QualityAssurance: Quality Assurance
+    Community: and evea
+    Sponsor: Special ta

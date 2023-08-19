@@ -1,7 +1,6 @@
 using ArcCreate.Compose.Components;
 using ArcCreate.Data;
 using ArcCreate.Gameplay;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace ArcCreate.Compose.Project

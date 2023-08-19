@@ -11,12 +11,11 @@ namespace ArcCreate.SceneTransition
         [SerializeField] private GameObject clickToStartText;
         [SerializeField] private ScriptedAnimator startupAnimator;
         [SerializeField] private ScriptedAnimator proceedAnimator;
-        [SerializeField] private Camera greetingCamera;
 
         protected override void OnSceneLoad()
         {
-            TransitionScene.Instance.SetTargetCamera(greetingCamera);
             TransitionScene.Instance.TriangleTileGameObject.SetActive(true);
+            TransitionScene.Instance.UpdateCameraStatus();
             startupAnimator.Show();
             TransitionScene.Instance.EnterGreetingScene();
             button.onClick.AddListener(Transition);

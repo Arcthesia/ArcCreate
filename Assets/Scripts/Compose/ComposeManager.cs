@@ -53,6 +53,7 @@ namespace ArcCreate.Compose
             gameplay.Chart.EnableColliderGeneration = true;
             TransitionScene.Instance.SetTargetCamera(gameplay.Camera.UICamera, "Topmost", 99);
             TransitionScene.Instance.TriangleTileGameObject.SetActive(false);
+            TransitionScene.Instance.UpdateCameraStatus();
         }
 
         private void StartCheckingStartupArgs()

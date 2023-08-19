@@ -42,6 +42,11 @@ namespace ArcCreate.Selection.Interface
 
         private void OnClick()
         {
+            if (SceneTransitionManager.Instance.IsTransitioning)
+            {
+                return;
+            }
+
             TransitionSequence transition = new TransitionSequence()
                 .OnShow()
                 .AddTransition(new TriangleTileTransition());

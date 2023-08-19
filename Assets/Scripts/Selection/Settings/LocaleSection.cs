@@ -14,16 +14,17 @@ namespace ArcCreate.Selection.Interface
         private void Awake()
         {
             cellPool = Pools.New<Cell>("LocaleCellPool", localeCellPrefab, scroll.transform, 6);
-            string[] locales = I18n.ListAllLocales();
+            List<I18n.LocaleEntry> locales = I18n.LocaleList;
             List<CellData> cellDatas = new List<CellData>();
 
-            foreach (string locale in locales)
+            foreach (var locale in locales)
             {
                 cellDatas.Add(new LocaleCellData()
                 {
                     Pool = cellPool,
                     Size = localeCellSize,
-                    Name = locale,
+                    Id = locale.Id,
+                    Name = locale.LocalName,
                 });
             }
 

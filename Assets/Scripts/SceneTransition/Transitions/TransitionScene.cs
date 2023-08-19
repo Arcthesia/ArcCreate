@@ -11,6 +11,7 @@ namespace ArcCreate.SceneTransition
     public class TransitionScene : MonoBehaviour
     {
         [Header("Objects")]
+        [SerializeField] private Camera transitionCamera;
         [SerializeField] private Image triangleTileImage;
         [SerializeField] private GameObject playRetryCountParent;
         [SerializeField] private GameObject infoParent;
@@ -95,6 +96,15 @@ namespace ArcCreate.SceneTransition
             => (int)Mathf.Max(
                 colorAnimationDuration,
                 (inOutVariant ? scaleAnimationDurationInOut : scaleAnimationDurationOut) * 1000);
+
+        public void UpdateCameraStatus()
+        {
+            transitionCamera.gameObject.SetActive(
+                TriangleTileGameObject.activeInHierarchy ||
+                playRetryCountParent.activeInHierarchy ||
+                infoParent.activeInHierarchy ||
+                decorationParent.activeInHierarchy);
+        }
 
         public void EnterGreetingScene()
         {

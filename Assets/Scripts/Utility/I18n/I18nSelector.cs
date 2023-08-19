@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using TMPro;
@@ -12,12 +13,12 @@ namespace ArcCreate.Utility
         [SerializeField] private Button reloadButton;
         [SerializeField] private Button openFolderButton;
         [SerializeField] private Button reportMissingButton;
-        private string[] options;
+        private List<I18n.LocaleEntry> options;
 
         private void Awake()
         {
             dropdown.onValueChanged.AddListener(OnDropdown);
-            Settings.Locale.OnValueChanged.AddListener(OnSettings);
+            I18n.OnLocaleChanged += Reload;
 
             if (reloadButton != null)
             {
@@ -40,7 +41,7 @@ namespace ArcCreate.Utility
         private void OnDestroy()
         {
             dropdown.onValueChanged.RemoveListener(OnDropdown);
-            Settings.Locale.OnValueChanged.RemoveListener(OnSettings);
+            I18n.OnLocaleChanged -= Reload;
 
             if (reloadButton != null)
             {
@@ -65,28 +66,20 @@ namespace ArcCreate.Utility
 
         private void OnDropdown(int opt)
         {
-            Settings.Locale.Value = options[Mathf.Clamp(opt, 0, options.Length - 1)];
-        }
-
-        private void OnSettings(string locale)
-        {
-            I18n.SetLocale(locale);
-            if (reportMissingButton != null)
-            {
-                reportMissingButton.interactable = I18n.CurrentLocale != I18n.DefaultLocale;
-            }
+            Settings.Locale.Value = options[Mathf.Clamp(opt, 0, options.Count - 1)].Id;
+            I18n.SetLocale(Settings.Locale.Value);
         }
 
         private void Reload()
         {
-            options = I18n.ListAllLocales();
-            dropdown.options = options.Select(s => new TMP_Dropdown.OptionData(s)).ToList();
+            options = I18n.LocaleList;
+            dropdown.options = options.Select(s => new TMP_Dropdown.OptionData(s.LocalName)).ToList();
 
             bool found = false;
-            for (int i = 0; i < options.Length; i++)
+            for (int i = 0; i < options.Count; i++)
             {
-                string s = options[i];
-                if (s == Settings.Locale.Value)
+                string s = options[i].Id;
+                if (s == I18n.CurrentLocale)
                 {
                     dropdown.SetValueWithoutNotify(i);
                     found = true;
@@ -94,14 +87,8 @@ namespace ArcCreate.Utility
                 }
             }
 
-            if (!found)
+            if (found)
             {
-                dropdown.SetValueWithoutNotify(0);
-                Settings.Locale.Value = options[0];
-            }
-            else
-            {
-                I18n.SetLocale(Settings.Locale.Value);
                 if (reportMissingButton != null)
                 {
                     reportMissingButton.interactable = I18n.CurrentLocale != I18n.DefaultLocale;

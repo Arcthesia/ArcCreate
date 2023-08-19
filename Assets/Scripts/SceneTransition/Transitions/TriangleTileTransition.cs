@@ -18,6 +18,7 @@ namespace ArcCreate.SceneTransition
             if (TransitionScene.Instance != null)
             {
                 TransitionScene.Instance.TriangleTileGameObject.SetActive(false);
+                TransitionScene.Instance.UpdateCameraStatus();
             }
         }
 
@@ -26,6 +27,7 @@ namespace ArcCreate.SceneTransition
             if (TransitionScene.Instance != null)
             {
                 TransitionScene.Instance.TriangleTileGameObject.SetActive(true);
+                TransitionScene.Instance.UpdateCameraStatus();
             }
         }
 

@@ -5,7 +5,7 @@ namespace ArcCreate
 {
     public static class Settings
     {
-        public static readonly StringSetting Locale = new StringSetting("Locale", "en_us");
+        public static readonly StringSetting Locale = new StringSetting("System.Locale", null);
 
         // Gameplay
         public static readonly IntSetting DropRate = new IntSetting("DropRate", 150, 0);

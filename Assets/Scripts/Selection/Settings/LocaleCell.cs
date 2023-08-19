@@ -11,6 +11,7 @@ namespace ArcCreate.Selection.Interface
     {
         [SerializeField] private Button button;
         [SerializeField] private TMP_Text text;
+        private string id;
 
         public override UniTask LoadCellFully(CellData cellData, CancellationToken cancellationToken)
         {
@@ -20,6 +21,7 @@ namespace ArcCreate.Selection.Interface
         public override void SetCellData(CellData cellData)
         {
             text.text = (cellData as LocaleCellData).Name;
+            id = (cellData as LocaleCellData).Id;
         }
 
         private void Awake()
@@ -34,7 +36,7 @@ namespace ArcCreate.Selection.Interface
 
         private void OnButton()
         {
-            Settings.Locale.Value = text.text;
+            Settings.Locale.Value = id;
             I18n.SetLocale(Settings.Locale.Value);
         }
     }

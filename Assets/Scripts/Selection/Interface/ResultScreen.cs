@@ -129,7 +129,6 @@ namespace ArcCreate.Selection.Interface
             returnButton.onClick.AddListener(ReturnToPreviousScene);
             retryButton.onClick.AddListener(RetryChart);
             animator.HideImmediate();
-            TransitionScene.Instance.SetTargetCamera(resultCamera, "Default");
         }
 
         private void ReturnToPreviousScene()

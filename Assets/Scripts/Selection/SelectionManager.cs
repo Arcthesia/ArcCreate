@@ -14,18 +14,12 @@ namespace ArcCreate.Selection
         [SerializeField] private StorageData storageData;
         [SerializeField] private Camera selectionCamera;
 
-        public override void OnNoBootScene()
-        {
-            TransitionScene.Instance.SetTargetCamera(selectionCamera, "Default");
-        }
-
         protected override void OnSceneLoad()
         {
             storageData.SelectedPack.OnValueChange += OnPackChange;
             storageData.SelectedChart.OnValueChange += OnChartChange;
-            storageData.OnSwitchToGameplaySceneException += OnGameplayException;
-            TransitionScene.Instance.SetTargetCamera(selectionCamera, "Default");
             TransitionScene.Instance.TriangleTileGameObject.SetActive(true);
+            TransitionScene.Instance.UpdateCameraStatus();
             TransitionScene.Instance.EnsureDefaultTriangleScale();
         }
 
@@ -33,12 +27,6 @@ namespace ArcCreate.Selection
         {
             storageData.SelectedPack.OnValueChange -= OnPackChange;
             storageData.SelectedChart.OnValueChange -= OnChartChange;
-            storageData.OnSwitchToGameplaySceneException += OnGameplayException;
-        }
-
-        private void OnGameplayException(Exception exception)
-        {
-            TransitionScene.Instance.SetTargetCamera(selectionCamera, "Default");
         }
 
         private void OnPackChange(PackStorage pack)

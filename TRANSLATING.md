@@ -14,13 +14,27 @@ Now either create a new file named `(your language code).yml`, or open the file 
 
 If the file already exists, then someone else has already started working on the translation, and you can contribute by editing this further. Open the file, then click on the edit button (with a pencil as the icon) on the top right. You're now ready to start making changes.
 
-> Note: For every new build, missing entries in all locale files are filled in with the default english text from [en_us.yml](/Assets/StreamingAssets/Locales/). Feel free to update the translation by filling these in whenever a new build is released.
+> Note: For every new build, missing entries in all locale files are filled in with the default english text from [en-us.yml](/Assets/StreamingAssets/Locales/). Feel free to update the translation by filling these in whenever a new build is released.
 
 #### Creating a new translation
 
 If the file doesn't exist yet, you need to create it yourself.
 
-First, head over to the default locale file [en_us.yml](/Assets/StreamingAssets/Locales/), and copy all of its content. Then click on `Add File > Create new file`, name the file with the correct name mentioned above, and paste everything you just copied into this file. You're now ready to start translating.
+First, head over to the default locale file [en-us.yml](/Assets/StreamingAssets/Locales/), and copy all of its content. Then click on `Add File > Create new file`, name the file with the correct name mentioned above, and paste everything you just copied into this file.
+
+Next, in order for ArcCreate to recognize your new locale file, you must add it to the [locale_list.yml](/Assets/StreamingAssets/). Follow the example and add a new entry in the following format:
+```yml
+- Id: your-locale-file
+  CodeName: CodeNameForLanguage
+  LocalName: Language Name
+```
+
+Where:
+- `Id` is what your locale file is named i.e the LCID string listed on the [locale code identifiers list](https://www.science.co.il/language/Locale-codes.php).
+- `CodeName` is the name of your language as listed in the [list of system languages provided by Unity](https://docs.unity3d.com/ScriptReference/SystemLanguage.html).
+- `LocalName` is what your language will be displayed as in game.
+
+After creating the file and modifying the locale list, you're now ready to start translating.
 
 #### Submitting changes
 

@@ -52,7 +52,6 @@ namespace ArcCreate.SceneTransition
 
         public void SetTransition(TransitionSequence transition)
         {
-            this.transition?.DisableGameObject();
             this.transition = transition;
         }
 
@@ -152,14 +151,7 @@ namespace ArcCreate.SceneTransition
 
         private async UniTask LoadDefaultScene()
         {
-            if (Application.platform == RuntimePlatform.Android)
-            {
-                await I18n.StartLoadingLocale(Settings.Locale.Value);
-            }
-            else
-            {
-                I18n.SetLocale(Settings.Locale.Value);
-            }
+            await I18n.Initialize();
 
             foreach (string scene in SceneNames.RequiredScenes)
             {

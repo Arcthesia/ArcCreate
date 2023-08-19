@@ -11,6 +11,7 @@ namespace ArcCreate.SceneTransition
             if (TransitionScene.Instance != null)
             {
                 TransitionScene.Instance.PlayRetryCountGameObject.SetActive(false);
+                TransitionScene.Instance.UpdateCameraStatus();
             }
         }
 
@@ -19,6 +20,7 @@ namespace ArcCreate.SceneTransition
             if (TransitionScene.Instance != null)
             {
                 TransitionScene.Instance.PlayRetryCountGameObject.SetActive(true);
+                TransitionScene.Instance.UpdateCameraStatus();
             }
         }
 

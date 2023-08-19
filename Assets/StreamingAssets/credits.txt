@@ -1,0 +1,36 @@
+<size=33><b>{Credits.Role.LeadProgramming}</b></size>
+0thElement
+
+<size=33><b>{Credits.Role.Programming}</b></size>
+Arke12917
+floofer++
+recharge-sp
+
+<size=33><b>{Credits.Role.VisualDesign}</b></size>
+Alaiskai
+Ragnarok VII
+0thElement
+Exiony
+yojohanshinwataikei
+
+<size=33><b>{Credits.Role.SoundDesign}</b></size>
+SpoonierThanThou
+
+<size=33><b>{Credits.Role.Localization}</b></size>
+[ja-jp]: rassvet2
+[es-es]: Alaiskai
+[vi]: Himori
+[zh-cn]: HaloSense
+[zh-tw]: Sylvexia
+
+<size=33><b>{Credits.Role.QualityAssurance}</b></size>
+ZydeKun
+Exiony
+Alaiskai
+MicroHazard
+{Credits.Role.Community}
+
+<size=33><b>{Credits.Role.Sponsor}</b></size>
+Alaiskai
+Yut0124
+Zeurunix

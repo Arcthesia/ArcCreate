@@ -11,6 +11,7 @@ namespace ArcCreate.SceneTransition
             if (TransitionScene.Instance != null)
             {
                 TransitionScene.Instance.DecorationGameObject.SetActive(false);
+                TransitionScene.Instance.UpdateCameraStatus();
             }
         }
 
@@ -19,6 +20,7 @@ namespace ArcCreate.SceneTransition
             if (TransitionScene.Instance != null)
             {
                 TransitionScene.Instance.DecorationGameObject.SetActive(true);
+                TransitionScene.Instance.UpdateCameraStatus();
             }
         }
 

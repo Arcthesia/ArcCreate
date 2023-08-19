@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using ArcCreate;
 using ArcCreate.Utility;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 /// <summary>
 /// Internationalization.
 /// </summary>
 public static class I18n
 {
-    public const string DefaultLocale = "en_us";
+    public const string DefaultLocale = "en-us";
     private const string MissingLocale = "Missing locale: ({0}){1}";
 
     private static readonly Dictionary<string, string> DefaultStrings = new Dictionary<string, string>();
@@ -27,7 +30,72 @@ public static class I18n
     /// </summary>
     public static string CurrentLocale { get; private set; } = DefaultLocale;
 
+    public static List<LocaleEntry> LocaleList { get; private set; } = new List<LocaleEntry>();
+
     public static string LocaleDirectory => Path.Combine(Application.streamingAssetsPath, "Locales");
+
+    public static string LocaleListPath => Path.Combine(Application.streamingAssetsPath, "locale_list.yml");
+
+    /// <summary>
+    /// Runs at startup.
+    /// </summary>
+    /// <returns>UniTask instance.</returns>
+    public static async UniTask Initialize()
+    {
+        string currentLocale = Settings.Locale.Value;
+        await UpdateLocaleList();
+
+        bool found = false;
+        foreach (var locale in LocaleList)
+        {
+            if (locale.Id == currentLocale)
+            {
+                found = true;
+                break;
+            }
+        }
+
+        currentLocale = found ? currentLocale : string.Empty;
+
+        if (string.IsNullOrEmpty(currentLocale))
+        {
+            string systemLanguage = Application.systemLanguage.ToString();
+            foreach (LocaleEntry locale in LocaleList)
+            {
+                if (locale.CodeName == systemLanguage)
+                {
+                    currentLocale = locale.Id;
+                    break;
+                }
+            }
+        }
+
+        currentLocale = string.IsNullOrEmpty(currentLocale) ? DefaultLocale : currentLocale;
+        CurrentLocale = currentLocale;
+
+        string path = Path.Combine(LocaleDirectory, CurrentLocale) + ".yml";
+        if (CurrentLocale != DefaultLocale)
+        {
+            string defaultPath = Path.Combine(LocaleDirectory, DefaultLocale) + ".yml";
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                await StartLoadingLocaleWithUnityWeb(defaultPath, DefaultStrings, false);
+            }
+            else
+            {
+                LoadLocale(defaultPath, DefaultStrings, false);
+            }
+        }
+
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            await StartLoadingLocaleWithUnityWeb(path, strings);
+        }
+        else
+        {
+            LoadLocale(path, strings);
+        }
+    }
 
     /// <summary>
     /// Gets the translated string from a key.
@@ -129,47 +197,6 @@ public static class I18n
         }
     }
 
-    public static async UniTask StartLoadingLocale(string locale)
-    {
-        CurrentLocale = locale;
-        string path = Path.Combine(LocaleDirectory, CurrentLocale) + ".yml";
-        if (CurrentLocale != DefaultLocale)
-        {
-            string defaultPath = Path.Combine(LocaleDirectory, DefaultLocale) + ".yml";
-            await StartLoadingLocaleWithUnityWeb(defaultPath, DefaultStrings, false);
-        }
-
-        await StartLoadingLocaleWithUnityWeb(path, strings);
-    }
-
-    /// <summary>
-    /// List all locales available. Each locale is defined by a file in the streaming assets folder.
-    /// </summary>
-    /// <returns>List of all locales available.</returns>
-    public static string[] ListAllLocales()
-    {
-        if (Application.platform == RuntimePlatform.Android)
-        {
-            return new string[]
-            {
-                "en_us",
-                "es_es",
-                "ja_jp",
-                "ko",
-                "vi",
-                "zh_cn",
-                "zh_tw",
-            };
-        }
-
-        DirectoryInfo dir = new DirectoryInfo(LocaleDirectory);
-        FileInfo[] yamls = dir.GetFiles("*.yaml");
-        FileInfo[] ymls = dir.GetFiles("*.yml");
-        return yamls.Select(file => Path.GetFileNameWithoutExtension(file.Name))
-            .Union(ymls.Select(file => Path.GetFileNameWithoutExtension(file.Name)))
-            .ToArray();
-    }
-
     public static async UniTask ReportMissingEntries()
     {
         string path = Path.Combine(LocaleDirectory, "report.txt");
@@ -204,11 +231,24 @@ public static class I18n
         Shell.OpenExplorer(path);
     }
 
+    public static string GetLocalName(string id)
+    {
+        foreach (var locale in LocaleList)
+        {
+            if (locale.Id == id)
+            {
+                return locale.LocalName;
+            }
+        }
+
+        return id;
+    }
+
     private static void LoadLocale(string path, Dictionary<string, string> target, bool invoke = true)
     {
         if (Application.platform == RuntimePlatform.Android)
         {
-            StartLoadingLocaleWithUnityWeb(path, target).Forget();
+            StartLoadingLocaleWithUnityWeb(path, target, invoke).Forget();
         }
         else
         {
@@ -250,5 +290,43 @@ public static class I18n
         {
             OnLocaleChanged?.Invoke();
         }
+    }
+
+    private static async UniTask UpdateLocaleList()
+    {
+        string data = string.Empty;
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            using (var req = UnityWebRequest.Get(LocaleListPath))
+            {
+                await req.SendWebRequest();
+                if (!string.IsNullOrEmpty(req.error))
+                {
+                    Debug.LogWarning($"Couldn't load locale file at {LocaleListPath}");
+                    return;
+                }
+
+                data = req.downloadHandler.text;
+            }
+        }
+        else
+        {
+            data = File.ReadAllText(LocaleListPath);
+        }
+
+        var deserializer = new DeserializerBuilder()
+            .WithNamingConvention(new PascalCaseNamingConvention())
+            .IgnoreUnmatchedProperties()
+            .Build();
+        LocaleList = deserializer.Deserialize<List<LocaleEntry>>(data);
+    }
+
+    public class LocaleEntry
+    {
+        public string Id { get; set; }
+
+        public string CodeName { get; set; }
+
+        public string LocalName { get; set; }
     }
 }
