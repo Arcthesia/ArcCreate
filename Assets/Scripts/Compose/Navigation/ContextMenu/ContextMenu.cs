@@ -27,6 +27,12 @@ namespace ArcCreate.Compose.Navigation
         [WhitelistScopes(all: true)]
         public async UniTask OpenContextMenu(EditorAction action)
         {
+            if (Settings.InputMode.Value == (int)InputMode.Touch
+             || Settings.InputMode.Value == (int)InputMode.Mouse)
+            {
+                return;
+            }
+
             SubAction close = action.GetSubAction("Close");
 
             buttonPool.ReturnAll();

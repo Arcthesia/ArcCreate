@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using ArcCreate.Data;
 using ArcCreate.Gameplay;
 using ArcCreate.SceneTransition;
@@ -121,7 +122,7 @@ namespace ArcCreate.Storage
             OnOpenFilePicker?.Invoke();
         }
 
-        public async UniTask AssignTexture(RawImage image, IStorageUnit storage, string jacketPath)
+        public async UniTask AssignTexture(RawImage image, IStorageUnit storage, string jacketPath, CancellationToken ct = default)
         {
             Option<string> realJacketPath = storage.GetRealPath(jacketPath);
             if (!realJacketPath.HasValue)
@@ -137,6 +138,10 @@ namespace ArcCreate.Storage
                 while (!cachedTexture.Completed)
                 {
                     await UniTask.NextFrame();
+                    if (ct.IsCancellationRequested)
+                    {
+                        return;
+                    }
                 }
 
                 if (cachedTexture.IsSuccess)
@@ -157,9 +162,14 @@ namespace ArcCreate.Storage
                 if (string.IsNullOrEmpty(req.error))
                 {
                     Texture2D texture = DownloadHandlerTexture.GetContent(req);
-                    image.texture = texture;
                     loading.Value = texture;
                     loading.IsSuccess = true;
+                    if (ct.IsCancellationRequested)
+                    {
+                        return;
+                    }
+
+                    image.texture = texture;
                 }
                 else
                 {

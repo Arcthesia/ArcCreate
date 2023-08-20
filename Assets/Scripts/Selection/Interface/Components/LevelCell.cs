@@ -89,7 +89,7 @@ namespace ArcCreate.Selection.Interface
 
         public override async UniTask LoadCellFully(CellData cellData, CancellationToken cancellationToken)
         {
-            await storage.AssignTexture(jacket, level, visibleChart.JacketPath);
+            await storage.AssignTexture(jacket, level, visibleChart.JacketPath, cancellationToken);
             jacketFill.texture = jacket.texture;
         }
 
@@ -106,6 +106,7 @@ namespace ArcCreate.Selection.Interface
                 difficultyCellPool.Return(im);
             }
 
+            difficultyCells.Clear();
             foreach (var chart in level.Settings.Charts)
             {
                 if (chart.ChartPath == visibleChart.ChartPath)
