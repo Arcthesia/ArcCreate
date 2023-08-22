@@ -23,6 +23,7 @@ namespace ArcCreate.Gameplay.Audio
         [SerializeField] private GameObject pauseControl;
         [SerializeField] private GameObject normalLayout;
         [SerializeField] private GameObject reversedLayout;
+        [SerializeField] private GameObject promptAudioConfigChange;
         private TransitionSequence retryTransition;
 
         private void Awake()
@@ -57,6 +58,8 @@ namespace ArcCreate.Gameplay.Audio
                 .AddTransition(new TriangleTileTransition())
                 .AddTransition(new PlayRetryCountTransition())
                 .AddTransition(new DecorationTransition());
+
+            AudioSettings.OnAudioConfigurationChanged += OnAudioConfig;
         }
 
         private void OnSwitchLayoutSettings(bool reversed)
@@ -85,6 +88,16 @@ namespace ArcCreate.Gameplay.Audio
 
             Application.focusChanged -= OnFocusChange;
             gameplayData.EnablePracticeMode.OnValueChange -= SetPracticeMode;
+            AudioSettings.OnAudioConfigurationChanged -= OnAudioConfig;
+        }
+
+        private void OnAudioConfig(bool deviceWasChanged)
+        {
+            if (deviceWasChanged)
+            {
+                Services.Audio.Pause();
+                promptAudioConfigChange.SetActive(true);
+            }
         }
 
         private void OnFocusChange(bool focused)

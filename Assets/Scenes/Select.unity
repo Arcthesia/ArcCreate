@@ -4104,6 +4104,7 @@ GameObject:
   - component: {fileID: 209434645}
   - component: {fileID: 209434646}
   - component: {fileID: 209434647}
+  - component: {fileID: 209434648}
   m_Layer: 5
   m_Name: SoundEfffect
   m_TagString: Untagged
@@ -4237,6 +4238,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &209434648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 209434644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08178049a6ae7784fbe4a0a2cfcd273d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reactivateAudio: 0
 --- !u!1001 &211348384
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16213,7 +16227,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 512036302}
   m_HandleRect: {fileID: 512036301}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -21789,6 +21803,7 @@ GameObject:
   - component: {fileID: 1151680748}
   - component: {fileID: 1151680750}
   - component: {fileID: 1151680749}
+  - component: {fileID: 1151680751}
   m_Layer: 5
   m_Name: AudioPreview
   m_TagString: Untagged
@@ -21922,6 +21937,19 @@ MonoBehaviour:
   audioSource: {fileID: 1151680749}
   audioFadeDuration: 1
   switchSceneAudioFadeDuration: 0.5
+--- !u!114 &1151680751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1151680747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08178049a6ae7784fbe4a0a2cfcd273d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reactivateAudio: 1
 --- !u!1 &1154420919
 GameObject:
   m_ObjectHideFlags: 0
@@ -35198,7 +35226,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 674.76874}
+  m_AnchoredPosition: {x: 0, y: 618.1115}
   m_SizeDelta: {x: 0, y: 700}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1961179716

@@ -243,7 +243,7 @@ namespace ArcCreate.Utility
             float width = contentSize.x + marginLeft + marginRight;
             float x = val * (width - Rect.rect.size.x);
             TextRect.anchoredPosition = new Vector2(-x + marginLeft, TextRect.anchoredPosition.y);
-            OnScrollHorizontalChanged?.Invoke(-x + marginLeft);
+            OnScrollHorizontalChanged?.Invoke(-x);
         }
 
         private void OnVerticalScrollbar(float val)

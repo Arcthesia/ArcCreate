@@ -80,7 +80,7 @@ namespace ArcCreate.Compose.Project
                                 Severity = Severity.Warning,
                                 LineNumber = h.Line,
                                 StartCharPos = h.CharacterStart,
-                                Length = h.Length,
+                                Length = Option<int>.None(),
                                 Description = I18n.S("Format.Warning.HoldTooShort"),
                             });
                         }
@@ -101,7 +101,7 @@ namespace ArcCreate.Compose.Project
                                         Severity = Severity.Warning,
                                         LineNumber = h.Line,
                                         StartCharPos = h.CharacterStart,
-                                        Length = h.Length,
+                                        Length = Option<int>.None(),
                                         Description = I18n.S("Format.Warning.TapJudgementOverlap"),
                                     });
                                     break;
@@ -130,7 +130,7 @@ namespace ArcCreate.Compose.Project
                                         Severity = Severity.Warning,
                                         LineNumber = t.Line,
                                         StartCharPos = t.CharacterStart,
-                                        Length = t.Length,
+                                        Length = Option<int>.None(),
                                         Description = I18n.S("Format.Warning.TapJudgementOverlap"),
                                     });
                                     break;

@@ -1,6 +1,6 @@
 # ArcCreate
 
-![Logo](Assets/Textures/LogoFull.png?raw=true "Title")
+![Logo](Assets/Textures/Logos/LoLogoFull.png?raw=true "Title")
 
 Fast and powerful .aff editor made with Unity.
 

@@ -58,7 +58,7 @@ namespace ArcCreate.Compose.Project
                 }
 
                 int leftIndex = lineInfo.startCharIdx + startCharPos.Value;
-                int rightIndex = length.HasValue ? (leftIndex + length.Value - 1) : nextLineStartIdx;
+                int rightIndex = (length.HasValue && length.Value > 0) ? (leftIndex + length.Value - 1) : nextLineStartIdx;
                 rightIndex = Mathf.Max(leftIndex + 1, rightIndex);
 
                 float left = (leftIndex >= 0 && leftIndex < charInfoArray.Count) ? charInfoArray[leftIndex].cursorPos.x : 0;

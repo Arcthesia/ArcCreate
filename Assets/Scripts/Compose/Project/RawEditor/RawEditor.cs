@@ -109,7 +109,7 @@ namespace ArcCreate.Compose.Project
 
         private void OnInputFieldScrollHorizontal(float x)
         {
-            lineHighlightParent.anchoredPosition = new Vector2(x, lineHighlightParent.anchoredPosition.x);
+            lineHighlightParent.anchoredPosition = new Vector2(x, lineHighlightParent.anchoredPosition.y);
         }
 
         private void OnEnable()

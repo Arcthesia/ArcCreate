@@ -351,6 +351,12 @@ namespace ArcCreate.Gameplay.Audio
             gameplayData.PlaybackSpeed.OnValueChange -= OnPlaybackSpeedChange;
         }
 
+        private void OnAudioConfig(bool deviceWasChanged)
+        {
+            Pause();
+            ResumeWithDelay(200, false);
+        }
+
         private void OnPlaybackSpeedChange(float value)
         {
             playbackSpeed = value;

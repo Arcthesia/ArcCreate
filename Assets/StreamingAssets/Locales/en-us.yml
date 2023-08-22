@@ -440,6 +440,8 @@ Compose:
       drawLines(color.unsafe.boundary, {bydTR, gridTR, gridBR}, false)
       drawLines(color.unsafe.boundary, {gridBR, trackR, trackL, gridBL}, false)
 
+      spacing.x = math.max(spacing.x, 0.01)
+      spacing.y = math.max(spacing.y, 0.01)
       grid.drawLine(config.left, config.left, config.bottom, config.top, color.lines)
       for x = config.mainLeft - spacing.x, config.left + spacing.x, -spacing.x do
           grid.drawLine(x, x, config.bottom, config.top, color.lines)
@@ -845,6 +847,8 @@ Gameplay:
     Play: Resume
     Retry: Retry
     Return: Quit
+    AudioDeviceChange: Dectected a change in audio device. ArcCreate will forcibly return to Select menu.
+    Confirm: Confirm
   Practice:
     PlaybackSpeed: Speed
     Repeat:

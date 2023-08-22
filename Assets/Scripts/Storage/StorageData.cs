@@ -20,7 +20,6 @@ namespace ArcCreate.Storage
     public class StorageData : ScriptableObject
     {
         private static readonly LRUCache<string, Incompletable<Texture>> JacketCache = new LRUCache<string, Incompletable<Texture>>(50, DestroyCache);
-        private static readonly LRUCache<string, Incompletable<AudioClip>> AudioClipCache = new LRUCache<string, Incompletable<AudioClip>>(10, DestroyCache);
         private static readonly HashSet<UnityEngine.Object> PersistentCache = new HashSet<UnityEngine.Object>();
         private static readonly HashSet<UnityEngine.Object> QueuedForDelete = new HashSet<UnityEngine.Object>();
         [SerializeField] private Texture defaultJacket;
@@ -223,24 +222,6 @@ namespace ArcCreate.Storage
             }
 
             audioPath = realAudioPath.Value;
-            Incompletable<AudioClip> cachedClip = AudioClipCache.Get(audioPath);
-            if (cachedClip != null)
-            {
-                while (!cachedClip.Completed)
-                {
-                    await UniTask.NextFrame();
-                }
-
-                if (cachedClip.IsSuccess)
-                {
-                    return cachedClip.Value;
-                }
-
-                return null;
-            }
-
-            Incompletable<AudioClip> loading = new Incompletable<AudioClip>();
-            AudioClipCache.Add(audioPath, loading);
             using (UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(
                 "file:///" + Uri.EscapeDataString(audioPath.Replace("\\", "/")),
                 audioPath.EndsWith(".ogg") ? AudioType.OGGVORBIS : AudioType.WAV))
@@ -253,17 +234,13 @@ namespace ArcCreate.Storage
                     await UniTask.NextFrame();
                 }
 
-                loading.Completed = true;
                 if (string.IsNullOrEmpty(req.error))
                 {
                     AudioClip clip = ((DownloadHandlerAudioClip)req.downloadHandler).audioClip;
-                    loading.Value = clip;
-                    loading.IsSuccess = true;
                     return clip;
                 }
                 else
                 {
-                    loading.IsSuccess = false;
                     return null;
                 }
             }
