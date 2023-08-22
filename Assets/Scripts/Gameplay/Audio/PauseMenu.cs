@@ -102,10 +102,7 @@ namespace ArcCreate.Gameplay.Audio
 
         private void OnFocusChange(bool focused)
         {
-            if (!focused)
-            {
-                OnPauseButton();
-            }
+            OnPauseButton();
         }
 
         private void OnPauseButton()
