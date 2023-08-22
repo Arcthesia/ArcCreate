@@ -26,6 +26,7 @@ namespace ArcCreate.Utility
             if (deviceWasChanged && Time.realtimeSinceStartup > lastResetAt)
             {
                 AudioConfiguration config = AudioSettings.GetConfiguration();
+                config.dspBufferSize = 512;
                 AudioSettings.Reset(config);
                 lastResetAt = Time.realtimeSinceStartup;
             }

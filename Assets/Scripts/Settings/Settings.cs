@@ -98,14 +98,7 @@ namespace ArcCreate
             }
 
             Application.quitting += OnApplicationQuit;
-            Application.focusChanged += OnFocusChange;
             CultureInfo.CurrentCulture = new CultureInfo("en");
-        }
-
-        private static void OnFocusChange(bool focus)
-        {
-            AudioConfiguration config = AudioSettings.GetConfiguration();
-            AudioSettings.Reset(config);
         }
 
         private static void OnApplicationQuit()
