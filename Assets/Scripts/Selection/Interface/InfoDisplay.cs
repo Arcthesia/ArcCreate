@@ -171,7 +171,7 @@ namespace ArcCreate.Selection.Interface
             for (int j = 0; j < level.Settings.Charts.Count; j++)
             {
                 ChartSettings otherChart = level.Settings.Charts[j];
-                if (otherChart == chart)
+                if (otherChart.ChartPath == chart.ChartPath)
                 {
                     indexOfCurrentChart = j;
                     break;
@@ -181,7 +181,7 @@ namespace ArcCreate.Selection.Interface
             for (int j = 1; j < level.Settings.Charts.Count; j++)
             {
                 ChartSettings otherChart = level.Settings.Charts[(j + indexOfCurrentChart) % level.Settings.Charts.Count];
-                if (otherChart == chart)
+                if (otherChart.ChartPath == chart.ChartPath)
                 {
                     break;
                 }

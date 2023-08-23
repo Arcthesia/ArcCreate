@@ -6,6 +6,7 @@ using ArcCreate.Utility;
 using ArcCreate.Utility.Extension;
 using TMPro;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 namespace ArcCreate.Gameplay.Score
 {
@@ -40,13 +41,13 @@ namespace ArcCreate.Gameplay.Score
         private readonly List<JudgementResult> resultReceivedThisFrame = new List<JudgementResult>(20);
         private Grade[] cachedGradeOptions;
 
-        public int CurrentScore => CurrentScoreTotal;
+        public int CurrentScore => (int)Math.Round(CurrentScoreTotal);
 
         public int CurrentCombo => currentCombo;
 
         public int NoteCount => noteCount;
 
-        private int CurrentScoreTotal => (int)System.Math.Round(currentScoreFull + currentScorePartial);
+        private double CurrentScoreTotal => currentScoreFull + currentScorePartial;
 
         private double CurrentCountTotal => currentCountFull + currentCountPartial;
 
@@ -218,12 +219,12 @@ namespace ArcCreate.Gameplay.Score
             };
         }
 
-        private void SetScore(int score, double count)
+        private void SetScore(double score, double count)
         {
             int length = 0;
             double scorePerNote = noteCount != 0 ? (double)Constants.MaxScore / noteCount : 0;
-            int theoreticalScore = (int)Math.Round(count * (scorePerNote + 1));
-            int differenceToTheoretical = score - theoreticalScore;
+            double theoreticalScore = count * (scorePerNote + 1);
+            double differenceToTheoretical = score - theoreticalScore;
 
             // interfaces are overrated
             switch ((ScoreDisplayMode)Settings.ScoreDisplayMode.Value)
@@ -286,8 +287,8 @@ namespace ArcCreate.Gameplay.Score
                     break;
 
                 case ScoreDisplayMode.Difference:
-                    differenceToTheoretical = Mathf.Clamp(differenceToTheoretical, -99_999_999, 99_999_999);
-                    scoreCharArray.SetNumberDigitsToArray(Math.Abs(differenceToTheoretical), out length);
+                    int clamped = Mathf.Clamp((int)Math.Abs(Math.Round(differenceToTheoretical)), -99_999_999, 99_999_999);
+                    scoreCharArray.SetNumberDigitsToArray(clamped, out length);
                     for (int i = scoreCharArray.Length - 8; i < scoreCharArray.Length - length; i++)
                     {
                         scoreCharArray[i] = '0';
@@ -298,8 +299,8 @@ namespace ArcCreate.Gameplay.Score
                     break;
 
                 case ScoreDisplayMode.Decrease:
-                    int theoreticalEndScore = Constants.MaxScore + noteCount + differenceToTheoretical;
-                    scoreCharArray.SetNumberDigitsToArray(theoreticalEndScore, out length);
+                    double theoreticalEndScore = Constants.MaxScore + noteCount + differenceToTheoretical;
+                    scoreCharArray.SetNumberDigitsToArray((int)Math.Round(theoreticalEndScore), out length);
                     for (int i = scoreCharArray.Length - 8; i < scoreCharArray.Length - length; i++)
                     {
                         scoreCharArray[i] = '0';
@@ -310,7 +311,7 @@ namespace ArcCreate.Gameplay.Score
 
                 case ScoreDisplayMode.Default:
                 default:
-                    scoreCharArray.SetNumberDigitsToArray(score, out length);
+                    scoreCharArray.SetNumberDigitsToArray((int)Math.Round(score), out length);
                     for (int i = scoreCharArray.Length - 8; i < scoreCharArray.Length - length; i++)
                     {
                         scoreCharArray[i] = '0';

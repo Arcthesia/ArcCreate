@@ -12,12 +12,19 @@ namespace ArcCreate.Selection.Interface
         private void Awake()
         {
             GetComponent<Button>().onClick.AddListener(CycleSortStrategy);
-            text.text = I18n.S($"Gameplay.Selection.Sort.{Settings.SelectionSortStrategy.Value}");
+            I18n.OnLocaleChanged += OnLocale;
+            OnLocale();
         }
 
         private void OnDestroy()
         {
             GetComponent<Button>().onClick.RemoveListener(CycleSortStrategy);
+            I18n.OnLocaleChanged += OnLocale;
+        }
+
+        private void OnLocale()
+        {
+            text.text = I18n.S($"Gameplay.Selection.Sort.{Settings.SelectionSortStrategy.Value}");
         }
 
         private void CycleSortStrategy()
