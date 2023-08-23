@@ -45,7 +45,7 @@ namespace ArcCreate.Storage
                 throw new Exception("Audio file does not exist");
             }
 
-            string uri = "file:///" + Uri.EscapeDataString(audioPath.Value.Replace("\\", "/"));
+            string uri = "file:///" + Uri.EscapeDataString(audioPath.Value.Replace("\\", "/")).Replace(" ", "%20");
             await gameplayData.LoadAudioFromHttp(uri, Path.GetExtension(audioPath.Value));
         }
 
@@ -58,7 +58,7 @@ namespace ArcCreate.Storage
                 return;
             }
 
-            string uri = "file:///" + Uri.EscapeDataString(bgPath.Value.Replace("\\", "/"));
+            string uri = "file:///" + Uri.EscapeDataString(bgPath.Value.Replace("\\", "/").Replace(" ", "%20"));
             await gameplayData.LoadBackgroundFromHttp(uri);
         }
 
