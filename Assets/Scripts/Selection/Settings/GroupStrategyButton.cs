@@ -12,12 +12,19 @@ namespace ArcCreate.Selection.Interface
         private void Awake()
         {
             GetComponent<Button>().onClick.AddListener(CycleGroupStrategy);
-            text.text = I18n.S($"Gameplay.Selection.Group.{Settings.SelectionGroupStrategy.Value}");
+            I18n.OnLocaleChanged += OnLocale;
+            OnLocale();
         }
 
         private void OnDestroy()
         {
+            I18n.OnLocaleChanged -= OnLocale;
             GetComponent<Button>().onClick.RemoveListener(CycleGroupStrategy);
+        }
+
+        private void OnLocale()
+        {
+            text.text = I18n.S($"Gameplay.Selection.Group.{Settings.SelectionGroupStrategy.Value}");
         }
 
         private void CycleGroupStrategy()
