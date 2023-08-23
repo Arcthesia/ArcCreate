@@ -55,7 +55,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: Build-${{ matrix.targetPlatform }}
-          path: Build/${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
 
   buildForAndroidPlatform:
     name: Build For Android Platform
@@ -94,8 +94,8 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: build-Android
-          path: build/Android
+          name: build-AndroidBundle
+          path: build/AndroidBundle
 
   releaseToGooglePlay:
     name: Release to the Google Play Store
@@ -105,7 +105,7 @@ jobs:
       GOOGLE_PLAY_KEY_FILE: ${{ secrets.GOOGLE_PLAY_KEY_FILE }}
       GOOGLE_PLAY_KEY_FILE_PATH:
         ${{ format('{0}/fastlane/google-fastlane.json', github.workspace) }}
-      ANDROID_BUILD_FILE_PATH: ${{ format('{0}/build/Android/Android.aab', github.workspace) }}
+      ANDROID_BUILD_FILE_PATH: ${{ format('{0}/build/AndroidBundle/Android.aab', github.workspace) }}
       ANDROID_PACKAGE_NAME: ${{ secrets.ANDROID_PACKAGE_NAME }}
     steps:
       - name: Checkout Repository
@@ -114,8 +114,8 @@ jobs:
       - name: Download Android Artifact
         uses: actions/download-artifact@v2
         with:
-          name: build-Android
-          path: build/Android
+          name: build-AndroidBundle
+          path: build/AndroidBundle
 
       - name: Add Authentication
         run: echo "$GOOGLE_PLAY_KEY_FILE" > $GOOGLE_PLAY_KEY_FILE_PATH
