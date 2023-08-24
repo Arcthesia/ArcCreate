@@ -78,7 +78,7 @@ namespace ArcCreate.Gameplay.Hitsound
             }
         }
 
-        public async UniTask LoadCustomSfxs(string parentUri, IFileAccessWrapper fileAccess)
+        public async UniTask LoadCustomSfxs(string parentFolder, IFileAccessWrapper fileAccess)
         {
             IsLoaded = false;
 
@@ -114,7 +114,7 @@ namespace ArcCreate.Gameplay.Hitsound
                     finalSfx = finalSfx + ".wav";
                 }
 
-                string uri = fileAccess == null ? Path.Combine(parentUri, finalSfx) : fileAccess.GetFileUri(finalSfx);
+                Uri uri = fileAccess == null ? new Uri(Path.Combine(parentFolder, finalSfx)) : fileAccess.GetFileUri(finalSfx);
                 if (uri != null)
                 {
                     loadTasks.Add(LoadCustomSfx(sfx, uri));
@@ -137,12 +137,11 @@ namespace ArcCreate.Gameplay.Hitsound
             playedArcHitsoundTimings.Clear();
         }
 
-        private async UniTask LoadCustomSfx(string sfx, string uri)
+        private async UniTask LoadCustomSfx(string sfx, Uri uri)
         {
             try
             {
-                using (UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(
-                    Uri.EscapeUriString(uri.Replace("\\", "/")), AudioType.WAV))
+                using (UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(uri, AudioType.WAV))
                 {
                     await req.SendWebRequest();
                     if (!string.IsNullOrWhiteSpace(req.error))

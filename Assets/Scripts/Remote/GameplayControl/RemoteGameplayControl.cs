@@ -174,7 +174,7 @@ namespace ArcCreate.Remote.Gameplay
 
         private async UniTask RetrieveChart()
         {
-            string uri = GetURI("chart");
+            Uri uri = GetURI("chart");
             using (UnityWebRequest req = UnityWebRequest.Get(uri))
             {
                 await req.SendWebRequest();
@@ -191,7 +191,7 @@ namespace ArcCreate.Remote.Gameplay
                 string chartData = req.downloadHandler.text;
                 var reader = new AffChartReader(new VirtualFileAccess(chartData), string.Empty, string.Empty, string.Empty);
                 reader.Parse();
-                gameplayData.LoadChart(reader, GetURI("sfx/"));
+                gameplayData.LoadChart(reader, GetURIString("sfx/"));
             }
         }
 
@@ -228,7 +228,7 @@ namespace ArcCreate.Remote.Gameplay
 
         private async UniTask RetrieveMetadata(string chartPath)
         {
-            string uri = GetURI("metadata");
+            Uri uri = GetURI("metadata");
             using (UnityWebRequest req = UnityWebRequest.Get(uri))
             {
                 await req.SendWebRequest();
@@ -309,7 +309,7 @@ namespace ArcCreate.Remote.Gameplay
                         gameplayData.DifficultyColor.Value = c;
 
                         bool enableVideoBackground = !string.IsNullOrEmpty(chartSettings.VideoPath);
-                        gameplayData.LoadVideoBackground(enableVideoBackground ? GetURI("video") : null, true);
+                        gameplayData.LoadVideoBackground(enableVideoBackground ? GetURIString("video") : null, true);
 
                         break;
                     }
@@ -319,7 +319,7 @@ namespace ArcCreate.Remote.Gameplay
 
         private async UniTask RetrieveScenecontrol()
         {
-            string uri = GetURI("scjson");
+            Uri uri = GetURI("scjson");
             using (UnityWebRequest req = UnityWebRequest.Get(uri))
             {
                 await req.SendWebRequest();
@@ -334,13 +334,18 @@ namespace ArcCreate.Remote.Gameplay
                 }
 
                 string json = req.downloadHandler.text;
-                gameplay.Scenecontrol.ScenecontrolFolder = GetURI("scenecontrol/");
+                gameplay.Scenecontrol.ScenecontrolFolder = GetURIString("scenecontrol/");
                 gameplay.Scenecontrol.Import(json);
                 gameplay.Scenecontrol.WaitForSceneLoad();
             }
         }
 
-        private string GetURI(string path)
+        private Uri GetURI(string path)
+        {
+            return new Uri(GetURIString(path));
+        }
+
+        private string GetURIString(string path)
         {
             var uri = $"http://{requestFileFromIP}:{requestFileFromPort}/{path}";
             Debug.Log(uri);

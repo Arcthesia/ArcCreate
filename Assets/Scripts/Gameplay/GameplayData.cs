@@ -197,12 +197,12 @@ namespace ArcCreate.Gameplay
         /// Set the chart file for this system.
         /// </summary>
         /// <param name="reader">The chart reader defining the chart.</param>
-        /// <param name="sfxParentUri">The parent uri for loading custom SFX files.</param>
+        /// <param name="sfxParentFolder">The parent folder for loading custom SFX files.</param>
         /// <param name="fileAccess">Custom file accessor.</param>
-        public void LoadChart(ChartReader reader, string sfxParentUri, IFileAccessWrapper fileAccess = null)
+        public void LoadChart(ChartReader reader, string sfxParentFolder, IFileAccessWrapper fileAccess = null)
         {
             Services.Chart.LoadChart(reader);
-            Services.Hitsound.LoadCustomSfxs(sfxParentUri, fileAccess).Forget();
+            Services.Hitsound.LoadCustomSfxs(sfxParentFolder, fileAccess).Forget();
             OnChartFileLoad?.Invoke();
         }
 
@@ -218,7 +218,7 @@ namespace ArcCreate.Gameplay
             isUsingDefaultBackground = true;
         }
 
-        public async UniTask LoadAudioFromHttp(string uri, string ext)
+        public async UniTask LoadAudioFromHttp(Uri uri, string ext)
         {
             if (AudioClip.Value != null)
             {
@@ -243,7 +243,7 @@ namespace ArcCreate.Gameplay
             }
         }
 
-        public async UniTask LoadJacketFromHttp(string uri)
+        public async UniTask LoadJacketFromHttp(Uri uri)
         {
             if (Jacket.Value != null && !isUsingDefaultJacket)
             {
@@ -274,7 +274,7 @@ namespace ArcCreate.Gameplay
             }
         }
 
-        public async UniTask LoadBackgroundFromHttp(string uri)
+        public async UniTask LoadBackgroundFromHttp(Uri uri)
         {
             if (Background.Value != null && !isUsingDefaultBackground)
             {
@@ -313,7 +313,7 @@ namespace ArcCreate.Gameplay
         internal async UniTask StartLoadingAudio(string path)
         {
             using (UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(
-                Uri.EscapeUriString("file:///" + path.Replace("\\", "/")),
+                new Uri(path),
                 path.EndsWith("wav") ? AudioType.WAV : AudioType.OGGVORBIS))
             {
                 await req.SendWebRequest();

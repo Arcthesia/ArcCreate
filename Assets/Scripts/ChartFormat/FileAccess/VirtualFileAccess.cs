@@ -18,9 +18,9 @@ namespace ArcCreate.ChartFormat
             streamWriter = new StreamWriter(stream);
         }
 
-        public string GetFileUri(string path)
+        public Uri GetFileUri(string path)
         {
-            return "file:///" + Uri.EscapeUriString(path.Replace("\\", "/"));
+            return new Uri(path);
         }
 
         public Option<string[]> ReadFileByLines(string path) => data;

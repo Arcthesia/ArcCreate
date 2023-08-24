@@ -402,7 +402,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             spriteTasks.Add(GetSprite(
                 new SpriteDefinition
                 {
-                    Uri = customFileAccess?.GetFileUri(Path.Combine("Scenecontrol", imgPath)) ?? Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath),
+                    Uri = customFileAccess?.GetFileUri(Path.Combine("Scenecontrol", imgPath)) ?? new Uri(Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath)),
                     Pivot = pivotVec,
                 },
                 cts.Token).ContinueWith(sprite => c.Image.sprite = sprite));
@@ -438,7 +438,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             spriteTasks.Add(GetSprite(
                 new SpriteDefinition
                 {
-                    Uri = customFileAccess?.GetFileUri(Path.Combine("Scenecontrol", imgPath)) ?? Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath),
+                    Uri = customFileAccess?.GetFileUri(Path.Combine("Scenecontrol", imgPath)) ?? new Uri(Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath)),
                     Pivot = pivotVec,
                 },
                 cts.Token).ContinueWith(sprite => c.SpriteRenderer.sprite = sprite));
@@ -845,7 +845,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
 
             spriteCache.Add(definition, null);
-            using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(Uri.EscapeUriString(definition.Uri.Replace("\\", "/"))))
+            using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(definition.Uri))
             {
                 try
                 {
@@ -914,7 +914,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         private struct SpriteDefinition
         {
-            public string Uri;
+            public Uri Uri;
             public Vector2 Pivot;
         }
     }

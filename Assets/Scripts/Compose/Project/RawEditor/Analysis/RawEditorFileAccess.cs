@@ -16,9 +16,9 @@ namespace ArcCreate.Compose.Project
             virt = new VirtualFileAccess(chartData);
         }
 
-        public string GetFileUri(string path)
+        public Uri GetFileUri(string path)
         {
-            return "file:///" + Uri.EscapeUriString(path.Replace("\\", "/"));
+            return new Uri(path);
         }
 
         public Option<string[]> ReadFileByLines(string path)

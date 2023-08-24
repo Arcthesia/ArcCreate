@@ -406,7 +406,7 @@ namespace ArcCreate.Compose.Project
 
             if (parseResult.IsOk)
             {
-                gameplayData.LoadChart(reader, "file:///" + Path.GetDirectoryName(path));
+                gameplayData.LoadChart(reader, Path.GetDirectoryName(path));
             }
             else
             {

@@ -5,9 +5,9 @@ namespace ArcCreate.ChartFormat
 {
     public class PhysicalFileAccess : IFileAccessWrapper
     {
-        public string GetFileUri(string path)
+        public Uri GetFileUri(string path)
         {
-            return "file:///" + Uri.EscapeUriString(path.Replace("\\", "/"));
+            return new Uri(path);
         }
 
         public Option<string[]> ReadFileByLines(string path)

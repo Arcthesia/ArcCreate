@@ -66,7 +66,7 @@ namespace ArcCreate.Compose.Project
             int timing = Services.Gameplay.Audio.AudioTiming;
             ChartReader reader = ChartReaderFactory.GetReader(new RawEditorFileAccess(rawChartData, absoluteMainChartPath), absoluteMainChartPath);
             reader.Parse();
-            gameplayData.LoadChart(reader, "file:///" + Path.GetDirectoryName(absoluteMainChartPath));
+            gameplayData.LoadChart(reader, Path.GetDirectoryName(absoluteMainChartPath));
             Services.Gameplay.Audio.AudioTiming = timing;
         }
 

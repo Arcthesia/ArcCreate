@@ -53,10 +53,10 @@ namespace ArcCreate.Gameplay.Hitsound
         /// <summary>
         /// Loads all sfx file referenced by the currently loaded chart from sfxParentUri.
         /// </summary>
-        /// <param name="sfxParentUri">Where to load sfx files from.</param>
+        /// <param name="parentFolder">Parent folder of where to load sfx files from.</param>
         /// <param name="fileAccess">Custom file accessor.</param>
         /// <returns>Unitask instance.</returns>
-        UniTask LoadCustomSfxs(string sfxParentUri, IFileAccessWrapper fileAccess);
+        UniTask LoadCustomSfxs(string parentFolder, IFileAccessWrapper fileAccess);
 
         void UpdateHitsoundHistory(int currentTiming);
 
