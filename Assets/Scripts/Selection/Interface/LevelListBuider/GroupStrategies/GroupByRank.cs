@@ -20,7 +20,7 @@ namespace ArcCreate.Selection.Interface
             List<(string name, List<LevelCellData> cells)> groups = new List<(string, List<LevelCellData>)>();
 
             cells = cells
-                .OrderBy(cell => cell.PlayHistory.BestScorePlayOrDefault.Grade)
+                .OrderBy(cell => cell.PlayHistory.BestResultPlayOrDefault.ClearResult)
                 .ThenBy(cell => cell.ChartToDisplay.Title)
                 .ToList();
 
