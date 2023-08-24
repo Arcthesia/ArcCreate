@@ -41,7 +41,6 @@ namespace ArcCreate.Storage
                 }
 
                 File.Copy(realLegacyPath, targetPath);
-                File.Delete(realLegacyPath);
             }
 
             Collection.Delete(Query.All());

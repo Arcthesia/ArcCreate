@@ -2,11 +2,14 @@ name: Deploy for public release
 
 on:
   push:
-    branches: master
+    tags:
+      - '*'
   workflow_dispatch:
 
 jobs:
   build:
+    permissions:
+      contents: write
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
     strategy:
@@ -46,8 +49,8 @@ jobs:
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
           buildName: ArcCreate
-          androidAppBundle: true
           androidKeystoreName: arccreate
+          androidAppBundle: true
           androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
           androidKeyaliasName: ${{ secrets.ANDROID_KEYALIAS_NAME }}
@@ -58,6 +61,20 @@ jobs:
         with:
           name: build-${{ matrix.targetPlatform }}
           path: build/${{ matrix.targetPlatform }}
+
+      - name: Zip Build
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r build/${{ matrix.targetPlatform }}.zip build/${{ matrix.targetPlatform }}
+
+      - name: Upload Zip to GitHub Release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: build/${{ matrix.targetPlatform }}.zip
+          asset_name: ${{ matrix.targetPlatform }}.zip
+          tag: ${{ github.ref }}
+          overwrite: true
 
   releaseToGooglePlay:
     name: Release to the Google Play Store
@@ -72,27 +89,26 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+
       - name: Download Android Artifact
         uses: actions/download-artifact@v2
         with:
           name: build-Android
           path: build/Android
+
       - name: Add Authentication
         run: echo "$GOOGLE_PLAY_KEY_FILE" > $GOOGLE_PLAY_KEY_FILE_PATH
+
       - name: Set up Fastlane
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7.2
           bundler-cache: true
+
       - name: Upload to Google Play Internal
         uses: maierj/fastlane-action@v2.0.1
         with:
           lane: 'android production'
-      - name: Cleanup to avoid storage limit
-        if: always()
-        uses: geekyeggo/delete-artifact@v1
-        with:
-          name: build-Android
 
   releaseToAppStore:
     name: Release to the App Store
@@ -131,4 +147,4 @@ jobs:
           ssh-add - <<< "${MATCH_DEPLOY_KEY}"
           find $IOS_BUILD_PATH -type f -name "**.sh" -exec chmod +x {} \;
           bundle install
-          bundle exec fastlane ios beta
+          bundle exec fastlane ios release
