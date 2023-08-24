@@ -8,6 +8,7 @@ using ArcCreate.Storage.Data;
 using ArcCreate.Utility.Extension;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace ArcCreate.Storage
 {
@@ -45,7 +46,7 @@ namespace ArcCreate.Storage
                 throw new Exception("Audio file does not exist");
             }
 
-            string uri = "file:///" + Uri.EscapeDataString(audioPath.Value.Replace("\\", "/")).Replace(" ", "%20");
+            string uri = "file:///" + UnityWebRequest.EscapeURL(audioPath.Value.Replace("\\", "/"));
             await gameplayData.LoadAudioFromHttp(uri, Path.GetExtension(audioPath.Value));
         }
 
@@ -58,7 +59,7 @@ namespace ArcCreate.Storage
                 return;
             }
 
-            string uri = "file:///" + Uri.EscapeDataString(bgPath.Value.Replace("\\", "/").Replace(" ", "%20"));
+            string uri = "file:///" + UnityWebRequest.EscapeURL(bgPath.Value.Replace("\\", "/"));
             await gameplayData.LoadBackgroundFromHttp(uri);
         }
 

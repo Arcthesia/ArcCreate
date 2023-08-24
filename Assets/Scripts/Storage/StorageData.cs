@@ -153,7 +153,8 @@ namespace ArcCreate.Storage
 
             Incompletable<Texture> loading = new Incompletable<Texture>();
             JacketCache.Add(jacketPath, loading);
-            using (UnityWebRequest req = UnityWebRequestTexture.GetTexture("file:///" + Uri.EscapeDataString(jacketPath.Replace("\\", "/")).Replace(" ", "%20")))
+            string uri = "file:///" + UnityWebRequest.EscapeURL(jacketPath.Replace("\\", "/"));
+            using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(uri))
             {
                 await req.SendWebRequest();
 
@@ -222,8 +223,9 @@ namespace ArcCreate.Storage
             }
 
             audioPath = realAudioPath.Value;
+            string uri = "file:///" + UnityWebRequest.EscapeURL(audioPath.Replace("\\", "/"));
             using (UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(
-                "file:///" + Uri.EscapeDataString(audioPath.Replace("\\", "/")).Replace(" ", "%20"),
+                uri,
                 audioPath.EndsWith(".ogg") ? AudioType.OGGVORBIS : AudioType.WAV))
             {
                 ((DownloadHandlerAudioClip)req.downloadHandler).streamAudio = true;

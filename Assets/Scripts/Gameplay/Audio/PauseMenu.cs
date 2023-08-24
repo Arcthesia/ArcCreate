@@ -59,7 +59,11 @@ namespace ArcCreate.Gameplay.Audio
                 .AddTransition(new PlayRetryCountTransition())
                 .AddTransition(new DecorationTransition());
 
-            AudioSettings.OnAudioConfigurationChanged += OnAudioConfig;
+            if (Application.platform == RuntimePlatform.IPhonePlayer
+             || Application.platform == RuntimePlatform.Android)
+            {
+                AudioSettings.OnAudioConfigurationChanged += OnAudioConfig;
+            }
         }
 
         private void OnSwitchLayoutSettings(bool reversed)
@@ -88,7 +92,12 @@ namespace ArcCreate.Gameplay.Audio
 
             Application.focusChanged -= OnFocusChange;
             gameplayData.EnablePracticeMode.OnValueChange -= SetPracticeMode;
-            AudioSettings.OnAudioConfigurationChanged -= OnAudioConfig;
+
+            if (Application.platform == RuntimePlatform.IPhonePlayer
+             || Application.platform == RuntimePlatform.Android)
+            {
+                AudioSettings.OnAudioConfigurationChanged -= OnAudioConfig;
+            }
         }
 
         private void OnAudioConfig(bool deviceWasChanged)
