@@ -2,11 +2,13 @@ name: Deploy for internal testing
 
 on:
   push:
-    branches: internal
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
   workflow_dispatch:
 
 jobs:
-
   build:
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
@@ -17,7 +19,6 @@ jobs:
           - StandaloneLinux64
           - StandaloneWindows64
           - StandaloneOSX
-          - Android
     steps:
       - uses: actions/checkout@v2
         with:
@@ -46,11 +47,6 @@ jobs:
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
           buildName: ArcCreate
-          androidKeystoreName: arccreate
-          androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-          androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
-          androidKeyaliasName: ${{ secrets.ANDROID_KEYALIAS_NAME }}
-          androidKeyaliasPass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
 
       - uses: actions/upload-artifact@v2
         with:
@@ -94,8 +90,8 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: build-AndroidBundle
-          path: build/AndroidBundle
+          name: build-Android
+          path: build/Android
 
   releaseToGooglePlay:
     name: Release to the Google Play Store
@@ -105,7 +101,7 @@ jobs:
       GOOGLE_PLAY_KEY_FILE: ${{ secrets.GOOGLE_PLAY_KEY_FILE }}
       GOOGLE_PLAY_KEY_FILE_PATH:
         ${{ format('{0}/fastlane/google-fastlane.json', github.workspace) }}
-      ANDROID_BUILD_FILE_PATH: ${{ format('{0}/build/AndroidBundle/Android.aab', github.workspace) }}
+      ANDROID_BUILD_FILE_PATH: ${{ format('{0}/build/Android/Android.aab', github.workspace) }}
       ANDROID_PACKAGE_NAME: ${{ secrets.ANDROID_PACKAGE_NAME }}
     steps:
       - name: Checkout Repository
@@ -114,8 +110,8 @@ jobs:
       - name: Download Android Artifact
         uses: actions/download-artifact@v2
         with:
-          name: build-AndroidBundle
-          path: build/AndroidBundle
+          name: build-Android
+          path: build/Android
 
       - name: Add Authentication
         run: echo "$GOOGLE_PLAY_KEY_FILE" > $GOOGLE_PLAY_KEY_FILE_PATH
@@ -136,3 +132,87 @@ jobs:
         uses: geekyeggo/delete-artifact@v1
         with:
           name: build-Android
+
+  buildForiOSPlatform:
+    name: Build for iOS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+            
+      - name: Decrypt & extract secrets
+        run: ./decrypt_secret.sh
+        env:
+          SECRET_PASSPHRASE: ${{ secrets.ENCRYPTED_FILE_SECRET_PASSPHRASE }}
+
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library-iOS
+
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key:
+            Library-iOS-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-iOS-
+            Library-
+
+      - uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: iOS 
+          buildName: ArcCreate
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: build-iOS
+          path: build/iOS
+
+  releaseToAppStore:
+    name: Release to the App Store
+    runs-on: macos-latest
+    needs: buildForiOSPlatform
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Download iOS Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-iOS
+          path: build/iOS
+
+      - name: Fix File Permissions and Run fastlane
+        env:
+          APPLE_CONNECT_EMAIL: ${{ secrets.APPLE_CONNECT_EMAIL }}
+          APPLE_DEVELOPER_EMAIL: ${{ secrets.APPLE_DEVELOPER_EMAIL }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
+          MATCH_REPOSITORY: ${{ secrets.MATCH_REPOSITORY }}
+          MATCH_DEPLOY_KEY: ${{ secrets.MATCH_DEPLOY_KEY }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+
+          APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
+          APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
+          APPSTORE_P8: ${{ secrets.APPSTORE_P8 }}
+
+          IOS_BUILD_PATH: ${{ format('{0}/build/iOS/ArcCreate', github.workspace) }}
+          IOS_BUNDLE_ID: com.Arcthesia.ArcCreate
+          PROJECT_NAME: ArcCreate
+        run: |
+          ls $IOS_BUILD_PATH
+          eval "$(ssh-agent -s)"
+          ssh-add - <<< "${MATCH_DEPLOY_KEY}"
+          find $IOS_BUILD_PATH -type f -name "**.sh" -exec chmod +x {} \;
+          bundle install
+          bundle exec fastlane ios beta
+
+      - name: Cleanup to avoid storage limit
+        if: always()
+        uses: geekyeggo/delete-artifact@v1
+        with:
+          name: build-iOS
