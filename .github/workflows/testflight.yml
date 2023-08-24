@@ -37,7 +37,7 @@ jobs:
           targetPlatform: iOS 
           buildName: ArcCreate
           versioning: Custom
-          version: "0.1"
+          version: "0.2"
 
       - uses: actions/upload-artifact@v2
         with:

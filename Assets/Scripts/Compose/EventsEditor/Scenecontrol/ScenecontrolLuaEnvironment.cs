@@ -77,7 +77,7 @@ namespace ArcCreate.Compose.EventsEditor
 
         public void Rebuild()
         {
-            Services.Gameplay.Scenecontrol.ScenecontrolFolder = "file:///" + Values.ScenecontrolFolder;
+            Services.Gameplay.Scenecontrol.ScenecontrolFolder = Values.ScenecontrolFolder;
             Clean();
             RunScript();
             ExecuteEvents();

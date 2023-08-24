@@ -14,7 +14,7 @@ namespace ArcCreate.Storage
             this.level = level;
         }
 
-        public string GetFileUri(string path)
+        public Uri GetFileUri(string path)
         {
             Option<string> realPath = level.GetRealPath(path);
             if (!realPath.HasValue)
@@ -22,7 +22,7 @@ namespace ArcCreate.Storage
                 return null;
             }
 
-            return "file:///" + Uri.EscapeUriString(realPath.Value.Replace("\\", "/"));
+            return new Uri(realPath.Value);
         }
 
         public Option<string[]> ReadFileByLines(string path)

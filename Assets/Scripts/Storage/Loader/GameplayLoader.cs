@@ -46,7 +46,7 @@ namespace ArcCreate.Storage
                 throw new Exception("Audio file does not exist");
             }
 
-            string uri = "file:///" + UnityWebRequest.EscapeURL(audioPath.Value.Replace("\\", "/"));
+            Uri uri = new Uri(audioPath.Value);
             await gameplayData.LoadAudioFromHttp(uri, Path.GetExtension(audioPath.Value));
         }
 
@@ -59,7 +59,7 @@ namespace ArcCreate.Storage
                 return;
             }
 
-            string uri = "file:///" + UnityWebRequest.EscapeURL(bgPath.Value.Replace("\\", "/"));
+            Uri uri = new Uri(bgPath.Value);
             await gameplayData.LoadBackgroundFromHttp(uri);
         }
 

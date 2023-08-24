@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Extension;
-using DG.Tweening;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.GameplayCamera
@@ -10,7 +9,6 @@ namespace ArcCreate.Gameplay.GameplayCamera
     {
         [SerializeField] private Camera backgroundCamera;
         [SerializeField] private Camera overlayCamera;
-        [SerializeField] private Transform skyInputLabel;
         [SerializeField] private RectTransform backgroundRect;
         private float currentTilt;
         private float currentArcPos;
@@ -159,11 +157,6 @@ namespace ArcCreate.Gameplay.GameplayCamera
                 GameplayCamera.transform.localRotation = Quaternion.Euler(EditorCameraRotation);
                 return;
             }
-
-            skyInputLabel.localPosition = new Vector3(
-                Mathf.LerpUnclamped(Values.SkyInputLabelX, Values.SkyInputLabelXTablet, AspectAdjustment),
-                skyInputLabel.localPosition.y,
-                skyInputLabel.localPosition.z);
 
             Vector3 prevPosition = backgroundCamera.transform.localPosition;
             Vector3 position = ResetPosition + translationExternal;
