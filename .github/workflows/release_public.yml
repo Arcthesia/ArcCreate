@@ -147,4 +147,4 @@ jobs:
           ssh-add - <<< "${MATCH_DEPLOY_KEY}"
           find $IOS_BUILD_PATH -type f -name "**.sh" -exec chmod +x {} \;
           bundle install
-          bundle exec fastlane ios release
+          bundle exec fastlane ios beta

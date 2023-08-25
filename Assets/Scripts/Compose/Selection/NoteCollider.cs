@@ -7,12 +7,15 @@ namespace ArcCreate.Compose.Selection
     {
         private MeshCollider meshCollider;
 
+        private MeshFilter meshFilter;
+
         public Note Note { get; private set; }
 
         public void AssignNote(Note note, int timing)
         {
             Note = note;
             meshCollider.sharedMesh = note.GetColliderMesh();
+            meshFilter.sharedMesh = meshCollider.sharedMesh;
             note.GetColliderPosition(timing, out Vector3 pos, out Vector3 scl);
             transform.localPosition = pos;
             transform.localScale = scl;
@@ -21,6 +24,7 @@ namespace ArcCreate.Compose.Selection
         private void Awake()
         {
             meshCollider = GetComponent<MeshCollider>();
+            meshFilter = GetComponentInChildren<MeshFilter>();
         }
     }
 }

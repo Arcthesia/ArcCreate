@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.ChartFormat;
@@ -467,6 +468,7 @@ namespace ArcCreate.Gameplay.Chart
             var beatlinePool = Pools.New<BeatlineBehaviour>(Values.BeatlinePoolName, beatlinePrefab, beatlineParent, beatlineCapacity);
 
             Settings.GlobalAudioOffset.OnValueChanged.AddListener(OnGlobalOffsetChange);
+            Settings.DropRate.OnValueChanged.AddListener(OnDropRateChange);
             gameplayData.BaseBpm.OnValueChange += OnBaseBpm;
             gameplayData.TimingPointDensityFactor.OnValueChange += OnTimingPointDensityFactor;
             gameplayData.AudioOffset.OnValueChange += OnChartAudioOffset;
@@ -479,10 +481,16 @@ namespace ArcCreate.Gameplay.Chart
             Pools.Destroy<BeatlineBehaviour>(Values.BeatlinePoolName);
 
             Settings.GlobalAudioOffset.OnValueChanged.RemoveListener(OnGlobalOffsetChange);
+            Settings.DropRate.OnValueChanged.RemoveListener(OnDropRateChange);
             gameplayData.BaseBpm.OnValueChange -= OnBaseBpm;
             gameplayData.TimingPointDensityFactor.OnValueChange -= OnTimingPointDensityFactor;
             gameplayData.AudioOffset.OnValueChange -= OnChartAudioOffset;
             gameplayData.AudioClip.OnValueChange -= OnAudioClipChange;
+        }
+
+        private void OnDropRateChange(int val)
+        {
+            UpdateArcColliderMesh();
         }
 
         private void OnAudioClipChange(AudioClip obj)
@@ -516,21 +524,10 @@ namespace ArcCreate.Gameplay.Chart
 
         private void UpdateArcColliderMesh()
         {
-            if (EnableColliderGeneration)
+            for (int i = 0; i < timingGroups.Count; i++)
             {
-                for (int i = 0; i < timingGroups.Count; i++)
-                {
-                    TimingGroup tg = timingGroups[i];
-                    tg.BuildArcColliders();
-                }
-            }
-            else
-            {
-                for (int i = 0; i < timingGroups.Count; i++)
-                {
-                    TimingGroup tg = timingGroups[i];
-                    tg.CleanArcColliders();
-                }
+                TimingGroup tg = timingGroups[i];
+                tg.CleanArcColliders();
             }
         }
     }
