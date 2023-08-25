@@ -134,6 +134,7 @@ namespace ArcCreate.Gameplay.Audio
         public void SetAudioTimingSilent(int timing)
         {
             audioTiming = timing;
+            videoPlayer.time = Mathf.Clamp(timing / 1000f, 0, (float)videoPlayer.length);
             UpdateSlider(timing);
         }
 
