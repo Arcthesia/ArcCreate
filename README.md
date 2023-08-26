@@ -1,6 +1,6 @@
 # ArcCreate
 
-![Logo](Assets/Textures/Logos/LoLogoFull.png?raw=true "Title")
+![Logo](Assets/Textures/Logos/LogoFull.png?raw=true "Title")
 
 Fast and powerful .aff editor made with Unity.
 
@@ -18,11 +18,14 @@ Fast and powerful .aff editor made with Unity.
 
 ArcCreate is available on Windows, MacOS, Linux, Android and iOS.
 
-Download the latest nightly build: https://nightly.link/Arcthesia/ArcCreate/workflows/build/master
+- Windows, MacOS, Linux (Editor):
 
-Install on iOS through TestFlight: https://testflight.apple.com/join/O3KJcYgN
+  [Download through GitHub releases](https://github.com/Arcthesia/ArcCreate/releases/)
 
-Check for available builds on the latest development branch at: https://github.com/Arcthesia/ArcCreate/actions (Github Account is required for downloading)
+- Android & iOS (Player):
+
+| [<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height=75px>](https://play.google.com/store/apps/details?id=com.Arcthesia.ArcCreate) | [<img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" height=50px>](https://apps.apple.com/us/app/arccreate/id6445904090) |
+| - | - |
 
 ### Building
 
