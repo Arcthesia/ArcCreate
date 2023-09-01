@@ -864,8 +864,8 @@ Gameplay:
         Name: 视觉设置
         Colorblind: 色盲模式
         ColorblindDetail: 使用其他的Arc颜色。
-        FrPmDisplay: FR/PM指示
-        FrPmDisplayDetail: 调节FR/PM指示器的位置
+        FrPmDisplay: FC/AP指示
+        FrPmDisplayDetail: 调节FC/AP指示器的位置
         MaxDisplay: 理论值指示
         MaxDisplayDetail: 切换是否显示理论值指示器
         EarlyLateDisplay: 过早/过晚指示

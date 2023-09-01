@@ -853,8 +853,8 @@ Gameplay:
         Name: Visual
         Colorblind: Modo daltónico
         ColorblindDetail: Usa colores alternativos en arcos.
-        FrPmDisplay: Visualizar FR/PM
-        FrPmDisplayDetail: Ajusta la posición del indicador FR/PM.
+        FrPmDisplay: Visualizar FC/AP
+        FrPmDisplayDetail: Ajusta la posición del indicador FC/AP.
         MaxDisplay: <size=10>Visualizar puntuación máxima</size>
         MaxDisplayDetail: Activa el indicador de puntuación máxima.
         EarlyLateDisplay: Visualizar Early/Late

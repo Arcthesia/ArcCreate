@@ -822,8 +822,8 @@ Gameplay:
         Name: Hiệu ứng
         Colorblind: Chế độ mù màu
         ColorblindDetail: Sử dụng màu khác cho arcs.
-        FrPmDisplay: Hiện FR/PM
-        FrPmDisplayDetail: Chỉnh vị trí hiển thị báo hiệu FR/PM.
+        FrPmDisplay: Hiện FC/AP
+        FrPmDisplayDetail: Chỉnh vị trí hiển thị báo hiệu FC/AP.
         MaxDisplay: Hiện Max PM
         MaxDisplayDetail: Hiện thị báo hiệu Max PM.
         EarlyLateDisplay: Vị trí Early/Late

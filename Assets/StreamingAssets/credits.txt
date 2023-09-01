@@ -12,6 +12,7 @@ Ragnarok VII
 0thElement
 Exiony
 yojohanshinwataikei
+Yut0124
 
 <size=33><b>{Credits.Role.SoundDesign}</b></size>
 SpoonierThanThou
@@ -34,3 +35,4 @@ MicroHazard
 Alaiskai
 Yut0124
 Zeurunix
+im rich

@@ -859,8 +859,8 @@ Gameplay:
         Name: 視覺設定
         Colorblind: 色盲模式
         ColorblindDetail: 使用另一種顏色的音弧。
-        FrPmDisplay: 顯示FR/PM
-        FrPmDisplayDetail: 調整FR/PM顯示的位置。
+        FrPmDisplay: 顯示FC/AP
+        FrPmDisplayDetail: 調整FC/AP顯示的位置。
         MaxDisplay: 理論值顯示
         MaxDisplayDetail: 切換理論值顯示。
         EarlyLateDisplay: 顯示 Early/Late

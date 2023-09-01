@@ -157,7 +157,7 @@ namespace ArcCreate.Compose.Project
 
                 foreach (var file in d.EnumerateFiles())
                 {
-                    string relativeToProjectDir = file.FullName.Substring(0, projectDir.Length);
+                    string relativeToProjectDir = file.FullName.Substring(projectDir.Length + 1, file.FullName.Length - projectDir.Length - 1);
                     referencedFiles.Add(relativeToProjectDir);
                 }
             }
@@ -169,7 +169,7 @@ namespace ArcCreate.Compose.Project
             ZipArchiveEntry entry = zip.CreateEntry(targetPath);
             using (Stream entryStream = entry.Open())
             {
-                using (FileStream fileStream = new FileStream(sourcePath, FileMode.Open))
+                using (FileStream fileStream = new FileStream(sourcePath, FileMode.Open, FileAccess.Read))
                 {
                     fileStream.CopyTo(entryStream);
                 }

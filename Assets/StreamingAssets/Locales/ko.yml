@@ -606,7 +606,7 @@ Compose:
           Name: 게임플레이
           Speed: 보면 속도
           AspectRatio: 화면 비율
-          Indicator: FR/PM 표시
+          Indicator: FC/AP 표시
           MaxIndicator: 이론치도 같이 표시
         Grid:
           Name: 눈금
@@ -833,8 +833,8 @@ Gameplay:
         Name: 비주얼
         Colorblind: 색약 모드
         ColorblindDetail: 아크의 색을 변경합니다.
-        FrPmDisplay: FR/PM 표시
-        FrPmDisplayDetail: FR/PM 마크의 표시 위치를 변경합니다.
+        FrPmDisplay: FC/AP 표시
+        FrPmDisplayDetail: FC/AP 마크의 표시 위치를 변경합니다.
         MaxDisplay: 이론치 표시
         MaxDisplayDetail: 이론치 마크의 표시 여부를 설정합니다.
         EarlyLateDisplay: Early/Late 표시

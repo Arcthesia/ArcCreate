@@ -109,7 +109,6 @@ namespace ArcCreate.Compose.Components
             }
 
             bool found = false;
-            print(path);
 
             if (isLocalFileSelector)
             {

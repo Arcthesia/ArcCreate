@@ -670,7 +670,7 @@ Compose:
           Name: ゲーム画面
           Speed: 譜面速度
           AspectRatio: アスペクト比
-          Indicator: FR/PM表示
+          Indicator: FC/AP表示
           MaxIndicator: 理論値表示
         Grid:
           Name: グリッド
@@ -905,10 +905,10 @@ Gameplay:
         Name: 画面設定
         Colorblind: 色覚補助モード
         ColorblindDetail: アークノートの色が青と黄色になります。
-        FrPmDisplay: FR/PM表示
-        FrPmDisplayDetail: FR/PM表示の有効/無効と表示場所を調整します。
+        FrPmDisplay: FC/AP表示
+        FrPmDisplayDetail: FC/AP表示の有効/無効と表示場所を調整します。
         MaxDisplay: 理論値表示
-        MaxDisplayDetail: 現在理論値かどうかに応じてFR/PM表示の色が変わります。
+        MaxDisplayDetail: 現在理論値かどうかに応じてFC/AP表示の色が変わります。
         EarlyLateDisplay: Early/Lateの位置
         EarlyLateDisplayDetail: Early/Lateの位置を調整します。
         LimitFramerate: FPS制限

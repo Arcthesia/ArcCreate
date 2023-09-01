@@ -948,8 +948,8 @@ Gameplay:
         Name: Visual
         Colorblind: Colorblind mode
         ColorblindDetail: Use alternate arc colors.
-        FrPmDisplay: FR/PM display
-        FrPmDisplayDetail: Adjust FR/PM indicator position.
+        FrPmDisplay: FC/AP display
+        FrPmDisplayDetail: Adjust FC/AP indicator position.
         MaxDisplay: Max indicator display
         MaxDisplayDetail: Toggle max score indicator display.
         EarlyLateDisplay: Early/Late display
