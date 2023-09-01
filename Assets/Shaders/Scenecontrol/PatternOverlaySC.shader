@@ -92,7 +92,7 @@ Shader "Sprites/PatternOverlaySC"
             {
                 layer = layer + 1;
                 screenPos.y = -screenPos.y - layer * 0.2;
-				float2 screenCoord = (screenPos.xy + _PatternOffset * layer * _Time.x) / screenPos.w / _Scale * layer;
+				float2 screenCoord = (screenPos.xy / screenPos.w + _PatternOffset * layer * _Time.x / 100) / _Scale * layer;
 				screenCoord.y = frac(screenCoord.y * 720 / _OverlayTex_TexelSize.w / 2);
 				screenCoord.x = frac(screenCoord.x * 720 * _ScreenParams.x / _ScreenParams.y / _OverlayTex_TexelSize.z / 2);
 				return tex2D(_OverlayTex, screenCoord);
