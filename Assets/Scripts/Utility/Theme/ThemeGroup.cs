@@ -12,22 +12,32 @@ namespace ArcCreate.Utility
         private Theme value;
         private Option<Theme> overrideValue;
 
-        public Theme Value
-        {
-            get => value;
-            set
-            {
-                this.value = value;
-                Update();
-            }
-        }
-
         public Option<Theme> OverrideValue
         {
             get => overrideValue;
             set
             {
                 overrideValue = value;
+                Update();
+            }
+        }
+
+        public Theme Value
+        {
+            get
+            {
+                Theme theme = value;
+                if (overrideValue.HasValue)
+                {
+                    theme = overrideValue.Value;
+                }
+
+                return theme;
+            }
+
+            set
+            {
+                this.value = value;
                 Update();
             }
         }
@@ -41,12 +51,7 @@ namespace ArcCreate.Utility
 
         private void Update()
         {
-            Theme theme = value;
-            if (overrideValue.HasValue)
-            {
-                theme = overrideValue.Value;
-            }
-
+            Theme theme = Value;
             OnValueChange.Invoke(theme);
             PlayerPrefs.SetInt(playerPrefKey, (int)theme);
         }

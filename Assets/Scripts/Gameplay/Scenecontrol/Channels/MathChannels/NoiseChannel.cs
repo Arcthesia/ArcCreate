@@ -37,7 +37,14 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public override List<object> SerializeProperties(ScenecontrolSerialization serialization)
         {
-            throw new System.NotImplementedException();
+            return new List<object>
+            {
+                serialization.AddUnitAndGetId(octave),
+                serialization.AddUnitAndGetId(frequency),
+                serialization.AddUnitAndGetId(min),
+                serialization.AddUnitAndGetId(max),
+                serialization.AddUnitAndGetId(offset),
+            };
         }
 
         public override float ValueAt(int timing)

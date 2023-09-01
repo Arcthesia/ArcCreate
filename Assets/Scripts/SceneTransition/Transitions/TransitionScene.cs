@@ -220,6 +220,9 @@ namespace ArcCreate.SceneTransition
             Instance = this;
             triangleTileImage.material = Instantiate(triangleTileImage.material);
             themeGroup.OnValueChange.AddListener(OnThemeChange);
+            Settings.ForceTheme.OnValueChanged.AddListener(OnForceThemeSettings);
+
+            OnForceThemeSettings(Settings.ForceTheme.Value);
 
             ExternalRenderStartAudio = new ExternalAudioClip(renderStartAudio, "AudioClips");
             ExternalEnterGameplayAudio = new ExternalAudioClip(enterGameplayAudio, "AudioClips");
@@ -243,6 +246,7 @@ namespace ArcCreate.SceneTransition
             }
 
             themeGroup.OnValueChange.RemoveListener(OnThemeChange);
+            Settings.ForceTheme.OnValueChanged.RemoveListener(OnForceThemeSettings);
             ExternalRenderStartAudio.Unload();
             ExternalEnterGameplayAudio.Unload();
             ExternalGameplayLoadCompleteAudio.Unload();
@@ -254,6 +258,22 @@ namespace ArcCreate.SceneTransition
         {
             StopAllAnimations();
             AnimateTriangleTilesBetweenColors(lastColor1, lastColor2, color1.GetColor(theme), color2.GetColor(theme), true);
+        }
+
+        private void OnForceThemeSettings(int value)
+        {
+            switch ((ForceUIThemeMode)Settings.ForceTheme.Value)
+            {
+                case ForceUIThemeMode.Light:
+                    themeGroup.OverrideValue = Theme.Light;
+                    break;
+                case ForceUIThemeMode.Dark:
+                    themeGroup.OverrideValue = Theme.Dark;
+                    break;
+                default:
+                    themeGroup.OverrideValue = Option<Theme>.None();
+                    break;
+            }
         }
 
         private void StopAllAnimations()

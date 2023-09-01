@@ -107,12 +107,21 @@ namespace ArcCreate.Compose.Project
                 return;
             }
 
-            proj.EditorSettings = new EditorProjectSettings
+            if (proj.EditorSettings == null)
             {
-                LastUsedPublisher = publisher,
-                LastUsedPackageName = package,
-                LastUsedVersionNumber = version,
-            };
+                proj.EditorSettings = new EditorProjectSettings
+                {
+                    LastUsedPublisher = publisher,
+                    LastUsedPackageName = package,
+                    LastUsedVersionNumber = version,
+                };
+            }
+            else
+            {
+                proj.EditorSettings.LastUsedPackageName = publisher;
+                proj.EditorSettings.LastUsedPackageName = package;
+                proj.EditorSettings.LastUsedVersionNumber = version;
+            }
 
             Settings.LastUsedPublisherName.Value = publisher;
             Services.Project.SaveProject();
