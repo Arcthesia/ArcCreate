@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.Data;
@@ -7,6 +8,7 @@ using ArcCreate.Utility.InfiniteScroll;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ArcCreate.Selection.Interface
 {
@@ -26,6 +28,9 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private float autoScrollDuration = 1f;
         [SerializeField] private float rebuildDuration = 0.3f;
         [SerializeField] private PackList packList;
+        [SerializeField] private Button randomButton;
+        [SerializeField] private Button jumpToTopButton;
+        [SerializeField] private Button jumpToBottomButton;
         private PackStorage currentPack;
         private ChartSettings currentChart;
         private LevelStorage currentLevel;
@@ -46,6 +51,10 @@ namespace ArcCreate.Selection.Interface
             storageData.SelectedChart.OnValueChange += OnSelectedChart;
             storageData.SelectedPack.OnValueChange += OnSelectedPack;
             options.OnNeedRebuild += RebuildList;
+
+            randomButton.onClick.AddListener(SelectRandom);
+            jumpToTopButton.onClick.AddListener(SelectTop);
+            jumpToBottomButton.onClick.AddListener(SelectBottom);
 
             LevelCellSize = levelCellSize;
             GroupCellSize = groupCellSize;
@@ -68,6 +77,10 @@ namespace ArcCreate.Selection.Interface
             storageData.SelectedChart.OnValueChange -= OnSelectedChart;
             storageData.SelectedPack.OnValueChange -= OnSelectedPack;
             options.OnNeedRebuild -= RebuildList;
+
+            randomButton.onClick.RemoveListener(SelectRandom);
+            jumpToTopButton.onClick.RemoveListener(SelectTop);
+            jumpToBottomButton.onClick.RemoveListener(SelectBottom);
 
             scroll.OnPointerEvent -= KillTween;
         }
@@ -207,8 +220,60 @@ namespace ArcCreate.Selection.Interface
 
             float scrollFrom = scroll.Value;
             float scrollTo = item.ValueToCenterCell;
-            scrollTween?.Kill();
+            KillTween();
             scrollTween = DOTween.To((float val) => scroll.Value = val, scrollFrom, scrollTo, autoScrollDuration).SetEase(Ease.OutExpo);
+        }
+
+        private void SelectRandom()
+        {
+            List<LevelStorage> levels = (storageData.SelectedPack.Value?.Levels ?? storageData.GetAllLevels())?.ToList();
+            if (levels.Count <= 0)
+            {
+                return;
+            }
+
+            LevelStorage level = null;
+
+            do
+            {
+                int index = UnityEngine.Random.Range(0, levels.Count);
+                level = levels[index];
+            }
+            while (InterfaceUtility.AreTheSame(level, storageData.SelectedChart.Value.level));
+
+            LevelCellData item = null;
+            for (int i = 0; i < scroll.Data.Count; i++)
+            {
+                CellData cell = scroll.Data[i];
+                if (cell is LevelCellData lvCell && InterfaceUtility.AreTheSame(lvCell.LevelStorage, level))
+                {
+                    item = lvCell;
+                    break;
+                }
+            }
+
+            if (item == null)
+            {
+                return;
+            }
+
+            storageData.SelectedChart.Value = (item.LevelStorage, item.ChartToDisplay);
+        }
+
+        private void SelectTop()
+        {
+            scrollTween = DOTween.To((float val) => scroll.Value = val, scroll.Value, 0, autoScrollDuration / 2).SetEase(Ease.OutExpo);
+        }
+
+        private void SelectBottom()
+        {
+            float v = 0;
+            if (scroll.Hierarchy.Count >= 1)
+            {
+                v = scroll.Hierarchy[scroll.Hierarchy.Count - 1].ValueToCenterCell;
+            }
+
+            scrollTween = DOTween.To((float val) => scroll.Value = val, scroll.Value, v, autoScrollDuration / 2).SetEase(Ease.OutExpo);
         }
 
         private void KillTween()
