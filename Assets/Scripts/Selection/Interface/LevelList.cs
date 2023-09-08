@@ -276,6 +276,11 @@ namespace ArcCreate.Selection.Interface
             scrollTween = DOTween.To((float val) => scroll.Value = val, scroll.Value, v, autoScrollDuration / 2).SetEase(Ease.OutExpo);
         }
 
+        private void OnScroll(float arg)
+        {
+            KillTween();
+        }
+
         private void KillTween()
         {
             scrollTween?.Kill();

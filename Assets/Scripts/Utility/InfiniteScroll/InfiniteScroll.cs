@@ -121,6 +121,11 @@ namespace ArcCreate.Utility.InfiniteScroll
             OnPointerEvent?.Invoke();
         }
 
+        public void OnDrag(BaseEventData eventData)
+        {
+            OnPointerEvent?.Invoke();
+        }
+
         /// <summary>
         /// Add cell to cells list along with their children.
         /// </summary>

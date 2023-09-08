@@ -899,6 +899,7 @@ Gameplay:
       difficulty: Difficulty
       grade: Grade
       playcount: Play count
+      rating: Rating
       score: Score
       title: Title
     Group:
@@ -906,6 +907,7 @@ Gameplay:
       difficulty: Difficulty
       grade: Grade
       rank: Rank
+      rating: Rating
       charter: Charter
     History:
       Best: Best

@@ -54,6 +54,9 @@ namespace ArcCreate.Selection.Interface
                     newStrat = SortByPlayCount.Typename;
                     break;
                 case SortByPlayCount.Typename:
+                    newStrat = SortByRating.Typename;
+                    break;
+                case SortByRating.Typename:
                     newStrat = SortByTitle.Typename;
                     break;
                 default:

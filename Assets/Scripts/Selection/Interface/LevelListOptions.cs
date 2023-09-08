@@ -116,6 +116,9 @@ namespace ArcCreate.Selection.Interface
                 case GroupByCharter.Typename:
                     GroupStrategy = new GroupByCharter();
                     break;
+                case GroupByRating.Typename:
+                    GroupStrategy = new GroupByRating();
+                    break;
                 default:
                     GroupStrategy = new NoGroup();
                     break;
@@ -155,6 +158,9 @@ namespace ArcCreate.Selection.Interface
                     break;
                 case SortByPlayCount.Typename:
                     SortStrategy = new SortByPlayCount();
+                    break;
+                case SortByRating.Typename:
+                    SortStrategy = new SortByRating();
                     break;
                 default:
                     SortStrategy = new SortByDifficulty();
