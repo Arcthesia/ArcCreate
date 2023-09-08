@@ -24,6 +24,7 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private TMP_Text title;
         [SerializeField] private TMP_Text composer;
         [SerializeField] private TMP_Text difficulty;
+        [SerializeField] private TMP_Text rating;
         [SerializeField] private RawImage jacket;
         [SerializeField] private RawImage jacketFill;
         [SerializeField] private DifficultyCell difficultyBackground;
@@ -32,7 +33,8 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private ClearResultDisplay clearResult;
         [SerializeField] private GradeDisplay grade;
         [SerializeField] private GameObject newIndicator;
-        [SerializeField] private Transform difficultyCellParent;
+        [SerializeField] private GameObject scoreDetailsParent;
+        [SerializeField] private RectTransform difficultyCellParent;
         [SerializeField] private GameObject playIndicate;
 
         [Header("Animation")]
@@ -100,6 +102,7 @@ namespace ArcCreate.Selection.Interface
 
             (string name, string number) = visibleChart.ParseDifficultyName(maxNumberLength: 3);
             difficulty.text = string.IsNullOrEmpty(number) ? name : InterfaceUtility.AlignedDiffNumber(number);
+            rating.text = playHistory.Rating == 0 ? "?" : playHistory.Rating.ToString();
 
             foreach (var im in difficultyCells)
             {
@@ -131,6 +134,7 @@ namespace ArcCreate.Selection.Interface
             grade.gameObject.SetActive(playHistory.PlayCount > 0);
             clearResult.gameObject.SetActive(playHistory.PlayCount > 0);
             newIndicator.SetActive(playHistory.PlayCount <= 0);
+            scoreDetailsParent.SetActive(playHistory.PlayCount > 0);
         }
 
         private void Awake()

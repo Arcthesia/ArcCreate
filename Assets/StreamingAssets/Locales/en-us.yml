@@ -873,6 +873,7 @@ Gameplay:
       Default assets cannot be deleted.
     EnablePractice: |-
       Practice mode enabled for next play.
+    SelectRating: Select rating
     Action:
       Copy: Copy
       Delete: Delete

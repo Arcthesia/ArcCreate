@@ -25,6 +25,9 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private Button switchDiffButton;
         [SerializeField] private Button nextDiffButton;
         [SerializeField] private Button nextNextDiffButton;
+        [SerializeField] private StarRating ratingDisplay;
+        [SerializeField] private Button openRatingDialog;
+        [SerializeField] private StarRatingDialog ratingDialog;
 
         [Header("Difficulty")]
         [SerializeField] private TMP_Text currDiffName;
@@ -64,6 +67,7 @@ namespace ArcCreate.Selection.Interface
             nextDiffButton.onClick.AddListener(SwitchDifficulty);
             nextNextDiffButton.onClick.AddListener(SwitchNextDifficulty);
             storage.OnSwitchToGameplaySceneException += OnGameplayException;
+            openRatingDialog.onClick.AddListener(ratingDialog.Show);
 
             if (storage.IsLoaded)
             {
@@ -79,6 +83,7 @@ namespace ArcCreate.Selection.Interface
             nextDiffButton.onClick.RemoveListener(SwitchDifficulty);
             nextNextDiffButton.onClick.RemoveListener(SwitchNextDifficulty);
             storage.OnSwitchToGameplaySceneException -= OnGameplayException;
+            openRatingDialog.onClick.RemoveListener(ratingDialog.Show);
             cts.Cancel();
         }
 
@@ -124,6 +129,8 @@ namespace ArcCreate.Selection.Interface
             score.text = playResult.FormattedScore;
             gradeDisplay.Display(playResult.Grade);
             gradeDisplay.gameObject.SetActive(history.PlayCount > 0);
+            ratingDisplay.Value = Mathf.FloorToInt(history.Rating);
+            ratingDialog.Attach(history);
 
             string sideString = (chart.Skin?.Side ?? "").ToLower();
 

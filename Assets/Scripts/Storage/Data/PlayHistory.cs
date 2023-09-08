@@ -32,6 +32,8 @@ namespace ArcCreate.Storage.Data
 
         public int PlayCount { get; set; }
 
+        public int Rating { get; set; } = 0;
+
         public static PlayHistory GetHistoryForChart(string levelId, string chartPath)
         {
             if (cache == null)
