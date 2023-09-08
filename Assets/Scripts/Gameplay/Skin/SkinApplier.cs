@@ -1,3 +1,4 @@
+using ArcCreate.Gameplay.Scenecontrol;
 using ArcCreate.SceneTransition;
 using ArcCreate.Utility;
 using TMPro;
@@ -19,6 +20,7 @@ namespace ArcCreate.Gameplay.Skin
         [SerializeField] private StringSO aliasSO;
         [SerializeField] private StringSO difficultySO;
         [SerializeField] private ColorSO difficultyColorSO;
+        [SerializeField] private ImageController difficultyImage;
 
         private void Awake()
         {
@@ -74,6 +76,7 @@ namespace ArcCreate.Gameplay.Skin
         private void OnDifficultyColor(Color value)
         {
             difficultyColorSO.Value = value;
+            difficultyImage.DefaultColor = value;
         }
 
         private void OnDifficulty(string value)

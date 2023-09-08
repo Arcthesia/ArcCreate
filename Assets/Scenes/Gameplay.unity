@@ -15827,6 +15827,7 @@ MonoBehaviour:
   aliasSO: {fileID: 11400000, guid: f10ee7d9b9ec2b3d388db0c4f6a60245, type: 2}
   difficultySO: {fileID: 11400000, guid: a5374b8b408aa6643b2a4b8e20c1cfaa, type: 2}
   difficultyColorSO: {fileID: 11400000, guid: d1fd32a8f162255428b01dba751cadf7, type: 2}
+  difficultyImage: {fileID: 537426955}
 --- !u!1 &2131211024
 GameObject:
   m_ObjectHideFlags: 0

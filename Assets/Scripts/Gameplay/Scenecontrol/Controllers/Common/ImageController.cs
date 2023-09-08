@@ -36,7 +36,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [SerializeField] private RectTransform rectTransform;
         [SerializeField] private Image image;
 
-        [MoonSharpHidden] public Color DefaultColor { get; private set; }
+        [MoonSharpHidden] public Color DefaultColor { get; set; }
 
         [MoonSharpHidden] public Vector3 DefaultTranslation { get; private set; } = Vector3.zero;
 
