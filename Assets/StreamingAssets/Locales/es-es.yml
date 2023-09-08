@@ -1,8 +1,17 @@
+Parsing:
+  # Exception messages for parsing strings
+  Exception:
+    CharacterNotFound: No se pudo encontrar el carácter "{0}".
+    InvalidConversionToInt: No se pudo convertir "{0}" a integer.
+    InvalidConversionToBool: No se pudo convertir "{0}" a boolean.
+    InvalidConversionToFloat: No se pudo convertir "{0}" a float.
+
 Format:
   # Exception messages while parsing chart files
   Exception:
     File: |-
       Ha ocurrido una excepción mientras se cargaba el archivo de mapa {File}:
+      {Error}
     SingleErrorFormat: |-
       en: línea {LineNumber}
       Mientras se analizaba evento de tipo: {EventType}
@@ -11,8 +20,11 @@ Format:
     SingleErrorShortFormat: |-
       Mientras se analizaba evento de tipo: {EventType}
       {Reason}
-    WrongSyntax: |-
-      Sintaxis errónea o incompleta.
+    UnknownException: |-
+      Excepción desconocida.
+      Excepción: {Exception}
+      Stack trace:
+      {StackTrace}
     InvalidHeader: |-
       Línea de cabecera no válida.  
     ArcColorNegative: |-
@@ -31,8 +43,6 @@ Format:
       Emparejamiento del símbolo de grupo de tiempo no válido. Asegúrate de terminar adecuadamente las definiciones de grupo de tiempo con "};".
     DivisorNegative: |-
       La propiedad del divisor del evento de tiempo no puede ser negativa.
-    BaseBPMZero: |-
-      El BPM base no puede ser cero.
     DurationNegative: |-
       La duración de este tipo de evento no puede ser negativa.
     DurationZero: |-
@@ -41,6 +51,11 @@ Format:
       La Nota Flotante está fuera del rango de tiempo de su Arco principal.
     TimingGroupPropertiesInvalid: |-
       Definición de las propìedades del grupo de tiempo no válida.
+    ReferencedFileError: |-
+      No se puede cargar el archivo de mapa referenciado:
+      {0}
+    FileDoesNotExist: |-
+      El archivo de mapa no existe.
   Warning:
     HoldTooShort:
       La duración de la nota Hold es inferior a 17ms.
@@ -122,9 +137,13 @@ Compose:
       O: Rodar hacia la derecha
       Esc: Cancelar
       Enter: Confirmar
-    EmmyLuaGenerated: |-
-      Plantilla EmmyLua de escena generada en la carpeta de proyecto actual
-      Usa VsCode con la extensión tangzx.emmylua para obtener el autocompletado  
+    EmmyLuaGenerated:
+      Scenecontrol: |-
+        Plantilla EmmyLua del control de escena generada en la carpeta de proyecto actual
+        Usa VsCode con la extensión tangzx.emmylua para obtener el autocompletado
+      Macros: |-
+        Plantilla EmmyLua de macros generada en la carpeta de macros
+        Usa VsCode con la extensión tangzx.emmylua para obtener el autocompletado        
     Actions:
       CannotMirror: No se pueden voltear ninguna de las notas seleccionadas.
       NoDragRange: No se pueden arrastrar el tiempo de las notas seleccionado. Intenta arrastrar las notas por separado.
@@ -196,7 +215,14 @@ Compose:
         Cancelled: Renderizado cancelado
         Complete: Renderizado completado
       Package:
-        Complete: Paquete exportado a {0}  
+        Complete: Paquete exportado a {0}
+    Macros:
+      Cancelled: Macro cancelada
+      Select:
+        Timing: Seleccionar tiempo
+        Position: Seleccionar posición
+        Lane: Seleccionar carril
+      NotFound: El macro "{macroId}" no existe.        
   # Dialog boxes
   Dialog:
     RemoveGroup:
@@ -218,7 +244,7 @@ Compose:
       Content: |-
         Tu proyecto tiene cambios sin guardar. ¿Quiéres guardar?
       Yes: Guardar cambios
-      No: Descartar cambios
+      No: <size=121>Descartar cambios</size>
       Cancel: Cancelar
     LoadChartError:
       Title: Error
@@ -227,11 +253,10 @@ Compose:
         Corrige esto en cualquier editor de texto o cierra este diálogo y usa el panel "<> {TabName}".
         
         Detalles:
-        Línea número: {LineNumber}
-        Contenido de línea: "{Content}".
-        Tipo de evento: {EventType}
-        {Exception}
-      Confirm: Confirmar  
+        {Content}
+      Confirm: Confirmar
+    Macros:
+      Title: Macros
   Navigation:
     KeybindOverride: Anulación de la combinación de teclas para la acción {0}
     # Texts that appear on the context menu (right-click menu)
@@ -277,16 +302,16 @@ Compose:
   Grid:
     # Please modify the comment lines only (lines beginning with '--')
     DefaultScript: |-
-      -- THIS IS A LUA SCRIPT. See full documentation at: https://github.com/Arcthesia/ArcCreate/wiki/Grid-settings
-      -- CONFIGURATION
-      -- Choose one of the following template: 4k, 6k, oob4k, oob6k
+      -- ESTO ES UN SCRIPT LUA. Mira toda la documentación en: https://github.com/Arcthesia/ArcCreate/wiki/Grid-settings
+      -- CONFIGURACIÓN
+      -- Elige una de las siguientes plantillas: 4k, 6k, oob4k, oob6k
       local useTemplate = "4k"
       local spacing = {
           x = 0.125,
           y = 0.25,
       }
 
-      -- Change grid color here
+      -- Cambia el color de la cuadrícula aquí
       local color = {
           ftr = {
               area = rgba(0, 200, 0, 48),
@@ -415,6 +440,8 @@ Compose:
       drawLines(color.unsafe.boundary, {bydTR, gridTR, gridBR}, false)
       drawLines(color.unsafe.boundary, {gridBR, trackR, trackL, gridBL}, false)
 
+      spacing.x = math.max(spacing.x, 0.01)
+      spacing.y = math.max(spacing.y, 0.01)
       grid.drawLine(config.left, config.left, config.bottom, config.top, color.lines)
       for x = config.mainLeft - spacing.x, config.left + spacing.x, -spacing.x do
           grid.drawLine(x, x, config.bottom, config.top, color.lines)
@@ -473,6 +500,13 @@ Compose:
         Open: Abrir
         Save: Guardar
         InputMode: Modo de Entrada
+        InputModeOptions:
+          auto: Auto
+          autocontroller: Auto (Mando)
+          touch: Táctil
+          controller: Mando
+          mouse: Ratón
+          idle: Inactivo
         FullScreen: Pantalla Completa
         ToggleFullScreenHint: Pulsa F11 para activar el modo de pantalla completa.
         Chart: Mapa
@@ -497,6 +531,7 @@ Compose:
         ChartOffset: <size=9>Desplazamiento de mapa</size>
         TimingPointDensityFactor: Densidad de Juicio
         ChartConstant: <size=10>Constante del Mapa</size>
+        SearchTags: <size=10>Etiquetas de búsqueda</size>
         DifficultyName: <size=10>Nombre de Dificultad</size>
         DifficultyColor: <size=10>Color de Dificultad</size>
         Files: Archivos
@@ -523,10 +558,13 @@ Compose:
         NoProjectLoaded: |-
           Proyecto no cargado.
           Crea o abre un nuevo proyecto
-        Shutter: Obturador
-        ShowShutter: Mostrar obturador
-        HideShutter: Ocultar obturador
+        RawEditorFileTooLarge: |-
+          El editor de texto está desactivado para archivos más grandes de 1000kb  
+        Shutter: Transición
+        ShowShutter: Mostrar transición
+        HideShutter: Ocultar transición
         PreviewSegment: <size=9>Segmento de vista previa</size>
+        CustomChartPath: Usar personalizado (avanzado)
       Options:
         Inherit: Legado
         Light: Luz
@@ -554,6 +592,10 @@ Compose:
         Offset: Desplazamiento
         TimingGroup: Grupo
         Density: Densidad
+        PlaybackSpeed: Velocidad
+      Timestamp:
+        Name: Marca de tiempo
+        DefaultMessage: Marca de tiempo {0}  
     # Events editor panel
     EventsEditor:
       Label:
@@ -595,7 +637,7 @@ Compose:
           Width: Ancho
           Height: Alto
           Size: Tamaño
-          ShowShutter: Mostrar obturador
+          ShowShutter: Mostrar transición
         Start: Iniciar renderización
         Cancel: Cancelar renderización
         Status: |-
@@ -626,6 +668,18 @@ Compose:
           AspectRatio: <size=9>Relación de aspecto</size>
           Indicator: Indicador
           MaxIndicator: <size=10>Activar indicador puntuación máxima</size>
+          Colorblind: Usar colores de arcos para daltónicos
+          ScoreDisplay: Puntuación
+        Judgement:
+          Name: Juicio
+          NotUsedInAutoOrIdle: "Estas opciones no tienen efecto en los modos Auto o Inactivo:"
+          EarlyLatePosition: Posición Early/Late
+          ShowMsDifference: Mostrar ms de diferencia
+          ShowJudgement: "Mostrar juicio:"
+          ShowMax: Perfect (Max)
+          ShowPerfect: Perfect (Early/Late)
+          ShowGood: Good
+          ShowMiss: Miss  
         Grid:
           Name: Cuadrícula
           Slot: Ranura
@@ -649,6 +703,7 @@ Compose:
         Input:
           Name: Controles
           ReloadKeybinds: Recargar combinaciones de teclas
+          AllowCreatingNotesBackward: Permitir crear notas hacia atrás
         Files:
           Name: Archivos
           Backup: <size=11>Crear copia de seguridad al guardar</size>
@@ -674,7 +729,11 @@ Compose:
         Hold:  Hold
         Arctap: <size=9>Nota flotante</size>
         Easing: Aceleración
-      Macros: Macros
+      Macros:
+        Name: Macros
+        GenerateEmmy: Generar EmmyLua
+        Reload: Recargar scripts de macros
+        OpenExplorer: Abrir carpeta de macros
     # Inspector window
     Inspector:
       Name: Inspector
@@ -692,6 +751,11 @@ Compose:
       Actions:
         SelectArc: Seleccionar arco principal
         SelectArctap: Selecciona notas flotantes
+    Startup:
+      Discord: Únete a nuestro Discord
+      Kofi: Apóyanos en Ko-fi
+      Version: "Versión: {0}"
+      Recent: Abierto recientemente   
 
 Remote:
   Exception:
@@ -783,6 +847,15 @@ Gameplay:
     Play: Reanudar
     Retry: Reintentar
     Return: Salir
+    AudioDeviceChange: Se ha detectado un cambio en el dispositivo de audio. ArcCreate forzará el regreso al Menú de Selección.
+    Confirm: Confirmar
+  Practice:
+    PlaybackSpeed: Velocidad
+    Repeat:
+      On: Repetición activada
+      Off: Repetición desactivada
+      From: Establecer punto de partida
+      To: Establevcer punto de fin  
   Selection:
     SelectStatus:
       Singular: |-
@@ -792,17 +865,25 @@ Gameplay:
     DeleteConfirmation: |-
       ¿Estás seguro de que deseas eliminar los siguientes activos?
       Tu puntuación no será eliminada.
+    PackDeleteConfirmation: |-
+      Estás eliminando el paquete:
+      <color=#FFFFFFB4>{0}</color>
+      ¿Quiéres también eliminar todos los niveles que pertenecen a este paquete, o mantener los niveles y eliminar el paquete simplemente? 
     CannotDeleteDefault: |-
       Los activos predeterminados no pueden ser eliminados.
+    EnablePractice: |-
+      Modo Práctica activado para la siguiente partida. 
     Action:
+      Copy: Copiar 
       Delete: Eliminar
       Cancel: Cancelar
+      Keep: Mantener
       Done: Listo
     List:
       RemoteTestplay: Juego de Prueba Remoto
-      Import: <size=11>Importar paquete</size>
+      Import: Importar paquete
       Community: Comunidad
-      AllSongs: <size=10.5>Todas las canciones</size>
+      AllSongs: <size=28>Todas las canciones</size>
       OtherDifficulties: Otras dificultades
     Info:
       Undefined:
@@ -817,7 +898,7 @@ Gameplay:
       difficulty: Dificultad
       grade: Calificación
       playcount: Veces jugada
-      score: "Orden: Puntuación"
+      score: Puntuación
       title: Título
     Group:
       none: Ninguno
@@ -825,6 +906,17 @@ Gameplay:
       grade: Calificación
       rank: Rango
       charter: Creador
+    History:
+      Best: Mejores
+      Recent: Recientes
+    Modifiers:
+      GameMode:
+        Name: Modo de juego
+        Auto: Auto
+        Practice: Práctica
+      Modifier:
+        Name: Modificadores
+        Mirror: Espejo  
     Settings:
       Name: Ajustes
       Language: Idioma
@@ -836,6 +928,9 @@ Gameplay:
         EarlyLatePerfectDisplay: Visualizar Early/Late Perfect
         EarlyLatePerfectDisplayDetail: |-
           Cambia si quieres mostrar o no los juicios Early/Late Perfect
+        EnablePractice: Activar modo práctica
+        ShowMsDifference: Visualizar milisegundos de diferencia
+        ShowMsDifferenceDetail: Visualizar milisegundos exactos de diferencia en vez de EARLY / LATE.  
       Audio:
         Name: Audio
         Offset: Offset
@@ -855,25 +950,51 @@ Gameplay:
         ColorblindDetail: Usa colores alternativos en arcos.
         FrPmDisplay: Visualizar FC/AP
         FrPmDisplayDetail: Ajusta la posición del indicador FC/AP.
-        MaxDisplay: <size=10>Visualizar puntuación máxima</size>
+        MaxDisplay: <size=16>Visualizar puntuación máxima</size>
         MaxDisplayDetail: Activa el indicador de puntuación máxima.
         EarlyLateDisplay: Visualizar Early/Late
         EarlyLateDisplayDetail: Ajusta la posición de los textos EARLY/LATE.
-        LimitFramerate: <size=10>Limitar velocidad de fotogramas</size>
-        LimitFramerateDetail: <size=10>Limita velocidad de fotogramas a 60 FPS para preservar la duración de la batería. Podría aumentar la latencia.</size>
+        ScoreDisplay: Visualización de puntuación
+        LimitFramerate: Limitar velocidad de fotogramas
+        LimitFramerateDetail: <size=20>Limita velocidad de fotogramas a 60 FPS para preservar la duración de la batería. Podría aumentar la latencia.</size>
+      Judgement:
+        Name: Juicio
+        ShowMax: Visualizar juicio Perfect (Max)
+        ShowPerfect: VIsualizar juicio Perfect (Early / Late)
+        ShowGood: Visualizar juicio Good
+        ShowMiss: Visualizar juicio Miss
       Interface:
+        Name: Interfaz
+        ForceTheme: Forzar tema IU
+        ForceThemeDetail: Configura la IU para que muestre un tema independientemente del mapa seleccionado.
+        SwitchResumeAndRetry: <size=29>Cambiar posición de Reanudar y Reintentar.</size>
+        SwitchResumeAndRetryDetail: Cambia las posiciones de los botones Reanudar y Reintentar dentro de la pantalla de Pausa.
         ShowFPS: Mostrar FPS
         ShowFPSDetail: Activa la visualización de FPS.
-        ShowDebug: <size=10>Mostrar información de depuración</size>
+        ShowDebug: Mostrar información de depuración
         ShowDebugDetail: Muestra información de depuración mientras juegas (avanzado).
       FrPmPosition:
         middle: En medio
         infopanel: Panel de info
-        off: <size=10>Desactivado</size>
+        off: Desactivado
       EarlyLateTextPosition:
         middle: En medio
         bottom: Abajo
         top: Arriba
+      ScoreDisplay:
+        default: Predeterminado
+        predictive: Predictivo
+        difference: Diferencia
+        decrease: Decrease
+      ScoreDisplayDetails:
+        default: El modo de visualización por defecto. La puntuación incrementa al pulsar notas.
+        predictive: La puntuación muestra la distancia al umbral de Grado más cercano.
+        difference: La puntuación muestra la diferencia a la puntuación perfecta teóricamente.
+        decrease: La puntuación empieza al máximo y disminuye.
+      ForceTheme:
+        default: Predeterminado
+        light: Claro
+        dark: Oscuro 
 
 Shutter:
   Composer: Música
@@ -912,11 +1033,11 @@ Credits:
   Name: Créditos
   View: Ver créditos
   Role:
-    LeadProgramming: a
-    Programming: Proga
-    VisualDesign: Visa
-    SoundDesign: Souna
-    Localization: Loca
-    QualityAssurance: Quality Assurance
-    Community: and evea
-    Sponsor: Special ta
+    LeadProgramming: Programación Principal
+    Programming: Programación
+    VisualDesign: Diseño Visual
+    SoundDesign: Diseño de Sonido
+    Localization: Traducción
+    QualityAssurance: Control de Calidad
+    Community: ¡y todo el mundo en la comunidad de Arcthesia & ArcCreate!
+    Sponsor: Agradecimientos especiales a nuestros Colaboradores
