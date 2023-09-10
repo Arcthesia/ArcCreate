@@ -162,7 +162,7 @@ namespace ArcCreate.Gameplay.Audio
 
                 int dspTimePassedSinceAudioStart = Mathf.RoundToInt((float)((dspTime - dspStartPlayingTime) * 1000 * playbackSpeed));
                 int realTimePassedSinceAudioStart = Mathf.RoundToInt((float)((Time.realtimeSinceStartup - realStartPlayingTime) * 1000 * playbackSpeed));
-                updatePace = Mathf.Approximately(realTimePassedSinceAudioStart, 0) ? 1
+                updatePace = realTimePassedSinceAudioStart < 0 + Mathf.Epsilon ? 1
                            : Mathf.Lerp(updatePace, (float)dspTimePassedSinceAudioStart / realTimePassedSinceAudioStart, 0.1f);
                 int newTiming = Mathf.RoundToInt(realTimePassedSinceAudioStart * updatePace) + startTime - FullOffset;
 
