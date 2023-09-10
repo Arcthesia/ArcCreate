@@ -22,6 +22,7 @@ jobs:
           - Android
           - iOS
     steps:
+      - uses: jlumbroso/free-disk-space@v1.2.0
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
