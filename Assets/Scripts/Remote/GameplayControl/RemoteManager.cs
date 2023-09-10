@@ -337,7 +337,7 @@ namespace ArcCreate.Remote.Gameplay
 
         private async UniTask OnBroadcastReceivedMainThread(IPAddress ipAddress, string message)
         {
-            if (ipAddress == IPAddress.Parse("0.0.0.0"))
+            if (ipAddress == IPAddress.Parse("0.0.0.0") || string.IsNullOrWhiteSpace(message))
             {
                 return;
             }
