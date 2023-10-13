@@ -4,6 +4,14 @@
 # 3. 
 #
 ######
+Parsing:
+  # 解析字符串的异常信息
+  Exception:
+    CharacterNotFound: 找不到字符"{0}"
+    InvalidConversionToInt: 无法将"{0}"转换为整数
+    InvalidConversionToBool: 无法将"{0}"转换为布尔值
+    InvalidConversionToFloat: 无法将"{0}"转换为浮点数
+
 Format:
   # 解析谱面文件时发生的错误
   Exception:
@@ -18,6 +26,11 @@ Format:
       {EventType}事件
       错误原因：
       {Reason}
+    UnknownException: |-
+      未知错误
+      异常: {Exception}
+      堆栈跟踪：
+      {StackTrace}
     WrongSyntax: |-
       语法错误或语句不完整。
     InvalidHeader: |-
@@ -49,6 +62,11 @@ Format:
       Sky note的时间超出其所在Arc的时间范围。
     TimingGroupPropertiesInvalid: |-
       无效的时间组属性。
+    ReferencedFileError: |-
+      无法加载引用的谱面文件:
+      {0}
+    FileDoesNotExist: |-
+      谱面文件不存在。
   Warning:
     HoldTooShort:
       Hold的持续时间过短，小于17ms。
@@ -105,7 +123,7 @@ Compose:
       执行{Path}路径下的Lua脚本时发生错误：{Message}
       {StackTrace}
     Render:
-      ConfigureFFmpeg:
+      FFmpeg:
         NotFound: |-
           找不到任何FFmpeg可执行文件。
           请确认配置的路径{0}是正确路径。
@@ -120,7 +138,7 @@ Compose:
           音效片段{Sfx}不兼容渲染。
           渲染音频声道数量为{ExpectedChannels}，渲染音频采样率为{ExpectedFrequency}，而音频片段的声道数量为{Channels}，采样率为{Frequency}。
           
-  # 通知消息
+ # 通知消息
   Notify:
     FreeCameraEditHelp: |-
       正在启动自由camera视角（鼠标悬停查看更多信息）
@@ -133,9 +151,13 @@ Compose:
       O：向右翻滚
       Esc：取消
       回车：确认
-    EmmyLuaGenerated: |-
-      在当前文件夹下生成了用于scenecontrol的EmmyLua模板
-      请使用安装了tangzx.emmylua插件的VS Code进行自动填充
+    EmmyLuaGenerated:
+      Scenecontrol: |-
+       在当前文件夹下生成了用于scenecontrol的EmmyLua模板
+       请使用安装了tangzx.emmylua插件的VS Code进行自动填充
+      Macros: |-
+       在当前文件夹下生成了用于macros的EmmyLua模板
+       请使用安装了tangzx.emmylua插件的VS Code进行自动填充
     Actions:
       CannotMirror: 无法镜像选中的音符。
       NoDragRange: 无法拖动选中音符的timing。请尝试分别拖动音符。
@@ -208,6 +230,13 @@ Compose:
         Complete: 渲染完成
       Package:
         Complete: 将包导出到了{0}
+    Macros:
+      Cancelled: 撤销宏
+      Select:
+        Timing: 选择timing
+        Position: 选择位置
+        Lane: 选择轨道
+      NotFound: 外置工具 "{macroId}" 不存在。
   # 对话框
   Dialog:
     RemoveGroup:
@@ -243,6 +272,8 @@ Compose:
         事件类型：{EventType}
         {Exception}
       Confirm: 确认
+    Macros:
+      Title: 外置工具
   Navigation:
     KeybindOverride: 正在覆盖{0}的键位设置
     # 右键菜单的文本
@@ -484,6 +515,13 @@ Compose:
         Open: 打开
         Save: 保存
         InputMode: 输入模式
+        InputModeOptions:
+          auto: Auto
+          autocontroller: Auto (Controller)
+          touch: Touch
+          controller: Controller
+          mouse: Mouse
+          idle: 无操作
         FullScreen: 全屏
         ToggleFullScreenHint: 按下F11切换全屏模式。
         Chart: 谱面
@@ -500,7 +538,7 @@ Compose:
         Composer: 曲师
         Illustrator: 插画作者
         Charter: 谱师
-        Alias: 假名
+        Alias: 谱师假名（马甲）
         BPM: BPM
         BaseBPM: 基准BPM
         BPMText: BPM文本
@@ -508,6 +546,7 @@ Compose:
         ChartOffset: 谱面偏移
         TimingPointDensityFactor: 判定点密度
         ChartConstant: 谱面定数
+        SearchTags: 搜索标签
         DifficultyName: 难度名称
         DifficultyColor: 难度颜色
         Files: 文件
@@ -534,17 +573,20 @@ Compose:
         NoProjectLoaded: |-
           没有加载工程。
           请新建或打开一个工程
+        RawEditorFileTooLarge: |-
+          文件大于1000kb，文本编辑器禁止打开
         Shutter: 加载界面
         ShowShutter: 显示加载界面
         HideShutter: 隐藏加载界面
         PreviewSegment: 预览片段
+        CustomChartPath: 使用自定义名称 (高级)
       Options:
         Inherit: 不变
         Light: 光芒侧
-        Conflict: 对立侧
+        Conflict: 纷争侧
         Colorless: 消色侧
         MiraiLight: Mirai光芒侧
-        MiraiConflict: Mirai对立侧
+        MiraiConflict: Mirai纷争侧
         Dynamix: Dynamix
         Black: Black
         Nijuusei: Nijuusei
@@ -565,6 +607,10 @@ Compose:
         Offset: 偏移
         TimingGroup: 时间组
         Density: 节拍细分
+        PlaybackSpeed: 播放速度
+      Timestamp:
+        Name: 时间戳
+        DefaultMessage: 时间戳 {0}
     # 事件编辑器面板
     EventsEditor:
       Label:
@@ -635,8 +681,20 @@ Compose:
           Name: 游玩设置
           Speed: 速度
           AspectRatio: 画面比例
-          Indicator: 指示器
+          Indicator: FC/AP指示器
           MaxIndicator: 打开理论值指示器
+          Colorblind: 使用色彩辅助模式的Arc颜色
+          ScoreDisplay: 分数显示设置
+        Judgement:
+          Name: 判断设置
+          NotUsedInAutoOrIdle: "在使用Auto或无操作输入模式时，以下这些选项将不起作用："
+          EarlyLatePosition: Early/Late显示位置
+          ShowMsDifference: 显示与Perfect (Max)的ms差距
+          ShowJudgement: "判断显示设置："
+          ShowMax: Perfect (Max)
+          ShowPerfect: Perfect (Early/Late)
+          ShowGood: Good
+          ShowMiss: Miss
         Grid:
           Name: 网格设置
           Slot: 栏位
@@ -660,6 +718,7 @@ Compose:
         Input:
           Name: 输入设置
           ReloadKeybinds: 重新加载键位绑定
+          AllowCreatingNotesBackward: 允许反向创建音符
         Files:
           Name: 文件设置
           Backup: 保存时创建备份
@@ -685,7 +744,12 @@ Compose:
         Hold: Hold
         Arctap: Sky
         Easing: Easing
-      Macros: 宏
+      Macros:
+      # 应该翻译为宏，但是外置工具更顺口
+        Name: 外置工具
+        GenerateEmmy: 生成EmmyLua
+        Reload: 重新加载外置工具脚本
+        OpenExplorer: 打开外置工具文件夹
     # Inspector window
     Inspector:
       Name: 查看器
@@ -703,6 +767,11 @@ Compose:
       Actions:
         SelectArc: 选中所在Arc
         SelectArctap: 选中Sky notes
+    Startup:
+      Discord: 加入我们的Discord服务器
+      Kofi: 在Ko-fi支持我们
+      Version: "版本: {0}"
+      Recent: 最近打开
 
 Remote:
   Exception:
@@ -794,6 +863,15 @@ Gameplay:
     Play: 返回
     Retry: 重试
     Return: 退出
+    AudioDeviceChange: 检测到音频设备发生变化，ArcCreate将强制返回选择菜单。
+    Confirm: 确认
+  Practice:
+    PlaybackSpeed: 播放速度
+    Repeat:
+      On: Repeat On
+      Off: Repeat Off
+      From: 设置起点
+      To: 设置终点
   Selection:
     SelectStatus:
       Singular: |-
@@ -803,11 +881,20 @@ Gameplay:
     DeleteConfirmation: |-
       你确定要删除以下资源吗？
       这不会删除你的分数。
+    PackDeleteConfirmation: |-
+      您正在删除谱面包：
+      <color=#FFFFFFB4>{0}</color>
+      您是否也想要删除掉属于这个谱面包的所有谱面，或者是保留谱面只删除这个谱面包？
     CannotDeleteDefault: |-
       无法删除默认资源。
+    EnablePractice: |-
+      下一次游玩时启用练习模式。
+    SelectRating: 为这张谱面打分
     Action:
+      Copy: 复制
       Delete: 删除
       Cancel: 取消
+      Keep: 保留
       Done: 完成
     List:
       RemoteTestplay: 远程测试游玩
@@ -828,6 +915,7 @@ Gameplay:
       difficulty: 难度
       grade: 评级
       playcount: 游玩次数
+      rating: 打分
       score: 分数
       title: 标题
     Group:
@@ -835,7 +923,19 @@ Gameplay:
       difficulty: 难度
       grade: 评级
       rank: 通关状态
+      rating: 打分
       charter: 谱师
+    History:
+      Best: 最佳成绩
+      Recent: 最近游玩成绩
+    Modifiers:
+      GameMode:
+        Name: 游玩模式
+        Auto: Autoplay
+        Practice: 练习模式
+      Modifier:
+        Name: 镜像模式
+        Mirror: Mirror
     Settings:
       Name: 设置
       Language: 语言
@@ -847,6 +947,9 @@ Gameplay:
         EarlyLatePerfectDisplay: 纯粹【过早/过晚】
         EarlyLatePerfectDisplayDetail: |-
           控制Pure判定时是否显示过早/过晚。
+        EnablePractice: 启用练习模式
+        ShowMsDifference: 显示各个判断的ms差距
+        ShowMsDifferenceDetail: 显示各个判断精确的ms差距，而不是过早/过晚。
       Audio:
         Name: 音频设置
         Offset: 偏移
@@ -862,7 +965,7 @@ Gameplay:
           调节游玩过程中的打击音效音量。
       Visual:
         Name: 视觉设置
-        Colorblind: 色盲模式
+        Colorblind: 色彩辅助模式
         ColorblindDetail: 使用其他的Arc颜色。
         FrPmDisplay: FC/AP指示
         FrPmDisplayDetail: 调节FC/AP指示器的位置
@@ -870,9 +973,21 @@ Gameplay:
         MaxDisplayDetail: 切换是否显示理论值指示器
         EarlyLateDisplay: 过早/过晚指示
         EarlyLateDisplayDetail: 调节过早/过晚提示的位置
+        ScoreDisplay: 分数显示设置
         LimitFramerate: 限制帧率
         LimitFramerateDetail: 限制帧率为60帧以省电。可能会增加延迟。
+      Judgement:
+        Name: 判断显示设置
+        ShowMax: 显示Perfect (Max)判断
+        ShowPerfect: 显示Perfect (Early / Late)判断
+        ShowGood: 显示Good判断
+        ShowMiss: 显示Miss判断
       Interface:
+        Name: 界面设置
+        ForceTheme: UI主题设置
+        ForceThemeDetail: UI主题界面将始终按照当前所选的主题显示，而与当前选择的谱面无关
+        SwitchResumeAndRetry: 切换【返回】和【重试】的位置
+        SwitchResumeAndRetryDetail: 在【暂停】界面中切换【返回】和【重试】按钮的位置
         ShowFPS: 显示FPS
         ShowFPSDetail: 开关FPS显示
         ShowDebug: 显示调试信息
@@ -885,6 +1000,20 @@ Gameplay:
         middle: 中间
         bottom: 底部
         top: 顶部
+      ScoreDisplay:
+        default: Default
+        predictive: Predictive
+        difference: Difference
+        decrease: Decrease
+      ScoreDisplayDetails:
+        default: 默认显示模式。击中音符时分数增加。
+        predictive: 当前分数将显示为与距离最近评级分数之差。
+        difference: 当前分数将显示为与离理论值的分数之差。
+        decrease: 当前分数将显示为与从理论值开始减少分数。
+      ForceTheme:
+        default: Default
+        light: Light
+        dark: Dark
 
 Shutter:
   Composer: 音乐
@@ -922,3 +1051,12 @@ Storage:
 Credits:
   Name: 制作组名单
   View: 查看制作组名单
+  Role:
+    LeadProgramming: 程序开发负责
+    Programming: 程序开发
+    VisualDesign: 视觉设计
+    SoundDesign: 音效设计
+    Localization: 本地化翻译
+    QualityAssurance: 测试人员
+    Community: 以及 Arcthesia 和 ArcCreate 社区的所有成员！
+    Sponsor: 特别感谢我们的赞助者！
