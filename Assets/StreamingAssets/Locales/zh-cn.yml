@@ -546,7 +546,7 @@ Compose:
         ChartOffset: 谱面偏移
         TimingPointDensityFactor: 判定点密度
         ChartConstant: 谱面定数
-        SearchTags: 搜索标签
+        SearchTags: 搜索别名添加
         DifficultyName: 难度名称
         DifficultyColor: 难度颜色
         Files: 文件
@@ -868,10 +868,10 @@ Gameplay:
   Practice:
     PlaybackSpeed: 播放速度
     Repeat:
-      On: Repeat On
-      Off: Repeat Off
-      From: 设置起点
-      To: 设置终点
+      On: 循环练习【开】
+      Off: 循环练习【关】
+      From: 选择起始位置
+      To: 选择结束位置
   Selection:
     SelectStatus:
       Singular: |-
@@ -935,10 +935,10 @@ Gameplay:
         Practice: 练习模式
       Modifier:
         Name: 镜像模式
-        Mirror: Mirror
+        Mirror: 镜像
     Settings:
       Name: 设置
-      Language: 语言
+      Language: 切换语言
       Gameplay:
         Name: 游玩设置
         Speed: 速度
