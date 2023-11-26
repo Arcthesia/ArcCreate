@@ -516,11 +516,11 @@ Compose:
         Save: 保存
         InputMode: 输入模式
         InputModeOptions:
-          auto: Auto
-          autocontroller: Auto (Controller)
-          touch: Touch
-          controller: Controller
-          mouse: Mouse
+          auto: 自动
+          autocontroller: 自动 (手柄模式)
+          touch: 触屏输入
+          controller: 手柄输入
+          mouse: 鼠标输入
           idle: 无操作
         FullScreen: 全屏
         ToggleFullScreenHint: 按下F11切换全屏模式。
