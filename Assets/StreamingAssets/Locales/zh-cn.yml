@@ -231,7 +231,7 @@ Compose:
       Package:
         Complete: 将包导出到了{0}
     Macros:
-      Cancelled: 撤销宏
+      Cancelled: 撤销外置工具
       Select:
         Timing: 选择timing
         Position: 选择位置
@@ -931,7 +931,7 @@ Gameplay:
     Modifiers:
       GameMode:
         Name: 游玩模式
-        Auto: Autoplay
+        Auto: 自动游玩
         Practice: 练习模式
       Modifier:
         Name: 镜像模式
