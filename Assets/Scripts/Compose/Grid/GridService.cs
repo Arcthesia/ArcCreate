@@ -112,6 +112,11 @@ namespace ArcCreate.Compose.Grid
             return verticalGrid.GetBounds();
         }
 
+        public (float fromX, float fromZ, float toX, float toZ) GetTimingGridBound()
+        {
+            return timingGrid.GetBounds();
+        }
+
         private void LoadGridSlot(int slot)
         {
             GridSettings settings = GridSettings.GetSlot(slot);

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
@@ -23,8 +24,6 @@ namespace ArcCreate.Gameplay.Data
         public float ZPos(double floorPosition)
             => ArcFormula.FloorPositionToZ(FloorPosition - floorPosition);
 
-        public abstract Mesh GetColliderMesh();
-
-        public abstract void GetColliderPosition(int timing, out Vector3 pos, out Vector3 scl);
+        public abstract void GenerateColliderTriangles(int timing, List<Vector3> vertices, List<int> triangles);
     }
 }

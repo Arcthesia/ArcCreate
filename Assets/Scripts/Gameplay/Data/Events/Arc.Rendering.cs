@@ -19,7 +19,6 @@ namespace ArcCreate.Gameplay.Data
         private float arcGroupAlpha = 1;
         private int longParticleUntil = int.MinValue;
         private Arc firstArcOfBranch;
-        private Mesh colliderMesh;
         private Texture arcCap;
         private Color heightIndicatorColor;
         private readonly List<ArcSegmentData> segments = new List<ArcSegmentData>();
@@ -111,7 +110,6 @@ namespace ArcCreate.Gameplay.Data
             RecalculateJudgeTimings();
             ReloadSkin();
             RebuildSegments();
-            RebuildCollider();
         }
 
         public void ReloadSkin()
@@ -121,23 +119,14 @@ namespace ArcCreate.Gameplay.Data
             (arcCap, heightIndicatorColor) = Services.Skin.GetArcSkin(this);
         }
 
-        public override Mesh GetColliderMesh()
-        {
-            if (colliderMesh == null)
-            {
-                colliderMesh = ArcMeshGenerator.GenerateColliderMesh(this);
-            }
-
-            return colliderMesh;
-        }
-
-        public override void GetColliderPosition(int timing, out Vector3 pos, out Vector3 scl)
+        public override void GenerateColliderTriangles(int timing, List<Vector3> vertices, List<int> triangles)
         {
             double fp = TimingGroupInstance.GetFloorPosition(timing);
             float z = ZPos(fp);
             Vector3 basePos = new Vector3(ArcFormula.ArcXToWorld(XStart), ArcFormula.ArcYToWorld(YStart), 0);
-            pos = (TimingGroupInstance.GroupProperties.FallDirection * z) + basePos;
-            scl = TimingGroupInstance.GroupProperties.ScaleIndividual;
+            Vector3 pos = (TimingGroupInstance.GroupProperties.FallDirection * z) + basePos;
+            Vector3 scl = TimingGroupInstance.GroupProperties.ScaleIndividual;
+            ArcMeshGenerator.GenerateColliderTriangles(this, vertices, triangles, pos, scl);
         }
 
         public void UpdateRender(int currentTiming, double currentFloorPosition, GroupProperties groupProperties)
@@ -330,15 +319,6 @@ namespace ArcCreate.Gameplay.Data
             return ArcFormula.Y(YStart, YEnd, p, LineType);
         }
 
-        public void CleanColliderMesh()
-        {
-            if (colliderMesh != null)
-            {
-                Object.Destroy(colliderMesh);
-                colliderMesh = null;
-            }
-        }
-
         private void RebuildSegments()
         {
             if (Values.EnableArcRebuildSegment || segments.Count == 0)
@@ -484,15 +464,6 @@ namespace ArcCreate.Gameplay.Data
             }
 
             return (false, default, default);
-        }
-
-        private void RebuildCollider()
-        {
-            CleanColliderMesh();
-            if (Values.EnableColliderGeneration)
-            {
-                colliderMesh = ArcMeshGenerator.GenerateColliderMesh(this);
-            }
         }
 
         private void SetGroupHighlight(bool highlight, int longParticleUntil)

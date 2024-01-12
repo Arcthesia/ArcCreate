@@ -2092,7 +2092,6 @@ Transform:
   - {fileID: 1783257452}
   - {fileID: 2075838863}
   - {fileID: 655056394}
-  - {fileID: 1759330970}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4422,8 +4421,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b281179eb630188a496fb7e6ccc46f03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  laneCollider: {fileID: 1114892755}
-  verticalCollider: {fileID: 1501613969}
+  verticalPlane: {fileID: 1501613968}
   cursorLaneTiming: {fileID: 229589920692709102}
   cursorLaneX: {fileID: 1390271752}
   cursorVerticalX: {fileID: 1912362337}
@@ -49844,7 +49842,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00018310547}
+  m_AnchoredPosition: {x: 0, y: -0.00010681152}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &985115557
@@ -57841,7 +57839,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1114892753}
-  - component: {fileID: 1114892755}
   m_Layer: 10
   m_Name: LaneCollider
   m_TagString: Untagged
@@ -57863,20 +57860,6 @@ Transform:
   m_Father: {fileID: 47568659}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &1114892755
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1114892752}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 0
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1120448177
 GameObject:
   m_ObjectHideFlags: 0
@@ -71951,7 +71934,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1501613968}
-  - component: {fileID: 1501613969}
   - component: {fileID: 1501613970}
   - component: {fileID: 1501613971}
   - component: {fileID: 1501613972}
@@ -71979,20 +71961,6 @@ Transform:
   m_Father: {fileID: 47568659}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &1501613969
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1501613967}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 0
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!33 &1501613970
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -74246,8 +74214,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 215.2657, y: 0}
-  m_SizeDelta: {x: 276.89703, y: 0}
+  m_AnchoredPosition: {x: 215.26575, y: 0}
+  m_SizeDelta: {x: 276.89697, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1554505476
 MonoBehaviour:
@@ -85810,36 +85778,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1759330969
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1759330970}
-  m_Layer: 10
-  m_Name: NoteColliders
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1759330970
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1759330969}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 47568659}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1759389848
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -87284,7 +87222,6 @@ MonoBehaviour:
     Color: {r: 1, g: 0.49019608, b: 0.49019608, a: 1}
   beatlineFallbackColor: {r: 0.6666667, g: 0.32941177, b: 0.627451, a: 1}
   beatlineBarColor: {r: 0.1764706, g: 0.22857964, b: 0.7372549, a: 1}
-  laneCollider: {fileID: 1114892755}
 --- !u!1 &1788814699
 GameObject:
   m_ObjectHideFlags: 0
@@ -87832,7 +87769,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1809673899}
   - component: {fileID: 1809673898}
-  - component: {fileID: 1809673900}
   m_Layer: 11
   m_Name: Selection
   m_TagString: Untagged
@@ -87858,7 +87794,6 @@ MonoBehaviour:
   inspectorWindow: {fileID: 405529745}
   inspectorMenu: {fileID: 405529754}
   rangeSelectPreview: {fileID: 957675523}
-  selectMeshBuilder: {fileID: 1809673900}
 --- !u!4 &1809673899
 Transform:
   m_ObjectHideFlags: 0
@@ -87873,23 +87808,6 @@ Transform:
   m_Father: {fileID: 1022165531}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1809673900
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1809673897}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a075c3d70a8ef31538c77590700964da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameplayData: {fileID: 11400000, guid: ae19a07671eb9dc748d6346649a697b7, type: 2}
-  colliderPrefab: {fileID: 1435657967835132184, guid: e85c8483d9bfaa5d486d2ccbad3b981f,
-    type: 3}
-  colliderParent: {fileID: 1759330970}
-  capacity: 50
 --- !u!1 &1816530363
 GameObject:
   m_ObjectHideFlags: 0
@@ -97575,7 +97493,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultLineColor: {r: 1, g: 0.81465954, b: 0.2688679, a: 1}
   defaultPanelColor: {r: 1, g: 1, b: 1, a: 0.16078432}
-  verticalCollider: {fileID: 1501613969}
   verticalPanel: {fileID: 1501613970}
   verticalPanelRenderer: {fileID: 1501613971}
   gridParent: {fileID: 1499645090}

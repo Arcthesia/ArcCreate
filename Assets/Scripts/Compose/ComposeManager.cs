@@ -50,7 +50,6 @@ namespace ArcCreate.Compose
             Services.Gameplay = gameplay ?? throw new System.Exception("Could not load gameplay scene");
             gameplay.EnablePauseMenu = false;
             gameplay.ShouldNotifyOnAudioEnd = false;
-            gameplay.Chart.EnableColliderGeneration = true;
             TransitionScene.Instance.SetTargetCamera(gameplay.Camera.UICamera, "Topmost", 99);
             TransitionScene.Instance.TriangleTileGameObject.SetActive(false);
             TransitionScene.Instance.UpdateCameraStatus();

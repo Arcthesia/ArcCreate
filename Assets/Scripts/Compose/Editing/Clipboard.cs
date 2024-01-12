@@ -142,7 +142,6 @@ namespace ArcCreate.Compose.Editing
                 }
 
                 command.Execute();
-                Services.Gameplay.Chart.EnableColliderGeneration = false;
                 Services.Gameplay.Chart.EnableArcRebuildSegment = false;
 
                 var (success, timing) = await Services.Cursor.RequestTimingSelection(
@@ -166,7 +165,6 @@ namespace ArcCreate.Compose.Editing
                     });
                 if (success)
                 {
-                    Services.Gameplay.Chart.EnableColliderGeneration = true;
                     Services.Gameplay.Chart.EnableArcRebuildSegment = true;
                     ApplyTimingToPastingNotes(timing, newNotes, anchorNote);
                     Services.Gameplay.Chart.UpdateEvents(newNotes);
@@ -199,7 +197,6 @@ namespace ArcCreate.Compose.Editing
                 }
                 else
                 {
-                    Services.Gameplay.Chart.EnableColliderGeneration = true;
                     Services.Gameplay.Chart.EnableArcRebuildSegment = true;
                     command.Undo();
                 }

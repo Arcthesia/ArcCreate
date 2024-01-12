@@ -10,8 +10,7 @@ namespace ArcCreate.Compose.Cursor
     [EditorScope("Cursor")]
     public class CursorService : MonoBehaviour, ICursorService
     {
-        [SerializeField] private MeshCollider laneCollider;
-        [SerializeField] private MeshCollider verticalCollider;
+        [SerializeField] private Transform verticalPlane;
         [SerializeField] private LineRenderer cursorLaneTiming;
         [SerializeField] private LineRenderer cursorLaneX;
         [SerializeField] private LineRenderer cursorVerticalX;
@@ -88,7 +87,7 @@ namespace ArcCreate.Compose.Cursor
             Func<Vector2, bool> constraint = null)
         {
             this.showVerticalAtTiming = showVerticalAtTiming;
-            verticalCollider.gameObject.SetActive(true);
+            verticalPlane.gameObject.SetActive(true);
             var result = await RequestValue(
                 confirm: confirm,
                 cancel: cancel,
@@ -96,7 +95,7 @@ namespace ArcCreate.Compose.Cursor
                 update: update,
                 constraint: constraint);
 
-            verticalCollider.gameObject.SetActive(false);
+            verticalPlane.gameObject.SetActive(false);
             return result;
         }
 
@@ -128,7 +127,7 @@ namespace ArcCreate.Compose.Cursor
             Camera gameplayCamera = Services.Gameplay.Camera.GameplayCamera;
             Vector2 mousePosition = Input.mousePosition;
             Ray ray = gameplayCamera.ScreenPointToRay(mousePosition);
-            bool isCursorHoveringOnTrack = laneCollider.Raycast(ray, out RaycastHit laneHit, 120);
+            bool isCursorHoveringOnTrack = RaycastToLanePlane(ray, out Vector3 laneHit);
             isHittingLane = isLaneCursorEnabled && isCursorHoveringOnTrack;
             if (isCursorHoveringOnTrack)
             {
@@ -150,9 +149,9 @@ namespace ArcCreate.Compose.Cursor
 
                 Ray ray = gameplayCamera.ScreenPointToRay(mousePosition);
 
-                bool isVerticalActive = verticalCollider.gameObject.activeInHierarchy;
-                bool isCursorHoveringOnTrack = laneCollider.Raycast(ray, out RaycastHit laneHit, 120);
-                isHittingVertical = verticalCollider.Raycast(ray, out RaycastHit verticalHit, 120);
+                bool isVerticalActive = verticalPlane.gameObject.activeInHierarchy;
+                bool isCursorHoveringOnTrack = RaycastToLanePlane(ray, out Vector3 laneHit);
+                isHittingVertical = RaycastToVerticalPlane(ray, out Vector3 verticalHit);
                 isHittingLane = isLaneCursorEnabled && isCursorHoveringOnTrack;
 
                 if (isCursorHoveringOnTrack)
@@ -160,7 +159,7 @@ namespace ArcCreate.Compose.Cursor
                     CheckScroll();
                 }
 
-                if (!isHittingVertical && isHittingLane)
+                if (!isVerticalActive && isHittingLane)
                 {
                     AlignLaneCursor(laneHit);
                 }
@@ -178,7 +177,7 @@ namespace ArcCreate.Compose.Cursor
                     DisableVerticalCursor();
                 }
 
-                if (verticalCollider.gameObject.activeInHierarchy)
+                if (isVerticalActive)
                 {
                     UpdateVerticalZPosition();
                 }
@@ -202,13 +201,13 @@ namespace ArcCreate.Compose.Cursor
             Services.Gameplay.Audio.ChartTiming = snap;
         }
 
-        private void AlignLaneCursor(RaycastHit hit)
+        private void AlignLaneCursor(Vector3 hit)
         {
             cursorLaneTiming.gameObject.SetActive(true);
             cursorLaneX.gameObject.SetActive(true);
 
             var tg = Services.Gameplay.Chart.GetTimingGroup(Values.EditingTimingGroup.Value);
-            int timing = tg.GetTimingFromZPosition(hit.point.z);
+            int timing = tg.GetTimingFromZPosition(hit.z);
             selectingTiming = Services.Grid.SnapTimingToGridIfGridIsEnabled(timing);
             double fp = tg.GetFloorPositionFromCurrent(selectingTiming);
             float z = Gameplay.ArcFormula.FloorPositionToZ(fp);
@@ -218,12 +217,12 @@ namespace ArcCreate.Compose.Cursor
                 to: new Vector3(Values.LaneToX, 0, z));
 
             cursorLaneX.DrawLine(
-                from: new Vector3(hit.point.x, 0, Gameplay.Values.TrackLengthBackward),
-                to: new Vector3(hit.point.x, 0, -Gameplay.Values.TrackLengthForward));
+                from: new Vector3(hit.x, 0, Gameplay.Values.TrackLengthBackward),
+                to: new Vector3(hit.x, 0, -Gameplay.Values.TrackLengthForward));
 
-            selectingLane = Gameplay.ArcFormula.WorldXToLane(hit.point.x);
+            selectingLane = Gameplay.ArcFormula.WorldXToLane(hit.x);
             cursorWorldPosition.z = z;
-            cursorWorldPosition.x = hit.point.x;
+            cursorWorldPosition.x = hit.x;
         }
 
         private void DisableLaneCursor()
@@ -232,13 +231,13 @@ namespace ArcCreate.Compose.Cursor
             cursorLaneX.gameObject.SetActive(false);
         }
 
-        private void AlignVerticalCursor(RaycastHit hit)
+        private void AlignVerticalCursor(Vector3 hit)
         {
             cursorVerticalX.gameObject.SetActive(true);
             cursorVerticalY.gameObject.SetActive(true);
 
-            Vector2 snapped = Services.Grid.SnapPointToGridIfEnabled(hit.point);
-            float verticalScale = verticalCollider.transform.localScale.y;
+            Vector2 snapped = Services.Grid.SnapPointToGridIfEnabled(hit);
+            float verticalScale = verticalPlane.localScale.y;
 
             selectingVerticalPoint = new Vector2(
                 Gameplay.ArcFormula.WorldXToArc(snapped.x),
@@ -263,7 +262,7 @@ namespace ArcCreate.Compose.Cursor
             cursorWorldPosition.x = snapped.x;
 
             cursorWorldPosition.y = snapped.y;
-            cursorWorldPosition.z = hit.point.z;
+            cursorWorldPosition.z = hit.z;
         }
 
         private void DisableVerticalCursor()
@@ -278,9 +277,9 @@ namespace ArcCreate.Compose.Cursor
             double fp = tg.GetFloorPositionFromCurrent(showVerticalAtTiming);
             float z = Gameplay.ArcFormula.FloorPositionToZ(fp);
 
-            Vector3 pos = verticalCollider.transform.localPosition;
+            Vector3 pos = verticalPlane.localPosition;
             pos.z = z;
-            verticalCollider.transform.localPosition = pos;
+            verticalPlane.localPosition = pos;
         }
 
         // Amazing
@@ -322,6 +321,24 @@ namespace ArcCreate.Compose.Cursor
             }
 
             return (wasSuccessful, result);
+        }
+
+        private bool RaycastToLanePlane(Ray ray, out Vector3 hit)
+        {
+            float scalar = -ray.origin.y / ray.direction.y;
+            hit = ray.origin + (ray.direction * scalar);
+            (float fromX, float fromZ, float toX, float toZ) = Services.Grid.GetTimingGridBound();
+            return hit.x >= fromX && hit.x <= toX
+                && hit.z >= fromZ && hit.z <= toZ;
+        }
+
+        private bool RaycastToVerticalPlane(Ray ray, out Vector3 hit)
+        {
+            float scalar = (verticalPlane.transform.position.z - ray.origin.z) / ray.direction.z;
+            hit = ray.origin + (ray.direction * scalar);
+            (float fromX, float fromY, float toX, float toY) = Services.Grid.GetVerticalGridBound();
+            return hit.x >= fromX && hit.x <= toX
+                && hit.y >= fromY && hit.y <= toY;
         }
     }
 }

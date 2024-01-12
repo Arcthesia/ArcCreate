@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
+using ArcCreate.Utility.Extension;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Utility
@@ -184,8 +187,12 @@ namespace ArcCreate.Gameplay.Utility
             };
         }
 
-        public static Mesh GenerateColliderMesh(Arc arc)
+        public static void GenerateColliderTriangles(
+            Arc arc, List<Vector3> vertices, List<int> triangles, Vector3 pos, Vector3 scl)
         {
+            vertices.Clear();
+            triangles.Clear();
+
             float offset = arc.IsTrace ? Values.TraceMeshOffset : Values.ArcMeshOffset;
             float offsetHalf = offset / 2;
 
@@ -201,10 +208,6 @@ namespace ArcCreate.Gameplay.Utility
             // help
             if (arc.IsFirstArcOfGroup)
             {
-                Vector3[] vertices = new Vector3[3 + (segmentCount * 3) + 1];
-                Vector2[] uv = new Vector2[3 + (segmentCount * 3) + 1];
-                int[] triangles = new int[(12 * segmentCount) + 6];
-
                 // . 4
                 //  /|\
                 // 5 | 6
@@ -213,17 +216,17 @@ namespace ArcCreate.Gameplay.Utility
                 // 2 | 3
                 //  \0/
                 bool arcIsBackward = tg.GetFloorPosition(Mathf.Min(arc.Timing + (int)segmentLength, arc.EndTiming)) < arc.FloorPosition;
-                vertices[0] = new Vector3(0, -offsetHalf, arcIsBackward ? -offsetHalf : offsetHalf);
-                vertices[1] = new Vector3(0, offsetHalf, 0);
-                vertices[2] = new Vector3(offset, -offsetHalf, 0);
-                vertices[3] = new Vector3(-offset, -offsetHalf, 0);
+                vertices.Add(new Vector3(0, -offsetHalf, arcIsBackward ? -offsetHalf : offsetHalf)); // 0
+                vertices.Add(new Vector3(0, offsetHalf, 0)); // 1
+                vertices.Add(new Vector3(offset, -offsetHalf, 0)); // 2
+                vertices.Add(new Vector3(-offset, -offsetHalf, 0)); // 3
 
-                triangles[0] = 0;
-                triangles[1] = 2;
-                triangles[2] = 1;
-                triangles[3] = 0;
-                triangles[4] = 1;
-                triangles[5] = 3;
+                triangles.Add(0); // 0
+                triangles.Add(2); // 1
+                triangles.Add(1); // 2
+                triangles.Add(0); // 3
+                triangles.Add(1); // 4
+                triangles.Add(3); // 5
 
                 for (int i = 0; i < segmentCount; i++)
                 {
@@ -237,49 +240,38 @@ namespace ArcCreate.Gameplay.Utility
                     float dy = y - baseY;
                     float dz = z - baseZ;
 
-                    vertices[(i * 3) + 4] = new Vector3(dx, dy + offsetHalf, dz);
-                    vertices[(i * 3) + 5] = new Vector3(dx + offset, dy - offsetHalf, dz);
-                    vertices[(i * 3) + 6] = new Vector3(dx - offset, dy - offsetHalf, dz);
+                    vertices.Add(new Vector3(dx, dy + offsetHalf, dz)); // 3i + 4
+                    vertices.Add(new Vector3(dx + offset, dy - offsetHalf, dz)); // 3i + 5
+                    vertices.Add(new Vector3(dx - offset, dy - offsetHalf, dz)); // 3i + 6
 
-                    triangles[(i * 12) + 6] = (i * 3) + 1;
-                    triangles[(i * 12) + 7] = (i * 3) + 2;
-                    triangles[(i * 12) + 8] = (i * 3) + 5;
+                    triangles.Add((i * 3) + 1); // 12i + 6
+                    triangles.Add((i * 3) + 2); // 12i + 7
+                    triangles.Add((i * 3) + 5); // 12i + 8
 
-                    triangles[(i * 12) + 9] = (i * 3) + 1;
-                    triangles[(i * 12) + 10] = (i * 3) + 5;
-                    triangles[(i * 12) + 11] = (i * 3) + 4;
+                    triangles.Add((i * 3) + 1); // 12i + 9
+                    triangles.Add((i * 3) + 5); // 12i + 10
+                    triangles.Add((i * 3) + 4); // 12i + 11
 
-                    triangles[(i * 12) + 12] = (i * 3) + 1;
-                    triangles[(i * 12) + 13] = (i * 3) + 4;
-                    triangles[(i * 12) + 14] = (i * 3) + 3;
+                    triangles.Add((i * 3) + 1); // 12i + 12
+                    triangles.Add((i * 3) + 4); // 12i + 13
+                    triangles.Add((i * 3) + 3); // 12i + 14
 
-                    triangles[(i * 12) + 15] = (i * 3) + 3;
-                    triangles[(i * 12) + 16] = (i * 3) + 4;
-                    triangles[(i * 12) + 17] = (i * 3) + 6;
+                    triangles.Add((i * 3) + 3); // 12i + 15
+                    triangles.Add((i * 3) + 4); // 12i + 16
+                    triangles.Add((i * 3) + 6); // 12i + 17
                 }
-
-                return new Mesh
-                {
-                    vertices = vertices,
-                    uv = uv,
-                    triangles = triangles,
-                };
             }
             else
             {
-                Vector3[] vertices = new Vector3[3 + (segmentCount * 3)];
-                Vector2[] uv = new Vector2[3 + (segmentCount * 3)];
-                int[] triangles = new int[12 * segmentCount];
-
                 // . 3
                 //  / \
                 // 4   5
                 // | 0 |
                 // |/ \|
                 // 1   2
-                vertices[0] = new Vector3(0, offsetHalf, 0);
-                vertices[1] = new Vector3(offset, -offsetHalf, 0);
-                vertices[2] = new Vector3(-offset, -offsetHalf, 0);
+                vertices.Add(new Vector3(0, offsetHalf, 0)); // 0
+                vertices.Add(new Vector3(offset, -offsetHalf, 0)); // 1
+                vertices.Add(new Vector3(-offset, -offsetHalf, 0)); // 2
                 for (int i = 0; i < segmentCount; i++)
                 {
                     int timing = Mathf.RoundToInt(arc.Timing + (segmentLength * (i + 1)));
@@ -292,33 +284,34 @@ namespace ArcCreate.Gameplay.Utility
                     float dy = y - baseY;
                     float dz = z - baseZ;
 
-                    vertices[(i * 3) + 3] = new Vector3(dx, dy + offsetHalf, dz);
-                    vertices[(i * 3) + 4] = new Vector3(dx + offset, dy - offsetHalf, dz);
-                    vertices[(i * 3) + 5] = new Vector3(dx - offset, dy - offsetHalf, dz);
+                    vertices.Add(new Vector3(dx, dy + offsetHalf, dz)); // 3i + 3
+                    vertices.Add(new Vector3(dx + offset, dy - offsetHalf, dz)); // 3i + 4
+                    vertices.Add(new Vector3(dx - offset, dy - offsetHalf, dz)); // 3i + 5
 
-                    triangles[(i * 12) + 0] = (i * 3) + 0;
-                    triangles[(i * 12) + 1] = (i * 3) + 1;
-                    triangles[(i * 12) + 2] = (i * 3) + 4;
+                    triangles.Add((i * 3) + 0); // 12i + 0
+                    triangles.Add((i * 3) + 1); // 12i + 1
+                    triangles.Add((i * 3) + 4); // 12i + 2
 
-                    triangles[(i * 12) + 3] = (i * 3) + 0;
-                    triangles[(i * 12) + 4] = (i * 3) + 4;
-                    triangles[(i * 12) + 5] = (i * 3) + 3;
+                    triangles.Add((i * 3) + 0); // 12i + 3
+                    triangles.Add((i * 3) + 4); // 12i + 4
+                    triangles.Add((i * 3) + 3); // 12i + 5
 
-                    triangles[(i * 12) + 6] = (i * 3) + 0;
-                    triangles[(i * 12) + 7] = (i * 3) + 3;
-                    triangles[(i * 12) + 8] = (i * 3) + 2;
+                    triangles.Add((i * 3) + 0); // 12i + 6
+                    triangles.Add((i * 3) + 3); // 12i + 7
+                    triangles.Add((i * 3) + 2); // 12i + 8
 
-                    triangles[(i * 12) + 9] = (i * 3) + 2;
-                    triangles[(i * 12) + 10] = (i * 3) + 3;
-                    triangles[(i * 12) + 11] = (i * 3) + 5;
+                    triangles.Add((i * 3) + 2); // 12i + 9
+                    triangles.Add((i * 3) + 3); // 12i + 10
+                    triangles.Add((i * 3) + 5); // 12i + 11
                 }
+            }
 
-                return new Mesh
-                {
-                    vertices = vertices,
-                    uv = uv,
-                    triangles = triangles,
-                };
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                Vector3 v = vertices[i];
+                v.Multiply(scl);
+                v += pos;
+                vertices[i] = v;
             }
         }
     }

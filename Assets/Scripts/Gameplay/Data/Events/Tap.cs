@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
+using ArcCreate.Utility.Extension;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
@@ -53,18 +54,27 @@ namespace ArcCreate.Gameplay.Data
             return Timing.CompareTo(other.Timing);
         }
 
-        public override Mesh GetColliderMesh()
+        public override void GenerateColliderTriangles(int timing, List<Vector3> vertices, List<int> triangles)
         {
-            return Services.Render.TapMesh;
-        }
+            Mesh mesh = Services.Render.TapMesh;
+            vertices.Clear();
+            triangles.Clear();
+            mesh.GetVertices(vertices);
+            mesh.GetTriangles(triangles, 0);
 
-        public override void GetColliderPosition(int timing, out Vector3 pos, out Vector3 scl)
-        {
             float z = ZPos(TimingGroupInstance.GetFloorPosition(timing));
             Vector3 basePos = new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
-            pos = (TimingGroupInstance.GroupProperties.FallDirection * z) + basePos;
-            scl = TimingGroupInstance.GroupProperties.ScaleIndividual;
+            Vector3 pos = (TimingGroupInstance.GroupProperties.FallDirection * z) + basePos;
+            Vector3 scl = TimingGroupInstance.GroupProperties.ScaleIndividual;
             scl.z *= ArcFormula.CalculateTapSizeScalar(z);
+
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                Vector3 v = vertices[i];
+                v = v.Multiply(scl);
+                v += pos;
+                vertices[i] = v;
+            }
         }
 
         public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)

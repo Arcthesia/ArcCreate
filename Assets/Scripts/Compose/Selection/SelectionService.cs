@@ -24,12 +24,11 @@ namespace ArcCreate.Compose.Selection
         [SerializeField] private GameObject inspectorWindow;
         [SerializeField] private InspectorMenu inspectorMenu;
         [SerializeField] private MarkerRange rangeSelectPreview;
-        [SerializeField] private SelectMeshBuilder selectMeshBuilder;
 
         private readonly HashSet<Note> selectedNotes = new HashSet<Note>();
         private float latestSelectedDistance = 0;
         private bool rangeSelected;
-        private readonly RaycastHit[] hitResults = new RaycastHit[32];
+        private readonly NoteRaycastHit[] hitResults = new NoteRaycastHit[32];
         private readonly HashSet<Note> search = new HashSet<Note>();
 
         public event Action<HashSet<Note>> OnSelectionChange;
@@ -58,7 +57,6 @@ namespace ArcCreate.Compose.Selection
                 return;
             }
 
-            selectMeshBuilder.RefreshCollider();
             await UniTask.NextFrame();
             if (TryGetNoteUnderCursor(out Note note, SelectionMode.Any))
             {
@@ -78,7 +76,6 @@ namespace ArcCreate.Compose.Selection
         [RequireGameplayLoaded]
         public async UniTask AddToSelection()
         {
-            selectMeshBuilder.RefreshCollider();
             await UniTask.NextFrame();
 
             if (TryGetNoteUnderCursor(out Note note, SelectionMode.Deselected))
@@ -94,7 +91,6 @@ namespace ArcCreate.Compose.Selection
         [RequireGameplayLoaded]
         public async UniTask RemoveFromSelection()
         {
-            selectMeshBuilder.RefreshCollider();
             await UniTask.NextFrame();
 
             if (TryGetNoteUnderCursor(out Note note, SelectionMode.Selected))
@@ -110,7 +106,6 @@ namespace ArcCreate.Compose.Selection
         [RequireGameplayLoaded]
         public async UniTask ToggleNoteSelection()
         {
-            selectMeshBuilder.RefreshCollider();
             await UniTask.NextFrame();
 
             if (TryGetNoteUnderCursor(out Note note, SelectionMode.Any))
@@ -336,7 +331,7 @@ namespace ArcCreate.Compose.Selection
             Vector2 mousePosition = Input.mousePosition;
             Ray ray = gameplayCamera.ScreenPointToRay(mousePosition);
 
-            int amount = Physics.RaycastNonAlloc(ray, hitResults, 99999, gameplayLayer);
+            int amount = NoteRaycaster.Raycast(ray, hitResults, 99999);
 
             if (TryGetNoteWithMinDistance(latestSelectedDistance, amount, out note, selectionMode))
             {
@@ -352,69 +347,66 @@ namespace ArcCreate.Compose.Selection
         {
             for (int i = 0; i < Mathf.Min(hitResults.Length, amount); i++)
             {
-                RaycastHit hit = hitResults[i];
+                NoteRaycastHit hit = hitResults[i];
 
-                if (hit.distance <= distance)
+                if (hit.HitDistance <= distance)
                 {
                     continue;
                 }
 
-                if (hit.point.z >= Gameplay.Values.TrackLengthBackward
-                 || hit.point.z <= -Gameplay.Values.TrackLengthForward)
+                if (hit.HitPoint.z >= Gameplay.Values.TrackLengthBackward
+                 || hit.HitPoint.z <= -Gameplay.Values.TrackLengthForward)
                 {
                     continue;
                 }
 
-                if (hit.transform.TryGetComponent<NoteCollider>(out var collider))
+                note = hit.Note;
+                if (!note.TimingGroupInstance.GroupProperties.Editable)
                 {
-                    note = collider.Note;
-                    if (!note.TimingGroupInstance.GroupProperties.Editable)
+                    continue;
+                }
+
+                int timing = Services.Gameplay.Audio.ChartTiming;
+
+                if (note is LongNote l)
+                {
+                    if (l.EndTiming < timing)
                     {
                         continue;
                     }
 
-                    int timing = Services.Gameplay.Audio.ChartTiming;
-
-                    if (note is LongNote l)
-                    {
-                        if (l.EndTiming < timing)
-                        {
-                            continue;
-                        }
-
-                        float startZ = l.ZPos(l.TimingGroupInstance.GetFloorPosition(timing));
-                        if (hit.point.z * startZ > 0 && l.Timing < timing)
-                        {
-                            continue;
-                        }
-                    }
-                    else if (note.Timing < timing)
+                    float startZ = l.ZPos(l.TimingGroupInstance.GetFloorPosition(timing));
+                    if (hit.HitPoint.z * startZ > 0 && l.Timing < timing)
                     {
                         continue;
                     }
+                }
+                else if (note.Timing < timing)
+                {
+                    continue;
+                }
 
-                    switch (selectionMode)
-                    {
-                        case SelectionMode.Any:
-                            latestSelectedDistance = hit.distance;
+                switch (selectionMode)
+                {
+                    case SelectionMode.Any:
+                        latestSelectedDistance = hit.HitDistance;
+                        return true;
+                    case SelectionMode.Selected:
+                        if (note.IsSelected)
+                        {
+                            latestSelectedDistance = hit.HitDistance;
                             return true;
-                        case SelectionMode.Selected:
-                            if (note.IsSelected)
-                            {
-                                latestSelectedDistance = hit.distance;
-                                return true;
-                            }
+                        }
 
-                            break;
-                        case SelectionMode.Deselected:
-                            if (!note.IsSelected)
-                            {
-                                latestSelectedDistance = hit.distance;
-                                return true;
-                            }
+                        break;
+                    case SelectionMode.Deselected:
+                        if (!note.IsSelected)
+                        {
+                            latestSelectedDistance = hit.HitDistance;
+                            return true;
+                        }
 
-                            break;
-                    }
+                        break;
                 }
             }
 

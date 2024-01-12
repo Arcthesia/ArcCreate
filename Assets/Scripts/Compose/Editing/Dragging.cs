@@ -128,7 +128,6 @@ namespace ArcCreate.Compose.Editing
             var command = new EventCommand(
                 name: I18n.S("Compose.Notify.History.Drag.Timing"),
                 update: events);
-            Services.Gameplay.Chart.EnableColliderGeneration = false;
             var (success, timing) = await Services.Cursor.RequestTimingSelection(
                 confirm,
                 cancel,
@@ -148,7 +147,6 @@ namespace ArcCreate.Compose.Editing
                     command.Execute();
                 });
 
-            Services.Gameplay.Chart.EnableColliderGeneration = true;
             if (!success)
             {
                 command.Undo();
@@ -282,7 +280,6 @@ namespace ArcCreate.Compose.Editing
                 name: I18n.S("Compose.Notify.History.Drag.Position"),
                 update: events);
 
-            Services.Gameplay.Chart.EnableColliderGeneration = false;
             var (success, position) = await Services.Cursor.RequestVerticalSelection(
                 confirm,
                 cancel,
@@ -304,7 +301,6 @@ namespace ArcCreate.Compose.Editing
                     command.Execute();
                 });
 
-            Services.Gameplay.Chart.EnableColliderGeneration = true;
             if (!success)
             {
                 command.Undo();

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
-using ArcCreate.Gameplay.Render;
+using ArcCreate.Utility.Extension;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
@@ -58,18 +58,27 @@ namespace ArcCreate.Gameplay.Data
             isSfx = !string.IsNullOrEmpty(Sfx) && Sfx != "none";
         }
 
-        public override Mesh GetColliderMesh()
+        public override void GenerateColliderTriangles(int timing, List<Vector3> vertices, List<int> triangles)
         {
-            return Services.Render.ArcTapMesh;
-        }
+            Mesh mesh = Services.Render.ArcTapMesh;
+            vertices.Clear();
+            triangles.Clear();
+            mesh.GetVertices(vertices);
+            mesh.GetTriangles(triangles, 0);
 
-        public override void GetColliderPosition(int timing, out Vector3 pos, out Vector3 scl)
-        {
             double fp = TimingGroupInstance.GetFloorPosition(timing);
             float z = ZPos(fp);
             Vector3 basePos = new Vector3(WorldX, WorldY, 0);
-            pos = (TimingGroupInstance.GroupProperties.FallDirection * z) + basePos;
-            scl = TimingGroupInstance.GroupProperties.ScaleIndividual;
+            Vector3 pos = (TimingGroupInstance.GroupProperties.FallDirection * z) + basePos;
+            Vector3 scl = TimingGroupInstance.GroupProperties.ScaleIndividual;
+
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                Vector3 v = vertices[i];
+                v = v.Multiply(scl);
+                v += pos;
+                vertices[i] = v;
+            }
         }
 
         public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)

@@ -12,12 +12,6 @@ namespace ArcCreate.Gameplay
         List<TimingGroup> TimingGroups { get; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether or not to recreate arc's collider mesh when rebuilding.
-        /// Useful for operations that rebuild the arcs every frame.
-        /// </summary>
-        bool EnableColliderGeneration { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether or not to recreate arc segments collider mesh when rebuilding.
         /// Useful for operations that rebuild the arcs every frame.
         /// </summary>

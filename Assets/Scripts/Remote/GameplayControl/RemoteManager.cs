@@ -177,7 +177,6 @@ namespace ArcCreate.Remote.Gameplay
         private void UseGameplay(IGameplayControl gameplay)
         {
             gameplay.ShouldNotifyOnAudioEnd = false;
-            gameplay.Chart.EnableColliderGeneration = false;
             remoteGameplayControl.SetGameplay(gameplay);
             foreach (var canvas in canvases)
             {
