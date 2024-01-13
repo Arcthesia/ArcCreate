@@ -684,7 +684,7 @@ Compose:
           ScoreDisplay: 分数显示设置
         Judgement:
           Name: 判断设置
-          NotUsedInAutoOrIdle: "在使用【自动】或【无操作【输入模式时，以下这些选项将不起作用："
+          NotUsedInAutoOrIdle: "在使用【自动】或【无操作】输入模式时，以下这些选项将不起作用："
           EarlyLatePosition: Early/Late显示位置
           ShowMsDifference: 显示与Perfect (Max)的ms差距
           ShowJudgement: "判断显示设置："
