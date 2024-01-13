@@ -17,10 +17,10 @@ Format:
   Exception:
     File: |-
       读取谱面文件{File}时发生错误
+      {Error}
     SingleErrorFormat: |-
       错误位于第{LineNumber}行的{EventType}事件
-      语句内容："{Content}"
-      错误原因：
+      语句内容: "{Content}".
       {Reason}
     SingleErrorShortFormat: |-
       {EventType}事件
@@ -267,10 +267,7 @@ Compose:
         你可以选择在外部编辑器中修复该错误，也可以关闭此对话框并使用"<{TabName}>"面板修复。
         
         错误信息：
-        错误行号：{LineNumber}
-        错误内容："{Content}"
-        事件类型：{EventType}
-        {Exception}
+        {Content}
       Confirm: 确认
     Macros:
       Title: 外置工具
@@ -687,7 +684,7 @@ Compose:
           ScoreDisplay: 分数显示设置
         Judgement:
           Name: 判断设置
-          NotUsedInAutoOrIdle: "在使用Auto或无操作输入模式时，以下这些选项将不起作用："
+          NotUsedInAutoOrIdle: "在使用【自动】或【无操作【输入模式时，以下这些选项将不起作用："
           EarlyLatePosition: Early/Late显示位置
           ShowMsDifference: 显示与Perfect (Max)的ms差距
           ShowJudgement: "判断显示设置："
@@ -870,8 +867,8 @@ Gameplay:
     Repeat:
       On: 循环练习【开】
       Off: 循环练习【关】
-      From: 选择起始位置
-      To: 选择结束位置
+      From: 选择起始时间
+      To: 选择结束时间
   Selection:
     SelectStatus:
       Singular: |-
@@ -944,12 +941,12 @@ Gameplay:
         Speed: 速度
         SpeedDetail: |-
           调节音符下落的速度。
-        EarlyLatePerfectDisplay: 纯粹【过早/过晚】
+        EarlyLatePerfectDisplay: 纯粹Early/Late
         EarlyLatePerfectDisplayDetail: |-
-          控制Pure判定时是否显示过早/过晚。
+          控制Pure判定时是否显示Early/Late
         EnablePractice: 启用练习模式
         ShowMsDifference: 显示各个判断的ms差距
-        ShowMsDifferenceDetail: 显示各个判断精确的ms差距，而不是过早/过晚。
+        ShowMsDifferenceDetail: 显示各个判断精确的ms差距，而不是Early/Late
       Audio:
         Name: 音频设置
         Offset: 偏移
@@ -967,12 +964,12 @@ Gameplay:
         Name: 视觉设置
         Colorblind: 色彩辅助模式
         ColorblindDetail: 使用其他的Arc颜色。
-        FrPmDisplay: FC/AP指示
+        FrPmDisplay: FC/AP指示器
         FrPmDisplayDetail: 调节FC/AP指示器的位置
         MaxDisplay: 理论值指示
         MaxDisplayDetail: 切换是否显示理论值指示器
-        EarlyLateDisplay: 过早/过晚指示
-        EarlyLateDisplayDetail: 调节过早/过晚提示的位置
+        EarlyLateDisplay: Early/Late指示
+        EarlyLateDisplayDetail: 调节Early/Late提示的位置
         ScoreDisplay: 分数显示设置
         LimitFramerate: 限制帧率
         LimitFramerateDetail: 限制帧率为60帧以省电。可能会增加延迟。
