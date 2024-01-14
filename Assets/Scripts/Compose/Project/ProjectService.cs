@@ -172,18 +172,21 @@ namespace ArcCreate.Compose.Project
         }
 
         [EditorAction("New", false, "<c-n>")]
+        [KeybindHint(Exclude = true)]
         public void StartCreatingNewProject()
         {
             OpenUnsavedChangesDialog(newProjectDialog.Open);
         }
 
         [EditorAction("Open", false, "<c-o>")]
+        [KeybindHint(Exclude = true)]
         public void StartOpeningProject()
         {
             OpenUnsavedChangesDialog(OnOpenConfirmed);
         }
 
         [EditorAction("Save", false, "<c-s>")]
+        [KeybindHint(Exclude = true)]
         [RequireGameplayLoaded]
         public void SaveProject()
         {

@@ -37,6 +37,7 @@ namespace ArcCreate.Compose.Timeline
         private bool IsPlaying => Services.Gameplay?.Audio.IsPlaying ?? false;
 
         [EditorAction("TogglePlay", false, "q")]
+        [KeybindHint(Priority = KeybindPriorities.Playback + 1)]
         [RequireGameplayLoaded]
         public void TogglePlay()
         {
@@ -53,6 +54,9 @@ namespace ArcCreate.Compose.Timeline
         [EditorAction("PlayReturn", false, "<space>")]
         [SubAction("Return", false, "<u-space>")]
         [SubAction("Pause", false, "q")]
+        [KeybindHint(Priority = KeybindPriorities.Playback)]
+        [KeybindHint("Return", Priority = KeybindPriorities.Playback + 2)]
+        [KeybindHint("Pause", Priority = KeybindPriorities.Playback + 1)]
         [RequireGameplayLoaded]
         public async UniTask StartPlayReturn(EditorAction action)
         {
@@ -80,6 +84,7 @@ namespace ArcCreate.Compose.Timeline
 
         [EditorAction("ScrollBackOneTick", false, "j")]
         [SubAction("Stop", false, "<u-j>")]
+        [KeybindHint(Exclude = true)]
         public async UniTask ScrollBackOneTick(EditorAction action)
         {
             SubAction stop = action.GetSubAction("Stop");
@@ -101,6 +106,7 @@ namespace ArcCreate.Compose.Timeline
 
         [EditorAction("ScrollForwardOneTick", false, "k")]
         [SubAction("Stop", false, "<u-k>")]
+        [KeybindHint(Exclude = true)]
         public async UniTask ScrollForwardOneTick(EditorAction action)
         {
             SubAction stop = action.GetSubAction("Stop");
@@ -122,6 +128,7 @@ namespace ArcCreate.Compose.Timeline
 
         [EditorAction("ScrollBackwardOneBeat", false, "h")]
         [SubAction("Stop", false, "<u-h>")]
+        [KeybindHint(Exclude = true)]
         public async UniTask ScrollBackwardOneBeat(EditorAction action)
         {
             SubAction stop = action.GetSubAction("Stop");
@@ -142,6 +149,7 @@ namespace ArcCreate.Compose.Timeline
 
         [EditorAction("ScrollForwardOneBeat", false, "l")]
         [SubAction("Stop", false, "<u-l>")]
+        [KeybindHint(Exclude = true)]
         public async UniTask ScrollForwardOneBeat(EditorAction action)
         {
             SubAction stop = action.GetSubAction("Stop");

@@ -69,6 +69,18 @@ namespace ArcCreate.Compose.Grid
         [SubAction("Slot8", false, "8")]
         [SubAction("Slot9", false, "9")]
         [SubAction("Slot0", false, "0")]
+        [KeybindHint(Priority = KeybindPriorities.Grid)]
+        [KeybindHint("Confirm", Exclude = true)]
+        [KeybindHint("Slot1", Priority = KeybindPriorities.Grid + 9)]
+        [KeybindHint("Slot2", Priority = KeybindPriorities.Grid + 8)]
+        [KeybindHint("Slot3", Priority = KeybindPriorities.Grid + 7)]
+        [KeybindHint("Slot4", Priority = KeybindPriorities.Grid + 6)]
+        [KeybindHint("Slot5", Priority = KeybindPriorities.Grid + 5)]
+        [KeybindHint("Slot6", Priority = KeybindPriorities.Grid + 4)]
+        [KeybindHint("Slot7", Priority = KeybindPriorities.Grid + 3)]
+        [KeybindHint("Slot8", Priority = KeybindPriorities.Grid + 2)]
+        [KeybindHint("Slot9", Priority = KeybindPriorities.Grid + 1)]
+        [KeybindHint("Slot0", Priority = KeybindPriorities.Grid + 0)]
         [RequireGameplayLoaded]
         public async UniTask SetSlot(EditorAction action)
         {

@@ -326,7 +326,7 @@ namespace ArcCreate.Compose.Navigation
                                 if (KeybindUtils.TryParseKeybind(keybindString, subAction, out Keybind keybind, out string reason))
                                 {
                                     keybinds.Add(keybind);
-                                    if (subfirst && !(subHint?.Exclude ?? false))
+                                    if (subfirst && !(subHint?.Exclude ?? false) && !(editorHint?.Exclude ?? false))
                                     {
                                         keybind.Priority = subHint?.Priority ?? 0;
                                         keybindsToDisplayHint.Add(keybind);

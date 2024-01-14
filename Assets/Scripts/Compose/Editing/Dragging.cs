@@ -24,6 +24,9 @@ namespace ArcCreate.Compose.Editing
         [EditorAction("Timing", false, "<a-mouse1>")]
         [SubAction("Confirm", false, "<u-mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
+        [KeybindHint(Priority = KeybindPriorities.Dragging + 1)]
+        [KeybindHint("Confirm", Priority = KeybindPriorities.SubConfirm)]
+        [KeybindHint("Cancel", Priority = KeybindPriorities.SubCancel)]
         [WhitelistScopes(typeof(GridService), typeof(TimelineService))]
         public async UniTask DragTiming(EditorAction action)
         {
@@ -160,6 +163,9 @@ namespace ArcCreate.Compose.Editing
         [EditorAction("Position", false, "<s-mouse1>")]
         [SubAction("Confirm", false, "<u-mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
+        [KeybindHint(Priority = KeybindPriorities.Dragging)]
+        [KeybindHint("Confirm", Priority = KeybindPriorities.SubConfirm)]
+        [KeybindHint("Cancel", Priority = KeybindPriorities.SubCancel)]
         [WhitelistScopes(typeof(GridService), typeof(TimelineService))]
         public async UniTask DragPosition(EditorAction action)
         {

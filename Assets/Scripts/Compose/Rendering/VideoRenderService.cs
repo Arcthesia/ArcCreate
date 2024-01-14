@@ -48,6 +48,7 @@ namespace ArcCreate.Compose.Rendering
 
         [EditorAction("Start", false)]
         [SubAction("Cancel", false, "<esc>")]
+        [KeybindHint(Priority = KeybindPriorities.SubCancel)]
         public async UniTask StartRender(EditorAction editorAction)
         {
             Services.Gameplay.Audio.Pause();

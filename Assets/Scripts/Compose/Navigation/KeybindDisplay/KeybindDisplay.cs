@@ -45,7 +45,7 @@ namespace ArcCreate.Compose.Navigation
                 keystrokes.Add(display);
             }
 
-            actionText.text = keybind.Action.I18nName;
+            actionText.text = I18n.S(keybind.Action.I18nName);
             Size = totalLength + actionText.preferredWidth + TotalPadding;
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Size);
         }

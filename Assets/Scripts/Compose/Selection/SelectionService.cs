@@ -46,6 +46,7 @@ namespace ArcCreate.Compose.Selection
         }
 
         [EditorAction("Single", false, "<mouse1>")]
+        [KeybindHint(Priority = KeybindPriorities.Selection + 4)]
         [RequireGameplayLoaded]
         public void SelectSingle()
         {
@@ -72,6 +73,7 @@ namespace ArcCreate.Compose.Selection
         }
 
         [EditorAction("Add", false, "<s-h-mouse2>")]
+        [KeybindHint(Priority = KeybindPriorities.Selection + 2)]
         [RequireGameplayLoaded]
         public void AddToSelection()
         {
@@ -85,6 +87,7 @@ namespace ArcCreate.Compose.Selection
         }
 
         [EditorAction("Remove", false, "<a-h-mouse2>")]
+        [KeybindHint(Priority = KeybindPriorities.Selection + 1)]
         [RequireGameplayLoaded]
         public void RemoveFromSelection()
         {
@@ -98,6 +101,7 @@ namespace ArcCreate.Compose.Selection
         }
 
         [EditorAction("Toggle", false, "<c-mouse1>")]
+        [KeybindHint(Priority = KeybindPriorities.Selection + 3)]
         [RequireGameplayLoaded]
         public void ToggleNoteSelection()
         {
@@ -134,6 +138,7 @@ namespace ArcCreate.Compose.Selection
         }
 
         [EditorAction("ArcChain", false, "c")]
+        [KeybindHint(Exclude = true)]
         [RequireGameplayLoaded]
         [RequireSelection]
         public void SelectArcChain()
@@ -167,6 +172,8 @@ namespace ArcCreate.Compose.Selection
         }
 
         [EditorAction("ToggleArcTapAndArc", false, "v")]
+        [KeybindHint(Exclude = true)]
+        [RequireSelection]
         public void SwitchSelectArcAndArcTap()
         {
             search.Clear();
@@ -228,6 +235,7 @@ namespace ArcCreate.Compose.Selection
         }
 
         [EditorAction("RangeSelect", true, "<c-r>")]
+        [KeybindHint(Priority = KeybindPriorities.Selection)]
         [RequireGameplayLoaded]
         [SubAction("Confirm", false, "<mouse1>")]
         [SubAction("Cancel", false, "<esc>")]

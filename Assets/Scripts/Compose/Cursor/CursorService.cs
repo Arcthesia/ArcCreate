@@ -104,6 +104,7 @@ namespace ArcCreate.Compose.Cursor
         [SubAction("Confirm", false, "<cr>", "<mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
         [WhitelistScopes(typeof(CursorService), typeof(Grid.GridService))]
+        [KeybindHint(Exclude = true)]
         public async UniTask TestCursor(EditorAction action)
         {
             SubAction confirm = action.GetSubAction("Confirm");

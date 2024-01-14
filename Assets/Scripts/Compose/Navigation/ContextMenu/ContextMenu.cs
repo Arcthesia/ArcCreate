@@ -24,6 +24,7 @@ namespace ArcCreate.Compose.Navigation
 
         [EditorAction("Open", false, "<mouse2>")]
         [SubAction("Close", false, "<u-mouse1>", "<mouse2><u-mouse2>", "<u-mouse3>", "<esc>")]
+        [KeybindHint(Exclude = true)]
         [WhitelistScopes(all: true)]
         public async UniTask OpenContextMenu(EditorAction action)
         {

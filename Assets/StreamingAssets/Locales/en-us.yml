@@ -265,40 +265,140 @@ Compose:
         Name: Camera
         FreeCamera:
           Name: Start free camera
+          Confirm: Confirm
+          Cancel: Cancel
+          Faster: Move faster
+          Slower: Move slower
+          MoveForward: Foward
+          MoveLeft: Left
+          MoveRight: Right
+          MoveBackward: Back
+          MoveUp: Up
+          MoveDown: Down
+          LookUp: Look up
+          LookDown: Look down
+          LookLeft: Look left
+          LookRight: Look right
+          RollLeft: Roll left
+          RollRight: Roll right
       Grid:
         Name: Grid
         Toggle: Toggle grid
+        ToggleSlot:
+          Name: Grid
+          Slot1: Slot 1
+          Slot2: Slot 2
+          Slot3: Slot 3
+          Slot4: Slot 4
+          Slot5: Slot 5
+          Slot6: Slot 6
+          Slot7: Slot 7
+          Slot8: Slot 8
+          Slot9: Slot 9
+          Slot0: Slot 0
+      Macro:
+        Name: Macro
+        SelectEvents:
+          Confirm: Confirm
+          Cancel: Cancel
+        SelectLane:
+          Confirm: Confirm
+          Cancel: Cancel
+        SelectPosition:
+          Confirm: Confirm
+          Cancel: Cancel
+        SelectTiming:
+          Confirm: Confirm
+          Cancel: Cancel
       Display:
         Name: Display
         FullScreen: Toggle full screen
       Selection:
         Name: Selection
         Clear: Clear selection
+        Single: Select note
+        Add: Drag select
+        Remove: Drag deselect
+        Toggle: Toggle select
         RangeSelect:
           Name: Select notes between range
       Measure:
         Name: Measure
         Start:
           Name: Open measurer
+          Confirm: Confirm
+          Cancel: Cancel
+          CopyTiming: Copy timing
+          CopyPosition: Copy position
+          CopyX: Copy x coordinate
+          CopyY: Copy y coordinate
       Clipboard:
         Name: Clipboard
         Copy: Copy
         Cut: Cut
         Paste:
           Name: Paste
+          Confirm: Confirm pasting
           Cancel: Cancel pasting
+          Mirror: Mirror
         NamedPaste:
           Name: Paste
+          Confirm: Confirm pasting
           Cancel: Cancel pasting
+          Mirror: Mirror
         Clear: Clear clipboard
+      NoteCreation:
+        Name: Note creation
+        Start:
+          Name: Add note
+          Confirm: Confirm
+          Cancel: Cancel
+      NotePallete:
+        Name: Note palette
+        Arc: 
+          Name: Arc
+          Blue: Blue arc
+          Red: Red arc
+          Green: Green arc
+        ArcAlt: 
+          Name: Arc (alt)
+          Blue: Blue arc
+          Red: Red arc
+          Green: Green arc
+        Sky: Sky
+        Tap: Tap
+        Hold: Hold
+        Idle: Idle
       Delete:
         Name: Delete
-        Execute: Delete notes
+        Execute: Delete
       Mirror:
         Name: Mirror
         Horizontal: Mirror horizontally
         HorizontalNoColorSwitch: Mirror horizontally (ignore color)
         Vertical: Mirror vertically
+      Dragging:
+        Name: Dragging
+        Timing:
+          Name: Drag timing
+          Confirm: Confirm
+          Cancel: Cancel
+        Position:
+          Name: Drag position
+          Confirm: Confirm
+          Cancel: Cancel
+      Render:
+        Name: Rendering
+        Start:
+          Cancel: Cancel rendering
+      Playback:
+        Name: Timeline
+        TogglePlay: Play/Pause
+        PlayReturn:
+          Name: Play
+          Return: Pause and return
+          Pause: Pause
+
   Grid:
     # Please modify the comment lines only (lines beginning with '--')
     DefaultScript: |-

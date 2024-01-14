@@ -11,6 +11,7 @@ namespace ArcCreate.Compose.Editing
     public class Delete
     {
         [EditorAction("Execute", true, "d", "<del>")]
+        [KeybindHint(Priority = KeybindPriorities.Delete)]
         [SelectionService.RequireSelection]
         public void Execute()
         {

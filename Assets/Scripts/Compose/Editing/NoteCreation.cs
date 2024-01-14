@@ -24,7 +24,11 @@ namespace ArcCreate.Compose.Editing
         [EditorAction("Start", false, "<mouse1>")]
         [SubAction("Confirm", false, "<mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
+        [KeybindHint(Priority = KeybindPriorities.NoteCreation)]
+        [KeybindHint("Confirm", Priority = KeybindPriorities.SubConfirm)]
+        [KeybindHint("Cancel", Priority = KeybindPriorities.SubCancel)]
         [RequireGameplayLoaded]
+        [NotePallete.RequirePallete]
         [WhitelistScopes(typeof(Timeline.TimelineService), typeof(Grid.GridService), typeof(Cursor.CursorService), typeof(NotePallete), typeof(Mirror))]
         public async UniTask StartCreatingNote(EditorAction action)
         {

@@ -16,6 +16,7 @@ namespace ArcCreate.Compose.Editing
         private readonly Dictionary<KeyCode, HashSet<Note>> namedClipboards = new Dictionary<KeyCode, HashSet<Note>>();
 
         [EditorAction("Copy", true, "<c-c>")]
+        [KeybindHint(Priority = KeybindPriorities.Clipboard + 2)]
         [SelectionService.RequireSelection]
         public void Copy()
         {
@@ -27,6 +28,7 @@ namespace ArcCreate.Compose.Editing
         }
 
         [EditorAction("Cut", true, "<c-x>")]
+        [KeybindHint(Priority = KeybindPriorities.Clipboard + 1)]
         [SelectionService.RequireSelection]
         public void Cut()
         {
@@ -40,10 +42,14 @@ namespace ArcCreate.Compose.Editing
         }
 
         [EditorAction("Paste", true, "<c-v>")]
+        [KeybindHint(Priority = KeybindPriorities.Clipboard + 3)]
         [RequireClipboard]
         [SubAction("Confirm", false, "<mouse1>")]
         [SubAction("Mirror", false, "m")]
         [SubAction("Cancel", true, "<esc>")]
+        [KeybindHint("Confirm", Priority = KeybindPriorities.SubConfirm)]
+        [KeybindHint("Cancel", Priority = KeybindPriorities.SubCancel)]
+        [KeybindHint("Mirror", Priority = KeybindPriorities.Mirror)]
         [WhitelistScopes(typeof(Grid.GridService), typeof(Timeline.TimelineService), typeof(NotePallete), typeof(Mirror))]
         public async UniTask Paste(EditorAction action)
         {
@@ -61,6 +67,7 @@ namespace ArcCreate.Compose.Editing
         }
 
         [EditorAction("NamedCopy", false, "<c-a-c>")]
+        [KeybindHint(Exclude = true)]
         [SelectionService.RequireSelection]
         public async UniTask NamedCopy()
         {
@@ -81,6 +88,7 @@ namespace ArcCreate.Compose.Editing
         }
 
         [EditorAction("NamedCut", false, "<c-a-x>")]
+        [KeybindHint(Exclude = true)]
         [SelectionService.RequireSelection]
         public async UniTask NamedCut()
         {
@@ -108,6 +116,7 @@ namespace ArcCreate.Compose.Editing
         [SubAction("Confirm", false, "<mouse1>")]
         [SubAction("Mirror", false, "m")]
         [SubAction("Cancel", true, "<esc>")]
+        [KeybindHint(Exclude = true)]
         [WhitelistScopes(typeof(Grid.GridService), typeof(Timeline.TimelineService), typeof(NotePallete), typeof(Mirror))]
         public async UniTask NamedPaste(EditorAction action)
         {

@@ -19,6 +19,7 @@ namespace ArcCreate.Compose.Components
         [SerializeField] private float hideHintDuration;
 
         [EditorAction("FullScreen", true, "<f11>")]
+        [KeybindHint(Exclude = true)]
         public void Toggle()
         {
             if (Values.FullScreen.Value)
