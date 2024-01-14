@@ -382,6 +382,7 @@ namespace ArcCreate.Compose.EventsEditor
 
         private void OnEnable()
         {
+            ReloadGroup(Values.EditingTimingGroup.Value);
             if (marker != null)
             {
                 marker.gameObject.SetActive(Selected != null);

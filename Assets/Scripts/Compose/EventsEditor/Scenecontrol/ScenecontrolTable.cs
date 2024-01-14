@@ -226,6 +226,7 @@ namespace ArcCreate.Compose.EventsEditor
 
         private void OnTypenameChange(int value)
         {
+            Selected = null;
             currentTypename = argNames.Keys.ElementAt(value);
             horizontalScrollbar.value = 0;
             Rebuild();
@@ -304,6 +305,7 @@ namespace ArcCreate.Compose.EventsEditor
 
         private void OnEnable()
         {
+            Rebuild();
             if (marker != null)
             {
                 marker.gameObject.SetActive(Selected != null);
