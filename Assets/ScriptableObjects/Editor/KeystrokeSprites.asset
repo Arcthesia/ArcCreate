@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77803a2d810aa80409e8aba1294c42a2, type: 3}
+  m_Name: KeystrokeSprites
+  m_EditorClassIdentifier: 
+  releaseContainerSprite: {fileID: 0}
+  pressContainerSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  leftMouseSprite: {fileID: 21300000, guid: dad1647e22ad1c54c964143605fb560e, type: 3}
+  midMouseSprite: {fileID: 21300000, guid: 225247e2b9e7e634e88944fe71911f85, type: 3}
+  rightMouseSprite: {fileID: 21300000, guid: 72e8b1d051a2a2b4d86da4059857c682, type: 3}
+  releaseColor: {r: 0.6132076, g: 0.6103151, b: 0.6103151, a: 1}
+  pressColor: {r: 0.18431373, g: 0.18431373, b: 0.18431373, a: 1}

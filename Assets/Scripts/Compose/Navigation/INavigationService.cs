@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace ArcCreate.Compose.Navigation
@@ -40,10 +41,13 @@ namespace ArcCreate.Compose.Navigation
         bool ShouldExecute(IAction action);
 
         /// <summary>
-        /// Gets all actions that has their requirements fulfilled.
+        /// Gets all actions that has their context requirements fulfilled.
         /// </summary>
         /// <param name="calledByAction">Whether or not this method was called through an action.</param>
+        /// <param name="predicate">Additional predicate to filter actions.</param>
         /// <returns>The list of available editor actions.</returns>
-        List<IAction> GetContextMenuEntries(bool calledByAction = false);
+        List<IAction> GetExecutableActions(bool calledByAction = false, Func<IAction, bool> predicate = null);
+
+        List<Keybind> GetKeybindsToDisplay();
     }
 }

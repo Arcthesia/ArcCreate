@@ -27,6 +27,13 @@ namespace ArcCreate.Compose.Navigation
         // Last action in the list is considered top-priority, and only it will have sub-actions processed.
         // A stack was not used because lower-priority actions might exit early.
         private readonly List<EditorAction> actionsInProgress = new List<EditorAction>();
+        private readonly Dictionary<IContextRequirement, bool> contextRequirementStates = new Dictionary<IContextRequirement, bool>();
+        private readonly List<IAction> cachedActionList = new List<IAction>();
+        private readonly List<Keybind> keybindsToDisplayHint = new List<Keybind>();
+        private readonly List<Keybind> cachedKeybindList = new List<Keybind>();
+        private List<IContextRequirement> contextRequirements = new List<IContextRequirement>();
+
+        [SerializeField] private KeybindHintList keybindHintList;
 
         public string ConfigFilePath
         {
@@ -48,6 +55,8 @@ namespace ArcCreate.Compose.Navigation
             keybinds.Clear();
             activatingKeybinds.Clear();
             inProgressKeybinds.Clear();
+            contextRequirementStates.Clear();
+            keybindsToDisplayHint.Clear();
 
             Dictionary<string, List<string>> keybindOverrides = new Dictionary<string, List<string>>();
             Dictionary<string, List<string>> keybindActions = new Dictionary<string, List<string>>();
@@ -114,31 +123,59 @@ namespace ArcCreate.Compose.Navigation
             Services.Macros.RunMacro(fullPath);
         }
 
-        public List<IAction> GetContextMenuEntries(bool calledByAction = false)
+        public List<IAction> GetExecutableActions(bool calledByAction = false, Func<IAction, bool> predicate = null)
         {
             if (calledByAction)
             {
                 EditorAction caller = actionsInProgress[actionsInProgress.Count - 1];
                 actionsInProgress.RemoveAt(actionsInProgress.Count - 1);
-                List<IAction> result = allActions
-                    .Where(action => ShouldExecute(action) && action.ShouldDisplayOnContextMenu)
-                    .ToList();
+
+                cachedActionList.Clear();
+                foreach (var a in allActions)
+                {
+                    if (predicate.Invoke(a) & ShouldExecute(a))
+                    {
+                        cachedActionList.Add(a);
+                    }
+                }
+
                 actionsInProgress.Add(caller);
-                return result;
+                return cachedActionList;
             }
 
-            return allActions.Where(ShouldExecute).ToList();
+            cachedActionList.Clear();
+            foreach (var a in allActions)
+            {
+                if (predicate.Invoke(a) & ShouldExecute(a))
+                {
+                    cachedActionList.Add(a);
+                }
+            }
+
+            return cachedActionList;
+        }
+
+        public List<Keybind> GetKeybindsToDisplay()
+        {
+            cachedKeybindList.Clear();
+            foreach (var k in keybindsToDisplayHint)
+            {
+                if (ShouldExecute(k.Action))
+                {
+                    cachedKeybindList.Add(k);
+                }
+            }
+
+            return cachedKeybindList;
         }
 
         public bool ShouldExecute(IAction action)
         {
-            if (EventSystem.current.currentSelectedGameObject != null)
+            if (EventSystem.current.currentSelectedGameObject != null &&
+                (EventSystem.current.currentSelectedGameObject.GetComponent<TMP_InputField>() != null
+              || EventSystem.current.currentSelectedGameObject.GetComponent<InputField>() != null))
             {
-                if (EventSystem.current.currentSelectedGameObject.GetComponent<TMP_InputField>() != null
-                 || EventSystem.current.currentSelectedGameObject.GetComponent<InputField>() != null)
-                {
-                    return false;
-                }
+                return false;
             }
 
             if (Dialog.IsAnyOpen)
@@ -181,6 +218,7 @@ namespace ArcCreate.Compose.Navigation
         }
 
         [EditorAction("Cancel", false, "<esc>")]
+        [KeybindHint(Exclude = true)]
         private void CancelOngoingKeybinds()
         {
             foreach (var keybind in keybinds)
@@ -196,7 +234,19 @@ namespace ArcCreate.Compose.Navigation
 
         private void Update()
         {
+            if (EventSystem.current.currentSelectedGameObject != null &&
+                (EventSystem.current.currentSelectedGameObject.GetComponent<TMP_InputField>() != null
+              || EventSystem.current.currentSelectedGameObject.GetComponent<InputField>() != null))
+            {
+                keybindHintList.EnableDisplay = false;
+            }
+            else
+            {
+                keybindHintList.EnableDisplay = true;
+            }
+
             CheckKeybind();
+            CheckContextRequirementChanges();
         }
 
         private void OnDestroy()
@@ -246,6 +296,8 @@ namespace ArcCreate.Compose.Navigation
                     ContextRequirementAttribute[] contextRequirements = method.GetCustomAttributes(typeof(ContextRequirementAttribute)) as ContextRequirementAttribute[];
                     SubActionAttribute[] subActions = method.GetCustomAttributes(typeof(SubActionAttribute)) as SubActionAttribute[];
                     WhitelistScopesAttribute whitelist = method.GetCustomAttribute(typeof(WhitelistScopesAttribute)) as WhitelistScopesAttribute;
+                    KeybindHintAttribute[] hint = method.GetCustomAttributes(typeof(KeybindHintAttribute)) as KeybindHintAttribute[];
+                    KeybindHintAttribute editorHint = hint.FirstOrDefault(h => string.IsNullOrEmpty(h.SubActionId));
 
                     // Resolve subactions
                     List<SubAction> subActionInstances = new List<SubAction>();
@@ -254,6 +306,8 @@ namespace ArcCreate.Compose.Navigation
                         foreach (SubActionAttribute s in subActions)
                         {
                             SubAction subAction = new SubAction(s.Id, scopeId, actionId, s.ShouldDisplayOnContextMenu);
+                            KeybindHintAttribute subHint = hint.FirstOrDefault(h => h.SubActionId == s.Id);
+
                             IEnumerable<string> keybindStrings = s.DefaultHotkeys;
                             if (keybindOverrides.TryGetValue(subAction.FullPath, out List<string> keybindOverride))
                             {
@@ -261,6 +315,7 @@ namespace ArcCreate.Compose.Navigation
                                 Debug.Log(I18n.S("Compose.Navigation.KeybindOverride", subAction.FullPath));
                             }
 
+                            bool subfirst = true;
                             foreach (string keybindString in keybindStrings)
                             {
                                 if (string.IsNullOrEmpty(keybindString))
@@ -271,6 +326,12 @@ namespace ArcCreate.Compose.Navigation
                                 if (KeybindUtils.TryParseKeybind(keybindString, subAction, out Keybind keybind, out string reason))
                                 {
                                     keybinds.Add(keybind);
+                                    if (subfirst && !(subHint?.Exclude ?? false))
+                                    {
+                                        keybind.Priority = subHint?.Priority ?? 0;
+                                        keybindsToDisplayHint.Add(keybind);
+                                        subfirst = false;
+                                    }
                                 }
                                 else
                                 {
@@ -283,10 +344,19 @@ namespace ArcCreate.Compose.Navigation
                         }
                     }
 
+                    var contextRequirementList = contextRequirements?.Cast<IContextRequirement>().ToList() ?? new List<IContextRequirement>();
+                    foreach (var req in contextRequirementList)
+                    {
+                        if (!contextRequirementStates.ContainsKey(req))
+                        {
+                            contextRequirementStates.Add(req, false);
+                        }
+                    }
+
                     EditorAction action = new EditorAction(
                         id: actionId,
                         shouldDisplayOnContextMenu: editorAction.ShouldDisplayOnContextMenu,
-                        contextRequirements: contextRequirements?.Cast<IContextRequirement>().ToList() ?? new List<IContextRequirement>(),
+                        contextRequirements: contextRequirementList,
                         whitelist: whitelist?.Scopes.ToList() ?? new List<Type>(),
                         whitelistAll: whitelist?.All ?? false,
                         scope: new EditorScope(type, scopeId, instance),
@@ -303,6 +373,7 @@ namespace ArcCreate.Compose.Navigation
                         Debug.Log(I18n.S("Compose.Navigation.KeybindOverride", action.FullPath));
                     }
 
+                    bool first = true;
                     foreach (string keybindString in actionKeybindStrings)
                     {
                         if (string.IsNullOrEmpty(keybindString))
@@ -312,7 +383,13 @@ namespace ArcCreate.Compose.Navigation
 
                         if (KeybindUtils.TryParseKeybind(keybindString, action, out Keybind keybind, out string reason))
                         {
+                            keybind.Priority = editorHint?.Priority ?? 0;
                             keybinds.Add(keybind);
+                            if (first && !(editorHint?.Exclude ?? false))
+                            {
+                                keybindsToDisplayHint.Add(keybind);
+                                first = false;
+                            }
                         }
                         else
                         {
@@ -322,6 +399,9 @@ namespace ArcCreate.Compose.Navigation
 
                     allActions.Add(action);
                 }
+
+                keybindsToDisplayHint.Sort((a, b) => b.Priority.CompareTo(a.Priority));
+                contextRequirements = contextRequirementStates.Keys.ToList();
             }
         }
 
@@ -386,6 +466,16 @@ namespace ArcCreate.Compose.Navigation
                         inProgressKeybinds.Add(keybind);
                         break;
                 }
+            }
+
+            if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.LeftShift)
+             || Input.GetKeyDown(KeyCode.LeftAlt) || Input.GetKeyUp(KeyCode.LeftAlt)
+             || Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyUp(KeyCode.LeftControl)
+             || Input.GetKeyDown(KeyCode.RightShift) || Input.GetKeyUp(KeyCode.RightShift)
+             || Input.GetKeyDown(KeyCode.RightAlt) || Input.GetKeyUp(KeyCode.RightAlt)
+             || Input.GetKeyDown(KeyCode.RightControl) || Input.GetKeyUp(KeyCode.RightControl))
+            {
+                keybindHintList.RebuildList();
             }
 
             for (int i = 0; i < activatingKeybinds.Count; i++)
@@ -456,6 +546,26 @@ namespace ArcCreate.Compose.Navigation
             }
         }
 
+        private void CheckContextRequirementChanges()
+        {
+            bool changed = false;
+            foreach (IContextRequirement req in contextRequirements)
+            {
+                bool previousState = contextRequirementStates[req];
+                bool newState = req.CheckRequirement();
+                if (previousState != newState)
+                {
+                    changed = true;
+                    contextRequirementStates[req] = newState;
+                }
+            }
+
+            if (changed)
+            {
+                keybindHintList.RebuildList();
+            }
+        }
+
         private async UniTask ExecuteActionTask(EditorAction action)
         {
             // Ensure all keybinds that can trigger will do so first before resetting the rest
@@ -463,6 +573,7 @@ namespace ArcCreate.Compose.Navigation
             CancelOngoingKeybinds();
 
             actionsInProgress.Add(action);
+            bool rebuiltList = false;
 
             // Without try-catch the entire navigation system stops working when any exception is thrown
             try
@@ -471,7 +582,13 @@ namespace ArcCreate.Compose.Navigation
                 object obj = action.Method.Invoke(action.Scope.Instance, action.ParamsToPass);
                 if (obj is UniTask task)
                 {
-                    await task;
+                    await UniTask.DelayFrame(5);
+                    if (task.Status != UniTaskStatus.Succeeded)
+                    {
+                        rebuiltList = true;
+                        keybindHintList.RebuildList();
+                        await task;
+                    }
                 }
             }
             catch (Exception e)
@@ -480,6 +597,10 @@ namespace ArcCreate.Compose.Navigation
             }
 
             actionsInProgress.Remove(action);
+            if (rebuiltList)
+            {
+                keybindHintList.RebuildList();
+            }
         }
 
         private async UniTask ExecuteActionListTask(List<IAction> actions)

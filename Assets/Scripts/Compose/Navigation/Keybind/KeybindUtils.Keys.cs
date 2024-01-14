@@ -225,29 +225,133 @@ namespace ArcCreate.Compose.Navigation
             "<", ">", "?",
         };
 
-        public static readonly Dictionary<KeyCode, string> ShiftKeys = new Dictionary<KeyCode, string>()
+        public static readonly Dictionary<KeyCode, string> KeyToString = new Dictionary<KeyCode, string>()
         {
-            { KeyCode.BackQuote, "~" },
-            { KeyCode.Alpha1, "!" },
-            { KeyCode.Alpha2, "@" },
-            { KeyCode.Alpha3, "#" },
-            { KeyCode.Alpha4, "$" },
-            { KeyCode.Alpha5, "%" },
-            { KeyCode.Alpha6, "^" },
-            { KeyCode.Alpha7, "&" },
-            { KeyCode.Alpha8, "*" },
-            { KeyCode.Alpha9, "(" },
-            { KeyCode.Alpha0, ")" },
-            { KeyCode.Minus, "_" },
-            { KeyCode.Equals, "+" },
-            { KeyCode.LeftBracket, "{" },
-            { KeyCode.RightBracket, "}" },
-            { KeyCode.Backslash, "|" },
-            { KeyCode.Semicolon, ":" },
-            { KeyCode.Quote, "\"" },
-            { KeyCode.Comma, "<" },
-            { KeyCode.Period, ">" },
-            { KeyCode.Slash, "?" },
+            // Alphanumeric
+            { KeyCode.A, "A" },
+            { KeyCode.B, "B" },
+            { KeyCode.C, "C" },
+            { KeyCode.D, "D" },
+            { KeyCode.E, "E" },
+            { KeyCode.F, "F" },
+            { KeyCode.G, "G" },
+            { KeyCode.H, "H" },
+            { KeyCode.I, "I" },
+            { KeyCode.J, "J" },
+            { KeyCode.K, "K" },
+            { KeyCode.L, "L" },
+            { KeyCode.M, "M" },
+            { KeyCode.N, "N" },
+            { KeyCode.O, "O" },
+            { KeyCode.P, "P" },
+            { KeyCode.Q, "Q" },
+            { KeyCode.R, "R" },
+            { KeyCode.S, "S" },
+            { KeyCode.T, "T" },
+            { KeyCode.U, "U" },
+            { KeyCode.V, "V" },
+            { KeyCode.W, "W" },
+            { KeyCode.X, "X" },
+            { KeyCode.Y, "Y" },
+            { KeyCode.Z, "Z" },
+
+            // Arrows
+            { KeyCode.LeftArrow, "←" },
+            { KeyCode.RightArrow, "→" },
+            { KeyCode.UpArrow, "↑" },
+            { KeyCode.DownArrow, "↓" },
+
+            // Symbols
+            { KeyCode.BackQuote, "`" },
+            { KeyCode.Quote, "'" },
+            { KeyCode.Semicolon, "\"" },
+            { KeyCode.Comma, "," },
+            { KeyCode.Period, "." },
+            { KeyCode.Slash, "/" },
+            { KeyCode.Backslash, "\\" },
+            { KeyCode.LeftBracket, "[" },
+            { KeyCode.RightBracket, "]" },
+            { KeyCode.Minus, "-" },
+            { KeyCode.Equals, "=" },
+
+            // Special keys
+            { KeyCode.Backspace, "Backspace" },
+            { KeyCode.Menu, "Menu" },
+            { KeyCode.Delete, "Del" },
+            { KeyCode.Return, "Enter" },
+            { KeyCode.Escape, "Esc" },
+            { KeyCode.PageUp, "PgUp" },
+            { KeyCode.PageDown, "PgDn" },
+            { KeyCode.Space, "␣" },
+            { KeyCode.Tab, "Tab" },
+            { KeyCode.LeftShift, "LShift" },
+            { KeyCode.RightShift, "RShift" },
+            { KeyCode.LeftAlt, "LAlt" },
+            { KeyCode.RightAlt, "RAlt" },
+            { KeyCode.LeftControl, "LCtrl" },
+            { KeyCode.RightControl, "RCtrl" },
+            { KeyCode.Home, "Home" },
+            { KeyCode.End, "End" },
+            { KeyCode.Insert, "Ins" },
+            { KeyCode.CapsLock, "CapsLk" },
+            { KeyCode.Numlock, "NumLk" },
+            { KeyCode.Print, "PrtSc" },
+            { KeyCode.ScrollLock, "ScrLk" },
+            { KeyCode.Pause, "Pause" },
+            { KeyCode.LeftWindows, "LWin" },
+            { KeyCode.LeftApple, "LWin" },
+            { KeyCode.RightWindows, "RWin" },
+            { KeyCode.RightApple, "RWin" },
+
+            // Number
+            { KeyCode.Alpha1, "1" },
+            { KeyCode.Alpha2, "2" },
+            { KeyCode.Alpha3, "3" },
+            { KeyCode.Alpha4, "4" },
+            { KeyCode.Alpha5, "5" },
+            { KeyCode.Alpha6, "6" },
+            { KeyCode.Alpha7, "7" },
+            { KeyCode.Alpha8, "8" },
+            { KeyCode.Alpha9, "9" },
+            { KeyCode.Alpha0, "0" },
+
+            // Numpad
+            { KeyCode.Keypad0, "Numpad 0" },
+            { KeyCode.Keypad1, "Numpad 1" },
+            { KeyCode.Keypad2, "Numpad 2" },
+            { KeyCode.Keypad3, "Numpad 3" },
+            { KeyCode.Keypad4, "Numpad 4" },
+            { KeyCode.Keypad5, "Numpad 5" },
+            { KeyCode.Keypad6, "Numpad 6" },
+            { KeyCode.Keypad7, "Numpad 7" },
+            { KeyCode.Keypad8, "Numpad 8" },
+            { KeyCode.Keypad9, "Numpad 9" },
+            { KeyCode.KeypadEnter, "Numpad Enter" },
+            { KeyCode.KeypadDivide, "Numpad /" },
+            { KeyCode.KeypadMultiply, "Numpad *" },
+            { KeyCode.KeypadPlus, "Numpad +" },
+            { KeyCode.KeypadMinus, "Numpad -" },
+            { KeyCode.KeypadPeriod, "Numpad ." },
+            { KeyCode.KeypadEquals, "Numpad =" },
+
+            // F-keys
+            { KeyCode.F1, "F1" },
+            { KeyCode.F2, "F2" },
+            { KeyCode.F3, "F3" },
+            { KeyCode.F4, "F4" },
+            { KeyCode.F5, "F5" },
+            { KeyCode.F6, "F6" },
+            { KeyCode.F7, "F7" },
+            { KeyCode.F8, "F8" },
+            { KeyCode.F9, "F9" },
+            { KeyCode.F10, "F10" },
+            { KeyCode.F11, "F11" },
+            { KeyCode.F12, "F12" },
+
+            // Mouse keys
+            { KeyCode.Mouse0, "LMouse" },
+            { KeyCode.Mouse1, "RMouse" },
+            { KeyCode.Mouse2, "MMouse" },
         };
 
         public static readonly Dictionary<string, KeyCode> ModMap = new Dictionary<string, KeyCode>()
@@ -269,6 +373,16 @@ namespace ArcCreate.Compose.Navigation
                 key = default;
                 return false;
             }
+        }
+
+        public static string GetString(KeyCode key)
+        {
+            if (KeyToString.TryGetValue(key, out string str))
+            {
+                return str;
+            }
+
+            return string.Empty;
         }
     }
 }

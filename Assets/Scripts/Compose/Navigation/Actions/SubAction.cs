@@ -4,7 +4,11 @@ namespace ArcCreate.Compose.Navigation
     {
         private bool executed = false;
 
-        public SubAction(string id, string scopeId, string actionId, bool shouldDisplayOnContextMenu)
+        public SubAction(
+            string id,
+            string scopeId,
+            string actionId,
+            bool shouldDisplayOnContextMenu)
         {
             Id = id;
             FullPath = $"{scopeId}.{actionId}.{id}";

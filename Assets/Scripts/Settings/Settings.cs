@@ -77,6 +77,7 @@ namespace ArcCreate
         public static readonly BoolSetting SyncToDSPTime = new BoolSetting("Editor.SyncToDSPTime", false);
         public static readonly BoolSetting AllowCreatingNotesBackward = new BoolSetting("Editor.AllowCreatingNotesBackward", true);
         public static readonly BoolSetting EnableEasterEggs = new BoolSetting("Fun.EasterEggs", Application.isEditor);
+        public static readonly BoolSetting EnableKeybindHintDisplay = new BoolSetting("Editor.Navigation.KeybindHint", true);
 
         [RuntimeInitializeOnLoadMethod]
         public static void OnInitialize()

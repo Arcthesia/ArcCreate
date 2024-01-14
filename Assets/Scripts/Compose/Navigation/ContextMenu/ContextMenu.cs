@@ -41,7 +41,7 @@ namespace ArcCreate.Compose.Navigation
 
             bool optionsExist = false;
             float height = 0;
-            foreach (IAction entry in Services.Navigation.GetContextMenuEntries(true))
+            foreach (IAction entry in Services.Navigation.GetExecutableActions(true, a => a.ShouldDisplayOnContextMenu))
             {
                 if (categories.TryGetValue(entry.CategoryI18nName, out ContextMenuCategory category))
                 {

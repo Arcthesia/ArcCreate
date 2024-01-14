@@ -47,7 +47,7 @@ namespace ArcCreate.Compose.Selection
 
         [EditorAction("Single", false, "<mouse1>")]
         [RequireGameplayLoaded]
-        public async UniTask SelectSingle()
+        public void SelectSingle()
         {
             if (EventSystem.current.currentSelectedGameObject != null
              || !Services.Cursor.IsCursorAboveViewport
@@ -57,7 +57,6 @@ namespace ArcCreate.Compose.Selection
                 return;
             }
 
-            await UniTask.NextFrame();
             if (TryGetNoteUnderCursor(out Note note, SelectionMode.Any))
             {
                 ClearSelection();
@@ -74,10 +73,8 @@ namespace ArcCreate.Compose.Selection
 
         [EditorAction("Add", false, "<s-h-mouse2>")]
         [RequireGameplayLoaded]
-        public async UniTask AddToSelection()
+        public void AddToSelection()
         {
-            await UniTask.NextFrame();
-
             if (TryGetNoteUnderCursor(out Note note, SelectionMode.Deselected))
             {
                 AddNoteToSelection(note);
@@ -89,10 +86,8 @@ namespace ArcCreate.Compose.Selection
 
         [EditorAction("Remove", false, "<a-h-mouse2>")]
         [RequireGameplayLoaded]
-        public async UniTask RemoveFromSelection()
+        public void RemoveFromSelection()
         {
-            await UniTask.NextFrame();
-
             if (TryGetNoteUnderCursor(out Note note, SelectionMode.Selected))
             {
                 RemoveNoteFromSelection(note);
@@ -104,10 +99,8 @@ namespace ArcCreate.Compose.Selection
 
         [EditorAction("Toggle", false, "<c-mouse1>")]
         [RequireGameplayLoaded]
-        public async UniTask ToggleNoteSelection()
+        public void ToggleNoteSelection()
         {
-            await UniTask.NextFrame();
-
             if (TryGetNoteUnderCursor(out Note note, SelectionMode.Any))
             {
                 if (selectedNotes.Contains(note))

@@ -168,7 +168,7 @@ namespace ArcCreate.Compose.Cursor
                     DisableLaneCursor();
                 }
 
-                if (isHittingVertical)
+                if (isVerticalActive && isHittingVertical)
                 {
                     AlignVerticalCursor(verticalHit);
                 }
