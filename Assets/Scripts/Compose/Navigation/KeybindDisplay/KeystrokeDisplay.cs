@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +9,6 @@ namespace ArcCreate.Compose.Navigation
         private const float TotalPadding = 10;
         private const float MouseIconWidth = 10;
         private readonly char[] chars = new char[32];
-        [SerializeField] private Image container;
         [SerializeField] private Image mouseHint;
         [SerializeField] private TMP_Text keyText;
         [SerializeField] private KeystrokeSprites sprites;
@@ -25,14 +23,6 @@ namespace ArcCreate.Compose.Navigation
 
         public void SetKeystroke(Keystroke keystroke)
         {
-            container.sprite = keystroke.ActuateOnRelease ?
-                               sprites.ReleaseContainerSprite :
-                               sprites.PressContainerSprite;
-
-            Color contentColor = keystroke.ActuateOnRelease ?
-                                 sprites.ReleaseColor :
-                                 sprites.PressColor;
-
             bool ctrl = false;
             bool shift = false;
             bool alt = false;
@@ -101,11 +91,7 @@ namespace ArcCreate.Compose.Navigation
                         || keystroke.Key == KeyCode.Mouse2;
 
             keyText.SetCharArray(chars, 0, c);
-            keyText.color = contentColor;
-
             mouseHint.gameObject.SetActive(isMouse);
-            mouseHint.color = contentColor;
-
             Size = keyText.preferredWidth + TotalPadding + (isMouse ? MouseIconWidth : 0);
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Size);
         }

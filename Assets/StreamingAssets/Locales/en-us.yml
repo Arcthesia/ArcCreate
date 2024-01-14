@@ -804,6 +804,7 @@ Compose:
           Name: Input
           ReloadKeybinds: Reload keybinds
           AllowCreatingNotesBackward: Allow creating notes backward
+          ShowKeybindHint: Show keybind hints
         Files:
           Name: Files
           Backup: Create backup on save

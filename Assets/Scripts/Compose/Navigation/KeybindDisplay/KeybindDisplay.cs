@@ -17,6 +17,8 @@ namespace ArcCreate.Compose.Navigation
 
         public float Size { get; set; }
 
+        public float Position => rectTransform.anchoredPosition.x;
+
         public void SetPosition(float x)
         {
             rectTransform.anchoredPosition = new Vector2(x, rectTransform.anchoredPosition.y);
