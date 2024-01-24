@@ -114,6 +114,11 @@ namespace ArcCreate.Compose.Project
 
                     if (ev is RawTap t)
                     {
+                        if (rawTimingGroups[t.TimingGroup].NoInput)
+                        {
+                            continue;
+                        }
+
                         Vector2 pos = new Vector2(ArcFormula.LaneToWorldX(t.Lane), 0);
                         if (!requireTaps.ContainsKey(t.Timing))
                         {
@@ -145,6 +150,11 @@ namespace ArcCreate.Compose.Project
                     {
                         foreach (var at in a.ArcTaps)
                         {
+                            if (rawTimingGroups[at.TimingGroup].NoInput)
+                            {
+                                continue;
+                            }
+
                             float percent = Mathf.Clamp((float)(at.Timing - a.Timing) / (a.EndTiming - a.Timing), 0, 1);
                             Vector2 pos = a.EndTiming == a.Timing ?
                                 new Vector2(
