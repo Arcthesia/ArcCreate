@@ -1,3 +1,4 @@
+using System;
 using ArcCreate.Compose.Navigation;
 using ArcCreate.Utility.Parser;
 using Cysharp.Threading.Tasks;
@@ -117,6 +118,20 @@ namespace ArcCreate.Compose.Grid
             }
 
             IsGridEnabled = slotSwitched || !IsGridEnabled;
+        }
+
+        [EditorAction("DecreaseDensity", false, "-")]
+        [KeybindHint(Priority = KeybindPriorities.Grid - 1)]
+        public void DecreaseGridDensity()
+        {
+            Values.BeatlineDensity.Value = Mathf.Max(Values.BeatlineDensity.Value - 1, 1);
+        }
+
+        [EditorAction("IncreaseDensity", false, "=")]
+        [KeybindHint(Priority = KeybindPriorities.Grid - 2)]
+        public void IncreaseGridDensity()
+        {
+            Values.BeatlineDensity.Value = Values.BeatlineDensity.Value + 1;
         }
 
         public (float fromX, float fromY, float toX, float toY) GetVerticalGridBound()

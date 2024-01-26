@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.Compose.Components;
 using ArcCreate.Compose.History;
+using ArcCreate.Compose.Navigation;
 using ArcCreate.Gameplay;
 using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.Data;
@@ -13,6 +14,7 @@ using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Selection
 {
+    [EditorScope("Inspector")]
     public class InspectorMenu : MonoBehaviour
     {
         private const string Mixed = "-";
@@ -53,6 +55,14 @@ namespace ArcCreate.Compose.Selection
         {
             this.selected = selected;
             Rebuild();
+        }
+
+        [EditorAction("AssignToGroup", false, "<c-s-g>")]
+        [KeybindHint(Exclude = true)]
+        [SelectionService.RequireSelection]
+        public void AssignSelectedToGroup()
+        {
+            groupField.Open(I18n.S("Compose.Dialog.GroupPicker.AssignNotesToGroup"));
         }
 
         private void Rebuild()

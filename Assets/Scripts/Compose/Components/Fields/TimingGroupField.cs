@@ -1,9 +1,11 @@
 using System;
+using System.Security.Cryptography.X509Certificates;
 using ArcCreate.Compose.Popups;
 using ArcCreate.Gameplay.Chart;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 namespace ArcCreate.Compose.Components
 {
@@ -16,6 +18,12 @@ namespace ArcCreate.Compose.Components
         public event Action<TimingGroup> OnValueChanged;
 
         public TimingGroup Value => value;
+
+        public void Open(string title)
+        {
+            Vector2 position = Input.mousePosition;
+            OpenWindow(position, title);
+        }
 
         /// <summary>
         /// Set the value without invoking <see cref="OnValueChanged"/> event.
@@ -40,9 +48,14 @@ namespace ArcCreate.Compose.Components
 
         public void OnPointerDown(PointerEventData eventData)
         {
+            OpenWindow(eventData.position, string.Empty);
+        }
+
+        private void OpenWindow(Vector2 position, string title)
+        {
             if (Services.Gameplay?.IsLoaded ?? false)
             {
-                window = Services.Popups.OpenTimingGroupPicker(eventData.position, value.GroupNumber, this);
+                window = Services.Popups.OpenTimingGroupPicker(position, value.GroupNumber, title, this);
                 window.OnEndEdit = OnWindow;
             }
         }

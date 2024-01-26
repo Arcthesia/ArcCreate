@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.Compose.Navigation;
+using ArcCreate.Compose.Popups;
 using ArcCreate.Compose.Timeline;
 using ArcCreate.Gameplay.Data;
 using Cysharp.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace ArcCreate.Compose.Selection
         [SerializeField] private LayerMask gameplayLayer;
         [SerializeField] private GameObject inspectorWindow;
         [SerializeField] private InspectorMenu inspectorMenu;
+        [SerializeField] private TimingGroupPicker timingGroupPicker;
         [SerializeField] private MarkerRange rangeSelectPreview;
 
         private readonly HashSet<Note> selectedNotes = new HashSet<Note>();
@@ -53,6 +55,7 @@ namespace ArcCreate.Compose.Selection
             if (EventSystem.current.currentSelectedGameObject != null
              || !Services.Cursor.IsCursorAboveViewport
              || inspectorMenu.IsCursorHovering
+             || timingGroupPicker.IsCursorHovering
              || RangeSelected)
             {
                 return;

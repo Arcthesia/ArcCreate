@@ -36,9 +36,10 @@ namespace ArcCreate.Compose.Popups
         /// </summary>
         /// <param name="screenPosition">The screen position to open the picker at.</param>
         /// <param name="defaultTimingGroup">The timing group to initialize the picker with.</param>
+        /// <param name="title">The title of the display.</param>
         /// <param name="caller">The object that opened this window.</param>
         /// <returns>An arc type picker instance.</returns>
-        TimingGroupPicker OpenTimingGroupPicker(Vector2 screenPosition, int? defaultTimingGroup, object caller);
+        TimingGroupPicker OpenTimingGroupPicker(Vector2 screenPosition, int? defaultTimingGroup, string title, object caller);
 
         /// <summary>
         /// Open a text dialog.

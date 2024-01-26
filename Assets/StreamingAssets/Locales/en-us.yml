@@ -257,6 +257,9 @@ Compose:
       Confirm: Confirm
     Macros:
       Title: Macros
+    GroupPicker:
+      SelectEditingGroup: "Change current group to:"
+      AssignNotesToGroup: "Assign selected notes to:"
   Navigation:
     KeybindOverride: Overriding keybind for action {0}
     # Texts that appear on the context menu (right-click menu)
@@ -296,6 +299,8 @@ Compose:
           Slot8: Slot 8
           Slot9: Slot 9
           Slot0: Slot 0
+        IncreaseDensity: Increase density
+        DecreaseDensity: Decrease density
       Macro:
         Name: Macro
         SelectEvents:
@@ -400,6 +405,8 @@ Compose:
           Name: Play
           Return: Pause and return
           Pause: Pause
+        IncreaseSpeed: Speed up
+        DecreaseSpeed: Slow down
 
   Grid:
     # Please modify the comment lines only (lines beginning with '--')

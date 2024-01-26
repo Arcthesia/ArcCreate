@@ -45,9 +45,9 @@ namespace ArcCreate.Compose.Popups
             return colorPickerWindow;
         }
 
-        public TimingGroupPicker OpenTimingGroupPicker(Vector2 screenPosition, int? defaultTg, object caller)
+        public TimingGroupPicker OpenTimingGroupPicker(Vector2 screenPosition, int? defaultTg, string title, object caller)
         {
-            timingGroupPickerWindow.OpenAt(screenPosition, defaultTg, caller);
+            timingGroupPickerWindow.OpenAt(screenPosition, defaultTg, title, caller);
             return timingGroupPickerWindow;
         }
 

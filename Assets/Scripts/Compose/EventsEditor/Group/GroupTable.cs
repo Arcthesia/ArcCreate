@@ -1,18 +1,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.Compose.Components;
+using ArcCreate.Compose.Navigation;
 using ArcCreate.Gameplay;
 using ArcCreate.Gameplay.Chart;
+using ArcCreate.Gameplay.Data;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace ArcCreate.Compose.EventsEditor
 {
+    [EditorScope("Groups")]
     public class GroupTable : Table<TimingGroup>
     {
         [SerializeField] private GameplayData gameplayData;
         [SerializeField] private Button addButton;
         [SerializeField] private Button removeButton;
+        [SerializeField] private Button selectButton;
         [SerializeField] private TimingGroupField editingTimingGroupField;
 
         public override TimingGroup Selected
@@ -23,7 +27,15 @@ namespace ArcCreate.Compose.EventsEditor
                 base.Selected = value;
                 removeButton.interactable = Selected?.GroupProperties.Editable ?? false
                                          && Selected?.GroupNumber > 0;
+                selectButton.interactable = Selected?.GroupProperties.Editable ?? false;
             }
+        }
+
+        [EditorAction("ChangeGroup", false, "<c-g>")]
+        [KeybindHint(Exclude = true)]
+        public void OpenPicker()
+        {
+            editingTimingGroupField.Open(I18n.S("Compose.Dialog.GroupPicker.SelectEditingGroup"));
         }
 
         public void UpdateEditingGroupField()
@@ -43,6 +55,7 @@ namespace ArcCreate.Compose.EventsEditor
             Values.EditingTimingGroup.OnValueChange += OnEdittingTimingGroup;
             addButton.onClick.AddListener(OnAddButton);
             removeButton.onClick.AddListener(OnRemoveButton);
+            selectButton.onClick.AddListener(OnSelectButton);
             editingTimingGroupField.OnValueChanged += OnEditingTimingGroupField;
         }
 
@@ -53,6 +66,7 @@ namespace ArcCreate.Compose.EventsEditor
             Values.EditingTimingGroup.OnValueChange -= OnEdittingTimingGroup;
             addButton.onClick.RemoveListener(OnAddButton);
             removeButton.onClick.RemoveListener(OnRemoveButton);
+            selectButton.onClick.RemoveListener(OnSelectButton);
             editingTimingGroupField.OnValueChanged -= OnEditingTimingGroupField;
         }
 
@@ -129,6 +143,20 @@ namespace ArcCreate.Compose.EventsEditor
                     { "Number", num },
                 }));
             Values.OnEditAction?.Invoke();
+        }
+
+        private void OnSelectButton()
+        {
+            if (Selected == null)
+            {
+                return;
+            }
+
+            Services.Selection.SetSelection(
+                Selected.GetEventType<Tap>().Cast<Note>()
+                    .Concat(Selected.GetEventType<Hold>().Cast<Note>())
+                    .Concat(Selected.GetEventType<Arc>().Cast<Note>())
+                    .Concat(Selected.GetEventType<ArcTap>().Cast<Note>()));
         }
 
         private void OnChart()

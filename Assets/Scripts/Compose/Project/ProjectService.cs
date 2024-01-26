@@ -200,6 +200,22 @@ namespace ArcCreate.Compose.Project
             SerializeProject(CurrentProject);
         }
 
+        [EditorAction("Reload", false, "<c-s-r>")]
+        [KeybindHint(Exclude = true)]
+        [RequireGameplayLoaded]
+        public void ReloadChart()
+        {
+            if (CurrentProject == null)
+            {
+                return;
+            }
+
+            int currentTiming = Services.Gameplay.Audio.AudioTiming;
+            SaveProject();
+            LoadChart(CurrentChart);
+            Services.Gameplay.Audio.AudioTiming = currentTiming;
+        }
+
         public void OpenProject(string path)
         {
             ProjectSettings project = DeserializeProject(path);

@@ -1,4 +1,5 @@
 using ArcCreate.Compose.Navigation;
+using ArcCreate.Gameplay;
 using ArcCreate.Utility;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace ArcCreate.Compose.Timeline
     public class TimelineService : MonoBehaviour, ITimelineService
     {
         [SerializeField] private WaveformDisplay waveformDisplay;
+        [SerializeField] private GameplayData gameplayData;
 
         [Header("Markers")]
         [SerializeField] private Marker timingMarker;
@@ -37,7 +39,7 @@ namespace ArcCreate.Compose.Timeline
         private bool IsPlaying => Services.Gameplay?.Audio.IsPlaying ?? false;
 
         [EditorAction("TogglePlay", false, "q")]
-        [KeybindHint(Priority = KeybindPriorities.Playback + 1)]
+        [KeybindHint(Priority = KeybindPriorities.Playback + 3)]
         [RequireGameplayLoaded]
         public void TogglePlay()
         {
@@ -54,9 +56,9 @@ namespace ArcCreate.Compose.Timeline
         [EditorAction("PlayReturn", false, "<space>")]
         [SubAction("Return", false, "<u-space>")]
         [SubAction("Pause", false, "q")]
-        [KeybindHint(Priority = KeybindPriorities.Playback)]
-        [KeybindHint("Return", Priority = KeybindPriorities.Playback + 2)]
-        [KeybindHint("Pause", Priority = KeybindPriorities.Playback + 1)]
+        [KeybindHint(Priority = KeybindPriorities.Playback + 2)]
+        [KeybindHint("Return", Priority = KeybindPriorities.Playback + 4)]
+        [KeybindHint("Pause", Priority = KeybindPriorities.Playback + 3)]
         [RequireGameplayLoaded]
         public async UniTask StartPlayReturn(EditorAction action)
         {
@@ -166,6 +168,22 @@ namespace ArcCreate.Compose.Timeline
 
                 await UniTask.NextFrame();
             }
+        }
+
+        [EditorAction("DecreaseSpeed", false, "[")]
+        [KeybindHint(Exclude = false, Priority = KeybindPriorities.Playback + 1)]
+        public void DecreasePlaybackSpeed()
+        {
+            gameplayData.PlaybackSpeed.Value
+                = Mathf.Max(gameplayData.PlaybackSpeed.Value - 0.25f, 0.1f);
+        }
+
+        [EditorAction("IncreaseSpeed", false, "]")]
+        [KeybindHint(Exclude = false, Priority = KeybindPriorities.Playback)]
+        public void IncreasePlaybackSpeed()
+        {
+            gameplayData.PlaybackSpeed.Value
+                = Mathf.Min(gameplayData.PlaybackSpeed.Value + 0.25f, 5f);
         }
 
         private void Awake()
