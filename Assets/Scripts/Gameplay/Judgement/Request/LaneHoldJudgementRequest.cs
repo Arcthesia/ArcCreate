@@ -1,3 +1,5 @@
+using ArcCreate.Gameplay.Data;
+
 namespace ArcCreate.Gameplay.Judgement
 {
     public struct LaneHoldJudgementRequest
@@ -8,5 +10,6 @@ namespace ArcCreate.Gameplay.Judgement
         public int Lane;
         public bool IsJudgement;
         public ILaneHoldJudgementReceiver Receiver;
+        public GroupProperties Properties;
     }
 }

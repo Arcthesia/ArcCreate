@@ -120,18 +120,18 @@ namespace ArcCreate.Gameplay.Data
         {
             if (currentTiming >= Timing - Values.MissJudgeWindow && locked && !tapJudgementRequestSent)
             {
-                RequestTapJudgement();
+                RequestTapJudgement(groupProperties);
                 tapJudgementRequestSent = true;
             }
 
             if (currentTiming >= Timing)
             {
-                RequestHoldJudgement();
+                RequestHoldJudgement(groupProperties);
             }
 
             if (currentTiming >= Timing && !holdHighlightRequestSent)
             {
-                RequestHoldHighlight(currentTiming);
+                RequestHoldHighlight(currentTiming, groupProperties);
                 holdHighlightRequestSent = true;
             }
 
@@ -209,7 +209,7 @@ namespace ArcCreate.Gameplay.Data
             return Timing.CompareTo(note.EndTiming);
         }
 
-        public void ProcessLaneTapJudgement(int offset)
+        public void ProcessLaneTapJudgement(int offset, GroupProperties props)
         {
             int currentTiming = Services.Audio.ChartTiming;
             if (currentTiming >= EndTiming + Values.GoodJudgeWindow)
@@ -233,7 +233,7 @@ namespace ArcCreate.Gameplay.Data
             }
         }
 
-        public void ProcessLaneHoldJudgement(bool isExpired, bool isJudgement)
+        public void ProcessLaneHoldJudgement(bool isExpired, bool isJudgement, GroupProperties props)
         {
             int currentTiming = Services.Audio.ChartTiming;
             if (!isJudgement)
@@ -245,12 +245,14 @@ namespace ArcCreate.Gameplay.Data
             {
                 longParticleUntil = int.MinValue;
                 highlight = false;
+                JudgementResult result = props.MapJudgementResult(JudgementResult.MissLate);
+
                 if (isJudgement)
                 {
-                    Services.Score.ProcessJudgement(JudgementResult.MissLate, Option<int>.None());
+                    Services.Score.ProcessJudgement(result, Option<int>.None());
                     if (!spawnedParticleThisFrame)
                     {
-                        PlayParticle(JudgementResult.MissLate);
+                        PlayParticle(result);
                         spawnedParticleThisFrame = true;
                     }
                 }
@@ -259,19 +261,21 @@ namespace ArcCreate.Gameplay.Data
             {
                 longParticleUntil = currentTiming + Values.HoldParticlePersistDuration;
                 highlight = true;
+                JudgementResult result = props.MapJudgementResult(JudgementResult.Max);
+
                 if (isJudgement)
                 {
-                    Services.Score.ProcessJudgement(JudgementResult.Max, Option<int>.None());
+                    Services.Score.ProcessJudgement(result, Option<int>.None());
                     if (!spawnedParticleThisFrame)
                     {
-                        PlayParticle(JudgementResult.Max);
+                        PlayParticle(result);
                         spawnedParticleThisFrame = true;
                     }
                 }
             }
         }
 
-        private void RequestTapJudgement()
+        private void RequestTapJudgement(GroupProperties props)
         {
             Services.Judgement.Request(new LaneTapJudgementRequest()
             {
@@ -279,10 +283,11 @@ namespace ArcCreate.Gameplay.Data
                 AutoAtTiming = Timing,
                 Lane = Lane,
                 Receiver = this,
+                Properties = props,
             });
         }
 
-        private void RequestHoldJudgement()
+        private void RequestHoldJudgement(GroupProperties props)
         {
             for (int t = numHoldJudgementRequestsSent; t < TotalCombo; t++)
             {
@@ -296,13 +301,14 @@ namespace ArcCreate.Gameplay.Data
                     Lane = Lane,
                     IsJudgement = true,
                     Receiver = this,
+                    Properties = props,
                 });
             }
 
             numHoldJudgementRequestsSent = TotalCombo;
         }
 
-        private void RequestHoldHighlight(int timing)
+        private void RequestHoldHighlight(int timing, GroupProperties props)
         {
             Services.Judgement.Request(new LaneHoldJudgementRequest()
             {
@@ -312,12 +318,16 @@ namespace ArcCreate.Gameplay.Data
                 Lane = Lane,
                 IsJudgement = false,
                 Receiver = this,
+                Properties = props,
             });
         }
 
         private void PlayParticle(JudgementResult result)
         {
-            Services.Particle.PlayTextParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0), result, Option<int>.None());
+            Services.Particle.PlayTextParticle(
+                new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0),
+                result,
+                Option<int>.None());
         }
     }
 }

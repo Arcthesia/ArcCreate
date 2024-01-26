@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using ArcCreate.ChartFormat;
+using ArcCreate.Gameplay.Judgement;
 using ArcCreate.Gameplay.Skin;
 using UnityEngine;
 
@@ -8,20 +10,6 @@ namespace ArcCreate.Gameplay.Data
     {
         public GroupProperties()
         {
-            Name = null;
-            FileName = null;
-            SkinOverride = NoteSkinOverride.Default;
-            FadingHolds = false;
-            NoInput = false;
-            NoClip = false;
-            NoHeightIndicator = false;
-            NoHead = false;
-            NoShadow = false;
-            NoArcCap = false;
-            AngleX = 0;
-            AngleY = 0;
-            ArcResolution = 1;
-            Editable = true;
         }
 
         public GroupProperties(RawTimingGroup raw)
@@ -30,6 +18,7 @@ namespace ArcCreate.Gameplay.Data
             FileName = raw.File;
             SkinOverride = (NoteSkinOverride)(int)raw.Side;
             FadingHolds = raw.FadingHolds;
+            IgnoreMirror = raw.IgnoreMirror;
             NoInput = raw.NoInput;
             NoClip = raw.NoClip;
             NoHeightIndicator = raw.NoHeightIndicator;
@@ -40,15 +29,20 @@ namespace ArcCreate.Gameplay.Data
             AngleY = raw.AngleY;
             ArcResolution = raw.ArcResolution;
             Editable = raw.Editable;
+            Autoplay = raw.Autoplay;
+            foreach (var pair in raw.JudgementMaps)
+            {
+                JudgementMaps.Add((JudgementResult)(int)pair.Key, (JudgementResult)(int)pair.Value);
+            }
         }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = null;
 
-        public string FileName { get; set; }
+        public string FileName { get; set; } = null;
 
-        public bool Editable { get; set; }
+        public bool Editable { get; set; } = true;
 
-        public NoteSkinOverride SkinOverride { get; set; }
+        public NoteSkinOverride SkinOverride { get; set; } = NoteSkinOverride.Default;
 
         public Color Color { get; set; } = Color.white;
 
@@ -70,11 +64,15 @@ namespace ArcCreate.Gameplay.Data
 
         public bool FadingHolds { get; set; } = false;
 
+        public bool IgnoreMirror { get; set; } = false;
+
+        public bool Autoplay { get; set; } = false;
+
         public float AngleX { get; set; } = 0;
 
         public float AngleY { get; set; } = 0;
 
-        public float ArcResolution { get; set; } = 0;
+        public float ArcResolution { get; set; } = 1;
 
         public float SCAngleX { get; set; } = 0;
 
@@ -83,6 +81,9 @@ namespace ArcCreate.Gameplay.Data
         public Matrix4x4 GroupMatrix { get; set; } = Matrix4x4.identity;
 
         public bool Visible { get; set; } = true;
+
+        public Dictionary<JudgementResult, JudgementResult> JudgementMaps { get; private set; }
+            = new Dictionary<JudgementResult, JudgementResult>();
 
         public Vector3 FallDirection
         {
@@ -100,7 +101,7 @@ namespace ArcCreate.Gameplay.Data
 
         public RawTimingGroup ToRaw()
         {
-            return new RawTimingGroup
+            var rtg = new RawTimingGroup
             {
                 Name = Name,
                 File = FileName,
@@ -115,7 +116,26 @@ namespace ArcCreate.Gameplay.Data
                 AngleX = AngleX,
                 AngleY = AngleY,
                 ArcResolution = ArcResolution,
+                Autoplay = Autoplay,
+                IgnoreMirror = IgnoreMirror,
             };
+
+            foreach (var pair in JudgementMaps)
+            {
+                rtg.JudgementMaps.Add((JudgementMap)(int)pair.Key, (JudgementMap)(int)pair.Value);
+            }
+
+            return rtg;
+        }
+
+        public JudgementResult MapJudgementResult(JudgementResult from)
+        {
+            if (JudgementMaps.TryGetValue(from, out JudgementResult to))
+            {
+                return to;
+            }
+
+            return from;
         }
     }
 }

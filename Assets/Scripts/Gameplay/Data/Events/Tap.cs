@@ -81,7 +81,7 @@ namespace ArcCreate.Gameplay.Data
         {
             if (!judgementRequestSent && currentTiming <= Timing)
             {
-                RequestJudgement();
+                RequestJudgement(groupProperties);
                 judgementRequestSent = true;
             }
         }
@@ -127,9 +127,9 @@ namespace ArcCreate.Gameplay.Data
             }
         }
 
-        public void ProcessLaneTapJudgement(int offset)
+        public void ProcessLaneTapJudgement(int offset, GroupProperties props)
         {
-            JudgementResult result = offset.CalculateJudgeResult();
+            JudgementResult result = props.MapJudgementResult(offset.CalculateJudgeResult());
             Services.Particle.PlayTapParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0), result);
             Services.Particle.PlayTextParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0), result, offset);
             Services.Score.ProcessJudgement(result, offset);
@@ -142,7 +142,7 @@ namespace ArcCreate.Gameplay.Data
             }
         }
 
-        private void RequestJudgement()
+        private void RequestJudgement(GroupProperties props)
         {
             Services.Judgement.Request(
                 new LaneTapJudgementRequest()
@@ -151,6 +151,7 @@ namespace ArcCreate.Gameplay.Data
                     AutoAtTiming = Timing,
                     Lane = Lane,
                     Receiver = this,
+                    Properties = props,
                 });
         }
     }

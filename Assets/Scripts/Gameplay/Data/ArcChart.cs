@@ -138,6 +138,11 @@ namespace ArcCreate.Gameplay.Data
             {
                 foreach (ChartTimingGroup tg in TimingGroups)
                 {
+                    if (tg.Properties.IgnoreMirror)
+                    {
+                        continue;
+                    }
+
                     foreach (var tap in tg.Taps)
                     {
                         tap.Lane = 5 - tap.Lane;
@@ -154,6 +159,17 @@ namespace ArcCreate.Gameplay.Data
                         arc.XEnd = 1 - arc.XEnd;
                         arc.Color = arc.Color == 0 ? 1 : (arc.Color == 1 ? 0 : arc.Color);
                     }
+                }
+
+                foreach (var cam in Cameras)
+                {
+                    if (TimingGroups[cam.TimingGroup].Properties.IgnoreMirror)
+                    {
+                        continue;
+                    }
+
+                    cam.Move = new UnityEngine.Vector3(-cam.Move.x, cam.Move.y, cam.Move.z);
+                    cam.Rotate = new UnityEngine.Vector3(-cam.Rotate.x, cam.Rotate.y, -cam.Rotate.z);
                 }
             }
         }

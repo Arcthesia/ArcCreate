@@ -103,12 +103,12 @@ namespace ArcCreate.Gameplay.Judgement.Input
 
                 if (applicableArcTapRequestExists)
                 {
-                    applicableArcTapRequest.Receiver.ProcessArcTapJudgement(currentTiming - applicableArcTapRequest.AutoAtTiming);
+                    applicableArcTapRequest.Receiver.ProcessArcTapJudgement(currentTiming - applicableArcTapRequest.AutoAtTiming, applicableArcTapRequest.Properties);
                     arcTapRequests.RemoveAt(applicableArcTapRequestIndex);
                 }
                 else if (applicableLaneRequestExists)
                 {
-                    applicableLaneRequest.Receiver.ProcessLaneTapJudgement(currentTiming - applicableLaneRequest.AutoAtTiming);
+                    applicableLaneRequest.Receiver.ProcessLaneTapJudgement(currentTiming - applicableLaneRequest.AutoAtTiming, applicableLaneRequest.Properties);
                     laneTapRequests.RemoveAt(applicableLaneRequestIndex);
                 }
             }
@@ -134,7 +134,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
 
                     if (LaneCollide(input, screenPosition, req.Lane))
                     {
-                        req.Receiver.ProcessLaneHoldJudgement(currentTiming >= req.ExpireAtTiming, req.IsJudgement);
+                        req.Receiver.ProcessLaneHoldJudgement(currentTiming >= req.ExpireAtTiming, req.IsJudgement, req.Properties);
                         requests.RemoveAt(i);
                     }
                 }
@@ -293,7 +293,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
 
                     if (collide && acceptInput)
                     {
-                        req.Receiver.ProcessArcJudgement(currentTiming >= req.ExpireAtTiming, req.IsJudgement);
+                        req.Receiver.ProcessArcJudgement(currentTiming >= req.ExpireAtTiming, req.IsJudgement, req.Properties);
                         requests.RemoveAt(i);
                     }
                 }

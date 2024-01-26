@@ -322,6 +322,8 @@ Compose:
         Toggle: Toggle select
         RangeSelect:
           Name: Select notes between range
+          Confirm: Confirm
+          Cancel: Cancel
       Measure:
         Name: Measure
         Start:

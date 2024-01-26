@@ -1,3 +1,5 @@
+using ArcCreate.Gameplay.Data;
+
 namespace ArcCreate.Gameplay.Judgement
 {
     /// <summary>
@@ -10,6 +12,7 @@ namespace ArcCreate.Gameplay.Judgement
         /// </summary>
         /// <param name="offset">Offset of judgement from auto timing.
         /// Positive is late, negative is early.</param>
-        void ProcessArcTapJudgement(int offset);
+        /// <param name="properties">Relayed from <see cref="ArcTapJudgementRequest.Properties"/>.</param>
+        void ProcessArcTapJudgement(int offset, GroupProperties properties);
     }
 }

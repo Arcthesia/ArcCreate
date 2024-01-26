@@ -85,7 +85,7 @@ namespace ArcCreate.Gameplay.Data
         {
             if (!judgementRequestSent && currentTiming <= Timing)
             {
-                RequestJudgement();
+                RequestJudgement(groupProperties);
                 judgementRequestSent = true;
             }
 
@@ -113,14 +113,17 @@ namespace ArcCreate.Gameplay.Data
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
             Matrix4x4 matrix = groupProperties.GroupMatrix * Matrix4x4.TRS(pos, rot, scl);
-            Matrix4x4 shadowMatrix = matrix * Matrix4x4.Translate(new Vector3(0, -pos.y, 0));
 
             float alpha = ArcFormula.CalculateFadeOutAlpha(z);
             Color color = groupProperties.Color;
             color.a *= alpha;
 
             Services.Render.DrawArcTap(isSfx, texture, matrix, color, IsSelected);
-            Services.Render.DrawArcTapShadow(shadowMatrix, color);
+            if (!groupProperties.NoShadow)
+            {
+                Matrix4x4 shadowMatrix = matrix * Matrix4x4.Translate(new Vector3(0, -pos.y, 0));
+                Services.Render.DrawArcTapShadow(shadowMatrix, color);
+            }
         }
 
         public int CompareTo(INote other)
@@ -128,9 +131,9 @@ namespace ArcCreate.Gameplay.Data
             return Timing.CompareTo(other.Timing);
         }
 
-        public void ProcessArcTapJudgement(int offset)
+        public void ProcessArcTapJudgement(int offset, GroupProperties props)
         {
-            JudgementResult result = offset.CalculateJudgeResult();
+            JudgementResult result = props.MapJudgementResult(offset.CalculateJudgeResult());
             Services.Particle.PlayTapParticle(new Vector3(WorldX, WorldY), result);
             Services.Particle.PlayTextParticle(new Vector3(WorldX, WorldY), result, offset);
             Services.Score.ProcessJudgement(result, offset);
@@ -142,7 +145,7 @@ namespace ArcCreate.Gameplay.Data
             }
         }
 
-        private void RequestJudgement()
+        private void RequestJudgement(GroupProperties props)
         {
             Services.Judgement.Request(
                 new ArcTapJudgementRequest()
@@ -152,6 +155,7 @@ namespace ArcCreate.Gameplay.Data
                     X = WorldX,
                     Y = WorldY,
                     Receiver = this,
+                    Properties = props,
                 });
         }
     }
