@@ -39,7 +39,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public override void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization)
         {
             int offset = 0;
-            TargetEffect.enabled.Override((bool)properties[offset++]);
+            TargetEffect.enabled.Override((bool)properties[offset++] && !Settings.DisableAdvancedGraphics.Value);
             TargetEffect.intensity.overrideState = (bool)properties[offset++];
             Intensity = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
             TargetEffect.fastMode.Override((bool)properties[offset++]);

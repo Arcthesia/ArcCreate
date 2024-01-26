@@ -265,7 +265,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public override void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization)
         {
             int offset = 0;
-            TargetEffect.enabled.Override((bool)properties[offset++]);
+            TargetEffect.enabled.Override((bool)properties[offset++] && !Settings.DisableAdvancedGraphics.Value);
             TargetEffect.temperature.overrideState = (bool)properties[offset++];
             TargetEffect.tint.overrideState = (bool)properties[offset++];
             TargetEffect.colorFilter.overrideState = (bool)properties[offset++];

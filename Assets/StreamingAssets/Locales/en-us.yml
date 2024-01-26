@@ -1044,6 +1044,8 @@ Gameplay:
         EnablePractice: Enable practice mode
         ShowMsDifference: Display miliseconds differences
         ShowMsDifferenceDetail: Display exact miliseconds differences instead of EARLY / LATE.
+        HidePause: Hide pause button
+        PauseMode: Pause button behaviour
       Audio:
         Name: Audio
         Offset: Offset
@@ -1070,6 +1072,8 @@ Gameplay:
         ScoreDisplay: Score display
         LimitFramerate: Limit framerate
         LimitFramerateDetail: Limit display framerate to 60 FPS to preserve battery life. Might increase latency.
+        DisableAdvancedGraphics: Disable advanced graphics
+        DisableAdvancedGraphicsDetails: Disable post processing and video backgrounds, which can boost performance.
       Judgement:
         Name: Judgement
         ShowMax: Display Perfect (Max) judgement
@@ -1090,6 +1094,11 @@ Gameplay:
         middle: Middle
         infopanel: Info panel
         off: Off
+      PauseMode:
+        clickonce: Single tap
+        doubleclick: Double tap
+        hold: Long press
+        disable: Disable
       EarlyLateTextPosition:
         middle: Middle
         bottom: Bottom

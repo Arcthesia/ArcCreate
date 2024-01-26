@@ -57,7 +57,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public override void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization)
         {
             int offset = 0;
-            TargetEffect.enabled.Override((bool)properties[offset++]);
+            TargetEffect.enabled.Override((bool)properties[offset++] && !Settings.DisableAdvancedGraphics.Value);
             TargetEffect.focusDistance.overrideState = (bool)properties[offset++];
             TargetEffect.focusDistance.overrideState = (bool)properties[offset++];
             TargetEffect.focalLength.overrideState = (bool)properties[offset++];

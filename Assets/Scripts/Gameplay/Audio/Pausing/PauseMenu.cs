@@ -1,4 +1,3 @@
-using System;
 using ArcCreate.Gameplay.Audio.Practice;
 using ArcCreate.SceneTransition;
 using ArcCreate.Utility.Extension;
@@ -12,7 +11,7 @@ namespace ArcCreate.Gameplay.Audio
     {
         [SerializeField] private StringSO retryCount;
         [SerializeField] private GameplayData gameplayData;
-        [SerializeField] private Button pauseButton;
+        [SerializeField] private PauseButton pauseButton;
         [SerializeField] private RectTransform pauseButtonRect;
         [SerializeField] private Camera uiCamera;
         [SerializeField] private GameObject pauseScreen;
@@ -28,7 +27,7 @@ namespace ArcCreate.Gameplay.Audio
 
         private void Awake()
         {
-            pauseButton.onClick.AddListener(OnPauseButton);
+            pauseButton.OnActivation.AddListener(OnPauseButton);
             foreach (var playButton in playButtons)
             {
                 playButton.onClick.AddListener(OnPlayButton);
@@ -74,7 +73,7 @@ namespace ArcCreate.Gameplay.Audio
 
         private void OnDestroy()
         {
-            pauseButton.onClick.RemoveListener(OnPauseButton);
+            pauseButton.OnActivation.RemoveListener(OnPauseButton);
             foreach (var playButton in playButtons)
             {
                 playButton.onClick.RemoveListener(OnPlayButton);
@@ -167,9 +166,9 @@ namespace ArcCreate.Gameplay.Audio
 
         private async UniTask DisablePauseButton()
         {
-            pauseButton.interactable = false;
+            pauseButton.Interactable = false;
             await UniTask.Delay(1000);
-            pauseButton.interactable = true;
+            pauseButton.Interactable = true;
         }
 
         private void OnReturnButton()

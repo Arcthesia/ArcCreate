@@ -375,7 +375,7 @@ namespace ArcCreate.Gameplay.Skin
         public void SetVideoBackground(string path, bool isUri)
         {
             videoBackground.enabled = !string.IsNullOrEmpty(path);
-            videoBackgroundRenderer.enabled = !string.IsNullOrEmpty(path);
+            videoBackgroundRenderer.enabled = !string.IsNullOrEmpty(path) && !Settings.DisableAdvancedGraphics.Value;
 
             if (!string.IsNullOrEmpty(path))
             {
