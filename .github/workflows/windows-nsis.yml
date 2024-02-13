@@ -1,0 +1,38 @@
+name: Build NSIS Installer
+
+on:
+  workflow_run:
+    workflows: ["Deploy for public release"]
+    types: [completed]
+  workflow_dispatch:
+
+jobs:
+  makensis:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install NSIS
+      run: apt update && apt install -y nsis
+
+    - name: Download Built Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: Build-StandaloneWindows64
+        path: NSIS/StandaloneWindows64
+
+    - name: Generate file list
+      run: ./genfilelist.sh
+      working-directory: NSIS
+
+    - name: Make NSIS Installer
+      run: makensis -V4 installer.nsi
+      working-directory: NSIS
+
+    - name: Upload Installer
+      uses: actions/upload-artifact@v3
+      with:
+        name: ArcCreate-Installer.exe
+        path: NSIS/ArcCreate-Installer.exe
