@@ -1,8 +1,17 @@
+Parsing:
+  # Exception messages for parsing strings
+  Exception:
+    CharacterNotFound: Could not find character "{0}".
+    InvalidConversionToInt: Could not convert "{0}" to integer.
+    InvalidConversionToBool: Could not convert "{0}" to boolean.
+    InvalidConversionToFloat: Could not convert "{0}" to float.
+
 Format:
   # Exception messages while parsing chart files
   Exception:
     File: |-
-      An exception occured while reading the chart file {File}
+      An exception occured while reading the chart file {File}:
+      {Error}
     SingleErrorFormat: |-
       At: line {LineNumber}
       While parsing event of type: {EventType}
@@ -11,6 +20,13 @@ Format:
     SingleErrorShortFormat: |-
       While parsing event of type: {EventType}
       {Reason}
+    UnknownException: |-
+      Unknown exception.
+      Exception: {Exception}
+      Stack trace:
+      {StackTrace}
+    InvalidHeader: |-
+      Invalid header line.
     ArcColorNegative: |-
       Arc color id can not be negative.
     AudioOffsetInvalid: |-
@@ -27,8 +43,6 @@ Format:
       Invalid timing group symbol pairing. Make sure to enclose timing group definitions properly with "};".
     DivisorNegative: |-
       Divisor property of timing event can not be negative.
-    BaseBPMZero: |-
-      Base BPM can not be zero.
     DurationNegative: |-
       Duration of this event type can not be negative.
     DurationZero: |-
@@ -37,6 +51,16 @@ Format:
       ArcTap is outside the timing range of its parent Arc.
     TimingGroupPropertiesInvalid: |-
       Invalid timing group properties definition.
+    ReferencedFileError: |-
+      Can not load the referenced chart file:
+      {0}
+    FileDoesNotExist: |-
+      Chart file does not exist.
+  Warning:
+    HoldTooShort:
+      Hold note's duration is shorter than 17ms.
+    TapJudgementOverlap:
+      Tap judgement overlaps with other notes.
 
 Compose:
   # Exception messages within the editor
@@ -76,8 +100,6 @@ Compose:
         Invalid key: The string "{0}" does not match any key.
       InvalidModifier: |-
         Invalid modifier: The string "{0}" does not match any modifier key.
-      TooManyModifiers: |-
-        Invalid keystroke: The keystroke "{0}" has too many modifiers (maximum is 2).
       InvalidActionPath: |-
         Invalid action path: The string "{0}" does not match any action.
     Scenecontrol: |-
@@ -105,53 +127,57 @@ Compose:
   # Notification messages
   Notify:
     FreeCameraEditHelp: |-
-      Khởi động máy quay tự do (Giữ để xem thêm)
+      Starting free camera (hover for more info)
       
-      WASD: Tiến/Trái/Lùi/Phải
-      Space: Đi lên
-      Shift: Đi xuống
-      IJKL: Xoay lên/trái/xuống/phải
-      U: Lăn trái
-      O: Lăn phải
-      Esc: Hủy
-      Enter: Xác nhận
-    EmmyLuaGenerated: |-
-      EmmyLua template for scenecontrol generated at the current project's folder
-      Use VsCode with the extension tangzx.emmylua to get autocompletion
+      WASD: Move forward/left/backward/right
+      Space: Move upward
+      Shift: Move downward
+      IJKL: Rotate up/left/down/right
+      U: Roll left
+      O: Roll right
+      Esc: Cancel
+      Enter: Confirm
+    EmmyLuaGenerated:
+      Scenecontrol: |-
+        EmmyLua template for scenecontrol generated at the current project's folder
+        Use VsCode with the extension tangzx.emmylua to get autocompletion
+      Macros: |-
+        EmmyLua template for macros generated at macros folder
+        Use VsCode with the extension tangzx.emmylua to get autocompletion
     Actions:
-      CannotMirror: Không thể đảo ngược bất kì nốt nào.
-      NoDragRange: Không thể di chuyển nốt timing đã chọn. Hãy thử kéo riêng từng nốt.
+      CannotMirror: Can not mirror any of the selected notes.
+      NoDragRange: Can not drag selected notes timing. Try dragging the notes separately.
     History:
       Execute: |-
-        Đã thi hành lệnh: {Name}
+        Executed command: {Name}
       Undo: |-
-        Hoàn tác lệnh: {Name}
+        Undo command: {Name}
       Redo: |-
-        Làm lại lệnh: {Name}
+        Redo command: {Name}
       # {Name} above will be replaced with these entries
-      AddTiming: Thêm timing event
-      EditTiming: Chỉnh sửa timing event
-      RemoveTiming: Xóa timing event
-      AddCamera: Thêm camera event
-      EditCamera: Sửa camera event
-      RemoveCamera: Xóa camera event
-      AddScenecontrol: Thêm scenecontrol event
-      EditScenecontrol: Sửa scenecontrol event
-      RemoveScenecontrol: Xóa scenecontrol event
-      EditValue: Sửa giá trị của nốt đã chọn
-      EditArc: Sửa giá trị của arc
+      AddTiming: Add timing event
+      EditTiming: Edit timing event
+      RemoveTiming: Remove timing event
+      AddCamera: Add camera event
+      EditCamera: Edit camera event
+      RemoveCamera: Remove camera event
+      AddScenecontrol: Add scenecontrol event
+      EditScenecontrol: Edit scenecontrol event
+      RemoveScenecontrol: Remove scenecontrol event
+      EditValue: Edit selected note's value
+      EditArc: Edit arc's values
       CreateNote:
-        Tap: Tạo nốt nhấn
-        Hold: Tạo nốt giữ
-        Arc: Tạo arc
-        ArcTap: Tạo sky note
-        Trace: Tạo trace note
-      DeleteNotes: Xóa notes
-      Cut: Cắt notes
-      Paste: Dán notes
+        Tap: Create tap note
+        Hold: Create hold note
+        Arc: Create arc note
+        ArcTap: Create sky note
+        Trace: Create trace note
+      DeleteNotes: Delete notes
+      Cut: Cut notes
+      Paste: Paste notes
       Mirror:
-        Vertical: Đảo ngược nốt chiều ngang
-        Horizontal: Đảo ngược nốt chiều dọc
+        Vertical: Mirror notes vertically
+        Horizontal: Mirror notes horizontally
       Drag:
         Timing: Drag notes timing
         Position: Drag notes position
@@ -186,75 +212,93 @@ Compose:
       CopyY: Copied arc's y coordinate
     Export:
       Render:
-        Cancelled: Đã hủy Render
-        Complete: Render thành công
+        Cancelled: Render cancelled
+        Complete: Render complete
       Package:
         Complete: Exported package to {0}
+    Macros:
+      Cancelled: Cancelled macro
+      Select:
+        Timing: Select timing
+        Position: Select position
+        Lane: Select lane
+      NotFound: Macro "{macroId}" does not exist.
   # Dialog boxes
   Dialog:
     RemoveGroup:
-      Title: Xóa timing group
+      Title: Remove timing group
       Content: |-
-        Bạn có chắc bạn muốn xóa timing group này và mọi thứ bên trong? (một đi không trở lại)
-      Yes: Xóa
-      No: Hủy
+        Are you sure you want to remove this timing group and all of its content? (no undo)
+      Yes: Remove
+      No: Cancel
     RemoveChart:
-      Title: Xóa chart file
+      Title: Remove chart file
       Content: |-
-        Bạn có chắc bạn muốn xóa chart file này khỏi project?
+        Are you sure you want to remove this chart file from the project?
 
-        File sẽ không bị xóa và có thể thêm lại vào project sau, nhưng bất kì thông tin nào đi kèm với nó sẽ bị mất.
-      Yes: Xóa
-      No: Hủy
+        The file itself will NOT be deleted and can be added back to the project later, but any metadata associated with it will be lost.
+      Yes: Remove
+      No: Cancel
     UnsavedChanges:
-      Title: Thay đổi chưa lưu
+      Title: Unsaved changes
       Content: |-
-        Bạn quên chưa lưu kìa :v. Bạn có muốn lưu không?
-      Yes: Lưu thay đổi
-      No: Bỏ thay đổi
-      Cancel: Hủy
+        Your project has unsaved changes. Do you want to save?
+      Yes: Save changes
+      No: Discard changes
+      Cancel: Cancel
+    LoadChartError:
+      Title: Error
+      Content: |-
+        There was an error loading the chart file {ChartPath}.
+        Either fix this in a separate text editor, or close this dialog and use the "<> {TabName}" panel.
+        
+        Details:
+        {Content}
+      Confirm: Confirm
+    Macros:
+      Title: Macros
   Navigation:
-    KeybindOverride: Thay đổi phím cho tác vụ {0}
+    KeybindOverride: Overriding keybind for action {0}
     # Texts that appear on the context menu (right-click menu)
     Actions:
       Camera:
         Name: Camera
         FreeCamera:
-          Name: Khởi động camera tự do
+          Name: Start free camera
       Grid:
-        Name: Lưới
-        Toggle: Hiển thị lưới
+        Name: Grid
+        Toggle: Toggle grid
       Display:
-        Name: Hiển thị
-        FullScreen: Toàn màn hình
+        Name: Display
+        FullScreen: Toggle full screen
       Selection:
         Name: Selection
         Clear: Clear selection
         RangeSelect:
-          Name: Chọn các nốt giữa một khoảng
+          Name: Select notes between range
       Measure:
         Name: Measure
         Start:
           Name: Open measurer
       Clipboard:
-        Name: Bộ nhớ tạm
-        Copy: Sao chép
-        Cut: Cắt
+        Name: Clipboard
+        Copy: Copy
+        Cut: Cut
         Paste:
-          Name: Dán
-          Cancel: Bỏ dán
+          Name: Paste
+          Cancel: Cancel pasting
         NamedPaste:
-          Name: Dán
-          Cancel: Bỏ dán
-        Clear: Dọn bộ nhớ tạm
+          Name: Paste
+          Cancel: Cancel pasting
+        Clear: Clear clipboard
       Delete:
-        Name: Xóa
-        Execute: Xóa notes
+        Name: Delete
+        Execute: Delete notes
       Mirror:
-        Name: Đảo ngược
-        Horizontal: Đảo ngược ngang
-        HorizontalNoColorSwitch: Đảo ngược ngang (bỏ qua màu)
-        Vertical: Đảo ngược dọc
+        Name: Mirror
+        Horizontal: Mirror horizontally
+        HorizontalNoColorSwitch: Mirror horizontally (ignore color)
+        Vertical: Mirror vertically
   Grid:
     # Please modify the comment lines only (lines beginning with '--')
     DefaultScript: |-
@@ -396,6 +440,8 @@ Compose:
       drawLines(color.unsafe.boundary, {bydTR, gridTR, gridBR}, false)
       drawLines(color.unsafe.boundary, {gridBR, trackR, trackL, gridBL}, false)
 
+      spacing.x = math.max(spacing.x, 0.01)
+      spacing.y = math.max(spacing.y, 0.01)
       grid.drawLine(config.left, config.left, config.bottom, config.top, color.lines)
       for x = config.mainLeft - spacing.x, config.left + spacing.x, -spacing.x do
           grid.drawLine(x, x, config.bottom, config.top, color.lines)
@@ -426,19 +472,20 @@ Compose:
   # Texts that appear on the editor UI
   UI:
     Common:
-      Confirm: Xác nhận
-      Cancel: Hủy
-      Close: Đóng
-      NotRequired: (không yêu cầu)
-      Extension: Tiện ích mở rộng
+      Confirm: Confirm
+      Cancel: Cancel
+      Close: Close
+      NotRequired: (not required)
+      Extension: Extension
     Placeholder:
-      Text: Trống không...
-      File: Không tệp nào được chọn...
-      Image: Không hình nào được chọn...
+      Text: Empty...
+      File: No file selected...
+      Image: No image selected...
       Property: No property...
-      ImagePrompt: Nhấn để chọn hình
+      ImagePrompt: Click to select image
     PanelNames:
       Toolbox: Toolbox
+      RawEditor: Text
       Gameplay: Gameplay
       Timeline: Timeline
       Project: Project
@@ -449,12 +496,19 @@ Compose:
     # Top bar of the UI
     Top:
       Label:
-        New: Mới
-        Open: Mở
-        Save: Lưu
+        New: New
+        Open: Open
+        Save: Save
         InputMode: Input Mode
-        FullScreen: Toàn màn hình
-        ToggleFullScreenHint: Nhấn F11 để mở toàn màn hình.
+        InputModeOptions:
+          auto: Auto
+          autocontroller: Auto (Controller)
+          touch: Touch
+          controller: Controller
+          mouse: Mouse
+          idle: Idle
+        FullScreen: Full Screen
+        ToggleFullScreenHint: Press F11 to toggle full screen mode.
         Chart: Chart
     # Project panel
     Project:
@@ -477,6 +531,7 @@ Compose:
         ChartOffset: Chart Offset
         TimingPointDensityFactor: Judge Density
         ChartConstant: Chart Constant
+        SearchTags: Search Tags
         DifficultyName: Difficulty Name
         DifficultyColor: Difficulty Color
         Files: Files
@@ -503,10 +558,13 @@ Compose:
         NoProjectLoaded: |-
           No project loaded.
           Create or open a new project
-        Shutter: Shutter
-        ShowShutter: Show shutter
-        HideShutter: Hide shutter
-        PreviewSegment: Preview segment
+        RawEditorFileTooLarge: |-
+          Text editor is disabled for files larger than 1000kb
+        Shutter: Transition
+        ShowShutter: Show Transition
+        HideShutter: Hide Transition
+        PreviewSegment: Preview Segment
+        CustomChartPath: Use custom (advanced)
       Options:
         Inherit: Inherit
         Light: Light
@@ -534,6 +592,10 @@ Compose:
         Offset: Offset
         TimingGroup: Group
         Density: Density
+        PlaybackSpeed: Speed
+      Timestamp:
+        Name: Timestamp
+        DefaultMessage: Timestamp {0}
     # Events editor panel
     EventsEditor:
       Label:
@@ -597,13 +659,27 @@ Compose:
       Label:
         Locale:
           Name: Localization
-          Language: Ngôn ngữ
-          Reload: Tải lại ngôn ngữ
+          Language: Language
+          Reload: Reload locales
           CheckMissing: Check missing entries
         Gameplay:
           Name: Gameplay
           Speed: Speed
           AspectRatio: Aspect Ratio
+          Indicator: Indicator
+          MaxIndicator: Enable max indicator
+          Colorblind: Use colorblind arc colors
+          ScoreDisplay: Score display
+        Judgement:
+          Name: Judgement
+          NotUsedInAutoOrIdle: "These options take no effect in auto or idle mode:"
+          EarlyLatePosition: Early/Late position
+          ShowMsDifference: Show ms difference
+          ShowJudgement: "Show judgement:"
+          ShowMax: Perfect (Max)
+          ShowPerfect: Perfect (Early/Late)
+          ShowGood: Good
+          ShowMiss: Miss
         Grid:
           Name: Grid
           Slot: Slot
@@ -614,10 +690,11 @@ Compose:
           Gridline: Define gridlines
           Script: Lua script
         AudioVolume:
-          Name: Audio volume
+          Name: Audio
           Music: Music
           Effect: Effect
           GlobalOffset: Global offset
+          SyncToDSPTime: Sync to DSP timing
         Display:
           Name: Display
           Vsync: Vsync
@@ -626,6 +703,13 @@ Compose:
         Input:
           Name: Input
           ReloadKeybinds: Reload keybinds
+          AllowCreatingNotesBackward: Allow creating notes backward
+        Files:
+          Name: Files
+          Backup: Create backup on save
+          BackupCount: Backups count
+          Autosave: Enable autosaving
+          AutosaveInterval: Autosave interval (seconds)
         ScrollSensitivity:
           Name: Scroll sensitivity
           Vertical: Vertical
@@ -645,7 +729,11 @@ Compose:
         Hold: Hold
         Arctap: Sky
         Easing: Easing
-      Macros: Macros
+      Macros:
+        Name: Macros
+        GenerateEmmy: Generate EmmyLua
+        Reload: Reload macro scripts
+        OpenExplorer: Open macros folder
     # Inspector window
     Inspector:
       Name: Inspector
@@ -663,6 +751,11 @@ Compose:
       Actions:
         SelectArc: Select parent arc
         SelectArctap: Select sky notes
+    Startup:
+      Discord: Join our Discord
+      Kofi: Support us on Ko-fi
+      Version: "Version: {0}"
+      Recent: Recently opened
 
 Remote:
   Exception:
@@ -702,27 +795,27 @@ Remote:
     ManualIP: Thiết lập kết nối thủ công
     ReturnToSelect: Quay lại
   Control:
-    Name: Control
+    Name: Điều khiển
     Sync:
-      Name: Sync data
-      AllFiles: All files
+      Name: Đồng bộ dữ liệu
+      AllFiles: Tất cả tệp
       Chart: Chart
-      Audio: Audio
+      Audio: Âm thanh
       Jacket: Jacket
-      Background: Background
+      Background: Nền
       Metadata: Metadata
     Settings:
-      Name: Settings
-      Offset: Device offset
-      Speed: Device speed
-      MusicVolume: Music volume
-      EffectVolume: Effect volume
+      Name: Cài đặt
+      Offset: Độ trễ thiết bị
+      Speed: Tốc độ thiết bị
+      MusicVolume: Âm lượng nhạc
+      EffectVolume: Âm lượng hiệu ứng
     StartTiming: Play from timing
     EndTiming: Play to timing      
     Loop: Loop playback
     ShowLog: Show log
     ShowDebug: Show debug information
-    ManualIP: Enter IP Manually
+    ManualIP: Nhập IP bằng tay
   Window:
     Name: Remote
     SyncChart: Sync chart
@@ -754,6 +847,15 @@ Gameplay:
     Play: Tiếp tục
     Retry: Thử lại
     Return: Thoát
+    AudioDeviceChange: Phát hiện thay đổi của thiết bị phát thanh. ArcCreate sẽ trở về menu.
+    Confirm: Xác nhận
+  Practice:
+    PlaybackSpeed: Tốc độ
+    Repeat:
+      On: Lặp lại Bật
+      Off: Lặp lại Tắt
+      From: Đặt điểm khởi đầu
+      To: Đặt điểm kết 
   Selection:
     SelectStatus:
       Singular: |-
@@ -763,11 +865,20 @@ Gameplay:
     DeleteConfirmation: |-
       Bạn có chắc bạn muốn xóa những assets này?
       Điểm của bạn sẽ không bị xóa.
+    PackDeleteConfirmation: |-
+      Bạn chuẩn bị xóa pack:
+      <color=#FFFFFFB4>{0}</color>
+      Bạn có muốn xóa hết màn chơi thuộc pack này, hay giữ lại màn chơi và chỉ xóa pack thôi?
     CannotDeleteDefault: |-
       Những assets mặc định không thể bị xóa.
+    EnablePractice: |-
+      Chế độ luyện tập đã được bật cho lần chơi tiếp theo.
+    SelectRating: Hãy chọn mức đánh giá
     Action:
+      Copy: Sao chép
       Delete: Xóa
       Cancel: Hủy bỏ
+      Keep: Giữ
       Done: Xong
     List:
       RemoteTestplay: Chơi thử từ xa
@@ -788,12 +899,27 @@ Gameplay:
       difficulty: Độ khó
       grade: Thành tích
       playcount: Lượt chơi
+      rating: Đánh giá
       score: Điểm
-      title: Tên màn
+      title: Tiêu đề
     Group:
       none: không
       difficulty: Độ khó
-      grade: Điểm
+      grade: Thành tích
+      rank: Rank
+      rating: Đánh giá
+      charter: Charter
+    History:
+      Best: Tốt nhất
+      Recent: Gần đây
+    Modifiers:
+      GameMode:
+        Name: Chế độ chơi
+        Auto: Tự động chơi
+        Practice: Tập luyện
+      Modifier:
+        Name: Chỉnh sửa
+        Mirror: Đảo ngược
     Settings:
       Name: Cài đặt
       Language: Ngôn ngữ
@@ -805,6 +931,9 @@ Gameplay:
         EarlyLatePerfectDisplay: Hiển thị Early/Late perfect
         EarlyLatePerfectDisplayDetail: |-
           Cho bạn biết mình nhấn sớm hay muộn.
+        EnablePractice: Bật chế độ tập luyện
+        ShowMsDifference: Hiển thị sự khác biệt mili giây
+        ShowMsDifferenceDetail: Hiển thị độ trễ chính xác đến từng mili thay vì EARLY / LATE.
       Audio:
         Name: Âm thanh
         Offset: Độ trễ
@@ -830,7 +959,18 @@ Gameplay:
         EarlyLateDisplayDetail: Vị trí của Late/Early
         LimitFramerate: Giới hạn khung hình
         LimitFramerateDetail: Giới hạn khung hình xuống 60 FPS để tiết kiệm pin. Có thể tăng độ trễ.
+      Judgement:
+        Name: Judgement
+        ShowMax: Hiển thị Perfect (Max) judgement
+        ShowPerfect: Hiển thị Perfect (Early / Late) judgement
+        ShowGood: Hiển thị Good judgement
+        ShowMiss: Hiển thị Miss judgement
       Interface:
+        Name: Giao diện
+        ForceTheme: Ép buộc chủ đề giao diện
+        ForceThemeDetail: Ép giao diện người dùng đặt màu chủ đề, bỏ qua màu chủ đề của chart đã chọn.
+        SwitchResumeAndRetry: Đảo vị trí Tiếp tục và Thử lại
+        SwitchResumeAndRetryDetail: Đảo vị trí của nút Tiếp tục và Thử lại ở màn hình tạm dừng.
         ShowFPS: Hiện FPS
         ShowFPSDetail: Cho bạn thấy FPS hiện tại.
         ShowDebug: Hiện thông tin gỡ lỗi
@@ -843,6 +983,20 @@ Gameplay:
         middle: Giữa
         bottom: Đáy
         top: Trên
+      ScoreDisplay:
+        default: Mặc định
+        predictive: Đoán trước
+        difference: Khác biệt
+        decrease: Giảm dần
+      ScoreDisplayDetails:
+        default: Cách hiển thị điểm phổ biến. Điểm tăng khi bấm note.
+        predictive: Hiển thị khoảng cách gần nhất tới ngưỡng Rank kế.
+        difference: Hiển thị số điểm còn thiếu để đạt điểm tối đa.
+        decrease: Như mặc định nhưng ngược lại. Bắt đầu tính từ số điểm tối đa và giảm dần.
+      ForceTheme:
+        default: Mặc định
+        light: Sáng
+        dark: Tối
 
 Shutter:
   Composer: Nhạc
@@ -866,7 +1020,7 @@ Storage:
       Thay thế bằng cách nhập asset mới
     KeepOriginal:
       Giữ lại asset cũ
-    Identifier: "Identifier: {0}"
+    Identifier: "Mã nhận dạng: {0}"
     Version: "Phiên bản: {0}"
   Loading:
     Message: 'Đang tải: {0}...'
@@ -876,7 +1030,16 @@ Storage:
     DeleteAsset: Đang xóa asset {0}
     StoreAsset: Đang trữ asset {0}
     Finalizing: Kết thúc tiến trình
-
+  
 Credits:
   Name: Credits
-  View: See credits
+  View: See Credits
+  Role:
+    LeadProgramming: Lập trình viên trưởng
+    Programming: Lập trình viên
+    VisualDesign: Thiết kế hình ảnh
+    SoundDesign: Thiết kế âm thanh
+    Localization: Người dịch ngữ
+    QualityAssurance: Quản lí chất lượng
+    Community: và tất cả mọi người tại cộng đồng Arcthesia và ArcCreate!
+    Sponsor: Đặc biệt cám ơn những người đã ủng hộ chúng tôi
