@@ -702,6 +702,7 @@ Compose:
         Past: Past
         Present: Present
         Future: Future
+        Eternal: Eternal
         Beyond: Beyond
     Timeline:
       Label:

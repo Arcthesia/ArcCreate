@@ -375,6 +375,10 @@ namespace ArcCreate.Compose.Project
                     chart.DifficultyColor = defaultDifficultyColors[3].ConvertToHexCode();
                     chart.Difficulty = defaultDifficultyNames[3];
                     break;
+                case "4":
+                    chart.DifficultyColor = defaultDifficultyColors[4].ConvertToHexCode();
+                    chart.Difficulty = defaultDifficultyNames[4];
+                    break;
                 default:
                     chart.DifficultyColor = defaultDifficultyColors[2].ConvertToHexCode();
                     chart.Difficulty = defaultDifficultyNames[2];
