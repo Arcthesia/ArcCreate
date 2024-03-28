@@ -349,6 +349,7 @@ namespace ArcCreate.Gameplay.Render
 
         private void Awake()
         {
+            Shader.WarmupAllShaders();
             connectionLineDrawer = new InstancedRendererPool(
                 connectionLineMaterial,
                 connectionLineMesh,

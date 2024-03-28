@@ -166,10 +166,6 @@ namespace ArcCreate.Gameplay.Data
 
                 alpha *= Values.MaxArcAlpha;
             }
-            else
-            {
-                alpha = EndTiming - Timing <= 1 ? Values.MaxArcAlpha / 2 : Values.MaxArcAlpha;
-            }
 
             Color color = groupProperties.Color;
             color.a *= Mathf.Min(alpha, arcGroupAlpha);
