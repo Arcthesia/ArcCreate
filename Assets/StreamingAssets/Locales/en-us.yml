@@ -260,6 +260,13 @@ Compose:
     GroupPicker:
       SelectEditingGroup: "Change current group to:"
       AssignNotesToGroup: "Assign selected notes to:"
+    PanelLayout:
+      Name: Layout
+      Default: Default
+      Compact: Compact
+      SaveLayout: Save layout
+      LayoutName: Layout name
+      DuplicateError: Another layout with the same name already exists.
   Navigation:
     KeybindOverride: Overriding keybind for action {0}
     # Texts that appear on the context menu (right-click menu)
