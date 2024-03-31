@@ -55,7 +55,7 @@ namespace ArcCreate.Compose.Components
         {
             if (Services.Gameplay?.IsLoaded ?? false)
             {
-                window = Services.Popups.OpenTimingGroupPicker(position, value.GroupNumber, title, this);
+                window = Services.Popups.OpenTimingGroupPicker(position, value?.GroupNumber, title, this);
                 window.OnEndEdit = OnWindow;
             }
         }

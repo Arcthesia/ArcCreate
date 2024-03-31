@@ -13,6 +13,7 @@ namespace ArcCreate.Compose.Navigation
         [SerializeField] private Pool<KeybindDisplay> keybindPool;
         [SerializeField] private GameObject keybindPrefab;
         [SerializeField] private GameObject keystrokePrefab;
+        [SerializeField] private GameObject hintDisplay;
         [SerializeField] private RectTransform mainDisplayRect;
         [SerializeField] private float mainDisplayOffset;
         [SerializeField] private float baseScrollSensitivity = 1;
@@ -27,7 +28,7 @@ namespace ArcCreate.Compose.Navigation
             get => enableDisplay;
             set
             {
-                gameObject.SetActive(Settings.EnableKeybindHintDisplay.Value && value);
+                hintDisplay.SetActive(Settings.EnableKeybindHintDisplay.Value && value);
                 enableDisplay = value;
             }
         }

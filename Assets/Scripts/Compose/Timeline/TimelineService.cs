@@ -182,6 +182,12 @@ namespace ArcCreate.Compose.Timeline
         [KeybindHint(Exclude = false, Priority = KeybindPriorities.Playback)]
         public void IncreasePlaybackSpeed()
         {
+            if (gameplayData.PlaybackSpeed.Value < 0.25f)
+            {
+                gameplayData.PlaybackSpeed.Value = 0.25f;
+                return;
+            }
+
             gameplayData.PlaybackSpeed.Value
                 = Mathf.Min(gameplayData.PlaybackSpeed.Value + 0.25f, 5f);
         }
