@@ -256,7 +256,7 @@ namespace ArcCreate.Gameplay.Data
                 Services.Particle.PlayArcParticle(
                     Color,
                     firstArcOfBranch ?? this,
-                    new Vector3(WorldXAt(currentTiming), WorldYAt(currentTiming), 0));
+                    new Vector3(WorldXAt(currentTiming), WorldYAt(currentTiming), 0) + groupProperties.CurrentJudgementOffset);
             }
         }
 

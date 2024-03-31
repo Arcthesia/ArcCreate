@@ -114,24 +114,33 @@ namespace ArcCreate.Gameplay.Data
 
             Services.Render.DrawTap(texture, matrix, color, IsSelected);
 
-            foreach (var arctap in ConnectedArcTaps)
+            if (!groupProperties.NoConnection)
             {
-                Vector3 arctapPos = new Vector3(arctap.WorldX, arctap.WorldY, 0);
-                Vector3 direction = arctapPos - basePos;
+                foreach (var arctap in ConnectedArcTaps)
+                {
+                    if (arctap.TimingGroupInstance.GroupProperties.NoConnection)
+                    {
+                        return;
+                    }
 
-                Matrix4x4 lineMatrix = matrix * Matrix4x4.TRS(
-                    pos: Vector3.zero,
-                    q: Quaternion.LookRotation(direction, Vector3.up),
-                    s: new Vector3(1, 1, direction.magnitude));
-                Services.Render.DrawConnectionLine(lineMatrix, connectionColor);
+                    Vector3 arctapPos = new Vector3(arctap.WorldX, arctap.WorldY, 0);
+                    Vector3 direction = arctapPos - basePos;
+
+                    Matrix4x4 lineMatrix = matrix * Matrix4x4.TRS(
+                        pos: Vector3.zero,
+                        q: Quaternion.LookRotation(direction, Vector3.up),
+                        s: new Vector3(1, 1, direction.magnitude));
+                    Services.Render.DrawConnectionLine(lineMatrix, connectionColor);
+                }
             }
         }
 
         public void ProcessLaneTapJudgement(int offset, GroupProperties props)
         {
+            Vector3 judgeOffset = props.CurrentJudgementOffset;
             JudgementResult result = props.MapJudgementResult(offset.CalculateJudgeResult());
-            Services.Particle.PlayTapParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0), result);
-            Services.Particle.PlayTextParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0), result, offset);
+            Services.Particle.PlayTapParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0) + judgeOffset, result);
+            Services.Particle.PlayTextParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0) + judgeOffset, result, offset);
             Services.Score.ProcessJudgement(result, offset);
             isHit = true;
 

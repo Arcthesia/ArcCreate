@@ -101,7 +101,7 @@ namespace ArcCreate.Gameplay.Data
                 {
                     if (!spawnedParticleThisFrame)
                     {
-                        Services.Particle.PlayTextParticle(currentPos, result, Option<int>.None());
+                        Services.Particle.PlayTextParticle(currentPos + props.CurrentJudgementOffset, result, Option<int>.None());
                         spawnedParticleThisFrame = true;
                     }
 
@@ -123,7 +123,7 @@ namespace ArcCreate.Gameplay.Data
                 {
                     if (!spawnedParticleThisFrame)
                     {
-                        Services.Particle.PlayTextParticle(currentPos, result, Option<int>.None());
+                        Services.Particle.PlayTextParticle(currentPos + props.CurrentJudgementOffset, result, Option<int>.None());
                         spawnedParticleThisFrame = true;
                     }
 

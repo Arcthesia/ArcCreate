@@ -21,6 +21,8 @@ namespace ArcCreate.ChartFormat
 
         public bool NoArcCap { get; set; } = false;
 
+        public bool NoConnection { get; set; } = false;
+
         public bool FadingHolds { get; set; } = false;
 
         public bool IgnoreMirror { get; set; } = false;
@@ -35,6 +37,16 @@ namespace ArcCreate.ChartFormat
         public float AngleX { get; set; } = 0;
 
         public float AngleY { get; set; } = 0;
+
+        public float JudgementSizeX { get; set; } = 1;
+
+        public float JudgementSizeY { get; set; } = 1;
+
+        public float JudgementOffsetX { get; set; } = 0;
+
+        public float JudgementOffsetY { get; set; } = 0;
+
+        public float JudgementOffsetZ { get; set; } = 0;
 
         public SideOverride Side { get; set; } = SideOverride.None;
 
@@ -80,6 +92,26 @@ namespace ArcCreate.ChartFormat
                         case "angley":
                             valid = Evaluator.TryFloat(value, out val);
                             tg.AngleY = valid ? val : 0;
+                            break;
+                        case "judgesizex":
+                            valid = Evaluator.TryFloat(value, out val);
+                            tg.JudgementSizeX = valid ? val : 1;
+                            break;
+                        case "judgesizey":
+                            valid = Evaluator.TryFloat(value, out val);
+                            tg.JudgementSizeY = valid ? val : 1;
+                            break;
+                        case "judgeoffsetx":
+                            valid = Evaluator.TryFloat(value, out val);
+                            tg.JudgementOffsetX = valid ? val : 1;
+                            break;
+                        case "judgeoffsety":
+                            valid = Evaluator.TryFloat(value, out val);
+                            tg.JudgementOffsetY = valid ? val : 1;
+                            break;
+                        case "judgeoffsetz":
+                            valid = Evaluator.TryFloat(value, out val);
+                            tg.JudgementOffsetZ = valid ? val : 1;
                             break;
                         case "arcresolution":
                             valid = Evaluator.TryFloat(value, out val);
@@ -147,6 +179,9 @@ namespace ArcCreate.ChartFormat
                             break;
                         case "noarccap":
                             tg.NoArcCap = true;
+                            break;
+                        case "noconnection":
+                            tg.NoConnection = true;
                             break;
                         case "light":
                             tg.Side = SideOverride.Light;
@@ -273,6 +308,11 @@ namespace ArcCreate.ChartFormat
                 opts.Add("autoplay");
             }
 
+            if (NoConnection)
+            {
+                opts.Add("noconnection");
+            }
+
             if (JudgementMaps.TryGetValue(JudgementMap.Max, out JudgementMap maxTo))
             {
                 opts.Add($"max={GetStringFrom(maxTo)}");
@@ -336,6 +376,31 @@ namespace ArcCreate.ChartFormat
             if (ArcResolution != 1)
             {
                 opts.Add($"arcresolution={ArcResolution:f1}");
+            }
+
+            if (JudgementOffsetX != 0)
+            {
+                opts.Add($"judgeoffsetx={JudgementOffsetX:f1}");
+            }
+
+            if (JudgementOffsetY != 0)
+            {
+                opts.Add($"judgeoffsety={JudgementOffsetY:f1}");
+            }
+
+            if (JudgementOffsetZ != 0)
+            {
+                opts.Add($"judgeoffsetz={JudgementOffsetZ:f1}");
+            }
+
+            if (JudgementSizeX != 1)
+            {
+                opts.Add($"judgesizex={JudgementSizeX:f1}");
+            }
+
+            if (JudgementSizeY != 1)
+            {
+                opts.Add($"judgesizey={JudgementSizeY:f1}");
             }
 
             if (Side != SideOverride.None)

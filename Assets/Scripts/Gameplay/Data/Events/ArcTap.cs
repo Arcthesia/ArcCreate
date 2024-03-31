@@ -134,8 +134,9 @@ namespace ArcCreate.Gameplay.Data
         public void ProcessArcTapJudgement(int offset, GroupProperties props)
         {
             JudgementResult result = props.MapJudgementResult(offset.CalculateJudgeResult());
-            Services.Particle.PlayTapParticle(new Vector3(WorldX, WorldY), result);
-            Services.Particle.PlayTextParticle(new Vector3(WorldX, WorldY), result, offset);
+            Vector3 judgeOffset = props.CurrentJudgementOffset;
+            Services.Particle.PlayTapParticle(new Vector3(WorldX, WorldY) + judgeOffset, result);
+            Services.Particle.PlayTextParticle(new Vector3(WorldX, WorldY) + judgeOffset, result, offset);
             Services.Score.ProcessJudgement(result, offset);
             isHit = true;
 

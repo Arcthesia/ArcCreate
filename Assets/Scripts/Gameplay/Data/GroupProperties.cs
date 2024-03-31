@@ -25,8 +25,14 @@ namespace ArcCreate.Gameplay.Data
             NoHead = raw.NoHead;
             NoShadow = raw.NoShadow;
             NoArcCap = raw.NoArcCap;
+            NoConnection = raw.NoConnection;
             AngleX = raw.AngleX;
             AngleY = raw.AngleY;
+            JudgementOffsetX = raw.JudgementOffsetX;
+            JudgementOffsetY = raw.JudgementOffsetY;
+            JudgementOffsetZ = raw.JudgementOffsetZ;
+            JudgementSizeX = raw.JudgementSizeX;
+            JudgementSizeY = raw.JudgementSizeY;
             ArcResolution = raw.ArcResolution;
             Editable = raw.Editable;
             Autoplay = raw.Autoplay;
@@ -62,6 +68,8 @@ namespace ArcCreate.Gameplay.Data
 
         public bool NoArcCap { get; set; } = false;
 
+        public bool NoConnection { get; set; } = false;
+
         public bool FadingHolds { get; set; } = false;
 
         public bool IgnoreMirror { get; set; } = false;
@@ -72,11 +80,31 @@ namespace ArcCreate.Gameplay.Data
 
         public float AngleY { get; set; } = 0;
 
+        public float JudgementSizeX { get; set; } = 1;
+
+        public float JudgementSizeY { get; set; } = 1;
+
+        public float JudgementOffsetX { get; set; } = 0;
+
+        public float JudgementOffsetY { get; set; } = 0;
+
+        public float JudgementOffsetZ { get; set; } = 0;
+
         public float ArcResolution { get; set; } = 1;
 
         public float SCAngleX { get; set; } = 0;
 
         public float SCAngleY { get; set; } = 0;
+
+        public float SCJudgementSizeX { get; set; } = 1;
+
+        public float SCJudgementSizeY { get; set; } = 1;
+
+        public float SCJudgementOffsetX { get; set; } = 0;
+
+        public float SCJudgementOffsetY { get; set; } = 0;
+
+        public float SCJudgementOffsetZ { get; set; } = 0;
 
         public Matrix4x4 GroupMatrix { get; set; } = Matrix4x4.identity;
 
@@ -99,6 +127,13 @@ namespace ArcCreate.Gameplay.Data
             }
         }
 
+        public Vector2 CurrentJudgementSize => new Vector2(JudgementSizeX * SCJudgementSizeX, JudgementSizeY * SCJudgementSizeY);
+
+        public Vector3 CurrentJudgementOffset => new Vector3(
+            JudgementOffsetX + SCJudgementOffsetX,
+            JudgementOffsetY + SCJudgementOffsetY,
+            JudgementOffsetZ + SCJudgementOffsetZ);
+
         public RawTimingGroup ToRaw()
         {
             var rtg = new RawTimingGroup
@@ -113,8 +148,14 @@ namespace ArcCreate.Gameplay.Data
                 NoShadow = NoShadow,
                 NoClip = NoClip,
                 NoArcCap = NoArcCap,
+                NoConnection = NoConnection,
                 AngleX = AngleX,
                 AngleY = AngleY,
+                JudgementOffsetX = JudgementOffsetX,
+                JudgementOffsetY = JudgementOffsetY,
+                JudgementOffsetZ = JudgementOffsetZ,
+                JudgementSizeX = JudgementSizeX,
+                JudgementSizeY = JudgementSizeY,
                 ArcResolution = ArcResolution,
                 Autoplay = Autoplay,
                 IgnoreMirror = IgnoreMirror,
@@ -130,6 +171,13 @@ namespace ArcCreate.Gameplay.Data
 
         public JudgementResult MapJudgementResult(JudgementResult from)
         {
+            InputMode inputMode = (InputMode)Settings.InputMode.Value;
+            bool isAuto = inputMode == InputMode.Auto || inputMode == InputMode.AutoController;
+            if (isAuto || Autoplay)
+            {
+                return JudgementResult.Max;
+            }
+
             if (JudgementMaps.TryGetValue(from, out JudgementResult to))
             {
                 return to;

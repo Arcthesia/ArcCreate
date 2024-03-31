@@ -194,7 +194,7 @@ namespace ArcCreate.Gameplay.Data
 
             if (currentTiming <= longParticleUntil && currentTiming <= EndTiming)
             {
-                Services.Particle.PlayHoldParticle(this, new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0));
+                Services.Particle.PlayHoldParticle(this, new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0) + groupProperties.CurrentJudgementOffset);
             }
         }
 
@@ -223,7 +223,7 @@ namespace ArcCreate.Gameplay.Data
             longParticleUntil = currentTiming + Values.HoldParticlePersistDuration;
             highlight = true;
             Services.InputFeedback.LaneFeedback(Lane);
-            Services.Particle.PlayHoldParticle(this, new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0));
+            Services.Particle.PlayHoldParticle(this, new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0) + props.CurrentJudgementOffset);
             Services.Hitsound.PlayTapHitsound(Timing);
 
             // Extend the note back
@@ -252,7 +252,7 @@ namespace ArcCreate.Gameplay.Data
                     Services.Score.ProcessJudgement(result, Option<int>.None());
                     if (!spawnedParticleThisFrame)
                     {
-                        PlayParticle(result);
+                        PlayParticle(result, props.CurrentJudgementOffset);
                         spawnedParticleThisFrame = true;
                     }
                 }
@@ -268,7 +268,7 @@ namespace ArcCreate.Gameplay.Data
                     Services.Score.ProcessJudgement(result, Option<int>.None());
                     if (!spawnedParticleThisFrame)
                     {
-                        PlayParticle(result);
+                        PlayParticle(result, props.CurrentJudgementOffset);
                         spawnedParticleThisFrame = true;
                     }
                 }
@@ -322,10 +322,10 @@ namespace ArcCreate.Gameplay.Data
             });
         }
 
-        private void PlayParticle(JudgementResult result)
+        private void PlayParticle(JudgementResult result, Vector3 judgeOffset)
         {
             Services.Particle.PlayTextParticle(
-                new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0),
+                new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0) + judgeOffset,
                 result,
                 Option<int>.None());
         }
