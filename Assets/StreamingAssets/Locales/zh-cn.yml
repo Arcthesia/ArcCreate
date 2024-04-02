@@ -526,10 +526,9 @@ Compose:
         TraceBody: Trace主体
         Shadow: 阴影
         ArcColors: Arc颜色
-        Blue: 蓝（0）
-        Red: 红（1）
-        Green: 绿（2）
-        Custom: 自定义（{0}）
+        Blue: 蓝
+        Red: 红
+        Green: 绿
         AddArcColor: 添加Arc颜色
         NoProjectLoaded: |-
           没有加载工程。

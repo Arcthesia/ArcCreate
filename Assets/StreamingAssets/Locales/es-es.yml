@@ -550,10 +550,9 @@ Compose:
         TraceBody: Cuerpo del trazado
         Shadow: Sombra
         ArcColors: Colores del arco
-        Blue: Azul (0)
-        Red: Rojo (1)
-        Green: Verde (2)
-        Custom: Personalizado ({0})
+        Blue: Azul
+        Red: Rojo
+        Green: Verde
         AddArcColor: Añadir color a arco
         NoProjectLoaded: |-
           Proyecto no cargado.

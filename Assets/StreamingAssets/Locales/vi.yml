@@ -495,10 +495,9 @@ Compose:
         TraceBody: Trace Body
         Shadow: Shadow
         ArcColors: Arc Colors
-        Blue: Blue (0)
-        Red: Red (1)
-        Green: Green (2)
-        Custom: Custom ({0})
+        Blue: Blue
+        Red: Red
+        Green: Green
         AddArcColor: Add arc color
         NoProjectLoaded: |-
           No project loaded.

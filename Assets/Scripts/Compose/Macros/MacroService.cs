@@ -14,7 +14,7 @@ using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Macros
 {
-    [EditorScope("Macros")]
+    [EditorScope("Macro")]
     public class MacroService : MonoBehaviour, IMacroService
     {
         [SerializeField] private MacroDialog macroDialog;
@@ -42,7 +42,7 @@ namespace ArcCreate.Compose.Macros
         {
             if (!macroEnvironment.TryGetMacro(macroId, out MacroDefinition macro))
             {
-                Services.Popups.Notify(Popups.Severity.Error, I18n.S("Compose.Notift.Macros.NotFound", macroId));
+                Services.Popups.Notify(Popups.Severity.Error, I18n.S("Compose.Notify.Macros.NotFound", macroId));
                 return;
             }
 

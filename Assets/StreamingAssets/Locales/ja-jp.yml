@@ -561,10 +561,9 @@ Compose:
         TraceBody: Trace
         Shadow: 影
         ArcColors: Arc
-        Blue: Blue (0)
-        Red: Red (1)
-        Green: Green (2)
-        Custom: Custom ({0})
+        Blue: Blue
+        Red: Red
+        Green: Green
         AddArcColor: 追加
         NoProjectLoaded: |-
           プロジェクトがロードされていません。

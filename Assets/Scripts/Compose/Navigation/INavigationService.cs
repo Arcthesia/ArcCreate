@@ -49,5 +49,7 @@ namespace ArcCreate.Compose.Navigation
         List<IAction> GetExecutableActions(bool calledByAction = false, Func<IAction, bool> predicate = null);
 
         List<Keybind> GetKeybindsToDisplay();
+
+        void RefreshKeybindHint();
     }
 }

@@ -519,10 +519,9 @@ Compose:
         TraceBody: 黑線顏色
         Shadow: 影子顏色
         ArcColors: 音弧顏色
-        Blue: 藍 (0)
-        Red: 紅 (1)
-        Green: 綠 (2)
-        Custom: 自訂 ({0})
+        Blue: 藍
+        Red: 紅
+        Green: 綠
         AddArcColor: 新增音弧顏色
         NoProjectLoaded: |-
           沒有專案被讀取，

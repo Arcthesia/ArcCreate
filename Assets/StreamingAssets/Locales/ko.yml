@@ -497,10 +497,9 @@ Compose:
         TraceBody: 트레이스 색
         Shadow: 그림자 색
         ArcColors: 아크 색
-        Blue: 파랑 (0)
-        Red: 빨강 (1)
-        Green: 초록 (2)
-        Custom: 커스텀 ({0})
+        Blue: 파랑
+        Red: 빨강
+        Green: 초록
         AddArcColor: 아크 색 추가
         NoProjectLoaded: |-
           프로젝트가 로드되지 않았습니다.

@@ -22,9 +22,11 @@ namespace ArcCreate.Compose.Editing
         private bool AllowCreatingNoteBackwards => Settings.AllowCreatingNotesBackward.Value;
 
         [EditorAction("Start", false, "<mouse1>")]
+        [SubAction("ToggleFreeSky", false, "<s>")]
         [SubAction("Confirm", false, "<mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
         [KeybindHint(Priority = KeybindPriorities.NoteCreation)]
+        [KeybindHint("ToggleFreeSky", Priority = KeybindPriorities.SubConfirm + 1)]
         [KeybindHint("Confirm", Priority = KeybindPriorities.SubConfirm)]
         [KeybindHint("Cancel", Priority = KeybindPriorities.SubCancel)]
         [RequireGameplayLoaded]
@@ -46,27 +48,34 @@ namespace ArcCreate.Compose.Editing
 
             SubAction confirm = action.GetSubAction("Confirm");
             SubAction cancel = action.GetSubAction("Cancel");
+            SubAction toggleFreeSky = action.GetSubAction("ToggleFreeSky");
 
-            switch (Values.CreateNoteMode.Value)
+            CreateNoteMode mode = Values.CreateNoteMode.Value;
+            switch (mode)
             {
                 case CreateNoteMode.Idle:
-                    return;
+                    break;
                 case CreateNoteMode.Tap:
                     CreateTap();
-                    return;
+                    break;
                 case CreateNoteMode.Hold:
+                    toggleFreeSky.ForceDisabled = true;
                     await CreateHold(confirm, cancel);
-                    return;
+                    break;
                 case CreateNoteMode.Arc:
+                    toggleFreeSky.ForceDisabled = true;
                     await CreateArc(isArc: true, confirm, cancel);
-                    return;
+                    break;
                 case CreateNoteMode.Trace:
+                    toggleFreeSky.ForceDisabled = true;
                     await CreateArc(isArc: false, confirm, cancel);
-                    return;
+                    break;
                 case CreateNoteMode.ArcTap:
-                    await CreateArcTap(confirm, cancel);
-                    return;
+                    await CreateArcTap(toggleFreeSky, confirm, cancel);
+                    break;
             }
+
+            Values.CreateNoteMode.Value = mode;
         }
 
         private void CreateTap()
@@ -242,7 +251,7 @@ namespace ArcCreate.Compose.Editing
             }
         }
 
-        private async UniTask CreateArcTap(SubAction confirm, SubAction cancel)
+        private async UniTask CreateArcTap(SubAction toggleFreeSky, SubAction confirm, SubAction cancel)
         {
             int timing = Services.Cursor.CursorTiming;
             List<Arc> elligibleArcs = new List<Arc>();
@@ -267,54 +276,150 @@ namespace ArcCreate.Compose.Editing
 
             if (elligibleArcs.Count == 0)
             {
-                Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Exception.CreateSkyNoteNoValidArc"));
-                return;
-            }
-
-            ArcTap arctap = new ArcTap()
-            {
-                Timing = timing,
-                TimingGroup = elligibleArcs[0].TimingGroup,
-                Arc = elligibleArcs[0],
-            };
-
-            IEnumerable<ArcEvent> events = new ArcEvent[] { arctap };
-            var command = new EventCommand(
-                I18n.S("Compose.Notify.History.CreateNote.ArcTap"),
-                add: events);
-
-            using (new NoteModifyTarget(new List<Note> { arctap }))
-            {
-                if (elligibleArcs.Count > 1)
+                toggleFreeSky.ForceDisabled = true;
+                Arc arc = new Arc()
                 {
-                    command.Execute();
+                    Timing = timing,
+                    EndTiming = timing + 1,
+                    LineType = Values.CreateArcTypeMode.Value,
+                    Color = Values.CreateArcColorMode.Value,
+                    Sfx = "none",
+                    IsTrace = true,
+                    TimingGroup = Values.EditingTimingGroup.Value,
+                };
 
+                ArcTap arctap = new ArcTap()
+                {
+                    Timing = timing,
+                    TimingGroup = Values.EditingTimingGroup.Value,
+                    Arc = arc,
+                };
+
+                IEnumerable<ArcEvent> events = new ArcEvent[] { arctap, arc };
+                var command = new EventCommand(
+                    I18n.S("Compose.Notify.History.CreateNote.ArcTap"),
+                    add: events);
+                command.Execute();
+
+                var (success, pos) = await Services.Cursor.RequestVerticalSelection(
+                    confirm,
+                    cancel,
+                    showGridAtTiming: timing,
+                    update: p =>
+                    {
+                        arc.XStart = p.x;
+                        arc.XEnd = p.x;
+                        arc.YStart = p.y;
+                        arc.YEnd = p.y;
+                        Services.Gameplay.Chart.UpdateEvents(events);
+                    });
+
+                if (success)
+                {
+                    arc.XStart = pos.x;
+                    arc.XEnd = pos.x;
+                    arc.YStart = pos.y;
+                    arc.YEnd = pos.y;
+                    Services.Gameplay.Chart.UpdateEvents(events);
+                    Services.History.AddCommandWithoutExecuting(command);
+                }
+                else
+                {
+                    command.Undo();
+                }
+            }
+            else
+            {
+                toggleFreeSky.ForceDisabled = false;
+                Arc arc = new Arc()
+                {
+                    Timing = timing,
+                    EndTiming = timing + 1,
+                    LineType = Values.CreateArcTypeMode.Value,
+                    Color = Values.CreateArcColorMode.Value,
+                    Sfx = "none",
+                    IsTrace = true,
+                    TimingGroup = Values.EditingTimingGroup.Value,
+                };
+
+                ArcTap arctap = new ArcTap()
+                {
+                    Timing = timing,
+                    TimingGroup = elligibleArcs[0].TimingGroup,
+                    Arc = elligibleArcs[0],
+                };
+
+                IEnumerable<ArcEvent> events = new ArcEvent[] { arctap };
+                var command = new EventCommand(
+                    I18n.S("Compose.Notify.History.CreateNote.ArcTap"),
+                    add: events);
+
+                bool freeSky = false;
+                using (new NoteModifyTarget(new List<Note> { arctap }))
+                {
+                    if (elligibleArcs.Count == 1)
+                    {
+                        Services.History.AddCommand(command);
+                        return;
+                    }
+
+                    command.Execute();
                     var (success, pos) = await Services.Cursor.RequestVerticalSelection(
                         confirm,
                         cancel,
                         showGridAtTiming: timing,
                         update: p =>
                         {
-                            arctap.Arc = GetClosestArc(timing, elligibleArcs, p);
+                            if (toggleFreeSky.WasExecuted)
+                            {
+                                freeSky = !freeSky;
+                            }
+
+                            if (freeSky)
+                            {
+                                arc.XStart = p.x;
+                                arc.XEnd = p.x;
+                                arc.YStart = p.y;
+                                arc.YEnd = p.y;
+                                arctap.Arc = arc;
+                            }
+                            else
+                            {
+                                arctap.Arc = GetClosestArc(timing, elligibleArcs, p);
+                            }
+
                             Services.Gameplay.Chart.UpdateEvents(events);
                         });
 
-                    if (success)
+                    if (!success)
+                    {
+                        command.Undo();
+                        return;
+                    }
+
+                    if (freeSky)
+                    {
+                        arc.XStart = pos.x;
+                        arc.XEnd = pos.x;
+                        arc.YStart = pos.y;
+                        arc.YEnd = pos.y;
+                        arctap.Arc = arc;
+
+                        command.Undo();
+                        events = new ArcEvent[] { arc, arctap };
+                        command = new EventCommand(
+                            I18n.S("Compose.Notify.History.CreateNote.ArcTap"),
+                            add: events);
+                        Services.History.AddCommand(command);
+                    }
+                    else
                     {
                         arctap.Arc = GetClosestArc(timing, elligibleArcs, pos);
                         Services.Gameplay.Chart.UpdateEvents(events);
                         Services.History.AddCommandWithoutExecuting(command);
                     }
-                    else
-                    {
-                        command.Undo();
-                    }
-
-                    return;
                 }
             }
-
-            Services.History.AddCommand(command);
         }
 
         private Arc GetClosestArc(int timing, List<Arc> arcs, Vector2 arcPos)

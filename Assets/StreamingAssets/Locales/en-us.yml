@@ -223,6 +223,8 @@ Compose:
         Position: Select position
         Lane: Select lane
       NotFound: Macro "{macroId}" does not exist.
+    Mirror:
+      CannotMirror: No notes can be mirrored
   # Dialog boxes
   Dialog:
     RemoveGroup:
@@ -367,6 +369,7 @@ Compose:
           Name: Add note
           Confirm: Confirm
           Cancel: Cancel
+          ToggleFreeSky: Switch to free sky note
       NotePallete:
         Name: Note palette
         Arc: 
@@ -666,10 +669,9 @@ Compose:
         TraceBody: Trace Body
         Shadow: Shadow
         ArcColors: Arc Colors
-        Blue: Blue (0)
-        Red: Red (1)
-        Green: Green (2)
-        Custom: Custom ({0})
+        Blue: Blue
+        Red: Red
+        Green: Green
         AddArcColor: Add arc color
         NoProjectLoaded: |-
           No project loaded.
@@ -821,7 +823,7 @@ Compose:
           Name: Input
           ReloadKeybinds: Reload keybinds
           AllowCreatingNotesBackward: Allow creating notes backward
-          EnableEditingArctapWidth: Enable editing sky note's width
+          EnableEditingArctapWidth: Allow editing sky note's width
           ShowKeybindHint: Show keybind hints
         Files:
           Name: Files
@@ -847,7 +849,13 @@ Compose:
         Tap: Tap
         Hold: Hold
         Arctap: Sky
+        Idle: Idle
         Easing: Easing
+      Settings:
+        ShowGrid: Show grid
+        HideGrid: Hide grid
+        Measure: Measure
+        RangeSelect: Range select
       Macros:
         Name: Macros
         GenerateEmmy: Generate EmmyLua

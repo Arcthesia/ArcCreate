@@ -83,7 +83,7 @@ namespace ArcCreate.Compose.Components
                     text.text = I18n.S("Compose.UI.Project.Label.Green");
                     break;
                 default:
-                    text.text = I18n.S("Compose.UI.Project.Label.Custom", color);
+                    text.text = color.ToString();
                     break;
             }
 

@@ -6,7 +6,9 @@ using ArcCreate.Compose.History;
 using ArcCreate.Compose.Navigation;
 using ArcCreate.Gameplay.Data;
 using Cysharp.Threading.Tasks;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Editing
@@ -14,21 +16,35 @@ namespace ArcCreate.Compose.Editing
     [EditorScope("NotePallete")]
     public class NotePallete : MonoBehaviour
     {
+        [Header("Palette")]
         [SerializeField] private NoteCreation noteCreation;
         [SerializeField] private Button tapButton;
         [SerializeField] private Button holdButton;
         [SerializeField] private Button arcButton;
         [SerializeField] private Button traceButton;
         [SerializeField] private Button arctapButton;
-        [SerializeField] private ArcTypeSelector arcTypeSelector;
-        [SerializeField] private ArcColorSelector arcColorSelector;
-        [SerializeField] private Image arcImage;
+        [SerializeField] private Button idleButton;
 
+        [Header("Highlights")]
         [SerializeField] private GameObject tapButtonHighlight;
         [SerializeField] private GameObject holdButtonHighlight;
         [SerializeField] private GameObject arcButtonHighlight;
         [SerializeField] private GameObject traceButtonHighlight;
         [SerializeField] private GameObject arctapButtonHighlight;
+        [SerializeField] private GameObject idleButtonHighlight;
+
+        [Header("Arcs")]
+        [SerializeField] private ArcTypeSelector arcTypeSelector;
+        [SerializeField] private ArcColorSelector arcColorSelector;
+        [SerializeField] private Image arcImage;
+
+        [Header("Tools")]
+        [SerializeField] private Button toggleGridButton;
+        [SerializeField] private TMP_Text toggleGridText;
+        [SerializeField] private GameObject showGridIcon;
+        [SerializeField] private GameObject hideGridIcon;
+        [SerializeField] private Button measurerButton;
+        [SerializeField] private Button rangeSelectButton;
 
         private bool creatingArc = true;
 
@@ -362,8 +378,12 @@ namespace ArcCreate.Compose.Editing
             arcButton.onClick.AddListener(OnArcButton);
             traceButton.onClick.AddListener(OnTraceButton);
             arctapButton.onClick.AddListener(OnArcTapButton);
+            idleButton.onClick.AddListener(OnIdleButton);
             arcTypeSelector.OnTypeChanged += OnArcTypeSelector;
             arcColorSelector.OnColorChanged += OnArcColorSelector;
+            toggleGridButton.onClick.AddListener(OnToggleGrid);
+            measurerButton.onClick.AddListener(OnMeasurer);
+            rangeSelectButton.onClick.AddListener(OnRangeSelect);
             Values.CreateNoteMode.OnValueChange += UpdateModePalleteVisual;
             Values.CreateArcTypeMode.OnValueChange += UpdateArcTypeVisual;
             Values.CreateArcColorMode.OnValueChange += UpdateArcColorVisual;
@@ -379,6 +399,10 @@ namespace ArcCreate.Compose.Editing
             arcButton.onClick.RemoveListener(OnArcButton);
             traceButton.onClick.RemoveListener(OnTraceButton);
             arctapButton.onClick.RemoveListener(OnArcTapButton);
+            idleButton.onClick.RemoveListener(OnIdleButton);
+            toggleGridButton.onClick.RemoveListener(OnToggleGrid);
+            measurerButton.onClick.RemoveListener(OnMeasurer);
+            rangeSelectButton.onClick.RemoveListener(OnRangeSelect);
             arcTypeSelector.OnTypeChanged -= OnArcTypeSelector;
             arcColorSelector.OnColorChanged -= OnArcColorSelector;
             Values.CreateNoteMode.OnValueChange -= UpdateModePalleteVisual;
@@ -393,6 +417,7 @@ namespace ArcCreate.Compose.Editing
             arcButtonHighlight.SetActive(mode == CreateNoteMode.Arc);
             traceButtonHighlight.SetActive(mode == CreateNoteMode.Trace);
             arctapButtonHighlight.SetActive(mode == CreateNoteMode.ArcTap);
+            idleButtonHighlight.SetActive(mode == CreateNoteMode.Idle);
             Services.Cursor.EnableLaneCursor = mode != CreateNoteMode.Idle;
         }
 
@@ -462,6 +487,11 @@ namespace ArcCreate.Compose.Editing
             Values.CreateNoteMode.Value = CreateNoteMode.ArcTap;
         }
 
+        private void OnIdleButton()
+        {
+            Values.CreateNoteMode.Value = CreateNoteMode.Idle;
+        }
+
         private void OnArcColorSelector(int color)
         {
             Values.CreateArcColorMode.Value = color;
@@ -470,6 +500,29 @@ namespace ArcCreate.Compose.Editing
         private void OnArcTypeSelector(ArcLineType type)
         {
             Values.CreateArcTypeMode.Value = type;
+        }
+
+        private void OnToggleGrid()
+        {
+            Services.Grid.IsGridEnabled = !Services.Grid.IsGridEnabled;
+            showGridIcon.SetActive(!Services.Grid.IsGridEnabled);
+            hideGridIcon.SetActive(Services.Grid.IsGridEnabled);
+            toggleGridText.text = I18n.S(Services.Grid.IsGridEnabled ?
+                "Compose.UI.Toolbox.Settings.HideGrid" :
+                "Compose.UI.Toolbox.Settings.ShowGrid");
+            EventSystem.current.SetSelectedGameObject(null);
+        }
+
+        private void OnMeasurer()
+        {
+            Services.Navigation.StartAction("Measure.Start");
+            EventSystem.current.SetSelectedGameObject(null);
+        }
+
+        private void OnRangeSelect()
+        {
+            Services.Navigation.StartAction("Selection.RangeSelect");
+            EventSystem.current.SetSelectedGameObject(null);
         }
 
         public class RequirePalleteAttribute : ContextRequirementAttribute
