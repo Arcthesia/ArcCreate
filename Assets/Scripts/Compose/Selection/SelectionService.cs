@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using ArcCreate.Compose.Navigation;
 using ArcCreate.Compose.Popups;
 using ArcCreate.Compose.Timeline;
@@ -28,10 +29,10 @@ namespace ArcCreate.Compose.Selection
         [SerializeField] private MarkerRange rangeSelectPreview;
 
         private readonly HashSet<Note> selectedNotes = new HashSet<Note>();
-        private float latestSelectedDistance = 0;
         private bool rangeSelected;
         private readonly NoteRaycastHit[] hitResults = new NoteRaycastHit[32];
         private readonly HashSet<Note> search = new HashSet<Note>();
+        private RaycastHitComparer hitComparer = new RaycastHitComparer();
 
         public event Action<HashSet<Note>> OnSelectionChange;
 
@@ -336,27 +337,29 @@ namespace ArcCreate.Compose.Selection
             Ray ray = gameplayCamera.ScreenPointToRay(mousePosition);
 
             int amount = NoteRaycaster.Raycast(ray, hitResults, 99999);
+            Array.Sort(hitResults, 0, amount, hitComparer);
 
-            if (TryGetNoteWithMinDistance(latestSelectedDistance, amount, out note, selectionMode))
-            {
-                return true;
-            }
-            else
-            {
-                return TryGetNoteWithMinDistance(0, amount, out note, selectionMode);
-            }
-        }
+            int length = Mathf.Min(hitResults.Length, amount);
+            int initialOffset = 0;
+            bool skipOne = false;
 
-        private bool TryGetNoteWithMinDistance(float distance, int amount, out Note note, SelectionMode selectionMode)
-        {
-            for (int i = 0; i < Mathf.Min(hitResults.Length, amount); i++)
+            if (selectionMode == SelectionMode.Any)
             {
-                NoteRaycastHit hit = hitResults[i];
-
-                if (hit.HitDistance <= distance)
+                for (int i = 0; i < length; i++)
                 {
-                    continue;
+                    NoteRaycastHit hit = hitResults[i];
+                    if (SelectedNotes.Contains(hit.Note))
+                    {
+                        initialOffset = i + 1;
+                        skipOne = true;
+                    }
                 }
+            }
+
+            int loopNum = skipOne ? length - 1 : length;
+            for (int i = 0; i < loopNum; i++)
+            {
+                NoteRaycastHit hit = hitResults[(i + initialOffset) % length];
 
                 if (hit.HitPoint.z >= Gameplay.Values.TrackLengthBackward
                  || hit.HitPoint.z <= -Gameplay.Values.TrackLengthForward)
@@ -393,12 +396,10 @@ namespace ArcCreate.Compose.Selection
                 switch (selectionMode)
                 {
                     case SelectionMode.Any:
-                        latestSelectedDistance = hit.HitDistance;
                         return true;
                     case SelectionMode.Selected:
                         if (note.IsSelected)
                         {
-                            latestSelectedDistance = hit.HitDistance;
                             return true;
                         }
 
@@ -406,7 +407,6 @@ namespace ArcCreate.Compose.Selection
                     case SelectionMode.Deselected:
                         if (!note.IsSelected)
                         {
-                            latestSelectedDistance = hit.HitDistance;
                             return true;
                         }
 
@@ -470,6 +470,14 @@ namespace ArcCreate.Compose.Selection
             public static HashSet<Note> Selection { get; set; }
 
             public override bool CheckRequirement() => Selection.Count > 0;
+        }
+
+        private class RaycastHitComparer : IComparer<NoteRaycastHit>
+        {
+            public int Compare(NoteRaycastHit x, NoteRaycastHit y)
+            {
+                return x.HitDistance.CompareTo(y.HitDistance);
+            }
         }
     }
 }
