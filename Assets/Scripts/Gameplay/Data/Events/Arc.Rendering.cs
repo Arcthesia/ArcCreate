@@ -206,10 +206,22 @@ namespace ArcCreate.Gameplay.Data
                     continue;
                 }
 
-                var (bodyMatrix, shadowMatrix) = segment.GetMatrices(currentFloorPosition, groupProperties.FallDirection, z, pos.y);
                 Vector3 midpoint = pos + ((segment.StartPosition + segment.EndPosition) / 2);
                 midpoint.z = (zPos + endZPos) / 2;
                 float depth = Services.Camera.CalculateDepthSquared(midpoint);
+
+                var (bodyMatrix, shadowMatrix, cornerOffset) =
+                        (EndTiming > Timing || IsTrace) ?
+                        segment.GetMatrices(currentFloorPosition, groupProperties.FallDirection, z, pos.y) :
+                        segment.GetMatricesSlam(
+                            currentFloorPosition,
+                            groupProperties.FallDirection,
+                            z,
+                            pos,
+                            TimingGroupInstance,
+                            NextArc,
+                            Values.ArcMeshOffset);
+
                 if (IsTrace)
                 {
                     Services.Render.DrawTraceSegment(matrix * bodyMatrix, color, IsSelected, depth);
@@ -223,7 +235,7 @@ namespace ArcCreate.Gameplay.Data
                     Services.Render.DrawArcSegment(Color, highlight, matrix * bodyMatrix, color, IsSelected, redArcValue, basePos.y + segment.EndPosition.y, depth);
                     if (!groupProperties.NoShadow)
                     {
-                        Services.Render.DrawArcShadow(matrix * shadowMatrix, color);
+                        Services.Render.DrawArcShadow(matrix * shadowMatrix, color, cornerOffset);
                     }
                 }
             }
@@ -313,6 +325,18 @@ namespace ArcCreate.Gameplay.Data
 
             float p = Mathf.Clamp((float)(timing - Timing) / (EndTiming - Timing), 0, 1);
             return ArcFormula.Y(YStart, YEnd, p, LineType);
+        }
+
+        public bool TryGetFirstSegement(out ArcSegmentData segment)
+        {
+            if (segments.Count >= 1)
+            {
+                segment = segments[0];
+                return true;
+            }
+
+            segment = default;
+            return false;
         }
 
         private void RebuildSegments()
