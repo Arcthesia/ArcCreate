@@ -821,6 +821,7 @@ Compose:
           Name: Input
           ReloadKeybinds: Reload keybinds
           AllowCreatingNotesBackward: Allow creating notes backward
+          EnableEditingArctapWidth: Enable editing sky note's width
           ShowKeybindHint: Show keybind hints
         Files:
           Name: Files
@@ -862,6 +863,7 @@ Compose:
       StartPos: From
       EndPos: To
       Sfx: Sfx
+      Width: Width
       Group: Group
       Mixed: Mixed
       Arc: Arc

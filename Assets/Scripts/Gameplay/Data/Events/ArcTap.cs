@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
+using ArcCreate.Gameplay.Scenecontrol;
 using ArcCreate.Utility.Extension;
 using UnityEngine;
 
@@ -17,6 +18,8 @@ namespace ArcCreate.Gameplay.Data
 
         public Arc Arc { get; set; }
 
+        public float Width { get; set; } = 1;
+
         public float WorldX => Arc.WorldXAt(Timing);
 
         public float WorldY => Arc.WorldYAt(Timing);
@@ -29,6 +32,7 @@ namespace ArcCreate.Gameplay.Data
             {
                 Timing = Timing,
                 Arc = Arc,
+                Width = Width,
                 TimingGroup = TimingGroup,
             };
         }
@@ -38,6 +42,7 @@ namespace ArcCreate.Gameplay.Data
             base.Assign(newValues);
             ArcTap e = newValues as ArcTap;
             Arc = e.Arc;
+            Width = e.Width;
         }
 
         public void ResetJudgeTo(int timing)
@@ -71,6 +76,7 @@ namespace ArcCreate.Gameplay.Data
             Vector3 basePos = new Vector3(WorldX, WorldY, 0);
             Vector3 pos = (TimingGroupInstance.GroupProperties.FallDirection * z) + basePos;
             Vector3 scl = TimingGroupInstance.GroupProperties.ScaleIndividual;
+            scl.x *= Width;
 
             for (int i = 0; i < vertices.Count; i++)
             {
@@ -112,6 +118,7 @@ namespace ArcCreate.Gameplay.Data
             Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(WorldX, WorldY, 0);
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
+            scl.x *= Width;
             Matrix4x4 matrix = groupProperties.GroupMatrix * Matrix4x4.TRS(pos, rot, scl);
 
             float alpha = ArcFormula.CalculateFadeOutAlpha(z);
@@ -155,6 +162,7 @@ namespace ArcCreate.Gameplay.Data
                     AutoAtTiming = Timing,
                     X = WorldX,
                     Y = WorldY,
+                    Width = Width,
                     Receiver = this,
                     Properties = props,
                 });

@@ -29,7 +29,8 @@ namespace ArcCreate.Compose.Popups
 
         public object Owner { get; private set; }
 
-        public bool IsCursorHovering => RectTransformUtility.RectangleContainsScreenPoint(rect, Input.mousePosition, null);
+        public bool IsCursorHovering => gameObject.activeInHierarchy &&
+            RectTransformUtility.RectangleContainsScreenPoint(rect, Input.mousePosition, null);
 
         public void OpenAt(Vector2 screenPosition, int? defaultTg, string title, object caller)
         {

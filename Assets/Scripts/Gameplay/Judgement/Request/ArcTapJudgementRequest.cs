@@ -8,6 +8,7 @@ namespace ArcCreate.Gameplay.Judgement
         public int AutoAtTiming;
         public float X;
         public float Y;
+        public float Width;
         public IArcTapJudgementReceiver Receiver;
         public GroupProperties Properties;
     }

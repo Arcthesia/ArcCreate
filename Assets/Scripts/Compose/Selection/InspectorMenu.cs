@@ -38,6 +38,7 @@ namespace ArcCreate.Compose.Selection
         [SerializeField] private ArcColorSelector arcColorField;
         [SerializeField] private Button arcOrTraceButton;
         [SerializeField] private TMP_InputField sfxField;
+        [SerializeField] private TMP_InputField widthField;
         [SerializeField] private TimingGroupField groupField;
         [SerializeField] private Button selectArcButton;
         [SerializeField] private Button selectArcTapButton;
@@ -86,12 +87,14 @@ namespace ArcCreate.Compose.Selection
             bool includeShort = includeTap || includeArctap;
             bool includeArclike = includeArc || includeTrace;
             bool showArcSettings = includeArclike && !includeTap && !includeHold && !includeArctap;
+            bool showArctapWidth = includeArctap && Settings.EnableArctapWidthEditing.Value;
 
             timingFields.SetActive(includeShort);
             rangeTimingFields.SetActive(!includeShort && includeLong);
             laneFields.SetActive((includeTap || includeHold) && !includeArclike && !includeArctap);
             positionFields.SetActive(showArcSettings);
             arcSettingsFields.SetActive(showArcSettings);
+            widthField.gameObject.SetActive(showArctapWidth);
             sfxField.gameObject.SetActive(showArcSettings);
             groupField.gameObject.SetActive(selected.Any(n => !(n is ArcTap)));
             selectArcButton.gameObject.SetActive(includeArctap);
@@ -124,6 +127,7 @@ namespace ArcCreate.Compose.Selection
             arcTypeField.SetValueWithoutNotify(ExtractCommonProperty<Arc, int>(n => (int)n.LineType, out int lineTypeNum) ? (ArcLineType)lineTypeNum : ArcLineType.Unknown);
             arcColorField.SetValueWithoutNotify(ExtractCommonProperty<Arc, int>(n => n.Color, out int color) ? color : int.MinValue);
             sfxField.text = ExtractCommonProperty<Arc, string>(n => n.Sfx, out string sfx) ? sfx : Mixed;
+            widthField.text = ExtractCommonProperty<ArcTap, float>(n => n.Width, out float arctapWidth) ? arctapWidth.ToString() : Mixed;
 
             bool tg = ExtractCommonProperty<Note, int>(n => n.TimingGroup, out int group);
             groupField.SetValueWithoutNotify(null);
@@ -203,6 +207,7 @@ namespace ArcCreate.Compose.Selection
             arcColorField.OnColorChanged += OnArcColorField;
             arcOrTraceButton.onClick.AddListener(OnArcOrTraceButton);
             sfxField.onEndEdit.AddListener(OnSfxField);
+            widthField.onEndEdit.AddListener(OnWidthField);
             groupField.OnValueChanged += OnGroupField;
             selectArcButton.onClick.AddListener(OnSelectArcButton);
             selectArcTapButton.onClick.AddListener(OnSelectArcTapButton);
@@ -223,6 +228,7 @@ namespace ArcCreate.Compose.Selection
             arcColorField.OnColorChanged -= OnArcColorField;
             arcOrTraceButton.onClick.RemoveListener(OnArcOrTraceButton);
             sfxField.onEndEdit.RemoveListener(OnSfxField);
+            widthField.onEndEdit.RemoveListener(OnWidthField);
             groupField.OnValueChanged -= OnGroupField;
             selectArcButton.onClick.RemoveListener(OnSelectArcButton);
             selectArcTapButton.onClick.RemoveListener(OnSelectArcTapButton);
@@ -475,6 +481,21 @@ namespace ArcCreate.Compose.Selection
             ModifyNotes<Arc>(
                 a => a.Sfx != value,
                 a => a.Sfx = value);
+        }
+
+        private void OnWidthField(string value)
+        {
+            if (value == Mixed)
+            {
+                return;
+            }
+
+            if (Evaluator.TryFloat(value, out float width))
+            {
+                ModifyNotes<ArcTap>(
+                    n => n.Width != width,
+                    n => n.Width = width);
+            }
         }
 
         private void OnGroupField(TimingGroup tg)

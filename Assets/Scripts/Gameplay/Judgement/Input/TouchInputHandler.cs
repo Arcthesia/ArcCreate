@@ -94,7 +94,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
                     Vector3 deltaToNote = screenPosition - input.ScreenPos;
                     float distanceToNote = deltaToNote.sqrMagnitude;
 
-                    if (ArcTapCollide(input, screenPosition, worldPosition, judgementSize)
+                    if (ArcTapCollide(input, screenPosition, worldPosition, req.Width, judgementSize)
                     && (timingDifference < minTimingDifference || distanceToNote <= minPositionDifference))
                     {
                         minTimingDifference = timingDifference;
@@ -351,17 +351,18 @@ namespace ArcCreate.Gameplay.Judgement.Input
             return worldCollide || screenCollide;
         }
 
-        private bool ArcTapCollide(TouchInput input, Vector3 screenPosition, Vector3 worldPosition, Vector2 judgementSize)
+        private bool ArcTapCollide(TouchInput input, Vector3 screenPosition, Vector3 worldPosition, float width, Vector2 judgementSize)
         {
+            float hitboxX = Values.ArcTapHitboxX + (Values.LaneWidth / 2 * (width - 1));
             float dSx = Mathf.Abs(input.ScreenPos.x - screenPosition.x);
             float dSy = input.ScreenPos.y - screenPosition.y;
-            bool screenCollide = dSx <= (Values.LaneScreenHitboxHorizontal * 2 * Values.ArcTapHitboxX / Values.LaneWidth * judgementSize.x)
+            bool screenCollide = dSx <= (Values.LaneScreenHitboxHorizontal * 2 * hitboxX / Values.LaneWidth * judgementSize.x)
                               && dSy >= (-Values.LaneScreenHitboxVertical * 2 * Values.ArcTapHitboxYDown / Values.LaneWidth * judgementSize.y)
                               && dSy <= (Values.LaneScreenHitboxVertical * 2 * Values.ArcTapHitboxYUp / Values.LaneWidth * judgementSize.y);
 
             float dWx = Mathf.Abs(input.VerticalPos.x - worldPosition.x);
             float dWy = input.VerticalPos.y - worldPosition.y;
-            bool worldCollide = dWx <= (Values.ArcTapHitboxX * judgementSize.x)
+            bool worldCollide = dWx <= (hitboxX * judgementSize.x)
                              && dWy >= (-Values.ArcTapHitboxYDown * judgementSize.y)
                              && dWy <= (Values.ArcTapHitboxYUp * judgementSize.y);
             return worldCollide || screenCollide;
