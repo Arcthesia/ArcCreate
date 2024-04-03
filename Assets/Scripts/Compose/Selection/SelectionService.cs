@@ -312,6 +312,13 @@ namespace ArcCreate.Compose.Selection
         {
             foreach (var note in selectedNotes)
             {
+                var group = note.TimingGroupInstance;
+                if (!group.IsVisible
+                 || !group.GroupProperties.Editable)
+                {
+                    return;
+                }
+
                 note.IsSelected = false;
             }
 

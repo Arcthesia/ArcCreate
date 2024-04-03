@@ -75,6 +75,8 @@ namespace ArcCreate.Compose.Navigation
             rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
             AlignToCursor(height);
 
+            var prevMode = Values.CreateNoteMode.Value;
+            Values.CreateNoteMode.Value = CreateNoteMode.Idle;
             if (optionsExist)
             {
                 parent.gameObject.SetActive(true);
@@ -86,6 +88,8 @@ namespace ArcCreate.Compose.Navigation
                     CloseContextMenu();
                 }
             }
+
+            Values.CreateNoteMode.Value = prevMode;
         }
 
         public void CloseContextMenu()
