@@ -222,7 +222,7 @@ Compose:
         Timing: Seleccionar tiempo
         Position: Seleccionar posición
         Lane: Seleccionar carril
-      NotFound: El macro "{macroId}" no existe.        
+      NotFound: El macro "{0}" no existe.        
   # Dialog boxes
   Dialog:
     RemoveGroup:

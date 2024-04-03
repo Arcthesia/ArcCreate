@@ -222,7 +222,7 @@ Compose:
         Timing: Select timing
         Position: Select position
         Lane: Select lane
-      NotFound: Macro "{macroId}" does not exist.
+      NotFound: Macro "{0}" does not exist.
     Mirror:
       CannotMirror: No notes can be mirrored
   # Dialog boxes

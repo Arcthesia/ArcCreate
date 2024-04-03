@@ -61,7 +61,7 @@ namespace ArcCreate.Compose.Macros
         public void RequestSelection(EventSelectionConstraint constraint, EventSelectionRequest request, bool selectSingle)
         {
             currentSelectionRequest = (constraint, request, selectSingle);
-            Services.Navigation.StartAction("Macros.SelectEvents");
+            Services.Navigation.StartAction("Macro.SelectEvents");
             macroEnvironment.WaitForRequest(request);
         }
 
@@ -131,7 +131,7 @@ namespace ArcCreate.Compose.Macros
         public void RequestTrackLane(MacroRequest request)
         {
             currentMacroRequest = (request, 0);
-            Services.Navigation.StartAction("Macros.SelectLane");
+            Services.Navigation.StartAction("Macro.SelectLane");
             macroEnvironment.WaitForRequest(request);
         }
 
@@ -161,7 +161,7 @@ namespace ArcCreate.Compose.Macros
         public void RequestTrackPosition(MacroRequest request, int timing)
         {
             currentMacroRequest = (request, timing);
-            Services.Navigation.StartAction("Macros.SelectPosition");
+            Services.Navigation.StartAction("Macro.SelectPosition");
             macroEnvironment.WaitForRequest(request);
         }
 
@@ -193,7 +193,7 @@ namespace ArcCreate.Compose.Macros
         public void RequestTrackTiming(MacroRequest request)
         {
             currentMacroRequest = (request, 0);
-            Services.Navigation.StartAction("Macros.SelectTiming");
+            Services.Navigation.StartAction("Macro.SelectTiming");
             macroEnvironment.WaitForRequest(request);
         }
 
