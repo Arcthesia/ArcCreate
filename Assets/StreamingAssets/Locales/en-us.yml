@@ -406,10 +406,12 @@ Compose:
           Name: Drag timing
           Confirm: Confirm
           Cancel: Cancel
+          CycleSkyNoteMode: Cycle sky note mode
         Position:
           Name: Drag position
           Confirm: Confirm
           Cancel: Cancel
+          CycleSkyNoteMode: Cycle sky note mode
       Render:
         Name: Rendering
         Start:

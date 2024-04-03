@@ -45,8 +45,9 @@ namespace ArcCreate.Gameplay.GameplayCamera
         /// </summary>
         /// <param name="from">The timing range's lower bound.</param>
         /// <param name="to">The timing range's upper bound.</param>
+        /// <param name="overlapCompletely">Whether to only query for notes that overlap with the range completely.</param>
         /// <returns>All matching camera events.</returns>
-        IEnumerable<CameraEvent> FindWithinRange(int from, int to);
+        IEnumerable<CameraEvent> FindWithinRange(int from, int to, bool overlapCompletely = true);
 
         /// <summary>
         /// Add a collection of camera events.

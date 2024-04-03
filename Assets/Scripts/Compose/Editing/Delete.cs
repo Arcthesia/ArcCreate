@@ -28,7 +28,7 @@ namespace ArcCreate.Compose.Editing
 
                 if (note is ArcTap arctap
                  && arctap.Arc != null
-                 && arctap.Arc.Timing <= arctap.Arc.EndTiming - 1
+                 && arctap.Arc.Timing >= arctap.Arc.EndTiming - 1
                  && arctap.Arc.XStart == arctap.Arc.XEnd
                  && arctap.Arc.YStart == arctap.Arc.YEnd)
                 {

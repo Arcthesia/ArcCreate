@@ -285,9 +285,10 @@ namespace ArcCreate.Gameplay.Chart
         /// </summary>
         /// <param name="from">The query timing lower range.</param>
         /// <param name="to">The query timing upper range.</param>
+        /// <param name="overlapCompletely">Whether to only query for notes that overlap with the range completely.</param>
         /// <typeparam name="T">Event type to search for.</typeparam>
         /// <returns>All events with matching timing value.</returns>
-        public IEnumerable<T> FindEventsWithinRange<T>(int from, int to)
+        public IEnumerable<T> FindEventsWithinRange<T>(int from, int to, bool overlapCompletely = true)
             where T : ArcEvent
         {
             if (typeof(T) == typeof(Tap))
@@ -297,7 +298,7 @@ namespace ArcCreate.Gameplay.Chart
 
             if (typeof(T) == typeof(Hold))
             {
-                return holds.FindEventsWithinRange(from, to).Cast<T>();
+                return holds.FindEventsWithinRange(from, to, overlapCompletely).Cast<T>();
             }
 
             if (typeof(T) == typeof(ArcTap))
@@ -307,7 +308,7 @@ namespace ArcCreate.Gameplay.Chart
 
             if (typeof(T) == typeof(Arc))
             {
-                return arcs.FindEventsWithinRange(from, to).Cast<T>();
+                return arcs.FindEventsWithinRange(from, to, overlapCompletely).Cast<T>();
             }
 
             if (typeof(T) == typeof(TimingEvent))

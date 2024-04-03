@@ -111,7 +111,7 @@ namespace ArcCreate.Gameplay.Chart
             }
         }
 
-        public IEnumerable<T> FindEventsWithinRange<T>(int from, int to)
+        public IEnumerable<T> FindEventsWithinRange<T>(int from, int to, bool overlapCompletely)
             where T : ArcEvent
         {
             if (typeof(T) == typeof(ScenecontrolEvent))
@@ -124,7 +124,7 @@ namespace ArcCreate.Gameplay.Chart
 
             if (typeof(T) == typeof(CameraEvent))
             {
-                foreach (var note in Services.Camera.FindWithinRange(from, to))
+                foreach (var note in Services.Camera.FindWithinRange(from, to, overlapCompletely))
                 {
                     yield return note as T;
                 }
@@ -133,7 +133,7 @@ namespace ArcCreate.Gameplay.Chart
             for (int i = 0; i < timingGroups.Count; i++)
             {
                 TimingGroup tg = timingGroups[i];
-                IEnumerable<T> groupNotes = tg.FindEventsWithinRange<T>(from, to);
+                IEnumerable<T> groupNotes = tg.FindEventsWithinRange<T>(from, to, overlapCompletely);
                 foreach (T note in groupNotes)
                 {
                     yield return note;

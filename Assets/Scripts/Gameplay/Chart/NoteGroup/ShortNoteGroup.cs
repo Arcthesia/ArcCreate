@@ -106,7 +106,7 @@ namespace ArcCreate.Gameplay.Chart
             }
         }
 
-        public override IEnumerable<Note> FindEventsWithinRange(int from, int to)
+        public override IEnumerable<Note> FindEventsWithinRange(int from, int to, bool overlapCompletely = true)
         {
             if (Notes.Count == 0)
             {

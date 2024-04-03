@@ -50,17 +50,6 @@ namespace ArcCreate.Gameplay.Chart
             where T : LongNote;
 
         /// <summary>
-        /// Find all events that are bounded by the provided timing range.
-        /// I.e note.Timing >= from && note.EndTiming. <= to.
-        /// </summary>
-        /// <param name="from">The query timing lower range.</param>
-        /// <param name="to">The query timing upper range.</param>
-        /// <typeparam name="T">Event type to search for.</typeparam>
-        /// <returns>All events with matching timing value.</returns>
-        IEnumerable<T> FindEventsWithinRange<T>(int from, int to)
-            where T : ArcEvent;
-
-        /// <summary>
         /// Load a chart.
         /// </summary>
         /// <param name="chart">Chart to load.</param>

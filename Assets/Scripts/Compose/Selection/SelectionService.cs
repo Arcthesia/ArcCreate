@@ -433,22 +433,22 @@ namespace ArcCreate.Compose.Selection
 
         private IEnumerable<Note> GetNotesBetweenRange(int from, int to)
         {
-            foreach (var tap in Services.Gameplay.Chart.GetAll<Tap>().Where(t => from <= t.Timing && t.Timing <= to))
+            foreach (var tap in Services.Gameplay.Chart.FindEventsWithinRange<Tap>(from, to))
             {
                 yield return tap;
             }
 
-            foreach (var hold in Services.Gameplay.Chart.GetAll<Hold>().Where(t => from <= t.Timing && t.EndTiming <= to))
+            foreach (var hold in Services.Gameplay.Chart.FindEventsWithinRange<Hold>(from, to))
             {
                 yield return hold;
             }
 
-            foreach (var arc in Services.Gameplay.Chart.GetAll<Arc>().Where(t => from <= t.Timing && t.EndTiming <= to))
+            foreach (var arc in Services.Gameplay.Chart.FindEventsWithinRange<Arc>(from, to))
             {
                 yield return arc;
             }
 
-            foreach (var arctap in Services.Gameplay.Chart.GetAll<ArcTap>().Where(t => from <= t.Timing && t.Timing <= to))
+            foreach (var arctap in Services.Gameplay.Chart.FindEventsWithinRange<ArcTap>(from, to))
             {
                 yield return arctap;
             }
