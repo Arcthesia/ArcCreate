@@ -32,7 +32,10 @@ namespace ArcCreate.Compose.Editing
                  && arctap.Arc.XStart == arctap.Arc.XEnd
                  && arctap.Arc.YStart == arctap.Arc.YEnd)
                 {
+                    var arctaps = Services.Gameplay.Chart.GetAll<ArcTap>()
+                        .Where(at => at.Arc == arctap.Arc);
                     list.Add(arctap.Arc);
+                    list.AddRange(arctaps);
                 }
             }
 

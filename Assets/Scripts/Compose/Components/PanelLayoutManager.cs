@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Components
 {
-    public class PanelLayoutManager : MonoBehaviour
+    public class PanelLayoutManager : MonoBehaviour, IItemNameDialogConsumer
     {
         private const string PlayerPrefKey = "Compose.CustomPanelLayout";
 
@@ -17,14 +17,14 @@ namespace ArcCreate.Compose.Components
         [SerializeField] private DynamicPanelsCanvas canvas;
         [SerializeField] private Button defaultLayoutButton;
         [SerializeField] private Button saveLayoutButton;
-        [SerializeField] private SaveCustomPanelLayoutDialog saveLayoutDialog;
+        [SerializeField] private SaveItemNameDialog saveLayoutDialog;
         [SerializeField] private GameObject customLayoutRowPrefab;
         [SerializeField] private Transform customLayoutRowsParent;
         private readonly List<PanelLayoutRow> rows = new List<PanelLayoutRow>();
         private Dictionary<string, byte[]> customLayouts = new Dictionary<string, byte[]>();
         private byte[] defaultLayoutData;
 
-        internal bool IsValidLabel(string text, out string reason)
+        bool IItemNameDialogConsumer.IsValidName(string text, out string reason)
         {
             if (customLayouts.ContainsKey(text))
             {
@@ -35,7 +35,7 @@ namespace ArcCreate.Compose.Components
             return true;
         }
 
-        internal void SaveLayout(string label)
+        void IItemNameDialogConsumer.SaveItem(string label)
         {
             byte[] data = PanelSerialization.SerializeCanvasToArray(canvas);
             customLayouts.Add(label, data);
@@ -115,11 +115,6 @@ namespace ArcCreate.Compose.Components
         private void OnSaveLayoutButton()
         {
             saveLayoutDialog.Open(this);
-        }
-
-        private void SetCompactLayout()
-        {
-            throw new NotImplementedException();
         }
 
         private void SetDefaultLayout()

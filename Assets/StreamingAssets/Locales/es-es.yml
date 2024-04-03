@@ -257,6 +257,12 @@ Compose:
       Confirm: Confirmar
     Macros:
       Title: Macros
+    CameraViews:
+      Default: Vista predeterminada
+      Stationary: Vista estacionaria
+      ZoomedOut: Vista alejada
+      BirdsEye1: Vista panorámica 1
+      BirdsEye2: Vista panorámica 2
   Navigation:
     KeybindOverride: Anulación de la combinación de teclas para la acción {0}
     # Texts that appear on the context menu (right-click menu)
@@ -609,12 +615,6 @@ Compose:
         GenerateEmmyLua: Generar EmmyLua
         Reload: Recargar
         FreeCamera: <size=10>Cámara libre<size=10>
-      CameraView:
-        Default: Vista predeterminada
-        Stationary: Vista estacionaria
-        ZoomedOut: Vista alejada
-        BirdsEye1: Vista panorámica 1
-        BirdsEye2: Vista panorámica 2
       Mode:
         Timing: Tiempo
         Camera: Cámara

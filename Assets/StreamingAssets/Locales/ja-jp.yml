@@ -276,6 +276,12 @@ Compose:
         -
         {Exception}
       Confirm: 確認
+    CameraViews:
+      Default: '視点: デフォルト'
+      Stationary: '視点: 固定'
+      ZoomedOut: '視点: ズームアウト'
+      BirdsEye1: '視点: 俯瞰 (上から下)'
+      BirdsEye2: '視点: 俯瞰 (左から右)'
   Navigation:
     KeybindOverride: アクション"{0}"のキーバインドがオーバーライドされました。
     # Texts that appear on the context menu (right-click menu)
@@ -613,12 +619,6 @@ Compose:
         GenerateEmmyLua: 型定義ファイルを生成
         Reload: 再読み込み
         FreeCamera: フリー
-      CameraView:
-        Default: '視点: デフォルト'
-        Stationary: '視点: 固定'
-        ZoomedOut: '視点: ズームアウト'
-        BirdsEye1: '視点: 俯瞰 (上から下)'
-        BirdsEye2: '視点: 俯瞰 (左から右)'
       Mode: # これは翻訳しない
         Timing: Timing
         Camera: Camera

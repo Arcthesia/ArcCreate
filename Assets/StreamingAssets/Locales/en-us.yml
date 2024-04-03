@@ -262,6 +262,12 @@ Compose:
     GroupPicker:
       SelectEditingGroup: "Change current group to:"
       AssignNotesToGroup: "Assign selected notes to:"
+    CameraViews:
+      Default: Default view
+      Stationary: Stationary view
+      ZoomedOut: Zoomed out view
+      BirdsEye1: Bird's-eye view 1
+      BirdsEye2: Bird's-eye view 2
     PanelLayout:
       Name: Layout
       Default: Default
@@ -729,12 +735,6 @@ Compose:
         GenerateEmmyLua: Generate EmmyLua
         Reload: Reload
         FreeCamera: Free camera
-      CameraView:
-        Default: Default view
-        Stationary: Stationary view
-        ZoomedOut: Zoomed out view
-        BirdsEye1: Bird's-eye view 1
-        BirdsEye2: Bird's-eye view 2
       Mode:
         Timing: Timing
         Camera: Camera

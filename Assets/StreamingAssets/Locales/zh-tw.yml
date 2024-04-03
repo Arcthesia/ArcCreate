@@ -236,6 +236,12 @@ Compose:
         事件型態: {EventType}
         {Exception}
       Confirm: 確定
+    CameraViews:
+      Default: 遊戲視角
+      Stationary: 正常視角
+      ZoomedOut: 縮小視角
+      BirdsEye1: 俯視視角 1
+      BirdsEye2: 俯視視角 2
   Navigation:
     KeybindOverride: 複寫動作指令 {0} 的快捷鍵
     # Texts that appear on the context menu (right-click menu)
@@ -571,12 +577,6 @@ Compose:
         GenerateEmmyLua: 產生 EmmyLua
         Reload: 重新載入
         FreeCamera: 移動相機
-      CameraView:
-        Default: 遊戲視角
-        Stationary: 正常視角
-        ZoomedOut: 縮小視角
-        BirdsEye1: 俯視視角 1
-        BirdsEye2: 俯視視角 2
       Mode:
         Timing: 時間
         Camera: 相機
