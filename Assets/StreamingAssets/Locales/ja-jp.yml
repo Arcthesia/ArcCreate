@@ -636,11 +636,8 @@ Compose:
           Name: 出力設定
           From: 開始
           To: 終了
-          Quality: 品質
           FPS: FPS
-          Width: 幅
-          Height: 高さ
-          Size: Size # (?) 機能不明・用途不明
+          Size: サイズ
           ShowShutter: シャッターを表示
         Start: 出力開始
         Cancel: キャンセル

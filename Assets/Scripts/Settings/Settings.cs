@@ -62,10 +62,6 @@ namespace ArcCreate
 
         // Export
         public static readonly IntSetting ChartSortMode = new IntSetting("ChartSortMode", 0);
-        public static readonly FloatSetting FPS = new FloatSetting("RenderPreferences.FPS", 60);
-        public static readonly IntSetting CRF = new IntSetting("RenderPreferences.CRF", 25, 0, 51);
-        public static readonly IntSetting RenderWidth = new IntSetting("RenderPreferences.Width", 1920, 0);
-        public static readonly IntSetting RenderHeight = new IntSetting("RenderPreferences.Height", 1080, 0);
         public static readonly StringSetting FFmpegPath = new StringSetting("RenderPreferences.FFmpegPath", "ffmpeg");
         public static readonly StringSetting LastUsedPublisherName = new StringSetting("Editor.Export.LastUsedPublisherName", null);
 

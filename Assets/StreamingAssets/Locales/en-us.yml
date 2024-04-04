@@ -750,14 +750,25 @@ Compose:
           Automatically export chart view video.
           Requires FFmpeg to be installed.
         ConfigureFFmpeg: Configure FFmpeg executable path
+        Presets:
+          Name: Presets
+          Reset: Reset
+          FourK: 4K
+          FullHD: Full HD
+          Compact: Compact
         Settings:
           Name: Settings
           From: From
           To: To
-          Quality: Quality
+          CRF:
+            Name: CRF
+            Lossless: "{0} (Lossless quality)"
+            VeryLow: "{0} (Near lossless quality)"
+            Low: "{0} (High quality)"
+            Medium: "{0} (Medium quality)"
+            Default: "{0} (Default quality)"
+            High: "{0} (Low quality)"
           FPS: FPS
-          Width: Width
-          Height: Height
           Size: Size
           ShowShutter: Show shutter
         Start: Start rendering

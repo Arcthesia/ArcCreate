@@ -572,10 +572,7 @@ Compose:
           Name: 설정
           From: 시작 시간
           To: 끝 시간
-          Quality: 품질
           FPS: FPS
-          Width: 영상 너비
-          Height: 영상 높이
           Size: 크기
           ShowShutter: 셔터 포함
         Start: 렌더링 시작

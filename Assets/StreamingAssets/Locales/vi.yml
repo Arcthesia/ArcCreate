@@ -570,10 +570,7 @@ Compose:
           Name: Settings
           From: From
           To: To
-          Quality: Quality
           FPS: FPS
-          Width: Width
-          Height: Height
           Size: Size
           ShowShutter: Show shutter
         Start: Start rendering

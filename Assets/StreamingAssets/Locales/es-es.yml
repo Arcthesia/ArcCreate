@@ -632,10 +632,7 @@ Compose:
           Name: Ajustes
           From: De
           To: A
-          Quality: Calidad
           FPS: FPS
-          Width: Ancho
-          Height: Alto
           Size: Tamaño
           ShowShutter: Mostrar transición
         Start: Iniciar renderización

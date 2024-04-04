@@ -601,10 +601,7 @@ Compose:
           Name: 设置
           From: 从
           To: 到
-          Quality: 质量
           FPS: FPS
-          Width: 宽度
-          Height: 高度
           Size: 大小
           ShowShutter: 显示加载界面
         Start: 开始渲染

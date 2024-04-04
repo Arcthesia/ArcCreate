@@ -24,16 +24,20 @@ namespace ArcCreate.Compose.Rendering
         [SerializeField] private FileSelectField ffmpegPathField;
         [SerializeField] private TMP_InputField fromTimingField;
         [SerializeField] private TMP_InputField toTimingField;
-        [SerializeField] private TMP_InputField qualityField;
+        [SerializeField] private CrfField crfField;
         [SerializeField] private TMP_InputField fpsField;
         [SerializeField] private TMP_InputField widthField;
         [SerializeField] private TMP_InputField heightField;
+        [SerializeField] private TMP_InputField musicVolumeField;
+        [SerializeField] private TMP_InputField effectVolumeField;
         [SerializeField] private Toggle showShutterToggle;
         [SerializeField] private Button startButton;
         [SerializeField] private MarkerRange renderRangeMarker;
         [SerializeField] private GameplayViewport gameplayViewport;
         [SerializeField] private StringSO retryCount;
         [SerializeField] private StringSO playCount;
+        [SerializeField] private OptionsPanel presetPanel;
+        [SerializeField] private Button resetSelectedPreset;
 
         [Header("Render in progress")]
         [SerializeField] private GameObject renderInProgressIndicator;
@@ -81,6 +85,7 @@ namespace ArcCreate.Compose.Rendering
             AudioRenderer audioRenderer = new AudioRenderer(
                 startTiming: from,
                 endTiming: to,
+                settings: RenderSetting.Current,
                 showTransition: showShutterToggle.isOn,
                 audioOffset: gameplayData.AudioOffset.Value,
                 songAudio: gameplayData.AudioClip.Value,
@@ -114,10 +119,7 @@ namespace ArcCreate.Compose.Rendering
             using (var renderer = new FrameRenderer(
                 outputPath: outputPath,
                 cameras: Services.Gameplay.Camera.RenderingCameras,
-                width: Settings.RenderWidth.Value,
-                height: Settings.RenderHeight.Value,
-                fps: Settings.FPS.Value,
-                crf: Settings.CRF.Value,
+                settings: RenderSetting.Current,
                 from: from,
                 to: to,
                 showShutter: showShutterToggle.isOn,
@@ -157,43 +159,63 @@ namespace ArcCreate.Compose.Rendering
             fromTimingField.onEndEdit.AddListener(OnTimingFields);
             toTimingField.onEndEdit.AddListener(OnTimingFields);
             renderRangeMarker.OnEndEdit += OnMarker;
-            qualityField.onEndEdit.AddListener(OnQualityField);
+            crfField.OnValueChanged.AddListener(OnQualityField);
             fpsField.onEndEdit.AddListener(OnFpsField);
             widthField.onEndEdit.AddListener(OnWidthField);
             heightField.onEndEdit.AddListener(OnHeightField);
+            musicVolumeField.onEndEdit.AddListener(OnMusicVolumeField);
+            effectVolumeField.onEndEdit.AddListener(OnEffectVolumeField);
             startButton.onClick.AddListener(OnStartRenderButton);
             gameplayData.AudioClip.OnValueChange += OnClipChange;
             cancelButton.onClick.AddListener(OnCancelRenderButton);
 
+            RenderSetting.LoadSettings();
             ffmpegPathField.SetPathWithoutNotify(Settings.FFmpegPath.Value);
             fromTimingField.SetTextWithoutNotify("0");
             toTimingField.SetTextWithoutNotify("0");
             renderRangeMarker.SetTiming(0, 0);
-            qualityField.SetTextWithoutNotify(Settings.CRF.Value.ToString());
-            fpsField.SetTextWithoutNotify(Settings.FPS.Value.ToString());
-            widthField.SetTextWithoutNotify(Settings.RenderWidth.Value.ToString());
-            heightField.SetTextWithoutNotify(Settings.RenderHeight.Value.ToString());
+            UpdateRenderSettingFields();
 
             ffmpegPathField.AcceptedExtensions =
                 Application.platform == RuntimePlatform.WindowsEditor
                 || Application.platform == RuntimePlatform.WindowsPlayer ?
                 new string[] { "exe" } : new string[0];
+
+            presetPanel.OnSelect += OnPresetSelect;
+            resetSelectedPreset.onClick.AddListener(ResetSelectedPanel);
         }
 
         private void OnDestroy()
         {
+            RenderSetting.SaveSettings();
             ffmpegPathField.OnValueChanged += OnFFmpegPath;
             fromTimingField.onEndEdit.RemoveListener(OnTimingFields);
             toTimingField.onEndEdit.RemoveListener(OnTimingFields);
             renderRangeMarker.OnEndEdit -= OnMarker;
-            qualityField.onEndEdit.RemoveListener(OnQualityField);
+            crfField.OnValueChanged.RemoveListener(OnQualityField);
             fpsField.onEndEdit.RemoveListener(OnFpsField);
             widthField.onEndEdit.RemoveListener(OnWidthField);
             heightField.onEndEdit.RemoveListener(OnHeightField);
+            musicVolumeField.onEndEdit.RemoveListener(OnMusicVolumeField);
+            effectVolumeField.onEndEdit.RemoveListener(OnEffectVolumeField);
             startButton.onClick.RemoveListener(OnStartRenderButton);
             gameplayData.AudioClip.OnValueChange -= OnClipChange;
             cancelButton.onClick.AddListener(OnCancelRenderButton);
+            presetPanel.OnSelect -= OnPresetSelect;
+            resetSelectedPreset.onClick.RemoveListener(ResetSelectedPanel);
             cts.Dispose();
+        }
+
+        private void ResetSelectedPanel()
+        {
+            RenderSetting.ResetSelectedSetting();
+            UpdateRenderSettingFields();
+        }
+
+        private void OnPresetSelect(string option)
+        {
+            RenderSetting.SetSelectedSetting(option);
+            UpdateRenderSettingFields();
         }
 
         private void OnEnable()
@@ -236,15 +258,9 @@ namespace ArcCreate.Compose.Rendering
             showShutterToggle.isOn = from <= 0;
         }
 
-        private void OnQualityField(string val)
+        private void OnQualityField(int crf)
         {
-            if (Evaluator.TryInt(val, out int quality))
-            {
-                quality = Mathf.Clamp(quality, 0, 51);
-                Settings.CRF.Value = quality;
-            }
-
-            qualityField.text = Settings.CRF.Value.ToString();
+            RenderSetting.Current.Crf = crf;
         }
 
         private void OnFpsField(string val)
@@ -252,10 +268,10 @@ namespace ArcCreate.Compose.Rendering
             if (Evaluator.TryFloat(val, out float fps))
             {
                 fps = Mathf.Abs(fps);
-                Settings.FPS.Value = fps;
+                RenderSetting.Current.Fps = fps;
             }
 
-            fpsField.text = Settings.FPS.Value.ToString();
+            fpsField.text = RenderSetting.Current.Fps.ToString();
         }
 
         private void OnWidthField(string val)
@@ -263,10 +279,10 @@ namespace ArcCreate.Compose.Rendering
             if (Evaluator.TryInt(val, out int width))
             {
                 width = Mathf.Abs(width);
-                Settings.RenderWidth.Value = width;
+                RenderSetting.Current.Width = width;
             }
 
-            widthField.text = Settings.RenderWidth.Value.ToString();
+            widthField.text = RenderSetting.Current.Width.ToString();
         }
 
         private void OnHeightField(string val)
@@ -274,10 +290,32 @@ namespace ArcCreate.Compose.Rendering
             if (Evaluator.TryInt(val, out int height))
             {
                 height = Mathf.Abs(height);
-                Settings.RenderHeight.Value = height;
+                RenderSetting.Current.Height = height;
             }
 
-            heightField.text = Settings.RenderHeight.Value.ToString();
+            heightField.text = RenderSetting.Current.Height.ToString();
+        }
+
+        private void OnMusicVolumeField(string val)
+        {
+            if (Evaluator.TryFloat(val, out float vol))
+            {
+                vol = Mathf.Clamp(vol, 0, 1);
+                RenderSetting.Current.MusicVolume = vol;
+            }
+
+            musicVolumeField.text = RenderSetting.Current.MusicVolume.ToString();
+        }
+
+        private void OnEffectVolumeField(string val)
+        {
+            if (Evaluator.TryFloat(val, out float vol))
+            {
+                vol = Mathf.Clamp(vol, 0, 1);
+                RenderSetting.Current.EffectVolume = vol;
+            }
+
+            effectVolumeField.text = RenderSetting.Current.EffectVolume.ToString();
         }
 
         private void OnStartRenderButton()
@@ -297,6 +335,16 @@ namespace ArcCreate.Compose.Rendering
             renderRangeMarker.SetTiming(from, to);
             fromTimingField.text = from.ToString();
             toTimingField.text = to.ToString();
+        }
+
+        private void UpdateRenderSettingFields()
+        {
+            crfField.SetValueWithoutNotify(RenderSetting.Current.Crf);
+            fpsField.SetTextWithoutNotify(RenderSetting.Current.Fps.ToString());
+            widthField.SetTextWithoutNotify(RenderSetting.Current.Width.ToString());
+            heightField.SetTextWithoutNotify(RenderSetting.Current.Height.ToString());
+            musicVolumeField.SetTextWithoutNotify(RenderSetting.Current.MusicVolume.ToString());
+            effectVolumeField.SetTextWithoutNotify(RenderSetting.Current.EffectVolume.ToString());
         }
     }
 }
