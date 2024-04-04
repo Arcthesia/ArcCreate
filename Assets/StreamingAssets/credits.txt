@@ -23,6 +23,7 @@ SpoonierThanThou
 [vi]: Himori
 [zh-cn]: HaloSense
 [zh-tw]: Sylvexia
+[pt-br]: PedSen
 
 <size=33><b>{Credits.Role.QualityAssurance}</b></size>
 ZydeKun
