@@ -934,7 +934,7 @@ Remote:
     EndTiming: Tocar para o timing   
     Loop: Reproduzir em loop
     ShowLog: Exibir registro
-    ShowDebug: Exibir informações de debug
+    ShowDebug: Exibir informações de depuração
     ManualIP: Inserir IP Manualmente
   Window:
     Name: Remoto
