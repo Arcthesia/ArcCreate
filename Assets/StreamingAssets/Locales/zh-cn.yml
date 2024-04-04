@@ -535,6 +535,7 @@ Compose:
         Blue: 蓝
         Red: 红
         Green: 绿
+        Custom: 自定义
         AddArcColor: 添加Arc颜色
         NoProjectLoaded: |-
           没有加载工程。

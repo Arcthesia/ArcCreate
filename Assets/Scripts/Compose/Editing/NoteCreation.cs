@@ -263,6 +263,7 @@ namespace ArcCreate.Compose.Editing
                 }
             }
 
+            bool arcsSelected = elligibleArcs.Count > 0;
             if (elligibleArcs.Count == 0)
             {
                 foreach (var arc in Services.Gameplay.Chart.GetAll<Arc>())
@@ -330,7 +331,8 @@ namespace ArcCreate.Compose.Editing
             }
             else
             {
-                toggleFreeSky.ForceDisabled = false;
+                toggleFreeSky.ForceDisabled = arcsSelected;
+
                 Arc arc = new Arc()
                 {
                     Timing = timing,
@@ -357,7 +359,7 @@ namespace ArcCreate.Compose.Editing
                 bool freeSky = false;
                 using (new NoteModifyTarget(new List<Note> { arctap }))
                 {
-                    if (elligibleArcs.Count == 1)
+                    if (elligibleArcs.Count == 1 && arcsSelected)
                     {
                         Services.History.AddCommand(command);
                         return;
@@ -370,7 +372,7 @@ namespace ArcCreate.Compose.Editing
                         showGridAtTiming: timing,
                         update: p =>
                         {
-                            if (toggleFreeSky.WasExecuted)
+                            if (!arcsSelected && toggleFreeSky.WasExecuted)
                             {
                                 freeSky = !freeSky;
                             }

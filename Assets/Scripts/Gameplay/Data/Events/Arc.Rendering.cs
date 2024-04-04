@@ -339,6 +339,27 @@ namespace ArcCreate.Gameplay.Data
             return false;
         }
 
+        public float WorldSegmentedXAt(int timing)
+        {
+            for (int i = 0; i < segments.Count; i++)
+            {
+                var seg = segments[i];
+                if (seg.Timing <= timing && timing <= seg.EndTiming)
+                {
+                    if (seg.Timing == seg.EndTiming)
+                    {
+                        return seg.StartPosition.x + ArcFormula.ArcXToWorld(XStart);
+                    }
+
+                    float dx = (seg.EndPosition - seg.StartPosition).x;
+                    float dt = (float)(timing - seg.Timing) / (seg.EndTiming - seg.Timing);
+                    return seg.StartPosition.x + (dt * dx) + ArcFormula.ArcXToWorld(XStart);
+                }
+            }
+
+            return WorldXAt(timing);
+        }
+
         private void RebuildSegments()
         {
             if (Values.EnableArcRebuildSegment || segments.Count == 0)

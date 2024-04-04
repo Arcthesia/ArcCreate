@@ -86,9 +86,9 @@ namespace ArcCreate.Compose.Grid
         {
             // idk why i have to do this.
             return (Math.Min(area.xMin, area.xMax),
-                    Math.Min(area.yMin, area.yMax),
+                    Math.Min(area.yMin, area.yMax) * verticalScale,
                     Math.Max(area.xMax, area.xMin),
-                    Math.Max(area.yMax, area.yMin));
+                    Math.Max(area.yMax, area.yMin) * verticalScale);
         }
 
         private void ResizePanel(Rect area)
@@ -162,6 +162,7 @@ namespace ArcCreate.Compose.Grid
             }
             else
             {
+                verticalPanel.transform.localScale = new Vector3(1, 1, 0.001f);
                 verticalScale = 1;
             }
         }

@@ -570,6 +570,7 @@ Compose:
         Blue: Blue
         Red: Red
         Green: Green
+        Custom: Custom
         AddArcColor: 追加
         NoProjectLoaded: |-
           プロジェクトがロードされていません。

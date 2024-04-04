@@ -680,6 +680,7 @@ Compose:
         Blue: Blue
         Red: Red
         Green: Green
+        Custom: Custom
         AddArcColor: Add arc color
         NoProjectLoaded: |-
           No project loaded.

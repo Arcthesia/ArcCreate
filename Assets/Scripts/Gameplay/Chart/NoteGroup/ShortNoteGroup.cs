@@ -115,10 +115,14 @@ namespace ArcCreate.Gameplay.Chart
 
             // Avoid modifying the cache of search tree.
             int fromI = timingSearch.List.BisectLeft(from, n => n.Timing);
-            int toI = timingSearch.List.BisectRight(to, n => n.Timing);
 
-            for (int i = fromI; i <= toI; i++)
+            for (int i = fromI; i < timingSearch.List.Count; i++)
             {
+                if (timingSearch.List[i].Timing > to)
+                {
+                    yield break;
+                }
+
                 yield return timingSearch.List[i];
             }
         }

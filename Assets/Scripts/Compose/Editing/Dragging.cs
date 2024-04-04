@@ -555,11 +555,6 @@ namespace ArcCreate.Compose.Editing
                 .Where(a => a.IsTrace && a.Timing <= timing && timing <= a.EndTiming)
                 .ToList();
 
-            if (snappableArcs.Count <= 1)
-            {
-                return;
-            }
-
             Arc freeArc = new Arc
             {
                 Timing = timing,

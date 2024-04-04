@@ -506,6 +506,7 @@ Compose:
         Blue: 파랑
         Red: 빨강
         Green: 초록
+        Custom: 커스텀
         AddArcColor: 아크 색 추가
         NoProjectLoaded: |-
           프로젝트가 로드되지 않았습니다.

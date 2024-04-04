@@ -528,6 +528,7 @@ Compose:
         Blue: 藍
         Red: 紅
         Green: 綠
+        Custom: 自訂
         AddArcColor: 新增音弧顏色
         NoProjectLoaded: |-
           沒有專案被讀取，
