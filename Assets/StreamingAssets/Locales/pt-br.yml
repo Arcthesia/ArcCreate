@@ -631,7 +631,7 @@ Compose:
       Label:
         NewChart: Nova Chart
         NewProject: Novo Projeto
-        ProjectFile: Project File
+        ProjectFile: Arquivo do Projeto
         ChartFile: Arquivo da chart
         Information: Informação
         Gameplay: Gameplay
@@ -711,8 +711,8 @@ Compose:
         Density: Densidade
         PlaybackSpeed: Velocidade
       Timestamp:
-        Name: Timestamp
-        DefaultMessage: Timestamp {0}
+        Name: Marcação de tempo
+        DefaultMessage: Marcação de tempo {0}
     # Events editor panel
     EventsEditor:
       Label:
