@@ -146,16 +146,39 @@ namespace ArcCreate.ChartFormat
                 while (true)
                 {
                     int startCharPos = s.Pos + 1;
+                    float width = 1;
                     s.Skip("[arctap(".Length);
-                    if (!s.ReadInt(")").TryUnwrap(out TextSpan<int> timing, out ParsingError ae))
+                    if (!s.ReadString(")").TryUnwrap(out TextSpan<string> args, out ParsingError ae))
                     {
                         return ChartError.Parsing(line, lineNumber, RawEventType.ArcTap, ae);
+                    }
+
+                    string[] split = args.Value.Split(',');
+                    if (split.Length == 2)
+                    {
+                        if (!Evaluator.TryFloat(split[1], out width))
+                        {
+                            return ChartError.Parsing(line, lineNumber, RawEventType.ArcTap, new ParsingError(
+                                line,
+                                args.StartPos + args.Value.IndexOf(','),
+                                split[2].Length,
+                                ParsingError.Kind.InvalidConversionToFloat));
+                        }
+                    }
+
+                    if (!Evaluator.TryInt(split[0], out int timing))
+                    {
+                        return ChartError.Parsing(line, lineNumber, RawEventType.ArcTap, new ParsingError(
+                            line,
+                            args.StartPos,
+                            split[0].Length,
+                            ParsingError.Kind.InvalidConversionToInt));
                     }
 
                     int length = s.Pos - startCharPos;
                     if (timing < tick || timing > endtick)
                     {
-                        return ChartError.Property(line, lineNumber, RawEventType.ArcTap, timing.StartPos, timing.Length, ChartError.Kind.ArcTapOutOfRange);
+                        return ChartError.Property(line, lineNumber, RawEventType.ArcTap, args.StartPos, split[0].Length, ChartError.Kind.ArcTapOutOfRange);
                     }
 
                     arctap.Add(new RawArcTap
@@ -163,6 +186,7 @@ namespace ArcCreate.ChartFormat
                         Type = RawEventType.ArcTap,
                         Timing = timing,
                         TimingGroup = CurrentTimingGroup,
+                        Width = width,
                         Line = lineNumber,
                         CharacterStart = startCharPos,
                         Length = length,

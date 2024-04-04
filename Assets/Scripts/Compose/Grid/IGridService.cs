@@ -72,5 +72,11 @@ namespace ArcCreate.Compose.Grid
         /// </summary>
         /// <returns>Coordinates of the bound.</returns>
         (float fromX, float fromY, float toX, float toY) GetVerticalGridBound();
+
+        /// <summary>
+        /// Get the horizontal bounds of the timing grid.
+        /// </summary>
+        /// <returns>Coordinates of the bound.</returns>
+        (float fromX, float fromZ, float toX, float toZ) GetTimingGridBound();
     }
 }

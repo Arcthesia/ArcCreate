@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ArcCreate.Gameplay;
 using ArcCreate.Gameplay.Chart;
@@ -14,7 +15,6 @@ namespace ArcCreate.Compose.Grid
         [SerializeField] private List<BeatlineColorSetting> beatlineColorSettings;
         [SerializeField] private Color beatlineFallbackColor;
         [SerializeField] private Color beatlineBarColor;
-        [SerializeField] private MeshCollider laneCollider;
         private BeatlineDisplay beatlineDisplay;
         private TimingGroup tg = null;
         private readonly List<Beatline> beatlineList = new List<Beatline>();
@@ -151,17 +151,18 @@ namespace ArcCreate.Compose.Grid
                 (laneFrom, laneTo) = (laneTo, laneFrom);
             }
 
-            Destroy(laneCollider.sharedMesh);
             float worldFrom = ArcFormula.LaneToWorldX(laneFrom) + (Gameplay.Values.LaneWidth / 2f);
             float worldTo = ArcFormula.LaneToWorldX(laneTo) - (Gameplay.Values.LaneWidth / 2f);
+            if (worldFrom > worldTo)
+            {
+                (worldFrom, worldTo) = (worldTo, worldFrom);
+            }
 
             Values.LaneFromX = worldFrom;
             Values.LaneToX = worldTo;
 
             beatlineParent.localPosition = new Vector3((worldTo + worldFrom) / 2, 0, 0);
             beatlineParent.localScale = new Vector3(Mathf.Abs(worldTo - worldFrom) / (4 * Gameplay.Values.LaneWidth), 1, 1);
-
-            laneCollider.sharedMesh = MeshBuilder.BuildQuadMeshLane(worldFrom, worldTo);
         }
 
         public void Setup()
@@ -174,8 +175,11 @@ namespace ArcCreate.Compose.Grid
             gameplayData.AudioClip.OnValueChange += OnAudioChange;
             gameplayData.OnChartTimingEdit += OnChartChange;
             gameplayData.OnGameplayUpdate += UpdateBeatlines;
+        }
 
-            laneCollider.sharedMesh = Instantiate(laneCollider.sharedMesh);
+        public (float fromX, float fromZ, float toX, float toZ) GetBounds()
+        {
+            return (Values.LaneFromX, -Gameplay.Values.TrackLengthForward, Values.LaneToX, Gameplay.Values.TrackLengthBackward);
         }
 
         private void OnDestroy()

@@ -42,6 +42,7 @@ namespace ArcCreate.Compose.History
         }
 
         [EditorAction("Redo", false, "<c-y>", "<c-Z>")]
+        [KeybindHint(Exclude = true)]
         [RequireRedoStack]
         public void Redo()
         {
@@ -59,6 +60,7 @@ namespace ArcCreate.Compose.History
         }
 
         [EditorAction("Undo", false, "<c-z>")]
+        [KeybindHint(Exclude = true)]
         [RequireUndoStack]
         public void Undo()
         {

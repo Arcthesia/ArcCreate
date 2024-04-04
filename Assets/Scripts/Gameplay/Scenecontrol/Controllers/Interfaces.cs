@@ -118,6 +118,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         ValueChannel AngleY { get; set; }
 
+        ValueChannel JudgeSizeX { get; set; }
+
+        ValueChannel JudgeSizeY { get; set; }
+
+        ValueChannel JudgeOffsetX { get; set; }
+
+        ValueChannel JudgeOffsetY { get; set; }
+
+        ValueChannel JudgeOffsetZ { get; set; }
+
         ValueChannel RotationIndividualX { get; set; }
 
         ValueChannel RotationIndividualY { get; set; }
@@ -130,7 +140,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         ValueChannel ScaleIndividualZ { get; set; }
 
-        void UpdateNoteGroup(Quaternion rotation, Vector3 scale, Vector2 angle);
+        void UpdateNoteGroup(Quaternion rotation, Vector3 scale, Vector2 angle, Vector2 judgesize, Vector3 judgeoffset);
     }
 
     public interface ICameraController : IController

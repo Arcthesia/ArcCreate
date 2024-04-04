@@ -341,7 +341,7 @@ namespace ArcCreate.Utility
             TextGenerator gen = cachedInputTextGenerator;
             UILineInfo firstLine = gen.lines[0];
             UILineInfo startLine = gen.lines[line];
-            float y = firstLine.topY - startLine.topY;
+            float y = firstLine.topY - startLine.topY - (startLine.leading * line);
             float val = y / (contentSize.y - gen.rectExtents.size.y);
             OnScrollVerticalChanged?.Invoke(y);
             verticalScrollbar.SetValueWithoutNotify(val);

@@ -10,5 +10,6 @@ namespace ArcCreate.Gameplay.Judgement
         public Arc Arc;
         public bool IsJudgement;
         public IArcJudgementReceiver Receiver;
+        public GroupProperties Properties;
     }
 }

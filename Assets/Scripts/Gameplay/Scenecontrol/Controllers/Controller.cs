@@ -139,6 +139,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 tg.ScaleIndividualX = tg2.ScaleIndividualX;
                 tg.ScaleIndividualY = tg2.ScaleIndividualY;
                 tg.ScaleIndividualZ = tg2.ScaleIndividualZ;
+                tg.JudgeOffsetX = tg2.JudgeOffsetX;
+                tg.JudgeOffsetY = tg2.JudgeOffsetY;
+                tg.JudgeOffsetZ = tg2.JudgeOffsetZ;
+                tg.JudgeSizeX = tg2.JudgeSizeX;
+                tg.JudgeSizeY = tg2.JudgeSizeY;
                 tg.EnableNoteGroupModule = tg2.EnableNoteGroupModule;
             }
 
@@ -270,6 +275,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 Vector3 rotation = Vector3.zero;
                 Vector3 scale = Vector3.one;
                 Vector2 angle = Vector2.zero;
+                Vector2 judgesize = Vector2.one;
+                Vector3 judgeoffset = Vector3.zero;
 
                 rotation.x = tg.RotationIndividualX.ValueAt(timing);
                 rotation.y = tg.RotationIndividualY.ValueAt(timing);
@@ -282,7 +289,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 angle.x = tg.AngleX.ValueAt(timing);
                 angle.y = tg.AngleY.ValueAt(timing);
 
-                tg.UpdateNoteGroup(Quaternion.Euler(rotation), scale, angle);
+                judgesize.x = tg.JudgeSizeX.ValueAt(timing);
+                judgesize.y = tg.JudgeSizeY.ValueAt(timing);
+                judgeoffset.x = tg.JudgeOffsetX.ValueAt(timing);
+                judgeoffset.y = tg.JudgeOffsetY.ValueAt(timing);
+                judgeoffset.z = tg.JudgeOffsetZ.ValueAt(timing);
+
+                tg.UpdateNoteGroup(Quaternion.Euler(rotation), scale, angle, judgesize, judgeoffset);
             }
 
             if (this is ICameraController cam && cam.EnableCameraModule)
@@ -407,7 +420,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
             if (this is INoteGroupController tg)
             {
-                tg.UpdateNoteGroup(Quaternion.identity, Vector3.one, Vector2.zero);
+                tg.UpdateNoteGroup(Quaternion.identity, Vector3.one, Vector2.zero, Vector2.one, Vector3.zero);
                 tg.AngleX = new ConstantChannel(0);
                 tg.AngleY = new ConstantChannel(0);
                 tg.RotationIndividualX = new ConstantChannel(0);
@@ -416,6 +429,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 tg.ScaleIndividualX = new ConstantChannel(1);
                 tg.ScaleIndividualY = new ConstantChannel(1);
                 tg.ScaleIndividualZ = new ConstantChannel(1);
+                tg.JudgeSizeX = new ConstantChannel(1);
+                tg.JudgeSizeY = new ConstantChannel(1);
+                tg.JudgeOffsetX = new ConstantChannel(0);
+                tg.JudgeOffsetY = new ConstantChannel(0);
+                tg.JudgeOffsetZ = new ConstantChannel(0);
                 tg.EnableNoteGroupModule = false;
             }
 
@@ -527,6 +545,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 result.Add(serialization.AddUnitAndGetId(tg.ScaleIndividualX));
                 result.Add(serialization.AddUnitAndGetId(tg.ScaleIndividualY));
                 result.Add(serialization.AddUnitAndGetId(tg.ScaleIndividualZ));
+                result.Add(serialization.AddUnitAndGetId(tg.JudgeSizeX));
+                result.Add(serialization.AddUnitAndGetId(tg.JudgeSizeY));
+                result.Add(serialization.AddUnitAndGetId(tg.JudgeOffsetX));
+                result.Add(serialization.AddUnitAndGetId(tg.JudgeOffsetY));
+                result.Add(serialization.AddUnitAndGetId(tg.JudgeOffsetZ));
             }
 
             if (this is ICameraController cam)
@@ -643,6 +666,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 tg.ScaleIndividualX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
                 tg.ScaleIndividualY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
                 tg.ScaleIndividualZ = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                tg.JudgeSizeX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                tg.JudgeSizeY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                tg.JudgeOffsetX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                tg.JudgeOffsetY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                tg.JudgeOffsetZ = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
                 tg.EnableNoteGroupModule = enable;
             }
 

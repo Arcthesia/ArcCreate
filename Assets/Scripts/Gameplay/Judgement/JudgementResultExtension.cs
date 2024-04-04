@@ -57,20 +57,23 @@ namespace ArcCreate.Gameplay.Judgement
         public static bool IsMiss(this JudgementResult res)
         {
             return res == JudgementResult.MissEarly
-                || res == JudgementResult.MissLate;
+                || res == JudgementResult.MissLate
+                || res == JudgementResult.MissMapped;
         }
 
         public static bool IsGood(this JudgementResult res)
         {
             return res == JudgementResult.GoodEarly
-                || res == JudgementResult.GoodLate;
+                || res == JudgementResult.GoodLate
+                || res == JudgementResult.GoodMapped;
         }
 
         public static bool IsPerfect(this JudgementResult res)
         {
             return res == JudgementResult.PerfectEarly
                 || res == JudgementResult.Max
-                || res == JudgementResult.PerfectLate;
+                || res == JudgementResult.PerfectLate
+                || res == JudgementResult.PerfectMapped;
         }
 
         public static bool IsMax(this JudgementResult res)

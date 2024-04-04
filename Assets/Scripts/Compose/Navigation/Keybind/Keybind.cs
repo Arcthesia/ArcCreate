@@ -35,6 +35,8 @@ namespace ArcCreate.Compose.Navigation
 
         public Keystroke[] Keystrokes { get; private set; }
 
+        public int Priority { get; set; }
+
         public int CurrentIndex => index;
 
         public void Reset()

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
+using ArcCreate.Utility.Extension;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
@@ -53,25 +54,34 @@ namespace ArcCreate.Gameplay.Data
             return Timing.CompareTo(other.Timing);
         }
 
-        public override Mesh GetColliderMesh()
+        public override void GenerateColliderTriangles(int timing, List<Vector3> vertices, List<int> triangles)
         {
-            return Services.Render.TapMesh;
-        }
+            Mesh mesh = Services.Render.TapMesh;
+            vertices.Clear();
+            triangles.Clear();
+            mesh.GetVertices(vertices);
+            mesh.GetTriangles(triangles, 0);
 
-        public override void GetColliderPosition(int timing, out Vector3 pos, out Vector3 scl)
-        {
             float z = ZPos(TimingGroupInstance.GetFloorPosition(timing));
             Vector3 basePos = new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
-            pos = (TimingGroupInstance.GroupProperties.FallDirection * z) + basePos;
-            scl = TimingGroupInstance.GroupProperties.ScaleIndividual;
+            Vector3 pos = (TimingGroupInstance.GroupProperties.FallDirection * z) + basePos;
+            Vector3 scl = TimingGroupInstance.GroupProperties.ScaleIndividual;
             scl.z *= ArcFormula.CalculateTapSizeScalar(z);
+
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                Vector3 v = vertices[i];
+                v = v.Multiply(scl);
+                v += pos;
+                vertices[i] = v;
+            }
         }
 
         public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)
         {
             if (!judgementRequestSent && currentTiming <= Timing)
             {
-                RequestJudgement();
+                RequestJudgement(groupProperties);
                 judgementRequestSent = true;
             }
         }
@@ -104,24 +114,33 @@ namespace ArcCreate.Gameplay.Data
 
             Services.Render.DrawTap(texture, matrix, color, IsSelected);
 
-            foreach (var arctap in ConnectedArcTaps)
+            if (!groupProperties.NoConnection)
             {
-                Vector3 arctapPos = new Vector3(arctap.WorldX, arctap.WorldY, 0);
-                Vector3 direction = arctapPos - basePos;
+                foreach (var arctap in ConnectedArcTaps)
+                {
+                    if (arctap.TimingGroupInstance.GroupProperties.NoConnection)
+                    {
+                        return;
+                    }
 
-                Matrix4x4 lineMatrix = matrix * Matrix4x4.TRS(
-                    pos: Vector3.zero,
-                    q: Quaternion.LookRotation(direction, Vector3.up),
-                    s: new Vector3(1, 1, direction.magnitude));
-                Services.Render.DrawConnectionLine(lineMatrix, connectionColor);
+                    Vector3 arctapPos = new Vector3(arctap.WorldX, arctap.WorldY, 0);
+                    Vector3 direction = arctapPos - basePos;
+
+                    Matrix4x4 lineMatrix = matrix * Matrix4x4.TRS(
+                        pos: Vector3.zero,
+                        q: Quaternion.LookRotation(direction, Vector3.up),
+                        s: new Vector3(1, 1, direction.magnitude));
+                    Services.Render.DrawConnectionLine(lineMatrix, connectionColor);
+                }
             }
         }
 
-        public void ProcessLaneTapJudgement(int offset)
+        public void ProcessLaneTapJudgement(int offset, GroupProperties props)
         {
-            JudgementResult result = offset.CalculateJudgeResult();
-            Services.Particle.PlayTapParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0), result);
-            Services.Particle.PlayTextParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0), result, offset);
+            Vector3 judgeOffset = props.CurrentJudgementOffset;
+            JudgementResult result = props.MapJudgementResult(offset.CalculateJudgeResult());
+            Services.Particle.PlayTapParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0) + judgeOffset, result);
+            Services.Particle.PlayTextParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0) + judgeOffset, result, offset);
             Services.Score.ProcessJudgement(result, offset);
             isHit = true;
 
@@ -132,7 +151,7 @@ namespace ArcCreate.Gameplay.Data
             }
         }
 
-        private void RequestJudgement()
+        private void RequestJudgement(GroupProperties props)
         {
             Services.Judgement.Request(
                 new LaneTapJudgementRequest()
@@ -141,6 +160,7 @@ namespace ArcCreate.Gameplay.Data
                     AutoAtTiming = Timing,
                     Lane = Lane,
                     Receiver = this,
+                    Properties = props,
                 });
         }
     }

@@ -44,6 +44,15 @@ namespace ArcCreate.Compose.Editing
         [SubAction("Cancel", false, "<esc>")]
         [SubAction("Restart", false, "e")]
         [SubAction("Close", false, "<mouse1>", "<esc>")]
+        [KeybindHint(Priority = KeybindPriorities.Measurer)]
+        [KeybindHint("Confirm", Priority = KeybindPriorities.SubConfirm)]
+        [KeybindHint("Cancel", Priority = KeybindPriorities.SubCancel)]
+        [KeybindHint("CopyTiming", Priority = KeybindPriorities.Measurer + 4)]
+        [KeybindHint("CopyPosition", Priority = KeybindPriorities.Measurer + 3)]
+        [KeybindHint("CopyX", Priority = KeybindPriorities.Measurer + 2)]
+        [KeybindHint("CopyY", Priority = KeybindPriorities.Measurer + 1)]
+        [KeybindHint("Restart", Exclude = true)]
+        [KeybindHint("Close", Exclude = true)]
         [WhitelistScopes(typeof(CursorService), typeof(GridService), typeof(TimelineService))]
         public async UniTask OpenMeasurer(EditorAction editorAction)
         {

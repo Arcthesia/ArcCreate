@@ -15,17 +15,6 @@ namespace ArcCreate.Gameplay.Chart
             }
         }
 
-        public override void Clear()
-        {
-            for (int i = 0; i < Notes.Count; i++)
-            {
-                Arc arc = Notes[i];
-                arc.CleanColliderMesh();
-            }
-
-            base.Clear();
-        }
-
         public int Compare(Arc x, Arc y)
         {
             return x.CurrentDepth.CompareTo(y.CurrentDepth);

@@ -64,7 +64,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public override void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization)
         {
             int offset = 0;
-            TargetEffect.enabled.Override((bool)properties[offset++]);
+            TargetEffect.enabled.Override((bool)properties[offset++] && !Settings.DisableAdvancedGraphics.Value);
             TargetEffect.intensity.overrideState = (bool)properties[offset++];
             TargetEffect.size.overrideState = (bool)properties[offset++];
             TargetEffect.lumContrib.overrideState = (bool)properties[offset++];

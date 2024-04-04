@@ -16,6 +16,8 @@ namespace ArcCreate
             "IndicatorPosition",
             (int)(Application.isMobilePlatform ? FrPmPosition.Middle : FrPmPosition.Off));
 
+        public static readonly BoolSetting DisableAdvancedGraphics = new BoolSetting("DisableAdvancedGraphics", false);
+
         public static readonly BoolSetting EnableMaxIndicator = new BoolSetting("EnableMaxIndicator", false);
         public static readonly IntSetting LateEarlyTextPosition = new IntSetting("LateEarlyTextPosition", 0);
         public static readonly IntSetting ViewportAspectRatioSetting = new IntSetting("ViewportAspectRatioSetting", 0);
@@ -25,6 +27,8 @@ namespace ArcCreate
         public static readonly IntSetting ScoreDisplayMode = new IntSetting("UI.ScoreDisplayMode", 0);
         public static readonly BoolSetting SwitchResumeAndRetryPosition = new BoolSetting("UI.SwitchResumeAndRetryPosition", false);
         public static readonly BoolSetting MirrorNotes = new BoolSetting("Gameplay.Mirror", false);
+        public static readonly BoolSetting HidePause = new BoolSetting("Gameplay.HidePause", false);
+        public static readonly IntSetting PauseButtonMode = new IntSetting("Gameplay.PauseMode", 0);
 
         // Judgement
         public static readonly BoolSetting ShowMaxJudgement = new BoolSetting("Gameplay.Judgement.ShowMax", true);
@@ -77,6 +81,8 @@ namespace ArcCreate
         public static readonly BoolSetting SyncToDSPTime = new BoolSetting("Editor.SyncToDSPTime", false);
         public static readonly BoolSetting AllowCreatingNotesBackward = new BoolSetting("Editor.AllowCreatingNotesBackward", true);
         public static readonly BoolSetting EnableEasterEggs = new BoolSetting("Fun.EasterEggs", Application.isEditor);
+        public static readonly BoolSetting EnableKeybindHintDisplay = new BoolSetting("Editor.Navigation.KeybindHint", true);
+        public static readonly BoolSetting EnableArctapWidthEditing = new BoolSetting("Editor.Secret.ArctapWidth", false);
 
         [RuntimeInitializeOnLoadMethod]
         public static void OnInitialize()

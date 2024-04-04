@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using ArcCreate.Compose.Navigation;
+using ArcCreate.Compose.Popups;
 using ArcCreate.Compose.Timeline;
 using ArcCreate.Gameplay.Data;
 using Cysharp.Threading.Tasks;
@@ -23,14 +25,14 @@ namespace ArcCreate.Compose.Selection
         [SerializeField] private LayerMask gameplayLayer;
         [SerializeField] private GameObject inspectorWindow;
         [SerializeField] private InspectorMenu inspectorMenu;
+        [SerializeField] private TimingGroupPicker timingGroupPicker;
         [SerializeField] private MarkerRange rangeSelectPreview;
-        [SerializeField] private SelectMeshBuilder selectMeshBuilder;
 
         private readonly HashSet<Note> selectedNotes = new HashSet<Note>();
-        private float latestSelectedDistance = 0;
         private bool rangeSelected;
-        private readonly RaycastHit[] hitResults = new RaycastHit[32];
+        private readonly NoteRaycastHit[] hitResults = new NoteRaycastHit[32];
         private readonly HashSet<Note> search = new HashSet<Note>();
+        private RaycastHitComparer hitComparer = new RaycastHitComparer();
 
         public event Action<HashSet<Note>> OnSelectionChange;
 
@@ -47,19 +49,19 @@ namespace ArcCreate.Compose.Selection
         }
 
         [EditorAction("Single", false, "<mouse1>")]
+        [KeybindHint(Priority = KeybindPriorities.Selection + 4)]
         [RequireGameplayLoaded]
-        public async UniTask SelectSingle()
+        public void SelectSingle()
         {
             if (EventSystem.current.currentSelectedGameObject != null
              || !Services.Cursor.IsCursorAboveViewport
              || inspectorMenu.IsCursorHovering
+             || timingGroupPicker.IsCursorHovering
              || RangeSelected)
             {
                 return;
             }
 
-            selectMeshBuilder.RefreshCollider();
-            await UniTask.NextFrame();
             if (TryGetNoteUnderCursor(out Note note, SelectionMode.Any))
             {
                 ClearSelection();
@@ -75,12 +77,10 @@ namespace ArcCreate.Compose.Selection
         }
 
         [EditorAction("Add", false, "<s-h-mouse2>")]
+        [KeybindHint(Priority = KeybindPriorities.Selection + 2)]
         [RequireGameplayLoaded]
-        public async UniTask AddToSelection()
+        public void AddToSelection()
         {
-            selectMeshBuilder.RefreshCollider();
-            await UniTask.NextFrame();
-
             if (TryGetNoteUnderCursor(out Note note, SelectionMode.Deselected))
             {
                 AddNoteToSelection(note);
@@ -91,12 +91,10 @@ namespace ArcCreate.Compose.Selection
         }
 
         [EditorAction("Remove", false, "<a-h-mouse2>")]
+        [KeybindHint(Priority = KeybindPriorities.Selection + 1)]
         [RequireGameplayLoaded]
-        public async UniTask RemoveFromSelection()
+        public void RemoveFromSelection()
         {
-            selectMeshBuilder.RefreshCollider();
-            await UniTask.NextFrame();
-
             if (TryGetNoteUnderCursor(out Note note, SelectionMode.Selected))
             {
                 RemoveNoteFromSelection(note);
@@ -107,12 +105,10 @@ namespace ArcCreate.Compose.Selection
         }
 
         [EditorAction("Toggle", false, "<c-mouse1>")]
+        [KeybindHint(Priority = KeybindPriorities.Selection + 3)]
         [RequireGameplayLoaded]
-        public async UniTask ToggleNoteSelection()
+        public void ToggleNoteSelection()
         {
-            selectMeshBuilder.RefreshCollider();
-            await UniTask.NextFrame();
-
             if (TryGetNoteUnderCursor(out Note note, SelectionMode.Any))
             {
                 if (selectedNotes.Contains(note))
@@ -146,6 +142,7 @@ namespace ArcCreate.Compose.Selection
         }
 
         [EditorAction("ArcChain", false, "c")]
+        [KeybindHint(Exclude = true)]
         [RequireGameplayLoaded]
         [RequireSelection]
         public void SelectArcChain()
@@ -179,6 +176,8 @@ namespace ArcCreate.Compose.Selection
         }
 
         [EditorAction("ToggleArcTapAndArc", false, "v")]
+        [KeybindHint(Exclude = true)]
+        [RequireSelection]
         public void SwitchSelectArcAndArcTap()
         {
             search.Clear();
@@ -240,6 +239,7 @@ namespace ArcCreate.Compose.Selection
         }
 
         [EditorAction("RangeSelect", true, "<c-r>")]
+        [KeybindHint(Priority = KeybindPriorities.Selection)]
         [RequireGameplayLoaded]
         [SubAction("Confirm", false, "<mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
@@ -336,85 +336,81 @@ namespace ArcCreate.Compose.Selection
             Vector2 mousePosition = Input.mousePosition;
             Ray ray = gameplayCamera.ScreenPointToRay(mousePosition);
 
-            int amount = Physics.RaycastNonAlloc(ray, hitResults, 99999, gameplayLayer);
+            int amount = NoteRaycaster.Raycast(ray, hitResults, 99999);
+            Array.Sort(hitResults, 0, amount, hitComparer);
 
-            if (TryGetNoteWithMinDistance(latestSelectedDistance, amount, out note, selectionMode))
+            int length = Mathf.Min(hitResults.Length, amount);
+            int initialOffset = 0;
+            bool skipOne = false;
+
+            if (selectionMode == SelectionMode.Any)
             {
-                return true;
+                for (int i = 0; i < length; i++)
+                {
+                    NoteRaycastHit hit = hitResults[i];
+                    if (SelectedNotes.Contains(hit.Note))
+                    {
+                        initialOffset = i + 1;
+                        skipOne = true;
+                    }
+                }
             }
-            else
-            {
-                return TryGetNoteWithMinDistance(0, amount, out note, selectionMode);
-            }
-        }
 
-        private bool TryGetNoteWithMinDistance(float distance, int amount, out Note note, SelectionMode selectionMode)
-        {
-            for (int i = 0; i < Mathf.Min(hitResults.Length, amount); i++)
+            int loopNum = skipOne ? length - 1 : length;
+            for (int i = 0; i < loopNum; i++)
             {
-                RaycastHit hit = hitResults[i];
+                NoteRaycastHit hit = hitResults[(i + initialOffset) % length];
 
-                if (hit.distance <= distance)
+                if (hit.HitPoint.z >= Gameplay.Values.TrackLengthBackward
+                 || hit.HitPoint.z <= -Gameplay.Values.TrackLengthForward)
                 {
                     continue;
                 }
 
-                if (hit.point.z >= Gameplay.Values.TrackLengthBackward
-                 || hit.point.z <= -Gameplay.Values.TrackLengthForward)
+                note = hit.Note;
+                if (!note.TimingGroupInstance.GroupProperties.Editable)
                 {
                     continue;
                 }
 
-                if (hit.transform.TryGetComponent<NoteCollider>(out var collider))
+                int timing = Services.Gameplay.Audio.ChartTiming;
+
+                if (note is LongNote l)
                 {
-                    note = collider.Note;
-                    if (!note.TimingGroupInstance.GroupProperties.Editable)
+                    if (l.EndTiming < timing)
                     {
                         continue;
                     }
 
-                    int timing = Services.Gameplay.Audio.ChartTiming;
-
-                    if (note is LongNote l)
-                    {
-                        if (l.EndTiming < timing)
-                        {
-                            continue;
-                        }
-
-                        float startZ = l.ZPos(l.TimingGroupInstance.GetFloorPosition(timing));
-                        if (hit.point.z * startZ > 0 && l.Timing < timing)
-                        {
-                            continue;
-                        }
-                    }
-                    else if (note.Timing < timing)
+                    float startZ = l.ZPos(l.TimingGroupInstance.GetFloorPosition(timing));
+                    if (hit.HitPoint.z * startZ > 0 && l.Timing < timing)
                     {
                         continue;
                     }
+                }
+                else if (note.Timing < timing)
+                {
+                    continue;
+                }
 
-                    switch (selectionMode)
-                    {
-                        case SelectionMode.Any:
-                            latestSelectedDistance = hit.distance;
+                switch (selectionMode)
+                {
+                    case SelectionMode.Any:
+                        return true;
+                    case SelectionMode.Selected:
+                        if (note.IsSelected)
+                        {
                             return true;
-                        case SelectionMode.Selected:
-                            if (note.IsSelected)
-                            {
-                                latestSelectedDistance = hit.distance;
-                                return true;
-                            }
+                        }
 
-                            break;
-                        case SelectionMode.Deselected:
-                            if (!note.IsSelected)
-                            {
-                                latestSelectedDistance = hit.distance;
-                                return true;
-                            }
+                        break;
+                    case SelectionMode.Deselected:
+                        if (!note.IsSelected)
+                        {
+                            return true;
+                        }
 
-                            break;
-                    }
+                        break;
                 }
             }
 
@@ -474,6 +470,14 @@ namespace ArcCreate.Compose.Selection
             public static HashSet<Note> Selection { get; set; }
 
             public override bool CheckRequirement() => Selection.Count > 0;
+        }
+
+        private class RaycastHitComparer : IComparer<NoteRaycastHit>
+        {
+            public int Compare(NoteRaycastHit x, NoteRaycastHit y)
+            {
+                return x.HitDistance.CompareTo(y.HitDistance);
+            }
         }
     }
 }

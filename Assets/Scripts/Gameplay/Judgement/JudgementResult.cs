@@ -9,5 +9,8 @@ namespace ArcCreate.Gameplay.Judgement
         PerfectLate,
         GoodLate,
         MissLate,
+        PerfectMapped,
+        GoodMapped,
+        MissMapped,
     }
 }

@@ -70,6 +70,22 @@ namespace ArcCreate.Compose.EventsEditor
         [SubAction("Slower", false, "<h-alt>")]
         [SubAction("Cancel", false, "<esc>")]
         [SubAction("Confirm", false, "<cr>")]
+        [KeybindHint("Confirm", Priority = KeybindPriorities.SubConfirm)]
+        [KeybindHint("Cancel", Priority = KeybindPriorities.SubCancel)]
+        [KeybindHint("Faster", Priority = KeybindPriorities.FreeCamera + 97)]
+        [KeybindHint("Slower", Priority = KeybindPriorities.FreeCamera + 96)]
+        [KeybindHint("MoveForward", Priority = KeybindPriorities.FreeCamera + 11)]
+        [KeybindHint("MoveLeft", Priority = KeybindPriorities.FreeCamera + 10)]
+        [KeybindHint("MoveRight", Priority = KeybindPriorities.FreeCamera + 9)]
+        [KeybindHint("MoveBackward", Priority = KeybindPriorities.FreeCamera + 8)]
+        [KeybindHint("MoveUp", Priority = KeybindPriorities.FreeCamera + 7)]
+        [KeybindHint("MoveDown", Priority = KeybindPriorities.FreeCamera + 6)]
+        [KeybindHint("LookUp", Priority = KeybindPriorities.FreeCamera + 5)]
+        [KeybindHint("LookDown", Priority = KeybindPriorities.FreeCamera + 4)]
+        [KeybindHint("LookLeft", Priority = KeybindPriorities.FreeCamera + 3)]
+        [KeybindHint("LookRight", Priority = KeybindPriorities.FreeCamera + 2)]
+        [KeybindHint("RollLeft", Priority = KeybindPriorities.FreeCamera + 1)]
+        [KeybindHint("RollRight", Priority = KeybindPriorities.FreeCamera + 0)]
         public async UniTask BeginFreeCamera(EditorAction action)
         {
             SubAction moveForward = action.GetSubAction("MoveForward");
@@ -366,6 +382,7 @@ namespace ArcCreate.Compose.EventsEditor
 
         private void OnEnable()
         {
+            ReloadGroup(Values.EditingTimingGroup.Value);
             if (marker != null)
             {
                 marker.gameObject.SetActive(Selected != null);

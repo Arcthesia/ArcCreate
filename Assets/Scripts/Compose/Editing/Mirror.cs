@@ -9,6 +9,7 @@ namespace ArcCreate.Compose.Editing
     public class Mirror
     {
         [EditorAction("Horizontal", true, "m")]
+        [KeybindHint(Priority = KeybindPriorities.Mirror)]
         [NoteModifyTarget.RequireTarget]
         public void MirrorHorizontal()
         {
@@ -16,6 +17,7 @@ namespace ArcCreate.Compose.Editing
         }
 
         [EditorAction("HorizontalNoColorSwitch", true, "<c-m>")]
+        [KeybindHint(Exclude = true)]
         [NoteModifyTarget.RequireTarget]
         public void MirrorHorizontalNoColorSwitch()
         {
@@ -23,6 +25,7 @@ namespace ArcCreate.Compose.Editing
         }
 
         [EditorAction("Vertical", true, "<a-m>")]
+        [KeybindHint(Exclude = true)]
         [NoteModifyTarget.RequireTarget]
         public void MirrorVertical()
         {

@@ -295,7 +295,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [MoonSharpHidden]
         public static Func<float, float, float, float> FromString(string s)
         {
-            if (!StringMapping.ContainsKey(s))
+            if (string.IsNullOrEmpty(s) || !StringMapping.ContainsKey(s))
             {
                 return Linear;
             }

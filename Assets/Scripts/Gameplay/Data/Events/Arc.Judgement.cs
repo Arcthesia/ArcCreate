@@ -72,27 +72,22 @@ namespace ArcCreate.Gameplay.Data
         {
             if (!IsTrace && currentTiming >= Timing && Timing < EndTiming)
             {
-                RequestJudgement();
+                RequestJudgement(groupProperties);
             }
 
             if (!IsTrace && currentTiming >= Timing && Timing < EndTiming && !highlightRequestSent)
             {
-                RequestHighlight(currentTiming);
+                RequestHighlight(currentTiming, groupProperties);
                 highlightRequestSent = true;
             }
 
             spawnedParticleThisFrame = false;
         }
 
-        public void ProcessArcJudgement(bool isExpired, bool isJudgement)
+        public void ProcessArcJudgement(bool isExpired, bool isJudgement, GroupProperties props)
         {
             int currentTiming = Services.Audio.ChartTiming;
-
-            if (!isJudgement && currentTiming <= EndTiming)
-            {
-                RequestHighlight(currentTiming);
-            }
-
+            highlightRequestSent = false;
             float x = WorldXAt(currentTiming);
             float y = WorldYAt(currentTiming);
             Vector3 currentPos = new Vector3(x, y);
@@ -100,16 +95,17 @@ namespace ArcCreate.Gameplay.Data
             if (isExpired)
             {
                 SetGroupHighlight(false, int.MinValue);
+                JudgementResult result = props.MapJudgementResult(JudgementResult.MissLate);
 
                 if (isJudgement)
                 {
                     if (!spawnedParticleThisFrame)
                     {
-                        Services.Particle.PlayTextParticle(currentPos, JudgementResult.MissLate, Option<int>.None());
+                        Services.Particle.PlayTextParticle(currentPos + props.CurrentJudgementOffset, result, Option<int>.None());
                         spawnedParticleThisFrame = true;
                     }
 
-                    Services.Score.ProcessJudgement(JudgementResult.MissLate, Option<int>.None());
+                    Services.Score.ProcessJudgement(result, Option<int>.None());
                 }
             }
             else if (currentTiming <= EndTiming + Values.HoldMissLateJudgeWindow)
@@ -121,21 +117,22 @@ namespace ArcCreate.Gameplay.Data
                 }
 
                 hasBeenHitOnce = true;
+                JudgementResult result = props.MapJudgementResult(JudgementResult.Max);
 
                 if (isJudgement)
                 {
                     if (!spawnedParticleThisFrame)
                     {
-                        Services.Particle.PlayTextParticle(currentPos, JudgementResult.Max, Option<int>.None());
+                        Services.Particle.PlayTextParticle(currentPos + props.CurrentJudgementOffset, result, Option<int>.None());
                         spawnedParticleThisFrame = true;
                     }
 
-                    Services.Score.ProcessJudgement(JudgementResult.Max, Option<int>.None());
+                    Services.Score.ProcessJudgement(result, Option<int>.None());
                 }
             }
         }
 
-        private void RequestJudgement()
+        private void RequestJudgement(GroupProperties props)
         {
             for (int t = numJudgementRequestsSent; t < TotalCombo; t++)
             {
@@ -148,13 +145,14 @@ namespace ArcCreate.Gameplay.Data
                     Arc = this,
                     IsJudgement = true,
                     Receiver = this,
+                    Properties = props,
                 });
             }
 
             numJudgementRequestsSent = TotalCombo;
         }
 
-        private void RequestHighlight(int timing)
+        private void RequestHighlight(int timing, GroupProperties props)
         {
             Services.Judgement.Request(new ArcJudgementRequest()
             {
@@ -164,6 +162,7 @@ namespace ArcCreate.Gameplay.Data
                 Arc = this,
                 IsJudgement = false,
                 Receiver = this,
+                Properties = props,
             });
         }
     }

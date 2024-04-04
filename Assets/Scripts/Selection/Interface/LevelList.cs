@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.Data;
@@ -6,7 +5,6 @@ using ArcCreate.Storage;
 using ArcCreate.Storage.Data;
 using ArcCreate.Utility.InfiniteScroll;
 using DG.Tweening;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -22,6 +22,12 @@ namespace ArcCreate.Data
 
         public int EarlyMissCount { get; set; }
 
+        public int MappedPerfectCount { get; set; } = 0;
+
+        public int MappedGoodCount { get; set; } = 0;
+
+        public int MappedMissCount { get; set; } = 0;
+
         public int MaxCombo { get; set; }
 
         public int RetryCount { get; set; }
@@ -43,13 +49,13 @@ namespace ArcCreate.Data
         public int NoteCount { get; set; }
 
         [BsonIgnore]
-        public int PerfectCount => LatePerfectCount + EarlyPerfectCount + MaxCount;
+        public int PerfectCount => LatePerfectCount + EarlyPerfectCount + MappedPerfectCount + MaxCount;
 
         [BsonIgnore]
-        public int GoodCount => LateGoodCount + EarlyGoodCount;
+        public int GoodCount => LateGoodCount + EarlyGoodCount + MappedGoodCount;
 
         [BsonIgnore]
-        public int MissCount => LateMissCount + EarlyMissCount;
+        public int MissCount => LateMissCount + EarlyMissCount + MappedMissCount;
 
         [BsonIgnore]
         public double Score

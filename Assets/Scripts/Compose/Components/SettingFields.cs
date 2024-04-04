@@ -50,7 +50,9 @@ namespace ArcCreate.Compose.Components
         [Header("Input")]
         [SerializeField] private Button reloadHotkeysButton;
         [SerializeField] private Button openHotkeySettingsButton;
+        [SerializeField] private SettingsToggle showHotkeyHintsToggle;
         [SerializeField] private SettingsToggle allowCreatingNotesBackwardToggle;
+        [SerializeField] private SettingsToggle enableEditingArctapWidthToggle;
         [SerializeField] private SettingsInputFieldFloat scrollVerticalField;
         [SerializeField] private SettingsInputFieldFloat scrollHorizontalField;
         [SerializeField] private SettingsInputFieldFloat scrollTimelineField;
@@ -112,7 +114,9 @@ namespace ArcCreate.Compose.Components
             syncToDspTime.Setup(Settings.SyncToDSPTime);
             inputModeDropdown.Setup(Settings.InputMode, typeof(InputMode), "Compose.UI.Top.Label.InputModeOptions");
             indicatorPositionDropdown.Setup(Settings.FrPmIndicatorPosition, typeof(FrPmPosition), "Gameplay.Selection.Settings.FrPmPosition");
+            showHotkeyHintsToggle.Setup(Settings.EnableKeybindHintDisplay);
             allowCreatingNotesBackwardToggle.Setup(Settings.AllowCreatingNotesBackward);
+            enableEditingArctapWidthToggle.Setup(Settings.EnableArctapWidthEditing);
             colorblindModeToggle.Setup(Settings.EnableColorblind);
             scoreDisplayDropdown.Setup(Settings.ScoreDisplayMode, typeof(ScoreDisplayMode), "Gameplay.Selection.Settings.ScoreDisplay");
             lateEarlyPositionDropdown.Setup(Settings.LateEarlyTextPosition, typeof(EarlyLateTextPosition), "Gameplay.Selection.Settings.EarlyLateTextPosition");

@@ -16,7 +16,6 @@ namespace ArcCreate.Compose.Grid
 
         [SerializeField] private Color defaultLineColor;
         [SerializeField] private Color defaultPanelColor;
-        [SerializeField] private MeshCollider verticalCollider;
         [SerializeField] private MeshFilter verticalPanel;
         [SerializeField] private MeshRenderer verticalPanelRenderer;
         [SerializeField] private Transform gridParent;
@@ -53,7 +52,7 @@ namespace ArcCreate.Compose.Grid
             mpb.SetColor(shaderId, panelColor);
             verticalPanelRenderer.SetPropertyBlock(mpb);
 
-            ResizeCollider(area);
+            ResizePanel(area);
             DrawLines();
             GenerateAreas(areas);
         }
@@ -79,22 +78,24 @@ namespace ArcCreate.Compose.Grid
             DefaultPanelColor = defaultPanelColor;
             linePool = Pools.New<LineRenderer>(linePrefab.name, linePrefab, gridParent, 10);
 
-            verticalCollider.sharedMesh = Instantiate(verticalCollider.sharedMesh);
-            verticalPanel.sharedMesh = verticalCollider.sharedMesh;
-
+            verticalPanel.sharedMesh = Instantiate(verticalPanel.sharedMesh);
             verticalPanelRenderer.sharedMaterial = Instantiate(verticalPanelRenderer.sharedMaterial);
         }
 
         public (float fromX, float fromY, float toX, float toY) GetBounds()
         {
-            return (area.xMin, area.yMin, area.xMax, area.yMax);
+            // idk why i have to do this.
+            return (Math.Min(area.xMin, area.xMax),
+                    Math.Min(area.yMin, area.yMax),
+                    Math.Max(area.xMax, area.xMin),
+                    Math.Max(area.yMax, area.yMin));
         }
 
-        private void ResizeCollider(Rect area)
+        private void ResizePanel(Rect area)
         {
-            Destroy(verticalCollider.sharedMesh);
-            verticalCollider.sharedMesh = MeshBuilder.BuildQuadMeshVertical(area);
-            verticalPanel.sharedMesh = verticalCollider.sharedMesh;
+            Destroy(verticalPanel.sharedMesh);
+            verticalPanel.sharedMesh = MeshBuilder.BuildQuadMeshVertical(area);
+            verticalPanel.sharedMesh = verticalPanel.sharedMesh;
         }
 
         private void DrawLines()
@@ -155,9 +156,9 @@ namespace ArcCreate.Compose.Grid
             {
                 ValueChannel skyInputY = Services.Gameplay.Scenecontrol.Scene.GetSkyInputYChannel();
                 int timing = Services.Gameplay.Chart.GetTimingGroup(Values.EditingTimingGroup.Value)
-                    .GetTimingFromZPosition(verticalCollider.transform.localPosition.z);
+                    .GetTimingFromZPosition(verticalPanel.transform.localPosition.z);
                 verticalScale = skyInputY.ValueAt(timing) / Gameplay.Values.ArcY1;
-                verticalCollider.transform.localScale = new Vector3(1, verticalScale, 0.001f);
+                verticalPanel.transform.localScale = new Vector3(1, verticalScale, 0.001f);
             }
             else
             {

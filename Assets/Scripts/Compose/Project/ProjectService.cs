@@ -172,18 +172,21 @@ namespace ArcCreate.Compose.Project
         }
 
         [EditorAction("New", false, "<c-n>")]
+        [KeybindHint(Exclude = true)]
         public void StartCreatingNewProject()
         {
             OpenUnsavedChangesDialog(newProjectDialog.Open);
         }
 
         [EditorAction("Open", false, "<c-o>")]
+        [KeybindHint(Exclude = true)]
         public void StartOpeningProject()
         {
             OpenUnsavedChangesDialog(OnOpenConfirmed);
         }
 
         [EditorAction("Save", false, "<c-s>")]
+        [KeybindHint(Exclude = true)]
         [RequireGameplayLoaded]
         public void SaveProject()
         {
@@ -195,6 +198,22 @@ namespace ArcCreate.Compose.Project
             CurrentChart.LastWorkingTiming = Services.Gameplay.Audio.AudioTiming;
             SerializeChart(CurrentProject);
             SerializeProject(CurrentProject);
+        }
+
+        [EditorAction("Reload", false, "<c-s-r>")]
+        [KeybindHint(Exclude = true)]
+        [RequireGameplayLoaded]
+        public void ReloadChart()
+        {
+            if (CurrentProject == null)
+            {
+                return;
+            }
+
+            int currentTiming = Services.Gameplay.Audio.AudioTiming;
+            SaveProject();
+            LoadChart(CurrentChart);
+            Services.Gameplay.Audio.AudioTiming = currentTiming;
         }
 
         public void OpenProject(string path)
@@ -355,6 +374,10 @@ namespace ArcCreate.Compose.Project
                 case "3":
                     chart.DifficultyColor = defaultDifficultyColors[3].ConvertToHexCode();
                     chart.Difficulty = defaultDifficultyNames[3];
+                    break;
+                case "4":
+                    chart.DifficultyColor = defaultDifficultyColors[4].ConvertToHexCode();
+                    chart.Difficulty = defaultDifficultyNames[4];
                     break;
                 default:
                     chart.DifficultyColor = defaultDifficultyColors[2].ConvertToHexCode();

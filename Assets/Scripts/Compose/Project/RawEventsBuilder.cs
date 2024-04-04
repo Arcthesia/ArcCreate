@@ -24,7 +24,6 @@ namespace ArcCreate.Compose.Project
                 RawTimingGroup rawprop = tg.GroupProperties.ToRaw();
 
                 List<ArcEvent> events = new List<ArcEvent>();
-
                 events.AddRange(tg.GetEventType<Tap>());
                 events.AddRange(tg.GetEventType<Hold>());
                 events.AddRange(tg.GetEventType<Arc>());
@@ -99,6 +98,7 @@ namespace ArcCreate.Compose.Project
                                         Type = RawEventType.ArcTap,
                                         Timing = at.Timing,
                                         TimingGroup = arc.TimingGroup,
+                                        Width = at.Width,
                                     });
                                 return new RawArc
                                 {

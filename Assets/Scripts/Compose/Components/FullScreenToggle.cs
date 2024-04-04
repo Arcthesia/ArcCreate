@@ -15,10 +15,12 @@ namespace ArcCreate.Compose.Components
         [SerializeField] private GameplayViewport viewportResizer;
         [SerializeField] private GameObject fullScreenBackground;
         [SerializeField] private CanvasGroup toggleFullScreenHint;
+        [SerializeField] private GameObject[] forceCloseOnFullScreen;
         [SerializeField] private float hideHintDelay;
         [SerializeField] private float hideHintDuration;
 
         [EditorAction("FullScreen", true, "<f11>")]
+        [KeybindHint(Exclude = true)]
         public void Toggle()
         {
             if (Values.FullScreen.Value)
@@ -49,6 +51,17 @@ namespace ArcCreate.Compose.Components
             toggleFullScreenHint.DOFade(0, hideHintDuration).SetDelay(hideHintDelay);
             fullScreenBackground.SetActive(true);
             Values.FullScreen.Value = true;
+            foreach (var gameObject in forceCloseOnFullScreen)
+            {
+                if (gameObject.TryGetComponent<Dialog>(out var dialog))
+                {
+                    dialog.Close();
+                }
+                else
+                {
+                    gameObject.SetActive(false);
+                }
+            }
         }
 
         private void ToDefault()

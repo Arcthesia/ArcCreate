@@ -156,8 +156,11 @@ namespace ArcCreate.Compose.EventsEditor
 
         private void ReloadGroup(int group)
         {
-            TimingGroup tg = Services.Gameplay.Chart.GetTimingGroup(group);
-            SetData(tg.Timings);
+            if (Services.Gameplay?.Chart != null)
+            {
+                TimingGroup tg = Services.Gameplay.Chart.GetTimingGroup(group);
+                SetData(tg.Timings);
+            }
         }
 
         private void OnMarker(Marker marker, int timing)
@@ -178,6 +181,7 @@ namespace ArcCreate.Compose.EventsEditor
 
         private void OnEnable()
         {
+            ReloadGroup(Values.EditingTimingGroup.Value);
             if (marker != null)
             {
                 marker.gameObject.SetActive(Selected != null);

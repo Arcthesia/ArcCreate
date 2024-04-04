@@ -44,6 +44,7 @@
 			
 			UNITY_INSTANCING_BUFFER_START(Props)
                 UNITY_DEFINE_INSTANCED_PROP(half4, _Color)
+                UNITY_DEFINE_INSTANCED_PROP(float4, _Properties)
             UNITY_INSTANCING_BUFFER_END(Props)
 			 
 			float4 _ShadowColor;
@@ -56,9 +57,15 @@
 				UNITY_SETUP_INSTANCE_ID(v);
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				
+				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+				float4 offset = UNITY_ACCESS_INSTANCED_PROP(Props, _Properties);
+				v.vertex.x += ((o.uv.x < 0.5) && (o.uv.y < 0.5)) * offset.x;
+				v.vertex.x += ((o.uv.x < 0.5) && (o.uv.y > 0.5)) * offset.y;
+				v.vertex.x += ((o.uv.x > 0.5) && (o.uv.y < 0.5)) * offset.z;
+				v.vertex.x += ((o.uv.x > 0.5) && (o.uv.y > 0.5)) * offset.w;
+
 				o.worldpos = mul(unity_ObjectToWorld, v.vertex);
 				o.vertex = UnityObjectToClipPos(v.vertex);
-				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				return o;
 			}
 			

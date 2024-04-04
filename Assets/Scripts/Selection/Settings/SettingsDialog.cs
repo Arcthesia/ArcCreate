@@ -20,6 +20,8 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private Button increateSpeedButton;
         [SerializeField] private TMP_Text noteSpeedText;
         [SerializeField] private SettingsToggle earlyLatePerfectSetting;
+        [SerializeField] private SettingsToggle hidePauseSetting;
+        [SerializeField] private SettingsEnum pauseModeSetting;
         [SerializeField] private Button openCreditButton;
         [SerializeField] private Button closeCreditButton;
         [SerializeField] private ScriptedAnimator creditAnimation;
@@ -45,6 +47,7 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private SettingsToggle limitFrameRateSetting;
         [SerializeField] private SettingsEnum scoreDisplaySetting;
         [SerializeField] private List<ScoreDisplayPreviewItem> scoreDisplayPreviews;
+        [SerializeField] private SettingsToggle disableAdvancedGraphicsSetting;
 
         [Header("Judgement")]
         [SerializeField] private SettingsToggle showMsDifferenceSetting;
@@ -83,8 +86,11 @@ namespace ArcCreate.Selection.Interface
             OnGlobalAudioOffsetSettings(Settings.GlobalAudioOffset.Value);
             ChangeScoreDisplayPreview(Settings.ScoreDisplayMode.Value);
 
+            hidePauseSetting.Setup(Settings.HidePause);
+            pauseModeSetting.Setup(Settings.PauseButtonMode, typeof(PauseButtonMode), "Gameplay.Selection.Settings.PauseMode");
             earlyLatePerfectSetting.Setup(Settings.ShowEarlyLatePerfect);
             colorblindModeSetting.Setup(Settings.EnableColorblind);
+            disableAdvancedGraphicsSetting.Setup(Settings.DisableAdvancedGraphics);
             frPmDisplayPositionSetting.Setup(Settings.FrPmIndicatorPosition, typeof(FrPmPosition), "Gameplay.Selection.Settings.FrPmPosition");
             earlyLatePerfectSetting.Setup(Settings.ShowEarlyLatePerfect);
             lateEarlyPositionSetting.Setup(Settings.LateEarlyTextPosition, typeof(EarlyLateTextPosition), "Gameplay.Selection.Settings.EarlyLateTextPosition");

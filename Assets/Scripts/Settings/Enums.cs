@@ -38,4 +38,12 @@ namespace ArcCreate
         Difference = 2,
         Decrease = 3,
     }
+
+    public enum PauseButtonMode
+    {
+        ClickOnce = 0,
+        DoubleClick = 1,
+        Hold = 2,
+        Disable = 3,
+    }
 }

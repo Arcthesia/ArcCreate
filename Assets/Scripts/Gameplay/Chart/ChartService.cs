@@ -21,12 +21,6 @@ namespace ArcCreate.Gameplay.Chart
 
         public bool IsLoaded { get; private set; }
 
-        public bool EnableColliderGeneration
-        {
-            get => Values.EnableColliderGeneration;
-            set => Values.EnableColliderGeneration = value;
-        }
-
         public bool EnableArcRebuildSegment
         {
             get => Values.EnableArcRebuildSegment;
@@ -468,7 +462,6 @@ namespace ArcCreate.Gameplay.Chart
             var beatlinePool = Pools.New<BeatlineBehaviour>(Values.BeatlinePoolName, beatlinePrefab, beatlineParent, beatlineCapacity);
 
             Settings.GlobalAudioOffset.OnValueChanged.AddListener(OnGlobalOffsetChange);
-            Settings.DropRate.OnValueChanged.AddListener(OnDropRateChange);
             gameplayData.BaseBpm.OnValueChange += OnBaseBpm;
             gameplayData.TimingPointDensityFactor.OnValueChange += OnTimingPointDensityFactor;
             gameplayData.AudioOffset.OnValueChange += OnChartAudioOffset;
@@ -481,16 +474,10 @@ namespace ArcCreate.Gameplay.Chart
             Pools.Destroy<BeatlineBehaviour>(Values.BeatlinePoolName);
 
             Settings.GlobalAudioOffset.OnValueChanged.RemoveListener(OnGlobalOffsetChange);
-            Settings.DropRate.OnValueChanged.RemoveListener(OnDropRateChange);
             gameplayData.BaseBpm.OnValueChange -= OnBaseBpm;
             gameplayData.TimingPointDensityFactor.OnValueChange -= OnTimingPointDensityFactor;
             gameplayData.AudioOffset.OnValueChange -= OnChartAudioOffset;
             gameplayData.AudioClip.OnValueChange -= OnAudioClipChange;
-        }
-
-        private void OnDropRateChange(int val)
-        {
-            UpdateArcColliderMesh();
         }
 
         private void OnAudioClipChange(AudioClip obj)
@@ -508,7 +495,6 @@ namespace ArcCreate.Gameplay.Chart
         {
             Values.BaseBpm = value;
             ResetJudge();
-            UpdateArcColliderMesh();
         }
 
         private void OnChartAudioOffset(int value)
@@ -520,15 +506,6 @@ namespace ArcCreate.Gameplay.Chart
         private void OnGlobalOffsetChange(int offset)
         {
             ResetJudge();
-        }
-
-        private void UpdateArcColliderMesh()
-        {
-            for (int i = 0; i < timingGroups.Count; i++)
-            {
-                TimingGroup tg = timingGroups[i];
-                tg.CleanArcColliders();
-            }
         }
     }
 }

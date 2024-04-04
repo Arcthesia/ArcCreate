@@ -6,7 +6,6 @@ using ArcCreate.Utility;
 using ArcCreate.Utility.Extension;
 using TMPro;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 namespace ArcCreate.Gameplay.Score
 {
@@ -27,7 +26,7 @@ namespace ArcCreate.Gameplay.Score
         private readonly char[] scoreCharArray = new char[64];
         private readonly char[] comboCharArray = new char[64];
 
-        private readonly int[] judgeCounts = new int[7];
+        private readonly int[] judgeCounts = new int[10];
         private int currentCombo = 0;
         private int maxCombo = 0;
         private int noteCount = 1;
@@ -208,6 +207,9 @@ namespace ArcCreate.Gameplay.Score
                 EarlyPerfectCount = judgeCounts[(int)JudgementResult.PerfectEarly],
                 EarlyGoodCount = judgeCounts[(int)JudgementResult.GoodEarly],
                 EarlyMissCount = judgeCounts[(int)JudgementResult.MissEarly],
+                MappedPerfectCount = judgeCounts[(int)JudgementResult.PerfectMapped],
+                MappedGoodCount = judgeCounts[(int)JudgementResult.GoodMapped],
+                MappedMissCount = judgeCounts[(int)JudgementResult.MissMapped],
                 MaxCombo = maxCombo,
                 OffsetMean = offsetCalculator.Mean,
                 OffsetStd = offsetCalculator.StandardDeviation,

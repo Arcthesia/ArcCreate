@@ -24,6 +24,9 @@ namespace ArcCreate.Compose.Editing
         [EditorAction("Timing", false, "<a-mouse1>")]
         [SubAction("Confirm", false, "<u-mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
+        [KeybindHint(Priority = KeybindPriorities.Dragging + 1)]
+        [KeybindHint("Confirm", Priority = KeybindPriorities.SubConfirm)]
+        [KeybindHint("Cancel", Priority = KeybindPriorities.SubCancel)]
         [WhitelistScopes(typeof(GridService), typeof(TimelineService))]
         public async UniTask DragTiming(EditorAction action)
         {
@@ -128,7 +131,6 @@ namespace ArcCreate.Compose.Editing
             var command = new EventCommand(
                 name: I18n.S("Compose.Notify.History.Drag.Timing"),
                 update: events);
-            Services.Gameplay.Chart.EnableColliderGeneration = false;
             var (success, timing) = await Services.Cursor.RequestTimingSelection(
                 confirm,
                 cancel,
@@ -148,7 +150,6 @@ namespace ArcCreate.Compose.Editing
                     command.Execute();
                 });
 
-            Services.Gameplay.Chart.EnableColliderGeneration = true;
             if (!success)
             {
                 command.Undo();
@@ -162,6 +163,9 @@ namespace ArcCreate.Compose.Editing
         [EditorAction("Position", false, "<s-mouse1>")]
         [SubAction("Confirm", false, "<u-mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
+        [KeybindHint(Priority = KeybindPriorities.Dragging)]
+        [KeybindHint("Confirm", Priority = KeybindPriorities.SubConfirm)]
+        [KeybindHint("Cancel", Priority = KeybindPriorities.SubCancel)]
         [WhitelistScopes(typeof(GridService), typeof(TimelineService))]
         public async UniTask DragPosition(EditorAction action)
         {
@@ -282,7 +286,6 @@ namespace ArcCreate.Compose.Editing
                 name: I18n.S("Compose.Notify.History.Drag.Position"),
                 update: events);
 
-            Services.Gameplay.Chart.EnableColliderGeneration = false;
             var (success, position) = await Services.Cursor.RequestVerticalSelection(
                 confirm,
                 cancel,
@@ -304,7 +307,6 @@ namespace ArcCreate.Compose.Editing
                     command.Execute();
                 });
 
-            Services.Gameplay.Chart.EnableColliderGeneration = true;
             if (!success)
             {
                 command.Undo();

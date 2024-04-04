@@ -27,6 +27,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
         private ValueChannel colorS;
         private ValueChannel angleX;
         private ValueChannel angleY;
+        private ValueChannel judgeSizeX;
+        private ValueChannel judgeSizeY;
+        private ValueChannel judgeOffsetX;
+        private ValueChannel judgeOffsetY;
+        private ValueChannel judgeOffsetZ;
         private ValueChannel rotationIndividualX;
         private ValueChannel rotationIndividualY;
         private ValueChannel rotationIndividualZ;
@@ -142,6 +147,56 @@ namespace ArcCreate.Gameplay.Scenecontrol
             set
             {
                 angleY = value;
+                EnableNoteGroupModule = true;
+            }
+        }
+
+        public ValueChannel JudgeSizeX
+        {
+            get => judgeSizeX;
+            set
+            {
+                judgeSizeX = value;
+                EnableNoteGroupModule = true;
+            }
+        }
+
+        public ValueChannel JudgeSizeY
+        {
+            get => judgeSizeY;
+            set
+            {
+                judgeSizeY = value;
+                EnableNoteGroupModule = true;
+            }
+        }
+
+        public ValueChannel JudgeOffsetX
+        {
+            get => judgeOffsetX;
+            set
+            {
+                judgeOffsetX = value;
+                EnableNoteGroupModule = true;
+            }
+        }
+
+        public ValueChannel JudgeOffsetY
+        {
+            get => judgeOffsetY;
+            set
+            {
+                judgeOffsetY = value;
+                EnableNoteGroupModule = true;
+            }
+        }
+
+        public ValueChannel JudgeOffsetZ
+        {
+            get => judgeOffsetZ;
+            set
+            {
+                judgeOffsetZ = value;
                 EnableNoteGroupModule = true;
             }
         }
@@ -297,10 +352,15 @@ namespace ArcCreate.Gameplay.Scenecontrol
         }
 
         [MoonSharpHidden]
-        public void UpdateNoteGroup(Quaternion rotation, Vector3 scale, Vector2 angle)
+        public void UpdateNoteGroup(Quaternion rotation, Vector3 scale, Vector2 angle, Vector2 judgesize, Vector3 judgeoffset)
         {
             TimingGroup.GroupProperties.SCAngleX = angle.x;
             TimingGroup.GroupProperties.SCAngleY = angle.y;
+            TimingGroup.GroupProperties.SCJudgementSizeX = judgesize.x;
+            TimingGroup.GroupProperties.SCJudgementSizeY = judgesize.y;
+            TimingGroup.GroupProperties.SCJudgementOffsetX = judgeoffset.x;
+            TimingGroup.GroupProperties.SCJudgementOffsetY = judgeoffset.y;
+            TimingGroup.GroupProperties.SCJudgementOffsetZ = judgeoffset.z;
             TimingGroup.GroupProperties.RotationIndividual = rotation;
             TimingGroup.GroupProperties.ScaleIndividual = scale;
         }

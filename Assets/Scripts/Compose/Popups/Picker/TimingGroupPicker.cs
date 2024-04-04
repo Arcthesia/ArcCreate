@@ -17,6 +17,8 @@ namespace ArcCreate.Compose.Popups
         [SerializeField] private RectTransform canvasRect;
         [SerializeField] private float minDistanceFromBorder;
         [SerializeField] private TMP_InputField numberField;
+        [SerializeField] private TMP_Text title;
+        [SerializeField] private GameObject titleFrame;
         private RectTransform rect;
 
         public Action<TimingGroup> OnValueChanged { get; set; }
@@ -27,7 +29,10 @@ namespace ArcCreate.Compose.Popups
 
         public object Owner { get; private set; }
 
-        public void OpenAt(Vector2 screenPosition, int? defaultTg, object caller)
+        public bool IsCursorHovering => gameObject.activeInHierarchy &&
+            RectTransformUtility.RectangleContainsScreenPoint(rect, Input.mousePosition, null);
+
+        public void OpenAt(Vector2 screenPosition, int? defaultTg, string title, object caller)
         {
             window.SetActive(true);
             Owner = caller;
@@ -35,6 +40,9 @@ namespace ArcCreate.Compose.Popups
             EventSystem.current.SetSelectedGameObject(gameObject);
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPosition, null, out Vector2 position);
+
+            titleFrame.SetActive(!string.IsNullOrEmpty(title));
+            this.title.text = title;
 
             float canvasWidth = canvasRect.rect.width;
             float canvasHeight = canvasRect.rect.height;
@@ -92,6 +100,8 @@ namespace ArcCreate.Compose.Popups
             base.Awake();
             numberField.onValueChanged.AddListener(OnNumberFieldChange);
             numberField.onSubmit.AddListener(OnNumberFieldSubmit);
+            numberField.onDeselect.AddListener(OnNumberFieldDeselect);
+            numberField.onEndEdit.AddListener(OnNumberFieldEndEdit);
             rect = window.GetComponent<RectTransform>();
             rect.anchorMin = new Vector2(0.5f, 0.5f);
             rect.anchorMax = new Vector2(0.5f, 0.5f);
@@ -103,7 +113,24 @@ namespace ArcCreate.Compose.Popups
             base.OnDestroy();
             numberField.onValueChanged.RemoveListener(OnNumberFieldChange);
             numberField.onSubmit.RemoveListener(OnNumberFieldSubmit);
+            numberField.onDeselect.RemoveListener(OnNumberFieldDeselect);
+            numberField.onEndEdit.RemoveListener(OnNumberFieldEndEdit);
             closeButton.onClick.RemoveListener(CloseWindow);
+        }
+
+        private void OnNumberFieldDeselect(string val)
+        {
+            if (IsCursorHovering)
+            {
+                return;
+            }
+
+            OnNumberFieldSubmit(val);
+        }
+
+        private void OnNumberFieldEndEdit(string arg0)
+        {
+            CloseWindow();
         }
 
         private void OnNumberFieldChange(string val)

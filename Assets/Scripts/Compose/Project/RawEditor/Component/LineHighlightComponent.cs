@@ -36,7 +36,7 @@ namespace ArcCreate.Compose.Project
             UILineInfo lineInfo = lineInfoArray[lineNumVal];
             UILineInfo firstLineInfo = lineInfoArray[0];
 
-            float ascender = firstLineInfo.topY - lineInfo.topY;
+            float ascender = firstLineInfo.topY - lineInfo.topY - (lineInfo.leading * lineNumVal);
 
             if (!startCharPos.HasValue)
             {
@@ -63,6 +63,8 @@ namespace ArcCreate.Compose.Project
 
                 float left = (leftIndex >= 0 && leftIndex < charInfoArray.Count) ? charInfoArray[leftIndex].cursorPos.x : 0;
                 float right = (rightIndex >= 0 && rightIndex < charInfoArray.Count) ? charInfoArray[rightIndex].cursorPos.x + charInfoArray[rightIndex].charWidth : left + MinWidth;
+                left += (leftIndex - lineInfo.startCharIdx) * 0.4f;
+                right += (rightIndex - lineInfo.startCharIdx) * 0.4f;
 
                 rect.anchorMin = new Vector2(0f, 1f);
                 rect.anchorMax = new Vector2(0f, 1f);

@@ -356,14 +356,6 @@ namespace ArcCreate.Gameplay.Chart
             arcs.Clear();
         }
 
-        public void CleanArcColliders()
-        {
-            foreach (var note in arcs.Notes)
-            {
-                note.CleanColliderMesh();
-            }
-        }
-
         public void BuildArcColliders()
         {
             foreach (var note in arcs.Notes)

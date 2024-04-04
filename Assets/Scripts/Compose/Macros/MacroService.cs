@@ -68,6 +68,8 @@ namespace ArcCreate.Compose.Macros
         [EditorAction("SelectEvents", false)]
         [SubAction("Confirm", false, "<cr>")]
         [SubAction("Cancel", false, "<esc>")]
+        [KeybindHint("Confirm", Priority = KeybindPriorities.SubConfirm)]
+        [KeybindHint("Cancel", Priority = KeybindPriorities.SubCancel)]
         [WhitelistScopes(typeof(Timeline.TimelineService), typeof(Selection.SelectionService))]
         public async UniTask SelectEventsAction(EditorAction action)
         {
@@ -136,6 +138,8 @@ namespace ArcCreate.Compose.Macros
         [EditorAction("SelectLane", false)]
         [SubAction("Confirm", false, "<mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
+        [KeybindHint("Confirm", Priority = KeybindPriorities.SubConfirm)]
+        [KeybindHint("Cancel", Priority = KeybindPriorities.SubCancel)]
         [WhitelistScopes(typeof(Timeline.TimelineService), typeof(Grid.GridService), typeof(Cursor.CursorService))]
         public async UniTask SelectLaneAction(EditorAction action)
         {
@@ -164,6 +168,8 @@ namespace ArcCreate.Compose.Macros
         [EditorAction("SelectPosition", false)]
         [SubAction("Confirm", false, "<mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
+        [KeybindHint("Confirm", Priority = KeybindPriorities.SubConfirm)]
+        [KeybindHint("Cancel", Priority = KeybindPriorities.SubCancel)]
         [WhitelistScopes(typeof(Timeline.TimelineService), typeof(Grid.GridService), typeof(Cursor.CursorService))]
         public async UniTask SelectPositionAction(EditorAction action)
         {
@@ -194,6 +200,8 @@ namespace ArcCreate.Compose.Macros
         [EditorAction("SelectTiming", false)]
         [SubAction("Confirm", false, "<mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
+        [KeybindHint("Confirm", Priority = KeybindPriorities.SubConfirm)]
+        [KeybindHint("Cancel", Priority = KeybindPriorities.SubCancel)]
         [WhitelistScopes(typeof(Timeline.TimelineService), typeof(Grid.GridService), typeof(Cursor.CursorService))]
         public async UniTask SelectTimingAction(EditorAction action)
         {

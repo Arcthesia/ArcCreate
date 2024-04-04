@@ -38,6 +38,11 @@ namespace ArcCreate.Compose.Editing
         [SubAction("Blue", false, "1")]
         [SubAction("Red", false, "2")]
         [SubAction("Green", false, "3")]
+        [KeybindHint(Priority = KeybindPriorities.NoteCreation + 2)]
+        [KeybindHint("ConfirmColor", Exclude = true)]
+        [KeybindHint("Blue", Priority = KeybindPriorities.NoteCreation + 12)]
+        [KeybindHint("Red", Priority = KeybindPriorities.NoteCreation + 11)]
+        [KeybindHint("Green", Priority = KeybindPriorities.NoteCreation + 10)]
         public UniTask SwitchToArc(EditorAction action)
         {
             return ArcAction(action, creatingArc);
@@ -49,6 +54,11 @@ namespace ArcCreate.Compose.Editing
         [SubAction("Blue", false, "1")]
         [SubAction("Red", false, "2")]
         [SubAction("Green", false, "3")]
+        [KeybindHint(Priority = KeybindPriorities.NoteCreation + 1)]
+        [KeybindHint("ConfirmColor", Exclude = true)]
+        [KeybindHint("Blue", Priority = KeybindPriorities.NoteCreation + 12)]
+        [KeybindHint("Red", Priority = KeybindPriorities.NoteCreation + 11)]
+        [KeybindHint("Green", Priority = KeybindPriorities.NoteCreation + 10)]
         public UniTask SwitchToArcAlt(EditorAction action)
         {
             return ArcAction(action, !creatingArc);
@@ -92,6 +102,7 @@ namespace ArcCreate.Compose.Editing
         }
 
         [EditorAction("Sky", false, "s")]
+        [KeybindHint(Priority = KeybindPriorities.NoteCreation + 3)]
         [RequireGameplayLoaded]
         public void SwitchToSky()
         {
@@ -99,6 +110,7 @@ namespace ArcCreate.Compose.Editing
         }
 
         [EditorAction("Tap", false, "z")]
+        [KeybindHint(Priority = KeybindPriorities.NoteCreation + 5)]
         [RequireGameplayLoaded]
         public void SwitchToTap()
         {
@@ -106,6 +118,7 @@ namespace ArcCreate.Compose.Editing
         }
 
         [EditorAction("Hold", false, "x")]
+        [KeybindHint(Priority = KeybindPriorities.NoteCreation + 4)]
         [RequireGameplayLoaded]
         public void SwitchToHold()
         {
@@ -113,13 +126,16 @@ namespace ArcCreate.Compose.Editing
         }
 
         [EditorAction("Idle", false, "w")]
-        [RequireGameplayLoaded]
+        [KeybindHint(Priority = KeybindPriorities.NoteCreation + 6)]
+        [KeybindHint(Exclude = true)]
+        [RequirePallete]
         public void SwitchToIdle()
         {
             Values.CreateNoteMode.Value = CreateNoteMode.Idle;
         }
 
         [EditorAction("SwitchArcMode", false, "<f1>")]
+        [KeybindHint(Exclude = true)]
         [RequireGameplayLoaded]
         public void SwitchArcMode()
         {
@@ -142,6 +158,7 @@ namespace ArcCreate.Compose.Editing
         }
 
         [EditorAction("SwitchArcColor", false, "<f2>")]
+        [KeybindHint(Exclude = true)]
         [RequireGameplayLoaded]
         public void SwitchArcColor()
         {
@@ -159,6 +176,7 @@ namespace ArcCreate.Compose.Editing
         }
 
         [EditorAction("SwitchArcType", false, "<f3>")]
+        [KeybindHint(Exclude = true)]
         [RequireGameplayLoaded]
         public void SwitchArcType()
         {
@@ -173,6 +191,7 @@ namespace ArcCreate.Compose.Editing
         }
 
         [EditorAction("CycleArcType", false, "<f4>")]
+        [KeybindHint(Exclude = true)]
         [RequireGameplayLoaded]
         public void CycleArcType()
         {
@@ -187,6 +206,7 @@ namespace ArcCreate.Compose.Editing
         }
 
         [EditorAction("CycleArcTypeReversed", false, "<f5>")]
+        [KeybindHint(Exclude = true)]
         [RequireGameplayLoaded]
         public void CycleArcTypeReversed()
         {
@@ -201,41 +221,49 @@ namespace ArcCreate.Compose.Editing
         }
 
         [EditorAction("B", false, "1")]
+        [KeybindHint(Exclude = true)]
         [RequireGameplayLoaded]
         public void SetTypeB()
             => SetType(ArcLineType.B);
 
         [EditorAction("S", false, "2")]
+        [KeybindHint(Exclude = true)]
         [RequireGameplayLoaded]
         public void SetTypeS()
             => SetType(ArcLineType.S);
 
         [EditorAction("Si", false, "3")]
+        [KeybindHint(Exclude = true)]
         [RequireGameplayLoaded]
         public void SetTypeSi()
             => SetType(ArcLineType.Si);
 
         [EditorAction("So", false, "4")]
+        [KeybindHint(Exclude = true)]
         [RequireGameplayLoaded]
         public void SetTypeSo()
             => SetType(ArcLineType.So);
 
         [EditorAction("SiSi", false, "5")]
+        [KeybindHint(Exclude = true)]
         [RequireGameplayLoaded]
         public void SetTypeSiSi()
             => SetType(ArcLineType.SiSi);
 
         [EditorAction("SoSo", false, "6")]
+        [KeybindHint(Exclude = true)]
         [RequireGameplayLoaded]
         public void SetTypeSoSo()
             => SetType(ArcLineType.SoSo);
 
         [EditorAction("SiSo", false, "7")]
+        [KeybindHint(Exclude = true)]
         [RequireGameplayLoaded]
         public void SetTypeSiSo()
             => SetType(ArcLineType.SiSo);
 
         [EditorAction("SoSi", false, "8")]
+        [KeybindHint(Exclude = true)]
         [RequireGameplayLoaded]
         public void SetTypeSoSi()
             => SetType(ArcLineType.SoSi);
@@ -442,6 +470,14 @@ namespace ArcCreate.Compose.Editing
         private void OnArcTypeSelector(ArcLineType type)
         {
             Values.CreateArcTypeMode.Value = type;
+        }
+
+        public class RequirePalleteAttribute : ContextRequirementAttribute
+        {
+            public override bool CheckRequirement()
+            {
+                return Values.CreateNoteMode.Value != CreateNoteMode.Idle;
+            }
         }
     }
 }

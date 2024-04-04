@@ -124,9 +124,9 @@ namespace ArcCreate.Gameplay.Render
             });
         }
 
-        public void DrawArcShadow(Matrix4x4 matrix, Color color)
+        public void DrawArcShadow(Matrix4x4 matrix, Color color, Vector4 cornerOffset)
         {
-            arcShadowDrawer.RegisterInstance(matrix, color);
+            arcShadowDrawer.RegisterInstance(matrix, color, cornerOffset);
         }
 
         public void DrawTraceShadow(Matrix4x4 matrix, Color color)
@@ -280,7 +280,7 @@ namespace ArcCreate.Gameplay.Render
             arcShadowDrawer = new InstancedRendererPool(
                 material,
                 ArcMeshGenerator.GetShadowMesh(false),
-                false);
+                true);
 
             traceShadowDrawer?.Dispose();
             traceShadowDrawer = new InstancedRendererPool(
@@ -349,6 +349,7 @@ namespace ArcCreate.Gameplay.Render
 
         private void Awake()
         {
+            Shader.WarmupAllShaders();
             connectionLineDrawer = new InstancedRendererPool(
                 connectionLineMaterial,
                 connectionLineMesh,

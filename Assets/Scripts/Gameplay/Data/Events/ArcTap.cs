@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
-using ArcCreate.Gameplay.Render;
+using ArcCreate.Gameplay.Scenecontrol;
+using ArcCreate.Utility.Extension;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
@@ -17,6 +18,8 @@ namespace ArcCreate.Gameplay.Data
 
         public Arc Arc { get; set; }
 
+        public float Width { get; set; } = 1;
+
         public float WorldX => Arc.WorldXAt(Timing);
 
         public float WorldY => Arc.WorldYAt(Timing);
@@ -29,6 +32,7 @@ namespace ArcCreate.Gameplay.Data
             {
                 Timing = Timing,
                 Arc = Arc,
+                Width = Width,
                 TimingGroup = TimingGroup,
             };
         }
@@ -38,6 +42,7 @@ namespace ArcCreate.Gameplay.Data
             base.Assign(newValues);
             ArcTap e = newValues as ArcTap;
             Arc = e.Arc;
+            Width = e.Width;
         }
 
         public void ResetJudgeTo(int timing)
@@ -58,25 +63,35 @@ namespace ArcCreate.Gameplay.Data
             isSfx = !string.IsNullOrEmpty(Sfx) && Sfx != "none";
         }
 
-        public override Mesh GetColliderMesh()
+        public override void GenerateColliderTriangles(int timing, List<Vector3> vertices, List<int> triangles)
         {
-            return Services.Render.ArcTapMesh;
-        }
+            Mesh mesh = Services.Render.ArcTapMesh;
+            vertices.Clear();
+            triangles.Clear();
+            mesh.GetVertices(vertices);
+            mesh.GetTriangles(triangles, 0);
 
-        public override void GetColliderPosition(int timing, out Vector3 pos, out Vector3 scl)
-        {
             double fp = TimingGroupInstance.GetFloorPosition(timing);
             float z = ZPos(fp);
             Vector3 basePos = new Vector3(WorldX, WorldY, 0);
-            pos = (TimingGroupInstance.GroupProperties.FallDirection * z) + basePos;
-            scl = TimingGroupInstance.GroupProperties.ScaleIndividual;
+            Vector3 pos = (TimingGroupInstance.GroupProperties.FallDirection * z) + basePos;
+            Vector3 scl = TimingGroupInstance.GroupProperties.ScaleIndividual;
+            scl.x *= Width;
+
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                Vector3 v = vertices[i];
+                v = v.Multiply(scl);
+                v += pos;
+                vertices[i] = v;
+            }
         }
 
         public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)
         {
             if (!judgementRequestSent && currentTiming <= Timing)
             {
-                RequestJudgement();
+                RequestJudgement(groupProperties);
                 judgementRequestSent = true;
             }
 
@@ -103,15 +118,19 @@ namespace ArcCreate.Gameplay.Data
             Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(WorldX, WorldY, 0);
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
+            scl.x *= Width;
             Matrix4x4 matrix = groupProperties.GroupMatrix * Matrix4x4.TRS(pos, rot, scl);
-            Matrix4x4 shadowMatrix = matrix * Matrix4x4.Translate(new Vector3(0, -pos.y, 0));
 
             float alpha = ArcFormula.CalculateFadeOutAlpha(z);
             Color color = groupProperties.Color;
             color.a *= alpha;
 
             Services.Render.DrawArcTap(isSfx, texture, matrix, color, IsSelected);
-            Services.Render.DrawArcTapShadow(shadowMatrix, color);
+            if (!groupProperties.NoShadow)
+            {
+                Matrix4x4 shadowMatrix = matrix * Matrix4x4.Translate(new Vector3(0, -pos.y, 0));
+                Services.Render.DrawArcTapShadow(shadowMatrix, color);
+            }
         }
 
         public int CompareTo(INote other)
@@ -119,11 +138,12 @@ namespace ArcCreate.Gameplay.Data
             return Timing.CompareTo(other.Timing);
         }
 
-        public void ProcessArcTapJudgement(int offset)
+        public void ProcessArcTapJudgement(int offset, GroupProperties props)
         {
-            JudgementResult result = offset.CalculateJudgeResult();
-            Services.Particle.PlayTapParticle(new Vector3(WorldX, WorldY), result);
-            Services.Particle.PlayTextParticle(new Vector3(WorldX, WorldY), result, offset);
+            JudgementResult result = props.MapJudgementResult(offset.CalculateJudgeResult());
+            Vector3 judgeOffset = props.CurrentJudgementOffset;
+            Services.Particle.PlayTapParticle(new Vector3(WorldX, WorldY) + judgeOffset, result);
+            Services.Particle.PlayTextParticle(new Vector3(WorldX, WorldY) + judgeOffset, result, offset);
             Services.Score.ProcessJudgement(result, offset);
             isHit = true;
 
@@ -133,7 +153,7 @@ namespace ArcCreate.Gameplay.Data
             }
         }
 
-        private void RequestJudgement()
+        private void RequestJudgement(GroupProperties props)
         {
             Services.Judgement.Request(
                 new ArcTapJudgementRequest()
@@ -142,7 +162,9 @@ namespace ArcCreate.Gameplay.Data
                     AutoAtTiming = Timing,
                     X = WorldX,
                     Y = WorldY,
+                    Width = Width,
                     Receiver = this,
+                    Properties = props,
                 });
         }
     }
