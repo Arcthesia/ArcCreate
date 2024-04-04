@@ -8,6 +8,7 @@ using ArcCreate.Gameplay;
 using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Parser;
+using NSubstitute;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -242,12 +243,10 @@ namespace ArcCreate.Compose.Selection
                 return;
             }
 
-            if (Evaluator.TryInt(value, out int timing))
-            {
-                ModifyNotes<Note>(
-                    n => n.Timing != timing,
-                    n => n.Timing = timing);
-            }
+            ModifyNotesFloatProperty<Note>(
+                value,
+                n => n.Timing,
+                (n, v) => n.Timing = (int)v);
         }
 
         private void OnStartTimingField(string value)
@@ -257,23 +256,21 @@ namespace ArcCreate.Compose.Selection
                 return;
             }
 
-            if (Evaluator.TryInt(value, out int startTiming))
-            {
-                ModifyNotes<LongNote>(
-                    l => l.Timing != startTiming,
-                    l => l.Timing = startTiming,
-                    l =>
+            ModifyNotesFloatProperty<LongNote>(
+                value,
+                l => l.Timing,
+                (l, startTiming) => l.Timing = (int)startTiming,
+                (l, startTiming) =>
+                {
+                    if (l is Arc a)
                     {
-                        if (l is Arc a)
-                        {
-                            return l.EndTiming >= startTiming;
-                        }
-                        else
-                        {
-                            return l.EndTiming > startTiming;
-                        }
-                    });
-            }
+                        return l.EndTiming >= startTiming;
+                    }
+                    else
+                    {
+                        return l.EndTiming > startTiming;
+                    }
+                });
         }
 
         private void OnEndTimingField(string value)
@@ -283,23 +280,21 @@ namespace ArcCreate.Compose.Selection
                 return;
             }
 
-            if (Evaluator.TryInt(value, out int endTiming))
-            {
-                ModifyNotes<LongNote>(
-                    l => l.EndTiming != endTiming,
-                    l => l.EndTiming = endTiming,
-                    l =>
+            ModifyNotesFloatProperty<LongNote>(
+                value,
+                l => l.EndTiming,
+                (l, endTiming) => l.EndTiming = (int)endTiming,
+                (l, endTiming) =>
+                {
+                    if (l is Arc a)
                     {
-                        if (l is Arc a)
-                        {
-                            return l.Timing <= endTiming;
-                        }
-                        else
-                        {
-                            return l.Timing < endTiming;
-                        }
-                    });
-            }
+                        return l.Timing <= endTiming;
+                    }
+                    else
+                    {
+                        return l.Timing < endTiming;
+                    }
+                });
         }
 
         private void OnLaneField(string value)
@@ -309,22 +304,21 @@ namespace ArcCreate.Compose.Selection
                 return;
             }
 
-            if (Evaluator.TryInt(value, out int lane))
-            {
-                ModifyNotes<Note>(
-                    ev => (ev is Tap t && t.Lane != lane) || (ev is Hold h && h.Lane != lane),
-                    ev =>
+            ModifyNotesFloatProperty<Note>(
+                value,
+                ev => ev is Tap t ? t.Lane : ev is Hold h ? h.Lane : -1,
+                (ev, lane) =>
+                {
+                    if (ev is Tap t)
                     {
-                        if (ev is Tap t)
-                        {
-                            t.Lane = lane;
-                        }
-                        else if (ev is Hold h)
-                        {
-                            h.Lane = lane;
-                        }
-                    });
-            }
+                        t.Lane = (int)lane;
+                    }
+                    else if (ev is Hold h)
+                    {
+                        h.Lane = (int)lane;
+                    }
+                },
+                preselect: ev => ev is Tap || ev is Hold);
         }
 
         private void OnStartXField(string value)
@@ -346,12 +340,10 @@ namespace ArcCreate.Compose.Selection
                 return;
             }
 
-            if (Evaluator.TryFloat(value, out x))
-            {
-                ModifyNotes<Arc>(
-                    a => a.XStart != x,
-                    a => a.XStart = x);
-            }
+            ModifyNotesFloatProperty<Arc>(
+                value,
+                a => a.XStart,
+                (a, v) => a.XStart = (float)v);
         }
 
         private void OnStartYField(string value)
@@ -373,12 +365,10 @@ namespace ArcCreate.Compose.Selection
                 return;
             }
 
-            if (Evaluator.TryFloat(value, out y))
-            {
-                ModifyNotes<Arc>(
-                    a => a.YStart != y,
-                    a => a.YStart = y);
-            }
+            ModifyNotesFloatProperty<Arc>(
+                value,
+                a => a.YStart,
+                (a, v) => a.YStart = (float)v);
         }
 
         private void OnEndXField(string value)
@@ -400,12 +390,10 @@ namespace ArcCreate.Compose.Selection
                 return;
             }
 
-            if (Evaluator.TryFloat(value, out x))
-            {
-                ModifyNotes<Arc>(
-                    a => a.XEnd != x,
-                    a => a.XEnd = x);
-            }
+            ModifyNotesFloatProperty<Arc>(
+                value,
+                a => a.XEnd,
+                (a, v) => a.XEnd = (float)v);
         }
 
         private void OnEndYField(string value)
@@ -427,12 +415,10 @@ namespace ArcCreate.Compose.Selection
                 return;
             }
 
-            if (Evaluator.TryFloat(value, out y))
-            {
-                ModifyNotes<Arc>(
-                    a => a.YEnd != y,
-                    a => a.YEnd = y);
-            }
+            ModifyNotesFloatProperty<Arc>(
+                value,
+                a => a.YEnd,
+                (a, v) => a.YEnd = (float)v);
         }
 
         private bool TryParseXY(string value, out float x, out float y)
@@ -490,12 +476,10 @@ namespace ArcCreate.Compose.Selection
                 return;
             }
 
-            if (Evaluator.TryFloat(value, out float width))
-            {
-                ModifyNotes<ArcTap>(
-                    n => n.Width != width,
-                    n => n.Width = width);
-            }
+            ModifyNotesFloatProperty<ArcTap>(
+                value,
+                n => n.Width,
+                (n, w) => n.Width = (float)w);
         }
 
         private void OnGroupField(TimingGroup tg)
@@ -533,6 +517,207 @@ namespace ArcCreate.Compose.Selection
             }
 
             groupField.SetValueWithoutNotify(selected.First().TimingGroupInstance);
+        }
+
+        private void ModifyNotesFloatProperty<T>(
+            string str,
+            Func<T, double> propSelector,
+            Action<T, double> modifier,
+            Func<T, double, bool> requirement = null,
+            Func<T, bool> preselect = null)
+            where T : ArcEvent
+        {
+            try
+            {
+                if (str.Length >= 1 && str[0] == '=')
+                {
+                    string sub = str.Substring(2);
+                    if (str[1] == '+' && Evaluator.TryDouble(sub, out double increase) && increase != 0)
+                    {
+                        Func<T, bool> req = null;
+                        if (requirement != null)
+                        {
+                            req = n => requirement.Invoke(n, propSelector.Invoke(n) + increase);
+                        }
+
+                        ModifyNotes<T>(
+                            n => preselect?.Invoke(n) ?? true,
+                            n => modifier.Invoke(n, propSelector.Invoke(n) + increase),
+                            req);
+                        return;
+                    }
+
+                    if (str[1] == '-' && Evaluator.TryDouble(sub, out double decrease) && decrease != 0)
+                    {
+                        Func<T, bool> req = null;
+                        if (requirement != null)
+                        {
+                            req = n => requirement.Invoke(n, propSelector.Invoke(n) - decrease);
+                        }
+
+                        ModifyNotes<T>(
+                            n => preselect?.Invoke(n) ?? true,
+                            n => modifier.Invoke(n, propSelector.Invoke(n) - decrease),
+                            req);
+                        return;
+                    }
+
+                    if ((str[1] == '*' || str[1] == 'x') && Evaluator.TryDouble(sub, out double mult) && mult != 1)
+                    {
+                        Func<T, bool> req = null;
+                        if (requirement != null)
+                        {
+                            req = n => requirement.Invoke(n, propSelector.Invoke(n) * mult);
+                        }
+
+                        ModifyNotes<T>(
+                            n => preselect?.Invoke(n) ?? true,
+                            n => modifier.Invoke(n, propSelector.Invoke(n) * mult),
+                            req);
+                        return;
+                    }
+
+                    if (str[1] == '/' && Evaluator.TryDouble(sub, out double div) && div > Mathf.Epsilon && div != 1)
+                    {
+                        Func<T, bool> req = null;
+                        if (requirement != null)
+                        {
+                            req = n => requirement.Invoke(n, propSelector.Invoke(n) / div);
+                        }
+
+                        ModifyNotes<T>(
+                            n => preselect?.Invoke(n) ?? true,
+                            n => modifier.Invoke(n, propSelector.Invoke(n) / div),
+                            req);
+                        return;
+                    }
+
+                    {
+                        string formula = str.Substring(1);
+                        Dictionary<string, double> vars = new Dictionary<string, double>() { { "this", 0 }, };
+                        PopulateVarName(typeof(T), vars);
+
+                        Func<T, bool> req = null;
+                        if (requirement != null)
+                        {
+                            req = n =>
+                            {
+                                vars["this"] = propSelector.Invoke(n);
+                                PopulateVars(n, vars);
+                                return requirement.Invoke(n, Evaluator.Calculate(formula, vars));
+                            };
+                        }
+
+                        ModifyNotes<T>(
+                            n => preselect?.Invoke(n) ?? true,
+                            n =>
+                            {
+                                vars["this"] = propSelector.Invoke(n);
+                                PopulateVars(n, vars);
+                                modifier.Invoke(n, Evaluator.Calculate(formula, vars));
+                            },
+                            req);
+                        return;
+                    }
+                }
+
+                if (Evaluator.TryDouble(str, out double value))
+                {
+                    Func<T, bool> req = null;
+                    if (requirement != null)
+                    {
+                        req = n => requirement.Invoke(n, value);
+                    }
+
+                    ModifyNotes<T>(
+                        n => (preselect?.Invoke(n) ?? true) && propSelector.Invoke(n) != value,
+                        n => modifier.Invoke(n, value),
+                        req);
+                    return;
+                }
+            }
+            catch
+            {
+                Rebuild();
+                throw;
+            }
+        }
+
+        private void PopulateVars<T>(T n, Dictionary<string, double> vars)
+            where T : ArcEvent
+        {
+            vars["timing"] = n.Timing;
+            vars["group"] = n.TimingGroup;
+
+            if (n is LongNote l)
+            {
+                vars["endtiming"] = l.EndTiming;
+            }
+
+            if (n is Tap t)
+            {
+                vars["lane"] = t.Lane;
+            }
+
+            if (n is Hold h)
+            {
+                vars["lane"] = h.Lane;
+            }
+
+            if (n is Arc a)
+            {
+                vars["xstart"] = a.XStart;
+                vars["xend"] = a.XEnd;
+                vars["ystart"] = a.YStart;
+                vars["yend"] = a.YEnd;
+                vars["istrace"] = a.IsTrace ? 1 : 0;
+                vars["isarc"] = a.IsTrace ? 0 : 1;
+                vars["color"] = a.Color;
+            }
+
+            if (n is ArcTap at)
+            {
+                vars["width"] = at.Width;
+            }
+        }
+
+        private void PopulateVarName(Type type, Dictionary<string, double> vars)
+        {
+            if (typeof(ArcEvent).IsAssignableFrom(type))
+            {
+                vars.Add("timing", 0);
+                vars.Add("group", 0);
+            }
+
+            if (typeof(LongNote).IsAssignableFrom(type))
+            {
+                vars.Add("endtiming", 0);
+            }
+
+            if (typeof(Tap).IsAssignableFrom(type))
+            {
+                vars.Add("lane", 0);
+            }
+
+            if (typeof(Hold).IsAssignableFrom(type))
+            {
+                vars.Add("lane", 0);
+            }
+
+            if (typeof(Arc).IsAssignableFrom(type))
+            {
+                vars.Add("xstart", 0);
+                vars.Add("xend", 0);
+                vars.Add("ystart", 0);
+                vars.Add("yend", 0);
+                vars.Add("istrace", 0);
+                vars.Add("color", 0);
+            }
+
+            if (typeof(ArcTap).IsAssignableFrom(type))
+            {
+                vars.Add("width", 0);
+            }
         }
 
         private void ModifyNotes<T>(Func<T, bool> include, Action<T> modifier, Func<T, bool> requirement = null, HashSet<Note> customList = null)
