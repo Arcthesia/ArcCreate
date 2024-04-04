@@ -19,7 +19,9 @@
 - Id: zh-tw
   CodeName: ChineseTraditional
   LocalName: 繁體中文
-
+- Id: pt-br
+  CodeName: Portuguese 
+  LocalName: Português
 # Add additional entry according to this format
 # - Id: [LCID code. Must match with the YAML file's name]:
 #   CodeName: [Must be one of the entry listed at: https://docs.unity3d.com/ScriptReference/SystemLanguage.html. Delete this line if your language is not included here.]
