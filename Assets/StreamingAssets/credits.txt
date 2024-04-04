@@ -22,6 +22,7 @@ Exiatist
 <size=33><b>{Credits.Role.Localization}</b></size>
 [ja-jp]: rassvet2
 [es-es]: Alaiskai
+[pt-br]: PedSen
 [vi]: Himori
 [zh-cn]: HaloSense
 [zh-tw]: Sylvexia
