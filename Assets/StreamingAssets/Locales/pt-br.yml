@@ -68,10 +68,10 @@ Compose:
     FileDoesNotExist: |-
       Trying to read file located at {Path} but it does not exist. The file might have been deleted.
     LoadImage: |-
-      An error occured while trying to load the image located at {Path}.
+      Um erro ocorreu ao tentar carregar the image located at {Path}.
       {Error}
     LoadProject: |-
-      An error occured while trying to load the project file located at {Path}.
+      Um erro ocorreu ao tentar carregar the project file located at {Path}.
       The file could have been saved incorrectly.
       You can try modifying it manually, or you can delete the file and create a new project.
       {Error}
@@ -588,99 +588,99 @@ Compose:
   # Texts that appear on the editor UI
   UI:
     Common:
-      Confirm: Confirm
-      Cancel: Cancel
-      Close: Close
-      NotRequired: (not required)
-      Extension: Extension
+      Confirm: Confirmar
+      Cancel: Cancelar
+      Close: Fechar
+      NotRequired: (não é necessário)
+      Extension: Extensão
     Placeholder:
-      Text: Empty...
-      File: No file selected...
-      Image: No image selected...
-      Property: No property...
-      ImagePrompt: Click to select image
+      Text: Vazio...
+      File: Nenhum arquivo selecionado...
+      Image: Nenhuma imagem selecionada...
+      Property: Nenhuma propriedade...
+      ImagePrompt: Clique para selecionar imagem
     PanelNames:
       Toolbox: Toolbox
-      RawEditor: Text
+      RawEditor: Texto
       Gameplay: Gameplay
       Timeline: Timeline
-      Project: Project
-      Events: Events
-      Remote: Remote
-      Export: Export
-      Settings: Settings
+      Project: Projeto
+      Events: Eventos
+      Remote: Remoto
+      Export: Exportar
+      Settings: Configurações
     # Top bar of the UI
     Top:
       Label:
-        New: New
-        Open: Open
-        Save: Save
-        InputMode: Input Mode
+        New: Novo
+        Open: Abrir
+        Save: Salvar
+        InputMode: Modo de Entrada
         InputModeOptions:
           auto: Auto
-          autocontroller: Auto (Controller)
-          touch: Touch
-          controller: Controller
+          autocontroller: Auto (Controle)
+          touch: Toque
+          controller: Controle
           mouse: Mouse
-          idle: Idle
-        FullScreen: Full Screen
-        ToggleFullScreenHint: Press F11 to toggle full screen mode.
+          idle: Ocioso
+        FullScreen: Tela Cheia
+        ToggleFullScreenHint: Aperte F11 para entrar na tela cheia.
         Chart: Chart
     # Project panel
     Project:
       Label:
-        NewChart: New Chart
-        NewProject: New Project
+        NewChart: Nova Chart
+        NewProject: Novo Projeto
         ProjectFile: Project File
-        ChartFile: Chart file
-        Information: Information
+        ChartFile: Arquivo da chart
+        Information: Informação
         Gameplay: Gameplay
-        Title: Title
-        Composer: Composer
-        Illustrator: Illustrator
+        Title: Título
+        Composer: Compositor
+        Illustrator: Ilustrador
         Charter: Charter
-        Alias: Alias
+        Alias: Apelido
         BPM: BPM
-        BaseBPM: Base BPM
-        BPMText: BPM Text
-        SyncBaseBPM: Sync
-        ChartOffset: Chart Offset
-        TimingPointDensityFactor: Judge Density
+        BaseBPM: BPM Base
+        BPMText: Texto do BPM
+        SyncBaseBPM: Sincronizar
+        ChartOffset: Offset da Chart
+        TimingPointDensityFactor: Densidade do Julgamento
         ChartConstant: Chart Constant
-        SearchTags: Search Tags
-        DifficultyName: Difficulty Name
-        DifficultyColor: Difficulty Color
-        Files: Files
-        Audio: Audio
-        JacketArt: Jacket Art
-        Background: Background
-        Video: Video
+        SearchTags: Pesquisar Tags
+        DifficultyName: Nome da Dificuldade
+        DifficultyColor: Cor da Dificuldade
+        Files: Arquivos
+        Audio: Áudio
+        JacketArt: Arte da Capa
+        Background: Fundo
+        Video: Vídeo
         Skin: Skin
-        Side: Side
-        Note: Note
-        Particle: Particle
-        Accent: Accent
-        Track: Track
-        SingleLine: Single Line
-        Colors: Colors
-        TraceBody: Trace Body
-        Shadow: Shadow
-        ArcColors: Arc Colors
-        Blue: Blue (0)
-        Red: Red (1)
-        Green: Green (2)
-        Custom: Custom ({0})
-        AddArcColor: Add arc color
+        Side: Lado
+        Note: Nota
+        Particle: Partícula
+        Accent: Acento
+        Track: Linha
+        SingleLine: Linha Única
+        Colors: Cores
+        TraceBody: Corpo do Traço
+        Shadow: Sombra
+        ArcColors: Cores da Arc
+        Blue: Azul (0)
+        Red: Vermelho (1)
+        Green: Verde (2)
+        Custom: Personalizado ({0})
+        AddArcColor: Adicionar cor da arc
         NoProjectLoaded: |-
-          No project loaded.
-          Create or open a new project
+          Nenhum projeto carregado.
+          Crie ou abra um novo projeto
         RawEditorFileTooLarge: |-
-          Text editor is disabled for files larger than 1000kb
-        Shutter: Transition
-        ShowShutter: Show Transition
-        HideShutter: Hide Transition
-        PreviewSegment: Preview Segment
-        CustomChartPath: Use custom (advanced)
+          O editor de texto foi desativado para arquivos maiores que 1000kb
+        Shutter: Transição
+        ShowShutter: Exibir Transição
+        HideShutter: Esconder Transição
+        PreviewSegment: Pré-visualizar segmento
+        CustomChartPath: Usar personalizado (avançado)
       Options:
         Inherit: Inherit
         Light: Light
@@ -707,469 +707,469 @@ Compose:
     Timeline:
       Label:
         Offset: Offset
-        TimingGroup: Group
-        Density: Density
-        PlaybackSpeed: Speed
+        TimingGroup: Grupo
+        Density: Densidade
+        PlaybackSpeed: Velocidade
       Timestamp:
         Name: Timestamp
         DefaultMessage: Timestamp {0}
     # Events editor panel
     EventsEditor:
       Label:
-        Group: Group
-        Events: Events
+        Group: Grupo
+        Events: Eventos
       Actions:
-        AddGroup: Add group
-        DeleteGroup: Delete group
-        AddEvent: Add event
-        DeleteEvent: Delete event
-        AutoReload: Reload automatically
-        GenerateEmmyLua: Generate EmmyLua
-        Reload: Reload
-        FreeCamera: Free camera
+        AddGroup: Adicionar grupo
+        DeleteGroup: Deletar grupo
+        AddEvent: Adicionar evento
+        DeleteEvent: Deletar evento
+        AutoReload: Recarregar automáticamente
+        GenerateEmmyLua: Gerar EmmyLua
+        Reload: Recarregar
+        FreeCamera: Câmera livre
       CameraView:
-        Default: Default view
-        Stationary: Stationary view
-        ZoomedOut: Zoomed out view
-        BirdsEye1: Bird's-eye view 1
-        BirdsEye2: Bird's-eye view 2
+        Default: Visão padrão
+        Stationary: Visão fixa
+        ZoomedOut: Visão de longe
+        BirdsEye1: Visão panorâmica 1
+        BirdsEye2: Visão panorâmica 2
       Mode:
         Timing: Timing
-        Camera: Camera
-        Scenecontrol: Scene
+        Camera: Câmera
+        Scenecontrol: Cena
     # Export panel
     Export:
       Render:
-        Name: Render video
+        Name: Renderizar vídeo
         Description: |-
-          Automatically export chart view video.
-          Requires FFmpeg to be installed.
-        ConfigureFFmpeg: Configure FFmpeg executable path
+          Automaticamente exporta um vídeo de chart view.
+          Requer que o FFmpeg esteja instalado.
+        ConfigureFFmpeg: Configurar caminho executável do FFmpeg
         Settings:
-          Name: Settings
-          From: From
-          To: To
-          Quality: Quality
+          Name: Configurações
+          From: De
+          To: Para
+          Quality: Qualidade
           FPS: FPS
-          Width: Width
-          Height: Height
-          Size: Size
-          ShowShutter: Show shutter
-        Start: Start rendering
-        Cancel: Cancel rendering
+          Width: Largura
+          Height: Altura
+          Size: Tamanho
+          ShowShutter: Exibir obturador
+        Start: Começar renderização
+        Cancel: Cancelar renderização
         Status: |-
-          Rendering video. This will take a while.
-          Elapsed: {0}
-          Remaining: {1}
+          Renderizandoo vídeo. Isso irá demorar um pouco.
+          Decorrido: {0}
+          Restante: {1}
       Package:
-        Name: Export package
+        Name: Exportar pacote
         Description: |-
-          Export a .arcpkg package file to share to other players.
-        Publisher: Publisher
-        Package: Package
-        Version: Version
-        BlankField: Please enter both publisher and package name information
-        Identifier: "Your package identifier is: {0}"
-        Export: Export
+          Exporta um pacote de arquivo .arcpkg para compartilhar com outros jogadores.
+        Publisher: Publicador
+        Package: Pacote
+        Version: Versão
+        BlankField: Por favor insira ambas informações de publicador e nome de pacote
+        Identifier: "O seu indentificador de pacote é: {0}"
+        Export: Exportar
     # Editor settings panel
     Settings:
       Label:
         Locale:
-          Name: Localization
-          Language: Language
-          Reload: Reload locales
-          CheckMissing: Check missing entries
+          Name: Localização
+          Language: Língua
+          Reload: Recarregar localizações
+          CheckMissing: Verificar entradas ausentes
         Gameplay:
           Name: Gameplay
-          Speed: Speed
-          AspectRatio: Aspect Ratio
-          Indicator: Indicator
-          MaxIndicator: Enable max indicator
-          Colorblind: Use colorblind arc colors
-          ScoreDisplay: Score display
+          Speed: Velocidade
+          AspectRatio: Taxa de Proporção
+          Indicator: Indicador
+          MaxIndicator: Habilitar indicator máximo
+          Colorblind: Usar cores de arc para daltônicos
+          ScoreDisplay: Visualização da pontuação
         Judgement:
-          Name: Judgement
-          NotUsedInAutoOrIdle: "These options take no effect in auto or idle mode:"
-          EarlyLatePosition: Early/Late position
-          ShowMsDifference: Show ms difference
-          ShowJudgement: "Show judgement:"
-          ShowMax: Perfect (Max)
-          ShowPerfect: Perfect (Early/Late)
-          ShowGood: Good
-          ShowMiss: Miss
+          Name: Julgamento
+          NotUsedInAutoOrIdle: "Essas opções não terão efeito no modo automático ou ocioso:"
+          EarlyLatePosition: Posição do Early/Late
+          ShowMsDifference: Exibir diferença de ms
+          ShowJudgement: "Exibir julgamento:"
+          ShowMax: Perfeito (Max)
+          ShowPerfect: Perfeito (Early/Late)
+          ShowGood: Bom
+          ShowMiss: Erro
         Grid:
-          Name: Grid
+          Name: Grade
           Slot: Slot
-          UseDefault: Use default
-          FromLane: From lane
-          ToLane: To lane
-          ScaleGrid: Scale with sky input
-          Gridline: Define gridlines
-          Script: Lua script
+          UseDefault: Usar padrão
+          FromLane: Da linha
+          ToLane: Para a linha
+          ScaleGrid: Escalar com o sky input
+          Gridline: Definir linhas de grade
+          Script: Script lua
         AudioVolume:
-          Name: Audio
-          Music: Music
-          Effect: Effect
-          GlobalOffset: Global offset
-          SyncToDSPTime: Sync to DSP timing
+          Name: Áudio
+          Music: Música
+          Effect: Efeito
+          GlobalOffset: Offset global
+          SyncToDSPTime: Sincronizar com o timing DSP
         Display:
           Name: Display
           Vsync: Vsync
-          Framerate: Framerate
-          ShowCounter: Show framerate
+          Framerate: Taxa de quadros
+          ShowCounter: Exibir taxa de quadros
         Input:
-          Name: Input
-          ReloadKeybinds: Reload keybinds
-          AllowCreatingNotesBackward: Allow creating notes backward
-          EnableEditingArctapWidth: Enable editing sky note's width
-          ShowKeybindHint: Show keybind hints
+          Name: Entrada
+          ReloadKeybinds: Recarregar vinculações de teclas
+          AllowCreatingNotesBackward: Permitir criar notas para trás
+          EnableEditingArctapWidth: Permitir editar a largura da sky note
+          ShowKeybindHint: Exibir dicas de vinculações de teclas
         Files:
-          Name: Files
-          Backup: Create backup on save
-          BackupCount: Backups count
-          Autosave: Enable autosaving
-          AutosaveInterval: Autosave interval (seconds)
+          Name: Arquivos
+          Backup: Criar backup ao salvar
+          BackupCount: Contagem de backups
+          Autosave: Habilitar salvamento automático
+          AutosaveInterval: Intervalo do salvamento automático (segundos)
         ScrollSensitivity:
-          Name: Scroll sensitivity
+          Name: Sensibilidade da deslizagem
           Vertical: Vertical
           Horizontal: Horizontal
           Timeline: Timeline
         TrackScrolling:
-          Name: Track scrolling
-          Threshold: Threshold
-          MaxMovement: Max movement
+          Name: Deslizagem da pista
+          Threshold: Limite
+          MaxMovement: Movimento máximo
     # Toolbox panel
     Toolbox:
       Pallete:
-        Name: Palette
+        Name: Paleta
         Arc: Arc
-        Trace: Trace
+        Trace: Traço
         Tap: Tap
         Hold: Hold
         Arctap: Sky
-        Easing: Easing
+        Easing: Atenuação
       Macros:
         Name: Macros
-        GenerateEmmy: Generate EmmyLua
-        Reload: Reload macro scripts
-        OpenExplorer: Open macros folder
+        GenerateEmmy: Gerar EmmyLua
+        Reload: Recarregar scripts de macro
+        OpenExplorer: Abrir pasta de macros
     # Inspector window
     Inspector:
-      Name: Inspector
+      Name: Inspetor
       Timing: Timing
-      StartTiming: Start
-      EndTiming: End
-      Lane: Lane
-      StartPos: From
-      EndPos: To
+      StartTiming: Começo
+      EndTiming: Fim
+      Lane: Linha
+      StartPos: De
+      EndPos: Para
       Sfx: Sfx
-      Width: Width
-      Group: Group
-      Mixed: Mixed
+      Width: Largura
+      Group: Grupo
+      Mixed: Misturado
       Arc: Arc
-      Trace: Trace
+      Trace: Traço
       Actions:
-        SelectArc: Select parent arc
-        SelectArctap: Select sky notes
+        SelectArc: Selecionar arc pai
+        SelectArctap: Selecionar sky notes
     Startup:
-      Discord: Join our Discord
-      Kofi: Support us on Ko-fi
-      Version: "Version: {0}"
-      Recent: Recently opened
+      Discord: Junte-se ao nosso Discord
+      Kofi: Nos apoie no Ko-fi
+      Version: "Versão: {0}"
+      Recent: Recentemente aberto
 
 Remote:
   Exception:
-    InvalidIP: Invalid IP address
+    InvalidIP: Endereço IP inválido
   State:
     Listening: |-
-      Listening for broadcast...
+      Escutando para transmissão...
       <size=20>
-      On your desktop ArcCreate client, open "Remote" tab and press "Start broadcasting" to begin.</size>
+      No seu cliente ArcCreate de área de trabalho, abra a guia "Remoto" e pressione "Iniciar transmissão" para começar.</size>
     ManualIP: |-
-      Waiting for connection from desktop client.
+      Esperando pela conexão do cliente de área de trabalho.
       <size=20>
-      On your desktop ArcCreate client, open "Remote" tab and enter the IP address: {0}.</size>
+      No seu cliente ArcCreate de área de trabalho, abra a guia "Remoto" e insira o endereço IP: {0}.</size>
     Found: |-
-      Broadcast received from the following device(s).
-      Select a device to continue.
+      Transmissão recebida do(s) seguinte(s) dispositivo(s).
+      Selecione um dispositivo para continuar.
     TargetDisconnected:
-      Compose: Target client disconnected. Stopping connection.
-      Gameplay: Target client disconnected. Do you want to start a new session?
+      Compose: Cliente alvo desconectado. Parando conexão.
+      Gameplay: Cliente alvo desconectado. Você deseja começar uma nova sessão?
     Receiving:
-      Receiving data ({0})
+      Recebendo dados ({0})
   Description:
     Idle: |-
-      No test play client has been connected.
-      Start broadcasting to discover clients. Make sure this device and test play client's device are on the same local network, and that the test play client is listening for incoming broadcast.
+      Nenhum cliente de teste de jogo foi conectado.
+      Inicie a transmissão para descobrir clientes. Certifique-se de que este dispositivo e o dispositivo do cliente de teste do jogo estejam na mesma rede local e que o cliente de teste do jogo esteja ouvindo a recepção da transmissão.
     Broadcasting: |-
-      Broadcasting code: {0}.
-      Select the option with this code on the test play client to start the session.
+      Código de transmissão: {0}.
+      Selecione a opção com este código no cliente de teste de jogo para começar a sessão.
     Connected: |-
-      Connected to test play client at: {0}:{1}
+      Conectado com o cliente de teste de jogo em: {0}:{1}
   Actions:
-    Broadcast: Start broadcasting
-    AbortBroadcast: Stop broadcast
-    BroadcastAgain: Broadcast again
-    StopSession: Stop session
-    StartNewSession: Start new session
-    ManualIP: Manually set up connection
-    ReturnToSelect: Return to Song Select
+    Broadcast: Iniciar transmissão
+    AbortBroadcast: Parar transmissão
+    BroadcastAgain: Transmitir de novo
+    StopSession: Parar sessão
+    StartNewSession: Começar nova sessão
+    ManualIP: Configurar conexão manualmente
+    ReturnToSelect: Retonar á Seleção de Música
   Control:
-    Name: Control
+    Name: Controle
     Sync:
-      Name: Sync data
-      AllFiles: All files
+      Name: Sincronizar dados
+      AllFiles: Todos os arquivos
       Chart: Chart
-      Audio: Audio
-      Jacket: Jacket
-      Background: Background
-      Metadata: Metadata
+      Audio: Áudio
+      Jacket: Capa
+      Background: Fundo
+      Metadata: Metadados
     Settings:
-      Name: Settings
-      Offset: Device offset
-      Speed: Device speed
-      MusicVolume: Music volume
-      EffectVolume: Effect volume
-    StartTiming: Play from timing
-    EndTiming: Play to timing      
-    Loop: Loop playback
-    ShowLog: Show log
-    ShowDebug: Show debug information
-    ManualIP: Enter IP Manually
+      Name: Configurações
+      Offset: Offset do dispositivo
+      Speed: Velocidade do dispositivo
+      MusicVolume: Volume da música
+      EffectVolume: Volume dos efeitos
+    StartTiming: Tocar do timing
+    EndTiming: Tocar para o timing   
+    Loop: Reproduzir em loop
+    ShowLog: Exibir registro
+    ShowDebug: Exibir informações de debug
+    ManualIP: Inserir IP Manualmente
   Window:
-    Name: Remote
-    SyncChart: Sync chart
-    SyncTiming: Sync timing
+    Name: Remoto
+    SyncChart: Sincronizar chart
+    SyncTiming: Sincronizar timing
 
 Gameplay:
   Exception:
     LoadAudio: |-
-      An error occured while trying to load the audio file located at {Path}.
+      Um erro ocorreu ao tentar carregar o arquivo de áudio localizado em {Path}.
       {Error}
     Chart: |-
-      An error occured while trying to load the chart located at {Path}.
+      Um erro ocorreu ao tentar carregar a chart localizada em {Path}.
       {Error}
     Skin: |-
-      An error occured while trying to load the image located at {Path}.
+      Um erro ocorreu ao tentar carregar a imagem localizada em {Path}.
       {Error}
     Scenecontrol: |-
-      An error occured while trying to load scenecontrol json located at {Path}.
+      Um erro ocorreu ao tentar carregar um json de scenecontrol localizado em {Path}.
       {Error}
     ScenecontrolSprite: |-
-      An error occured while trying to load a scenecontrol sprite located at {Path}.
+      Um erro ocorreu ao tentar carregar um sprite de scenecontrol localizado em {Path}.
       {Error}
     Load: |-
-      An unknown error occured while trying to load the chart {Identifier}, {ChartPath}
-      Error: {Message}
-      Stack trace:
+      Um erro desconhecido ocorreu ao tentar carregar a chart {Identifier}, {ChartPath}
+      Erro: {Message}
+      Caminho para rastrear:
       {StackTrace}
   HUD:
-    Play: Resume
-    Retry: Retry
-    Return: Quit
-    AudioDeviceChange: Dectected a change in audio device. ArcCreate will forcibly return to Select menu.
-    Confirm: Confirm
+    Play: Continuar
+    Retry: Reiniciar
+    Return: Sair
+    AudioDeviceChange: Dectectado uma mudança no dispositivo de áudio. ArcCreate irá forçadamente voltar ao menu de Seleção.
+    Confirm: Confirmar
   Practice:
-    PlaybackSpeed: Speed
+    PlaybackSpeed: Velocidade
     Repeat:
-      On: Repeat On
-      Off: Repeat Off
-      From: Set starting point
-      To: Set ending point 
+      On: Repetir Ligado
+      Off: Repetir Desligado
+      From: Definir ponto de começo
+      To: Definir ponto de fim
   Selection:
     SelectStatus:
       Singular: |-
-        {0} asset selected
+        {0} recurso selecionado
       Plural: |-
-        {0} assets selected
+        {0} recursos selecionados
     DeleteConfirmation: |-
-      Are you sure you want to delete the following assets?
-      Your score will not be deleted.
+      Tem certeza que quer deletar os assets a seguir?
+      Sua pontuação não será deletada.
     PackDeleteConfirmation: |-
-      You are deleting the pack:
+      Você está deletando o pack:
       <color=#FFFFFFB4>{0}</color>
-      Do you want to also delete all levels belonging to this pack, or keep the levels and delete this pack only?
+      Você deseja excluir também todos os níveis pertencentes a esse pack ou manter os níveis e excluir somente esse pack?
     CannotDeleteDefault: |-
-      Default assets cannot be deleted.
+      Recursos padrão não podem ser deletados.
     EnablePractice: |-
-      Practice mode enabled for next play.
+      Modo prática habilitado para a próxima partida.
     SelectRating: Select rating
     Action:
-      Copy: Copy
-      Delete: Delete
-      Cancel: Cancel
-      Keep: Keep
-      Done: Done
+      Copy: Copiar
+      Delete: Deletar
+      Cancel: Cancelar
+      Keep: Manter
+      Done: Feito
     List:
-      RemoteTestplay: Remote Testplay
-      Import: Import package
-      Community: Community
-      AllSongs: All Songs
-      OtherDifficulties: Other difficulties
+      RemoteTestplay: Teste de Jogo Remoto
+      Import: Importar pacote
+      Community: Comunidade
+      AllSongs: Todas as Músicas
+      OtherDifficulties: Outras dificuldades
     Info:
       Undefined:
-        Title: Unnamed
+        Title: Sem nome
         Composer: N/A
-        Charter: Unknown
+        Charter: Desconhecido
       Charter: 'Charter: {0}'
     Sort:
-      addeddate: Added date
+      addeddate: Data adicionada
       charter: Charter
-      composer: Composer
-      difficulty: Difficulty
-      grade: Grade
-      playcount: Play count
-      rating: Rating
-      score: Score
-      title: Title
+      composer: Compositor
+      difficulty: Dificuldade
+      grade: Nota 
+      playcount: Número de partidas
+      rating: Classificação
+      score: Pontuação
+      title: Título
     Group:
-      none: None
-      difficulty: Difficulty
-      grade: Grade
-      rank: Rank
-      rating: Rating
+      none: Nenhum
+      difficulty: Dificuldade
+      grade: Nota
+      rank: Ranque
+      rating: Classificação
       charter: Charter
     History:
-      Best: Best
-      Recent: Recent
+      Best: Melhor
+      Recent: Recente
     Modifiers:
       GameMode:
-        Name: Game mode
+        Name: Modo de jogo
         Auto: Autoplay
-        Practice: Practice
+        Practice: Prática
       Modifier:
-        Name: Modifiers
-        Mirror: Mirror
+        Name: Modificadores
+        Mirror: Espelhado
     Settings:
-      Name: Settings
-      Language: Language
+      Name: Configurações
+      Language: Idioma
       Gameplay:
         Name: Gameplay
-        Speed: Speed
+        Speed: Velocidade
         SpeedDetail: |-
-          Adjust the speed at which notes approach the judgement area.
-        EarlyLatePerfectDisplay: Early/Late perfect display
+          Ajusta a velocidade das quais as notas se aproximam da área de julgamento.
+        EarlyLatePerfectDisplay: Exibir Early/Late
         EarlyLatePerfectDisplayDetail: |-
-          Change whether or not to display early/late perfect judgements.
-        EnablePractice: Enable practice mode
-        ShowMsDifference: Display miliseconds differences
-        ShowMsDifferenceDetail: Display exact miliseconds differences instead of EARLY / LATE.
-        HidePause: Hide pause button
-        PauseMode: Pause button behaviour
+          Altera se exibe ou não julgamentos perfeitos Adiantados/Atrasados.
+        EnablePractice: Habilitar modo de prática
+        ShowMsDifference: Exibir diferença de milissegundos
+        ShowMsDifferenceDetail: Exibir a diferença exata de milissegundos invés de EARLY / LATE.
+        HidePause: Esconder botão de pausa
+        PauseMode: Comportamento do botão de pausa
       Audio:
-        Name: Audio
+        Name: Áudio
         Offset: Offset
         OffsetDetail: |-
-          Adjust music synchronization.
-          Increase if you're getting LATE, or decrease if you're getting EARLY.
-        Calibrate: Calibrate
-        MusicAudio: Music volume
+          Ajusta a sincronia da música.
+          Aumente se você está pegando LATE, ou diminua se você está pegando EARLY.
+        Calibrate: Calibrar
+        MusicAudio: Volume da Música
         MusicAudioDetail: |-
-          Change the volume of music during gameplay.
-        EffectAudio: Effect volume
+          Muda o volume da música durante a partida.
+        EffectAudio: Volume dos Efeitos
         EffectAudioDetail: |-
-          Change the volume of hit sounds during gameplay.
+          Muda o volume dos sons de toque durante a partida.
       Visual:
         Name: Visual
-        Colorblind: Colorblind mode
-        ColorblindDetail: Use alternate arc colors.
-        FrPmDisplay: FC/AP display
-        FrPmDisplayDetail: Adjust FC/AP indicator position.
-        MaxDisplay: Max indicator display
-        MaxDisplayDetail: Toggle max score indicator display.
-        EarlyLateDisplay: Early/Late display
-        EarlyLateDisplayDetail: Adjust early/late text position.
-        ScoreDisplay: Score display
-        LimitFramerate: Limit framerate
-        LimitFramerateDetail: Limit display framerate to 60 FPS to preserve battery life. Might increase latency.
-        DisableAdvancedGraphics: Disable advanced graphics
-        DisableAdvancedGraphicsDetails: Disable post processing and video backgrounds, which can boost performance.
+        Colorblind: Modo daltônico
+        ColorblindDetail: Usa cores de arc alternativos.
+        FrPmDisplay: Exibição de FC/AP
+        FrPmDisplayDetail: Ajusta a possição do FC/AP.
+        MaxDisplay: Exibição do indicador máximo
+        MaxDisplayDetail: Habilita a exibição do indicador de pontuação máxima.
+        EarlyLateDisplay: Exibição do Early/Late
+        EarlyLateDisplayDetail: Ajusta a posição do texto early/late.
+        ScoreDisplay: Exibição da pontuação
+        LimitFramerate: Limitar taxa de quadros
+        LimitFramerateDetail: Limita a taxa de quadros da tela para 60 FPS para preservar a vida útil da bateria. Pode aumentar a latência.
+        DisableAdvancedGraphics: Desabilitar gráficos avançados
+        DisableAdvancedGraphicsDetails: Desabilita pós-processamento and vídeos de fundo, o que pode impulsionar o desempenho.
       Judgement:
-        Name: Judgement
-        ShowMax: Display Perfect (Max) judgement
-        ShowPerfect: Display Perfect (Early / Late) judgement
-        ShowGood: Display Good judgement
-        ShowMiss: Display Miss judgement
+        Name: Julgamento
+        ShowMax: Exibir julgamento Perfeito (Máx.)
+        ShowPerfect: Exibir julgamento Perfeito (Early / Late)
+        ShowGood: Exibir julgamento Bom
+        ShowMiss: Exibir julgamento Erro
       Interface:
         Name: Interface
-        ForceTheme: Force UI Theme
-        ForceThemeDetail: Set the UI to display a theme regardless of selected chart.
-        SwitchResumeAndRetry: Switch Resume and Retry position
-        SwitchResumeAndRetryDetail: Switch the positions of Resume and Retry buttons within the Pause screen.
-        ShowFPS: Show FPS
-        ShowFPSDetail: Toggle FPS display.
-        ShowDebug: Show debug information
-        ShowDebugDetail: Display debug information during gameplay (advanced).
+        ForceTheme: Forçar Tema da UI
+        ForceThemeDetail: Definir para a UI exibir um tema indepentemente da chart selecionada.
+        SwitchResumeAndRetry: Mudar a posição dos botões Continuar e Reiniciar
+        SwitchResumeAndRetryDetail: Muda as posições dos botões Continuar e Reiniciar na tela de Pause.
+        ShowFPS: Exibir FPS
+        ShowFPSDetail: Habilita a exibição do FPS.
+        ShowDebug: Exibir informações de depuração
+        ShowDebugDetail: Exibe informações de depuração durante a partida (avançado).
       FrPmPosition:
-        middle: Middle
-        infopanel: Info panel
+        middle: Meio
+        infopanel: Painel de informações
         off: Off
       PauseMode:
-        clickonce: Single tap
-        doubleclick: Double tap
-        hold: Long press
-        disable: Disable
+        clickonce: Toque único
+        doubleclick: Toque duplo
+        hold: Toque longo
+        disable: Desabilitar
       EarlyLateTextPosition:
-        middle: Middle
-        bottom: Bottom
-        top: Top
+        middle: Meio
+        bottom: Abaixo
+        top: Acima
       ScoreDisplay:
-        default: Default
-        predictive: Predictive
-        difference: Difference
-        decrease: Decrease
+        default: Padrão
+        predictive: Preditivo
+        difference: Diferença
+        decrease: Diminuir
       ScoreDisplayDetails:
-        default: The default display mode. Score increases as you hit notes.
-        predictive: Score displays distance to the closest Grade threshold.
-        difference: Score shows difference to theoretically perfect score.
-        decrease: Score starts at max value and decreases.
+        default: A exibição de pontuação padrão. A pontuação aumenta ao acertar notas.
+        predictive: A pontuação exibe a distância para o limite de Nota mais próximo Grade
+        difference: A pontuação exibe a diferença para a pontuação teoricamente perfeita.
+        decrease: A pontuação inicia no valor máximo e diminui ao errar notas.
       ForceTheme:
-        default: Default
-        light: Light
-        dark: Dark
+        default: Padrão
+        light: Claro
+        dark: Escuro
 
 Shutter:
-  Composer: Music
-  Illustrator: Illustration
-  Charter: Note Design
-  Alias: as
+  Composer: Música
+  Illustrator: Ilustração
+  Charter: Padrão das Notas
+  Alias: como
     
 Storage:
-  Confirm: Confirm
+  Confirm: Confirmar
   ImportErrors: |-
-    The following assets could not be imported:
+    Os recursos a seguir não puderam ser importados:
   ImportSummary: |-
-    Successfully imported the following assets:
+    Os recursos a seguir foram importados com sucesso:
   NoAssetImported: |-
-    No assets were imported.
+    Nenhum recurso foi importado.
   ImportConflict:
     Message: |-
-      You're trying to import an older version of an asset.
-      Which version would you like to keep?
+      Você está tentando importar uma versão mais antiga de um recurso.
+      Qual versão gostaria de manter?
     ReplaceAsset:
-      Replace with importing asset
+      Substituir com o recurso importado
     KeepOriginal:
-      Keep the original asset
-    Identifier: "Identifier: {0}"
-    Version: "Version: {0}"
+     Manter o recurso original
+    Identifier: "Identificador: {0}"
+    Version: "Versão: {0}"
   Loading:
-    Message: 'Loading: {0}...'
-    Archive: Unpacking archive
-    ValidatePackage: Validating package
-    CheckConflict: Checking for conflict
-    DeleteAsset: Deleting asset {0}
-    StoreAsset: Storing asset {0}
-    Finalizing: Finalizing
+    Message: 'Carregando: {0}...'
+    Archive: Desempacotando arquivo
+    ValidatePackage: Validando pacote
+    CheckConflict: Verificando por conflito
+    DeleteAsset: Deletando recurso {0}
+    StoreAsset: Guardando recurso {0}
+    Finalizing: Finaliazndo
   
 Credits:
-  Name: Credits
-  View: See Credits
+  Name: Créditos
+  View: Ver Créditos
   Role:
-    LeadProgramming: Lead Programming
-    Programming: Programming
-    VisualDesign: Visual Design
-    SoundDesign: Sound Design
-    Localization: Localization
-    QualityAssurance: Quality Assurance
-    Community: and everyone at the Arcthesia & ArcCreate community!
-    Sponsor: Special thanks to our Supporters
+    LeadProgramming: Programação Principal
+    Programming: Programação
+    VisualDesign: Design Visual
+    SoundDesign: Design Sonoro
+    Localization: Localização
+    QualityAssurance: Controle de Qualidade
+    Community: e todos na comunidade de ArcCreate e Arcthesia!
+    Sponsor: Agradecimentos especiais aos nossos Apoiadores
