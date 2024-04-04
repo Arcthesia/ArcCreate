@@ -600,7 +600,7 @@ Compose:
       Property: Nenhuma propriedade...
       ImagePrompt: Clique para selecionar imagem
     PanelNames:
-      Toolbox: Toolbox
+      Toolbox: Ferramentas
       RawEditor: Texto
       Gameplay: Gameplay
       Timeline: Timeline
@@ -659,7 +659,7 @@ Compose:
         Side: Lado
         Note: Nota
         Particle: Partícula
-        Accent: Acento
+        Accent: Destaque
         Track: Linha
         SingleLine: Linha Única
         Colors: Cores
