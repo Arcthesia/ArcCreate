@@ -728,13 +728,13 @@ Remote:
 Gameplay:
   Exception:
     LoadAudio: |-
-      Gặp lỗi khi cố gắng tải tệp âm thanh nằm ở {Path}.
+      Gặp lỗi khi cố gắng tải tệp âm thanh tại {Path}.
       {Error}
     Chart: |-
-      Gặp lỗi khi cố gắng tải chart nằm ở {Path}.
+      Gặp lỗi khi cố gắng tải chart tại {Path}.
       {Error}
     Skin: |-
-      Gặp lỗi khi cố gắng tải tệp hình ảnh nằm ở {Path}.
+      Gặp lỗi khi cố gắng tải tệp hình ảnh tại {Path}.
       {Error}
     Scenecontrol: |-
       Gặp lỗi khi cố gắng tải sencecontrol json nằm ở {Path}.
@@ -820,16 +820,16 @@ Gameplay:
         Colorblind: Chế độ mù màu
         ColorblindDetail: Sử dụng màu khác cho arcs.
         FrPmDisplay: Hiện FC/AP
-        FrPmDisplayDetail: Chỉnh vị trí hiển thị báo hiệu FC/AP.
+        FrPmDisplayDetail: Chỉnh vị trí hiển thị FC/AP.
         MaxDisplay: Hiện Max PM
-        MaxDisplayDetail: Hiện thị báo hiệu Max PM.
+        MaxDisplayDetail: Hiện thị chỉ số Max PM.
         EarlyLateDisplay: Vị trí Early/Late
         EarlyLateDisplayDetail: Vị trí của Late/Early
-        LimitFramerate: Giới hạn khung hình
-        LimitFramerateDetail: Giới hạn khung hình xuống 60 FPS để tiết kiệm pin. Có thể tăng độ trễ.
+        LimitFramerate: Giới hạn FPS
+        LimitFramerateDetail: Giới hạn FPS để tiết kiệm pin. Có thể tăng độ trễ.
       Interface:
         ShowFPS: Hiện FPS
-        ShowFPSDetail: Cho bạn thấy FPS hiện tại.
+        ShowFPSDetail: HIển thị FPS khi chơi.
         ShowDebug: Hiện thông tin gỡ lỗi
         ShowDebugDetail: Hiện thông tin gỡ lỗi trong lúc chơi (Đừng bật trừ khi cần thiết).
       FrPmPosition:
@@ -838,42 +838,42 @@ Gameplay:
         off: Tắt
       EarlyLateTextPosition:
         middle: Giữa
-        bottom: Đáy
+        bottom: Dưới
         top: Trên
 
 Shutter:
   Composer: Nhạc
   Illustrator: Minh họa
   Charter: Charter
-  Alias: dưới tên
+  Alias: Nghệ danh
     
 Storage:
   Confirm: Xác nhận
   ImportErrors: |-
-    Những asset sau đây chưa thêm được:
+    Những tài nguyên sau đây chưa thêm được:
   ImportSummary: |-
-    Thêm thành công những asset sau:
+    Thêm thành công những tài nguyên sau:
   NoAssetImported: |-
-    Không asset nào được thêm.
+    Không tài nguyên nào được thêm.
   ImportConflict:
     Message: |-
-      Bạn đang cố gắng thêm một phiên bản cũ.
+      Bạn đang cố gắng thêm một phiên bản cũ hơn.
       Bạn muốn giữ lại bản nào?
     ReplaceAsset:
-      Thay thế bằng cách nhập asset mới
+      Thay thế bằng cách nhập tài nguyên mới
     KeepOriginal:
-      Giữ lại asset cũ
-    Identifier: "Identifier: {0}"
+      Giữ lại tài nguyên cũ
+    Identifier: "Số hiệu: {0}"
     Version: "Phiên bản: {0}"
   Loading:
     Message: 'Đang tải: {0}...'
     Archive: Đang giải nén
-    ValidatePackage: Xác thực tài nguyên
+    ValidatePackage: Xác thực gói dữ liệu
     CheckConflict: Kiểm tra xung đột
-    DeleteAsset: Đang xóa asset {0}
-    StoreAsset: Đang trữ asset {0}
+    DeleteAsset: Đang xóa tài nguyên {0}
+    StoreAsset: Đang trữ tài nguyên {0}
     Finalizing: Kết thúc tiến trình
 
 Credits:
-  Name: Credits
-  View: See credits
+  Name: Cống hiến
+  View: Xem cống hiến
