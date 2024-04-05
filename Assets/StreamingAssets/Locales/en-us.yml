@@ -989,7 +989,7 @@ Gameplay:
     Play: Resume
     Retry: Retry
     Return: Quit
-    AudioDeviceChange: Dectected a change in audio device. ArcCreate will forcibly return to Select menu.
+    AudioDeviceChange: Detected a change in audio device. ArcCreate will forcibly return to Select menu.
     Confirm: Confirm
   Practice:
     PlaybackSpeed: Speed
