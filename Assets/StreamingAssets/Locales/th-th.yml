@@ -1,0 +1,1189 @@
+# Translation Terms Note:
+# Tap แตะ
+# Hold ค้าง
+# Sky อากาศ
+# Arc ลาก
+# Trace ราง
+# Chart โน้ตเพลง
+# scenecontrol (keep)
+# Timingpointdensityfactor (keep) Render (สร้างวิดีโอ)
+# Lane (use แถว)
+# Macros (มาโคร) 
+# Easing การโค้ง
+# Project (keep for debug)
+# Mirror (สะท้อน)
+# Metadata (keep for debug) 
+# Remote (as in remote testing)(ทดสอบ as placeholder) 
+# Charter (ผู้ออกแบบโน้ตเพลง) 
+# Judgement (wip) 
+# Asset (wip)
+
+Parsing:
+  # Exception messages for parsing strings
+  Exception:
+    CharacterNotFound: หาตัวอักขระ "{0}" ไม่ได้
+    InvalidConversionToInt: ไม่สามารถเปลี่ยน "{0}" เป็นค่าเลขจริง
+    InvalidConversionToBool: ไม่สามารถเปลี่ยน "{0}" เป็นค่าจริงเท็จ
+    InvalidConversionToFloat: ไม่สามารถเปลี่ยน "{0}" เป็นค่าทศนิยม
+
+Format:
+  # Exception messages while parsing chart files
+  Exception:
+    File: |-
+      มี exception เกิดขึ้นระหว่างอ่านไฟล์โน้ตเพลง {File}:
+      {Error}
+    SingleErrorFormat: |-
+      at: แถว {LineNumber}
+      ระหว่างดําเนินเหตุการณ์ประเภท: {EventType}
+      เนื่องจาก: "{Content}" 
+      {Reason}
+    SingleErrorShortFormat: |-
+      ระหว่างดําเนินเหตุการณ์ประเภท: {EventType}
+      {Reason}
+    UnknownException: |-
+      เกิด exception ที่ไม่ทราบเหตุว่า : {Exception}
+      Stack trace:
+      {StackTrace}
+    InvalidHeader: |-
+      เขียนหัวข้อที่ใช้งานไม่ได้
+    ArcColorNegative: |-
+      รหัสสีของโน้ตลากไม่สามารถเป็นค่าลบได้
+    AudioOffsetInvalid: |-
+      ค่าความคลาดเคลื่อนของเสียงเป็นค่าที่ไม่สามารถใช้ได้
+    TimingPointDensityFactorInvalid: |-
+      ค่า density ของจุดเวลาที่เลีอกไม่ถูกต้อง.
+    BaseTimingInvalid: |-
+      ตั้งจังหวะเริ่มต้นไม่ถูกต้อง ต้องตั้งจังหวะเริ่มต้นที่ 0ms (0.000วินาที)
+    IncludeReferencedMultipleTimes: |-
+      ไฟล์โน้ตเพลงที่ถูกเรียก มีอยู่แล้ว
+    IncludeAReferencedFragment: |-
+      ไฟล์โน้ตที่ถูกเรียก โหลดไว้อยู่แล้วในรูปแบบ fragment
+# A chart file was already referenced as a fragment but is being included again.
+    TimingGroupPairInvalid: |-
+      กลุ่มเวลาไม่สามารถอ่านได้ ตรวจสอบว่าลืมใส่ปีกกาปิดท้าย "};" ในไฟล์ข้อความของกลุ่มเวลาหรือไม่
+    DivisorNegative: |-
+      ตัวแบ่งย่อยของจังหวะไม่สามารถเป็นค่าติดลบได้
+    DurationNegative: |-
+      ระยะเวลาของเหตุการณ์ประเภทนี้ไม่สามารถเป็นค่าลบได้
+    DurationZero: |-
+      ระยะเวลาของเหตุการณ์ประเภทนี้ไม่สามารถเป็นศูนย์ได้
+    ArcTapOutOfRange: |-
+     โน้ตอากาศอยู่นอกเวลาโน้ตรางที่ได้เชื่อมไว้.
+    TimingGroupPropertiesInvalid: |-
+      คุณสมบัติของกลุ่มจังหวะที่ตั้งไว้ไม่สามารถใช้ได้    
+    ReferencedFileError: |-
+     ไม่สามารถโหลดไฟล์โน้ตเพลง: 
+     {0}
+    FileDoesNotExist: |-
+      ไม่มีไฟล์โน้ตเพลง
+  Warning:
+    HoldTooShort:
+      โน้ตยาวสั้นกว่า 17ms(0.017วินาที)
+    TapJudgementOverlap:
+     บริเวณโน้ตแตะ ทับกับโน้ตอื่น
+
+Compose:
+  # Exception messages within the editor
+  Exception:
+    FileDoesNotExist: |-
+      ไฟล์ที่ {Path} ไม่สามารถถูกอ่านได้เนื่องจากไฟล์ไม่มีอยู่จริง ไฟล์อาจจะถูกลบไปแล้วก็ได้     LoadImage: |-
+      เกิดปัญหาขั้นระหว่างที่กําลังโหลดรูปภาพที่ {Path}.
+      {Error}
+    LoadProject: |-
+      เกิดปัญหาขึ้นระหว่างพยายากโหลดไฟล์ Project ที่ {Path}.
+      ไฟล์อาจถูกบันทึกผิดวิธี คุณสามารถปรับเปลี่ยนไฟล์ด้วยตัวเอง หรือคุณสามารถลบไฟล์และสร้าง Project ใหม่      {Error}
+    ChartFileAlreadyExists: |-
+      โน้ตเพลงมีอยู่ใน Project อยู่แล้ว
+    InvalidChartFile: |-
+      ชื่อของไฟล์โน้ตเพลงที่ให้ไว้ไม่สามารถใช้ได้    NoChartIncluded: |-
+      ไฟล์ Project ที่ไม่สามารถใช้ได้ : ไม่มีโน้ตเพลงอยู่ใน Project นี้
+    InvalidGroupProperties: |-
+      คุณสมบัติของกลุ่มจังหวะนี้ไม่สามารถใช้ได้ {Message}
+    InstructionLimit: |-
+      การสั่งทํางานของ Lua script ได้ถูกยกเลิก : คุณถึงค่าจํากัดของ The instruction count ที่ {0}     
+     InvalidBaseBPM: |-
+      ค่า BPM นี้ไม่สามารถใช้ได้: {0}
+    CreateSkyNoteNoValidArc: |-
+      ไม่สามารถสร้างโน้ตอากาศที่นี่ได้เนื่องจากโน้ตต้องอยู่บนรางเท่านั้น
+    Navigation:
+      ParseKeybind: |-
+        มี exception เกิดขึ้นระหว่างดําเนินปุ่มลัด: "{0}".
+      ParseWhitespace: |-
+        ปุ่มลัดใช้งานไม่ได้: ไม่สามารถเว้นว่างในช่องปุ่มได้
+      InvalidKeystroke: |-
+        ปุ่มลัดใช้งานไม่ได้: ปุ่มลัด "{0}" ใช้รูปแบบที่ไม่ถูกต้อง
+      InvalidKey: |-
+        ปุ่มใช้งานไม่ได้: ค่าปุ่ม "{0}" ไม่ตรงกับปุ่มไหนเลย
+      InvalidModifier: |-
+        แป้นดัดแปรใช้งานไม่ได้: เส้นโค้ด "{0}" ไม่ตรงกับแป้นดัดแปรใดเลย
+      InvalidActionPath: |-
+        คําสั่งการกระทําช้งานไม่ได้: เส้นโค้ด "{0}" ไม่ตรงกับการกระทําใดเลย
+    Scenecontrol: |-
+      มีปัญหาเกิดขึ้นเมื่อกำลังทำคำสั่ง Scenecontrol ประเภท {Type}: {Message}
+      {StackTrace}
+    LuaScript: |-
+      มีปัญหาเกิดขึ้นเมื่อกำลังทำคำสั่งสคริปต์ lua {Path}: {Message}
+      {StackTrace}
+    Render:
+      FFmpeg:
+        NotFound: |-
+          ไม่สามารถหาไฟล์ ตัววิ่ง FFmpeg ได้.
+          Please confirm that the configured path {0} is correct.
+        Start: |-
+          มีปัญหาเกิดขึ้นระหว่างเริ่มใช้ FFmpeg ที่ {Path}: {Message}
+          {StackTrace}
+        Write: |-
+          เกิดปัญหาขึ้นระหว่างแปลงไฟล์เป็น FFmpeg ที่: {Message}
+          {StackTrace}
+      Audio:
+        IncompatibleSfx: |-
+          คลิปเสียง {Sfx} ไม่สามารถสร้างวิดีโอได้
+          จำนวนช่องเสียงที่รับคือ {ExpectedChannels} ช่อง และความถี่ {ExpectedFrequency}, แต่มีจำนวนช่อง {Channels} ช่อง และความถี่ {Frequency}.
+          
+  # Notification messages
+  Notify:
+    FreeCameraEditHelp: |-
+      เริ่มต้นการใช้กล้องอิสระ (เลื่อนเมาส์สําหรับข้อมูลเพิ่มเติม)
+      
+      WASD: เดินหน้า/ซ้าย/ถอยหลัง/ขวา
+      Space: ขยับขึ้น
+      Shift: ขยับลง
+      IJKL: หมุนกล้อง ขึ้น/ซ้าย/ลง/ขวา
+      U: ตะแคงซ้าย
+      O: ตะแคงขวา
+      Esc: ยกเลิก
+      Enter: ยืนยัน
+    EmmyLuaGenerated:
+      Scenecontrol: |-
+        แม่แบบ EmmyLua สําหรับ scenecontrol ได้ถูกสร้างไว้ไว้ในโฟลเดอร์ของ Project
+        ใช้ VsCode พร้อมกับส่วนเสริม tangzx.emmylua เพื่อเติมข้อความอัตโนมัติ
+      Macros: |-
+        แม่แบบ EmmyLua สําหรับมาโครได้ถูกสร้างไว้ในโฟลเดอร์ของมาโคร 
+        ใช้ VsCode พร้อมกับส่วนเสริม tangzx.emmylua เพิ่อเติมข้อความอัตโนมัติ
+    Actions:
+      CannotMirror: ไม่สามารถสะท้อนโน้ตที่เลือกไว้ได้
+      NoDragRange: ไม่สามารถลากกลุ่มโน้ตที่เลือกไว้ได้ แนะนําให้ลองลากลากโน้ตทีละตัวแยกกัน
+    History:
+      Execute: |-
+        ทําคําสั่ง: {Name}
+      Undo: |-
+        เลิกทําคําสั่ง: {Name}
+      Redo: |-
+        ทําซํ้าคําสั่ง: {Name}
+      # {Name} above will be replaced with these entries
+      AddTiming: เพิ่มเหตุการณ์จังหวะ
+      EditTiming: แก้ไขเหตุการณ์จังหวะ
+      RemoveTiming: ลบเหตุการณ์จังหวะ
+      AddCamera: เพิ่มเหตุการณ์กล้อง
+      EditCamera: แก้ไขเหตุการณ์กล้อง      
+RemoveCamera: ลบเหตุการณ์กล้อง
+      AddScenecontrol: เพิ่มเหตุการณ์ scenecontrol 
+      EditScenecontrol: แก้ไขเหตุการณ์ scenecontrol 
+      RemoveScenecontrol: ลบเหตุการณ์ scenecontrol 
+      EditValue: แก้ค่าข้อมูลของโน้ตที่ถูกเลือก
+      EditArc: แก้ค่าข้อมูลของโน้ตลาก
+      CreateNote:
+        Tap: สร้างโน้ตแตะ
+        Hold: สร้างโน้ตค้าง
+        Arc: สร้างโน้ตลาก
+        ArcTap: สร้างโน้ตอากาศ
+        Trace: สร้างราง
+      DeleteNotes: ลบโน้ต
+      Cut: ตัดโน้ต
+      Paste: วางโน้ต
+      Mirror:
+        Vertical: Mirror โน้ตในแนวดิ่ง
+        Horizontal: Mirror โน้ตในแนวยาว
+      Drag:
+        Timing: ย้ายจังหวะของโน้ต
+        Position: ย้ายตำแหน่งของโน้ต
+    Clipboard:
+      Copy: คัดลอกโน้ต {0} ตัว
+      Cut: ตัดโน้ต {0} ตัว
+      NamedCopy: คัดลอก {0} ตัวไปที่คลิปบอร์ดที่ "{1}"
+      NamedCut: ตัดโน้ต {0} ตัวไปที่คลิปบอร์ดที่ "{1}"
+    GroupTable:
+      AddGroup: เพิ่มกลุ่มจังหวะที่ {Number}
+      EditGroup: แก้ไขกลุ่มจังหวะที่ {Number}
+      RemoveGroup: ลบกลุ่มจังหวะที {Number}
+    Project:
+      NewProject: |-
+        สร้าง Project ใหม่
+        at: {Path}
+      OpenProject: |-
+        เปิด Project
+        at: {Path}
+      SaveProject: |-
+        บันทึก Project
+        at: {Path}
+      OpenChart: เปิดไฟล์โน้ตเพลง {Path}
+      CreateChart: สร้างไฟล์โน้ตเพลง {Path}
+      RemoveChart: ลบไฟล์โน้ตเพลง {Path} ออกจาก Project
+    Inspector:
+      InvalidParamameter: ค่าข้อมูลที่ไม่สามารถใช้ได้
+    Measurer:
+      CopyTiming: คัดลอกจังหวะบทเคอร์เซอร์
+      CopyPosition: คัดลองตําแหน่งของโน้ตลาก
+      CopyX: คัดลอกพิกัด x ของโน้ตลาก
+      CopyY: คัดลอกพิกัด y ของโน้ตลาก
+    Export:
+      Render:
+        Cancelled: การสร้างวิดีโอถูกยกเลิก
+        Complete: การสร้างวิดีโอเสร็จสิ้น
+      Package:
+        Complete: ส่งออก package ไปที่ {0}
+    Macros:
+      Cancelled: ยกเลิกมาโคร
+      Select:
+        Timing: เลือกจังหวะ
+        Position: เลือกตำแหน่ง
+        Lane: เลือกแถว
+      NotFound: ไม่มีมาโคร "{macroId}" อยู่จริง
+  # Dialog boxes
+  Dialog:
+    RemoveGroup:
+      Title: ลบกลุ่มจังหวะ
+      Content: |-
+        คุณมั่นใจว่าจะละกลุ่มจังหวะนี้และข้อมูลทั้งหมดในกลุ่มหรือเปล่า(ไม่สามารถเลิกทําได้)
+      Yes: ลบ
+      No: ยกเลิก
+    RemoveChart:
+      Title: ลบไฟล์โน้ตเพลง
+      Content: |-
+        คุณมั่นใจว่าจะลบไฟล์โน้ตเพลงนี้ออกจาก Project นี้หรือเปล่า
+        ตัวโฟล์เองจะไม่ถูกลบและจะสามารถถูกเพิ่มเข้ามาใหม่ได้ แต่ว่า metadata ของไฟล์จะหายไป 
+      Yes: ลบ
+      No: ยกเลิก
+    UnsavedChanges:
+      Title: ข้อมูลยังไม่ถูกบันทึก
+      Content: |-
+        คุณมีข้อมูลที่ยังไม่ถูกบันทึก คุณอยากบันทึกข้อมูลหรือไม่
+      Yes: บันทึกการเปลี่ยนแปลง
+      No: ละทิ้งการเปลี่ยนแปลง
+      Cancel: ยกเลิก
+    LoadChartError:
+      Title: เกิดปัญหา
+      Content: |-
+        มีปัญหาเกิดขึ้นระหว่างโหลดไฟล์โน้ตเพลง {ChartPath}.
+        โปรดแก้ไขปัญหาในโปรแกรมแก้ไขข้อมูลอื่น หรือปิดหน้าต่างนี้แล้วใช้หน้าต่าง "<> {TabName}" 
+        
+        Details:
+        {Content}
+      Confirm: ยืนยัน
+    Macros:
+      Title: มาโคร
+    GroupPicker:
+      SelectEditingGroup: "เปลี่ยนกลุ่มปัจจุบันเป็น:"
+      AssignNotesToGroup: "กําหนดโน้ตที่เลือกไปที่:"
+    PanelLayout:
+      Name: การจัดแสดง
+      Default: ปกติ
+      Compact: รวบรัด
+      SaveLayout: บันทึกการจัดแสดง
+      LayoutName: ชื่อการจัดแสดง
+      DuplicateError: มีการจัดแสดงที่มีชื่อเดียวกัยอยู่แล้ว
+  Navigation:
+    KeybindOverride: แทนที่ปุ่นที่ใช้กระทํา {0}
+    # Texts that appear on the context menu (right-click menu)
+    Actions:
+      Camera:
+        Name: กล้อง
+        FreeCamera:
+          Name: เริ่มต้นกล้องอิสระ
+          Confirm: ยืนยัน
+          Cancel: ยกเลิก
+          Faster: ขยับเร็วขึ้น
+          Slower: ขยับช้าลง
+          MoveForward: เดินหน้า
+          MoveLeft: ซ้าย
+          MoveRight: ขวา
+          MoveBackward: ถอยหลัง
+          MoveUp: ขึ้น
+          MoveDown: ลง
+          LookUp: มองขึ้น
+          LookDown: มองลง
+          LookLeft: มองซ้าย
+          LookRight: มองขวา
+          RollLeft: Roll left
+          RollRight: Roll right
+      Grid:
+        Name: ตาราง
+        Toggle: เปิดช่องตาราง
+        ToggleSlot:
+          Name: ตาราง
+          Slot1: ช่องที่ 1
+          Slot2: ช่องที่ 2
+          Slot3: ช่องที่ 3
+          Slot4: ช่องที่ 4
+          Slot5: ช่องที่ 5
+          Slot6: ช่องที่ 6
+          Slot7: ช่องที่ 7
+          Slot8: ช่องที่ 8
+          Slot9: ช่องที่ 9
+          Slot0: ช่องที่ 0
+        IncreaseDensity: เพิ่ม density
+        DecreaseDensity: ลด density
+      Macro:
+        Name: มาโคร
+        SelectEvents:
+          Confirm: ยืนยัน
+          Cancel: ยกเลิก
+        SelectLane:
+          Confirm: ยืนยัน
+          Cancel: ยกเลิก
+        SelectPosition:
+          Confirm: ยืนยัน
+          Cancel: ยกเลิก
+        SelectTiming:
+          Confirm: ยืนยัน
+          Cancel: ยกเลิก
+      Display:
+        Name: การแสดงผล
+        FullScreen: เปิดภาพเติมหน้าจอ
+      Selection:
+        Name: การเลือก
+        Clear: ยกเลืกการเลือก
+        Single: เลือกโน้ต
+        Add: ลากเลือก
+        Remove: ยกเลิกการลากเลือก
+        Toggle: เลือกโน้ต
+        RangeSelect:
+          Name: เลือกโน้ตระหว่างระย
+          Confirm: ยืนยัน
+          Cancel: ยกเลิก
+      Measure:
+        Name: วัด
+        Start:
+          Name: เปิดตัววัด
+          Confirm: ยืนยัน
+          Cancel: ยกเลิก
+          CopyTiming: คัดลอกจังหวะ
+          CopyPosition: คัดลอกตําแหล่ง
+          CopyX: คัดลอกพิกัด x
+          CopyY: คัดลอกพิกัด y 
+      Clipboard:
+        Name: คลิปบอร์ด
+        Copy: คัดลอก
+        Cut: ตัด
+        Paste:
+          Name: วาง
+          Confirm: ยืนยันการวาง
+          Cancel: ยกเลิกการวาง
+          Mirror: สะท้อน
+        NamedPaste:
+          Name: วาง
+          Confirm: ยืนยันการวาง
+          Cancel: ยกเลิกการวาง
+          Mirror: สะท้อน
+        Clear: ล้างคลิปบอร์ด
+      NoteCreation:
+        Name: สร้างโน้ต
+        Start:
+          Name: เพิ่มโน้ต
+          Confirm: ยืนยัน
+          Cancel: ยกเลิก
+      NotePallete:
+        Name: โน้ต
+        Arc: 
+          Name: โน้ตลาก
+          Blue: โน้ตลากสีฟ้า
+          Red: โน้ตลากสีแดง
+          Green: โน้ตลากสีเขียว
+        ArcAlt: 
+          Name: โน้ตลาก (ราง)
+          Blue: โน้ตลากสีฟ้า
+          Red: โน้ตลากสีแดง
+          Green: โน้ตลากสีเขียว
+        Sky: โน้ตอากาศ
+        Tap: โน้ตแตะ
+        Hold: โน้ตค้าง
+        Idle: ว่าง
+      Delete:
+        Name: ลบ
+        Execute: ลบ
+      Mirror:
+        Name: สะท้อน
+        Horizontal: สะท้อนแนวนอน
+        HorizontalNoColorSwitch: สะท้อนแนวนอน (ไม่สนสี)
+        Vertical: สะท้อนแนวตั้ง
+      Dragging:
+        Name: ลาก
+        Timing:
+          Name: ลากจังหวะ
+          Confirm: ยืนยัน
+          Cancel: ยกเลิก
+        Position:
+          Name: ลากตําแหน่ง
+          Confirm: ยืนยัน
+          Cancel: ยกเลิก
+      Render:
+        Name: การสร้างวิดีโอ
+        Start:
+          Cancel: ยกเลิกการสร้างวิดีโอ
+      Playback:
+        Name: เส้นเวลาเพลง
+        TogglePlay: เล่น/หยุด
+        PlayReturn:
+          Name: เล่น
+          Return: หยุดและย้อนกลับ
+          Pause: หยุด
+        IncreaseSpeed: เร่งความเร็ว
+        DecreaseSpeed: ชะลอความเร็ว
+
+  Grid:
+    # Please modify the comment lines only (lines beginning with '--')
+    DefaultScript: |-
+      -- THIS IS A LUA SCRIPT. See full documentation at: https://github.com/Arcthesia/ArcCreate/wiki/Grid-settings
+      -- CONFIGURATION
+      -- Choose one of the following template: 4k, 6k, oob4k, oob6k
+      local useTemplate = "4k"
+      local spacing = {
+          x = 0.125,
+          y = 0.25,
+      }
+
+      -- Change grid color here
+      local color = {
+          ftr = {
+              area = rgba(0, 200, 0, 48),
+              boundary = rgba(65, 180, 66, 100),
+          },
+          byd = {
+              area = rgba(150, 130, 22, 64),
+              boundary = rgba(150, 180, 108, 200),
+          },
+          unsafe = {
+              area = rgba(230, 30, 22, 48),
+              boundary = rgba(200, 60, 50, 200),
+          },
+          lines = rgba(150, 150, 150, 50),
+          panel = rgba(255, 255, 255, 16),
+      }
+
+      -- INTERNAL
+      local templates = {}
+      templates["4k"] = {
+          left = -0.5,
+          right = 1.5,
+          top = 1,
+          bottom = -0.2,
+
+          mainLeft = -0.5,
+          mainRight = 1.5,
+          mainTop = 1,
+          mainBottom = 0,
+
+          lane = -0.2,
+          ftrLeft = 0,
+          ftrRight = 1,
+          bydLeft = -0.25,
+          bydRight = 1.25
+      }
+      templates["6k"] = {
+          left = -1,
+          right = 2,
+          top = 1,
+          bottom = -0.2 / 1.61,
+
+          mainLeft = -1,
+          mainRight = 2,
+          mainTop = 1,
+          mainBottom = 0,
+
+          lane = -0.2 / 1.61,
+          ftrLeft = -0.25,
+          ftrRight = 1.25,
+          bydLeft = -0.625,
+          bydRight = 1.625
+      }
+      templates["oob4k"] = {
+          left = -4,
+          right = 5,
+          top = 5,
+          bottom = -0.2,
+
+          mainLeft = -0.5,
+          mainRight = 1.5,
+          mainTop = 1,
+          mainBottom = 0,
+
+          lane = -0.2,
+          ftrLeft = 0,
+          ftrRight = 1,
+          bydLeft = -0.25,
+          bydRight = 1.25
+      }
+      templates["oob6k"] = {
+          left = -4,
+          right = 5,
+          top = 5,
+          bottom = -0.2 / 1.61,
+
+          mainLeft = -1,
+          mainRight = 2,
+          mainTop = 1,
+          mainBottom = 0,
+
+          lane = -0.2 / 1.61,
+          ftrLeft = -0.25,
+          ftrRight = 1.25,
+          bydLeft = -0.625,
+          bydRight = 1.625
+      }
+
+      local config = templates[useTemplate]
+
+      local function drawLines(color, points, isLoop)
+          for i = 1, #points - 1 do
+              grid.drawLineDecorative(points[i], points[i+1], color)
+          end
+          if isLoop then
+              grid.drawLineDecorative(points[#points], points[1], color)
+          end
+      end
+
+      local ftrTL = xy(config.ftrLeft, config.mainTop)
+      local ftrTR = xy(config.ftrRight, config.mainTop)
+      local bydTL = xy(config.bydLeft, config.mainTop)
+      local bydTR = xy(config.bydRight, config.mainTop)
+      local gridBR = xy(config.mainRight, config.mainBottom)
+      local gridBL = xy(config.mainLeft, config.mainBottom)
+      local gridTL = xy(config.mainLeft, config.mainTop)
+      local gridTR = xy(config.mainRight, config.mainTop)
+      local trackL = xy(config.mainLeft, config.lane)
+      local trackR = xy(config.mainRight, config.lane)
+
+      grid.setCollider(config.left, config.right, config.bottom, config.top)
+      grid.setPanelColor(color.panel)
+
+      grid.drawArea(color.ftr.area, ftrTL, ftrTR, gridBR, gridBL)
+      drawLines(color.ftr.boundary, {ftrTL, ftrTR, gridBR, gridBL}, true)
+
+      grid.drawArea(color.byd.area, bydTL, ftrTL, gridBL)
+      grid.drawArea(color.byd.area, ftrTR, bydTR, gridBR)
+      drawLines(color.byd.boundary, {ftrTL, bydTL, gridBL}, false)
+      drawLines(color.byd.boundary, {ftrTR, bydTR, gridBR}, false)
+
+      grid.drawArea(color.unsafe.area, bydTL, gridTL, gridBL)
+      grid.drawArea(color.unsafe.area, gridTR, bydTR, gridBR)
+      grid.drawArea(color.unsafe.area, gridBL, gridBR, trackR, trackL)
+      drawLines(color.unsafe.boundary, {bydTL, gridTL, gridBL}, false)
+      drawLines(color.unsafe.boundary, {bydTR, gridTR, gridBR}, false)
+      drawLines(color.unsafe.boundary, {gridBR, trackR, trackL, gridBL}, false)
+
+      spacing.x = math.max(spacing.x, 0.01)
+      spacing.y = math.max(spacing.y, 0.01)
+      grid.drawLine(config.left, config.left, config.bottom, config.top, color.lines)
+      for x = config.mainLeft - spacing.x, config.left + spacing.x, -spacing.x do
+          grid.drawLine(x, x, config.bottom, config.top, color.lines)
+      end
+
+      for x = config.mainLeft, config.mainRight, spacing.x do
+          grid.drawLine(x, x, config.bottom, config.top, color.lines)
+      end
+
+      for x = config.mainRight + spacing.x, config.right - spacing.x, spacing.x do
+          grid.drawLine(x, x, config.bottom, config.top, color.lines)
+      end
+      grid.drawLine(config.right, config.right, config.bottom, config.top, color.lines)
+
+      grid.drawLine(config.left, config.right, config.bottom, config.bottom, color.lines)
+      for y = config.mainBottom - spacing.y, config.bottom + spacing.y, -spacing.y do
+          grid.drawLine(config.left, config.right, y, y, color.lines)
+      end
+
+      for y = config.mainBottom, config.mainTop, spacing.y do
+          grid.drawLine(config.left, config.right, y, y, color.lines)
+      end
+
+      for y = config.mainTop + spacing.y, config.top - spacing.y, spacing.y do
+          grid.drawLine(config.left, config.right, y, y, color.lines)
+      end
+      grid.drawLine(config.left, config.right, config.top, config.top, color.lines)
+  # Texts that appear on the editor UI
+  UI:
+    Common:
+      Confirm: ยืนยัน
+      Cancel: ยกเลิก
+      Close: ปิด
+      NotRequired: (ไม่จําเป็นต้องระบุ)
+      Extension: ส่วนเสริม
+    Placeholder:
+      Text: (ว่าง)
+      File: (ไม่มีไฟล์ที่ถูกเลือก)
+      Image: (ไม่มีรูปที่ถูกเลือก)
+      Property: (ไม่มีคุณสมบัติ)
+      ImagePrompt: คลิกเพื่อเลีอกรูป
+    PanelNames:
+      Toolbox: กล่องอุปกรณ์
+      RawEditor: ข้อความ
+      Gameplay: การแสดงผลของเกม
+      Timeline: เส้นเวลาเพลง
+      Project: โปรเจค
+      Events: เหตุการณ์
+      Remote: ทดสอบ
+      Export: ส่งออก
+      Settings: การตั้งค่า
+    # Top bar of the UI
+    Top:
+      Label:
+        New: ใหม่
+        Open: เปิด
+        Save: บันทึก
+        InputMode: การป้อนข้อมูล
+        InputModeOptions:
+          auto: อัตโนมัติ
+          autocontroller: อัตโนมัติ (เครื่องควบคุม)
+          touch: จอสัมผัส
+          controller: เครื่องควบคุม
+          mouse: เมาส์
+          idle: ว่าง
+        FullScreen: แสดงเต็มจอ
+        ToggleFullScreenHint: กดปุ่ม F11 เพื่อเปิดโหมดเต็มหน้าจอ
+        Chart: โน้ตเพลง
+    # Project panel
+    Project:
+      Label:
+        NewChart: โน้ตเพลงใหม่
+        NewProject: Project ใหม่
+        ProjectFile: ไฟล์ Project
+        ChartFile: ไฟล์โน้ตเพลง
+        Information: ข้อมูล
+        Gameplay: การแสดงผลของเกม
+        Title: หัวข้อ
+        Composer: ผู้จัดทําเพลงา
+        Illustrator: นักวาดภาพประกอบ
+        Charter: ผู้จัดวางโน้ต
+        Alias: นามแฝง
+        BPM: BPM
+        BaseBPM: ฐาน BPM 
+        BPMText: ข้อความ BPM 
+        SyncBaseBPM: Sync
+        ChartOffset: เวลาความคลาดเคลื่อนของโน้ตเพลง
+        TimingPointDensityFactor: Judge Density
+        ChartConstant: ความยากของโน้ตเพลง
+        SearchTags: แท็คการค้นหา
+        DifficultyName: ชื่อความยาก
+        DifficultyColor: สีความยาก
+        Files: ไฟล์
+        Audio: เสียง
+        JacketArt: รูปประกอบเพลง
+        Background: พื้นหลัง
+        Video: วิดิโอ
+        Skin: รูปร่างโน้ต
+        Side: ด้าน
+        Note: ด้านโน้ต
+        Particle: เอฟเฟ็กต์
+        Accent: เส้นตกแต่ง
+        Track: เพลง
+        SingleLine: Single Line
+        Colors: สี
+        TraceBody: Trace Body
+        Shadow: เงา
+        ArcColors: สีโน้ตลาก
+        Blue: ฟ้า (0)
+        Red: แดง (1)
+        Green: เขียว (2)
+        Custom: Custom ({0})
+        AddArcColor: เพิ่มสีโน้ตลาก
+        NoProjectLoaded: |-
+          ไม่มี Project ที่โหลดไว้
+          สร้าง Project ใหม่หรือเปิด Project 
+        RawEditorFileTooLarge: |-
+          การแก้ไขไฟล์ข้อความในโปรแกรมถูกปิดเมื่อมีขนาดใหญ่กว่า 1000kilobytes
+        Shutter: หน้า Loading
+        ShowShutter: เปิดหน้า Loading
+        HideShutter: ปิดหน้า Loading
+        PreviewSegment: เวลาที่เล่นในหน้าเลีอกเพลง
+        CustomChartPath: ทำเอง (ขั้นสูง)
+      Options:
+        Inherit: ตามฝั่ง
+        Light: สว่าง
+        Conflict: ขัดแย้ง
+        Colorless: ไร้สี
+        MiraiLight: Mirai สว่าง
+        MiraiConflict: Mirai ขัดแย้ง
+        Dynamix: Dynamix
+        Black: Black
+        Nijuusei: Nijuusei
+        Rei: Rei
+        DarkVs: DarkVs
+        Tempest: Tempest
+        Finale: Finale
+        Pentiment: Pentiment
+        Arcana: Arcana
+        None: None
+        Neo: Neo
+        Past: Past
+        Present: Present
+        Future: Future
+        Eternal: Eternal
+        Beyond: Beyond
+    Timeline:
+      Label:
+        Offset: ค่าคาคเคลื่อน
+        TimingGroup: กลุ่ม
+        Density: Density
+        PlaybackSpeed: ความเร็ว
+      Timestamp:
+        Name: จุดเวลา
+        DefaultMessage: จุดเวลา {0}
+    # Events editor panel
+    EventsEditor:
+      Label:
+        Group: กลุ่ม
+        Events: เหตุการณ์
+      Actions:
+        AddGroup: เพี่มกลุ่ม
+        DeleteGroup: ลบกลุ่ม
+        AddEvent: เพี่มเหตุการณ์
+        DeleteEvent: ลบเหตุการณ์
+        AutoReload: อัฟเดตอัตโนมัติ
+        GenerateEmmyLua: ทำ EmmyLua
+        Reload: โหลดใหม่
+        FreeCamera: กล้องอิสระ
+      CameraView:
+        Default: มุมปกติ
+        Stationary: มุมคงที่
+        ZoomedOut: มุมซูมออกไป
+        BirdsEye1: มุมสูง 1
+        BirdsEye2: มุมสูง 2
+      Mode:
+        Timing: จังหวะเวลา
+        Camera: กล้อง
+        Scenecontrol: ฉาก
+    # Export panel
+    Export:
+      Render:
+        Name: สร้างวิดีโอ
+        Description: |-
+          สร้างวีดีโอการเล่นโน้ตไฟล์อัตโนมัติ
+          ต้องติดตั้ง FFmpeg ไว้ก่อนใช้
+        ConfigureFFmpeg: ระบุตำแหน่งไฟล์ของ FFmepg
+        Settings:
+          Name: การตั้งค่า
+          From: จาก
+          To: ถึง
+          Quality: ความชัด
+          FPS: FPS
+          Width: ความกว้าง
+          Height: ความสูง
+          Size: ขนาด
+          ShowShutter: Show shutter
+        Start: เริ่มการสร้างวิดีโอ
+        Cancel: ยกเลิกการสร้างวิดีโอ
+        Status: |-
+          กําลังสร้างวิดีโอ อาจใช้เวลาสักครู่
+          อาจใช้เวลา: {0}
+          เหลือ: {1}
+      Package:
+        Name: ส่งออกไฟล์
+        Description: |-
+          ส่งออกไฟล์ .arcpkg สำหรับแชร์ให้ผู้อื่นเล่น
+        Publisher: ผู้ส่งออกไฟล์
+        Package: package
+        Version: Version
+        BlankField: โปรดใส่ชื่อผู้ส่งออกไฟล์และชื่อ package
+        Identifier: "รหัสไฟล์ของคุณคือ: {0}"
+        Export: ส่งออก
+    # Editor settings panel
+    Settings:
+      Label:
+        Locale:
+          Name: ภาษา
+          Language: ภาษา
+          Reload: โหลดชุดภาษาใหม่
+          CheckMissing: เช็คข้อมูลที่หาย
+        Gameplay:
+          Name: การเล่น
+          Speed: ความเร็ว
+          AspectRatio: สัดส่วนการแสดงผล
+          Indicator: การแสดงผล
+          MaxIndicator: แสดงคะแนนเต็ม
+          Colorblind: โน้ตลากตาบอดสี แปลี่ยนสีแดงเป็นสีเหลือง
+          ScoreDisplay: แสดงคะแนน
+        Judgement:
+          Name: ผลการเล่น
+          NotUsedInAutoOrIdle: “การตั้งค่านี้ไม่มีผลต่อโหมดอัตโนมัติและโหมดปล่อยเฉย:"
+          EarlyLatePosition: ตำแหน่ง Early/Late (เร็ว/ช้า)
+          ShowMsDifference: แสดง ms ที่แตกต่าง
+          ShowJudgement: ”แสดงผลการเล่น:"
+          ShowMax: Perfect (เต็ม)
+          ShowPerfect: Perfect (Early/Late)
+          ShowGood: Good
+          ShowMiss: Miss
+        Grid:
+          Name: ตาราง
+          Slot: ช่อง
+          UseDefault: ใช้ค่าเริ่มต้น
+          FromLane: จากแถว
+          ToLane: ถึงแถว
+          ScaleGrid: ปรับตัวตามบริเวณที่แตะกลางอากาศ
+          Gridline: ตั้งค่าตารางวางโน้ต
+          Script: สคริปต์ Lua
+        AudioVolume:
+          Name: เสียง
+          Music: เพลง
+          Effect: เสียงเอฟเฟค
+          GlobalOffset: ค่าคาคเคลื่อนรวม
+          SyncToDSPTime: ใช้เวลา DSP
+        Display:
+          Name: หน้าจอ
+          Vsync: Vsync
+          Framerate: Framerate
+          ShowCounter: แสดง framerate
+        Input:
+          Name: Input
+          ReloadKeybinds: โหลดการตั้งค่าคีย์ใหม่
+          AllowCreatingNotesBackward: สามารถสร้างโน้ตยาวกลับหลัง
+          EnableEditingArctapWidth: สามารถเปลี่ยนขนาดโน้ตอากาศ
+          ShowKeybindHint: บอกวิธีใช้คีย์ที่ตั้งไว้
+        Files:
+          Name: ไฟล์
+          Backup: สร้างสำเนาหรือบันทึก
+          BackupCount: นับจำนวนสำเนา
+          Autosave: บันทึกอัตโนมัติ
+          AutosaveInterval: ความเร็วการบันทึกอัตโนมัติ (วินาที)
+        ScrollSensitivity:
+          Name: ความเร็วการเลื่อน
+          Vertical: แนวตั้ง
+          Horizontal: แนวนอน
+          Timeline: ตำแหน่งเวลา
+        TrackScrolling:
+          Name: การเลื่อนพื้นโน้ต
+          Threshold: เกณฑ์
+          MaxMovement: จำกัดการเลื่อน
+    # Toolbox panel
+    Toolbox:
+      Pallete:
+        Name: โน้ต
+        Arc: ลาก
+        Trace: ราง
+        Tap: แตะ
+        Hold: ค้าง
+        Arctap: อากาศ
+        Easing: การโค้ง
+      Macros:
+        Name: มาโคร
+        GenerateEmmy: สร้าง EmmyLua
+        Reload: โหลดสคริปต์มาโครใหม่
+        OpenExplorer: เปิดแฟ้มมาโคร
+    # Inspector window
+    Inspector:
+      Name: การตั้งค่าโน้ต
+      Timing: เวลา
+      StartTiming: เริ่ม
+      EndTiming: จบ
+      Lane: แถว
+      StartPos: จาก
+      EndPos: ถึง
+      Sfx: Sfx
+      Width: ความกว้าง
+      Group: กลุ่ม
+      Mixed: คละ
+      Arc: โน้ตลาก
+      Trace: โน้ตราง
+      Actions:
+        SelectArc: เลือกโน้ตรางที่เชื่อม
+        SelectArctap: เลือกโน้ตอากาศที่เชื่อม
+    Startup:
+      Discord: กลุ่ม Discord Arccreate
+      Kofi: สนับสนุนบน Ko-fi
+      Version: "Version: {0}"
+      Recent: ไฟล์ที่เปิดล่าสุด
+
+Remote:
+  Exception:
+    InvalidIP: IP address ไม่ถูกต้อง
+  State:
+    Listening: |-
+      กำลังหา boardcast...
+      <size=20>
+      ใน Arccreate Editor บนคอม เปิดแท็บด์  “ทดสอบทางไกล" และกด “เริ่มการ Boardcast" เพื่อเริ่ม</size>
+    ManualIP: |-
+      รอการเชื่อมต่อจาก Arccreate Editor
+      <size=20>
+      ใน Arccreate Editor บนคอม เปิดแท็บด์  “ทดสอบทางไกล" และใส่ IP address: {0}.</size>
+    Found: |-
+      Boardcast ที่มองเห็น:
+      โปรดเลือกเครื่องที่จะเชื่อมต่อ
+    TargetDisconnected:
+      Compose: ไม่สามารถเชื่อมต่อเครื่องที่เลือกได้ หยุดการเชื่อมต่อ
+      Gameplay: ไม่สามารถเชื่อมต่อเครื่องที่เลือกได้ เริ่ม Boardcast ใหม่ไช่ใหม?
+    Receiving:
+      กำลังรับข้อมูล ({0})
+  Description:
+    Idle: |-
+      ไม่มีเครื่องที่เชื่อมต่อ
+      เริ่ม broadcast เพื่อหาเครื่องที่จะเชื่อมต่อ ทั้งเครื่องนี้และเครื่องที่ใช้เล่นต้องเชื่อมต่อ Network เดียวกัน และเครื่องเล่นต้องเปิดการมองหาเครื่อง Editor
+    Broadcasting: |-
+      รหัส Boardcast: {0}.
+      บนเครื่องเล่น เลีอกรหัสที่แสดงตรงนี้เพื่อเริ่มทดสอบ
+    Connected: |-
+      เชื่อมเครื่องเล่นที่: {0}:{1}
+  Actions:
+    Broadcast: เริ่มการ Broadcast
+    AbortBroadcast: หยุดการ Broadcast
+    BroadcastAgain: Broadcast ใหม่
+    StopSession: หยุดใช้
+    StartNewSession: เริ่มใช้ใหม่
+    ManualIP: ตั้งการเชื่อมต่อเอง
+    ReturnToSelect: กลับไปเลีอกเพลง
+  Control:
+    Name: การควบคุม
+    Sync:
+      Name: อัปเดต
+      AllFiles: ทุกไฟล์
+      Chart: โน้ตเพลง
+      Audio: เสียง
+      Jacket: รุปปกเพลง
+      Background: พื้นหลัง
+      Metadata: Metadata
+    Settings:
+      Name: การตั้งค่า
+      Offset: ค่าคาคเคลื่อนของเครื่อง
+      Speed: ความเร็วของเครื่อง
+      MusicVolume: ระดับเสียงเพลง
+      EffectVolume: ระดับเสียงเอฟเฟค
+    StartTiming: เล่นจากเวลา
+    EndTiming: หยุดที่เวลา      
+    Loop: วนซ้ำ
+    ShowLog: แสดง log
+    ShowDebug: แสดงข้อมูล Debug
+    ManualIP: ใส่ IP ด้วยตนเอง
+  Window:
+    Name: ทดสอบทางไกล
+    SyncChart: อัปเดตโน้ตเพลง
+    SyncTiming: อัปเดตเวลา
+
+Gameplay:
+  Exception:
+    LoadAudio: |-
+      เกิดปัญหาระหว่างพยายามโหลดไฟล์เสียงที่ {Path}.
+      {Error}
+    Chart: |-
+      เกิดปัญหาระหว่างพยายามโหลดโน้ตเพลงที่  {Path}.
+      {Error}
+    Skin: |-
+      เกิดปัญหาระหว่างพยายามโหลดรูปภาพที่ {Path}.
+      {Error}
+    Scenecontrol: |-
+      เกิดปัญหาระหว่างพยายามโหลด scenecontrol hson ใน {Path}.
+      {Error}
+    ScenecontrolSprite: |-
+      เกิดปัญหาระหว่างพยายามโหลด scenecontrol sprite ใน {Path}.
+      {Error}
+    Load: |-
+      เกิดปัญหาที่ไม่ทราบสาเหตุระหว่างพยายามโหลดโน้ตเพลง {Identifier}, {ChartPath}
+      Error: {Message}
+      Stack trace:
+      {StackTrace}
+  HUD:
+    Play: เล่นต่อ
+    Retry: เริ่มใหม่
+    Return: เลิกเล่น
+    AudioDeviceChange: พบการเปลี่ยนแปลงของเครื่องเล่นเสียง Arccreate จะปิดตัวเองและกลับไปหน้าเลือกเพลง
+    Confirm: ยืนยัน
+  Practice:
+    PlaybackSpeed: ความเร็ว
+    Repeat:
+      On: เปิดการเล่นซํ้า
+      Off: ปิดการเลินซํ้า
+      From: ตั้งจุดเริ่ม
+      To: ตั้งจุดจบ
+  Selection:
+    SelectStatus:
+      Singular: |-
+        {0} เลือก asset ไว้แล้ว
+      Plural: |-
+        {0} เลือก asset กลุ่มนี้ไว้แล้ว
+    DeleteConfirmation: |-
+      คุณมั่นใจว่าจะลบ asset ต่อไปนี้หรือไม่
+      คะแนนของคุณจะยังคงถูกบันทึกไว้    PackDeleteConfirmation: |-
+      คุณกําลังลบ pack:
+      <color=#FFFFFFB4>{0}</color>
+      ลบเพลงและโน้ตเพลงด้วยหรือไม่ หรือเก็บเพลงและโน้ดเพลงไว้?
+    CannotDeleteDefault: |-
+      เพลงเริ่มต้นไม่สามารถลบได้.
+    EnablePractice: |-
+      เปิดโหมดฝึกในการเล่นครั้งถัดไป.
+    SelectRating: เลีอกระดับดาว
+    Action:
+      Copy: คัดลอก
+      Delete: ลบ
+      Cancel: ยกเลิก
+      Keep: คงไว้
+      Done: เสร็จสิ้น
+    List:
+      RemoteTestplay: ทดสอบเล่น
+      Import: นำเข้า package
+      Community: ชุมชน
+      AllSongs: ทุกเพลง
+      OtherDifficulties: ความยากระดับอื่น
+    Info:
+      Undefined:
+        Title: ไม่ระบุ
+        Composer: N/A
+        Charter: ไม่ประกฏ
+      Charter: 'โน้ตเพลงจาก: {0}'
+    Sort:
+      addeddate: วันที่นำเข้า
+      charter: ผู้ออกแบบโน้ตเพลง
+      composer: ผู้ทำเพลง
+      difficulty: ระดับความยาก
+      grade: เกรด
+      playcount: จำนวนครั้งที่เล่น
+      rating: ระดับดาว
+      score: คะแนน
+      title: ชื่อเพลง
+    Group:
+      none: ไม่มี
+      difficulty: ระดับความยาก
+      grade: เกรด
+      rank: ระดับ
+      rating: ระดับดาว
+      charter: ผู้ออกแบบโน้ตเพลง
+    History:
+      Best: คะแนนสูงสุด
+      Recent: คะแนนล่าสุด
+    Modifiers:
+      GameMode:
+        Name: Game mode
+        Auto: เล่นอัดโนมัติ
+        Practice: ฝึกฝน
+      Modifier:
+        Name: เพี่มเติม
+        Mirror: สะท้อน
+    Settings:
+      Name: การตั้งค่า
+      Language: ภาษา
+      Gameplay:
+        Name: การเล่น
+        Speed: ความเร็ว
+        SpeedDetail: |-
+          ปรับความเร็วที่โน้ตจะไหลมาที่บริเวณ Judgement
+        EarlyLatePerfectDisplay: แสดง Early/Late perfect
+        EarlyLatePerfectDisplayDetail: |-
+          แสดง early/late perfect judgements หรือไม่
+        EnablePractice: เปิดโหมดฝึกฝน
+        ShowMsDifference: แสดงความต่างใน miliseconds
+        ShowMsDifferenceDetail: แสดงความต่างใน miliseconds แทน EARLY / LATE.
+        HidePause: ซ่อนปุ่ม Pause
+        PauseMode: การใช้ปุม Pause
+      Audio:
+        Name: เสียง
+        Offset: ความคาคเคลื่อน
+        OffsetDetail: |-
+          ปรับจังหวะเพลงกับโน้ตที่คาคเคลื่อน.
+          ถ้ากดได้ LATE(ช้า) เพี่มค่า ถ้ากดได้ EARLY เร็ว ลดค่า
+        Calibrate: Calibrate
+        MusicAudio: ระดับเสียงเพลง
+        MusicAudioDetail: |-
+          เปลี่ยนระดับเลียงเพลงที่จะได้ยินระหว่างเล่น.
+        EffectAudio: ระดับเลียงเอฟเฟค
+        EffectAudioDetail: |-
+          เปลี่ยนระดับเลียงที่เล่นจากการเล่นโน้ต
+      Visual:
+        Name: การแสดงผล
+        Colorblind: โหมดตาบอดสี
+        ColorblindDetail: เปลี่ยนโน้ตลากสีแดงเป็นสีเหลีอง
+        FrPmDisplay: แสดง FC/AP
+        FrPmDisplayDetail: ปรังตำแหน่งที่แสดง FC/AP
+        MaxDisplay: แสดงคะแนนเต็ม
+        MaxDisplayDetail: แสดงจุดที่บอกว่ามีคะแนนเต็มอยู่
+        EarlyLateDisplay: แสดง Early/Late
+        EarlyLateDisplayDetail: ปรังตำแหน่งที่แสดง Early/Late
+        ScoreDisplay: แสดงคะแนน
+        LimitFramerate: จำกัด framerate
+        LimitFramerateDetail: จำกัด framerate ที่ 60 FPS เพื่อลดการใช้แบตเตอรี่ อาจทำให้มีความหน่วงหลังจากแตะหน้าจอมากขึ้น
+        DisableAdvancedGraphics: ปิด graphics ขั้นสูง
+        DisableAdvancedGraphicsDetails: ปิด post processing และ วีดีโอพื้นหลังเพื่อทำให้แอปทำงานดีขึ้น
+      Judgement:
+        Name: Judgement
+        ShowMax: แสดง Judgement Perfect (Max) 
+        ShowPerfect: แสดง Judgement Perfect (Early / Late) 
+        ShowGood: แสดง Judgement Good 
+        ShowMiss: แสดง Judgement Miss 
+      Interface:
+        Name: หน้าต่าง
+        ForceTheme: บังคับเปลี่ยนหน้าการแสดงผล
+        ForceThemeDetail: เปิดหน้าการแสดงผลเป็นประเภทหนึ่งโดยไม่สนใจด้านของโน้ตเพลง
+        SwitchResumeAndRetry: สลับตำแหน่งปุ่มเล่นต่อและปุ่มเริ่มต้นใหม่
+        SwitchResumeAndRetryDetail: สลับตำแหน่งปุ่มเล่นต่อและปุ่มเริ่มต้นใหม่ในหน้าหยุดการเล่น
+        ShowFPS: แสดง FPS
+        ShowFPSDetail: เปิดการแสดงผล FPS
+        ShowDebug: บอกข้อมูลปัญหา
+        ShowDebugDetail: บอกข้อมูลปัญหาระหว่างการเล่น (ขั้นสูง).
+      FrPmPosition:
+        middle: กลาง
+        infopanel: หน้าต่างข้อมูล
+        off: ปิด
+      PauseMode:
+        clickonce: กดหนึ่งครั้ง
+        doubleclick: กดสองครั้ง
+        hold: กดค้าง
+        disable: ปิด
+      EarlyLateTextPosition:
+        middle: กลาง
+        bottom: ล่าง
+        top: บน
+      ScoreDisplay:
+        default: ดั้วเดิม
+        predictive: คาดคะเน
+        difference: แตกต่าง
+        decrease: ลดลง
+      ScoreDisplayDetails:
+        default: การแสดงผลคะแนนดั้งเดิม คะแนนจะเพิ่มเมื่อคุณกดที่โน้ต
+        predictive: แสดงผมคะแนนโดยให้ใกล้เคียงกับเกรดคะแนนที่ใกล้ที่สุด
+        difference: บอกความแตกต่างต่อคะแนนสูงสุดที่เป็นไปได้
+        decrease: คะแนนเริ่มที่ค่าสูงสุดแล้วลดลง
+      ForceTheme:
+        default: ดั่งเดิม
+        light: สว่าง
+        dark: มืด
+
+Shutter:
+  Composer: เพลง
+  Illustrator: รูปประกอบเพลง
+  Charter: ออกแบบโน้ต
+  Alias: ด้วยชื่อ
+    
+Storage:
+  Confirm: ตกลง
+  ImportErrors: |-
+    ไม่สามารถนำเข้าไฟล์นี้ได้:
+  ImportSummary: |-
+    นำเข้าไฟล์สำเร็จ:
+  NoAssetImported: |-
+    ไม่ได้นำเข้าไฟล์
+  ImportConflict:
+    Message: |-
+      คุณกำลังนำเข้าไฟล์ที่เป็น version เก่า
+      เก็บไฟล์ version ใหนไว้?
+    ReplaceAsset:
+      เปลี่ยนเป็นไฟล์ที่นำเข้า
+    KeepOriginal:
+      เก็บไฟล์เดิมไว้
+    Identifier: "รหัสไฟล์: {0}"
+    Version: "Version: {0}"
+  Loading:
+    Message: 'กำลังโหลด: {0}...'
+    Archive: กำลังปลดไฟล์ออกมาจาก archive
+    ValidatePackage: กำลังตรวจสอบ package
+    CheckConflict: เช็คว่ามีปัญหาหรือไม่
+    DeleteAsset: กำลังลบไฟล์ {0}
+    StoreAsset: กำลังเก็บไฟล์ {0}
+    Finalizing: กำลังดำเนินการให้เสร็จ
+  
+Credits:
+  Name: ผู้จัดทํา
+  View: แสดงชื่อผู้จัดทํา
+  Role:
+    LeadProgramming: ผู้นําเขียนโปรแกรม
+    Programming: ผู้เขียนโปรแกรม
+    VisualDesign: ผู้ออกแบบการแสดงผลภาพ
+    SoundDesign: ผู้ออกแบบเสียง
+    Localization: ผู้แปล
+    QualityAssurance: ผู้ดูแลคุณภาพ
+    Community: และทุกคนในกลุ่ม Arcthesia และ Arccreate!
+    Sponsor: ขอบคุณมากสําหรับผู้สนับสนุน
