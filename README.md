@@ -10,7 +10,7 @@ Fast and powerful .aff editor made with Unity.
 
 ### Join our discord server:
 
-[![Join the Discord](https://discord.com/api/guilds/1083452023250354206/widget.png?style=banner4)](https://discord.gg/x5AqMQkyck)
+[![Join the Discord](https://discord.com/api/guilds/1083452023250354206/widget.png?style=banner4)](https://discord.com/invite/t27ptGsrGH)
 
 # Getting started
 
@@ -29,7 +29,7 @@ ArcCreate is available on Windows, MacOS, Linux, Android and iOS.
 
 ### Building
 
-This project was made with Unity 2019.4.34f1. You can download the exact version from the [official Download Archive here](https://unity.com/releases/editor/archive).
+This project was made with Unity 2021.3.37f1. You can download the exact version from the [official Download Archive here](https://unity.com/releases/editor/archive).
 
 # Project status
 
