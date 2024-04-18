@@ -1,0 +1,1200 @@
+Parsing:
+  # Exception messages for parsing strings
+  Exception:
+    CharacterNotFound: Could not find character "{0}".
+    InvalidConversionToInt: Could not convert "{0}" to integer.
+    InvalidConversionToBool: Could not convert "{0}" to boolean.
+    InvalidConversionToFloat: Could not convert "{0}" to float.
+
+Format:
+  # Exception messages while parsing chart files
+  Exception:
+    File: |-
+      An exception occured while reading the chart file {File}:
+      {Error}
+    SingleErrorFormat: |-
+      At: line {LineNumber}
+      While parsing event of type: {EventType}
+      With the following: "{Content}".
+      {Reason}
+    SingleErrorShortFormat: |-
+      While parsing event of type: {EventType}
+      {Reason}
+    UnknownException: |-
+      Unknown exception.
+      Exception: {Exception}
+      Stack trace:
+      {StackTrace}
+    InvalidHeader: |-
+      Invalid header line.
+    ArcColorNegative: |-
+      ID koloru arc'a nie może być ujemne.
+    AudioOffsetInvalid: |-
+      Invalid audio offset definition.
+    TimingPointDensityFactorInvalid: |-
+      Invalid timing point density factor definition.
+    BaseTimingInvalid: |-
+      Invalid base timing definition. Ensure your chart file starts with a timing event at 0ms.
+    IncludeReferencedMultipleTimes: |-
+      A chart file was already included but is being referenced again.
+    IncludeAReferencedFragment: |-
+      A chart file was already referenced as a fragment but is being included again.
+    TimingGroupPairInvalid: |-
+      Invalid timing group symbol pairing. Make sure to enclose timing group definitions properly with "};".
+    DivisorNegative: |-
+      Divisor property of timing event can not be negative.
+    DurationNegative: |-
+      Duration of this event type can not be negative.
+    DurationZero: |-
+      Duration of this event type can not be zero.
+    ArcTapOutOfRange: |-
+      ArcTap is outside the timing range of its parent Arc.
+    TimingGroupPropertiesInvalid: |-
+      Invalid timing group properties definition.
+    ReferencedFileError: |-
+      Can not load the referenced chart file:
+      {0}
+    FileDoesNotExist: |-
+      Chart file does not exist.
+  Warning:
+    HoldTooShort:
+      Hold note's duration is shorter than 17ms.
+    TapJudgementOverlap:
+      Tap judgement overlaps with other notes.
+
+Compose:
+  # Exception messages within the editor
+  Exception:
+    FileDoesNotExist: |-
+      Trying to read file located at {Path} but it does not exist. The file might have been deleted.
+    LoadImage: |-
+      An error occured while trying to load the image located at {Path}.
+      {Error}
+    LoadProject: |-
+      An error occured while trying to load the project file located at {Path}.
+      The file could have been saved incorrectly.
+      You can try modifying it manually, or you can delete the file and create a new project.
+      {Error}
+    ChartFileAlreadyExists: |-
+      Chart is already included in the project
+    InvalidChartFile: |-
+      The provided chart file name is invalid
+    NoChartIncluded: |-
+      Invalid project file: No chart is included within this project.
+    InvalidGroupProperties: |-
+      Invalid timing group properties. {Message}
+    InstructionLimit: |-
+      Lua script execution has been aborted: The instruction count limit of {0} was reached.
+    InvalidBaseBPM: |-
+      Invalid base bpm value: {0}
+    CreateSkyNoteNoValidArc: |-
+      Can not create sky note here. Sky notes must be placed on traces.
+    Navigation:
+      ParseKeybind: |-
+        An exception occured while parsing the keybind: "{0}".
+      ParseWhitespace: |-
+        Invalid keybind: a keystroke can not be a whitespace.
+      InvalidKeystroke: |-
+        Invalid keystroke: The keystroke "{0}" does not follow the correct format.
+      InvalidKey: |-
+        Invalid key: The string "{0}" does not match any key.
+      InvalidModifier: |-
+        Invalid modifier: The string "{0}" does not match any modifier key.
+      InvalidActionPath: |-
+        Invalid action path: The string "{0}" does not match any action.
+    Scenecontrol: |-
+      Error occured while executing scenecontrol event of type {Type}: {Message}
+      {StackTrace}
+    LuaScript: |-
+      Error occured while executing lua script {Path}: {Message}
+      {StackTrace}
+    Render:
+      FFmpeg:
+        NotFound: |-
+          Nie można znaleźć pliku executable FFmpeg.
+          Potwierdź, że skonfigurowana ścieżka {0} jest poprawna.
+        Start: |-
+          Wystąpił błąd podczas uruchamiania FFmpeg w {Path}: {Message}
+          {StackTrace}
+        Write: |-
+          Wystąpił błąd podczas zapisu do procesu FFmpeg: {Message}
+          {StackTrace}
+      Audio:
+        IncompatibleSfx: |-
+          The audio clip {Sfx} is incompatible for rendering.
+          Expected channel count of {ExpectedChannels} and frequency of {ExpectedFrequency}, but the clip's channel count is {Channels} and its frequency is {Frequency}.
+          
+  # Notification messages
+  Notify:
+    FreeCameraEditHelp: |-
+      Uruchamianie swobodnej kamery (najedź kursorem, aby uzyskać więcej informacji)
+      
+      WASD: Ruch do przodu/lewo/do tyłu/prawo
+      Spacja: Ruch w górę
+      Shift: Ruch w dół
+      IJKL: Obrót w górę/lewo/dół/prawo
+      U: Obrót pionowy w lewo
+      O: Obrót pionowy w lewo
+      Esc: Anuluj
+      Enter: Potwierdź
+    EmmyLuaGenerated:
+      Scenecontrol: |-
+        Szablon EmmyLua dla scenecontrol wygenerowany w folderze bieżącego projektu
+        Użyj VsCode z rozszerzeniem tangzx.emmylua, aby uzyskać autouzupełnianie
+      Macros: |-
+        Szablon EmmyLua dla makr został wygenerowany w folderze macros
+        Użyj VsCode z rozszerzeniem tangzx.emmylua, aby uzyskać autouzupełnianie
+    Actions:
+      CannotMirror: Can not mirror any of the selected notes.
+      NoDragRange: Can not drag selected notes timing. Try dragging the notes separately.
+    History:
+      Execute: |-
+        Wykonano polecenie: {Name}
+      Undo: |-
+        Cofnięto polecenie: {Name}
+      Redo: |-
+        Wykonano ponownie polecenie: {Name}
+      # {Name} above will be replaced with these entries
+      AddTiming: Add timing event
+      EditTiming: Edit timing event
+      RemoveTiming: Remove timing event
+      AddCamera: Add camera event
+      EditCamera: Edit camera event
+      RemoveCamera: Remove camera event
+      AddScenecontrol: Add scenecontrol event
+      EditScenecontrol: Edit scenecontrol event
+      RemoveScenecontrol: Remove scenecontrol event
+      EditValue: Edit selected note's value
+      EditArc: Edit arc's values
+      CreateNote:
+        Tap: Stwórz nutę tap
+        Hold: Stwórz nutę hold
+        Arc: Stwórz nutę arc
+        ArcTap: Stwórz nutę sky
+        Trace: Stwórz nutę trace
+      DeleteNotes: Usuń nuty
+      Cut: Wytnij nuty
+      Paste: Wklej nuty 
+      Mirror:
+        Vertical: Obróć pionowo nuty
+        Horizontal: Obróć poziomo nuty
+      Drag:
+        Timing: Drag notes timing
+        Position: Drag notes position
+    Clipboard:
+      Copy: Copied {0} notes
+      Cut: Cut {0} notes
+      NamedCopy: Skopiowano {0} nut do nazwanej schowka "{1}"
+      NamedCut: Wycięto {0} nut do nazwanej schowka "{1}"
+    GroupTable:
+      AddGroup: Added timing group {Number}
+      EditGroup: Edited timing group {Number}
+      RemoveGroup: Removed timing group {Number}
+    Project:
+      NewProject: |-
+        Utworzono nowy projekt
+        at: {Path}
+      OpenProject: |-
+        Otworzono projekt
+        at: {Path}
+      SaveProject: |-
+        Zapisano projekt
+        at: {Path}
+      OpenChart: Otworzono plik chartu {Path}
+      CreateChart: Stworzono plik chartu {Path}
+      RemoveChart: Usunięto plik chartu {Path} z projektu
+    Inspector:
+      InvalidParamameter: Nieprawidłowy parametr
+    Measurer:
+      CopyTiming: Copied cursor timing
+      CopyPosition: Copied arc's position
+      CopyX: Copied arc's x coordinate
+      CopyY: Copied arc's y coordinate
+    Export:
+      Render:
+        Cancelled: Render został anulowany
+        Complete: Render został ukończony
+      Package:
+        Complete: Pakiet wyeksportowany do {0}
+    Macros:
+      Cancelled: Makro został anulowany
+      Select:
+        Timing: Select timing
+        Position: Wybierz pozycję
+        Lane: Wybierz pas
+      NotFound: Makro "{0}" nie istnieje.
+    Mirror:
+      CannotMirror: No notes can be mirrored
+    Creation:
+      Overlap: "Invalid note position: the selected position overlaps with another note."
+  # Dialog boxes
+  Dialog:
+    RemoveGroup:
+      Title: Usuń grupę timing'u
+      Content: |-
+        Czy na pewno chcesz usunąć tę grupę timing'u i całą jej zawartość? (nie możesz tego cofnąć)
+      Yes: Usuń
+      No: Anuluj
+    RemoveChart:
+      Title: Usuń plik chartu
+      Content: |-
+        Czy na pewno chcesz usunąć ten plik chartu z projektu?
+
+        Sam plik NIE zostanie usunięty i można go później dodać do projektu, ale wszelkie powiązane z nim metadane zostaną utracone.
+      Yes: Usuń
+      No: Anuluj
+    UnsavedChanges:
+      Title: Niezapisane zmiany
+      Content: |-
+        Twój projekt ma niezapisane zmiany. Czy chcesz je zapisać?
+      Yes: Zapisz zmiany
+      No: Odrzuć zmiany
+      Cancel: Anuluj
+    LoadChartError:
+      Title: Error
+      Content: |-
+        Wystąpił błąd podczas ładowania pliku chartu {ChartPath}.
+        Napraw to w osobnym edytorze tekstu lub zamknij to okno dialogowe i użyj panelu "<> {TabName}".
+        
+        Szczegóły:
+        {Content}
+      Confirm: Potwierdź
+    Macros:
+      Title: Makra
+    GroupPicker:
+      SelectEditingGroup: "Change current group to:"
+      AssignNotesToGroup: "Assign selected notes to:"
+    CameraViews:
+      Default: Widok domyślny
+      Stationary: Widok statyczny
+      ZoomedOut: Widok pomniejszony
+      BirdsEye1: Widok z lotu ptaka 1
+      BirdsEye2: Widok z lotu ptaka 2
+    PanelLayout:
+      Name: Układ
+      Default: Domyślny
+      Compact: Kompaktowy
+      SaveLayout: Zapisz układ
+      LayoutName: Nazwa układu
+      DuplicateError: Inny układ o tej samej nazwie już istnieje.
+  Navigation:
+    KeybindOverride: Nadpisanie skrótu dla akcji {0}
+    # Texts that appear on the context menu (right-click menu)
+    Actions:
+      Camera:
+        Name: Kamera
+        FreeCamera:
+          Name: Start free camera
+          Confirm: Confirm
+          Cancel: Cancel
+          Faster: Move faster
+          Slower: Move slower
+          MoveForward: Foward
+          MoveLeft: Left
+          MoveRight: Right
+          MoveBackward: Back
+          MoveUp: Up
+          MoveDown: Down
+          LookUp: Look up
+          LookDown: Look down
+          LookLeft: Look left
+          LookRight: Look right
+          RollLeft: Roll left
+          RollRight: Roll right
+      Grid:
+        Name: Siatka
+        Toggle: Przełącz siatkę
+        ToggleSlot:
+          Name: Siatka
+          Slot1: Slot 1
+          Slot2: Slot 2
+          Slot3: Slot 3
+          Slot4: Slot 4
+          Slot5: Slot 5
+          Slot6: Slot 6
+          Slot7: Slot 7
+          Slot8: Slot 8
+          Slot9: Slot 9
+          Slot0: Slot 0
+        IncreaseDensity: Increase density
+        DecreaseDensity: Decrease density
+      Macro:
+        Name: Makro
+        SelectEvents:
+          Confirm: Potwierdź
+          Cancel: Anuluj
+        SelectLane:
+          Confirm: Potwierdź
+          Cancel: Anuluj
+        SelectPosition:
+          Confirm: Potwierdź
+          Cancel: Anuluj
+        SelectTiming:
+          Confirm: Potwierdź
+          Cancel: Anuluj
+      Display:
+        Name: Ekran
+        FullScreen: Przełącz pełny ekran
+      Selection:
+        Name: Wybór
+        Clear: Clear selection
+        Single: Wybierz nutę
+        Add: Drag select
+        Remove: Drag deselect
+        Toggle: Toggle select
+        RangeSelect:
+          Name: Wybierz nuty w zakresie
+          Confirm: Potwierdź
+          Cancel: Anuluj
+      Measure:
+        Name: Mierzenie
+        Start:
+          Name: Otwórz miarkę
+          Confirm: Potwierdź
+          Cancel: Anuluj
+          CopyTiming: Copy timing
+          CopyPosition: Skopiuj pozycję
+          CopyX: Skopiuj współrzędną x
+          CopyY: Skopiuj współrzędną y
+      Clipboard:
+        Name: Schowek
+        Copy: Kopiuj
+        Cut: Wytnij
+        Paste:
+          Name: Wklej
+          Confirm: Potwierdź wklejanie
+          Cancel: Anuluj wklejanie
+          Mirror: Mirror
+        NamedPaste:
+          Name: Paste
+          Confirm: Potwierdź wklejanie
+          Cancel: Anuluj wklejanie
+          Mirror: Mirror
+        Clear: Wyczyść schowek
+      NoteCreation:
+        Name: Note creation
+        Start:
+          Name: Dodaj nutę
+          Confirm: Potwierdź
+          Cancel: Anuluj
+          ToggleFreeSky: Switch to free sky note
+      NotePallete:
+        Name: Paleta nut
+        Arc: 
+          Name: Arc
+          Blue: Niebieski arc
+          Red: Czerwony arc
+          Green: Zielony arc
+        ArcAlt: 
+          Name: Arc (alt)
+          Blue: Niebieski arc
+          Red: Czerwony arc
+          Green: Zielony arc
+        Sky: Sky
+        Tap: Tap
+        Hold: Hold
+        Idle: Bezczynność
+      Delete:
+        Name: Usuń
+        Execute: Usuń
+      Mirror:
+        Name: Mirror
+        Horizontal: Mirror horizontally
+        HorizontalNoColorSwitch: Mirror horizontally (ignore color)
+        Vertical: Mirror vertically
+      Dragging:
+        Name: Dragging
+        Timing:
+          Name: Drag timing
+          Confirm: Confirm
+          Cancel: Cancel
+          CycleSkyNoteMode: Cycle sky note mode
+        Position:
+          Name: Drag position
+          Confirm: Confirm
+          Cancel: Cancel
+          CycleSkyNoteMode: Cycle sky note mode
+      Render:
+        Name: Renderowanie
+        Start:
+          Cancel: Anuluj renderowanie
+      Playback:
+        Name: Timeline
+        TogglePlay: Play/Pause
+        PlayReturn:
+          Name: Play
+          Return: Pause and return
+          Pause: Pause
+        IncreaseSpeed: Speed up
+        DecreaseSpeed: Slow down
+
+  Grid:
+    # Please modify the comment lines only (lines beginning with '--')
+    DefaultScript: |-
+      -- TO JEST SKRYPT LUA. Pełną dokumentację znajdziesz na stronie: https://github.com/Arcthesia/ArcCreate/wiki/Grid-settings
+      -- KONFIGURACJA
+      -- Wybierz jeden z następujących szablonów: 4k, 6k, oob4k, oob6k
+      local useTemplate = "4k"
+      local spacing = {
+          x = 0.125,
+          y = 0.25,
+      }
+
+      -- Change grid color here
+      local color = {
+          ftr = {
+              area = rgba(0, 200, 0, 48),
+              boundary = rgba(65, 180, 66, 100),
+          },
+          byd = {
+              area = rgba(150, 130, 22, 64),
+              boundary = rgba(150, 180, 108, 200),
+          },
+          unsafe = {
+              area = rgba(230, 30, 22, 48),
+              boundary = rgba(200, 60, 50, 200),
+          },
+          lines = rgba(150, 150, 150, 50),
+          panel = rgba(255, 255, 255, 16),
+      }
+
+      -- INTERNAL
+      local templates = {}
+      templates["4k"] = {
+          left = -0.5,
+          right = 1.5,
+          top = 1,
+          bottom = -0.2,
+
+          mainLeft = -0.5,
+          mainRight = 1.5,
+          mainTop = 1,
+          mainBottom = 0,
+
+          lane = -0.2,
+          ftrLeft = 0,
+          ftrRight = 1,
+          bydLeft = -0.25,
+          bydRight = 1.25
+      }
+      templates["6k"] = {
+          left = -1,
+          right = 2,
+          top = 1,
+          bottom = -0.2 / 1.61,
+
+          mainLeft = -1,
+          mainRight = 2,
+          mainTop = 1,
+          mainBottom = 0,
+
+          lane = -0.2 / 1.61,
+          ftrLeft = -0.25,
+          ftrRight = 1.25,
+          bydLeft = -0.625,
+          bydRight = 1.625
+      }
+      templates["oob4k"] = {
+          left = -4,
+          right = 5,
+          top = 5,
+          bottom = -0.2,
+
+          mainLeft = -0.5,
+          mainRight = 1.5,
+          mainTop = 1,
+          mainBottom = 0,
+
+          lane = -0.2,
+          ftrLeft = 0,
+          ftrRight = 1,
+          bydLeft = -0.25,
+          bydRight = 1.25
+      }
+      templates["oob6k"] = {
+          left = -4,
+          right = 5,
+          top = 5,
+          bottom = -0.2 / 1.61,
+
+          mainLeft = -1,
+          mainRight = 2,
+          mainTop = 1,
+          mainBottom = 0,
+
+          lane = -0.2 / 1.61,
+          ftrLeft = -0.25,
+          ftrRight = 1.25,
+          bydLeft = -0.625,
+          bydRight = 1.625
+      }
+
+      local config = templates[useTemplate]
+
+      local function drawLines(color, points, isLoop)
+          for i = 1, #points - 1 do
+              grid.drawLineDecorative(points[i], points[i+1], color)
+          end
+          if isLoop then
+              grid.drawLineDecorative(points[#points], points[1], color)
+          end
+      end
+
+      local ftrTL = xy(config.ftrLeft, config.mainTop)
+      local ftrTR = xy(config.ftrRight, config.mainTop)
+      local bydTL = xy(config.bydLeft, config.mainTop)
+      local bydTR = xy(config.bydRight, config.mainTop)
+      local gridBR = xy(config.mainRight, config.mainBottom)
+      local gridBL = xy(config.mainLeft, config.mainBottom)
+      local gridTL = xy(config.mainLeft, config.mainTop)
+      local gridTR = xy(config.mainRight, config.mainTop)
+      local trackL = xy(config.mainLeft, config.lane)
+      local trackR = xy(config.mainRight, config.lane)
+
+      grid.setCollider(config.left, config.right, config.bottom, config.top)
+      grid.setPanelColor(color.panel)
+
+      grid.drawArea(color.ftr.area, ftrTL, ftrTR, gridBR, gridBL)
+      drawLines(color.ftr.boundary, {ftrTL, ftrTR, gridBR, gridBL}, true)
+
+      grid.drawArea(color.byd.area, bydTL, ftrTL, gridBL)
+      grid.drawArea(color.byd.area, ftrTR, bydTR, gridBR)
+      drawLines(color.byd.boundary, {ftrTL, bydTL, gridBL}, false)
+      drawLines(color.byd.boundary, {ftrTR, bydTR, gridBR}, false)
+
+      grid.drawArea(color.unsafe.area, bydTL, gridTL, gridBL)
+      grid.drawArea(color.unsafe.area, gridTR, bydTR, gridBR)
+      grid.drawArea(color.unsafe.area, gridBL, gridBR, trackR, trackL)
+      drawLines(color.unsafe.boundary, {bydTL, gridTL, gridBL}, false)
+      drawLines(color.unsafe.boundary, {bydTR, gridTR, gridBR}, false)
+      drawLines(color.unsafe.boundary, {gridBR, trackR, trackL, gridBL}, false)
+
+      spacing.x = math.max(spacing.x, 0.01)
+      spacing.y = math.max(spacing.y, 0.01)
+      grid.drawLine(config.left, config.left, config.bottom, config.top, color.lines)
+      for x = config.mainLeft - spacing.x, config.left + spacing.x, -spacing.x do
+          grid.drawLine(x, x, config.bottom, config.top, color.lines)
+      end
+
+      for x = config.mainLeft, config.mainRight, spacing.x do
+          grid.drawLine(x, x, config.bottom, config.top, color.lines)
+      end
+
+      for x = config.mainRight + spacing.x, config.right - spacing.x, spacing.x do
+          grid.drawLine(x, x, config.bottom, config.top, color.lines)
+      end
+      grid.drawLine(config.right, config.right, config.bottom, config.top, color.lines)
+
+      grid.drawLine(config.left, config.right, config.bottom, config.bottom, color.lines)
+      for y = config.mainBottom - spacing.y, config.bottom + spacing.y, -spacing.y do
+          grid.drawLine(config.left, config.right, y, y, color.lines)
+      end
+
+      for y = config.mainBottom, config.mainTop, spacing.y do
+          grid.drawLine(config.left, config.right, y, y, color.lines)
+      end
+
+      for y = config.mainTop + spacing.y, config.top - spacing.y, spacing.y do
+          grid.drawLine(config.left, config.right, y, y, color.lines)
+      end
+      grid.drawLine(config.left, config.right, config.top, config.top, color.lines)
+  # Texts that appear on the editor UI
+  UI:
+    Common:
+      Confirm: Potwierdź
+      Cancel: Anuluj
+      Close: Zamknij
+      NotRequired: (nie wymagane)
+      Extension: Rozszerzenie
+    Placeholder:
+      Text: Puste...
+      File: Nie wybrano pliku...
+      Image: Nie wybrano obrazu...
+      Property: Brak właściwości...
+      ImagePrompt: Kliknij, aby wybrać obraz
+    PanelNames:
+      Toolbox: Toolbox
+      RawEditor: Tekst
+      Gameplay: Rozgrywka
+      Timeline: Oś czasu
+      Project: Projekt
+      Events: Wydarzenia
+      Remote: Pilot
+      Export: Eksport
+      Settings: Ustawienia
+    # Top bar of the UI
+    Top:
+      Label:
+        New: Nowy
+        Open: Otwórz
+        Save: Zapisz
+        InputMode: Tryb Wejścia
+        InputModeOptions:
+          auto: Auto
+          autocontroller: Auto (Kontroler)
+          touch: Ekran Dotykowy
+          controller: Kontroler
+          mouse: Myszka
+          idle: Bezczynność
+        FullScreen: Pełny Ekran
+        ToggleFullScreenHint: Naciśnij klawisz F11, aby przełączyć pełny ekran.
+        Chart: Chart
+    # Project panel
+    Project:
+      Label:
+        NewChart: Nowy Chart
+        NewProject: Nowy Projekt
+        ProjectFile: Plik Projektu
+        ChartFile: Plik Chartu
+        Information: Informacje
+        Gameplay: Rozgrywka
+        Title: Tytuł
+        Composer: Kompozytor
+        Illustrator: Ilustrator
+        Charter: Charter
+        Alias: Pseudonim
+        BPM: BPM
+        BaseBPM: Podstawowe BPM
+        BPMText: Tekst BPM
+        SyncBaseBPM: Synchronizacja
+        ChartOffset: Opóźnienie chartu 
+        TimingPointDensityFactor: Judge Density
+        ChartConstant: Constant Chartu
+        SearchTags: <size=10>Tagi Wyszukiwania</size>
+        DifficultyName: Nazwa Trudności
+        DifficultyColor: Kolor Trudności
+        Files: Pliki
+        Audio: Audio
+        JacketArt: Jacket Art
+        Background: Tło
+        Video: Wideo
+        Skin: Skórka
+        Side: Tryb
+        Note: Nuty
+        Particle: Efekt
+        Accent: Akcent
+        Track: Tor
+        SingleLine: Linia Pojedyncza
+        Colors: Kolory
+        TraceBody: Trace Body
+        Shadow: Cień
+        ArcColors: Kolor arc'ów
+        Blue: Niebieski
+        Red: Czerwony
+        Green: Zielony
+        Custom: Niestandardowy
+        AddArcColor: Dodaj kolor
+        NoProjectLoaded: |-
+          Nie załadowano żadnego projektu.
+          Utwórz lub otwórz nowy projekt
+        RawEditorFileTooLarge: |-
+          Edytor tekstu jest wyłączony dla plików większych niż 1000kb
+        Shutter: Przejście
+        ShowShutter: Pokaż Przejście
+        HideShutter: Ukryj Przejście
+        PreviewSegment: Fragment utworu
+        CustomChartPath: Użyj niestandardowego (zaawansowane)
+      Options:
+        Inherit: Odziedzicz
+        Light: Light
+        Conflict: Conflict
+        Colorless: Colorless
+        MiraiLight: Mirai Light
+        MiraiConflict: Mirai Conflict
+        Dynamix: Dynamix
+        Black: Black
+        Nijuusei: Nijuusei
+        Rei: Rei
+        DarkVs: DarkVs
+        Tempest: Tempest
+        Finale: Finale
+        Pentiment: Pentiment
+        Arcana: Arcana
+        None: Brak
+        Neo: Neo
+        Past: Past
+        Present: Present
+        Future: Future
+        Eternal: Eternal
+        Beyond: Beyond
+    Timeline:
+      Label:
+        Offset: Opóźnienie
+        TimingGroup: Grupa
+        Density: Density
+        PlaybackSpeed: Szybkość
+      Timestamp:
+        Name: Timestamp
+        DefaultMessage: Timestamp {0}
+    # Events editor panel
+    EventsEditor:
+      Label:
+        Group: Grupa
+        Events: Wydarzenia
+      Actions:
+        AddGroup: Dodaj grupę
+        DeleteGroup: Usuń grupę
+        AddEvent: Dodaj wydarzenie
+        DeleteEvent: Usuń wydarzenie
+        AutoReload: Odśwież automatycznie
+        GenerateEmmyLua: Wygeneruj EmmyLua
+        Reload: Odśwież
+        FreeCamera: Swobodna kamera
+      Mode:
+        Timing: Timing
+        Camera: Kamera
+        Scenecontrol: Scene
+    # Export panel
+    Export:
+      Render:
+        Name: Renderuj wideo
+        Description: |-
+          Automatycznie eksportuj wideo chart view.
+          Wymaga zainstalowania FFmpeg.
+        ConfigureFFmpeg: Skonfiguruj ścieżkę pliku executable FFmpeg
+        Presets:
+          Name: Presety
+          Reset: Reset
+          FourK: 4K
+          FullHD: Full HD
+          Compact: Compact
+        Settings:
+          Name: Ustawienia
+          From: Od
+          To: Do
+          CRF:
+            Name: CRF
+            Lossless: "{0} (Jakość Lossless)"
+            VeryLow: "{0} (Jakość prawie Lossless)"
+            Low: "{0} (Wysoka jakość)"
+            Medium: "{0} (Średnia jakość)"
+            Default: "{0} (Domyślna jakość)"
+            High: "{0} (Niska jakość)"
+          FPS: FPS
+          Size: <size=10>Rozdzielczość</size>
+          ShowShutter: Pokaż przejście
+        Start: Rozpocznij renderowanie
+        Cancel: Anuluj renderowanie
+        Status: |-
+          Renderowanie wideo. Zajmie to trochę czasu.
+          Upłynęło: {0}
+          Pozostało: {1}
+      Package:
+        Name: Eksportuj pakiet
+        Description: |-
+          Eksportuj plik pakietu .arcpkg, aby udostępnić go innym graczom.
+        Publisher: Wydawca
+        Package: Pakiet
+        Version: Wersja
+        BlankField: Wprowadź informacje o wydawcy i nazwie pakietu
+        Identifier: "Twój identyfikator pakietu to: {0}"
+        Export: Eksportuj
+    # Editor settings panel
+    Settings:
+      Label:
+        Locale:
+          Name: Ustawienia Regionalne
+          Language: Język
+          Reload: Przeładuj ustawienia regionalne
+          CheckMissing: Sprawdź brakujące wpisy
+        Gameplay:
+          Name: Rozgrywka
+          Speed: Szybkość
+          AspectRatio: Proporcje
+          Indicator: Wskaźnik
+          MaxIndicator: Enable max indicator
+          Colorblind: Używaj kolorów arc dla niewidomych
+          ScoreDisplay: <size=9>Wyświetlacz wyniku</size>
+        Judgement:
+          Name: Judgement
+          NotUsedInAutoOrIdle: "These options take no effect in auto or idle mode:"
+          EarlyLatePosition: Early/Late position
+          ShowMsDifference: Show ms difference
+          ShowJudgement: "Show judgement:"
+          ShowMax: Perfect (Max)
+          ShowPerfect: Perfect (Early/Late)
+          ShowGood: Good
+          ShowMiss: Miss
+        Grid:
+          Name: Siatka
+          Slot: Slot
+          UseDefault: Use default
+          FromLane: From lane
+          ToLane: To lane
+          ScaleGrid: Scale with sky input
+          Gridline: Define gridlines
+          Script: Lua script
+        AudioVolume:
+          Name: Audio
+          Music: Muzyka
+          Effect: SFX
+          GlobalOffset: <size=8>Globalne opóźnienie</size>
+          SyncToDSPTime: Sync to DSP timing
+        Display:
+          Name: Obraz
+          Vsync: Vsync
+          Framerate: Framerate
+          ShowCounter: Wyświetl framerate
+        Input:
+          Name: Input
+          ReloadKeybinds: Reload keybinds
+          AllowCreatingNotesBackward: Allow creating notes backward
+          BlockCreatingOverlappedNotes: Block creating overlapped notes
+          EnableEditingArctapWidth: Allow editing sky note's width
+          ShowKeybindHint: Show keybind hints
+        Files:
+          Name: Pliki
+          Backup: Utwórz kopię zapasową podczas zapisywania
+          BackupCount: Liczba kopii zapasowych
+          Autosave: Włącz autosave
+          AutosaveInterval:  Interwał autosave'u (sekundy)
+        ScrollSensitivity:
+          Name: Scroll sensitivity
+          Vertical: Vertical
+          Horizontal: Horizontal
+          Timeline: Timeline
+        TrackScrolling:
+          Name: Track scrolling
+          Threshold: Threshold
+          MaxMovement: Max movement
+    # Toolbox panel
+    Toolbox:
+      Pallete:
+        Name: Paleta
+        Arc: Arc
+        Trace: Trace
+        Tap: Tap
+        Hold: Hold
+        Arctap: Sky
+        Idle: Idle
+        Easing: Easing
+      Settings:
+        ShowGrid: Show grid
+        HideGrid: Hide grid
+        Measure: Measure
+        RangeSelect: Range select
+      Macros:
+        Name: Makra
+        GenerateEmmy: Generate EmmyLua
+        Reload: Reload macro scripts
+        OpenExplorer: Open macros folder
+    # Inspector window
+    Inspector:
+      Name: Inspector
+      Timing: Timing
+      StartTiming: Start
+      EndTiming: End
+      Lane: Lane
+      StartPos: From
+      EndPos: To
+      Sfx: Sfx
+      Width: Width
+      Group: Group
+      Mixed: Mixed
+      Arc: Arc
+      Trace: Trace
+      Actions:
+        SelectArc: Select parent arc
+        SelectArctap: Select sky notes
+    Startup:
+      Discord: Serwer Discord
+      Kofi: Wesprzyj nas na Ko-fi
+      Version: "Wersja: {0}"
+      Recent: Ostatnio otworzone
+
+Remote:
+  Exception:
+    InvalidIP: Niewłaściwy adres IP
+  State:
+    Listening: |-
+      Szukanie transmisji...
+      <size=20>
+      W kliencie PC ArcCreate otwórz zakładkę "Pilot" i naciśnij "Zacznij transmitowanie", aby rozpocząć.</size>
+    ManualIP: |-
+      Oczekiwanie na połączenie od klienta PC.
+      <size=20>
+      W kliencie PC ArcCreate otwórz zakładkę "Pilot" i wprowadź adres IP: {0}.</size>
+    Found: |-
+      Transmisja znaleziona z następujących urządzeń.
+      Wybierz urządzenie, aby kontynuować.
+    TargetDisconnected:
+      Compose: Klient PC rozłączony. Zatrzymanie połączenia.
+      Gameplay: Klient PC rozłączony. Czy chcesz rozpocząć nową sesję?
+    Receiving:
+      Odbieranie danych ({0})
+  Description:
+    Idle: |-
+      Nie podłączono żadnego klienta test play.
+      Rozpocznij transmitowanie w celu wykrycia klientów. Upewnij się, że to urządzenie i urządzenie z włączonym klientem test play znajdują się w tej samej sieci lokalnej i że klient test play znajduje przychodzące transmisje.
+    Broadcasting: |-
+      Kod transmitowania: {0}.
+      Wybierz opcję z tym kodem na kliencie test play, aby rozpocząć sesję.
+    Connected: |-
+      Połączono z klientem test play pod adresem: {0}:{1}
+  Actions:
+    Broadcast: Zacznij transmitowanie
+    AbortBroadcast: <size=8>Zatrzymaj transmitowanie</size>
+    BroadcastAgain: <size=9>Transmituj ponownie</size>
+    StopSession: Zatrzymaj sesję
+    StartNewSession: Zacznij nową sesję
+    ManualIP: Skonfiguruj połączenie ręcznie
+    ReturnToSelect: Wróć do Song Select
+  Control:
+    Name: Control
+    Sync:
+      Name: Synchronizuj dane
+      AllFiles: <size=10>Wszystkie pliki</size>
+      Chart: Chart
+      Audio: Audio
+      Jacket: Jacket
+      Background: Tło
+      Metadata: Metadane
+    Settings:
+      Name: Ustawienia
+      Offset: Opóźnienie urządzenia
+      Speed: Szybkość urządzenia
+      MusicVolume: Głośność muzyki
+      EffectVolume: Głośność SFX
+    StartTiming: Play from timing
+    EndTiming: Play to timing      
+    Loop: Odtwarzanie w pętli
+    ShowLog: Pokaż log
+    ShowDebug: Pokaż informacje debugowania
+    ManualIP: Wprowadź adres IP ręcznie
+  Window:
+    Name: Pilot
+    SyncChart: <size=8>Synchronizuj chart</size>
+    SyncTiming: <size=8>Synchonizuj timing</size>
+
+Gameplay:
+  Exception:
+    LoadAudio: |-
+      Wystąpił błąd podczas próby wczytania pliku audio znajdującego się w {Path}.
+      {Error}
+    Chart: |-
+      Wystąpił błąd podczas próby wczytania chartu znajdującego się w {Path}.
+      {Error}
+    Skin: |-
+      Wystąpił błąd podczas próby wczytania obrazu znajdującego się w {Path}.
+      {Error}
+    Scenecontrol: |-
+      Wystąpił błąd podczas próby wczytania pliku JSON scenecontrol'u znajdującego się w {Path}.
+      {Error}
+    ScenecontrolSprite: |-
+      Wystąpił błąd podczas próby wczytania sprite'a scenecontrol'u znajdującego się w {Path}.
+      {Error}
+    Load: |-
+      Wystąpił nieznany błąd podczas próby wczytania chartu {Identifier}, znajdującego się w {ChartPath}.
+      Error: {Message}
+      Stack trace:
+      {StackTrace}
+  HUD:
+    Play: Wznów
+    Retry: Ponów
+    Return: Wyjdź
+    AudioDeviceChange: Wykryto zmianę w urządzeniu audio. ArcCreate wymusi powrót do menu Select.
+    Confirm: Potwierdź
+  Practice:
+    PlaybackSpeed: Szybkość
+    Repeat:
+      On: Powtarzanie włączone
+      Off: Powtarzanie wyłączone
+      From: Ustaw punkt startowy
+      To: Ustaw punkt końcowy
+  Selection:
+    SelectStatus:
+      Singular: |-
+        {0} recz wybraną
+      Plural: |-
+        {0} rzeczy wybranych
+    DeleteConfirmation: |-
+      Czy na pewno chcesz usunąć następujące rzeczy?
+      Twój wynik nie zostanie usunięty.
+    PackDeleteConfirmation: |-
+      Usuwasz pakiet:
+      <color=#FFFFFFB4>{0}</color>
+      Czy chcesz również usunąć wszystkie poziomy należące do tego pakietu, czy zachować poziomy i usunąć tylko ten pakiet?
+    CannotDeleteDefault: |-
+      Nie można usunąć domyślnych rzeczy.
+    EnablePractice: |-
+      Tryb treningowy włączony dla następnej gry.
+    SelectRating: Wybierz ocenę
+    Action:
+      Copy: Kopiuj
+      Delete: Usuń
+      Cancel: Anuluj
+      Keep: Zachowaj
+      Done: Gotowe
+    List:
+      RemoteTestplay: Pilot Testplay
+      Import: Importuj pakiet
+      Community: Społeczność
+      AllSongs: Wszystkie piosenki
+      OtherDifficulties: Inne poziomy
+    Info:
+      Undefined:
+        Title: Bez nazwy
+        Composer: N/A
+        Charter: Nieznany
+      Charter: 'Charter: {0}'
+    Sort:
+      addeddate: Added date
+      charter: Charter
+      composer: Kompozytor
+      difficulty: Poziom
+      grade: Stopień
+      playcount: Liczba zagrań
+      rating: Rating
+      score: Wynik
+      title: Tytuł
+    Group:
+      none: Brak
+      difficulty: Poziom
+      grade: Stopień
+      rank: Rank
+      rating: Rating
+      charter: Charter
+    History:
+      Best: Najlepsze
+      Recent: Ostatnie
+    Modifiers:
+      GameMode:
+        Name: Tryb gry
+        Auto: Autoplay
+        Practice: Trening
+      Modifier:
+        Name: Modyfikacje
+        Mirror: Odbicie
+    Settings:
+      Name: Ustawienia
+      Language: Język
+      Gameplay:
+        Name: Rozgrywka
+        Speed: Szybkość
+        SpeedDetail: |-
+          Adjust the speed at which notes approach the judgement area.
+        EarlyLatePerfectDisplay: Wyświetlanie perfekcyjnych trafień wcześnie/późno
+        EarlyLatePerfectDisplayDetail: |-
+          Zmień opcję wyświetlania trafień perfekcyjnych wcześnie/późno.
+        EnablePractice: Włącz tryb treningu
+        ShowMsDifference: Wyświetlanie różnice w milisekundach
+        ShowMsDifferenceDetail: Wyświetlaj dokładne różnice czasowe w milisekundach zamiast EARLY / LATE.
+        HidePause: Ukryj przycisk pauzy
+        PauseMode: Metoda włączenia pauzy
+      Audio:
+        Name: Audio
+        Offset: Opóźnienie
+        OffsetDetail: |-
+          Dostosuj synchronizację muzyki.
+          Zwiększ, jeśli dostajesz LATE, lub zmniejsz, jeśli dostajesz EARLY.
+        Calibrate: Kalibruj
+        MusicAudio: Głośność muzyki
+        MusicAudioDetail: |-
+          Zmień głośność muzyki podczas rozgrywki.
+        EffectAudio: Effect volume
+        EffectAudioDetail: |-
+          Change the volume of hit sounds during gameplay.
+      Visual:
+        Name: Grafika
+        Colorblind: Tryb dla Niewidomych
+        ColorblindDetail: Użyj alternatywnych kolorów arc'ów.
+        FrPmDisplay: FC/AP display
+        FrPmDisplayDetail: Adjust FC/AP indicator position.
+        MaxDisplay: Max indicator display
+        MaxDisplayDetail: Toggle max score indicator display.
+        EarlyLateDisplay: Early/Late display
+        EarlyLateDisplayDetail: Adjust early/late text position.
+        ScoreDisplay: Score display
+        LimitFramerate: Ogranicz framerate
+        LimitFramerateDetail: Ogranicz framerate do 60 FPS, aby oszczędzać życie baterii. Może to zwiększyć opóźnienia.
+        DisableAdvancedGraphics: Wyłącz zaawansowaną grafikę
+        DisableAdvancedGraphicsDetails: Wyłącz post processing i tła wideo, co może poprawić wydajność.
+      Judgement:
+        Name: Judgement
+        ShowMax: Display Perfect (Max) judgement
+        ShowPerfect: Display Perfect (Early / Late) judgement
+        ShowGood: Display Good judgement
+        ShowMiss: Display Miss judgement
+      Interface:
+        Name: Interface
+        ForceTheme: Force UI Theme
+        ForceThemeDetail: Set the UI to display a theme regardless of selected chart.
+        SwitchResumeAndRetry: Switch Resume and Retry position
+        SwitchResumeAndRetryDetail: Switch the positions of Resume and Retry buttons within the Pause screen.
+        ShowFPS: Show FPS
+        ShowFPSDetail: Toggle FPS display.
+        ShowDebug: Pokaż informacje debugowania
+        ShowDebugDetail: Wyświetlaj informacje debugowania podczas rozgrywki (zaawansowane).
+      FrPmPosition:
+        middle: Middle
+        infopanel: Info panel
+        off: Off
+      PauseMode:
+        clickonce: Pojedyncze dotknięcie
+        doubleclick: Dwukrotne dotknięcie
+        hold: Długie naciśnięcie
+        disable: Wyłącz
+      EarlyLateTextPosition:
+        middle: Środek
+        bottom: Dół
+        top: Góra
+      ScoreDisplay:
+        default: Domyślny
+        predictive: Przewidywanie
+        difference: Różnica
+        decrease: Spadek
+      ScoreDisplayDetails:
+        default: Domyślny tryb wyświetlania. Wynik rośnie wraz z uderzaniem nut.
+        predictive: Wynik wyświetla odległość do najbliższego progu stopnia.
+        difference: Wynik pokazuje różnicę w stosunku do teoretycznie perfekcyjnego wyniku.
+        decrease: Wynik zaczyna się od wartości maksymalnej i maleje.
+      ForceTheme:
+        default: Domyślny
+        light: Jasny
+        dark: Ciemny
+
+Shutter:
+  Composer: Muzyka
+  Illustrator: Ilustracja
+  Charter: Twórca
+  Alias: jako
+    
+Storage:
+  Confirm: Potwierdź
+  ImportErrors: |-
+    Następujące rzeczy nie mogły zostać zaimportowane:
+  ImportSummary: |-
+    Pomyślnie zaimportowano następujące rzeczy:
+  NoAssetImported: |-
+    Nie zaimportowano żadnych rzeczy
+  ImportConflict:
+    Message: |-
+      Próbujesz zaimportować starszą wersję rzeczy.
+      Którą wersję chcesz zachować?
+    ReplaceAsset:
+      Zastąp importowaną rzeczą
+    KeepOriginal:
+      Zachowaj originalną rzecz
+    Identifier: "Identyfikator: {0}"
+    Version: "Wersja: {0}"
+  Loading:
+    Message: 'Ładowanie: {0}...'
+    Archive: Rozpakowywanie archiwum
+    ValidatePackage: Walidacja pakietu
+    CheckConflict: Sprawdzanie konfliktów
+    DeleteAsset: Usuwanie rzeczy {0}
+    StoreAsset: Przechowywanie rzeczy {0}
+    Finalizing: Finalizowanie
+  
+Credits:
+  Name: Autorzy
+  View: Zobacz autorów
+  Role:
+    LeadProgramming: Główne Programowanie
+    Programming: Programowanie
+    VisualDesign: Grafika
+    SoundDesign: Dzwięk
+    Localization: Tłumaczenie
+    QualityAssurance: Kontrola Jakości
+    Community: i wszyscy w społeczności Arcthesia & ArcCreate!
+    Sponsor: Specjalne podziękowania dla naszych Wspierających
