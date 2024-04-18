@@ -52,6 +52,7 @@ namespace ArcCreate.Compose.Components
         [SerializeField] private Button openHotkeySettingsButton;
         [SerializeField] private SettingsToggle showHotkeyHintsToggle;
         [SerializeField] private SettingsToggle allowCreatingNotesBackwardToggle;
+        [SerializeField] private SettingsToggle blockCreatingOverlappedNotesToggle;
         [SerializeField] private SettingsToggle enableEditingArctapWidthToggle;
         [SerializeField] private SettingsInputFieldFloat scrollVerticalField;
         [SerializeField] private SettingsInputFieldFloat scrollHorizontalField;
@@ -117,6 +118,7 @@ namespace ArcCreate.Compose.Components
             showHotkeyHintsToggle.Setup(Settings.EnableKeybindHintDisplay);
             allowCreatingNotesBackwardToggle.Setup(Settings.AllowCreatingNotesBackward);
             enableEditingArctapWidthToggle.Setup(Settings.EnableArctapWidthEditing);
+            blockCreatingOverlappedNotesToggle.Setup(Settings.BlockOverlapNoteCreation);
             colorblindModeToggle.Setup(Settings.EnableColorblind);
             scoreDisplayDropdown.Setup(Settings.ScoreDisplayMode, typeof(ScoreDisplayMode), "Gameplay.Selection.Settings.ScoreDisplay");
             lateEarlyPositionDropdown.Setup(Settings.LateEarlyTextPosition, typeof(EarlyLateTextPosition), "Gameplay.Selection.Settings.EarlyLateTextPosition");

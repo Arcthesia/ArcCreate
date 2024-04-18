@@ -225,6 +225,8 @@ Compose:
       NotFound: Macro "{0}" does not exist.
     Mirror:
       CannotMirror: No notes can be mirrored
+    Creation:
+      Overlap: "Invalid note position: the selected position overlaps with another note."
   # Dialog boxes
   Dialog:
     RemoveGroup:
@@ -837,6 +839,7 @@ Compose:
           Name: Input
           ReloadKeybinds: Reload keybinds
           AllowCreatingNotesBackward: Allow creating notes backward
+          BlockCreatingOverlappedNotes: Block creating overlapped notes
           EnableEditingArctapWidth: Allow editing sky note's width
           ShowKeybindHint: Show keybind hints
         Files:
