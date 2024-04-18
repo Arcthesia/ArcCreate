@@ -10,6 +10,9 @@
 - Id: ko
   CodeName: Korean
   LocalName: 한국어
+- Id: pl
+  CodeName: Polish
+  LocalName: Polski
 - Id: vi
   CodeName: Vietnamese
   LocalName: Tiếng Việt
