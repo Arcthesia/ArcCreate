@@ -53,7 +53,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public abstract List<object> SerializeProperties(ScenecontrolSerialization serialization);
 
         [MoonSharpHidden]
-        public abstract void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization);
+        public abstract void DeserializeProperties(List<object> properties, EnabledFeatures features, ScenecontrolDeserialization deserialization);
 
         protected abstract void SetupDefault();
 

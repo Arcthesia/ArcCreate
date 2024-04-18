@@ -6,10 +6,23 @@ namespace ArcCreate.Gameplay.Scenecontrol
     public class ScenecontrolSerialization
     {
         private readonly List<ISerializableUnit> units = new List<ISerializableUnit>();
-        private readonly List<SerializedUnit> serializedUnits = new List<SerializedUnit>();
+        private readonly List<SerializedUnit> serializedUnits;
         private readonly Dictionary<ISerializableUnit, int> idLookup = new Dictionary<ISerializableUnit, int>();
 
         public List<SerializedUnit> Result => serializedUnits;
+
+        public ScenecontrolSerialization()
+        {
+            var versioning = new ScenecontrolVersioning(EnabledFeatures.All);
+            units.Add(versioning);
+            idLookup.Add(versioning, 0);
+            serializedUnits = new List<SerializedUnit> {
+                new SerializedUnit
+                {
+                    Type = GetTypeFromUnit(versioning),
+                    Properties = versioning.SerializeProperties(this),
+                }};
+        }
 
         public int? AddUnitAndGetId(ISerializableUnit unit)
         {
@@ -41,6 +54,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             switch (unit)
             {
+                case ScenecontrolVersioning versioning:
+                    return "versioning";
                 case Context context:
                     return "context";
 

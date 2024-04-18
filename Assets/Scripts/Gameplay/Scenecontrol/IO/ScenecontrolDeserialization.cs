@@ -10,6 +10,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         private readonly PostProcessing postProcessing;
         private readonly List<SerializedUnit> serializedUnits;
         private readonly ISerializableUnit[] deserialized;
+        private EnabledFeatures features = EnabledFeatures.None;
 
         public ScenecontrolDeserialization(Scene scene, PostProcessing postProcessing, List<SerializedUnit> serializedUnits)
         {
@@ -34,7 +35,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
             SerializedUnit serializedChannel = serializedUnits[id];
             ISerializableUnit result = GetUnitFromType(serializedChannel.Type);
-            result.DeserializeProperties(serializedChannel.Properties, this);
+            result.DeserializeProperties(serializedChannel.Properties, features, this);
+            if (result is ScenecontrolVersioning versioning)
+            {
+                this.features = versioning.Features;
+            }
             return result;
         }
 
@@ -54,6 +59,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             switch (type)
             {
+                case "versioning":
+                    return new ScenecontrolVersioning(EnabledFeatures.None);
                 case "context":
                     return Services.Scenecontrol.Context;
 

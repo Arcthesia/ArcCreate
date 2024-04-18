@@ -76,6 +76,7 @@ namespace ArcCreate
         public static readonly IntSetting BackupCount = new IntSetting("Editor.Backup.Count", 10, 1);
         public static readonly BoolSetting SyncToDSPTime = new BoolSetting("Editor.SyncToDSPTime", false);
         public static readonly BoolSetting AllowCreatingNotesBackward = new BoolSetting("Editor.AllowCreatingNotesBackward", true);
+        public static readonly BoolSetting BlockOverlapNoteCreation = new BoolSetting("Editor.BlockOverlapNote", true);
         public static readonly BoolSetting EnableEasterEggs = new BoolSetting("Fun.EasterEggs", Application.isEditor);
         public static readonly BoolSetting EnableKeybindHintDisplay = new BoolSetting("Editor.Navigation.KeybindHint", true);
         public static readonly BoolSetting EnableArctapWidthEditing = new BoolSetting("Editor.Secret.ArctapWidth", false);

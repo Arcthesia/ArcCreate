@@ -20,6 +20,9 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [MoonSharpHidden]
         public abstract void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization);
 
+        void ISerializableUnit.DeserializeProperties(List<object> properties, EnabledFeatures features, ScenecontrolDeserialization deserialization)
+            => DeserializeProperties(properties, deserialization);
+
         [MoonSharpHidden]
         public abstract void Poll(int timing);
 

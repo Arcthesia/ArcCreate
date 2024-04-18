@@ -78,7 +78,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         }
 
         [MoonSharpHidden]
-        public void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization)
+        public void DeserializeProperties(List<object> properties, EnabledFeatures features, ScenecontrolDeserialization deserialization)
         {
             int offset = 0;
             laneFrom = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);

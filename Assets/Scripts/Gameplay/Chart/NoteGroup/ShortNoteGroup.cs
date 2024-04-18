@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Extension;
-using UnityEngine;
 
 namespace ArcCreate.Gameplay.Chart
 {
@@ -107,25 +106,7 @@ namespace ArcCreate.Gameplay.Chart
         }
 
         public override IEnumerable<Note> FindEventsWithinRange(int from, int to, bool overlapCompletely = true)
-        {
-            if (Notes.Count == 0)
-            {
-                yield break;
-            }
-
-            // Avoid modifying the cache of search tree.
-            int fromI = timingSearch.List.BisectLeft(from, n => n.Timing);
-
-            for (int i = fromI; i < timingSearch.List.Count; i++)
-            {
-                if (timingSearch.List[i].Timing > to)
-                {
-                    yield break;
-                }
-
-                yield return timingSearch.List[i];
-            }
-        }
+            => FindByTiming(from, to);
 
         public override IEnumerable<Note> GetRenderingNotes() => lastRenderingNotes;
     }

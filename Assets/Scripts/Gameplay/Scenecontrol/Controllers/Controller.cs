@@ -596,7 +596,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return result;
         }
 
-        public void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization)
+        public void DeserializeProperties(List<object> properties, EnabledFeatures features, ScenecontrolDeserialization deserialization)
         {
             customParent = deserialization.GetUnitFromId<Controller>(properties[0]);
             Active = deserialization.GetUnitFromId<ValueChannel>(properties[1]);
@@ -666,11 +666,15 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 tg.ScaleIndividualX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
                 tg.ScaleIndividualY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
                 tg.ScaleIndividualZ = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
-                tg.JudgeSizeX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
-                tg.JudgeSizeY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
-                tg.JudgeOffsetX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
-                tg.JudgeOffsetY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
-                tg.JudgeOffsetZ = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                if (features.HasFlag(EnabledFeatures.JudgeManipulation))
+                {
+                    tg.JudgeSizeX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                    tg.JudgeSizeY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                    tg.JudgeOffsetX = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                    tg.JudgeOffsetY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                    tg.JudgeOffsetZ = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                }
+
                 tg.EnableNoteGroupModule = enable;
             }
 

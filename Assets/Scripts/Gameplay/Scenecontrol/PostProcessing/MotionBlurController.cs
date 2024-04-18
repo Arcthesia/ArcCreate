@@ -46,7 +46,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             };
         }
 
-        public override void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization)
+        public override void DeserializeProperties(List<object> properties, EnabledFeatures features, ScenecontrolDeserialization deserialization)
         {
             int offset = 0;
             TargetEffect.enabled.Override((bool)properties[offset++] && !Settings.DisableAdvancedGraphics.Value);
