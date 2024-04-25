@@ -167,11 +167,11 @@ Compose:
       EditValue: Edit selected note's value
       EditArc: Edit arc's values
       CreateNote:
-        Tap: Create tap note
-        Hold: Create hold note
-        Arc: Create arc note
-        ArcTap: Create sky note
-        Trace: Create trace note
+        Tap: Stwórz nutę tap
+        Hold: Stwórz nutę hold
+        Arc: Stwórz nutę arc
+        ArcTap: Stwórz nutę sky
+        Trace: Stwórz nutę trace
       DeleteNotes: Usuń nuty
       Cut: Wytnij nuty
       Paste: Wklej nuty 
@@ -200,11 +200,11 @@ Compose:
       SaveProject: |-
         Zapisano projekt
         at: {Path}
-      OpenChart: Opened chart file {Path}
-      CreateChart: Created chart file {Path}
-      RemoveChart: Removed chart file {Path} from project
+      OpenChart: Otworzono plik chartu {Path}
+      CreateChart: Stworzono plik chartu {Path}
+      RemoveChart: Usunięto plik chartu {Path} z projektu
     Inspector:
-      InvalidParamameter: Invalid parameter
+      InvalidParamameter: Nieprawidłowy parametr
     Measurer:
       CopyTiming: Copied cursor timing
       CopyPosition: Copied arc's position
@@ -215,7 +215,7 @@ Compose:
         Cancelled: Render został anulowany
         Complete: Render został ukończony
       Package:
-        Complete: Exported package to {0}
+        Complete: Pakiet wyeksportowany do {0}
     Macros:
       Cancelled: Makro został anulowany
       Select:
@@ -278,11 +278,11 @@ Compose:
       LayoutName: Nazwa układu
       DuplicateError: Inny układ o tej samej nazwie już istnieje.
   Navigation:
-    KeybindOverride: Overriding keybind for action {0}
+    KeybindOverride: Nadpisanie skrótu dla akcji {0}
     # Texts that appear on the context menu (right-click menu)
     Actions:
       Camera:
-        Name: Camera
+        Name: Kamera
         FreeCamera:
           Name: Start free camera
           Confirm: Confirm
@@ -302,10 +302,10 @@ Compose:
           RollLeft: Roll left
           RollRight: Roll right
       Grid:
-        Name: Grid
-        Toggle: Toggle grid
+        Name: Siatka
+        Toggle: Przełącz siatkę
         ToggleSlot:
-          Name: Grid
+          Name: Siatka
           Slot1: Slot 1
           Slot2: Slot 2
           Slot3: Slot 3
@@ -334,34 +334,34 @@ Compose:
           Cancel: Cancel
       Display:
         Name: Display
-        FullScreen: Toggle full screen
+        FullScreen: Przełącz pełny ekran
       Selection:
-        Name: Selection
+        Name: Wybór
         Clear: Clear selection
-        Single: Select note
+        Single: Wybierz nutę
         Add: Drag select
         Remove: Drag deselect
         Toggle: Toggle select
         RangeSelect:
           Name: Select notes between range
-          Confirm: Confirm
-          Cancel: Cancel
+          Confirm: Potwierdź
+          Cancel: Anuluj
       Measure:
         Name: Measure
         Start:
           Name: Open measurer
-          Confirm: Confirm
-          Cancel: Cancel
+          Confirm: Potwierdź
+          Cancel: Anuluj
           CopyTiming: Copy timing
           CopyPosition: Copy position
           CopyX: Copy x coordinate
           CopyY: Copy y coordinate
       Clipboard:
-        Name: Clipboard
-        Copy: Copy
-        Cut: Cut
+        Name: Schowek
+        Copy: Kopiuj
+        Cut: Wytnij
         Paste:
-          Name: Paste
+          Name: Wklej
           Confirm: Confirm pasting
           Cancel: Cancel pasting
           Mirror: Mirror
@@ -395,8 +395,8 @@ Compose:
         Hold: Hold
         Idle: Idle
       Delete:
-        Name: Delete
-        Execute: Delete
+        Name: Usuń
+        Execute: Usuń
       Mirror:
         Name: Mirror
         Horizontal: Mirror horizontally
@@ -628,7 +628,7 @@ Compose:
         New: Nowy
         Open: Otwórz
         Save: Zapisz
-        InputMode: Tryb Grania
+        InputMode: Tryb Wejścia
         InputModeOptions:
           auto: Auto
           autocontroller: Auto (Kontroler)
@@ -816,7 +816,7 @@ Compose:
           ShowGood: Good
           ShowMiss: Miss
         Grid:
-          Name: Grid
+          Name: Siatka
           Slot: Slot
           UseDefault: Use default
           FromLane: From lane
