@@ -14,11 +14,11 @@ Format:
       {Error}
     SingleErrorFormat: |-
       Na: linha {LineNumber}
-      Ao examinar o eventoo de tipo: {eventoType}
+      Ao examinar o evento de tipo: {EventType}
       Com o seguinte: "{Content}".
       {Reason}
     SingleErrorShortFormat: |-
-      Ao examinar o eventoo de tipo: {eventoType}
+      Ao examinar o evento de tipo: {EventType}
       {Reason}
     UnknownException: |-
       Exceção desconhecida.
@@ -34,7 +34,7 @@ Format:
     TimingPointDensityFactorInvalid: |-
       Definição do fator de densidade dos pontos de timing inválida.
     BaseTimingInvalid: |-
-      Definição de timing base inválida. Tenha certeza que seu arquivo de chart comece com um eventoo de timing em 0ms.
+      Definição de timing base inválida. Tenha certeza que seu arquivo de chart comece com um evento de timing em 0ms.
     IncludeReferencedMultipleTimes: |-
       Um arquivo de chart já foi incluso mas está sendo referenciado novamente.
     IncludeAReferencedFragment: |-
@@ -42,11 +42,11 @@ Format:
     TimingGroupPairInvalid: |-
       Símbolo de pareamento de grupos de timing inválido. Certifique-se de fechar as definições de timing group corretamente com "};".
     DivisorNegative: |-
-      A propriedade divisora do eventoo de timing não pode ser negativa.
+      A propriedade divisora do evento de timing não pode ser negativa.
     DurationNegative: |-
-      A duração desse tipo de eventoo não pode ser negativa.
+      A duração desse tipo de evento não pode ser negativa.
     DurationZero: |-
-      A duração desse tipo de eventoo não pode ser zero.
+      A duração desse tipo de evento não pode ser zero.
     ArcTapOutOfRange: |-
       A ArcTap está fora do alcance do timing de seu Arc pai.
     TimingGroupPropertiesInvalid: |-
@@ -66,63 +66,63 @@ Compose:
   # Exception messages within the editor
   Exception:
     FileDoesNotExist: |-
-      Trying to read file located at {Path} but it does not exist. The file might have been deleted.
+      Tentando ler o arquivo localizado em {Path} mas ele não existe. O arquivo pode ter sido deletado.
     LoadImage: |-
-      Um erro ocorreu ao tentar carregar the image located at {Path}.
+      Um erro ocorreu ao tentar carregar a imagem localizada em {Path}.
       {Error}
     LoadProject: |-
-      Um erro ocorreu ao tentar carregar the project file located at {Path}.
-      The file could have been saved incorrectly.
-      You can try modifying it manually, or you can delete the file and create a new project.
+      Um erro ocorreu ao tentar carregar o arquivo do projeto localizado em {Path}.
+      O arquivo pode ter sido salvo incorretamente.
+      Você pode tentar modificá-lo manualmente, ou você pode excluir o arquivo e criar um novo projeto.
       {Error}
     ChartFileAlreadyExists: |-
-      Chart is already included in the project
+      A chart já está inclusa no projeto
     InvalidChartFile: |-
-      The provided chart file name is invalid
+      O nome do arquivo de chart provido é inválido.
     NoChartIncluded: |-
-      Invalid project file: No chart is included within this project.
+      Arquivo de projeto inválido: Não há uma chart inclusa neste projeto.
     InvalidGroupProperties: |-
-      Invalid timing group properties. {Message}
+      Propriedades de grupo de timing inválidas. {Message}
     InstructionLimit: |-
-      Lua script execution has been aborted: The instruction count limit of {0} was reached.
+      Execução do script lua abortado: The contagem limite da instrução de {0} was reached.
     InvalidBaseBPM: |-
-      Invalid base bpm value: {0}
+      BPM base inválido: {0}
     CreateSkyNoteNoValidArc: |-
-      Can not create sky nota here. Sky notes must be placed on traces.
+      Não é possível criar sky notes aqui. Sky notes devem ser posicionadas em traços.
     Navigation:
       ParseKeybind: |-
-        An exception occured while parsing the keybind: "{0}".
+        Uma exceção ocorreu ao tentar examinar a vinculação de tecla: "{0}".
       ParseWhitespace: |-
-        Invalid keybind: a keystroke can not be a whitespace.
+        Vinculação de tecla inválida: uma teclada não pode ser um espaço em branco.
       InvalidKeystroke: |-
-        Invalid keystroke: The keystroke "{0}" does not follow the correct format.
+        Teclada inválida: A teclada "{0}" não segue o formato correto.
       InvalidKey: |-
-        Invalid key: The string "{0}" does not match any key.
+        Tecla inválida: A string "{0}" não corresponde com nenhuma tecla.
       InvalidModifier: |-
-        Invalid modifier: The string "{0}" does not match any modifier key.
+        Modificador inválido: A string "{0}" não corresponde com nenhuma tecla modificadora.
       InvalidActionPath: |-
-        Invalid action path: The string "{0}" does not match any action.
+        Caminho de ação inválido: A string "{0}" não corresponde com nenhuma ação.
     Scenecontrol: |-
-      Error occured while executing scenecontrol evento of type {Type}: {Message}
+      Um erro ocorreu ao tentar executar um evento scenecontrol de tipo {Type}: {Message}
       {StackTrace}
     LuaScript: |-
-      Error occured while executing lua script {Path}: {Message}
+      Um erro ocorreu ao executar o script lua {Path}: {Message}
       {StackTrace}
     Render:
       FFmpeg:
         NotFound: |-
-          Could not find any FFmpeg executable.
-          Please confirm that the configured path {0} is correct.
+          Não foi possível encontrar um FFmpeg executável.
+          Por favor confirme que o caminho configurado {0} é correto.
         Start: |-
-          Error occured while starting FFmpeg at {Path}: {Message}
+          Um erro ocorreu ao tentar iniciar o FFmpeg em {Path}: {Message}
           {StackTrace}
         Write: |-
-          Error occured while writing to FFmpeg process: {Message}
+          Um erro ocorreu ao escrever para o processo FFmpeg: {Message}
           {StackTrace}
       Audio:
         IncompatibleSfx: |-
-          The audio clip {Sfx} is incompatible for rendering.
-          Expected channel count of {ExpectedChannels} and frequency of {ExpectedFrequency}, but the clip's channel count is {Channels} and its frequency is {Frequency}.
+          O clipe de áudio {Sfx} é imcompatível para renderização.
+          É esperado uma contagem de canais de {ExpectedChannels} e frequência de {ExpectedFrequency}, mas a contagem de canais do clipe é {Channels} e sua frequência é {Frequency}.
           
   # Notification messages
   Notify:
@@ -155,15 +155,15 @@ Compose:
       Redo: |-
         Refazer comando: {Name}
       # {Name} above will be replaced with these entries
-      AddTiming: Adicionar evento de timing
-      EditTiming: Editar evento de timing
-      RemoveTiming: Remover evento de timing
-      AddCamera: Adicionar evento de câmera
-      EditCamera: Editar evento de câmera
-      RemoveCamera: Remover evento de câmera
-      AddScenecontrol: Adicionar evento de scenecontrol
-      EditScenecontrol: Editar evento de scenecontrol
-      RemoveScenecontrol: Remover evento de scenecontrol
+      AddTiming: Adicionar Event de timing
+      EditTiming: Editar Event de timing
+      RemoveTiming: Remover Event de timing
+      AddCamera: Adicionar Event de câmera
+      EditCamera: Editar Event de câmera
+      RemoveCamera: Remover Event de câmera
+      AddScenecontrol: Adicionar Event de scenecontrol
+      EditScenecontrol: Editar Event de scenecontrol
+      RemoveScenecontrol: Remover Event de scenecontrol
       EditValue: Editar valor da nota selecionada
       EditArc: Editar valores da arc
       CreateNote:
@@ -310,7 +310,7 @@ Compose:
         DecreaseDensity: Diminuir densidade
       Macro:
         Name: Macro
-        Selecteventos:
+        SelectEvents:
           Confirm: Confirmar
           Cancel: Cancelar
         SelectLane:
@@ -605,7 +605,7 @@ Compose:
       Gameplay: Gameplay
       Timeline: Timeline
       Project: Projeto
-      eventos: eventoos
+      Events: Eventos
       Remote: Remoto
       Export: Exportar
       Settings: Configurações
@@ -713,16 +713,16 @@ Compose:
       Timestamp:
         Name: Marcação de tempo
         DefaultMessage: Marcação de tempo {0}
-    # eventos editor panel
-    eventosEditor:
+    # Events editor panel
+    EventsEditor:
       Label:
         Group: Grupo
-        eventos: eventoos
+        Events: Eventos
       Actions:
         AddGroup: Adicionar grupo
         DeleteGroup: Deletar grupo
-        Addevento: Adicionar eventoo
-        Deleteevento: Deletar eventoo
+        AddEvent: Adicionar evento
+        DeleteEvent: Deletar evento
         AutoReload: Recarregar automáticamente
         GenerateEmmyLua: Gerar EmmyLua
         Reload: Recarregar
