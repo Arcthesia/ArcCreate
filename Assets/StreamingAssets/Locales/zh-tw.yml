@@ -759,9 +759,15 @@ Compose:
           From: 開始
           To: 結束
           Quality: 品質
+          CRF:
+            Name: CRF
+            Loseless: "{0} (最低失真品質)"
+            VeryLow: "{0} (極低失真品質)"
+            Low: "{0} (高品質)"
+            Medium: "{0} (普通品質)"
+            Default: "{0} (預設品質)"
+            High: "{0} {低品質}"
           FPS: FPS
-          Width: 寬度
-          Height: 高度
           Size: 大小
           ShowShutter: 顯示載入介面
         Start: 開始錄製
