@@ -223,6 +223,8 @@ Compose:
         Position: Selecione a posição
         Lane: Selecione a linha
       NotFound: O macro "{macroId}" não existe.
+    Mirror:
+      CannotMirror: Nenhuma nota pode ser espelhada      
   # Dialog boxes
   Dialog:
     RemoveGroup:
@@ -260,6 +262,12 @@ Compose:
     GroupPicker:
       SelectEditingGroup: "Mudar grupo atual para:"
       AssignNotesToGroup: "Designar as notas selecionadas para:"
+      CameraViews:
+        Default: Visão padrão
+        Stationary: Visão fixa
+        ZoomedOut: Visão de longe
+        BirdsEye1: Visão panorâmica 1
+        BirdsEye2: Visão panorâmica 2      
     PanelLayout:
       Name: Layout
       Default: Padrão
@@ -367,6 +375,7 @@ Compose:
           Name: Adicionar nota
           Confirm: Confirmar
           Cancel: Cancelar
+          ToggleFreeSky: Mudar para sky note livre          
       NotePallete:
         Name: Paleta da nota
         Arc: 
@@ -397,10 +406,12 @@ Compose:
           Name: Arrastar timing
           Confirm: Confirmar
           Cancel: Cancelar
+          CycleSkyNoteMode: Modo de sky note ciclado          
         Position:
           Name: Arrastar posição
           Confirm: Confirmar
           Cancel: Cancelar
+          CycleSkyNoteMode: Modo de sky note ciclado          
       Render:
         Name: Renderização
         Start:
@@ -727,12 +738,6 @@ Compose:
         GenerateEmmyLua: Gerar EmmyLua
         Reload: Recarregar
         FreeCamera: Câmera livre
-      CameraView:
-        Default: Visão padrão
-        Stationary: Visão fixa
-        ZoomedOut: Visão de longe
-        BirdsEye1: Visão panorâmica 1
-        BirdsEye2: Visão panorâmica 2
       Mode:
         Timing: Timing
         Camera: Câmera
@@ -745,20 +750,31 @@ Compose:
           Automaticamente exporta um vídeo de chart view.
           Requer que o FFmpeg esteja instalado.
         ConfigureFFmpeg: Configurar caminho executável do FFmpeg
+        Presets:
+          Name: Predefinições
+          Reset: Resetar
+          FourK: 4K
+          FullHD: Full HD
+          Compact: Compacto        
         Settings:
           Name: Configurações
           From: De
           To: Para
-          Quality: Qualidade
+          CRF:
+            Name: CRF
+            Lossless: "{0} (Qualidade lossless)"
+            VeryLow: "{0} (Qualidade quase lossless)"
+            Low: "{0} (Qualidade alta)"
+            Medium: "{0} (Qualidade média)"
+            Default: "{0} (Qualidade padrão)"
+            High: "{0} (Qualidade baixa)"
           FPS: FPS
-          Width: Largura
-          Height: Altura
           Size: Tamanho
           ShowShutter: Exibir obturador
         Start: Começar renderização
         Cancel: Cancelar renderização
         Status: |-
-          Renderizandoo vídeo. Isso irá demorar um pouco.
+          Renderizando vídeo. Isso irá demorar um pouco.
           Decorrido: {0}
           Restante: {1}
       Package:
@@ -847,7 +863,13 @@ Compose:
         Tap: Tap
         Hold: Hold
         Arctap: Sky
+        Idle: Ausente        
         Easing: Atenuação
+      Settings:
+        ShowGrid: Mostrar grade
+        HideGrid: Esconder grade
+        Measure: Medir
+        RangeSelect: Seleção de alcance        
       Macros:
         Name: Macros
         GenerateEmmy: Gerar EmmyLua
@@ -872,7 +894,7 @@ Compose:
         SelectArc: Selecionar arc pai
         SelectArctap: Selecionar sky notes
     Startup:
-      Discord: Junte-se ao nosso Discord
+      Discord: <size=10>Junte-se ao nosso Discord</size>
       Kofi: Nos apoie no Ko-fi
       Version: "Versão: {0}"
       Recent: Recentemente aberto
@@ -993,7 +1015,7 @@ Gameplay:
       Recursos padrão não podem ser deletados.
     EnablePractice: |-
       Modo prática habilitado para a próxima partida.
-    SelectRating: Select rating
+    SelectRating: Selecionar velocidade
     Action:
       Copy: Copiar
       Delete: Deletar
