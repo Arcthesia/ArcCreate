@@ -195,14 +195,14 @@ Compose:
         Criou novo projeto
         em: {Path}
       OpenProject: |-
-        Abriu projeto
+        Projeto aberto
         em: {Path}
       SaveProject: |-
         Salvou projeto
         em: {Path}
-      OpenChart: Abriu arquivo de chart {Path}
-      CreateChart: Criou arquivo de chart {Path}
-      RemoveChart: Removeu arquivo de chart {Path} do projeto
+      OpenChart: Arquivo de chart aberto {Path}
+      CreateChart: Arquivo de chart criado {Path}
+      RemoveChart: Arquivo de chart removido {Path} do projeto
     Inspector:
       InvalidParamameter: Parâmetro inválido
     Measurer:
