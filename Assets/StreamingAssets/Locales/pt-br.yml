@@ -1,66 +1,66 @@
 Parsing:
   # Exception messages for parsing strings
   Exception:
-    CharacterNotFound: Could not find character "{0}".
-    InvalidConversionToInt: Could not convert "{0}" to integer.
-    InvalidConversionToBool: Could not convert "{0}" to boolean.
-    InvalidConversionToFloat: Could not convert "{0}" to float.
+    CharacterNotFound: Não foi possível encontrar o caractere "{0}".
+    InvalidConversionToInt: Não foi possível converter "{0}" para integer.
+    InvalidConversionToBool: Não foi possível converter "{0}" para boolean.
+    InvalidConversionToFloat: Não foi possível converter "{0}" para float.
 
 Format:
   # Exception messages while parsing chart files
   Exception:
     File: |-
-      An exception occured while reading the chart file {File}:
+      Uma exceção ocorreu ao ler o arquivo de chart {File}:
       {Error}
     SingleErrorFormat: |-
-      At: line {LineNumber}
-      While parsing event of type: {EventType}
-      With the following: "{Content}".
+      Na: linha {LineNumber}
+      Ao examinar o eventoo de tipo: {eventoType}
+      Com o seguinte: "{Content}".
       {Reason}
     SingleErrorShortFormat: |-
-      While parsing event of type: {EventType}
+      Ao examinar o eventoo de tipo: {eventoType}
       {Reason}
     UnknownException: |-
-      Unknown exception.
-      Exception: {Exception}
+      Exceção desconhecida.
+      Exceção: {Exception}
       Stack trace:
       {StackTrace}
     InvalidHeader: |-
-      Invalid header line.
+      Linha de cabeçário inválida.
     ArcColorNegative: |-
-      Arc color id can not be negative.
+      A ID da cor do arc não pode ser negativa.
     AudioOffsetInvalid: |-
-      Invalid audio offset definition.
+      Definição de atraso de áudio inválida.
     TimingPointDensityFactorInvalid: |-
-      Invalid timing point density factor definition.
+      Definição do fator de densidade dos pontos de timing inválida.
     BaseTimingInvalid: |-
-      Invalid base timing definition. Ensure your chart file starts with a timing event at 0ms.
+      Definição de timing base inválida. Tenha certeza que seu arquivo de chart comece com um eventoo de timing em 0ms.
     IncludeReferencedMultipleTimes: |-
-      A chart file was already included but is being referenced again.
+      Um arquivo de chart já foi incluso mas está sendo referenciado novamente.
     IncludeAReferencedFragment: |-
-      A chart file was already referenced as a fragment but is being included again.
+      Um arquivo de chart já foi referenciado como um fragmento mas está sendo incluso novamente.
     TimingGroupPairInvalid: |-
-      Invalid timing group symbol pairing. Make sure to enclose timing group definitions properly with "};".
+      Símbolo de pareamento de grupos de timing inválido. Certifique-se de fechar as definições de timing group corretamente com "};".
     DivisorNegative: |-
-      Divisor property of timing event can not be negative.
+      A propriedade divisora do eventoo de timing não pode ser negativa.
     DurationNegative: |-
-      Duration of this event type can not be negative.
+      A duração desse tipo de eventoo não pode ser negativa.
     DurationZero: |-
-      Duration of this event type can not be zero.
+      A duração desse tipo de eventoo não pode ser zero.
     ArcTapOutOfRange: |-
-      ArcTap is outside the timing range of its parent Arc.
+      A ArcTap está fora do alcance do timing de seu Arc pai.
     TimingGroupPropertiesInvalid: |-
-      Invalid timing group properties definition.
+      Definição de propriedades de grupo de timing inválida.
     ReferencedFileError: |-
-      Can not load the referenced chart file:
+      Não é possível carregar o arquivo de chart referenciado:
       {0}
     FileDoesNotExist: |-
-      Chart file does not exist.
+      O arquivo de chart não existe.
   Warning:
     HoldTooShort:
-      Hold note's duration is shorter than 17ms.
+      A duração da hold nota é menor que 17ms.
     TapJudgementOverlap:
-      Tap judgement overlaps with other notes.
+      O julgamento do toque se sobrepõe com outras notas.
 
 Compose:
   # Exception messages within the editor
@@ -88,7 +88,7 @@ Compose:
     InvalidBaseBPM: |-
       Invalid base bpm value: {0}
     CreateSkyNoteNoValidArc: |-
-      Can not create sky note here. Sky notes must be placed on traces.
+      Can not create sky nota here. Sky notes must be placed on traces.
     Navigation:
       ParseKeybind: |-
         An exception occured while parsing the keybind: "{0}".
@@ -103,7 +103,7 @@ Compose:
       InvalidActionPath: |-
         Invalid action path: The string "{0}" does not match any action.
     Scenecontrol: |-
-      Error occured while executing scenecontrol event of type {Type}: {Message}
+      Error occured while executing scenecontrol evento of type {Type}: {Message}
       {StackTrace}
     LuaScript: |-
       Error occured while executing lua script {Path}: {Message}
@@ -127,175 +127,175 @@ Compose:
   # Notification messages
   Notify:
     FreeCameraEditHelp: |-
-      Starting free camera (hover for more info)
+      Iniciando câmera livre (passe o cursor para mais informações)
       
-      WASD: Move forward/left/backward/right
-      Space: Move upward
-      Shift: Move downward
-      IJKL: Rotate up/left/down/right
-      U: Roll left
-      O: Roll right
-      Esc: Cancel
-      Enter: Confirm
+      WASD: Move para frente/esquerda/trás/direita
+      Space: Move para cima
+      Shift: Move para baixo
+      IJKL: Rotacionar para cima/esquerda/baixo/direita
+      U: Rolar à esquerda
+      O: Rolar à direita
+      Esc: Cancelar
+      Enter: Confirmar
     EmmyLuaGenerated:
       Scenecontrol: |-
-        EmmyLua template for scenecontrol generated at the current project's folder
-        Use VsCode with the extension tangzx.emmylua to get autocompletion
+        Template EmmyLua para scenecontrol gerado na pasta do projeto atual
+        Use o VsCode com a extensão tangzx.emmylua para ter completação automática
       Macros: |-
-        EmmyLua template for macros generated at macros folder
-        Use VsCode with the extension tangzx.emmylua to get autocompletion
+        Template EmmyLua para macros generado na pasta de macros
+        Use o VsCode com a extensão tangzx.emmylua para ter completação automática
     Actions:
-      CannotMirror: Can not mirror any of the selected notes.
-      NoDragRange: Can not drag selected notes timing. Try dragging the notes separately.
+      CannotMirror: Não é possível espelhar nenhuma das notas selecionadas.
+      NoDragRange: Não é possível arrastar o timing das notas selecionadas. Tente arrastar as notas separadamente.
     History:
       Execute: |-
-        Executed command: {Name}
+        Comando executado: {Name}
       Undo: |-
-        Undo command: {Name}
+        Desfazer comando: {Name}
       Redo: |-
-        Redo command: {Name}
+        Refazer comando: {Name}
       # {Name} above will be replaced with these entries
-      AddTiming: Add timing event
-      EditTiming: Edit timing event
-      RemoveTiming: Remove timing event
-      AddCamera: Add camera event
-      EditCamera: Edit camera event
-      RemoveCamera: Remove camera event
-      AddScenecontrol: Add scenecontrol event
-      EditScenecontrol: Edit scenecontrol event
-      RemoveScenecontrol: Remove scenecontrol event
-      EditValue: Edit selected note's value
-      EditArc: Edit arc's values
+      AddTiming: Adicionar evento de timing
+      EditTiming: Editar evento de timing
+      RemoveTiming: Remover evento de timing
+      AddCamera: Adicionar evento de câmera
+      EditCamera: Editar evento de câmera
+      RemoveCamera: Remover evento de câmera
+      AddScenecontrol: Adicionar evento de scenecontrol
+      EditScenecontrol: Editar evento de scenecontrol
+      RemoveScenecontrol: Remover evento de scenecontrol
+      EditValue: Editar valor da nota selecionada
+      EditArc: Editar valores da arc
       CreateNote:
-        Tap: Create tap note
-        Hold: Create hold note
-        Arc: Create arc note
-        ArcTap: Create sky note
-        Trace: Create trace note
-      DeleteNotes: Delete notes
-      Cut: Cut notes
-      Paste: Paste notes
+        Tap: Criar nota tap
+        Hold: Criar nota hold
+        Arc: Criar nota arc
+        ArcTap: Criar nota sky
+        Trace: Criar nota trace
+      DeleteNotes: Deletar notas
+      Cut: Cortar notas
+      Paste: Colar notas
       Mirror:
-        Vertical: Mirror notes vertically
-        Horizontal: Mirror notes horizontally
+        Vertical: Espelhar notas verticalmente
+        Horizontal: Espelhar notas horizontalmente
       Drag:
-        Timing: Drag notes timing
-        Position: Drag notes position
+        Timing: Arrastar o timing das notas
+        Position: Arrastar a posição das notas
     Clipboard:
-      Copy: Copied {0} notes
-      Cut: Cut {0} notes
-      NamedCopy: Copied {0} notes to named clipboard "{1}"
-      NamedCut: Cut {0} notes to named clipboard "{1}"
+      Copy: Copiou {0} notas
+      Cut: Cortou {0} notas
+      NamedCopy: Copiou {0} notas para área de transferência de nome "{1}"
+      NamedCut: Cortou {0} notas para área de transferência de nome "{1}"
     GroupTable:
-      AddGroup: Added timing group {Number}
-      EditGroup: Edited timing group {Number}
-      RemoveGroup: Removed timing group {Number}
+      AddGroup: Adicionou grupo de timing {Number}
+      EditGroup: Editou grupo de timing {Number}
+      RemoveGroup: Removeu grupo de timing {Number}
     Project:
       NewProject: |-
-        Created new project
-        at: {Path}
+        Criou novo projeto
+        em: {Path}
       OpenProject: |-
-        Opened project
-        at: {Path}
+        Abriu projeto
+        em: {Path}
       SaveProject: |-
-        Saved project
-        at: {Path}
-      OpenChart: Opened chart file {Path}
-      CreateChart: Created chart file {Path}
-      RemoveChart: Removed chart file {Path} from project
+        Salvou projeto
+        em: {Path}
+      OpenChart: Abriu arquivo de chart {Path}
+      CreateChart: Criou arquivo de chart {Path}
+      RemoveChart: Removeu arquivo de chart {Path} do projeto
     Inspector:
-      InvalidParamameter: Invalid parameter
+      InvalidParamameter: Parâmetro inválido
     Measurer:
-      CopyTiming: Copied cursor timing
-      CopyPosition: Copied arc's position
-      CopyX: Copied arc's x coordinate
-      CopyY: Copied arc's y coordinate
+      CopyTiming: Copiou o timing do cursor
+      CopyPosition: Copiou a posição do arc
+      CopyX: Copiou a coordenada x do arc
+      CopyY: Copiou a coordenada y do arc
     Export:
       Render:
-        Cancelled: Render cancelled
-        Complete: Render complete
+        Cancelled: Renderização cancelada
+        Complete: Renderização completa
       Package:
-        Complete: Exported package to {0}
+        Complete: Exportou pacote para {0}
     Macros:
-      Cancelled: Cancelled macro
+      Cancelled: Cancelou macro
       Select:
-        Timing: Select timing
-        Position: Select position
-        Lane: Select lane
-      NotFound: Macro "{macroId}" does not exist.
+        Timing: Selecione o timing
+        Position: Selecione a posição
+        Lane: Selecione a linha
+      NotFound: O macro "{macroId}" não existe.
   # Dialog boxes
   Dialog:
     RemoveGroup:
-      Title: Remove timing group
+      Title: Remover grupo de timing
       Content: |-
-        Are you sure you want to remove this timing group and all of its content? (no undo)
-      Yes: Remove
-      No: Cancel
+        Tem certeza que você quer remover este grupo de timing e todo seu conteúdo? (impossível desfazer)
+      Yes: Remover
+      No: Cancelar
     RemoveChart:
-      Title: Remove chart file
+      Title: Remover arquivo de chart
       Content: |-
-        Are you sure you want to remove this chart file from the project?
+        Tem certeza que você quer remover este arquivo de chart do projeto?
 
-        The file itself will NOT be deleted and can be added back to the project later, but any metadata associated with it will be lost.
-      Yes: Remove
-      No: Cancel
+        O arquivo em si NÃO será deletado e poderá ser adicionado ao projeto mais tarde, mas quaisquer metadados associados a ele serão perdidos.
+      Yes: Remover
+      No: Cancelar
     UnsavedChanges:
-      Title: Unsaved changes
+      Title: Mudanças não salvas
       Content: |-
-        Your project has unsaved changes. Do you want to save?
-      Yes: Save changes
-      No: Discard changes
-      Cancel: Cancel
+        Seu projeto tem mudanças não salvas. Queres salvar? 
+      Yes: Salvar mudanças
+      No: Descartar mudanças
+      Cancel: Cancelar
     LoadChartError:
-      Title: Error
+      Title: Erro
       Content: |-
-        There was an error loading the chart file {ChartPath}.
-        Either fix this in a separate text editor, or close this dialog and use the "<> {TabName}" panel.
+        Houve um erro ao carregar o arquivo da chart {ChartPath}.
+        Ou conserte isso num editor de texto separado, ou feche este dialogo e use o painel "<> {TabName}".
         
-        Details:
+        Detalhes:
         {Content}
-      Confirm: Confirm
+      Confirm: Confirmar
     Macros:
       Title: Macros
     GroupPicker:
-      SelectEditingGroup: "Change current group to:"
-      AssignNotesToGroup: "Assign selected notes to:"
+      SelectEditingGroup: "Mudar grupo atual para:"
+      AssignNotesToGroup: "Designar as notas selecionadas para:"
     PanelLayout:
       Name: Layout
-      Default: Default
-      Compact: Compact
-      SaveLayout: Save layout
-      LayoutName: Layout name
-      DuplicateError: Another layout with the same name already exists.
+      Default: Padrão
+      Compact: Compacto
+      SaveLayout: Salvar layout
+      LayoutName: Nome do layout
+      DuplicateError: Outro layout com o mesmo nome já existe.
   Navigation:
-    KeybindOverride: Overriding keybind for action {0}
+    KeybindOverride: Sobrepondo tecla selecionada para ação {0}
     # Texts that appear on the context menu (right-click menu)
     Actions:
       Camera:
-        Name: Camera
+        Name: Câmera
         FreeCamera:
-          Name: Start free camera
-          Confirm: Confirm
-          Cancel: Cancel
-          Faster: Move faster
-          Slower: Move slower
-          MoveForward: Foward
-          MoveLeft: Left
-          MoveRight: Right
-          MoveBackward: Back
-          MoveUp: Up
-          MoveDown: Down
-          LookUp: Look up
-          LookDown: Look down
-          LookLeft: Look left
-          LookRight: Look right
-          RollLeft: Roll left
-          RollRight: Roll right
+          Name: Iniciar câmera livre
+          Confirm: Confirmar
+          Cancel: Cancelar
+          Faster: Mover mais rápido
+          Slower: Mover mais devagar
+          MoveForward: Frente
+          MoveLeft: Esquerda
+          MoveRight: Direita
+          MoveBackward: Atrás
+          MoveUp: Cima
+          MoveDown: Baixo
+          LookUp: Olhar acima
+          LookDown: Olhar abaixo
+          LookLeft: Olhar à esquerda
+          LookRight: Olhar à direita
+          RollLeft: Rolar à esquerda
+          RollRight: Roll à direita
       Grid:
-        Name: Grid
-        Toggle: Toggle grid
+        Name: Grade
+        Toggle: Habilitar grade
         ToggleSlot:
-          Name: Grid
+          Name: Grade
           Slot1: Slot 1
           Slot2: Slot 2
           Slot3: Slot 3
@@ -306,128 +306,128 @@ Compose:
           Slot8: Slot 8
           Slot9: Slot 9
           Slot0: Slot 0
-        IncreaseDensity: Increase density
-        DecreaseDensity: Decrease density
+        IncreaseDensity: Aumentar densidade
+        DecreaseDensity: Diminuir densidade
       Macro:
         Name: Macro
-        SelectEvents:
-          Confirm: Confirm
-          Cancel: Cancel
+        Selecteventos:
+          Confirm: Confirmar
+          Cancel: Cancelar
         SelectLane:
-          Confirm: Confirm
-          Cancel: Cancel
+          Confirm: Confirmar
+          Cancel: Cancelar
         SelectPosition:
-          Confirm: Confirm
-          Cancel: Cancel
+          Confirm: Confirmar
+          Cancel: Cancelar
         SelectTiming:
-          Confirm: Confirm
-          Cancel: Cancel
+          Confirm: Confirmar
+          Cancel: Cancelar
       Display:
         Name: Display
-        FullScreen: Toggle full screen
+        FullScreen: Habilitar tela cheia
       Selection:
-        Name: Selection
-        Clear: Clear selection
-        Single: Select note
-        Add: Drag select
-        Remove: Drag deselect
-        Toggle: Toggle select
+        Name: Seleção
+        Clear: Limpar seleção
+        Single: Selecionar nota
+        Add: Arrastar seleção
+        Remove: Arrastar para desselecionar
+        Toggle: Habilitar seleção
         RangeSelect:
-          Name: Select notes between range
-          Confirm: Confirm
-          Cancel: Cancel
+          Name: Selecionar notas entre o alcance
+          Confirm: Confirmar
+          Cancel: Cancelar
       Measure:
-        Name: Measure
+        Name: Medir
         Start:
-          Name: Open measurer
-          Confirm: Confirm
-          Cancel: Cancel
-          CopyTiming: Copy timing
-          CopyPosition: Copy position
-          CopyX: Copy x coordinate
-          CopyY: Copy y coordinate
+          Name: Abrir medidor
+          Confirm: Confirmar
+          Cancel: Cancelar
+          CopyTiming: Copiar timing
+          CopyPosition: Copiar posição
+          CopyX: Copiar coordenada x
+          CopyY: Copiar coordenada y
       Clipboard:
-        Name: Clipboard
-        Copy: Copy
-        Cut: Cut
+        Name: Área de transferência
+        Copy: Copiar
+        Cut: Cortar
         Paste:
-          Name: Paste
-          Confirm: Confirm pasting
-          Cancel: Cancel pasting
-          Mirror: Mirror
+          Name: Colar
+          Confirm: Confirmar colar
+          Cancel: Cancelar colar
+          Mirror: Espelhar
         NamedPaste:
-          Name: Paste
-          Confirm: Confirm pasting
-          Cancel: Cancel pasting
-          Mirror: Mirror
-        Clear: Clear clipboard
+          Name: Colar
+          Confirm: Confirmar colar
+          Cancel: Cancelar colar
+          Mirror: Espelhar
+        Clear: Limpar área de transferência
       NoteCreation:
-        Name: Note creation
+        Name: Criação de nota
         Start:
-          Name: Add note
-          Confirm: Confirm
-          Cancel: Cancel
+          Name: Adicionar nota
+          Confirm: Confirmar
+          Cancel: Cancelar
       NotePallete:
-        Name: Note palette
+        Name: Paleta da nota
         Arc: 
           Name: Arc
-          Blue: Blue arc
-          Red: Red arc
-          Green: Green arc
+          Blue: Arc azul
+          Red: Arc vermelho
+          Green: Arc verde
         ArcAlt: 
           Name: Arc (alt)
-          Blue: Blue arc
-          Red: Red arc
-          Green: Green arc
+          Blue: Arc azul
+          Red: Arc vermelho
+          Green: Arc verde
         Sky: Sky
         Tap: Tap
         Hold: Hold
         Idle: Idle
       Delete:
-        Name: Delete
-        Execute: Delete
+        Name: Deletar
+        Execute: Deletar
       Mirror:
-        Name: Mirror
-        Horizontal: Mirror horizontally
-        HorizontalNoColorSwitch: Mirror horizontally (ignore color)
-        Vertical: Mirror vertically
+        Name: Espelhar
+        Horizontal: Espelhar horizontalmente
+        HorizontalNoColorSwitch: Espelhar horizontalmente (ignorar cor)
+        Vertical: Espelhar verticalmente
       Dragging:
-        Name: Dragging
+        Name: Arrastamento
         Timing:
-          Name: Drag timing
-          Confirm: Confirm
-          Cancel: Cancel
+          Name: Arrastar timing
+          Confirm: Confirmar
+          Cancel: Cancelar
         Position:
-          Name: Drag position
-          Confirm: Confirm
-          Cancel: Cancel
+          Name: Arrastar posição
+          Confirm: Confirmar
+          Cancel: Cancelar
       Render:
-        Name: Rendering
+        Name: Renderização
         Start:
-          Cancel: Cancel rendering
+          Cancel: Cancelar renderização
       Playback:
-        Name: Timeline
-        TogglePlay: Play/Pause
+        Name: Linha do tempo
+        TogglePlay: Reproduzir/Pausar
         PlayReturn:
-          Name: Play
-          Return: Pause and return
-          Pause: Pause
-        IncreaseSpeed: Speed up
-        DecreaseSpeed: Slow down
+          Name: Reproduzir
+          Return: Pausar e retornar
+          Pause: Pausar
+        IncreaseSpeed: Acelerar
+        DecreaseSpeed: Desacelerar
 
   Grid:
     # Please modify the comment lines only (lines beginning with '--')
     DefaultScript: |-
-      -- THIS IS A LUA SCRIPT. See full documentation at: https://github.com/Arcthesia/ArcCreate/wiki/Grid-settings
-      -- CONFIGURATION
-      -- Choose one of the following template: 4k, 6k, oob4k, oob6k
+      -- ESTE É UM SCRIPT LUA. Veja a documentação completa em: https://github.com/Arcthesia/ArcCreate/wiki/Grid-settings
+      -- CONFIGURAÇÃO
+      -- Escolha um dos templates a seguir: 4k, 6k, oob4k, oob6k
       local useTemplate = "4k"
       local spacing = {
           x = 0.125,
           y = 0.25,
       }
 
-      -- Change grid color here
+      -- Mude a cor da grade aqui
       local color = {
           ftr = {
               area = rgba(0, 200, 0, 48),
@@ -445,7 +445,7 @@ Compose:
           panel = rgba(255, 255, 255, 16),
       }
 
-      -- INTERNAL
+      -- INTERNO
       local templates = {}
       templates["4k"] = {
           left = -0.5,
@@ -605,7 +605,7 @@ Compose:
       Gameplay: Gameplay
       Timeline: Timeline
       Project: Projeto
-      Events: Eventos
+      eventos: eventoos
       Remote: Remoto
       Export: Exportar
       Settings: Configurações
@@ -638,7 +638,7 @@ Compose:
         Title: Título
         Composer: Compositor
         Illustrator: Ilustrador
-        Charter: Charter
+        Charter: Charteador
         Alias: Apelido
         BPM: BPM
         BaseBPM: BPM Base
@@ -706,23 +706,23 @@ Compose:
         Beyond: Beyond
     Timeline:
       Label:
-        Offset: Offset
+        Offset: Atraso
         TimingGroup: Grupo
         Density: Densidade
         PlaybackSpeed: Velocidade
       Timestamp:
         Name: Marcação de tempo
         DefaultMessage: Marcação de tempo {0}
-    # Events editor panel
-    EventsEditor:
+    # eventos editor panel
+    eventosEditor:
       Label:
         Group: Grupo
-        Events: Eventos
+        eventos: eventoos
       Actions:
         AddGroup: Adicionar grupo
         DeleteGroup: Deletar grupo
-        AddEvent: Adicionar evento
-        DeleteEvent: Deletar evento
+        Addevento: Adicionar eventoo
+        Deleteevento: Deletar eventoo
         AutoReload: Recarregar automáticamente
         GenerateEmmyLua: Gerar EmmyLua
         Reload: Recarregar
@@ -810,7 +810,7 @@ Compose:
           Name: Áudio
           Music: Música
           Effect: Efeito
-          GlobalOffset: Offset global
+          GlobalOffset: Atraso global
           SyncToDSPTime: Sincronizar com o timing DSP
         Display:
           Name: Display
@@ -821,7 +821,7 @@ Compose:
           Name: Entrada
           ReloadKeybinds: Recarregar vinculações de teclas
           AllowCreatingNotesBackward: Permitir criar notas para trás
-          EnableEditingArctapWidth: Permitir editar a largura da sky note
+          EnableEditingArctapWidth: Permitir editar a largura da sky nota
           ShowKeybindHint: Exibir dicas de vinculações de teclas
         Files:
           Name: Arquivos
@@ -909,7 +909,7 @@ Remote:
   Actions:
     Broadcast: Iniciar transmissão
     AbortBroadcast: Parar transmissão
-    BroadcastAgain: Transmitir de novo
+    Broadcastnovamente: Transmitir de novo
     StopSession: Parar sessão
     StartNewSession: Começar nova sessão
     ManualIP: Configurar conexão manualmente
@@ -926,7 +926,7 @@ Remote:
       Metadata: Metadados
     Settings:
       Name: Configurações
-      Offset: Offset do dispositivo
+      Offset: Atraso do dispositivo
       Speed: Velocidade do dispositivo
       MusicVolume: Volume da música
       EffectVolume: Volume dos efeitos
@@ -1011,10 +1011,10 @@ Gameplay:
         Title: Sem nome
         Composer: N/A
         Charter: Desconhecido
-      Charter: 'Charter: {0}'
+      Charter: 'Charteador: {0}'
     Sort:
       addeddate: Data adicionada
-      charter: Charter
+      charter: Charteador
       composer: Compositor
       difficulty: Dificuldade
       grade: Nota 
@@ -1028,7 +1028,7 @@ Gameplay:
       grade: Nota
       rank: Ranque
       rating: Classificação
-      charter: Charter
+      charter: Charteador
     History:
       Best: Melhor
       Recent: Recente
@@ -1058,7 +1058,7 @@ Gameplay:
         PauseMode: Comportamento do botão de pausa
       Audio:
         Name: Áudio
-        Offset: Offset
+        Offset: Atraso
         OffsetDetail: |-
           Ajusta a sincronia da música.
           Aumente se você está pegando LATE, ou diminua se você está pegando EARLY.
