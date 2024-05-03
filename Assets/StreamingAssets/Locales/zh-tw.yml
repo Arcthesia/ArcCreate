@@ -1,18 +1,33 @@
+# 翻譯準則
+# 1. Timing 作為單一事件時翻譯為『時間點』，Timing Group為『時間點群組』，音符的Timing仍翻為時間
+# 2. 除了錯誤或提醒訊息，其他界面盡量不要使用句號做結尾
+Parsing:
+  # 剖析字串的異常資訊
+  Exception:
+    CharacterNotFound: 找不到字元"{0}"
+    InvalidConversionToInt: 無法將"{0}"轉換為整數
+    InvalidConversionToBool: 無法將"{0}"轉換為布林值
+    InvalidConversionToFloat: 無法將"{0}"轉換為浮點數
+
 Format:
-  # Exception messages while parsing chart files
+  # 剖析譜面檔案時發生的錯誤
   Exception:
     File: |-
       讀取譜面檔案:{File} 時發生了錯誤。
+      {Error}
     SingleErrorFormat: |-
-      行數: {LineNumber}
-      解析事件型態: {EventType}
-      內容: "{Content}"
-      肇因: {Reason}
+      錯誤位於第{LineNumber}行的{EventType}事件
+      語句內容：“{Content}”.
+      {Reason}
     SingleErrorShortFormat: |-
-      解析事件型態: {EventType}
-      肇因: {Reason}
-    WrongSyntax: |-
-      錯誤或是不完整的語法。
+      {EventType}事件
+      錯誤原因：
+      {Reason}
+    UnknownException: |-
+      發生未知錯誤
+      異常：{Exception}
+      追蹤堆疊：
+      {StackTrace}
     InvalidHeader: |-
       無效的header line。
     ArcColorNegative: |-
@@ -22,31 +37,36 @@ Format:
     TimingPointDensityFactorInvalid: |-
       無效的判定密度定義。
     BaseTimingInvalid: |-
-      無效的base timing定義，請確認您的譜面檔案是否起始於0毫秒的時間事件。
+      無效的基準時間點定義，請確認您的譜面檔案是否有起始於0毫秒的時間點事件。
     IncludeReferencedMultipleTimes: |-
       譜面檔案已經被引入了卻又被參照了一次。
     IncludeAReferencedFragment: |-
       譜面已經被參照了一部分卻又引入了一次。
     TimingGroupPairInvalid: |-
-      非法的時間群組配對。請確認您的時間群組的定義是否正確地使用 "};" 來封閉。
+      時間點群組記號不成對。請確認您的時間點群組的定義是否有正確地使用 "};" 結束。
     DivisorNegative: |-
-      時間群組的除數屬性不可為負。
-    BaseBPMZero: |-
-      基準BPM不能為0。
+      時間事件的小節欄位不可為負值。
     DurationNegative: |-
-      此種事件的時間不能為0。
-    DurationZero: |-
       此種事件的持續時間不能為0。
+    DurationZero: |-
+      此種事件的持續時間不能小於0。
     ArcTapOutOfRange: |-
       天鍵在音弧/黑線的時間範圍外。
     TimingGroupPropertiesInvalid: |-
-      無效的時間群組屬性定義。
+      無效的時間點群組屬性定義。
+    ReferencedFileError: |-
+      無法載入引用的譜面檔案:
+      {0}
+    FileDoesNotExist: |-
+      譜面檔案不存在
   Warning:
-    HoldTooShort: 長按音符長度小於17毫秒。
-    TapJudgementOverlap: 點擊音符和其他音符重疊。
+    HoldTooShort:
+      長按音符長度小於17毫秒
+    TapJudgementOverlap:
+      單擊音符和其他音符重疊
 
 Compose:
-  # Exception messages within the editor
+  # 編輯器中的報錯
   Exception:
     FileDoesNotExist: |-
       嘗試讀取位於 {Path} 的檔案，然而其不存在，該檔案可能被刪除了。
@@ -55,8 +75,8 @@ Compose:
       {Error}
     LoadProject: |-
       在載入位於 {Path} 的專案檔發生錯誤。
-      專案檔可能不正確地被儲存。
-      您可以嘗試手動更改，或是刪除檔案並創建新檔。
+      專案檔在此之前可能儲存失敗。
+      您可以嘗試手動更改，或是刪除檔案並建立新檔。
       {Error}
     ChartFileAlreadyExists: |-
       譜面檔案已引入專案。
@@ -65,7 +85,7 @@ Compose:
     NoChartIncluded: |-
       無效的專案檔: 此專案檔中沒有譜面檔。
     InvalidGroupProperties: |-
-      無效的時間群組屬性 {Message}
+      無效的時間點群組屬性 {Message}
     InstructionLimit: |-
       Lua 腳本的執行被終止: 已經到達指令執行的數量上限: {0}。
     InvalidBaseBPM: |-
@@ -86,7 +106,7 @@ Compose:
       InvalidActionPath: |-
         無效的動作指令路徑: 字串 "{0}" 和任何動作指令不符。
     Scenecontrol: |-
-      在執行場景控制時發生錯誤，錯誤型態: {Type}: {Message}
+      在執行 Scenecontrol 時發生錯誤，錯誤型態: {Type}: {Message}
       {StackTrace}
     LuaScript: |-
       在執行 lua 腳本時發生錯誤，路徑: {Path}: {Message}
@@ -110,7 +130,7 @@ Compose:
           此音檔: {Sfx} 無法用於錄製。
           預期聲道數量: {ExpectedChannels} 及預期頻率: {ExpectedFrequency}， 但本聲道數量為 {Channels} 及頻率 {Frequency}。
 
-  # Notification messages
+  #通知消息
   Notify:
     FreeCameraEditHelp: |-
       開始移動相機 (將游標放在此訊息以獲得更多資訊)
@@ -123,9 +143,13 @@ Compose:
       O: 向右翻轉
       Esc: 取消
       Enter: 確認
-    EmmyLuaGenerated: |-
-      在專案資料夾，用以設定場景控制 EmmyLua 的腳本範本。
-      使用VsCode:"tangzx.emmylua"的擴充套件以得到自動補字的功能。
+    EmmyLuaGenerated:
+      Scenecontrol: |-
+       在專案資料夾，用以設定 Scenecontrol 的 EmmyLua 腳本範本。
+       使用VSCode並安裝"tangzx.emmylua"的擴充套件以得到自動完成的功能。
+      Macros: |-
+       在專案資料夾，用以設定巨集的 EmmyLua 腳本範本。
+       使用VSCode並安裝"tangzx.emmylua"的擴充套件以得到自動完成的功能。
     Actions:
       CannotMirror: 無法鏡像所選的音符。
       NoDragRange: 無法拖曳所選音符的時間，請嘗試個別拖曳音符。
@@ -136,10 +160,10 @@ Compose:
         還原指令: {Name}
       Redo: |-
         重做指令: {Name}
-      # {Name} above will be replaced with these entries
-      AddTiming: 新增時間事件
-      EditTiming: 編輯時間事件
-      RemoveTiming: 刪除時間事件
+      #上方的{Name}占位符會用以下項代替
+      AddTiming: 新增時間點事件
+      EditTiming: 編輯時間點事件
+      RemoveTiming: 刪除時間點事件
       AddCamera: 新增相機事件
       EditCamera: 編輯相機事件
       RemoveCamera: 移除相機事件
@@ -182,12 +206,9 @@ Compose:
       SaveProject: |-
         已儲存新專案
         路徑: {Path}
-      OpenChart: |-
-        已開啟譜面檔案，路徑: {Path}
-      CreateChart: |-
-        已新增譜面檔案，路徑: {Path}
-      RemoveChart: |-
-        已從專案刪除譜面檔案，路徑: {Path}
+      OpenChart: 已開啟譜面檔案，路徑：{Path}
+      CreateChart: 已新增譜面檔案，路徑：{Path}
+      RemoveChart: 已從專案刪除譜面檔案，路徑：{Path}
     Inspector:
       InvalidParamameter: 無效的參數
     Measurer:
@@ -201,7 +222,16 @@ Compose:
         Complete: 影片已錄製完成
       Package:
         Complete: 匯出譜面封裝檔至 {0}
-  # Dialog boxes
+    Macros:
+      Cancelled: 還原巨集
+      Select:
+        Timing: 選擇時間
+        Position: 選擇位置
+        Lane: 選擇軌數
+      NotFound: 巨集 "{macroId}" 不存在
+    Mirror:
+      CannotMirror: 沒有音符可以被鏡像
+  # 對話框
   Dialog:
     RemoveGroup:
       Title: 刪除時間群組
@@ -228,54 +258,146 @@ Compose:
       Title: 載入譜面錯誤
       Content: |-
         在載入譜面檔案的時候發生錯誤。路徑: {ChartPath}
-        請在其他文字編輯器修正此問題，或是關閉此對話視窗並使用 "<{TabName}>" 的控制項。
+        請在其他文字編輯器修正此問題，或是關閉此對話視窗並使用 "<>{TabName}" 的控制項
 
-        資訊:
-        行數: {LineNumber}
-        該行內容: "{Content}"。
-        事件型態: {EventType}
-        {Exception}
+        錯誤資訊:
+        {Content}
       Confirm: 確定
+    Macros:
+      Title: 巨集
+    GroupPicker:
+      SelectEditingGroup: "將當前時間群組更改為:"
+      AssignNotesToGroup: "將選擇的音符分配給:"
     CameraViews:
       Default: 遊戲視角
       Stationary: 正常視角
       ZoomedOut: 縮小視角
       BirdsEye1: 俯視視角 1
       BirdsEye2: 俯視視角 2
+    PanelLayout:
+      Name: 面板佈局
+      Default: 預設佈局
+      Compact: 緊湊佈局
+      SaveLayout: 保存當前佈局
+      LayoutName: 佈局名稱
+      DuplicateError: 已存在相同名稱的佈局
   Navigation:
     KeybindOverride: 複寫動作指令 {0} 的快捷鍵
-    # Texts that appear on the context menu (right-click menu)
+    # 右鍵選單的文字
     Actions:
       Camera:
         Name: 相機
         FreeCamera:
           Name: 移動相機
+          Confirm: 確定
+          Cancel: 取消
+          Faster: 移速增添
+          Slower: 移速降低
+          MoveForward: 向前移動
+          MoveLeft: 向左移動
+          MoveRight: 向右移動
+          MoveBackward: 向後移動
+          MoveUp: 向上移動
+          MoveDown: 向下移動
+          LookUp: 向上旋轉
+          LookDown: 向下旋轉
+          LookLeft: 向左旋轉
+          LookRight: 向右旋轉
+          RollLeft: 向左翻轉
+          RollRight: 向右翻轉
       Grid:
         Name: 網格
         Toggle: 切換網格
+        ToggleSlot:
+          Name: 網格切換
+          Slot1: 網格定義1
+          Slot2: 網格定義2
+          Slot3: 網格定義3
+          Slot4: 網格定義4
+          Slot5: 網格定義5
+          Slot6: 網格定義6
+          Slot7: 網格定義7
+          Slot8: 網格定義8
+          Slot9: 網格定義9
+          Slot0: 網格定義0
+        IncreaseDensity: 增加密度
+        DecreaseDensity: 減少密度
+      Macro:
+        Name: 巨集
+        SelectEvents:
+          Confirm: 確定
+          Cancel: 取消
+        SelectLane:
+          Confirm: 確定
+          Cancel: 取消
+        SelectPosition:
+          Confirm: 確定
+          Cancel: 取消
+        SelectTiming:
+          Confirm: 確定
+          Cancel: 取消
       Display:
         Name: 顯示
         FullScreen: 切換全螢幕
       Selection:
         Name: 選取
         Clear: 清除選取
+        Single: 選取音符
+        Add: 拖曳選取
+        Remove: 拖曳取消選取
+        Toggle: 選取
         RangeSelect:
           Name: 範圍選取
+          Confirm: 確定
+          Cancel: 取消
       Measure:
         Name: 測量
         Start:
           Name: 開啟測量器
+          Confirm: 確定
+          Cancel: 取消
+          CopyTiming: 複製量測時間
+          CopyPosition: 複製量測位置
+          CopyX: 複製x座標
+          CopyY: 複製y座標
       Clipboard:
         Name: 剪貼簿
         Copy: 複製
         Cut: 剪切
         Paste:
           Name: 貼上
+          Confirm: 確認貼上
           Cancel: 取消貼上
+          Mirror: 鏡像
         NamedPaste:
           Name: 貼上
+          Confirm: 確認貼上
           Cancel: 取消貼上
+          Mirror: 鏡像
         Clear: 清除剪貼簿
+      NoteCreation:
+        Name: 創建音符
+        Start:
+          Name: 新增音符
+          Confirm: 確認
+          Cancel: 取消
+          ToggleFreeSky: 切換至自由天鍵放置模式
+      NotePallete:
+        Name: 音弧/黑線顏色選取
+        Arc:
+          Name: 音弧
+          Blue: 藍
+          Red: 紅
+          Green: 綠
+        ArcAlt:
+          Name: 黑線
+          Blue: 藍
+          Red: 紅
+          Green: 綠
+        Sky: 天鍵
+        Tap: 地鍵
+        Hold: 長按
+        Idle: (無)
       Delete:
         Name: 刪除
         Execute: 刪除音符
@@ -284,8 +406,33 @@ Compose:
         Horizontal: 水平鏡像
         HorizontalNoColorSwitch: 水平鏡像 (忽略顏色)
         Vertical: 垂直鏡像
+      Dragging:
+        Name: 拖曳
+        Timing:
+          Name: 拖曳時間
+          Confirm: 確定
+          Cancel: 取消
+        Position:
+          Name: 拖曳位置
+          Confirm: 確定
+          Cancel: 取消
+          CycleSkyNoteMode: 切換天鍵放置模式
+      Render:
+        Name: 錄製
+        Start:
+          Cancel: 取消錄製影片
+      Playback:
+        Name: 時間
+        TogglePlay: 播放/暫停
+        PlayReturn:
+          Name: 播放
+          Return: 播放/返回
+          Pause: 暫停
+        IncreaseSpeed: 加快播放速度
+        DecreaseSpeed: 減緩播放速度
+
   Grid:
-    # Please modify the comment lines only (lines beginning with '--')
+    # 翻譯時煩請只編輯註釋行（開頭為“--”的行）
     DefaultScript: |-
       -- THIS IS A LUA SCRIPT. See full documentation at: https://github.com/Arcthesia/ArcCreate/wiki/Grid-settings
       -- CONFIGURATION
@@ -425,6 +572,8 @@ Compose:
       drawLines(color.unsafe.boundary, {bydTR, gridTR, gridBR}, false)
       drawLines(color.unsafe.boundary, {gridBR, trackR, trackL, gridBL}, false)
 
+      spacing.x = math.max(spacing.x, 0.01)
+      spacing.y = math.max(spacing.y, 0.01)
       grid.drawLine(config.left, config.left, config.bottom, config.top, color.lines)
       for x = config.mainLeft - spacing.x, config.left + spacing.x, -spacing.x do
           grid.drawLine(x, x, config.bottom, config.top, color.lines)
@@ -458,13 +607,13 @@ Compose:
       Confirm: 確定
       Cancel: 取消
       Close: 關閉
-      NotRequired: (不需要)
-      Extension: Extension
+      NotRequired: (非必須)
+      Extension: 副檔名
     Placeholder:
-      Text: 無...
-      File: 沒有檔案被選取...
-      Image: 沒有圖片被選取...
-      Property: 沒有屬性...
+      Text: 未指定...
+      File: 未指定檔案...
+      Image: 未指定圖片...
+      Property: 未設定屬性...
       ImagePrompt: 點擊以選取圖片
     PanelNames:
       Toolbox: 工具箱
@@ -476,17 +625,24 @@ Compose:
       Remote: 遠端測試
       Export: 匯出譜面
       Settings: 設定
-    # Top bar of the UI
+    # UI頂欄
     Top:
       Label:
         New: 新增
         Open: 開啟
         Save: 儲存
         InputMode: 輸入模式
+        InputModeOptions:
+          auto: Auto
+          autocontroller: Auto (Controller)
+          touch: Touch
+          controller: Controller
+          mouse: Mouse
+          idle: Idle
         FullScreen: 全螢幕
         ToggleFullScreenHint: 按F11以切換全螢幕模式
         Chart: 譜面
-    # Project panel
+    # 專案面板
     Project:
       Label:
         NewChart: 新增譜面
@@ -507,6 +663,7 @@ Compose:
         ChartOffset: 譜面偏移
         TimingPointDensityFactor: 判定密度
         ChartConstant: 譜面定數
+        SearchTags: 搜尋關鍵字
         DifficultyName: 難度名稱
         DifficultyColor: 難度顏色
         Files: 檔案
@@ -528,15 +685,17 @@ Compose:
         Blue: 藍
         Red: 紅
         Green: 綠
-        Custom: 自訂
         AddArcColor: 新增音弧顏色
         NoProjectLoaded: |-
           沒有專案被讀取，
           請新增或開啟新的專案。
+        RawEditorFileTooLarge: |-
+          檔案大於1000kb，文字輸入編輯已停用
         Shutter: 載入介面
         ShowShutter: 顯示載入介面
         HideShutter: 隱藏載入介面
         PreviewSegment: 預覽音樂區段
+        CustomChartPath: 使用自定義名稱（進階）
       Options:
         Inherit: 繼承
         Light: Light
@@ -558,13 +717,18 @@ Compose:
         Past: Past
         Present: Present
         Future: Future
+        Eternal: Eternal
         Beyond: Beyond
     Timeline:
       Label:
         Offset: 偏移
         TimingGroup: 群組
         Density: 節奏密度
-    # Events editor panel
+        PlaybackSpeed: 播放速度
+      Timestamp:
+        Name: 時間戳
+        DefaultMessage: 時間戳 {0}
+    # 事件編輯器面板
     EventsEditor:
       Label:
         Group: 群組
@@ -581,8 +745,8 @@ Compose:
       Mode:
         Timing: 時間
         Camera: 相機
-        Scenecontrol: 場景
-    # Export panel
+        Scenecontrol: 特殊
+    # 匯出面板
     Export:
       Render:
         Name: 錄製影片
@@ -594,7 +758,10 @@ Compose:
           Name: 設定
           From: 開始
           To: 結束
+          Quality: 品質
           FPS: FPS
+          Width: 寬度
+          Height: 高度
           Size: 大小
           ShowShutter: 顯示載入介面
         Start: 開始錄製
@@ -614,7 +781,7 @@ Compose:
         BlankField: 請輸入發布人和封裝檔的名稱
         Identifier: "您的封裝檔辨識碼為: {0}"
         Export: 匯出
-    # Editor settings panel
+    # 編輯器設定面板
     Settings:
       Label:
         Locale:
@@ -626,14 +793,26 @@ Compose:
           Name: 遊玩設定
           Speed: 下落速度
           AspectRatio: 螢幕比例設定
-          Indicator: FC/PM 顯示
+          Indicator: FC/AP 顯示
           MaxIndicator: 理論值顯示
+          Colorblind: 使用另一種顏色的音弧
+          ScoreDisplay: 分數顯示樣式
+        Judgement:
+          Name: 判定組態
+          NotUsedInAutoOrIdle: "在使用Auto或Idle輸入模式時，以下這些選項將不起作用："
+          EarlyLatePosition: Early/Late顯示位置
+          ShowMsDifference: 顯示與Perfect (Max)的ms差距
+          ShowJudgement: "判定顯示設定："
+          ShowMax: Perfect (Max)
+          ShowPerfect: Perfect (Early/Late)
+          ShowGood: Good
+          ShowMiss: Miss
         Grid:
-          Name: 網格設定
-          Slot: 網格箱
+          Name: 網格組態
+          Slot: 網格定義
           UseDefault: 使用預設
-          FromLane: 起始軌數
-          ToLane: 結束軌數
+          FromLane: 起始軌道
+          ToLane: 結束軌道
           ScaleGrid: 和天空判定線等比例縮放
           Gridline: 定義網格線
           Script: Lua 腳本
@@ -645,12 +824,15 @@ Compose:
           SyncToDSPTime: 同步至DSP timing
         Display:
           Name: 顯示設定
-          Vsync: Vsync
+          Vsync: 垂直同步
           Framerate: 幀率
           ShowCounter: 顯示幀率
         Input:
           Name: 輸入設定
           ReloadKeybinds: 重新載入快捷鍵
+          AllowCreatingNotesBackward: 允許反向創建音符
+          EnableEditingArctapWidth: 允許編輯天鍵的寬度
+          ShowKeybindHint: 顯示快捷鍵提示
         Files:
           Name: 檔案設定
           Backup: 在儲存時新增備份
@@ -666,7 +848,7 @@ Compose:
           Name: 捲動軌道
           Threshold: 門檻值
           MaxMovement: 最大移動
-    # Toolbox panel
+    # 工具箱面板
     Toolbox:
       Pallete:
         Name: 新增音符
@@ -676,8 +858,18 @@ Compose:
         Hold: 長按
         Arctap: 天鍵
         Easing: 緩動函數
-      Macros: 巨集
-    # Inspector window
+        Idle: (無)
+      Settings:
+        ShowGrid: 顯示網格線
+        HideGrid: 隱藏網格線
+        Measure: 測量
+        RangeSelect: 範圍選取
+      Macros:
+        Name: 巨集
+        GenerateEmmy: 生成EmmyLua
+        Reload: 重新載入巨集腳本
+        OpenExplorer: 打開巨集資料夾
+    # 檢視窗
     Inspector:
       Name: 音符資訊
       Timing: 時間
@@ -687,13 +879,19 @@ Compose:
       StartPos: <size=11>起始位置</size>
       EndPos: <size=11>結束位置</size>
       Sfx: 音效
+      Width: 寬度
       Group: 群組
       Mixed: 混合
       Arc: 音弧
       Trace: 黑線
       Actions:
-        SelectArc: 選取父音弧
+        SelectArc: 選取所在音弧
         SelectArctap: 選取天鍵
+    Startup:
+      Discord: 加入Discord伺服器
+      Kofi: 請我們喝杯咖啡
+      Version: "當前版本: {0}"
+      Recent: 最近打開
 
 Remote:
   Exception:
@@ -786,6 +984,15 @@ Gameplay:
     Play: 遊玩
     Retry: 重試
     Return: 退出
+    AudioDeviceChange: 偵測到音訊設備更動，ArcCreate將強制返回選單
+    Confirm: 確定
+  Practice:
+    PlaybackSpeed: 播放速度
+    Repeat:
+      On: 重複練習【開】
+      Off: 重複練習【關】
+      From: 選擇起始時間
+      To: 選擇結束時間
   Selection:
     SelectStatus:
       Singular: |-
@@ -795,11 +1002,20 @@ Gameplay:
     DeleteConfirmation: |-
       請問您是否要刪除以下的譜面?
       您的分數將不會被刪除。
+    PackDeleteConfirmation: |-
+      您正在删除譜面封裝檔：
+      <color=#FFFFFFB4>{0}</color>
+      您是否也想要删除掉屬於這個譜面封裝檔的所有譜面，或者是保留譜面只删除這個譜面封裝檔？
     CannotDeleteDefault: |-
       預設的譜面無法被刪除。
+    EnablePractice: |-
+      下一次遊玩時啟用練習模式
+    SelectRating: 為這張譜面評分
     Action:
+      Copy: 複製
       Delete: 刪除
       Cancel: 取消
+      Keep: 保留
       Done: 完成
     List:
       RemoteTestplay: 遠端測試遊玩
@@ -820,6 +1036,7 @@ Gameplay:
       difficulty: 難度
       grade: 評級
       playcount: 遊玩次數
+      rating: 評分
       score: 分數
       title: 曲名
     Group:
@@ -827,7 +1044,19 @@ Gameplay:
       difficulty: 難度
       grade: 評級
       rank: 通關狀態
+      rating: 評分
       charter: 譜師
+    History:
+      Best: 最佳成績
+      Recent: 最近遊玩成績
+    Modifiers:
+      GameMode:
+        Name: 遊玩模式
+        Auto: 自動遊玩
+        Practice: 練習模式
+      Modifier:
+        Name: 鏡像模式
+        Mirror: 鏡像
     Settings:
       Name: 設定
       Language: 語言設定
@@ -836,9 +1065,14 @@ Gameplay:
         Speed: 速度
         SpeedDetail: |-
           調整音符下落至判定區域的速度。
-        EarlyLatePerfectDisplay: Early/Late perfect顯示
+        EarlyLatePerfectDisplay: Early/Late Perfect 顯示
         EarlyLatePerfectDisplayDetail: |-
-          是否顯示 Early/Late perfect 的判定。
+          是否顯示 Early/Late Perfect 的判定。
+        EnablePractice: 啟用練習模式
+        ShowMsDifference: 顯示各個判定的ms差距
+        ShowMsDifferenceDetail: 顯示各個判定精確的ms差距，而不是 Early/Late
+        HidePause: 隱藏暫停按鈕
+        PauseMode: 暫停模式
       Audio:
         Name: 音效設定
         Offset: 偏移
@@ -855,16 +1089,30 @@ Gameplay:
       Visual:
         Name: 視覺設定
         Colorblind: 色盲模式
-        ColorblindDetail: 使用另一種顏色的音弧。
+        ColorblindDetail: 使用另一種顏色的音弧
         FrPmDisplay: 顯示FC/AP
-        FrPmDisplayDetail: 調整FC/AP顯示的位置。
+        FrPmDisplayDetail: 調整FC/AP顯示的位置
         MaxDisplay: 理論值顯示
-        MaxDisplayDetail: 切換理論值顯示。
+        MaxDisplayDetail: 切換理論值顯示
         EarlyLateDisplay: 顯示 Early/Late
-        EarlyLateDisplayDetail: 調整 Early/Late 位置。
+        EarlyLateDisplayDetail: 調整 Early/Late 位置
+        ScoreDisplay: 分數顯示樣式
         LimitFramerate: 限制幀率
-        LimitFramerateDetail: 限制幀率至60FPS以減少電池消耗，可能會增加延遲。
+        LimitFramerateDetail: 限制幀率至60FPS以減少電池消耗，可能會增加延遲
+        DisableAdvancedGraphics: 圖像品質
+        DisableAdvancedGraphicsDetails: 使用較低的圖像品質以確保設備運行穩定
+      Judgement:
+        Name: 判定顯示
+        ShowMax: 顯示 Perfect (Max) 判定
+        ShowPerfect: 顯示 Perfect (Early/Late) 判定
+        ShowGood: 顯示 Good 判定
+        ShowMiss: 顯示 Miss 判定
       Interface:
+        Name: 界面
+        ForceTheme: UI主題
+        ForceThemeDetail: UI主題界面將始終按照當前所選的主題顯示，而與當前選擇的譜面無關
+        SwitchResumeAndRetry: 切換返回和重試的位置
+        SwitchResumeAndRetryDetail: 在【暫停】界面中互換【返回】和【重試】的按鈕位置
         ShowFPS: 顯示幀率
         ShowFPSDetail: 調整幀率顯示。
         ShowDebug: 顯示除錯訊息
@@ -873,10 +1121,29 @@ Gameplay:
         middle: 中間
         infopanel: 訊息欄
         off: 關閉
+      PauseMode:
+        clickonce: 單擊
+        doubleclick: 雙擊
+        hold: 長按
+        disable: 禁用
       EarlyLateTextPosition:
         middle: 中間
         bottom: 底部
         top: 頂端
+      ScoreDisplay:
+        default: Default
+        predictive: Predictive
+        difference: Difference
+        decrease: Decrease
+      ScoreDisplayDetails:
+        default: 默認顯示模式。擊中音符時分數增加
+        predictive: 當前分數將顯示為與距離最近評級分數之差
+        difference: 當前分數將顯示為與離理論值的分數之差
+        decrease: 當前分數將顯示為與從理論值開始減少分數
+      ForceTheme:
+        default: Default
+        light: Light
+        dark: Dark
 
 Shutter:
   Composer: 曲師
@@ -896,8 +1163,10 @@ Storage:
     Message: |-
       您正在嘗試匯入舊版本的譜面資料，
       請問您想要保留哪個版本?
-    ReplaceAsset: 以匯入譜面資料取代。
-    KeepOriginal: 保留原本的譜面資料。
+    ReplaceAsset:
+      以匯入譜面資料取代
+    KeepOriginal:
+      保留原本的譜面資料
     Identifier: "辨識碼: {0}"
     Version: "版本: {0}"
   Loading:
@@ -914,3 +1183,4 @@ Credits:
   View: 查看致謝名單
 
 # First Edited by sylvex - 2023/4/25
+# Second edit by ZeErQi27, recharge-sp - 2024/4/11
