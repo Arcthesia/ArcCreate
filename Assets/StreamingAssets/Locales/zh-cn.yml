@@ -243,6 +243,12 @@ Compose:
         事件类型：{EventType}
         {Exception}
       Confirm: 确认
+    CameraViews:
+      Default: 默认视角
+      Stationary: 固定视角
+      ZoomedOut: 镜头拉远视角
+      BirdsEye1: 鸟瞰视角1
+      BirdsEye2: 鸟瞰视角2
   Navigation:
     KeybindOverride: 正在覆盖{0}的键位设置
     # 右键菜单的文本
@@ -526,10 +532,10 @@ Compose:
         TraceBody: Trace主体
         Shadow: 阴影
         ArcColors: Arc颜色
-        Blue: 蓝（0）
-        Red: 红（1）
-        Green: 绿（2）
-        Custom: 自定义（{0}）
+        Blue: 蓝
+        Red: 红
+        Green: 绿
+        Custom: 自定义
         AddArcColor: 添加Arc颜色
         NoProjectLoaded: |-
           没有加载工程。
@@ -579,12 +585,6 @@ Compose:
         GenerateEmmyLua: 生成EmmyLua
         Reload: 重新加载
         FreeCamera: 自由camera
-      CameraView:
-        Default: 默认视角
-        Stationary: 固定视角
-        ZoomedOut: 镜头拉远视角
-        BirdsEye1: 鸟瞰视角1
-        BirdsEye2: 鸟瞰视角2
       Mode:
         Timing: Timing
         Camera: Camera
@@ -601,10 +601,7 @@ Compose:
           Name: 设置
           From: 从
           To: 到
-          Quality: 质量
           FPS: FPS
-          Width: 宽度
-          Height: 高度
           Size: 大小
           ShowShutter: 显示加载界面
         Start: 开始渲染

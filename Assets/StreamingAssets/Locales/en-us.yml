@@ -222,7 +222,9 @@ Compose:
         Timing: Select timing
         Position: Select position
         Lane: Select lane
-      NotFound: Macro "{macroId}" does not exist.
+      NotFound: Macro "{0}" does not exist.
+    Mirror:
+      CannotMirror: No notes can be mirrored
   # Dialog boxes
   Dialog:
     RemoveGroup:
@@ -260,6 +262,12 @@ Compose:
     GroupPicker:
       SelectEditingGroup: "Change current group to:"
       AssignNotesToGroup: "Assign selected notes to:"
+    CameraViews:
+      Default: Default view
+      Stationary: Stationary view
+      ZoomedOut: Zoomed out view
+      BirdsEye1: Bird's-eye view 1
+      BirdsEye2: Bird's-eye view 2
     PanelLayout:
       Name: Layout
       Default: Default
@@ -367,6 +375,7 @@ Compose:
           Name: Add note
           Confirm: Confirm
           Cancel: Cancel
+          ToggleFreeSky: Switch to free sky note
       NotePallete:
         Name: Note palette
         Arc: 
@@ -397,10 +406,12 @@ Compose:
           Name: Drag timing
           Confirm: Confirm
           Cancel: Cancel
+          CycleSkyNoteMode: Cycle sky note mode
         Position:
           Name: Drag position
           Confirm: Confirm
           Cancel: Cancel
+          CycleSkyNoteMode: Cycle sky note mode
       Render:
         Name: Rendering
         Start:
@@ -666,10 +677,10 @@ Compose:
         TraceBody: Trace Body
         Shadow: Shadow
         ArcColors: Arc Colors
-        Blue: Blue (0)
-        Red: Red (1)
-        Green: Green (2)
-        Custom: Custom ({0})
+        Blue: Blue
+        Red: Red
+        Green: Green
+        Custom: Custom
         AddArcColor: Add arc color
         NoProjectLoaded: |-
           No project loaded.
@@ -727,12 +738,6 @@ Compose:
         GenerateEmmyLua: Generate EmmyLua
         Reload: Reload
         FreeCamera: Free camera
-      CameraView:
-        Default: Default view
-        Stationary: Stationary view
-        ZoomedOut: Zoomed out view
-        BirdsEye1: Bird's-eye view 1
-        BirdsEye2: Bird's-eye view 2
       Mode:
         Timing: Timing
         Camera: Camera
@@ -745,14 +750,25 @@ Compose:
           Automatically export chart view video.
           Requires FFmpeg to be installed.
         ConfigureFFmpeg: Configure FFmpeg executable path
+        Presets:
+          Name: Presets
+          Reset: Reset
+          FourK: 4K
+          FullHD: Full HD
+          Compact: Compact
         Settings:
           Name: Settings
           From: From
           To: To
-          Quality: Quality
+          CRF:
+            Name: CRF
+            Lossless: "{0} (Lossless quality)"
+            VeryLow: "{0} (Near lossless quality)"
+            Low: "{0} (High quality)"
+            Medium: "{0} (Medium quality)"
+            Default: "{0} (Default quality)"
+            High: "{0} (Low quality)"
           FPS: FPS
-          Width: Width
-          Height: Height
           Size: Size
           ShowShutter: Show shutter
         Start: Start rendering
@@ -821,7 +837,7 @@ Compose:
           Name: Input
           ReloadKeybinds: Reload keybinds
           AllowCreatingNotesBackward: Allow creating notes backward
-          EnableEditingArctapWidth: Enable editing sky note's width
+          EnableEditingArctapWidth: Allow editing sky note's width
           ShowKeybindHint: Show keybind hints
         Files:
           Name: Files
@@ -847,7 +863,13 @@ Compose:
         Tap: Tap
         Hold: Hold
         Arctap: Sky
+        Idle: Idle
         Easing: Easing
+      Settings:
+        ShowGrid: Show grid
+        HideGrid: Hide grid
+        Measure: Measure
+        RangeSelect: Range select
       Macros:
         Name: Macros
         GenerateEmmy: Generate EmmyLua

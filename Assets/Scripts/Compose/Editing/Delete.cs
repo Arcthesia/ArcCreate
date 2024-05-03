@@ -23,10 +23,19 @@ namespace ArcCreate.Compose.Editing
                 {
                     var arctaps = Services.Gameplay.Chart.GetAll<ArcTap>()
                         .Where(at => at.Arc == arc);
-                    foreach (var arctap in arctaps)
-                    {
-                        list.Add(arctap);
-                    }
+                    list.AddRange(arctaps);
+                }
+
+                if (note is ArcTap arctap
+                 && arctap.Arc != null
+                 && arctap.Arc.Timing >= arctap.Arc.EndTiming - 1
+                 && arctap.Arc.XStart == arctap.Arc.XEnd
+                 && arctap.Arc.YStart == arctap.Arc.YEnd)
+                {
+                    var arctaps = Services.Gameplay.Chart.GetAll<ArcTap>()
+                        .Where(at => at.Arc == arctap.Arc);
+                    list.Add(arctap.Arc);
+                    list.AddRange(arctaps);
                 }
             }
 

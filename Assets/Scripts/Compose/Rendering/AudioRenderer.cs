@@ -22,6 +22,7 @@ namespace ArcCreate.Compose.Rendering
         private readonly int endTiming;
         private readonly int audioOffset;
         private readonly bool showTransition;
+        private readonly RenderSetting settings;
         private readonly TransitionSequence transitionSequence;
 
         public AudioRenderer(
@@ -35,6 +36,7 @@ namespace ArcCreate.Compose.Rendering
             AudioClip gameplayLoadCompleteAudio,
             Dictionary<string, AudioClip> sfxAudio,
             bool showTransition,
+            RenderSetting settings,
             TransitionSequence transitionSequence)
         {
             this.startTiming = startTiming;
@@ -48,6 +50,7 @@ namespace ArcCreate.Compose.Rendering
             this.sfxAudio = sfxAudio;
             this.showTransition = showTransition;
             this.transitionSequence = transitionSequence;
+            this.settings = settings;
         }
 
         public List<string> SfxAudioList => sfxAudio.Keys.ToList();
@@ -109,7 +112,7 @@ namespace ArcCreate.Compose.Rendering
 
             float[] renderStart = GetSamples(renderStartAudio);
             float[] gameplayLoadComplete = GetSamples(gameplayLoadCompleteAudio);
-            float effectVolume = Settings.EffectAudio.Value;
+            float effectVolume = settings.EffectVolume;
             if (Settings.InputMode.Value != (int)InputMode.Auto && Settings.InputMode.Value != (int)InputMode.AutoController)
             {
                 effectVolume = 0;
@@ -249,7 +252,7 @@ namespace ArcCreate.Compose.Rendering
             Debug.Log("Cutting track from " + startTiming + " to " + endTiming);
             float[] songSamples = GetSongSamples(songAudio);
             byte[] songBytes = new byte[songSamples.Length * 2];
-            float songVolume = Settings.MusicAudio.Value;
+            float songVolume = settings.MusicVolume;
 
             Debug.Log("Converting to raw bytes");
             for (int i = 0; i < songSamples.Length; i++)

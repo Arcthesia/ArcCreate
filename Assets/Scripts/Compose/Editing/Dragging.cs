@@ -6,6 +6,7 @@ using ArcCreate.Compose.Navigation;
 using ArcCreate.Compose.Timeline;
 using ArcCreate.Gameplay;
 using ArcCreate.Gameplay.Data;
+using ArcCreate.Utility;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -21,6 +22,18 @@ namespace ArcCreate.Compose.Editing
         private Note targetShort;
         private LongNote targetLong;
 
+        private readonly List<(Arc, Vector2)> snappableArcs = new List<(Arc, Vector2)>();
+        private readonly List<Arc> pairedArcs = new List<Arc>(32);
+        private readonly List<ArcTap> pairedArcTaps = new List<ArcTap>(32);
+        private readonly List<(Arc, ArcTap, float)> pairings = new List<(Arc, ArcTap, float)>(32);
+
+        private enum PositionArctapMode
+        {
+            SnapToExisting,
+            Free,
+            Connected,
+        }
+
         [EditorAction("Timing", false, "<a-mouse1>")]
         [SubAction("Confirm", false, "<u-mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
@@ -32,7 +45,8 @@ namespace ArcCreate.Compose.Editing
         {
             SubAction confirm = action.GetSubAction("Confirm");
             SubAction cancel = action.GetSubAction("Cancel");
-            IEnumerable<Note> selection = GetSelection();
+
+            List<Note> selection = GetSelection().ToList();
 
             Services.Cursor.EnableLaneCursor = true;
             Services.Cursor.ForceUpdateLaneCursor();
@@ -61,8 +75,11 @@ namespace ArcCreate.Compose.Editing
             }
 
             List<(ArcEvent instance, ArcEvent newValue)> events = new List<(ArcEvent, ArcEvent)>();
+            List<ArcTap> arcTaps = new List<ArcTap>();
+            List<Arc> oldParentArcs = new List<Arc>();
             List<Note> dragStart = new List<Note>();
             List<LongNote> dragEnd = new List<LongNote>();
+            List<LongNote> dragBoth = new List<LongNote>();
             int limitLower = int.MinValue;
             int limitUpper = int.MaxValue;
 
@@ -72,64 +89,112 @@ namespace ArcCreate.Compose.Editing
                 return;
             }
 
-            foreach (var note in selection)
+            for (int i = 0; i < selection.Count; i++)
             {
+                Note note = selection[i];
                 if (Mathf.Abs(note.Timing - closestTiming) <= 1)
                 {
                     bool alsoDraggingEnd = note is LongNote longNote
-                     && Mathf.Abs(longNote.EndTiming - closestTiming) <= 1;
-                    if (!alsoDraggingEnd || cursorTiming <= closestTiming)
+                                         && Mathf.Abs(longNote.EndTiming - closestTiming) <= 1;
+                    switch (note)
                     {
-                        Note clone = note.Clone() as Note;
-                        events.Add((note, clone));
-                        dragStart.Add(clone);
+                        case Tap tap:
+                            Note clonetap = note.Clone() as Note;
+                            events.Add((note, clonetap));
+                            dragStart.Add(clonetap);
+                            break;
+                        case Hold hold:
+                            if (!alsoDraggingEnd || cursorTiming < closestTiming)
+                            {
+                                Note clonehold = note.Clone() as Note;
+                                events.Add((note, clonehold));
+                                dragStart.Add(clonehold);
+                                limitUpper = Mathf.Min(limitUpper, hold.EndTiming - 1);
+                            }
 
-                        if (note is ArcTap arctap)
-                        {
-                            limitLower = Mathf.Max(limitLower, arctap.Arc.Timing);
-                            limitUpper = Mathf.Min(limitUpper, arctap.Arc.EndTiming);
-                        }
+                            break;
+                        case ArcTap arcTap:
+                            ArcTap cloneArctap = arcTap.Clone() as ArcTap;
+                            events.Add((note, cloneArctap));
+                            arcTaps.Add(cloneArctap);
+                            if (!oldParentArcs.Contains(arcTap.Arc))
+                            {
+                                oldParentArcs.Add(arcTap.Arc);
+                            }
 
-                        if (note is Hold hold)
-                        {
-                            limitUpper = Mathf.Min(limitUpper, hold.EndTiming - 1);
-                        }
+                            break;
+                        case Arc arc:
+                            bool sameStartAndEnd = arc.XStart == arc.XEnd
+                                                && arc.YStart == arc.YEnd;
 
-                        if (note is Arc arc)
-                        {
-                            limitUpper = Mathf.Min(limitUpper, arc.EndTiming);
-                            foreach (var at in Services.Gameplay.Chart.GetAll<ArcTap>().Where(at => at.Arc == arc))
+                            if (!alsoDraggingEnd
+                             || (arc.EndTiming != arc.Timing && cursorTiming < closestTiming))
+                            {
+                                Arc clonearc = arc.Clone() as Arc;
+                                events.Add((note, clonearc));
+                                dragStart.Add(clonearc);
+                                limitUpper = Mathf.Min(limitUpper, sameStartAndEnd ? arc.EndTiming - 1 : arc.EndTiming);
+                            }
+                            else if (arc.EndTiming == arc.Timing)
+                            {
+                                Arc clonearc = arc.Clone() as Arc;
+                                events.Add((note, clonearc));
+                                dragBoth.Add(clonearc);
+                            }
+
+                            foreach (var at in Services.Gameplay.Chart.GetAll<ArcTap>()
+                                .Where(at => at.Arc == arc && !selection.Contains(at)))
                             {
                                 limitUpper = Mathf.Min(limitUpper, at.Timing);
                             }
-                        }
+
+                            break;
                     }
                 }
 
                 if (note is LongNote l && Mathf.Abs(l.EndTiming - closestTiming) <= 1)
                 {
                     bool alsoDraggingStart = Mathf.Abs(l.Timing - closestTiming) <= 1;
-                    if (!alsoDraggingStart || cursorTiming > closestTiming)
+                    switch (l)
                     {
-                        LongNote clone = l.Clone() as LongNote;
-                        events.Add((l, clone));
-                        dragEnd.Add(clone);
+                        case Hold hold:
+                            if (!alsoDraggingStart || cursorTiming >= closestTiming)
+                            {
+                                LongNote clonehold = hold.Clone() as LongNote;
+                                events.Add((note, clonehold));
+                                dragEnd.Add(clonehold);
+                                limitLower = Mathf.Max(limitLower, hold.Timing + 1);
+                            }
 
-                        limitLower = Mathf.Max(limitLower, l.Timing + (note is Hold ? 1 : 0));
-                    }
+                            break;
 
-                    if (note is Arc arc)
-                    {
-                        foreach (var at in Services.Gameplay.Chart.GetAll<ArcTap>().Where(at => at.Arc == arc))
-                        {
-                            limitLower = Mathf.Max(limitLower, at.Timing);
-                        }
+                        case Arc arc:
+                            bool sameStartAndEnd = arc.XStart == arc.XEnd
+                                                && arc.YStart == arc.YEnd;
+
+                            if (!alsoDraggingStart
+                             || (arc.EndTiming != arc.Timing && cursorTiming >= closestTiming)
+                             || (arc.EndTiming == arc.Timing && sameStartAndEnd))
+                            {
+                                Arc clonearc = arc.Clone() as Arc;
+                                events.Add((note, clonearc));
+                                dragEnd.Add(clonearc);
+                                limitLower = Mathf.Max(limitLower, sameStartAndEnd ? arc.Timing + 1 : arc.Timing);
+                            }
+
+                            foreach (var at in Services.Gameplay.Chart.GetAll<ArcTap>()
+                                .Where(at => at.Arc == arc && !selection.Contains(at)))
+                            {
+                                limitLower = Mathf.Max(limitLower, at.Timing);
+                            }
+
+                            break;
                     }
                 }
             }
 
             var command = new EventCommand(
-                name: I18n.S("Compose.Notify.History.Drag.Timing"),
+                name: string.Empty,
                 update: events);
             var (success, timing) = await Services.Cursor.RequestTimingSelection(
                 confirm,
@@ -137,6 +202,76 @@ namespace ArcCreate.Compose.Editing
                 update: t =>
                 {
                     t = Mathf.Clamp(t, limitLower, limitUpper);
+
+                    if (arcTaps.Count > 0)
+                    {
+                        snappableArcs.Clear();
+                        pairedArcs.Clear();
+                        pairedArcTaps.Clear();
+                        pairings.Clear();
+                        snappableArcs.AddRange(Services.Gameplay.Chart
+                            .FindEventsWithinRange<Arc>(t, t, false)
+                            .Where(a => a.IsTrace)
+                            .Select(a => (a, new Vector2(a.WorldXAt(t), a.WorldYAt(t)))));
+                    }
+
+                    for (int i = 0; i < arcTaps.Count; i++)
+                    {
+                        ArcTap at = arcTaps[i];
+                        Arc arc = at.Arc;
+
+                        Vector2 pos = new Vector2(arc.WorldXAt(t), arc.WorldYAt(t));
+                        bool hasDraggedToThisPos = false;
+                        for (int j = 0; j < i; j++)
+                        {
+                            ArcTap prev = arcTaps[j];
+                            Vector2 prevPos = new Vector2(prev.WorldX, prev.WorldY);
+                            if (prev.Timing == t
+                             && (prevPos - pos).sqrMagnitude <= Values.TapOverlapWarningThreshold)
+                            {
+                                hasDraggedToThisPos = true;
+                                break;
+                            }
+                        }
+
+                        if (!hasDraggedToThisPos)
+                        {
+                            at.Timing = Mathf.Clamp(t, arc.Timing, arc.EndTiming);
+                            pairedArcs.Add(arc);
+                        }
+
+                        if (t > arc.EndTiming || t < arc.Timing)
+                        {
+                            foreach (var a in snappableArcs)
+                            {
+                                if (a.Item1.TimingGroup != at.TimingGroup)
+                                {
+                                    continue;
+                                }
+
+                                float dist = (pos - a.Item2).sqrMagnitude;
+                                pairings.Add((a.Item1, at, dist));
+                            }
+                        }
+                    }
+
+                    if (pairings.Count > 0)
+                    {
+                        pairings.Sort((a, b) => a.Item3.CompareTo(b.Item3));
+                        for (int i = 0; i < pairings.Count; i++)
+                        {
+                            var (arc, arcTap, _) = pairings[i];
+                            if (pairedArcs.Contains(arc) || pairedArcTaps.Contains(arcTap))
+                            {
+                                continue;
+                            }
+
+                            arcTap.Arc = arc;
+                            pairedArcs.Add(arc);
+                            pairedArcTaps.Add(arcTap);
+                        }
+                    }
+
                     foreach (var note in dragStart)
                     {
                         note.Timing = t;
@@ -144,6 +279,12 @@ namespace ArcCreate.Compose.Editing
 
                     foreach (var note in dragEnd)
                     {
+                        note.EndTiming = t;
+                    }
+
+                    foreach (var note in dragBoth)
+                    {
+                        note.Timing = t;
                         note.EndTiming = t;
                     }
 
@@ -156,14 +297,37 @@ namespace ArcCreate.Compose.Editing
             }
             else
             {
-                Services.History.AddCommand(command);
+                List<ArcEvent> remove = null;
+                foreach (var arc in oldParentArcs)
+                {
+                    if (arc != null
+                     && arc.Timing >= arc.EndTiming - 1
+                     && arc.XStart == arc.XEnd
+                     && arc.YStart == arc.YEnd
+                     && Services.Gameplay.Chart.GetAll<ArcTap>().Where(a => a.Arc == arc).Count() == 0)
+                    {
+                        remove = remove ?? new List<ArcEvent>();
+                        remove.Add(arc);
+                    }
+                }
+
+                var removecmd = new EventCommand(
+                    name: string.Empty,
+                    remove: remove);
+
+                Services.History.AddCommand(new CombinedCommand(
+                    I18n.S("Compose.Notify.History.Drag.Timing"),
+                    command,
+                    removecmd));
             }
         }
 
         [EditorAction("Position", false, "<s-mouse1>")]
+        [SubAction("CycleSkyNoteMode", false, "<s>")]
         [SubAction("Confirm", false, "<u-mouse1>")]
         [SubAction("Cancel", false, "<esc>")]
         [KeybindHint(Priority = KeybindPriorities.Dragging)]
+        [KeybindHint("CycleSkyNoteMode", Priority = KeybindPriorities.SubConfirm + 1)]
         [KeybindHint("Confirm", Priority = KeybindPriorities.SubConfirm)]
         [KeybindHint("Cancel", Priority = KeybindPriorities.SubCancel)]
         [WhitelistScopes(typeof(GridService), typeof(TimelineService))]
@@ -171,6 +335,8 @@ namespace ArcCreate.Compose.Editing
         {
             SubAction confirm = action.GetSubAction("Confirm");
             SubAction cancel = action.GetSubAction("Cancel");
+            SubAction cycleSky = action.GetSubAction("CycleSkyNoteMode");
+
             IEnumerable<Note> selection = GetSelection();
 
             Vector2 mousePos = Input.mousePosition;
@@ -258,7 +424,7 @@ namespace ArcCreate.Compose.Editing
 
             if (dragArcTap.Count > 0)
             {
-                await DragArctaps(closestTiming, dragArcTap, confirm, cancel);
+                await DragArctaps(closestTiming, dragArcTap, confirm, cancel, cycleSky);
                 return;
             }
         }
@@ -362,8 +528,13 @@ namespace ArcCreate.Compose.Editing
             }
         }
 
-        private async UniTask DragArctaps(int timing, List<ArcTap> dragArctap, SubAction confirm, SubAction cancel)
+        private async UniTask DragArctaps(int timing, List<ArcTap> dragArctap, SubAction confirm, SubAction cancel, SubAction cycleMode)
         {
+            // this is a mess.
+            PositionArctapMode mode = PositionArctapMode.SnapToExisting;
+
+            List<Arc> oldParentArcs = new List<Arc>();
+            Vector2 oldPosition = Vector2.zero;
             List<(ArcEvent instance, ArcEvent newValue)> events = new List<(ArcEvent, ArcEvent)>();
             for (int i = 0; i < dragArctap.Count; i++)
             {
@@ -371,6 +542,12 @@ namespace ArcCreate.Compose.Editing
                 ArcTap clone = arcTap.Clone() as ArcTap;
                 events.Add((arcTap, clone));
                 dragArctap[i] = clone;
+
+                if (!oldParentArcs.Contains(arcTap.Arc))
+                {
+                    oldParentArcs.Add(arcTap.Arc);
+                    oldPosition = new Vector2(arcTap.Arc.ArcXAt(timing), arcTap.Arc.ArcYAt(timing));
+                }
             }
 
             List<Arc> snappableArcs = Services.Gameplay.Chart
@@ -378,20 +555,29 @@ namespace ArcCreate.Compose.Editing
                 .Where(a => a.IsTrace && a.Timing <= timing && timing <= a.EndTiming)
                 .ToList();
 
-            if (snappableArcs.Count <= 1)
+            Arc freeArc = new Arc
             {
-                return;
-            }
+                Timing = timing,
+                EndTiming = timing + 1,
+                LineType = Values.CreateArcTypeMode.Value,
+                Color = Values.CreateArcColorMode.Value,
+                Sfx = "none",
+                IsTrace = true,
+                TimingGroup = Values.EditingTimingGroup.Value,
+            };
 
             var command = new EventCommand(
-                name: I18n.S("Compose.Notify.History.Drag.Position"),
+                name: string.Empty,
                 update: events);
 
-            var (success, position) = await Services.Cursor.RequestVerticalSelection(
-                confirm,
-                cancel,
-                timing,
-                update: pos =>
+            var freeArcEvents = new ArcEvent[] { freeArc };
+            var addcmd = new EventCommand(
+                name: string.Empty,
+                add: freeArcEvents);
+
+            void UpdateNotes(Vector2 pos)
+            {
+                if (mode == PositionArctapMode.SnapToExisting)
                 {
                     Arc closestArc = snappableArcs[0];
                     float closestDist = float.MaxValue;
@@ -406,23 +592,103 @@ namespace ArcCreate.Compose.Editing
                         }
                     }
 
-                    for (int i = 0; i < dragArctap.Count; i++)
+                    for (int i = 0; i < events.Count; i++)
                     {
                         ArcTap arctap = dragArctap[i];
                         arctap.Arc = closestArc;
                     }
+                }
+                else if (mode == PositionArctapMode.Free)
+                {
+                    freeArc.XStart = pos.x;
+                    freeArc.XEnd = pos.x;
+                    freeArc.YStart = pos.y;
+                    freeArc.YEnd = pos.y;
+                    for (int i = 0; i < dragArctap.Count; i++)
+                    {
+                        ArcTap arctap = dragArctap[i];
+                        arctap.Arc = freeArc;
+                    }
 
+                    Services.Gameplay.Chart.UpdateEvents(freeArcEvents);
+                }
+                else if (mode == PositionArctapMode.Connected)
+                {
+                    freeArc.XStart = pos.x;
+                    freeArc.XEnd = oldPosition.x;
+                    freeArc.YStart = pos.y;
+                    freeArc.YEnd = oldPosition.y;
+                    for (int i = 0; i < dragArctap.Count; i++)
+                    {
+                        ArcTap arctap = dragArctap[i];
+                        arctap.Arc = freeArc;
+                        arctap.Timing = timing;
+                    }
+
+                    Services.Gameplay.Chart.UpdateEvents(freeArcEvents);
+                }
+            }
+
+            var (success, position) = await Services.Cursor.RequestVerticalSelection(
+                confirm,
+                cancel,
+                timing,
+                update: pos =>
+                {
+                    if (cycleMode.WasExecuted)
+                    {
+                        bool neededNew = mode != PositionArctapMode.SnapToExisting;
+                        mode = CycleArctapMode(mode);
+                        bool needNew = mode != PositionArctapMode.SnapToExisting;
+                        if (!neededNew && needNew)
+                        {
+                            addcmd.Execute();
+                        }
+                        else if (neededNew & !needNew)
+                        {
+                            addcmd.Undo();
+                        }
+                    }
+
+                    UpdateNotes(pos);
                     command.Execute();
                 });
 
             if (!success)
             {
                 command.Undo();
+                return;
             }
-            else
+
+            IEnumerable<ArcEvent> add = mode == PositionArctapMode.SnapToExisting ? null : new ArcEvent[] { freeArc };
+            List<ArcEvent> remove = null;
+
+            UpdateNotes(position);
+
+            foreach (var arc in oldParentArcs)
             {
-                Services.History.AddCommand(command);
+                if (arc != null
+                 && arc.Timing >= arc.EndTiming - 1
+                 && arc.XStart == arc.XEnd
+                 && arc.YStart == arc.YEnd
+                 && Services.Gameplay.Chart.GetAll<ArcTap>().Where(a => a.Arc == arc).Count() == 0)
+                {
+                    remove = remove ?? new List<ArcEvent>();
+                    remove.Add(arc);
+                }
             }
+
+            var removecmd = new EventCommand(
+                name: string.Empty,
+                remove: remove);
+            command.Execute();
+            removecmd.Execute();
+            Services.History.AddCommandWithoutExecuting(
+                new CombinedCommand(
+                    name: I18n.S("Compose.Notify.History.Drag.Position"),
+                    command,
+                    addcmd,
+                    removecmd));
         }
 
         private void Awake()
@@ -583,6 +849,21 @@ namespace ArcCreate.Compose.Editing
             {
                 return Services.Gameplay.Chart.GetRenderingNotes();
             }
+        }
+
+        private PositionArctapMode CycleArctapMode(PositionArctapMode mode)
+        {
+            switch (mode)
+            {
+                case PositionArctapMode.SnapToExisting:
+                    return PositionArctapMode.Free;
+                case PositionArctapMode.Free:
+                    return PositionArctapMode.Connected;
+                case PositionArctapMode.Connected:
+                    return PositionArctapMode.SnapToExisting;
+            }
+
+            return PositionArctapMode.SnapToExisting;
         }
     }
 }

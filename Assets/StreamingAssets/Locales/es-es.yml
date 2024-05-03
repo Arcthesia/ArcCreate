@@ -222,7 +222,7 @@ Compose:
         Timing: Seleccionar tiempo
         Position: Seleccionar posición
         Lane: Seleccionar carril
-      NotFound: El macro "{macroId}" no existe.        
+      NotFound: El macro "{0}" no existe.        
   # Dialog boxes
   Dialog:
     RemoveGroup:
@@ -257,6 +257,12 @@ Compose:
       Confirm: Confirmar
     Macros:
       Title: Macros
+    CameraViews:
+      Default: Vista predeterminada
+      Stationary: Vista estacionaria
+      ZoomedOut: Vista alejada
+      BirdsEye1: Vista panorámica 1
+      BirdsEye2: Vista panorámica 2
   Navigation:
     KeybindOverride: Anulación de la combinación de teclas para la acción {0}
     # Texts that appear on the context menu (right-click menu)
@@ -550,10 +556,10 @@ Compose:
         TraceBody: Cuerpo del trazado
         Shadow: Sombra
         ArcColors: Colores del arco
-        Blue: Azul (0)
-        Red: Rojo (1)
-        Green: Verde (2)
-        Custom: Personalizado ({0})
+        Blue: Azul
+        Red: Rojo
+        Green: Verde
+        Custom: Personalizado
         AddArcColor: Añadir color a arco
         NoProjectLoaded: |-
           Proyecto no cargado.
@@ -610,12 +616,6 @@ Compose:
         GenerateEmmyLua: Generar EmmyLua
         Reload: Recargar
         FreeCamera: <size=10>Cámara libre<size=10>
-      CameraView:
-        Default: Vista predeterminada
-        Stationary: Vista estacionaria
-        ZoomedOut: Vista alejada
-        BirdsEye1: Vista panorámica 1
-        BirdsEye2: Vista panorámica 2
       Mode:
         Timing: Tiempo
         Camera: Cámara
@@ -632,10 +632,7 @@ Compose:
           Name: Ajustes
           From: De
           To: A
-          Quality: Calidad
           FPS: FPS
-          Width: Ancho
-          Height: Alto
           Size: Tamaño
           ShowShutter: Mostrar transición
         Start: Iniciar renderización

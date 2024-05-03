@@ -33,7 +33,7 @@ namespace ArcCreate.Gameplay.Hitsound
 
         public Dictionary<string, AudioClip> SfxAudioClips => sfxClips;
 
-        private bool IsMuted => hitsoundPlayer == null || Mathf.Approximately(hitsoundPlayer.Volume, 0);
+        private bool IsMuted => hitsoundPlayer == null || hitsoundPlayer.Volume < 0.1f;
 
         public void PlayTapHitsound(int timing)
         {

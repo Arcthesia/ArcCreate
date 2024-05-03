@@ -213,6 +213,12 @@ Compose:
       Yes: Lưu thay đổi
       No: Bỏ thay đổi
       Cancel: Hủy
+    CameraViews:
+      Default: Default view
+      Stationary: Stationary view
+      ZoomedOut: Zoomed out view
+      BirdsEye1: Bird's-eye view 1
+      BirdsEye2: Bird's-eye view 2
   Navigation:
     KeybindOverride: Thay đổi phím cho tác vụ {0}
     # Texts that appear on the context menu (right-click menu)
@@ -495,10 +501,10 @@ Compose:
         TraceBody: Trace Body
         Shadow: Shadow
         ArcColors: Arc Colors
-        Blue: Blue (0)
-        Red: Red (1)
-        Green: Green (2)
-        Custom: Custom ({0})
+        Blue: Blue
+        Red: Red
+        Green: Green
+        Custom: Custom
         AddArcColor: Add arc color
         NoProjectLoaded: |-
           No project loaded.
@@ -548,12 +554,6 @@ Compose:
         GenerateEmmyLua: Generate EmmyLua
         Reload: Reload
         FreeCamera: Free camera
-      CameraView:
-        Default: Default view
-        Stationary: Stationary view
-        ZoomedOut: Zoomed out view
-        BirdsEye1: Bird's-eye view 1
-        BirdsEye2: Bird's-eye view 2
       Mode:
         Timing: Timing
         Camera: Camera
@@ -570,10 +570,7 @@ Compose:
           Name: Settings
           From: From
           To: To
-          Quality: Quality
           FPS: FPS
-          Width: Width
-          Height: Height
           Size: Size
           ShowShutter: Show shutter
         Start: Start rendering

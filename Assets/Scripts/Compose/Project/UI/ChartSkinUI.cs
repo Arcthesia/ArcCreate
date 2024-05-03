@@ -3,7 +3,6 @@ using ArcCreate.Compose.Components;
 using ArcCreate.Data;
 using ArcCreate.Utility;
 using UnityEngine;
-using UnityScript.Steps;
 
 namespace ArcCreate.Compose.Project
 {

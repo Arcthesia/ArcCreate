@@ -90,7 +90,7 @@ TextureImporter:
       213: -3354804850525770522
     second: note_sfx_28
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -110,6 +110,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -141,10 +143,14 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
   applyGammaDecoding: 1
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -816,6 +822,36 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      note_sfx_0: 6164302320787068705
+      note_sfx_1: 4326505988124706484
+      note_sfx_10: 1871808019755590965
+      note_sfx_11: -6668333467840055203
+      note_sfx_12: 187393566523102512
+      note_sfx_13: -8897313741351014959
+      note_sfx_14: -5111026424769462402
+      note_sfx_15: 3742171302494018768
+      note_sfx_16: -7594388950939750210
+      note_sfx_17: -6746183663891417379
+      note_sfx_18: 8426187009616852982
+      note_sfx_19: 4793328318645000476
+      note_sfx_2: -8589647755439084794
+      note_sfx_20: 3289310855842615553
+      note_sfx_21: 6073419406970915911
+      note_sfx_22: 4319173435758357306
+      note_sfx_23: 9209165337547475281
+      note_sfx_24: -5282774966382342705
+      note_sfx_25: -7085593912159513081
+      note_sfx_26: -2510366290852479555
+      note_sfx_27: -3019879777494375098
+      note_sfx_28: -3354804850525770522
+      note_sfx_3: -7218102379877087331
+      note_sfx_4: 2434836817713306108
+      note_sfx_5: 7046824104450794373
+      note_sfx_6: -2575591660819396229
+      note_sfx_7: -957267242877163986
+      note_sfx_8: -7601602788206994056
+      note_sfx_9: 8162934931975785399
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

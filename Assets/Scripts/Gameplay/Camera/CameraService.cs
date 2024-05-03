@@ -119,12 +119,13 @@ namespace ArcCreate.Gameplay.GameplayCamera
             }
         }
 
-        public IEnumerable<CameraEvent> FindWithinRange(int from, int to)
+        public IEnumerable<CameraEvent> FindWithinRange(int from, int to, bool overlapCompletely)
         {
             for (int i = 0; i < events.Count; i++)
             {
                 CameraEvent cam = events[i];
-                if (cam.Timing >= from && cam.Timing + cam.Duration <= to)
+                if ((overlapCompletely && cam.Timing >= from && cam.Timing + cam.Duration <= to)
+                 || (!overlapCompletely && (cam.Timing >= from || cam.Timing + cam.Duration <= to)))
                 {
                     yield return cam;
                 }

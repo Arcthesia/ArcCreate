@@ -178,8 +178,9 @@ namespace ArcCreate.Gameplay.Chart
         /// </summary>
         /// <param name="from">The query timing lower range.</param>
         /// <param name="to">The query timing upper range.</param>
+        /// <param name="overlapCompletely">Whether to only query for notes that overlap with the range completely.</param>
         /// <returns>All notes with matching timing value.</returns>
-        public abstract IEnumerable<Note> FindEventsWithinRange(int from, int to);
+        public abstract IEnumerable<Note> FindEventsWithinRange(int from, int to, bool overlapCompletely);
 
         /// <summary>
         /// Find all rendering notes.

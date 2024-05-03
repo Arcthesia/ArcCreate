@@ -21,12 +21,9 @@ namespace ArcCreate.Compose.Rendering
         private readonly string outputPath;
         private readonly float startRenderingTime;
         private readonly float endRenderingTime;
-        private readonly int crf;
-        private readonly float fps;
         private readonly AudioRenderer audioRenderer;
         private readonly GameplayViewport gameplayViewport;
-        private readonly int width;
-        private readonly int height;
+        private readonly RenderSetting settings;
         private readonly bool showShutter;
         private readonly TransitionSequence transitionSequence;
         private byte[] cachedByteArray;
@@ -34,10 +31,7 @@ namespace ArcCreate.Compose.Rendering
         public FrameRenderer(
             string outputPath,
             Camera[] cameras,
-            int width,
-            int height,
-            float fps,
-            int crf,
+            RenderSetting settings,
             int from,
             int to,
             AudioRenderer audioRenderer,
@@ -46,21 +40,18 @@ namespace ArcCreate.Compose.Rendering
             TransitionSequence transitionSequence)
         {
             this.audioRenderer = audioRenderer;
-            this.width = width;
-            this.height = height;
+            this.settings = settings;
             this.cameras = cameras;
             this.outputPath = outputPath;
             this.showShutter = showShutter;
-            this.crf = crf;
-            this.fps = fps;
             this.gameplayViewport = gameplayViewport;
             this.transitionSequence = transitionSequence;
 
             startRenderingTime = from / 1000f;
             endRenderingTime = to / 1000f;
 
-            renderTexture = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32);
-            texture2D = new Texture2D(width, height, TextureFormat.ARGB32, false, true);
+            renderTexture = new RenderTexture(settings.Width, settings.Height, 24, RenderTextureFormat.ARGB32);
+            texture2D = new Texture2D(settings.Width, settings.Height, TextureFormat.ARGB32, false, true);
             defaultRenderTextures = new RenderTexture[cameras.Length];
             for (int i = 0; i < cameras.Length; i++)
             {
@@ -118,7 +109,7 @@ namespace ArcCreate.Compose.Rendering
             try
             {
                 DateTime startAt = DateTime.Now;
-                Time.captureFramerate = Mathf.RoundToInt(fps);
+                Time.captureFramerate = Mathf.RoundToInt(settings.Fps);
                 Services.Gameplay.Audio.AudioTiming = Mathf.RoundToInt(startRenderingTime * 1000);
 
                 bool shouldUpdateTiming = false;
@@ -159,7 +150,7 @@ namespace ArcCreate.Compose.Rendering
                         cam.Render();
                     }
 
-                    texture2D.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+                    texture2D.ReadPixels(new Rect(0, 0, settings.Width, settings.Height), 0, 0);
                     texture2D.Apply();
 
                     Profiler.BeginSample("Renderer: Extract bytes");
@@ -260,8 +251,8 @@ namespace ArcCreate.Compose.Rendering
             string path = GetPath();
 
             // libx264 doesn't believe in odd sizes
-            int w = Mathf.Max(width - (width % 2), 2);
-            int h = Mathf.Max(height - (height % 2), 2);
+            int w = Mathf.Max(settings.Width - (settings.Width % 2), 2);
+            int h = Mathf.Max(settings.Height - (settings.Height % 2), 2);
             videoPath = videoPath.Replace(@"""", @"\""");
             if (!videoPath.ToLower().EndsWith(".mp4"))
             {
@@ -277,7 +268,7 @@ namespace ArcCreate.Compose.Rendering
             }
 #pragma warning disable
             string args = ""
-            + $" -f rawvideo -pixel_format argb -video_size {width}x{height} -framerate {fps} -i pipe: "
+            + $" -f rawvideo -pixel_format argb -video_size {settings.Width}x{settings.Height} -framerate {settings.Fps} -i pipe: "
             + $"-i \"{Path.Combine(path, "sfx.wav")}\" "   // First audio (sfx)
             + $"-i \"{Path.Combine(path, "song.wav")}\" "  // Second audio (sfx)
             + argsForSfxAudio
@@ -285,7 +276,7 @@ namespace ArcCreate.Compose.Rendering
             + $"-c:v libx264 "             //Video codec
             + $"-c:a aac "                 //Audio codec
             + $"-pix_fmt yuv420p "         //Set pixel format for QuickTime
-            + $"-crf {crf} "               //Video quality
+            + $"-crf {settings.Crf} "      //Video quality
             + $"-vf vflip,scale={w}x{h} "  //Video size, vflip because screenshot in byte array is upside down
             + $"-b:a 384k "                //Audio quality
             + $"-bf 2 "                    //2 B-frames

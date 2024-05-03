@@ -106,7 +106,7 @@ namespace ArcCreate.Gameplay.Chart
             }
         }
 
-        public override IEnumerable<Note> FindEventsWithinRange(int from, int to)
+        public override IEnumerable<Note> FindEventsWithinRange(int from, int to, bool overlapCompletely = true)
         {
             if (Notes.Count == 0)
             {
@@ -115,10 +115,14 @@ namespace ArcCreate.Gameplay.Chart
 
             // Avoid modifying the cache of search tree.
             int fromI = timingSearch.List.BisectLeft(from, n => n.Timing);
-            int toI = timingSearch.List.BisectRight(to, n => n.Timing);
 
-            for (int i = fromI; i <= toI; i++)
+            for (int i = fromI; i < timingSearch.List.Count; i++)
             {
+                if (timingSearch.List[i].Timing > to)
+                {
+                    yield break;
+                }
+
                 yield return timingSearch.List[i];
             }
         }

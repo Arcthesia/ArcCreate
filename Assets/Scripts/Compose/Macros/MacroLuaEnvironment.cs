@@ -33,6 +33,9 @@ namespace ArcCreate.Compose.Macros
 
         public string MacroDefFolder => new DirectoryInfo(Application.dataPath).Parent.FullName + "/Macros";
 
+        public string PreBundledMacroDefFolder =>
+            new DirectoryInfo(Application.streamingAssetsPath) + "/Macros";
+
         public void WaitForRequest(IRequest request)
         {
             currentRequest = request;
@@ -45,7 +48,7 @@ namespace ArcCreate.Compose.Macros
             cts = new CancellationTokenSource();
         }
 
-        public void ExecuteScript(string path)
+        public void ExecuteScript(string path, bool includePreBundledPath)
         {
             if (!File.Exists(path))
             {
@@ -56,7 +59,16 @@ namespace ArcCreate.Compose.Macros
             {
                 Script script = new Script();
                 UserData.RegisterAssembly();
-                LuaRunner.RunScript(File.ReadAllText(path), this, new ScriptLoader(Path.GetDirectoryName(path)));
+                if (includePreBundledPath)
+                {
+                    LuaRunner.RunScript(File.ReadAllText(path), this, new ScriptLoader(
+                        Path.GetDirectoryName(path),
+                        PreBundledMacroDefFolder));
+                }
+                else
+                {
+                    LuaRunner.RunScript(File.ReadAllText(path), this, new ScriptLoader(Path.GetDirectoryName(path)));
+                }
             }
             catch (Exception e)
             {
@@ -167,36 +179,8 @@ namespace ArcCreate.Compose.Macros
             macrosTree.Clear();
             blockReload = true;
 
-            Debug.Log($"Loading macros at {MacroDefFolder}");
-            if (!Directory.Exists(MacroDefFolder))
-            {
-                return;
-            }
-
-            foreach (string path in Directory.GetFiles(MacroDefFolder))
-            {
-                if (!path.EndsWith(".lua"))
-                {
-                    continue;
-                }
-
-                Debug.Log($"Executing macro definition script {path}");
-                try
-                {
-                    ExecuteScript(path);
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError(I18n.S("Compose.Exception.LuaScript", new Dictionary<string, object>()
-                    {
-                        { "Path", path },
-                        { "Message", e.Message },
-                        { "StackTrace", e.StackTrace },
-                    }));
-                }
-            }
-
-            blockReload = false;
+            LoadMacrosFrom(MacroDefFolder, true);
+            LoadMacrosFrom(PreBundledMacroDefFolder, false);
             UpdateMacroTree();
         }
 
@@ -247,6 +231,40 @@ namespace ArcCreate.Compose.Macros
 
         public void NotifyError(object content)
             => Services.Popups.Notify(Popups.Severity.Error, content.ToString());
+
+        private void LoadMacrosFrom(string dir, bool includePreBundledPath)
+        {
+            Debug.Log($"Loading macros at {dir}");
+            if (!Directory.Exists(dir))
+            {
+                return;
+            }
+
+            foreach (string path in Directory.GetFiles(dir))
+            {
+                if (!path.EndsWith(".lua"))
+                {
+                    continue;
+                }
+
+                Debug.Log($"Executing macro definition script {path}");
+                try
+                {
+                    ExecuteScript(path, includePreBundledPath);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(I18n.S("Compose.Exception.LuaScript", new Dictionary<string, object>()
+                    {
+                        { "Path", path },
+                        { "Message", e.Message },
+                        { "StackTrace", e.StackTrace },
+                    }));
+                }
+            }
+
+            blockReload = false;
+        }
 
         private void UpdateMacroTree()
         {

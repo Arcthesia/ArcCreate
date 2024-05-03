@@ -216,6 +216,12 @@ Compose:
       Yes: 예
       No: 아니오
       Cancel: 취소
+    CameraViews:
+      Default: 기본 시점
+      Stationary: 고정 시점
+      ZoomedOut: 원거리 시점
+      BirdsEye1: 상단 시점
+      BirdsEye2: 상단 시점 2
   Navigation:
     KeybindOverride: 액션 {0}에 배정된 단축키 덮어씌워짐
     # Texts that appear on the context menu (right-click menu)
@@ -497,10 +503,10 @@ Compose:
         TraceBody: 트레이스 색
         Shadow: 그림자 색
         ArcColors: 아크 색
-        Blue: 파랑 (0)
-        Red: 빨강 (1)
-        Green: 초록 (2)
-        Custom: 커스텀 ({0})
+        Blue: 파랑
+        Red: 빨강
+        Green: 초록
+        Custom: 커스텀
         AddArcColor: 아크 색 추가
         NoProjectLoaded: |-
           프로젝트가 로드되지 않았습니다.
@@ -550,12 +556,6 @@ Compose:
         GenerateEmmyLua: EmmyLua 템플릿 생성
         Reload: 리로드
         FreeCamera: 자유 카메라
-      CameraView:
-        Default: 기본 시점
-        Stationary: 고정 시점
-        ZoomedOut: 원거리 시점
-        BirdsEye1: 상단 시점
-        BirdsEye2: 상단 시점 2
       Mode:
         Timing: 타이밍
         Camera: 카메라
@@ -572,10 +572,7 @@ Compose:
           Name: 설정
           From: 시작 시간
           To: 끝 시간
-          Quality: 품질
           FPS: FPS
-          Width: 영상 너비
-          Height: 영상 높이
           Size: 크기
           ShowShutter: 셔터 포함
         Start: 렌더링 시작

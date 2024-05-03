@@ -155,13 +155,13 @@ namespace ArcCreate.Gameplay.Chart
             }
         }
 
-        public override IEnumerable<Note> FindEventsWithinRange(int from, int to)
+        public override IEnumerable<Note> FindEventsWithinRange(int from, int to, bool overlapCompletely = true)
         {
             var overlap = TimingTree[from, to];
             while (overlap.MoveNext())
             {
                 Note note = overlap.Current;
-                if (note.Timing >= from && note.EndTiming <= to)
+                if ((note.Timing >= from && note.EndTiming <= to) || !overlapCompletely)
                 {
                     yield return note;
                 }

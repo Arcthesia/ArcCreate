@@ -17,9 +17,7 @@
         "**/*.wav": true,
         "**/*.gif": true,
         "**/*.ico": true,
-        // "**/*.jpg": true,
         "**/*.jpeg": true,
-        // "**/*.png": true,
         "**/*.psd": true,
         "**/*.tga": true,
         "**/*.tif": true,
@@ -48,5 +46,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.preferCSharpExtension": true
+    "dotnet.preferCSharpExtension": true,
+    "dotnet.defaultSolution": "ArcCreate.sln"
 }

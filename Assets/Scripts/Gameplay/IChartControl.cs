@@ -60,6 +60,17 @@ namespace ArcCreate.Gameplay
             where T : ArcEvent;
 
         /// <summary>
+        /// Find all events that are bounded by the provided timing range.
+        /// </summary>
+        /// <param name="from">The query timing lower range.</param>
+        /// <param name="to">The query timing upper range.</param>
+        /// <param name="overlapCompletely">Whether to only query for notes that overlap with the range completely.</param>
+        /// <typeparam name="T">Event type to search for.</typeparam>
+        /// <returns>All events with matching timing value.</returns>
+        IEnumerable<T> FindEventsWithinRange<T>(int from, int to, bool overlapCompletely = true)
+            where T : ArcEvent;
+
+        /// <summary>
         /// Get all notes being rendered. Calculation is done with z position only (no frustum culling).
         /// </summary>
         /// <returns>All notes that's rendered.</returns>

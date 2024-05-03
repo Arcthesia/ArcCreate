@@ -106,7 +106,7 @@ namespace ArcCreate.Gameplay.Data
             // ----------------------------------> X axis
             float pf = startPos.x;
             float nn = endPos.x;
-            float nf = (next == null || next.EndTiming <= next.Timing) ? nn : next.WorldXAt(endOfSlamTiming) - basePos.x;
+            float nf = (next == null || next.EndTiming <= next.Timing) ? nn : next.WorldSegmentedXAt(endOfSlamTiming) - basePos.x;
 
             float nrx, nlx, frx, flx = 0;
             if (nn < pf)

@@ -4,17 +4,17 @@ using UnityEngine.UI;
 
 namespace ArcCreate.Compose.Components
 {
-    public class SaveCustomPanelLayoutDialog : Dialog
+    public class SaveItemNameDialog : Dialog
     {
         [SerializeField] private Button confirm;
         [SerializeField] private Button cancel;
         [SerializeField] private TMP_InputField labelInput;
         [SerializeField] private TMP_Text duplicateError;
-        private PanelLayoutManager manager;
+        private IItemNameDialogConsumer consumer;
 
-        public void Open(PanelLayoutManager manager)
+        public void Open(IItemNameDialogConsumer consumer)
         {
-            this.manager = manager;
+            this.consumer = consumer;
             labelInput.text = string.Empty;
             Open();
         }
@@ -28,7 +28,7 @@ namespace ArcCreate.Compose.Components
 
         private void OnLabelInputChange(string text)
         {
-            if (!manager.IsValidLabel(text, out string reason))
+            if (!consumer.IsValidName(text, out string reason))
             {
                 duplicateError.gameObject.SetActive(true);
                 duplicateError.text = reason;
@@ -46,12 +46,12 @@ namespace ArcCreate.Compose.Components
 
         private void OnConfirm()
         {
-            if (!manager.IsValidLabel(labelInput.text, out string _))
+            if (!consumer.IsValidName(labelInput.text, out string _))
             {
                 return;
             }
 
-            manager.SaveLayout(labelInput.text);
+            consumer.SaveItem(labelInput.text);
             Close();
         }
     }

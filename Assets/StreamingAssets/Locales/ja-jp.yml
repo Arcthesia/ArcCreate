@@ -276,6 +276,12 @@ Compose:
         -
         {Exception}
       Confirm: 確認
+    CameraViews:
+      Default: '視点: デフォルト'
+      Stationary: '視点: 固定'
+      ZoomedOut: '視点: ズームアウト'
+      BirdsEye1: '視点: 俯瞰 (上から下)'
+      BirdsEye2: '視点: 俯瞰 (左から右)'
   Navigation:
     KeybindOverride: アクション"{0}"のキーバインドがオーバーライドされました。
     # Texts that appear on the context menu (right-click menu)
@@ -561,10 +567,10 @@ Compose:
         TraceBody: Trace
         Shadow: 影
         ArcColors: Arc
-        Blue: Blue (0)
-        Red: Red (1)
-        Green: Green (2)
-        Custom: Custom ({0})
+        Blue: Blue
+        Red: Red
+        Green: Green
+        Custom: Custom
         AddArcColor: 追加
         NoProjectLoaded: |-
           プロジェクトがロードされていません。
@@ -614,12 +620,6 @@ Compose:
         GenerateEmmyLua: 型定義ファイルを生成
         Reload: 再読み込み
         FreeCamera: フリー
-      CameraView:
-        Default: '視点: デフォルト'
-        Stationary: '視点: 固定'
-        ZoomedOut: '視点: ズームアウト'
-        BirdsEye1: '視点: 俯瞰 (上から下)'
-        BirdsEye2: '視点: 俯瞰 (左から右)'
       Mode: # これは翻訳しない
         Timing: Timing
         Camera: Camera
@@ -636,11 +636,8 @@ Compose:
           Name: 出力設定
           From: 開始
           To: 終了
-          Quality: 品質
           FPS: FPS
-          Width: 幅
-          Height: 高さ
-          Size: Size # (?) 機能不明・用途不明
+          Size: サイズ
           ShowShutter: シャッターを表示
         Start: 出力開始
         Cancel: キャンセル

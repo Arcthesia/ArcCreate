@@ -169,6 +169,11 @@ namespace ArcCreate.Compose.Navigation
             return cachedKeybindList;
         }
 
+        public void RefreshKeybindHint()
+        {
+            keybindHintList.RebuildList();
+        }
+
         public bool ShouldExecute(IAction action)
         {
             if (EventSystem.current.currentSelectedGameObject != null &&
@@ -207,7 +212,7 @@ namespace ArcCreate.Compose.Navigation
                         return false;
                     }
 
-                    return currentAction.SubActions.Contains(subAction);
+                    return !subAction.ForceDisabled && currentAction.SubActions.Contains(subAction);
                 case CompositeAction compositeAction:
                     return true;
                 case MacroAction macroAction:

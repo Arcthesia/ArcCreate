@@ -51,7 +51,7 @@ TextureImporter:
       213: 3181351587459725422
     second: TapColorless_15
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -71,6 +71,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -102,10 +104,14 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
   applyGammaDecoding: 0
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -492,6 +498,23 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      TapColorless_0: -2950461966760933213
+      TapColorless_1: -8634998755398328641
+      TapColorless_10: -5083459723747809992
+      TapColorless_11: -144182127398495978
+      TapColorless_12: -3852830178994362998
+      TapColorless_13: -6071563041196311922
+      TapColorless_14: -8748674137460156535
+      TapColorless_15: 3181351587459725422
+      TapColorless_2: -8410649686551037253
+      TapColorless_3: -8481959052940483332
+      TapColorless_4: 4267454708512252826
+      TapColorless_5: 8032290451629028203
+      TapColorless_6: 6103982274707688128
+      TapColorless_7: 7423174082279450411
+      TapColorless_8: 3364410790384365935
+      TapColorless_9: 3374520144680761362
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

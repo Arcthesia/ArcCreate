@@ -231,7 +231,7 @@ namespace ArcCreate.Storage
                 ((DownloadHandlerAudioClip)req.downloadHandler).streamAudio = true;
                 await req.SendWebRequest();
 
-                while (!req.isNetworkError && req.downloadedBytes < 1024)
+                while (req.result == UnityWebRequest.Result.ConnectionError && req.downloadedBytes < 1024)
                 {
                     await UniTask.NextFrame();
                 }

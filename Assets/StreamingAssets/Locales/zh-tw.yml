@@ -236,6 +236,12 @@ Compose:
         事件型態: {EventType}
         {Exception}
       Confirm: 確定
+    CameraViews:
+      Default: 遊戲視角
+      Stationary: 正常視角
+      ZoomedOut: 縮小視角
+      BirdsEye1: 俯視視角 1
+      BirdsEye2: 俯視視角 2
   Navigation:
     KeybindOverride: 複寫動作指令 {0} 的快捷鍵
     # Texts that appear on the context menu (right-click menu)
@@ -519,10 +525,10 @@ Compose:
         TraceBody: 黑線顏色
         Shadow: 影子顏色
         ArcColors: 音弧顏色
-        Blue: 藍 (0)
-        Red: 紅 (1)
-        Green: 綠 (2)
-        Custom: 自訂 ({0})
+        Blue: 藍
+        Red: 紅
+        Green: 綠
+        Custom: 自訂
         AddArcColor: 新增音弧顏色
         NoProjectLoaded: |-
           沒有專案被讀取，
@@ -572,12 +578,6 @@ Compose:
         GenerateEmmyLua: 產生 EmmyLua
         Reload: 重新載入
         FreeCamera: 移動相機
-      CameraView:
-        Default: 遊戲視角
-        Stationary: 正常視角
-        ZoomedOut: 縮小視角
-        BirdsEye1: 俯視視角 1
-        BirdsEye2: 俯視視角 2
       Mode:
         Timing: 時間
         Camera: 相機
@@ -594,10 +594,7 @@ Compose:
           Name: 設定
           From: 開始
           To: 結束
-          Quality: 品質
           FPS: FPS
-          Width: 寬度
-          Height: 高度
           Size: 大小
           ShowShutter: 顯示載入介面
         Start: 開始錄製

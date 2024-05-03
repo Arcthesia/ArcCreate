@@ -3,6 +3,7 @@ namespace ArcCreate.Compose.Navigation
     public class SubAction : IAction
     {
         private bool executed = false;
+        private bool forceDisabled = false;
 
         public SubAction(
             string id,
@@ -40,6 +41,16 @@ namespace ArcCreate.Compose.Navigation
         public string I18nName { get; private set; }
 
         public bool ShouldDisplayOnContextMenu { get; private set; }
+
+        public bool ForceDisabled
+        {
+            get => forceDisabled;
+            set
+            {
+                forceDisabled = value;
+                Services.Navigation.RefreshKeybindHint();
+            }
+        }
 
         public void Execute()
         {
