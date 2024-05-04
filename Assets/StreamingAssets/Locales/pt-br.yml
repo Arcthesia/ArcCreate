@@ -262,12 +262,12 @@ Compose:
     GroupPicker:
       SelectEditingGroup: "Mudar grupo atual para:"
       AssignNotesToGroup: "Designar as notas selecionadas para:"
-      CameraViews:
-        Default: Visão padrão
-        Stationary: Visão fixa
-        ZoomedOut: Visão de longe
-        BirdsEye1: Visão panorâmica 1
-        BirdsEye2: Visão panorâmica 2      
+    CameraViews:
+      Default: Visão padrão
+      Stationary: Visão fixa
+      ZoomedOut: Visão de longe
+      BirdsEye1: Visão panorâmica 1
+      BirdsEye2: Visão panorâmica 2      
     PanelLayout:
       Name: Layout
       Default: Padrão
