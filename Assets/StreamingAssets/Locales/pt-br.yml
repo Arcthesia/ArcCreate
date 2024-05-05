@@ -693,7 +693,7 @@ Compose:
         PreviewSegment: <size=10>Pré-visu. segmento</size>
         CustomChartPath: Usar personalizado (avançado)
       Options:
-        Inherit: Inherit
+        Inherit: Do Lado
         Light: Light
         Conflict: Conflict
         Colorless: Colorless
