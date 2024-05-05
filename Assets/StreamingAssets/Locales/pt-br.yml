@@ -798,11 +798,11 @@ Compose:
         Gameplay:
           Name: Gameplay
           Speed: Velocidade
-          AspectRatio: Taxa de Proporção
+          AspectRatio: <size=10>Taxa de Proporção</size>
           Indicator: Indicador
           MaxIndicator: Habilitar indicator máximo
           Colorblind: Usar cores de arc para daltônicos
-          ScoreDisplay: Visualização da pontuação
+          ScoreDisplay: Pontuação
         Judgement:
           Name: Julgamento
           NotUsedInAutoOrIdle: "Essas opções não terão efeito no modo automático ou ocioso:"
@@ -931,7 +931,7 @@ Remote:
   Actions:
     Broadcast: Iniciar transmissão
     AbortBroadcast: Parar transmissão
-    Broadcastnovamente: Transmitir de novo
+    BroadcastAgain: Transmitir de novo
     StopSession: Parar sessão
     StartNewSession: Começar nova sessão
     ManualIP: Configurar conexão manualmente
