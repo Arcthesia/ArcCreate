@@ -628,8 +628,8 @@ Compose:
         Save: Salvar
         InputMode: Modo de Entrada
         InputModeOptions:
-          auto: Auto
-          autocontroller: Auto (Controle)
+          auto: Automático
+          autocontroller: Autom. (Controle)
           touch: Toque
           controller: Controle
           mouse: Mouse
@@ -867,7 +867,7 @@ Compose:
         Easing: Atenuação
       Settings:
         ShowGrid: Mostrar grade
-        HideGrid: Esconder grade
+        HideGrid: Escond. grade
         Measure: Medir
         RangeSelect: Selecionar        
       Macros:
