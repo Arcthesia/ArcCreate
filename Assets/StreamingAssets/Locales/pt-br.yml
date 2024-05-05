@@ -869,7 +869,7 @@ Compose:
         ShowGrid: Mostrar grade
         HideGrid: Esconder grade
         Measure: Medir
-        RangeSelect: Seleção de alcance        
+        RangeSelect: Selecionar        
       Macros:
         Name: Macros
         GenerateEmmy: Gerar EmmyLua
