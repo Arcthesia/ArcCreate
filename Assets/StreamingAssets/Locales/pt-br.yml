@@ -656,7 +656,7 @@ Compose:
         BPMText: Texto do BPM
         SyncBaseBPM: Sincronizar
         ChartOffset: Offset da Chart
-        TimingPointDensityFactor: Densidade do Julgamento
+        TimingPointDensityFactor: <size=10>Densidade do Julg.</size>
         ChartConstant: Chart Constant
         SearchTags: Pesquisar Tags
         DifficultyName: <size=10>Nome da Dificuldade</size>
@@ -690,7 +690,7 @@ Compose:
         Shutter: Transição
         ShowShutter: Exibir Transição
         HideShutter: Esconder Transição
-        PreviewSegment: Pré-visualizar segmento
+        PreviewSegment: <size=10>Pré-visu. segmento</size>
         CustomChartPath: Usar personalizado (avançado)
       Options:
         Inherit: Inherit
