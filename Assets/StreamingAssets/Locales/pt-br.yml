@@ -659,7 +659,7 @@ Compose:
         TimingPointDensityFactor: Densidade do Julgamento
         ChartConstant: Chart Constant
         SearchTags: Pesquisar Tags
-        DifficultyName: Nome da Dificuldade
+        DifficultyName: <size=15>Nome da Dificuldade</size>
         DifficultyColor: Cor da Dificuldade
         Files: Arquivos
         Audio: Áudio
