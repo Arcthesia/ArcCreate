@@ -4,6 +4,9 @@
 - Id: es-es
   CodeName: Spanish
   LocalName: Español
+- Id: pt-br
+  CodeName: Portuguese 
+  LocalName: Português
 - Id: ja-jp
   CodeName: Japanese
   LocalName: 日本語
