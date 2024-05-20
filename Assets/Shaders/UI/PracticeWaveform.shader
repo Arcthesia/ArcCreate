@@ -87,14 +87,14 @@ Shader "Gameplay/Waveform"
 				// If it works it's not stupid
 				float s = 0;
 
-				[unroll(8)]
-				for (int i = 0; i < 8; i++)
+				[unroll(4)]
+				for (int i = 0; i < 4; i++)
 				{
-					float smpl = (uvx + dx * i / 8) * _AudioLength;
+					float smpl = (uvx + dx * i / 4) * _AudioLength;
 					s += SampleAt(smpl);
 				}
 
-				s /= 8;
+				s /= 4;
 
                 bool hit = y <= s;
 				bool repeat = sampleMain > _RepeatSampleFrom && sampleMain < _RepeatSampleTo;

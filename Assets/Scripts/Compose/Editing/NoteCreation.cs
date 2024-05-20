@@ -565,7 +565,8 @@ namespace ArcCreate.Compose.Editing
                     continue;
                 }
 
-                if (AreOverlapping(p, new Vector2(ArcFormula.LaneToWorldX(note.Lane), 0)))
+                if (note.Timing >= timing - 1 && note.Timing <= timing + 1
+                 && AreOverlapping(p, new Vector2(ArcFormula.LaneToWorldX(note.Lane), 0)))
                 {
                     return true;
                 }
@@ -610,7 +611,7 @@ namespace ArcCreate.Compose.Editing
                     continue;
                 }
 
-                if (note.Lane == lane)
+                if (note.Lane == lane && note.Timing >= timing - 1 && note.Timing <= timing + 1)
                 {
                     return true;
                 }

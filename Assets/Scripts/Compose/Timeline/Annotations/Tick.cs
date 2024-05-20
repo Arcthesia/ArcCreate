@@ -6,6 +6,7 @@ namespace ArcCreate.Compose.Timeline
 {
     public class Tick : MonoBehaviour
     {
+        private int currentTiming = int.MinValue;
         private static readonly char[] ArrayChar = new char[16];
 
         private RectTransform rect;
@@ -13,8 +14,13 @@ namespace ArcCreate.Compose.Timeline
 
         public void SetTick(float x, int timing)
         {
-            ArrayChar.SetNumberDigitsToArray(timing, out int length);
-            text.SetCharArray(ArrayChar, ArrayChar.Length - length, length);
+            if (currentTiming != timing)
+            {
+                ArrayChar.SetNumberDigitsToArray(timing, out int length);
+                text.SetCharArray(ArrayChar, ArrayChar.Length - length, length);
+            }
+
+            currentTiming = timing;
             rect.anchoredPosition = new Vector2(x, rect.anchoredPosition.y);
         }
 
