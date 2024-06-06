@@ -6,6 +6,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
     {
         List<object> SerializeProperties(ScenecontrolSerialization serialization);
 
-        void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization);
+        void DeserializeProperties(List<object> properties, EnabledFeatures features, ScenecontrolDeserialization deserialization);
     }
 }

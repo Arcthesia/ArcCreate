@@ -85,5 +85,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
         }
 
         protected abstract IEnumerable<ValueChannel> GetChildrenChannels();
+
+        void ISerializableUnit.DeserializeProperties(List<object> properties, EnabledFeatures features, ScenecontrolDeserialization deserialization)
+            => DeserializeProperties(properties, deserialization);
     }
 }

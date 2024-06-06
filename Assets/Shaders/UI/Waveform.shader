@@ -78,14 +78,14 @@ Shader "Compose/Waveform"
 				// If it works it's not stupid
 				float s = 0;
 
-				[unroll(64)]
-				for (int i = 0; i < 64; i++)
+				[unroll(6)]
+				for (int i = 0; i < 6; i++)
 				{
-					float smpl = _FromSample + (uvx + dx * i / 64) * (_ToSample - _FromSample);
+					float smpl = _FromSample + (uvx + dx * i / 6) * (_ToSample - _FromSample);
 					s += SampleAt(smpl);
 				}
 
-				s /= 64;
+				s /= 6;
 
                 bool hit = yFromCenter >= s;
 				return hit ? _Color : _Background;

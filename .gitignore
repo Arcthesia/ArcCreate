@@ -13,6 +13,7 @@
 /[Tt]est/
 /Assets/InitTestScene**.unity
 /Skin/
+/UserSettings/
 
 # Local scripting define symbols
 /Assets/*.rsp

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using ArcCreate.Compose.History;
 using ArcCreate.Compose.Navigation;
 using ArcCreate.Gameplay;
@@ -80,10 +81,19 @@ namespace ArcCreate.Compose.Editing
 
         private void CreateTap()
         {
+            int timing = Services.Cursor.CursorTiming;
+            int lane = Services.Cursor.CursorLane;
+            if (Settings.BlockOverlapNoteCreation.Value
+            && HasOverlap(timing, lane))
+            {
+                Services.Popups.Notify(Popups.Severity.Warning, I18n.S("Compose.Notify.Creation.Overlap"));
+                return;
+            }
+
             Tap tap = new Tap()
             {
-                Timing = Services.Cursor.CursorTiming,
-                Lane = Services.Cursor.CursorLane,
+                Timing = timing,
+                Lane = lane,
                 TimingGroup = Values.EditingTimingGroup.Value,
             };
 
@@ -95,11 +105,19 @@ namespace ArcCreate.Compose.Editing
         private async UniTask CreateHold(SubAction confirm, SubAction cancel)
         {
             int timing1 = Services.Cursor.CursorTiming;
+            int lane = Services.Cursor.CursorLane;
+            if (Settings.BlockOverlapNoteCreation.Value
+             && HasOverlap(timing1, lane))
+            {
+                Services.Popups.Notify(Popups.Severity.Warning, I18n.S("Compose.Notify.Creation.Overlap"));
+                return;
+            }
+
             Hold hold = new Hold()
             {
                 Timing = timing1,
                 EndTiming = timing1 + 1,
-                Lane = Services.Cursor.CursorLane,
+                Lane = lane,
                 TimingGroup = Values.EditingTimingGroup.Value,
             };
 
@@ -253,11 +271,15 @@ namespace ArcCreate.Compose.Editing
 
         private async UniTask CreateArcTap(SubAction toggleFreeSky, SubAction confirm, SubAction cancel)
         {
+            bool blockOverlap = Settings.BlockOverlapNoteCreation.Value;
             int timing = Services.Cursor.CursorTiming;
             List<Arc> elligibleArcs = new List<Arc>();
+            HashSet<Arc> blockedArcs = Services.Gameplay.Chart.FindEventsWithinRange<ArcTap>(timing - 1, timing + 1)
+                .Select(a => a.Arc).ToHashSet();
             foreach (var note in Services.Selection.SelectedNotes)
             {
-                if (note is Arc arc && arc.Timing <= timing && timing <= arc.EndTiming)
+                if (note is Arc arc && arc.Timing <= timing && timing <= arc.EndTiming
+                 && !blockedArcs.Contains(arc))
                 {
                     elligibleArcs.Add(arc);
                 }
@@ -268,7 +290,8 @@ namespace ArcCreate.Compose.Editing
             {
                 foreach (var arc in Services.Gameplay.Chart.GetAll<Arc>())
                 {
-                    if (arc.IsTrace && arc.Timing <= timing && timing <= arc.EndTiming)
+                    if (arc.IsTrace && arc.Timing <= timing && timing <= arc.EndTiming
+                     && !blockedArcs.Contains(arc))
                     {
                         elligibleArcs.Add(arc);
                     }
@@ -302,32 +325,53 @@ namespace ArcCreate.Compose.Editing
                     add: events);
                 command.Execute();
 
-                var (success, pos) = await Services.Cursor.RequestVerticalSelection(
-                    confirm,
-                    cancel,
-                    showGridAtTiming: timing,
-                    update: p =>
+                bool success;
+                Vector2 pos;
+                
+                do
+                {
+                    (success, pos) = await Services.Cursor.RequestVerticalSelection(
+                        confirm,
+                        cancel,
+                        showGridAtTiming: timing,
+                        update: p =>
+                        {
+                            arc.XStart = p.x;
+                            arc.XEnd = p.x;
+                            arc.YStart = p.y;
+                            arc.YEnd = p.y;
+                            Services.Gameplay.Chart.UpdateEvents(events);
+                        });
+                    
+                    if (!success)
                     {
-                        arc.XStart = p.x;
-                        arc.XEnd = p.x;
-                        arc.YStart = p.y;
-                        arc.YEnd = p.y;
-                        Services.Gameplay.Chart.UpdateEvents(events);
-                    });
+                        command.Undo();
+                        return;
+                    }
 
-                if (success)
-                {
-                    arc.XStart = pos.x;
-                    arc.XEnd = pos.x;
-                    arc.YStart = pos.y;
-                    arc.YEnd = pos.y;
-                    Services.Gameplay.Chart.UpdateEvents(events);
-                    Services.History.AddCommandWithoutExecuting(command);
+                    if (!blockOverlap)
+                    {
+                        break;
+                    }
+
+                    if (HasOverlap(timing, arctap))
+                    {
+                        Services.Popups.Notify(
+                            Popups.Severity.Warning, I18n.S("Compose.Notify.Creation.Overlap"));
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
-                else
-                {
-                    command.Undo();
-                }
+                while (true);
+
+                arc.XStart = pos.x;
+                arc.XEnd = pos.x;
+                arc.YStart = pos.y;
+                arc.YEnd = pos.y;
+                Services.Gameplay.Chart.UpdateEvents(events);
+                Services.History.AddCommandWithoutExecuting(command);
             }
             else
             {
@@ -366,38 +410,59 @@ namespace ArcCreate.Compose.Editing
                     }
 
                     command.Execute();
-                    var (success, pos) = await Services.Cursor.RequestVerticalSelection(
-                        confirm,
-                        cancel,
-                        showGridAtTiming: timing,
-                        update: p =>
-                        {
-                            if (!arcsSelected && toggleFreeSky.WasExecuted)
-                            {
-                                freeSky = !freeSky;
-                            }
-
-                            if (freeSky)
-                            {
-                                arc.XStart = p.x;
-                                arc.XEnd = p.x;
-                                arc.YStart = p.y;
-                                arc.YEnd = p.y;
-                                arctap.Arc = arc;
-                            }
-                            else
-                            {
-                                arctap.Arc = GetClosestArc(timing, elligibleArcs, p);
-                            }
-
-                            Services.Gameplay.Chart.UpdateEvents(events);
-                        });
-
-                    if (!success)
+                    bool success;
+                    Vector2 pos;
+                    do
                     {
-                        command.Undo();
-                        return;
+                        (success, pos) = await Services.Cursor.RequestVerticalSelection(
+                            confirm,
+                            cancel,
+                            showGridAtTiming: timing,
+                            update: p =>
+                            {
+                                if (!arcsSelected && toggleFreeSky.WasExecuted)
+                                {
+                                    freeSky = !freeSky;
+                                }
+
+                                if (freeSky)
+                                {
+                                    arc.XStart = p.x;
+                                    arc.XEnd = p.x;
+                                    arc.YStart = p.y;
+                                    arc.YEnd = p.y;
+                                    arctap.Arc = arc;
+                                }
+                                else
+                                {
+                                    arctap.Arc = GetClosestArc(timing, elligibleArcs, p);
+                                }
+
+                                Services.Gameplay.Chart.UpdateEvents(events);
+                            });
+
+                        if (!success)
+                        {
+                            command.Undo();
+                            return;
+                        }
+
+                        if (!blockOverlap)
+                        {
+                            break;
+                        }
+
+                        if (HasOverlap(timing, arctap))
+                        {
+                            Services.Popups.Notify(
+                                Popups.Severity.Warning, I18n.S("Compose.Notify.Creation.Overlap"));
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
+                    while (true);
 
                     if (freeSky)
                     {
@@ -474,6 +539,103 @@ namespace ArcCreate.Compose.Editing
                     selectedArcs.Add(a);
                 }
             }
+        }
+
+        private bool HasOverlap(int timing, ArcTap creatingInstance)
+        {
+            Vector2 p = new Vector2(creatingInstance.WorldX, creatingInstance.WorldY);
+            foreach (var note in Services.Gameplay.Chart.FindEventsWithinRange<Tap>(timing - 1, timing + 1, false))
+            {
+                if (note.TimingGroupInstance.GroupProperties.NoInput)
+                {
+                    continue;
+                }
+
+                Debug.Log(p + " " + new Vector2(ArcFormula.LaneToWorldX(note.Lane), 0));
+                if (AreOverlapping(p, new Vector2(ArcFormula.LaneToWorldX(note.Lane), 0)))
+                {
+                    return true;
+                }
+            }
+
+            foreach (var note in Services.Gameplay.Chart.FindEventsWithinRange<Hold>(timing - 1, timing + 1, false))
+            {
+                if (note.TimingGroupInstance.GroupProperties.NoInput)
+                {
+                    continue;
+                }
+
+                if (note.Timing >= timing - 1 && note.Timing <= timing + 1
+                 && AreOverlapping(p, new Vector2(ArcFormula.LaneToWorldX(note.Lane), 0)))
+                {
+                    return true;
+                }
+            }
+
+            foreach (var note in Services.Gameplay.Chart.FindEventsWithinRange<ArcTap>(timing - 1, timing + 1, false))
+            {
+                if (note.TimingGroupInstance.GroupProperties.NoInput || note == creatingInstance)
+                {
+                    continue;
+                }
+
+                if (AreOverlapping(new Vector2(note.WorldX, note.WorldY), p))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+
+        }
+
+        private bool HasOverlap(int timing, int lane)
+        {
+            foreach (var note in Services.Gameplay.Chart.FindEventsWithinRange<Tap>(timing - 1, timing + 1, false))
+            {
+                if (note.TimingGroupInstance.GroupProperties.NoInput)
+                {
+                    continue;
+                }
+
+                if (note.Lane == lane)
+                {
+                    return true;
+                }
+            }
+
+            foreach (var note in Services.Gameplay.Chart.FindEventsWithinRange<Hold>(timing - 1, timing + 1, false))
+            {
+                if (note.TimingGroupInstance.GroupProperties.NoInput)
+                {
+                    continue;
+                }
+
+                if (note.Lane == lane && note.Timing >= timing - 1 && note.Timing <= timing + 1)
+                {
+                    return true;
+                }
+            }
+
+            foreach (var note in Services.Gameplay.Chart.FindEventsWithinRange<ArcTap>(timing - 1, timing + 1, false))
+            {
+                if (note.TimingGroupInstance.GroupProperties.NoInput)
+                {
+                    continue;
+                }
+
+                if (AreOverlapping(new Vector2(note.WorldX, note.WorldY), new Vector2(ArcFormula.LaneToWorldX(lane), 0)))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool AreOverlapping(Vector2 v1, Vector2 v2)
+        {
+            return (v1 - v2).sqrMagnitude <= Values.TapOverlapWarningThreshold;
         }
 
         private void Update()

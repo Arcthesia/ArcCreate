@@ -95,7 +95,11 @@ namespace ArcCreate.Gameplay.Audio
                 if (IsPlaying)
                 {
                     audioSource.Stop();
-                    videoPlayer.Pause();
+                    if (videoPlayer.enabled)
+                    {
+                        videoPlayer.Pause();
+                    }
+
                     Play(audioTiming, 0);
                 }
 
