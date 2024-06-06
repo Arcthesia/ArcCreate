@@ -321,17 +321,17 @@ Compose:
       Macro:
         Name: Makro
         SelectEvents:
-          Confirm: Confirm
-          Cancel: Cancel
+          Confirm: Potwierdź
+          Cancel: Anuluj
         SelectLane:
-          Confirm: Confirm
-          Cancel: Cancel
+          Confirm: Potwierdź
+          Cancel: Anuluj
         SelectPosition:
-          Confirm: Confirm
-          Cancel: Cancel
+          Confirm: Potwierdź
+          Cancel: Anuluj
         SelectTiming:
-          Confirm: Confirm
-          Cancel: Cancel
+          Confirm: Potwierdź
+          Cancel: Anuluj
       Display:
         Name: Display
         FullScreen: Przełącz pełny ekran
