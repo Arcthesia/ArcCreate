@@ -415,7 +415,7 @@ Compose:
           Cancel: Cancel
           CycleSkyNoteMode: Cycle sky note mode
       Render:
-        Name: Rendering
+        Name: Renderowanie
         Start:
           Cancel: Cancel rendering
       Playback:
@@ -431,7 +431,7 @@ Compose:
   Grid:
     # Please modify the comment lines only (lines beginning with '--')
     DefaultScript: |-
-      -- TO JEST SKRYPT LUA. Pełna dokumentacja znajduje się na stronie: https://github.com/Arcthesia/ArcCreate/wiki/Grid-settings
+      -- TO JEST SKRYPT LUA. Pełną dokumentację znajdziesz na stronie: https://github.com/Arcthesia/ArcCreate/wiki/Grid-settings
       -- KONFIGURACJA
       -- Wybierz jeden z następujących szablonów: 4k, 6k, oob4k, oob6k
       local useTemplate = "4k"
