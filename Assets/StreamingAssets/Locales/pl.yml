@@ -184,8 +184,8 @@ Compose:
     Clipboard:
       Copy: Copied {0} notes
       Cut: Cut {0} notes
-      NamedCopy: Copied {0} notes to named clipboard "{1}"
-      NamedCut: Cut {0} notes to named clipboard "{1}"
+      NamedCopy: Skopiowano {0} nut do nazwanej schowka "{1}"
+      NamedCut: Wycięto {0} nut do nazwanej schowka "{1}"
     GroupTable:
       AddGroup: Added timing group {Number}
       EditGroup: Edited timing group {Number}
@@ -333,7 +333,7 @@ Compose:
           Confirm: Potwierdź
           Cancel: Anuluj
       Display:
-        Name: Display
+        Name: Ekran
         FullScreen: Przełącz pełny ekran
       Selection:
         Name: Wybór
@@ -343,57 +343,57 @@ Compose:
         Remove: Drag deselect
         Toggle: Toggle select
         RangeSelect:
-          Name: Select notes between range
+          Name: Wybierz nuty w zakresie
           Confirm: Potwierdź
           Cancel: Anuluj
       Measure:
-        Name: Measure
+        Name: Mierzenie
         Start:
-          Name: Open measurer
+          Name: Otwórz miarkę
           Confirm: Potwierdź
           Cancel: Anuluj
           CopyTiming: Copy timing
-          CopyPosition: Copy position
-          CopyX: Copy x coordinate
-          CopyY: Copy y coordinate
+          CopyPosition: Skopiuj pozycję
+          CopyX: Skopiuj współrzędną x
+          CopyY: Skopiuj współrzędną y
       Clipboard:
         Name: Schowek
         Copy: Kopiuj
         Cut: Wytnij
         Paste:
           Name: Wklej
-          Confirm: Confirm pasting
-          Cancel: Cancel pasting
+          Confirm: Potwierdź wklejanie
+          Cancel: Anuluj wklejanie
           Mirror: Mirror
         NamedPaste:
           Name: Paste
-          Confirm: Confirm pasting
-          Cancel: Cancel pasting
+          Confirm: Potwierdź wklejanie
+          Cancel: Anuluj wklejanie
           Mirror: Mirror
-        Clear: Clear clipboard
+        Clear: Wyczyść schowek
       NoteCreation:
         Name: Note creation
         Start:
-          Name: Add note
-          Confirm: Confirm
-          Cancel: Cancel
+          Name: Dodaj nutę
+          Confirm: Potwierdź
+          Cancel: Anuluj
           ToggleFreeSky: Switch to free sky note
       NotePallete:
-        Name: Note palette
+        Name: Paleta nut
         Arc: 
           Name: Arc
-          Blue: Blue arc
-          Red: Red arc
-          Green: Green arc
+          Blue: Niebieski arc
+          Red: Czerwony arc
+          Green: Zielony arc
         ArcAlt: 
           Name: Arc (alt)
-          Blue: Blue arc
-          Red: Red arc
-          Green: Green arc
+          Blue: Niebieski arc
+          Red: Czerwony arc
+          Green: Zielony arc
         Sky: Sky
         Tap: Tap
         Hold: Hold
-        Idle: Idle
+        Idle: Bezczynność
       Delete:
         Name: Usuń
         Execute: Usuń
@@ -417,7 +417,7 @@ Compose:
       Render:
         Name: Renderowanie
         Start:
-          Cancel: Cancel rendering
+          Cancel: Anuluj renderowanie
       Playback:
         Name: Timeline
         TogglePlay: Play/Pause
@@ -619,7 +619,7 @@ Compose:
       Timeline: Oś czasu
       Project: Projekt
       Events: Wydarzenia
-      Remote: Klient zdalny
+      Remote: Pilot
       Export: Eksport
       Settings: Ustawienia
     # Top bar of the UI
@@ -635,7 +635,7 @@ Compose:
           touch: Ekran Dotykowy
           controller: Kontroler
           mouse: Myszka
-          idle: Idle
+          idle: Bezczynność
         FullScreen: Pełny Ekran
         ToggleFullScreenHint: Naciśnij klawisz F11, aby przełączyć pełny ekran.
         Chart: Chart
@@ -671,7 +671,7 @@ Compose:
         Skin: Skórka
         Side: Tryb
         Note: Nuty
-        Particle: Particle
+        Particle: Efekt
         Accent: Akcent
         Track: Tor
         SingleLine: Linia Pojedyncza
@@ -909,11 +909,11 @@ Remote:
     Listening: |-
       Szukanie transmisji...
       <size=20>
-      W kliencie PC ArcCreate otwórz zakładkę "Klient zdalny" i naciśnij "Zacznij transmitowanie", aby rozpocząć.</size>
+      W kliencie PC ArcCreate otwórz zakładkę "Pilot" i naciśnij "Zacznij transmitowanie", aby rozpocząć.</size>
     ManualIP: |-
       Oczekiwanie na połączenie od klienta PC.
       <size=20>
-      W kliencie PC ArcCreate otwórz zakładkę "Klient zdalny" i wprowadź adres IP: {0}.</size>
+      W kliencie PC ArcCreate otwórz zakładkę "Pilot" i wprowadź adres IP: {0}.</size>
     Found: |-
       Transmisja znaleziona z następujących urządzeń.
       Wybierz urządzenie, aby kontynuować.
@@ -921,7 +921,7 @@ Remote:
       Compose: Klient PC rozłączony. Zatrzymanie połączenia.
       Gameplay: Klient PC rozłączony. Czy chcesz rozpocząć nową sesję?
     Receiving:
-      Receiving data ({0})
+      Odbieranie danych ({0})
   Description:
     Idle: |-
       Nie podłączono żadnego klienta test play.
@@ -969,22 +969,22 @@ Remote:
 Gameplay:
   Exception:
     LoadAudio: |-
-      An error occured while trying to load the audio file located at {Path}.
+      Wystąpił błąd podczas próby wczytania pliku audio znajdującego się w {Path}.
       {Error}
     Chart: |-
-      An error occured while trying to load the chart located at {Path}.
+      Wystąpił błąd podczas próby wczytania chartu znajdującego się w {Path}.
       {Error}
     Skin: |-
-      An error occured while trying to load the image located at {Path}.
+      Wystąpił błąd podczas próby wczytania obrazu znajdującego się w {Path}.
       {Error}
     Scenecontrol: |-
-      An error occured while trying to load scenecontrol json located at {Path}.
+      Wystąpił błąd podczas próby wczytania pliku JSON scenecontrol'u znajdującego się w {Path}.
       {Error}
     ScenecontrolSprite: |-
-      An error occured while trying to load a scenecontrol sprite located at {Path}.
+      Wystąpił błąd podczas próby wczytania sprite'a scenecontrol'u znajdującego się w {Path}.
       {Error}
     Load: |-
-      An unknown error occured while trying to load the chart {Identifier}, {ChartPath}
+      Wystąpił nieznany błąd podczas próby wczytania chartu {Identifier}, znajdującego się w {ChartPath}.
       Error: {Message}
       Stack trace:
       {StackTrace}
@@ -1026,16 +1026,16 @@ Gameplay:
       Keep: Zachowaj
       Done: Gotowe
     List:
-      RemoteTestplay: Zdalny Testplay
+      RemoteTestplay: Pilot Testplay
       Import: Importuj pakiet
       Community: Społeczność
       AllSongs: Wszystkie piosenki
       OtherDifficulties: Inne poziomy
     Info:
       Undefined:
-        Title: Unnamed
+        Title: Bez nazwy
         Composer: N/A
-        Charter: Unknown
+        Charter: Nieznany
       Charter: 'Charter: {0}'
     Sort:
       addeddate: Added date
@@ -1064,7 +1064,7 @@ Gameplay:
         Practice: Trening
       Modifier:
         Name: Modyfikacje
-        Mirror: Lustro
+        Mirror: Odbicie
     Settings:
       Name: Ustawienia
       Language: Język
@@ -1073,31 +1073,31 @@ Gameplay:
         Speed: Szybkość
         SpeedDetail: |-
           Adjust the speed at which notes approach the judgement area.
-        EarlyLatePerfectDisplay: Early/Late perfect display
+        EarlyLatePerfectDisplay: Wyświetlanie perfekcyjnych trafień wcześnie/późno
         EarlyLatePerfectDisplayDetail: |-
-          Change whether or not to display early/late perfect judgements.
+          Zmień opcję wyświetlania trafień perfekcyjnych wcześnie/późno.
         EnablePractice: Włącz tryb treningu
-        ShowMsDifference: Display miliseconds differences
-        ShowMsDifferenceDetail: Display exact miliseconds differences instead of EARLY / LATE.
+        ShowMsDifference: Wyświetlanie różnice w milisekundach
+        ShowMsDifferenceDetail: Wyświetlaj dokładne różnice czasowe w milisekundach zamiast EARLY / LATE.
         HidePause: Ukryj przycisk pauzy
         PauseMode: Metoda włączenia pauzy
       Audio:
         Name: Audio
         Offset: Opóźnienie
         OffsetDetail: |-
-          Adjust music synchronization.
-          Increase if you're getting LATE, or decrease if you're getting EARLY.
+          Dostosuj synchronizację muzyki.
+          Zwiększ, jeśli dostajesz LATE, lub zmniejsz, jeśli dostajesz EARLY.
         Calibrate: Kalibruj
-        MusicAudio: Music volume
+        MusicAudio: Głośność muzyki
         MusicAudioDetail: |-
-          Change the volume of music during gameplay.
+          Zmień głośność muzyki podczas rozgrywki.
         EffectAudio: Effect volume
         EffectAudioDetail: |-
           Change the volume of hit sounds during gameplay.
       Visual:
         Name: Grafika
         Colorblind: Tryb dla Niewidomych
-        ColorblindDetail: Use alternate arc colors.
+        ColorblindDetail: Użyj alternatywnych kolorów arc'ów.
         FrPmDisplay: FC/AP display
         FrPmDisplayDetail: Adjust FC/AP indicator position.
         MaxDisplay: Max indicator display
@@ -1105,10 +1105,10 @@ Gameplay:
         EarlyLateDisplay: Early/Late display
         EarlyLateDisplayDetail: Adjust early/late text position.
         ScoreDisplay: Score display
-        LimitFramerate: Limit framerate
-        LimitFramerateDetail: Limit display framerate to 60 FPS to preserve battery life. Might increase latency.
-        DisableAdvancedGraphics: Disable advanced graphics
-        DisableAdvancedGraphicsDetails: Disable post processing and video backgrounds, which can boost performance.
+        LimitFramerate: Ogranicz framerate
+        LimitFramerateDetail: Ogranicz framerate do 60 FPS, aby oszczędzać życie baterii. Może to zwiększyć opóźnienia.
+        DisableAdvancedGraphics: Wyłącz zaawansowaną grafikę
+        DisableAdvancedGraphicsDetails: Wyłącz post processing i tła wideo, co może poprawić wydajność.
       Judgement:
         Name: Judgement
         ShowMax: Display Perfect (Max) judgement
@@ -1123,8 +1123,8 @@ Gameplay:
         SwitchResumeAndRetryDetail: Switch the positions of Resume and Retry buttons within the Pause screen.
         ShowFPS: Show FPS
         ShowFPSDetail: Toggle FPS display.
-        ShowDebug: Show debug information
-        ShowDebugDetail: Display debug information during gameplay (advanced).
+        ShowDebug: Pokaż informacje debugowania
+        ShowDebugDetail: Wyświetlaj informacje debugowania podczas rozgrywki (zaawansowane).
       FrPmPosition:
         middle: Middle
         infopanel: Info panel
