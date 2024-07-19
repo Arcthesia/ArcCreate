@@ -64,6 +64,8 @@ namespace ArcCreate.Compose.Rendering
 
         public float EffectVolume { get; set; }
 
+        public static string SelectedSetting => currentSelected;
+
         public static void LoadSettings()
         {
             string data = PlayerPrefs.GetString(SettingsPrefKey, null);

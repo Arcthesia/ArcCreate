@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311926, g: 0.38073993, b: 0.35872683, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -47520,18 +47520,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: Compose.UI.Settings.Label.AudioVolume.Effect
   readIdFromContent: 0
---- !u!114 &827499689
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 827499687}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87287c890369a7f49a5816702cb219f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &827499690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91006,7 +90994,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1931281401}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.8887527
+  m_Size: 0.88875276
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -96012,18 +96000,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: Compose.UI.Settings.Label.AudioVolume.Music
   readIdFromContent: 0
---- !u!114 &1788026720
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1788026718}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87287c890369a7f49a5816702cb219f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1788026721
 MonoBehaviour:
   m_ObjectHideFlags: 0

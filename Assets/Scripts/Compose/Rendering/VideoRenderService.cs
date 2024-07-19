@@ -185,6 +185,11 @@ namespace ArcCreate.Compose.Rendering
             resetSelectedPreset.onClick.AddListener(ResetSelectedPanel);
         }
 
+        private void Start()
+        {
+            presetPanel.SetValueWithoutNotify(RenderSetting.SelectedSetting);
+        }
+
         private void OnDestroy()
         {
             RenderSetting.SaveSettings();
