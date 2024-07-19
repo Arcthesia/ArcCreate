@@ -8,13 +8,13 @@
       "hash": "c7eedf85c79e2ce06658c8060ca38a282f2ca7ab"
     },
     "com.kyub.emojisearch": {
-      "version": "https://gitlab-ci-token:glpat-c6ymx9eBXkdQhFhCMaLg@gitlab.com/KyubInteractive/kyublibs.git#com.kyub.emojisearch-1.1.5",
+      "version": "https://github.com/calumma-robert/com.kyub.emojisearch.git",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.textmeshpro": "1.3.0"
       },
-      "hash": "66f73035a310e161a839d95923538421df31241f"
+      "hash": "aac0902ef489aba3b17609bd3257b43d6e83b12f"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",

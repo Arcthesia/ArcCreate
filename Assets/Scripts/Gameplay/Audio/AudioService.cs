@@ -102,6 +102,12 @@ namespace ArcCreate.Gameplay.Audio
 
                     Play(audioTiming, 0);
                 }
+                else
+                {
+                    videoPlayer.time = Mathf.Clamp(value / 1000f, 0, (float)videoPlayer.length);
+                    videoPlayer.Play();
+                    videoPlayer.Pause();
+                }
 
                 Services.Chart.ResetJudge();
             }
@@ -139,6 +145,9 @@ namespace ArcCreate.Gameplay.Audio
         {
             audioTiming = timing;
             videoPlayer.time = Mathf.Clamp(timing / 1000f, 0, (float)videoPlayer.length);
+            // Force video player to update the texture
+            videoPlayer.Play();
+            videoPlayer.Pause();
             UpdateSlider(timing);
         }
 
@@ -360,6 +369,7 @@ namespace ArcCreate.Gameplay.Audio
         {
             playbackSpeed = value;
             audioSource.pitch = value;
+            videoPlayer.playbackSpeed = value;
             if (IsPlayingAndNotStationary && (Application.isMobilePlatform || Settings.SyncToDSPTime.Value))
             {
                 Pause();
