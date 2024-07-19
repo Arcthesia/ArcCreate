@@ -5,6 +5,7 @@ using ArcCreate.Compose.Navigation;
 using ArcCreate.Compose.Selection;
 using ArcCreate.Gameplay.Data;
 using Cysharp.Threading.Tasks;
+using NSubstitute;
 using UnityEngine;
 
 namespace ArcCreate.Compose.Editing
@@ -184,10 +185,31 @@ namespace ArcCreate.Compose.Editing
                         if (note is ArcTap at && (at.Timing < at.Arc.Timing || at.Timing > at.Arc.EndTiming))
                         {
                             Arc newArc = at.Arc.Clone() as Arc;
-                            at.Arc = newArc;
                             newArc.Timing = newArc.Timing - minTiming + timing;
                             newArc.EndTiming = newArc.EndTiming - minTiming + timing;
+                            if (modify.VerticalMirrored)
+                            {
+                                newArc.YStart = 1 - newArc.YStart;
+                                newArc.YEnd = 1 - newArc.YEnd;
+                            }
+
+                            if (modify.HorizontalMirrored)
+                            {
+                                newArc.XStart = 1 - newArc.XStart;
+                                newArc.XEnd = 1 - newArc.XEnd;
+                            }
+
                             extraArc.Add(newArc);
+
+                            Arc oldArc = at.Arc;
+                            foreach (var n in newNotes
+                                .Where(n => n is ArcTap x
+                                   && x.Arc == oldArc
+                                   && (x.Timing < x.Arc.Timing || x.Timing > x.Arc.EndTiming))
+                                .Cast<ArcTap>())
+                            {
+                                n.Arc = newArc;
+                            }
                         }
                     }
 

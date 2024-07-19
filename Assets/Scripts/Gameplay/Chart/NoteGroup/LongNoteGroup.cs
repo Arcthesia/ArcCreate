@@ -162,7 +162,7 @@ namespace ArcCreate.Gameplay.Chart
             {
                 Note note = overlap.Current;
                 if ((overlapCompletely && note.Timing >= from && note.EndTiming <= to)
-                 || (!overlapCompletely && note.Timing <= to && note.EndTiming <= from))
+                 || (!overlapCompletely && note.Timing <= to && note.EndTiming >= from))
                 {
                     yield return note;
                 }

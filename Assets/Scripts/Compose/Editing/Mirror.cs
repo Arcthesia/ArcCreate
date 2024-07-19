@@ -43,6 +43,7 @@ namespace ArcCreate.Compose.Editing
             }
 
             NoteModifyTarget.MarkCurrentAsModified();
+            NoteModifyTarget.ToggleCurrentVerticalModifiedState();
             if (events.Count > 0)
             {
                 Services.History.AddCommand(new EventCommand(
@@ -88,6 +89,7 @@ namespace ArcCreate.Compose.Editing
             }
 
             NoteModifyTarget.MarkCurrentAsModified();
+            NoteModifyTarget.ToggleCurrentHorizontalModifiedState();
             if (events.Count > 0)
             {
                 Services.History.AddCommand(new EventCommand(

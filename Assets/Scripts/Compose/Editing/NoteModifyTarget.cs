@@ -12,6 +12,10 @@ namespace ArcCreate.Compose.Editing
         private readonly IEnumerable<Note> notes;
         private bool modified;
 
+        public bool HorizontalMirrored { get; private set; }
+
+        public bool VerticalMirrored { get; private set; }
+
         public NoteModifyTarget(IEnumerable<Note> notes)
         {
             this.notes = notes;
@@ -33,6 +37,28 @@ namespace ArcCreate.Compose.Editing
         public static void MarkCurrentAsModified()
         {
             TargetStack.LastOrDefault()?.MarkModified();
+        }
+
+        public static void ToggleCurrentVerticalModifiedState()
+        {
+            var target = TargetStack.LastOrDefault();
+            if (target == null)
+            {
+                return;
+            }
+
+            target.VerticalMirrored = !target.VerticalMirrored;
+        }
+
+        public static void ToggleCurrentHorizontalModifiedState()
+        {
+            var target = TargetStack.LastOrDefault();
+            if (target == null)
+            {
+                return;
+            }
+
+            target.HorizontalMirrored = !target.HorizontalMirrored;
         }
 
         public void Dispose()
