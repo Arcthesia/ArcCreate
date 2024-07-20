@@ -82,12 +82,6 @@ namespace ArcCreate.Compose.Editing
             int limitLower = int.MinValue;
             int limitUpper = int.MaxValue;
 
-            if (limitUpper < limitLower)
-            {
-                Services.Popups.Notify(Popups.Severity.Warning, I18n.S("Compose.Notify.NoDragRange"));
-                return;
-            }
-
             for (int i = 0; i < selection.Count; i++)
             {
                 Note note = selection[i];
@@ -127,7 +121,8 @@ namespace ArcCreate.Compose.Editing
                                                 && arc.YStart == arc.YEnd;
 
                             if (!alsoDraggingEnd
-                             || (arc.EndTiming != arc.Timing && cursorTiming < closestTiming))
+                             || (arc.EndTiming != arc.Timing && cursorTiming < closestTiming)
+                             || (arc.EndTiming == arc.Timing && cursorTiming < closestTiming - 1))
                             {
                                 Arc clonearc = arc.Clone() as Arc;
                                 events.Add((note, clonearc));
@@ -173,7 +168,7 @@ namespace ArcCreate.Compose.Editing
 
                             if (!alsoDraggingStart
                              || (arc.EndTiming != arc.Timing && cursorTiming >= closestTiming)
-                             || (arc.EndTiming == arc.Timing && sameStartAndEnd))
+                             || (arc.EndTiming == arc.Timing && cursorTiming > closestTiming + 1))
                             {
                                 Arc clonearc = arc.Clone() as Arc;
                                 events.Add((note, clonearc));
@@ -191,6 +186,8 @@ namespace ArcCreate.Compose.Editing
                     }
                 }
             }
+
+            Debug.Log($"{limitUpper} - {limitLower}");
 
             var command = new EventCommand(
                 name: string.Empty,
