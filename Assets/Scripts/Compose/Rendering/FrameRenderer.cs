@@ -81,7 +81,7 @@ namespace ArcCreate.Compose.Rendering
             gameplayViewport.enabled = false;
             Services.Gameplay.SetCameraViewportRect(new Rect(0, 0, 1, 1));
             Services.Gameplay.SetCameraEnabled(true);
-            Services.Gameplay.Audio.IsRendering = true;
+
             foreach (Camera cam in cameras)
             {
                 cam.targetTexture = renderTexture;
@@ -111,6 +111,10 @@ namespace ArcCreate.Compose.Rendering
                 DateTime startAt = DateTime.Now;
                 Time.captureFramerate = Mathf.RoundToInt(settings.Fps);
                 Services.Gameplay.Audio.AudioTiming = Mathf.RoundToInt(startRenderingTime * 1000);
+                Services.Gameplay.Audio.IsRendering = true;
+                Services.Grid.IsGridEnabled = false;
+                Services.Cursor.EnableLaneCursor = false;
+                await Services.Gameplay.Audio.PrepareVideoPlayback();
 
                 bool shouldUpdateTiming = false;
                 float unityStartTime = Time.time;

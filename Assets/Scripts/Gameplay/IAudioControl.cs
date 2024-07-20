@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay
@@ -113,5 +114,7 @@ namespace ArcCreate.Gameplay
         /// </summary>
         /// <param name="timing">The new audio timing value.</param>
         void SetAudioTimingSilent(int timing);
+
+        UniTask PrepareVideoPlayback();
     }
 }

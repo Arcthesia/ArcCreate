@@ -169,6 +169,7 @@ namespace ArcCreate.Gameplay.GameplayCamera
             backgroundCamera.fieldOfView = fov;
             overlayCamera.fieldOfView = fov;
 
+            isReset = true;
             for (int i = 0; i < events.Count; i++)
             {
                 CameraEvent cam = events[i];
@@ -180,7 +181,6 @@ namespace ArcCreate.Gameplay.GameplayCamera
                 isReset = cam.IsReset;
                 if (isReset)
                 {
-                    isReset = true;
                     position = ResetPosition + translationExternal;
                     rotation = ResetRotation;
                 }

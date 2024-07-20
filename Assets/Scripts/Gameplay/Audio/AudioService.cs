@@ -102,7 +102,7 @@ namespace ArcCreate.Gameplay.Audio
 
                     Play(audioTiming, 0);
                 }
-                else
+                else if (videoPlayer.enabled)
                 {
                     videoPlayer.time = Mathf.Clamp(value / 1000f, 0, (float)videoPlayer.length);
                     videoPlayer.Play();
@@ -144,10 +144,15 @@ namespace ArcCreate.Gameplay.Audio
         public void SetAudioTimingSilent(int timing)
         {
             audioTiming = timing;
-            videoPlayer.time = Mathf.Clamp(timing / 1000f, 0, (float)videoPlayer.length);
-            // Force video player to update the texture
-            videoPlayer.Play();
-            videoPlayer.Pause();
+            if (videoPlayer.enabled)
+            {
+                videoPlayer.time = Mathf.Clamp(timing / 1000f, 0, (float)videoPlayer.length);
+
+                // Force video player to update the texture
+                videoPlayer.Play();
+                videoPlayer.Pause();
+            }
+
             UpdateSlider(timing);
         }
 
@@ -291,6 +296,12 @@ namespace ArcCreate.Gameplay.Audio
             onPauseReturnTo = timing;
         }
 
+        public async UniTask PrepareVideoPlayback()
+        {
+            videoPlayer.Prepare();
+            await UniTask.WaitUntil(() => videoPlayer.isPrepared);
+        }
+
         private void Play(int timing = 0, int delay = 0, bool resetJudge = true)
         {
             delay = Mathf.Max(delay, 0);
@@ -348,7 +359,7 @@ namespace ArcCreate.Gameplay.Audio
             videoPlayer.Play();
             videoPlayer.time = Mathf.Clamp(((timing - delay) / 1000f) + (DateTime.Now - startTime).Seconds, 0, (float)videoPlayer.length);
         }
-
+        
         private void Awake()
         {
             gameplayData.AudioClip.OnValueChange += OnClipLoad;
