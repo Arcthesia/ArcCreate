@@ -79,7 +79,7 @@ namespace ArcCreate.Compose.Remote
                     case "scjson":
                         filePath = "remote.sc.json";
                         string json = Services.Gameplay.Scenecontrol.Export();
-                        File.WriteAllText(Path.Combine(dir, filePath), json);
+                        File.WriteAllText(Path.Combine(dir, filePath), json ?? "[]");
                         break;
                     case "video":
                         // video backgrounds are absolute path

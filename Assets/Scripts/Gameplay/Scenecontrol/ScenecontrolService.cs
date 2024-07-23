@@ -159,6 +159,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
         public string Export()
         {
             var serialization = new ScenecontrolSerialization();
+            if (referencedControllers.Count == 0)
+            {
+                return null;
+            }
+
             foreach (var c in referencedControllers)
             {
                 serialization.AddUnitAndGetId(c);
@@ -169,6 +174,11 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public void Import(string def, IFileAccessWrapper fileAccess)
         {
+            if (def == null)
+            {
+                return;
+            }
+
             scene.SetFileAccess(fileAccess);
             var units = JsonConvert.DeserializeObject<List<SerializedUnit>>(def);
             var deserialization = new ScenecontrolDeserialization(scene, postProcessing, units);

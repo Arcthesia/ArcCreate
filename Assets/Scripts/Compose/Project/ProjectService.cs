@@ -484,7 +484,7 @@ namespace ArcCreate.Compose.Project
             }
 
             string scJson = Services.Gameplay.Scenecontrol.Export();
-            if (scJson != "[]")
+            if (!string.IsNullOrEmpty(scJson) && scJson != "[]")
             {
                 string scPath = Path.Combine(dir, Path.GetFileNameWithoutExtension(CurrentChart.ChartPath) + ".sc.json");
                 File.WriteAllText(scPath, scJson);
