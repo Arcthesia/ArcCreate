@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ArcCreate.Compose.Components;
+using ArcCreate.Compose.History;
 using ArcCreate.Compose.Navigation;
 using ArcCreate.Gameplay;
 using ArcCreate.Gameplay.Chart;
@@ -51,6 +53,7 @@ namespace ArcCreate.Compose.EventsEditor
         protected override void Awake()
         {
             base.Awake();
+            gameplayData.OnChartEdit += OnChartEdit;
             gameplayData.OnChartFileLoad += OnChart;
             Values.EditingTimingGroup.OnValueChange += OnEdittingTimingGroup;
             addButton.onClick.AddListener(OnAddButton);
@@ -62,6 +65,7 @@ namespace ArcCreate.Compose.EventsEditor
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            gameplayData.OnChartEdit -= OnChartEdit;
             gameplayData.OnChartFileLoad -= OnChart;
             Values.EditingTimingGroup.OnValueChange -= OnEdittingTimingGroup;
             addButton.onClick.RemoveListener(OnAddButton);
@@ -85,6 +89,16 @@ namespace ArcCreate.Compose.EventsEditor
         private void OnAddButton()
         {
             int newTgNum = Services.Gameplay.Chart.TimingGroups.Count;
+            TimingGroup group = new TimingGroup(newTgNum);
+            group.Load();
+
+            ICommand cmd = new AddTimingGroupCommand(I18n.S(
+                "Compose.Notify.GroupTable.AddGroup", new Dictionary<string, object>
+                {
+                    { "Number", newTgNum },
+                }), group);
+
+            Services.History.AddCommand(cmd);
             Services.Gameplay.Chart.GetTimingGroup(newTgNum);
 
             // Trigger OnEdittingTimingGroup
@@ -92,12 +106,6 @@ namespace ArcCreate.Compose.EventsEditor
             JumpTo(Data.Count);
 
             Values.ProjectModified = true;
-
-            Debug.Log(I18n.S(
-                "Compose.Notify.GroupTable.AddGroup", new Dictionary<string, object>
-                {
-                    { "Number", newTgNum },
-                }));
             Values.OnEditAction?.Invoke();
         }
 
@@ -129,19 +137,18 @@ namespace ArcCreate.Compose.EventsEditor
         {
             int index = IndexOf(Selected);
             int num = Selected.GroupNumber;
-            Services.Gameplay.Chart.RemoveTimingGroup(Selected);
+            ICommand cmd = new RemoveTimingGroupCommand(I18n.S(
+                "Compose.Notify.GroupTable.RemoveGroup", new Dictionary<string, object>
+                {
+                    { "Number", num },
+                }), Selected);
+            Services.History.AddCommand(cmd);
 
             // Trigger OnEdittingTimingGroup
             Values.EditingTimingGroup.Value = Mathf.Min(Selected.GroupNumber, Services.Gameplay.Chart.TimingGroups.Count - 1);
             JumpTo(index - 1);
 
             Values.ProjectModified = true;
-
-            Debug.Log(I18n.S(
-                "Compose.Notify.GroupTable.RemoveGroup", new Dictionary<string, object>
-                {
-                    { "Number", num },
-                }));
             Values.OnEditAction?.Invoke();
         }
 
@@ -164,6 +171,11 @@ namespace ArcCreate.Compose.EventsEditor
             UpdateTable(Services.Gameplay.Chart.TimingGroups);
             Selected = Services.Gameplay.Chart.TimingGroups.FirstOrDefault();
             Values.EditingTimingGroup.Value = 0;
+        }
+
+        private void OnChartEdit()
+        {
+            RebuildRows();
         }
 
         private void UpdateTable(List<TimingGroup> groups)

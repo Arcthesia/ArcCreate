@@ -9,7 +9,7 @@ namespace ArcCreate.Gameplay.Chart
     /// </summary>
     /// <typeparam name="Note">The note type.</typeparam>
     public abstract class NoteGroup<Note>
-        where Note : INote
+        where Note : ArcEvent, INote
     {
         private List<Note> notes = new List<Note>();
 
@@ -31,6 +31,15 @@ namespace ArcCreate.Gameplay.Chart
         {
             this.notes = notes;
             RebuildList();
+        }
+
+        internal void SetGroupNumber(int n)
+        {
+            foreach (var note in notes)
+            {
+                note.TimingGroup = n;
+                note.ResetTimingGroupChangedFrom();
+            }
         }
 
         /// <summary>

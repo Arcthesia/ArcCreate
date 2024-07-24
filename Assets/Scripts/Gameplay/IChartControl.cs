@@ -52,6 +52,13 @@ namespace ArcCreate.Gameplay
         void RemoveTimingGroup(TimingGroup group);
 
         /// <summary>
+        /// Insert a timing group and all of its events. The group's Number property is taken into consideration when inserting.
+        /// The group number is clamped to the range [1, current group count].
+        /// </summary>
+        /// <param name="group">The timing group to insert.</param>
+        void InsertTimingGroup(TimingGroup group);
+
+        /// <summary>
         /// Get all notes of a type.
         /// </summary>
         /// <typeparam name="T">The event type.</typeparam>

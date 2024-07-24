@@ -89,6 +89,15 @@ namespace ArcCreate.Gameplay.Chart
             Services.Chart.NotifyEdit();
         }
 
+        internal void SetGroupNumber(int j)
+        {
+            GroupNumber = j;
+            taps.SetGroupNumber(j);
+            holds.SetGroupNumber(j);
+            arcs.SetGroupNumber(j);
+            arcTaps.SetGroupNumber(j);
+        }
+
         /// <summary>
         /// Update the group.
         /// </summary>

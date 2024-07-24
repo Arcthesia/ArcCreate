@@ -10,7 +10,7 @@ namespace ArcCreate.Gameplay.Chart
     /// </summary>
     /// <typeparam name="Note">The note type.</typeparam>
     public abstract class LongNoteGroup<Note> : NoteGroup<Note>
-        where Note : ILongNote
+        where Note : ArcEvent, ILongNote
     {
         private readonly RangeTree<Note> timingTree = new RangeTree<Note>();
         private readonly RangeTree<Note> floorPositionTree = new RangeTree<Note>();

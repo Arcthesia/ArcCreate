@@ -9,7 +9,7 @@ namespace ArcCreate.Gameplay.Chart
     /// </summary>
     /// <typeparam name="Note">The note type.</typeparam>
     public abstract class ShortNoteGroup<Note> : NoteGroup<Note>
-        where Note : INote
+        where Note : ArcEvent, INote
     {
         private CachedBisect<Note, int> timingSearch;
         private CachedBisect<Note, double> floorPositionSearch;

@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using ArcCreate.ChartFormat;
 using ArcCreate.Compose.Components;
+using ArcCreate.Compose.History;
 using ArcCreate.Gameplay.Chart;
+using ArcCreate.Gameplay.Data;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -137,22 +139,32 @@ namespace ArcCreate.Compose.EventsEditor
             value = value.Replace(",", string.Empty);
             value = value.Replace("\"", string.Empty);
 
+            // Duplicate group
+            GroupProperties newProps = new GroupProperties(Reference.GroupProperties.ToRaw());
             if (string.IsNullOrEmpty(value))
             {
-                Reference.GroupProperties.Name = null;
+                newProps.Name = null;
                 nameField.text = $"Group {Reference.GroupNumber}";
-                return;
+            }
+            else
+            {
+                newProps.Name = value;
+                nameField.text = $"{Reference.GroupProperties.Name} ({Reference.GroupNumber})";
             }
 
-            Reference.GroupProperties.Name = value;
-            nameField.text = $"{Reference.GroupProperties.Name} ({Reference.GroupNumber})";
             previousNameDisplay = nameField.text;
+            ICommand cmd = new EditTimingGroupProperitesCommand(I18n.S(
+                "Compose.Notify.GroupTable.EditGroup", new Dictionary<string, object>
+                {
+                        { "Number", Reference.GroupNumber },
+                }), Reference, newProps);
+            Services.History.AddCommand(cmd);
+
             (Table as GroupTable).UpdateEditingGroupField();
         }
 
         private void OnProperties(string value)
         {
-            // Hooking group editting to HistoryService is considered. But it seems very hard...
             RawTimingGroup group = RawTimingGroup.Parse(value).UnwrapOrElse(e =>
             {
                 propertiesField.text = Reference.GroupProperties.ToRaw().ToStringWithoutName();
@@ -163,15 +175,15 @@ namespace ArcCreate.Compose.EventsEditor
             });
 
             group.File = Reference.GroupProperties.FileName;
-            Reference.SetGroupProperties(new Gameplay.Data.GroupProperties(group));
-
-            Values.ProjectModified = true;
-
-            Debug.Log(I18n.S(
+            group.Name = Reference.GroupProperties.Name;
+            ICommand cmd = new EditTimingGroupProperitesCommand(I18n.S(
                 "Compose.Notify.GroupTable.EditGroup", new Dictionary<string, object>
                 {
                         { "Number", Reference.GroupNumber },
-                }));
+                }), Reference, new GroupProperties(group));
+            
+            Services.History.AddCommand(cmd);
+            Values.ProjectModified = true;
             Values.OnEditAction?.Invoke();
             propertiesField.text = Reference.GroupProperties.ToRaw().ToStringWithoutName();
         }

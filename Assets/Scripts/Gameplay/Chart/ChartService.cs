@@ -425,8 +425,46 @@ namespace ArcCreate.Gameplay.Chart
 
         public void RemoveTimingGroup(TimingGroup group)
         {
-            group.Clear();
-            timingGroups.Remove(group);
+            for (int i = 0; i < timingGroups.Count; i++)
+            {
+                if (timingGroups[i] == group)
+                {
+                    timingGroups.Remove(group);
+                    for (int j = i; j < timingGroups.Count; j++)
+                    {
+                        timingGroups[j].SetGroupNumber(j);
+                    }
+
+                    gameplayData.NotifyChartEdit();
+                    break;
+                }
+            }
+        }
+
+        public void InsertTimingGroup(TimingGroup group)
+        {
+            if (string.IsNullOrEmpty(group.GroupProperties.FileName))
+            {
+                group.GroupProperties.FileName = timingGroups[0].GroupProperties.FileName;
+            }
+
+            if (group.GroupNumber < 1)
+            {
+                group.SetGroupNumber(1);
+            }
+
+            if (group.GroupNumber > timingGroups.Count)
+            {
+                group.SetGroupNumber(timingGroups.Count);
+            }
+
+            timingGroups.Insert(group.GroupNumber, group);
+            for (int i = group.GroupNumber + 1; i < timingGroups.Count; i++)
+            {
+                timingGroups[i].SetGroupNumber(i);
+            }
+
+            gameplayData.NotifyChartEdit();
         }
 
         public void UpdateChartJudgement(int currentTiming)
