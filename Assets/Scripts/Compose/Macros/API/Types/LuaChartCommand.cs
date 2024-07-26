@@ -145,6 +145,17 @@ namespace ArcCreate.Compose.Macros
                 if (remove.Instance != null)
                 {
                     removed.Add(remove.Instance);
+                    remove.SetInstance(null);
+                }
+            }
+
+            foreach (var add in addedEvents)
+            {
+                if (add.Instance == null)
+                {
+                    ArcEvent newvalue = add.CreateInstance();
+                    added.Add(newvalue);
+                    add.SetInstance(newvalue);
                 }
             }
 
@@ -161,16 +172,6 @@ namespace ArcCreate.Compose.Macros
                     {
                         edited.Add(edit.Instance, newvalue);
                     }
-                }
-            }
-
-            foreach (var add in addedEvents)
-            {
-                if (add.Instance == null)
-                {
-                    ArcEvent newvalue = add.CreateInstance();
-                    added.Add(newvalue);
-                    add.SetInstance(newvalue);
                 }
             }
 

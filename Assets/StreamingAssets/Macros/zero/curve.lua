@@ -1,6 +1,9 @@
 local util = require("zero.util")
 
-addFolderWithIcon("zero", "zero.curve", "e7e1", "Curves")
+Folder.new("zero.curve")
+    .withParent("zero")
+    .withIcon("e7e1")
+    .withName("Curves").add()
 
 util.zeroMacro(
     "zero.curve", "followSingle", 
@@ -21,8 +24,8 @@ util.zeroMacro(
 
         util.operateOnSelectedArcs(function(arc)
             Event.setSelection({})
-            originArc = originArc or util.getArc("Origin")
-            targetArc = targetArc or util.getArc("Target")
+            originArc = originArc or util.getArc("Select origin curve")
+            targetArc = targetArc or util.getArc("Select target curve")
             arc.startXY = transform(arc.startXY, arc.timing)
             arc.endXY = transform(arc.endXY, arc.endTiming)
             batchCommand.add(arc.save())
@@ -97,10 +100,10 @@ util.zeroMacro(
 
         util.operateOnSelectedArcs(function(arc)
             Event.setSelection({})
-            origin1 = origin1 or util.getArc("Origin 1")
-            origin2 = origin2 or util.getArc("Origin 2")
-            target1 = target1 or util.getArc("Target 1")
-            target2 = target2 or util.getArc("Target 2")
+            origin1 = origin1 or util.getArc("Select first origin curve")
+            origin2 = origin2 or util.getArc("Select second origin curve")
+            target1 = target1 or util.getArc("Select first target curve")
+            target2 = target2 or util.getArc("Select second target curve")
             arc.startXY = transform(arc.startXY, arc.timing)
             arc.endXY = transform(arc.endXY, arc.endTiming)
             batchCommand.add(arc.save())

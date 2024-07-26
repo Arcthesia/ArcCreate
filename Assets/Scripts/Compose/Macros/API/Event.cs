@@ -468,9 +468,8 @@ namespace ArcCreate.Compose.Macros
 
             foreach (ArcEvent e in sorted)
             {
-                if (e is Arc)
+                if (e is Arc n)
                 {
-                    Arc n = e as Arc;
                     LuaArc a = Arc(
                         n.Timing,
                         n.XStart,

@@ -1,7 +1,10 @@
 local util = require "zero.util"
 require "configtool.config"
 
-addFolderWithIcon("zero", "zero.arcmod",  "e922", "Arc modification")
+Folder.new("zero.arcmod")
+    .withParent("zero")
+    .withIcon("e922")
+    .withName("Arc modification").add()
 local configModule = ConfigModule.new("zero.arcmod")
 
 util.zeroMacro(

@@ -67,6 +67,11 @@ namespace ArcCreate.Utility.Lua
 
         public static double ToNumber(DynValue value)
         {
+            if (value.Type == DataType.Number)
+            {
+                return value.Number;
+            }
+
             if (double.TryParse(value.String, out double result))
             {
                 return result;
@@ -77,7 +82,12 @@ namespace ArcCreate.Utility.Lua
 
         public static bool ToBool(DynValue value)
         {
-            if (bool.TryParse(value.String, out bool result))
+            if (value.Type == DataType.Boolean)
+            {
+                return value.Boolean;
+            }
+
+            if (bool.TryParse(value.String.ToLower(), out bool result))
             {
                 return result;
             }

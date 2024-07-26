@@ -1,7 +1,10 @@
 local util = require("zero.util")
 require "configtool.config"
 
-addFolderWithIcon("zero", "zero.creation", "e145", "Create elements")
+Folder.new("zero.creation")
+    .withParent("zero")
+    .withIcon("e145")
+    .withName("Create elements").add()
 local configModule = ConfigModule.new("zero.creation")
 
 util.zeroMacro(
@@ -10,7 +13,7 @@ util.zeroMacro(
     "Select a timing and position to create a vertical red arc beam.",
     function()
         local xyt = util.getTimingAndPosition()
-        Event.arc(xyt.timing, xyt.x, 10, xyt.timing + 1, xyt.x, 10, false, 1, "s", Context.currentTimingGroup, "none").save().commit()
+        Event.arc(xyt.timing, xyt.x, 10, xyt.timing, xyt.x, 10.1, false, 1, "s", Context.currentTimingGroup, "none").save().commit()
     end)
 
 util.zeroMacro(
@@ -19,20 +22,21 @@ util.zeroMacro(
     "Select a timing and position to create a vertical blue arc beam.",
     function()
         local xyt = util.getTimingAndPosition()
-        Event.arc(xyt.timing, xyt.x, 10, xyt.timing + 1, xyt.x, 10, false, 0, "s", Context.currentTimingGroup, "none").save().commit()
+        Event.arc(xyt.timing, xyt.x, 10, xyt.timing, xyt.x, 10.1, false, 0, "s", Context.currentTimingGroup, "none").save().commit()
     end)
 
 ---@param name string
+---@param command Command
 ---@return LuaTimingGroup
-local function detectTimingGroupName(name)
+local function detectTimingGroupName(name, command)
     for i = 1, Context.timingGroupCount - 1, 1 do
         local group = Event.getTimingGroup(i)
         if group.name == name then return group end
     end
 
-    local tg = Event.createTimingGroupProperty('name="'..name..'"')
-    Event.addTimingGroup(tg)
-    return Event.getTimingGroup(Context.timingGroupCount - 1)
+    local tg = Event.createTimingGroup('name="'..name..'"')
+    command.add(tg.save())
+    return tg
 end
     
 util.zeroMacro(
@@ -49,13 +53,19 @@ util.zeroMacro(
         local endTiming = util.getTiming(true, "Select end timing")
         if endTiming < startTiming then return end
 
-        local timingGroup = detectTimingGroupName("$zero.blink").num
-        local halfTiming = (endTiming + startTiming) / 2
-
         local batchCommand = Command.create("creating blink trace (zero.creation)")
 
+        local timingGroup = detectTimingGroupName("$zero.blink", batchCommand)
+        local halfTiming = (endTiming + startTiming) / 2
+
         local bpm = Context.baseBpm
-        local interferingTiming = Event.query(EventSelectionConstraint.timing().fromTiming(startTiming-1).toTiming(endTiming).ofTimingGroup(timingGroup)).timing
+        local interferingTiming = Event.query(
+            EventSelectionConstraint.create()
+                .timing()
+                .fromTiming(startTiming-1)
+                .toTiming(endTiming)
+                .ofTimingGroup(timingGroup.num)
+            ).timing
         for i = 1, #interferingTiming, 1 do
             batchCommand.add(interferingTiming[i].delete())
         end
@@ -63,30 +73,30 @@ util.zeroMacro(
         batchCommand.add(Event.arc(
             startTiming, startXY + xy(-0.03, 0),
             halfTiming, startXY,
-            true, 0, 'si', timingGroup
-        ).save())
+            true, 0, 'si' 
+        ).save().withTimingGroup(timingGroup))
 
         batchCommand.add(Event.arc(
             startTiming, startXY + xy(0.03, 0),
             halfTiming, startXY,
-            true, 0, 'si', timingGroup
-        ).save())
+            true, 0, 'si'
+        ).save().withTimingGroup(timingGroup))
 
         batchCommand.add(Event.arc(
             startTiming, startXY,
             endTiming, startXY,
-            true, 0, 's', timingGroup
-        ).save())
+            true, 0, 's'
+        ).save().withTimingGroup(timingGroup))
 
         batchCommand.add(Event.timing(
-            startTiming-1, 999999, 9999, timingGroup
-        ).save())
+            startTiming-1, 999999, 9999
+        ).save().withTimingGroup(timingGroup))
         batchCommand.add(Event.timing(
-            startTiming, bpm * 10, 9999, timingGroup
-        ).save())
+            startTiming, bpm * 10, 9999
+        ).save().withTimingGroup(timingGroup))
         batchCommand.add(Event.timing(
-            endTiming, bpm, 9999, timingGroup
-        ).save())
+            endTiming, bpm, 9999
+        ).save().withTimingGroup(timingGroup))
         
         batchCommand.commit()
     end)
@@ -112,11 +122,12 @@ util.zeroMacro(
     .. "A new timing group is generated automatically.\n",
     function()
         local xyt = util.getTimingAndPosition()
-        Event.addTimingGroup(Event.createTimingGroupProperty("name=\"$zero.arccap\",noinput,noheightindicator,nohead"))
+        local tg = Event.createTimingGroup("name=\"$zero.arccap\",noinput,noheightindicator,nohead")
         local tgNum = Context.timingGroupCount - 1
         local baseBpm = Context.baseBpm
         
         local cmd = Command.create("Fading arccap")
+        cmd.add(tg.save())
         cmd.add(Event.timing(0, baseBpm, 4, tgNum).save())
 
         local mult = baseMultConfig.value
@@ -134,11 +145,14 @@ util.zeroMacro(
         cmd.add(Event.arc(999997, xyt.xy, 999999, xyt.xy, false, 0, "s", tgNum, "none").save())
         cmd.add(Event.timing(999996, dist, 9999, tgNum).save())
         cmd.add(Event.timing(999997, 0.01, 4, tgNum).save())
+        cmd.withTimingGroup(tg)
 
         cmd.commit()
     end)
 
-addMacroWithIcon(
-    "zero.creation", "zero.creation.config", 
-    "Settings", "e8b8", 
-    function() configModule:renderDialog() end)
+Macro.new("zero.creation.config")
+    .withName("Settings")
+    .withParent("zero.creation") 
+    .withIcon("e8b8")
+    .withDefinition(function() configModule:renderDialog() end)
+    .add()

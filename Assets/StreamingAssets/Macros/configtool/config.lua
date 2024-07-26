@@ -34,7 +34,7 @@ end
 function ConfigModule:addField(defaultValue, field)
     ---@type Config
     local newConfig = {
-        value = defaultValue,
+        value = Persistent.getString(self.moduleName.."."..field.key, defaultValue),
         field = field
     }
 
@@ -45,13 +45,14 @@ function ConfigModule:addField(defaultValue, field)
 end
 
 function ConfigModule:renderDialog()
-    for _, config in pairs(self.configsLookup) do
-        config.field.defaultTo(config.value)
+    for key, config in pairs(self.configsLookup) do
+        config.field.defaultTo(Persistent.getString(self.moduleName.."."..key, config.value))
     end
     local req = DialogInput.withTitle("Configuration ("..self.moduleName..")").requestInput(self.fields)
     coroutine.yield()
     for key, value in pairs(req.result) do
         self.configsLookup[key].value = value
         self.configsLookup[key].field.defaultTo(value)
+        Persistent.setString(self.moduleName.."."..key, value)
     end
 end

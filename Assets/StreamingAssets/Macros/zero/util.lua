@@ -76,7 +76,12 @@ local helpFields = {
 ---@param help string
 function module.zeroMacro(parentId, selfId, displayName, icon, help, macroDef)
     local id = parentId.."."..selfId
-    addMacroWithIcon(parentId, id, displayName, icon, macroDef)
+    Macro.new(id)
+        .withParent(parentId)
+        .withName(displayName)
+        .withIcon(icon)
+        .withDefinition(macroDef)
+        .add()
     module.addHelp(displayName, id, help)
 end
 
@@ -91,6 +96,11 @@ end
 
 function module.renderHelp()
     DialogInput.withTitle("Help").requestInput(helpFields)
+end
+
+---@param bool boolean
+function module.choose(bool, vtrue, vfalse)
+    if bool then return vtrue else return vfalse end
 end
 
 return module

@@ -424,22 +424,17 @@ function Event.camera(timing, x, y, z, rx, ry, rz, type, duration, timingGroup) 
 ---@return LuaScenecontrol
 function Event.scenecontrol(timing, type, timingGroup, args) end
 
----Create a timing group property object. Properties are defined with a table. Returned group's number is -1.
----@param properties table<string, any>
----@return LuaTimingGroup
-function Event.createTimingGroup(properties) end
-
----Create a timing group property object. Properties are defined with a string whose format is the same as .aff chart format. Returned group's number is -1
+---Create a timing group object. Properties are defined with a string whose format is the same as .aff chart format.You must use LuaTimingGroup.save() in order to add this timing group to the chart.
 ---@param properties string
 ---@return LuaTimingGroup
 function Event.createTimingGroup(properties) end
 
----Deprecated, use Event.CreateTimingGroup() instead. Create a timing group property object. Properties are defined with a string whose format is the same as .aff chart format. Returned group's number is -1
+---Deprecated, use Event.CreateTimingGroup() instead. Create a timing group object. Properties are defined with a string whose format is the same as .aff chart format.
 ---@param properties string
 ---@return LuaTimingGroup
 function Event.createTimingGroupProperty(properties) end
 
----Deprecated, use Event.CreateTimingGroup() instead. Create a timing group property object. Properties are defined with a table. Returned group's number is -1.
+---Deprecated. This method does not support the latest timing group properties, use Event.CreateTimingGroup() instead.Create a timing group object. Properties are defined with a table.
 ---@param properties table<string, any>
 ---@return LuaTimingGroup
 function Event.createTimingGroupProperty(properties) end
@@ -448,17 +443,17 @@ function Event.createTimingGroupProperty(properties) end
 ---@param properties LuaTimingGroup
 function Event.addTimingGroup(properties) end
 
----Not recommended, use LuaTimingGruop.save() instead. Change an existing timing group's properties. Properties are defined with a property string, similar to that of .aff chart format
+---Not recommended, use LuaTimingGroup.save() instead. Change an existing timing group's properties. Properties are defined with a property string, similar to that of .aff chart format
 ---@param group integer
 ---@param properties LuaTimingGroup
 function Event.setTimingGroupProperty(group, properties) end
 
----Get the group-th timing group of the current chart.
+---Get the n-th timing group of the current chart.
 ---@param group integer
 ---@return LuaTimingGroup
 function Event.getTimingGroup(group) end
 
----Get the currently note selections. If a constraint is provided, then only notes that fit the constraint is returned.
+---Get the current note selection. If a constraint is provided, then only notes that fit the constraint is returned.
 ---@param constraint EventSelectionConstraint
 ---@return EventSelectionRequest
 function Event.getCurrentSelection(constraint) end
@@ -665,7 +660,13 @@ function MacroBuilder__inst.withParent(parent) end
 function MacroBuilder__inst.withDefinition(_function) end
 
 ---Add the macro to the application.
+---@return MacroBuilder
 function MacroBuilder__inst.add() end
+
+---Create a new macro builder inheriting the same settings from the current instance
+---@param id string
+---@return MacroBuilder
+function MacroBuilder__inst.new(id) end
 
 Folder = {}
 
@@ -679,19 +680,29 @@ FolderBuilder = {}
 ---@class FolderBuilder
 FolderBuilder__inst = {}
 
+---Set the macro display name.
 ---@param name string
 ---@return FolderBuilder
 function FolderBuilder__inst.withName(name) end
 
+---Set the display icon display code. Should be a Material icon unicode (example: e1666).
 ---@param icon string
 ---@return FolderBuilder
 function FolderBuilder__inst.withIcon(icon) end
 
+---Set the parent node. The value should be the id of the parent node.
 ---@param parent string
 ---@return FolderBuilder
 function FolderBuilder__inst.withParent(parent) end
 
+---Add the folder to the application.
+---@return FolderBuilder
 function FolderBuilder__inst.add() end
+
+---Create a new folder builder inheriting the same settings from the current instance
+---@param id string
+---@return FolderBuilder
+function FolderBuilder__inst.new(id) end
 
 Context = {}
 
@@ -912,13 +923,18 @@ LuaChartCommand = {}
 ---@field public name string
 LuaChartCommand__inst = {}
 
----Execute the command.
-function LuaChartCommand__inst.commit() end
-
 ---Combine both command to be executed at once.
 ---@param c LuaChartCommand
 ---@return LuaChartCommand
 function LuaChartCommand__inst.add(c) end
+
+---Assign all events under this command to a timing group on command execution. Useful for assign to newly created timing group.
+---@param timingGroup LuaTimingGroup
+---@return LuaChartCommand
+function LuaChartCommand__inst.withTimingGroup(timingGroup) end
+
+---Execute the command.
+function LuaChartCommand__inst.commit() end
 
 LuaChartEvent = {}
 
@@ -1000,14 +1016,27 @@ LuaTimingGroup = {}
 ---@field public noShadow boolean
 ---@field public noHead boolean
 ---@field public noArcCap boolean
+---@field public noConnection boolean
 ---@field public fadingHolds boolean
+---@field public ignoreMirror boolean
+---@field public autoplay boolean
 ---@field public arcResolution number
 ---@field public angleX number
 ---@field public angleY number
+---@field public judgementSizeX number
+---@field public judgementSizeY number
+---@field public judgementOffsetX number
+---@field public judgementOffsetY number
+---@field public judgementOffsetZ number
 ---@field public side string
 ---@field public file string
+---@field public judgementMaps table<string, string>
 ---@field public attached boolean
 LuaTimingGroup__inst = {}
+
+---Set the properties of this group using aff timing group property syntax.
+---@param props string
+function LuaTimingGroup__inst.setProperties(props) end
 
 ---@return string
 function LuaTimingGroup__inst.toString() end
@@ -1024,34 +1053,6 @@ function LuaTimingGroup__inst.delete() end
 ---@param group LuaTimingGroup
 ---@return boolean
 function LuaTimingGroup__inst.instanceEquals(group) end
-
----Not recommended. Please use Macro.new(). Add a macro without an icon.
----@param parentId string
----@param id string
----@param displayName string
----@param macroDef any
-function addMacro(parentId, id, displayName, macroDef) end
-
----Not recommended. Please use Macro.new(). Add a folder with the default icon.
----@param parentId string
----@param id string
----@param displayName string
-function addFolder(parentId, id, displayName) end
-
----Not recommended. Please use Macro.new(). Add a macro with an icon. The icon should be a material icon unicode value e.g e2c7.
----@param parentId string
----@param id string
----@param displayName string
----@param icon string
----@param macroDef any
-function addMacroWithIcon(parentId, id, displayName, icon, macroDef) end
-
----Not recommended. Please use Macro.new(). Add a folder with an icon. The icon should be a material icon unicode value e.g e2c7.
----@param parentId string
----@param id string
----@param icon string
----@param displayName string
-function addFolderWithIcon(parentId, id, icon, displayName) end
 
 ---Remove a macro or folder. Does nothing if the macro has not been added.
 ---@param id string

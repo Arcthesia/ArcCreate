@@ -11,7 +11,9 @@ namespace ArcCreate.Compose.Macros
         public override void SetupField(DialogField field, MacroRequest request)
         {
             base.SetupField(field, request);
-            checkbox.isOn = field.DefaultValue?.Boolean ?? false;
+            checkbox.isOn = field.DefaultValue == null ? false :
+                bool.TryParse(field.DefaultValue.String.ToLower(), out bool b) ? b :
+                field.DefaultValue.CastToBool();
         }
 
         public override bool IsFieldValid()
