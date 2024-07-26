@@ -37,7 +37,7 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private Button decreaseOffsetButton;
         [SerializeField] private TMP_Text offsetText;
         [SerializeField] private Button setupOffsetButton;
-        [SerializeField] private Dialog setupOffsetDialog;
+        [SerializeField] private ScriptedAnimator setupOffsetDialog;
 
         [Header("Visual")]
         [SerializeField] private SettingsToggle colorblindModeSetting;
@@ -73,6 +73,7 @@ namespace ArcCreate.Selection.Interface
             decreaseMusicVolumeButton.onClick.AddListener(OnDecreaseMusicVolumeButton);
             increaseOffsetButton.onClick.AddListener(OnIncreaseOffsetButton);
             decreaseOffsetButton.onClick.AddListener(OnDecreaseOffsetButton);
+            setupOffsetButton.onClick.AddListener(SetupOffset);
 
             Settings.DropRate.OnValueChanged.AddListener(OnDropRateSettings);
             Settings.MusicAudio.OnValueChanged.AddListener(OnMusicAudioSettings);
@@ -124,6 +125,7 @@ namespace ArcCreate.Selection.Interface
             decreaseMusicVolumeButton.onClick.RemoveListener(OnDecreaseMusicVolumeButton);
             increaseOffsetButton.onClick.RemoveListener(OnIncreaseOffsetButton);
             decreaseOffsetButton.onClick.RemoveListener(OnDecreaseOffsetButton);
+            setupOffsetButton.onClick.RemoveListener(SetupOffset);
 
             Settings.DropRate.OnValueChanged.RemoveListener(OnDropRateSettings);
             Settings.MusicAudio.OnValueChanged.RemoveListener(OnMusicAudioSettings);
@@ -135,6 +137,11 @@ namespace ArcCreate.Selection.Interface
             closeCreditButton.onClick.RemoveListener(creditAnimation.Hide);
 
             // setupOffsetButton.onClick.RemoveListener(setupOffsetDialog.Show);
+        }
+
+        private void SetupOffset()
+        {
+            setupOffsetDialog.Show();
         }
 
         private void OnDropRateSettings(int value)

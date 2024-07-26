@@ -1091,7 +1091,10 @@ Gameplay:
         OffsetDetail: |-
           Adjust music synchronization.
           Increase if you're getting LATE, or decrease if you're getting EARLY.
-        Calibrate: Calibrate
+        Calibrate:
+          Button: Calibrate
+          Title: Calibrate offset
+          SubTitle: Adjust your offset by tapping along with the rhythm
         MusicAudio: Music volume
         MusicAudioDetail: |-
           Change the volume of music during gameplay.
