@@ -19,6 +19,7 @@ namespace ArcCreate.Gameplay.Audio
         [SerializeField] private Button[] retryButtons;
         [SerializeField] private Button[] returnButtons;
         [SerializeField] private PracticeMenu practiceMenu;
+        [SerializeField] private PracticeTimingControl practiceTimingControl;
         [SerializeField] private GameObject pauseControl;
         [SerializeField] private GameObject normalLayout;
         [SerializeField] private GameObject reversedLayout;
@@ -185,6 +186,7 @@ namespace ArcCreate.Gameplay.Audio
         private void SetPracticeMode(bool enable)
         {
             practiceMenu.gameObject.SetActive(enable);
+            practiceTimingControl.gameObject.SetActive(enable);
             pauseControl.SetActive(!enable);
         }
     }

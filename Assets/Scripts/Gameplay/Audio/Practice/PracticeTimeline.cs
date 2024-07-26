@@ -9,8 +9,8 @@ namespace ArcCreate.Gameplay.Audio.Practice
     {
         [SerializeField] private GameplayData gameplayData;
         [SerializeField] private Camera viewCamera;
-        [SerializeField] private RectTransform container;
         [SerializeField] private RawImage image;
+        [SerializeField] private RectTransform rect;
         private readonly int timingShaderId = Shader.PropertyToID("_CurrentSample");
         private readonly int lengthShaderId = Shader.PropertyToID("_AudioLength");
         private readonly int repeatFromShaderId = Shader.PropertyToID("_RepeatSampleFrom");
@@ -20,7 +20,9 @@ namespace ArcCreate.Gameplay.Audio.Practice
 
         public void OnDrag(PointerEventData eventData)
         {
-            int timing = Mathf.RoundToInt(Mathf.Clamp(eventData.position.x / Screen.width, 0, 1) * Services.Audio.AudioLength);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(rect, eventData.position, viewCamera, out Vector2 local);
+            float t = Mathf.Clamp(local.x / rect.rect.width, -0.5f, 0.5f) + 0.5f;
+            int timing = Mathf.RoundToInt(t * Services.Audio.AudioLength);
             Services.Audio.AudioTiming = timing;
             Services.Audio.SetResumeAt(timing);
         }

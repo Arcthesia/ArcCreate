@@ -10,9 +10,8 @@ namespace ArcCreate.Gameplay.Audio.Practice
         [SerializeField] private PracticeTimeline timeline;
 
         [Header("Speed")]
-        [SerializeField] private Button changeSpeedButton;
+        [SerializeField] private SpeedSlider speedSlider;
         [SerializeField] private TMP_Text speedText;
-        [SerializeField] private float speedIncrement;
 
         [Header("Repeat")]
         [SerializeField] private GameObject repeatOff;
@@ -33,7 +32,7 @@ namespace ArcCreate.Gameplay.Audio.Practice
                 OnClipChange(gameplayData.AudioClip.Value);
             }
 
-            changeSpeedButton.onClick.AddListener(ChangeSpeed);
+            speedSlider.OnValueChanged += OnSpeedChange;
             repeatOffButton.onClick.AddListener(TurnRepeatOff);
             repeatOnButton.onClick.AddListener(TurnRepeatOn);
             repeatFromButton.onClick.AddListener(SetRepeatFrom);
@@ -44,7 +43,7 @@ namespace ArcCreate.Gameplay.Audio.Practice
         {
             gameplayData.AudioClip.OnValueChange -= OnClipChange;
             gameplayData.OnGameplayUpdate -= CheckRepeat;
-            changeSpeedButton.onClick.RemoveListener(ChangeSpeed);
+            speedSlider.OnValueChanged -= OnSpeedChange;
             repeatOffButton.onClick.RemoveListener(TurnRepeatOff);
             repeatOnButton.onClick.RemoveListener(TurnRepeatOn);
             repeatFromButton.onClick.RemoveListener(SetRepeatFrom);
@@ -59,17 +58,10 @@ namespace ArcCreate.Gameplay.Audio.Practice
             UpdateRepeatRange();
         }
 
-        private void ChangeSpeed()
+        private void OnSpeedChange(float speed)
         {
-            float speed = gameplayData.PlaybackSpeed.Value;
-            float nextSpeed = (Mathf.Floor(speed / speedIncrement) - 1) * speedIncrement;
-            if (nextSpeed <= 0)
-            {
-                nextSpeed = 1;
-            }
-
-            speedText.text = nextSpeed.ToString("f2") + "x";
-            gameplayData.PlaybackSpeed.Value = nextSpeed;
+            speedText.text = speed.ToString("f2") + "x";
+            gameplayData.PlaybackSpeed.Value = speed;
         }
 
         private void TurnRepeatOff()

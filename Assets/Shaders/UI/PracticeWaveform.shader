@@ -78,7 +78,7 @@ Shader "Gameplay/Waveform"
 			
 			float4 frag (v2f i) : SV_Target
 			{ 
-				float y = (1 - i.uv.y) / 2;
+				float yFromCenter = abs(i.uv.y - 0.5f) * 2;
 
 				float uvx = i.uv.x;
 				float sampleMain = uvx * _AudioLength;
@@ -96,13 +96,13 @@ Shader "Gameplay/Waveform"
 
 				s /= 4;
 
-                bool hit = y <= s;
+                bool hit = yFromCenter <= (s + 0.05);
 				bool repeat = sampleMain > _RepeatSampleFrom && sampleMain < _RepeatSampleTo;
 
 				if (hit)
 				{
 					half4 c = sampleMain > _CurrentSample ? _Color : _HighlightColor;
-					c = repeat ? lerp(c, _RepeatColor, 0.2) : c;
+					c = repeat ? lerp(c, _RepeatColor, 0.4) : c;
 					return c;
 				}
 				else
