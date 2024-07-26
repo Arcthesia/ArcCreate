@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ArcCreate.SceneTransition;
 using ArcCreate.Storage;
 using ArcCreate.Storage.Data;
@@ -72,6 +73,7 @@ namespace ArcCreate.Selection.Interface
 
         private async UniTask StartupAnimation()
         {
+            Settings.SelectionSortPackStrategy.OnValueChanged.AddListener(OnSortChange);
             hideUIAnimator.HideImmediate();
             packListAnimator.HideImmediate();
             await UniTask.DelayFrame(2);
@@ -88,6 +90,7 @@ namespace ArcCreate.Selection.Interface
         {
             Pools.Destroy<Cell>("PackCell");
 
+            Settings.SelectionSortPackStrategy.OnValueChanged.RemoveListener(OnSortChange);
             storageData.OnStorageChange -= RebuildList;
             storageData.OnSwitchToGameplayScene -= HideUI;
             storageData.SelectedPack.OnValueChange -= OnSelectedPack;
@@ -97,6 +100,8 @@ namespace ArcCreate.Selection.Interface
             loadChartsPack.onClick.RemoveListener(OpenChartPicker);
             storageData.OnSwitchToGameplaySceneException -= OnGameplayException;
         }
+
+        private void OnSortChange(string arg0) => RebuildList();
 
         private void SelectAllSongsPack()
         {
@@ -174,8 +179,9 @@ namespace ArcCreate.Selection.Interface
 
         private void RebuildList()
         {
-            IEnumerable<PackStorage> packs = storageData.GetAllPacks();
-            List<CellData> data = new List<CellData>();
+            List<PackStorage> packs = storageData.GetAllPacks().ToList();
+            ISortPackStrategy sortPack = GetSortPackStrategy(Settings.SelectionSortPackStrategy.Value);
+            List<PackCellData> data = new List<PackCellData>();
 
             foreach (var pack in packs)
             {
@@ -187,8 +193,23 @@ namespace ArcCreate.Selection.Interface
                 });
             }
 
-            scroll.SetData(data);
+            scroll.SetData(sortPack.Sort(data).ToList<CellData>());
             FocusOnPack(storageData.SelectedPack.Value);
+        }
+
+        private ISortPackStrategy GetSortPackStrategy(string value)
+        {
+            switch(value)
+            {
+                case SortPackByName.Typename:
+                    return new SortPackByName();
+                case SortPackByPublisher.Typename:
+                    return new SortPackByPublisher();
+                case SortPackByAddedDate.Typename:
+                    return new SortPackByAddedDate();
+                default:
+                    return new SortPackByName();
+            }
         }
 
         private void FocusOnPack(PackStorage pack)

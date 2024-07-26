@@ -68,6 +68,7 @@ namespace ArcCreate
         // Selection
         public static readonly StringSetting SelectionGroupStrategy = new StringSetting("Selection.Group", "none");
         public static readonly StringSetting SelectionSortStrategy = new StringSetting("Selection.Sort", "title");
+        public static readonly StringSetting SelectionSortPackStrategy = new StringSetting("Selection.SortPack", "addeddate");
 
         // Editor
         public static readonly BoolSetting ShouldAutosave = new BoolSetting("Editor.Autosave.Enable", true);

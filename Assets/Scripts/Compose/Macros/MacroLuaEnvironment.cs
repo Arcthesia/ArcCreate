@@ -212,7 +212,6 @@ namespace ArcCreate.Compose.Macros
 
         private void LoadMacrosFrom(string dir, bool includePreBundledPath)
         {
-            Debug.Log($"Loading macros at {dir}");
             if (!Directory.Exists(dir))
             {
                 return;
@@ -225,7 +224,6 @@ namespace ArcCreate.Compose.Macros
                     continue;
                 }
 
-                Debug.Log($"Executing macro definition script {path}");
                 try
                 {
                     ExecuteScript(path, includePreBundledPath);

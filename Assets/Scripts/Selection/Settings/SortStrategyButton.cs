@@ -19,7 +19,7 @@ namespace ArcCreate.Selection.Interface
         private void OnDestroy()
         {
             GetComponent<Button>().onClick.RemoveListener(CycleSortStrategy);
-            I18n.OnLocaleChanged += OnLocale;
+            I18n.OnLocaleChanged -= OnLocale;
         }
 
         private void OnLocale()
@@ -68,4 +68,5 @@ namespace ArcCreate.Selection.Interface
             text.text = I18n.S($"Gameplay.Selection.Sort.{newStrat}");
         }
     }
+
 }

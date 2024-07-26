@@ -1047,6 +1047,10 @@ Gameplay:
       rating: Rating
       score: Score
       title: Title
+    SortPack:
+      name: Name
+      publisher: Publisher
+      addeddate: Added date
     Group:
       none: None
       difficulty: Difficulty

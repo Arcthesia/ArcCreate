@@ -6,4 +6,9 @@ namespace ArcCreate.Selection.Interface
     {
         List<LevelCellData> Sort(List<LevelCellData> cells);
     }
+
+    public interface ISortPackStrategy
+    {
+        List<PackCellData> Sort(List<PackCellData> cells);
+    }
 }
