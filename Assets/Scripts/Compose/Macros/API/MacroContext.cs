@@ -2,6 +2,7 @@ using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Lua;
 using EmmySharp;
 using MoonSharp.Interpreter;
+using UnityEngine;
 
 namespace ArcCreate.Compose.Macros
 {
@@ -81,6 +82,12 @@ namespace ArcCreate.Compose.Macros
         public static float ScreenAspectRatio => ScreenWidth / ScreenHeight;
 
         public static XY ScreenMiddle => new XY(ScreenWidth / 2, ScreenHeight / 2);
+
+        public static string SystemClipboard
+        {
+            get => GUIUtility.systemCopyBuffer;
+            set => GUIUtility.systemCopyBuffer = value;
+        }
 
         public static float BeatLengthAt(int timing, int timingGroup = 0)
             => 60000 / BpmAt(timing, timingGroup);

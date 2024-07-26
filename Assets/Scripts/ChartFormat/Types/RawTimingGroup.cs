@@ -29,7 +29,7 @@ namespace ArcCreate.ChartFormat
 
         public bool Autoplay { get; set; } = false;
 
-        public Dictionary<JudgementMap, JudgementMap> JudgementMaps { get; }
+        public Dictionary<JudgementMap, JudgementMap> JudgementMaps { get; set; }
             = new Dictionary<JudgementMap, JudgementMap>();
 
         public float ArcResolution { get; set; } = 1;
@@ -71,7 +71,7 @@ namespace ArcCreate.ChartFormat
                     return ChartError.Parsing(def, lineNumber, RawEventType.TimingGroup, e);
                 }
 
-                string opt = optRaw.Value.Trim().ToLower();
+                string opt = optRaw.Value.Trim();
                 if (opt.Contains("="))
                 {
                     string[] tokens = opt.Split('=');
@@ -80,7 +80,7 @@ namespace ArcCreate.ChartFormat
 
                     bool valid;
                     float val;
-                    switch (type)
+                    switch (type.ToLower())
                     {
                         case "name":
                             tg.Name = value.Trim('"');
@@ -160,7 +160,7 @@ namespace ArcCreate.ChartFormat
                 }
                 else
                 {
-                    switch (opt)
+                    switch (opt.ToLower())
                     {
                         case "noinput":
                             tg.NoInput = true;
@@ -324,13 +324,16 @@ namespace ArcCreate.ChartFormat
             {
                 opts.Add($"perfect={GetStringFrom(pearlyTo)}");
             }
-            else if (JudgementMaps.TryGetValue(JudgementMap.PerfectEarly, out JudgementMap pe))
+            else
             {
-                opts.Add($"perfectearly={GetStringFrom(pe)}");
-            }
-            else if (JudgementMaps.TryGetValue(JudgementMap.PerfectLate, out JudgementMap pl))
-            {
-                opts.Add($"perfectlate={GetStringFrom(pl)}");
+                if (JudgementMaps.TryGetValue(JudgementMap.PerfectEarly, out JudgementMap pe))
+                {
+                    opts.Add($"perfectearly={GetStringFrom(pe)}");
+                }
+                if (JudgementMaps.TryGetValue(JudgementMap.PerfectLate, out JudgementMap pl))
+                {
+                    opts.Add($"perfectlate={GetStringFrom(pl)}");
+                }
             }
 
             if (JudgementMaps.TryGetValue(JudgementMap.GoodEarly, out JudgementMap gearlyTo)
@@ -339,13 +342,16 @@ namespace ArcCreate.ChartFormat
             {
                 opts.Add($"good={GetStringFrom(gearlyTo)}");
             }
-            else if (JudgementMaps.TryGetValue(JudgementMap.GoodEarly, out JudgementMap ge))
+            else
             {
-                opts.Add($"goodearly={GetStringFrom(ge)}");
-            }
-            else if (JudgementMaps.TryGetValue(JudgementMap.GoodLate, out JudgementMap gl))
-            {
-                opts.Add($"goodlate={GetStringFrom(gl)}");
+                if (JudgementMaps.TryGetValue(JudgementMap.GoodEarly, out JudgementMap ge))
+                {
+                    opts.Add($"goodearly={GetStringFrom(ge)}");
+                }
+                if (JudgementMaps.TryGetValue(JudgementMap.GoodLate, out JudgementMap gl))
+                {
+                    opts.Add($"goodlate={GetStringFrom(gl)}");
+                }
             }
 
             if (JudgementMaps.TryGetValue(JudgementMap.MissEarly, out JudgementMap mearlyTo)
@@ -354,13 +360,16 @@ namespace ArcCreate.ChartFormat
             {
                 opts.Add($"miss={GetStringFrom(mearlyTo)}");
             }
-            else if (JudgementMaps.TryGetValue(JudgementMap.MissEarly, out JudgementMap me))
+            else
             {
-                opts.Add($"missearly={GetStringFrom(me)}");
-            }
-            else if (JudgementMaps.TryGetValue(JudgementMap.MissLate, out JudgementMap ml))
-            {
-                opts.Add($"misslate={GetStringFrom(ml)}");
+                if (JudgementMaps.TryGetValue(JudgementMap.MissEarly, out JudgementMap me))
+                {
+                    opts.Add($"missearly={GetStringFrom(me)}");
+                }
+                if (JudgementMaps.TryGetValue(JudgementMap.MissLate, out JudgementMap ml))
+                {
+                    opts.Add($"misslate={GetStringFrom(ml)}");
+                }
             }
 
             if (AngleX != 0)

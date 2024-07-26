@@ -63,8 +63,9 @@ namespace EmmySharp
         /// </summary>
         /// <param name="value">The value to append.</param>
         /// <param name="baseTy">The base type.</param>
+        /// <param name="alias">The base type's alias.</param>
         /// <returns>The builder instance.</returns>
-        public EmmySharpBuilder AppendStaticValue(EmmySharpValue value, Type baseTy = null)
+        public EmmySharpBuilder AppendStaticValue(EmmySharpValue value, Type baseTy = null, string alias = null)
         {
             AppendDoc(value.Doc);
             builder.Append("---@type ");
@@ -73,7 +74,8 @@ namespace EmmySharp
 
             if (baseTy != null)
             {
-                builder.Append(baseTy.Name + ".");
+                UnityEngine.Debug.Log(alias + " " + baseTy.Name + " " + (alias ?? baseTy.Name));
+                builder.Append((alias ?? baseTy.Name) + ".");
             }
 
             builder.AppendLine(value.Name.ToCamelCase() + " = nil");
@@ -115,7 +117,7 @@ namespace EmmySharp
 
             foreach (var staticVal in staticValues)
             {
-                AppendStaticValue(staticVal, type);
+                AppendStaticValue(staticVal, type, alias);
             }
 
             bool singleton = type.IsDefined(typeof(EmmySingletonAttribute));

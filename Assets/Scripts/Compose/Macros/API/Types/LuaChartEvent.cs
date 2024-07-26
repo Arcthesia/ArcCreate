@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using ArcCreate.Compose.History;
 using ArcCreate.Gameplay.Data;
 using EmmySharp;
 using MoonSharp.Interpreter;
@@ -28,19 +27,14 @@ namespace ArcCreate.Compose.Macros
         [EmmyDoc("Create a command that saves changes made to this event.")]
         public LuaChartCommand Save()
         {
-            ArcEvent newInstance = CreateInstance();
-            EventCommand command;
             if (Instance == null)
             {
-                Instance = newInstance;
-                command = new EventCommand("Macro", add: new List<ArcEvent> { Instance });
+                return new LuaChartCommand(addedEvents: new List<LuaChartEvent>() { this });
             }
             else
             {
-                command = new EventCommand("Macro", update: new List<(ArcEvent instance, ArcEvent newValue)> { (Instance, newInstance) });
+                return new LuaChartCommand(editedEvents: new List<LuaChartEvent>() { this });
             }
-
-            return new LuaChartCommand(command);
         }
 
         [EmmyDoc("Create a command that delete current event, if it's connected to a real event in the chart.")]
@@ -51,8 +45,7 @@ namespace ArcCreate.Compose.Macros
                 return Command.Create();
             }
 
-            EventCommand command = new EventCommand("Macro", remove: new List<ArcEvent> { Instance });
-            return new LuaChartCommand(command);
+            return new LuaChartCommand(removedEvents: new List<LuaChartEvent>() { this });
         }
 
         [EmmyDoc("Check if the event matches the event type")]

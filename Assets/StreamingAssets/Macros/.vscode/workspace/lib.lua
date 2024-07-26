@@ -427,18 +427,28 @@ function Event.scenecontrol(timing, type, timingGroup, args) end
 ---Create a timing group property object. Properties are defined with a table. Returned group's number is -1.
 ---@param properties table<string, any>
 ---@return LuaTimingGroup
-function Event.createTimingGroupProperty(properties) end
+function Event.createTimingGroup(properties) end
 
 ---Create a timing group property object. Properties are defined with a string whose format is the same as .aff chart format. Returned group's number is -1
 ---@param properties string
 ---@return LuaTimingGroup
+function Event.createTimingGroup(properties) end
+
+---Deprecated, use Event.CreateTimingGroup() instead. Create a timing group property object. Properties are defined with a string whose format is the same as .aff chart format. Returned group's number is -1
+---@param properties string
+---@return LuaTimingGroup
 function Event.createTimingGroupProperty(properties) end
 
----Add a timing group to the current chart.
+---Deprecated, use Event.CreateTimingGroup() instead. Create a timing group property object. Properties are defined with a table. Returned group's number is -1.
+---@param properties table<string, any>
+---@return LuaTimingGroup
+function Event.createTimingGroupProperty(properties) end
+
+---Not recommended, use LuaTimingGroup.save() instead. Add a timing group to the current chart.
 ---@param properties LuaTimingGroup
 function Event.addTimingGroup(properties) end
 
----Change an existing timing group's properties. Properties are defined with a property string, similar to that of .aff chart format
+---Not recommended, use LuaTimingGruop.save() instead. Change an existing timing group's properties. Properties are defined with a property string, similar to that of .aff chart format
 ---@param group integer
 ---@param properties LuaTimingGroup
 function Event.setTimingGroupProperty(group, properties) end
@@ -621,100 +631,165 @@ function TrackInput.requestPosition(timing, notification) end
 ---@return MacroRequest
 function TrackInput.requestLane(notification) end
 
+Macro = {}
+
+---@class Macro
+---Create a new macro builder. The id should be unique.
+---@param id string
+---@return MacroBuilder
+function Macro.new(id) end
+
+MacroBuilder = {}
+
+---@class MacroBuilder
+MacroBuilder__inst = {}
+
+---Set the macro display name.
+---@param name string
+---@return MacroBuilder
+function MacroBuilder__inst.withName(name) end
+
+---Set the display icon display code. Should be a Material icon unicode (example: e1666).
+---@param icon string
+---@return MacroBuilder
+function MacroBuilder__inst.withIcon(icon) end
+
+---Set the parent node. The value should be the id of the parent node.
+---@param parent string
+---@return MacroBuilder
+function MacroBuilder__inst.withParent(parent) end
+
+---Set the macro definition. The value is a function that will be executed every time the macro is run (example: `funcion() ... end`)
+---@param function any
+---@return MacroBuilder
+function MacroBuilder__inst.withDefinition(_function) end
+
+---Add the macro to the application.
+function MacroBuilder__inst.add() end
+
+Folder = {}
+
+---@class Folder
+---@param id string
+---@return FolderBuilder
+function Folder.new(id) end
+
+FolderBuilder = {}
+
+---@class FolderBuilder
+FolderBuilder__inst = {}
+
+---@param name string
+---@return FolderBuilder
+function FolderBuilder__inst.withName(name) end
+
+---@param icon string
+---@return FolderBuilder
+function FolderBuilder__inst.withIcon(icon) end
+
+---@param parent string
+---@return FolderBuilder
+function FolderBuilder__inst.withParent(parent) end
+
+function FolderBuilder__inst.add() end
+
 Context = {}
 
 ---@type number
-MacroContext.dropRate = nil
+Context.dropRate = nil
 
 ---@type number
-MacroContext.offset = nil
+Context.offset = nil
 
 ---@type number
-MacroContext.timingPointDensityFactor = nil
+Context.timingPointDensityFactor = nil
 
 ---@type number
-MacroContext.beatlineDensity = nil
+Context.beatlineDensity = nil
 
 ---@type string
-MacroContext.language = nil
+Context.language = nil
 
 ---@type number
-MacroContext.baseBpm = nil
+Context.baseBpm = nil
 
 ---@type integer
-MacroContext.songLength = nil
+Context.songLength = nil
 
 ---@type integer
-MacroContext.maxCombo = nil
+Context.maxCombo = nil
 
 ---@type integer
-MacroContext.noteCount = nil
+Context.noteCount = nil
 
 ---@type string
-MacroContext.title = nil
+Context.title = nil
 
 ---@type string
-MacroContext.composer = nil
+Context.composer = nil
 
 ---@type string
-MacroContext.charter = nil
+Context.charter = nil
 
 ---@type string
-MacroContext.alias = nil
+Context.alias = nil
 
 ---@type string
-MacroContext.difficulty = nil
+Context.difficulty = nil
 
 ---@type string
-MacroContext.difficultyColor = nil
+Context.difficultyColor = nil
 
 ---@type string
-MacroContext.chartPath = nil
+Context.chartPath = nil
 
 ---@type string
-MacroContext.side = nil
+Context.side = nil
 
 ---@type boolean
-MacroContext.isLight = nil
+Context.isLight = nil
 
 ---@type integer
-MacroContext.currentArcColor = nil
+Context.currentArcColor = nil
 
 ---@type integer
-MacroContext.maxArcColor = nil
+Context.maxArcColor = nil
 
 ---@type string[]
-MacroContext.allArcTypes = nil
+Context.allArcTypes = nil
 
 ---@type string
-MacroContext.currentArcType = nil
+Context.currentArcType = nil
 
 ---@type boolean
-MacroContext.currentIsVoidMode = nil
+Context.currentIsVoidMode = nil
 
 ---@type boolean
-MacroContext.currentIsTraceMode = nil
+Context.currentIsTraceMode = nil
 
 ---@type integer
-MacroContext.currentTimingGroup = nil
+Context.currentTimingGroup = nil
 
 ---@type integer
-MacroContext.timingGroupCount = nil
+Context.timingGroupCount = nil
 
 ---@type integer
-MacroContext.currentTiming = nil
+Context.currentTiming = nil
 
 ---@type integer
-MacroContext.screenWidth = nil
+Context.screenWidth = nil
 
 ---@type integer
-MacroContext.screenHeight = nil
+Context.screenHeight = nil
 
 ---@type number
-MacroContext.screenAspectRatio = nil
+Context.screenAspectRatio = nil
 
 ---@type XY
-MacroContext.screenMiddle = nil
+Context.screenMiddle = nil
+
+---@type string
+Context.systemClipboard = nil
 
 ---@class Context
 ---@param timing integer
@@ -736,6 +811,23 @@ function Context.divisorAt(timing, timingGroup) end
 ---@param timingGroup integer
 ---@return number
 function Context.floorPositionAt(timing, timingGroup) end
+
+Persistent = {}
+
+---@class Persistent
+---Get the string data for a given key. Returns defaultValue if valid data can not be found.
+---@param key string
+---@param defaultValue string
+---@return string
+function Persistent.getString(key, defaultValue) end
+
+---Set the string data for a given key.
+---@param key string
+---@param value string
+function Persistent.setString(key, value) end
+
+---Save all configuration. This is also done automatically on application shutdown.
+function Persistent.save() end
 
 Command = {}
 
@@ -914,25 +1006,39 @@ LuaTimingGroup = {}
 ---@field public angleY number
 ---@field public side string
 ---@field public file string
+---@field public attached boolean
 LuaTimingGroup__inst = {}
 
 ---@return string
 function LuaTimingGroup__inst.toString() end
 
----Add a macro without an icon.
+---Create a command that saves changes made to this timing group.
+---@return LuaChartCommand
+function LuaTimingGroup__inst.save() end
+
+---Create a command that delete current timing group, if it's connected to a real group in the chart.
+---@return LuaChartCommand
+function LuaTimingGroup__inst.delete() end
+
+---Check if the attached instance equals that of another group
+---@param group LuaTimingGroup
+---@return boolean
+function LuaTimingGroup__inst.instanceEquals(group) end
+
+---Not recommended. Please use Macro.new(). Add a macro without an icon.
 ---@param parentId string
 ---@param id string
 ---@param displayName string
 ---@param macroDef any
 function addMacro(parentId, id, displayName, macroDef) end
 
----Add a folder with the default icon.
+---Not recommended. Please use Macro.new(). Add a folder with the default icon.
 ---@param parentId string
 ---@param id string
 ---@param displayName string
 function addFolder(parentId, id, displayName) end
 
----Add a macro with an icon. The icon should be a material icon unicode value e.g e2c7.
+---Not recommended. Please use Macro.new(). Add a macro with an icon. The icon should be a material icon unicode value e.g e2c7.
 ---@param parentId string
 ---@param id string
 ---@param displayName string
@@ -940,14 +1046,14 @@ function addFolder(parentId, id, displayName) end
 ---@param macroDef any
 function addMacroWithIcon(parentId, id, displayName, icon, macroDef) end
 
----Add a folder with an icon. The icon should be a material icon unicode value e.g e2c7.
+---Not recommended. Please use Macro.new(). Add a folder with an icon. The icon should be a material icon unicode value e.g e2c7.
 ---@param parentId string
 ---@param id string
 ---@param icon string
 ---@param displayName string
 function addFolderWithIcon(parentId, id, icon, displayName) end
 
----Remove a macro. Does nothing if the macro has not been added.
+---Remove a macro or folder. Does nothing if the macro has not been added.
 ---@param id string
 function removeMacro(id) end
 

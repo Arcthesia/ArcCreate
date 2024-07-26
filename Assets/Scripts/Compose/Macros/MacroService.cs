@@ -230,6 +230,7 @@ namespace ArcCreate.Compose.Macros
             showFullListButton.onClick.AddListener(ShowFullList);
             hideFullListButton.onClick.AddListener(HideFullList);
             macroEnvironment.ReloadMacros();
+            Application.quitting += SaveMacroPersistent;
         }
 
         private void OnDestroy()
@@ -241,6 +242,12 @@ namespace ArcCreate.Compose.Macros
             showFullListButton.onClick.AddListener(ShowFullList);
             hideFullListButton.onClick.AddListener(HideFullList);
             macroEnvironment.CancelMacro();
+            Application.quitting -= SaveMacroPersistent;
+        }
+
+        private void SaveMacroPersistent()
+        {
+            macroEnvironment.SavePersistent();
         }
 
         private void ShowFullList()

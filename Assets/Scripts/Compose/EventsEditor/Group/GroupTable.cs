@@ -99,7 +99,6 @@ namespace ArcCreate.Compose.EventsEditor
                 }), group);
 
             Services.History.AddCommand(cmd);
-            Services.Gameplay.Chart.GetTimingGroup(newTgNum);
 
             // Trigger OnEdittingTimingGroup
             Values.EditingTimingGroup.Value = newTgNum;

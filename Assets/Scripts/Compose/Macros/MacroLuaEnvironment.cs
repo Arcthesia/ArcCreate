@@ -19,6 +19,7 @@ namespace ArcCreate.Compose.Macros
         private readonly MacroPicker picker;
         private readonly Pool<Cell> macroCellPool;
         private readonly float macroCellSize;
+        private readonly Persistent persistent = new Persistent();
 
         private IRequest currentRequest;
         private CancellationTokenSource cts = new CancellationTokenSource();
@@ -82,10 +83,6 @@ namespace ArcCreate.Compose.Macros
             Assembly assembly = Assembly.GetAssembly(typeof(MacroService));
             LuaRunner.GetCommonEmmySharp()
                 .AppendGroup(assembly, "Macros")
-                .AppendFunction(typeof(MacroLuaEnvironment).GetMethod("AddMacro"))
-                .AppendFunction(typeof(MacroLuaEnvironment).GetMethod("AddFolder"))
-                .AppendFunction(typeof(MacroLuaEnvironment).GetMethod("AddMacroWithIcon"))
-                .AppendFunction(typeof(MacroLuaEnvironment).GetMethod("AddFolderWithIcon"))
                 .AppendFunction(typeof(MacroLuaEnvironment).GetMethod("RemoveMacro"))
                 .AppendFunction(typeof(MacroLuaEnvironment).GetMethod("Notify"))
                 .AppendFunction(typeof(MacroLuaEnvironment).GetMethod("NotifyWarn"))
@@ -102,6 +99,8 @@ namespace ArcCreate.Compose.Macros
             script.Globals["removeMacro"] = (Action<string>)RemoveMacro;
             script.Globals["Context"] = new MacroContext();
             script.Globals["Event"] = new Event();
+            script.Globals["Macro"] = new Macro(this, script);
+            script.Globals["Folder"] = new Folder(this, script);
             script.Globals["DialogField"] = new DialogField();
             script.Globals["DialogInput"] = new DialogInput();
             script.Globals["TrackInput"] = new TrackInput();
@@ -109,6 +108,7 @@ namespace ArcCreate.Compose.Macros
             script.Globals["EventSelectionInput"] = new EventSelectionInput();
             script.Globals["EventSelectionConstraint"] = new EventSelectionConstraint();
             script.Globals["FieldConstraint"] = new FieldConstraint();
+            script.Globals["Persistent"] = persistent;
             script.Globals["notify"] = (Action<object>)Notify;
             script.Globals["notifyWarn"] = (Action<object>)NotifyWarn;
             script.Globals["notifyError"] = (Action<object>)NotifyError;
@@ -184,29 +184,7 @@ namespace ArcCreate.Compose.Macros
             UpdateMacroTree();
         }
 
-#pragma warning disable
-        [EmmyDoc("Add a macro with an icon. The icon should be a material icon unicode value e.g e2c7.")]
-        public void AddMacroWithIcon(string parentId, string id, string displayName, string icon, DynValue macroDef)
-        {
-        }
-
-        [EmmyDoc("Add a folder with an icon. The icon should be a material icon unicode value e.g e2c7.")]
-        public void AddFolderWithIcon(string parentId, string id, string icon, string displayName)
-        {
-        }
-
-        [EmmyDoc("Add a macro without an icon.")]
-        public void AddMacro(string parentId, string id, string displayName, DynValue macroDef)
-        {
-        }
-
-        [EmmyDoc("Add a folder with the default icon.")]
-        public void AddFolder(string parentId, string id, string displayName)
-        {
-        }
-#pragma warning restore
-
-        [EmmyDoc("Remove a macro. Does nothing if the macro has not been added.")]
+        [EmmyDoc("Remove a macro or folder. Does nothing if the macro has not been added.")]
         public void RemoveMacro(string id)
         {
             if (!macros.ContainsKey(id))
@@ -276,7 +254,7 @@ namespace ArcCreate.Compose.Macros
             picker.SetData(macrosTree);
         }
 
-        private void AddNode(string parent, string id, string displayName, string icon, DynValue macroDef, Script script)
+        public void AddNode(string parent, string id, string displayName, string icon, DynValue macroDef, Script script)
         {
             MacroDefinition def = new MacroDefinition(id)
             {
@@ -314,6 +292,11 @@ namespace ArcCreate.Compose.Macros
             }
 
             UpdateMacroTree();
+        }
+
+        internal void SavePersistent()
+        {
+            persistent.Save();
         }
     }
 }

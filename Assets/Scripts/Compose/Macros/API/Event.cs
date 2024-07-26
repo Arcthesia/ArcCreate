@@ -219,7 +219,21 @@ namespace ArcCreate.Compose.Macros
             };
         }
 
-        [EmmyDoc("Create a timing group property object. Properties are defined with a table. Returned group's number is -1.")]
+        [EmmyDoc("Create a timing group object. Properties are defined with a string whose format is the same as .aff chart format."
+               + "You must use LuaTimingGroup.save() in order to add this timing group to the chart.")]
+        public static LuaTimingGroup CreateTimingGroup(string properties = "")
+        {
+            RawTimingGroup prop = RawTimingGroup.Parse(properties).UnwrapOrElse(e => throw new Exception(e.Message));
+            prop.File = Services.Gameplay.Chart.GetTimingGroup(0).GroupProperties.FileName;
+            return new LuaTimingGroup(prop);
+        }
+
+        [EmmyDoc("Deprecated, use Event.CreateTimingGroup() instead. Create a timing group object. Properties are defined with a string whose format is the same as .aff chart format.")]
+        public static LuaTimingGroup CreateTimingGroupProperty(string properties = "")
+            => CreateTimingGroup(properties);
+
+        [EmmyDoc("Deprecated. This method does not support the latest timing group properties, use Event.CreateTimingGroup() instead."
+               + "Create a timing group object. Properties are defined with a table.")]
         public static LuaTimingGroup CreateTimingGroupProperty(Dictionary<string, DynValue> properties)
         {
             string name = null;
@@ -295,10 +309,9 @@ namespace ArcCreate.Compose.Macros
                 }
             }
 
-            int num = -1;
             LuaTimingGroup tg = new LuaTimingGroup
             {
-                Num = num,
+                Name = name,
                 NoInput = noInput,
                 NoClip = noClip,
                 NoHeightIndicator = noHeightIndicator,
@@ -316,15 +329,8 @@ namespace ArcCreate.Compose.Macros
             return tg;
         }
 
-        [EmmyDoc("Create a timing group property object. Properties are defined with a string whose format is the same as .aff chart format. Returned group's number is -1")]
-        public static LuaTimingGroup CreateTimingGroupProperty(string properties = "")
-        {
-            RawTimingGroup prop = RawTimingGroup.Parse(properties).UnwrapOrElse(e => throw new Exception(e.Message));
-            prop.File = Services.Gameplay.Chart.GetTimingGroup(0).GroupProperties.FileName;
-            return new LuaTimingGroup(-1, prop);
-        }
 
-        [EmmyDoc("Add a timing group to the current chart.")]
+        [EmmyDoc("Not recommended, use LuaTimingGroup.save() instead. Add a timing group to the current chart.")]
         public static void AddTimingGroup(LuaTimingGroup properties = null)
         {
             int num = Services.Gameplay.Chart.TimingGroups.Count;
@@ -336,7 +342,7 @@ namespace ArcCreate.Compose.Macros
             }
         }
 
-        [EmmyDoc("Change an existing timing group's properties. Properties are defined with a property string, similar to that of .aff chart format")]
+        [EmmyDoc("Not recommended, use LuaTimingGroup.save() instead. Change an existing timing group's properties. Properties are defined with a property string, similar to that of .aff chart format")]
         public static void SetTimingGroupProperty(int group, LuaTimingGroup properties = null)
         {
             if (group == 0)
@@ -347,15 +353,20 @@ namespace ArcCreate.Compose.Macros
             Services.Gameplay.Chart.GetTimingGroup(group).SetProperties(properties.ToProperty());
         }
 
-        [EmmyDoc("Get the group-th timing group of the current chart.")]
+        [EmmyDoc("Get the n-th timing group of the current chart.")]
         public static LuaTimingGroup GetTimingGroup(int group)
         {
             var tg = Services.Gameplay.Chart.GetTimingGroup(group);
             RawTimingGroup prop = tg.GroupProperties.ToRaw();
-            return new LuaTimingGroup(tg.GroupNumber, prop);
+            var result = new LuaTimingGroup(prop)
+            {
+                Instance = tg
+            };
+
+            return result;
         }
 
-        [EmmyDoc("Get the currently note selections. If a constraint is provided, then only notes that fit the constraint is returned.")]
+        [EmmyDoc("Get the current note selection. If a constraint is provided, then only notes that fit the constraint is returned.")]
         public static EventSelectionRequest GetCurrentSelection(EventSelectionConstraint constraint = null)
         {
             var events = ConvertAll(Services.Selection.SelectedNotes);
