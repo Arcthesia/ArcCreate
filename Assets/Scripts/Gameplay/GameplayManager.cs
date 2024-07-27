@@ -143,12 +143,15 @@ namespace ArcCreate.Gameplay
 
             Services.Chart.UpdateChartJudgement(currentTiming);
             Services.Judgement.ProcessInput(currentTiming);
-            Services.Chart.UpdateChartRender(currentTiming);
-            Services.Score.UpdateDisplay(currentTiming);
-            Services.Camera.UpdateCamera(currentTiming);
+
+            Services.Score.UpdateScore(currentTiming);
             Services.Scenecontrol.UpdateScenecontrol(currentTiming);
+            Services.Camera.UpdateCamera(currentTiming);
+            Services.Chart.UpdateChartRender(currentTiming);
+            Services.Score.UpdateDisplay();
             Services.Hitsound.UpdateHitsoundHistory(currentTiming);
             Services.Render.UpdateRenderers();
+
             gameplayData.NotifyUpdate(currentTiming);
         }
     }

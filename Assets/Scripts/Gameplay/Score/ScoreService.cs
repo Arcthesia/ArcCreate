@@ -121,7 +121,7 @@ namespace ArcCreate.Gameplay.Score
             }
         }
 
-        public void UpdateDisplay(int currentTiming)
+        public void UpdateScore(int currentTiming)
         {
             comboRedmix = comboRedmix - (Time.deltaTime / Values.ComboLostFlashDuration);
             comboRedmix = Mathf.Max(comboRedmix, 0);
@@ -152,6 +152,10 @@ namespace ArcCreate.Gameplay.Score
                 }
             }
 
+        }
+
+        public void UpdateDisplay()
+        {
             SetScore(CurrentScoreTotal, CurrentCountTotal);
         }
 

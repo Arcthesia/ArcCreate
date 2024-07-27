@@ -40,8 +40,13 @@ namespace ArcCreate.Gameplay.Score
         /// <summary>
         /// Update the score display.
         /// </summary>
+        void UpdateDisplay();
+
+        /// <summary>
+        /// Update the score calculation.
+        /// </summary>
         /// <param name="currentTiming">The current chart timing.</param>
-        void UpdateDisplay(int currentTiming);
+        void UpdateScore(int currentTiming);
 
         PlayResult GetPlayResult();
     }

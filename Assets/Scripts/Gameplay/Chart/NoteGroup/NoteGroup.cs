@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
-using UnityEngine;
 
 namespace ArcCreate.Gameplay.Chart
 {
