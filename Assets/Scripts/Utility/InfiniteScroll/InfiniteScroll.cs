@@ -56,7 +56,11 @@ namespace ArcCreate.Utility.InfiniteScroll
                 if (IsVertical)
                 {
                     float halfContainerHeight = containerRect.rect.height / 2;
-                    value = Mathf.Clamp(value, halfContainerHeight, contentRect.rect.height - halfContainerHeight);
+                    float contentHeight = contentRect.rect.height;
+                    float max = contentHeight < containerRect.rect.height ?
+                        halfContainerHeight :
+                        contentHeight - halfContainerHeight;
+                    value = Mathf.Clamp(value, halfContainerHeight, max);
                     contentRect.anchoredPosition = new Vector2(
                         contentRect.anchoredPosition.x,
                         value - halfContainerHeight);
@@ -64,7 +68,11 @@ namespace ArcCreate.Utility.InfiniteScroll
                 else
                 {
                     float halfContainerWidth = containerRect.rect.width / 2;
-                    value = Mathf.Clamp(value, halfContainerWidth, contentRect.rect.width - halfContainerWidth);
+                    float contentWidth = contentRect.rect.width;
+                    float max = contentWidth < containerRect.rect.width ?
+                        halfContainerWidth :
+                        contentWidth - halfContainerWidth;
+                    value = Mathf.Clamp(value, halfContainerWidth, max);
                     contentRect.anchoredPosition = new Vector2(
                         -value + (containerRect.rect.width / 2),
                         contentRect.anchoredPosition.y);

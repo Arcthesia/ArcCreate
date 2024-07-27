@@ -16,6 +16,8 @@ Yut0124
 
 <size=33><b>{Credits.Role.SoundDesign}</b></size>
 SpoonierThanThou
+Pilcrow
+Exiatist
 
 <size=33><b>{Credits.Role.Localization}</b></size>
 [ja-jp]: rassvet2

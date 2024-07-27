@@ -65,10 +65,6 @@ Shader "Gameplay/Waveform"
 				xcoord += _MainTex_TexelSize.x * 0.5;
 				ycoord += _MainTex_TexelSize.y * 0.5;
 				
-				// On OpenGL-like rendering API y direction is flipped
-				float flip = _ProjectionParams.x;
-				ycoord = 0.5 - flip / 2 + flip * ycoord;
-				
 				float4 pixel = tex2Dlod(_MainTex, float4(xcoord, ycoord, 0, 0));
 				float i = frac(pos);
 				float val = i < 0.25 ? pixel.r : i < 0.5 ? pixel.g : i < 0.75 ? pixel.b : pixel.a;

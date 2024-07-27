@@ -58,7 +58,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AudioLength: 11645382
+    - _AudioLength: 13190624
     - _BumpScale: 1
     - _CurrentTimingSample: 0
     - _Cutoff: 0.5

@@ -51,9 +51,10 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private Button retryButton;
         [SerializeField] private StringSO transitionPlayCount;
         [SerializeField] private StringSO transitionRetryCount;
-        [SerializeField] private AudioPreview audioPreview;
+        [SerializeField] private AudioSource audioSource;
         [SerializeField] private GameObject playCountParent;
         [SerializeField] private GameObject autoNotifParent;
+        [SerializeField] private float switchSceneAudioFadeDuration = 1;
         private LevelStorage currentLevel;
         private ChartSettings currentChart;
         private CancellationTokenSource cts = new CancellationTokenSource();
@@ -102,7 +103,7 @@ namespace ArcCreate.Selection.Interface
             aliasName.text = chart.Alias ?? string.Empty;
             aliasRect.offsetMax = new Vector2(aliasRect.offsetMax.x, -charterName.preferredHeight);
 
-            audioPreview.PlayPreviewAudio(level, chart, cts.Token).Forget();
+            audioSource.Play();
             animator.Show();
         }
 
@@ -133,6 +134,7 @@ namespace ArcCreate.Selection.Interface
 
         private void ReturnToPreviousScene()
         {
+            audioSource.DOFade(0, switchSceneAudioFadeDuration).OnComplete(audioSource.Stop);
             animator.GetHideTween(out float _).Play().OnComplete(() =>
             {
                 TransitionSequence transition = new TransitionSequence();

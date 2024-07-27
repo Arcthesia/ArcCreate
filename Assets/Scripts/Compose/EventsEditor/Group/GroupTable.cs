@@ -115,25 +115,6 @@ namespace ArcCreate.Compose.EventsEditor
                 return;
             }
 
-            Services.Popups.CreateTextDialog(
-                I18n.S("Compose.Dialog.RemoveGroup.Title"),
-                I18n.S("Compose.Dialog.RemoveGroup.Content"),
-                new Popups.ButtonSetting
-                {
-                    Text = I18n.S("Compose.Dialog.RemoveGroup.Yes"),
-                    Callback = OnRemoveConfirm,
-                    ButtonColor = Popups.ButtonColor.Danger,
-                },
-                new Popups.ButtonSetting
-                {
-                    Text = I18n.S("Compose.Dialog.RemoveGroup.No"),
-                    Callback = null,
-                    ButtonColor = Popups.ButtonColor.Default,
-                });
-        }
-
-        private void OnRemoveConfirm()
-        {
             int index = IndexOf(Selected);
             int num = Selected.GroupNumber;
             ICommand cmd = new RemoveTimingGroupCommand(I18n.S(
