@@ -20,7 +20,7 @@ namespace ArcCreate.Storage
     /// </summary>
     public partial class FileImportManager : MonoBehaviour
     {
-        private const int InternalPackageVersion = 0;
+        private const int InternalPackageVersion = 1;
 
         [SerializeField] private StorageData storageData;
 
