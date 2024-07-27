@@ -128,7 +128,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
                 {
                     LaneHoldJudgementRequest req = requests[i];
 
-                    if (currentTiming < req.StartAtTiming)
+                    if (currentTiming < req.StartAtTiming || req.Receiver.IsLocked)
                     {
                         continue;
                     }

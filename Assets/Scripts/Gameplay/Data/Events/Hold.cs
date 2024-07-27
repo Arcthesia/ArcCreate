@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
-using ArcCreate.Gameplay.Render;
 using ArcCreate.Utility;
 using ArcCreate.Utility.Extension;
 using UnityEngine;
@@ -20,6 +19,8 @@ namespace ArcCreate.Gameplay.Data
         private Texture texture;
 
         public int Lane { get; set; }
+
+        public bool IsLocked => locked;
 
         public override ArcEvent Clone()
         {
@@ -241,7 +242,7 @@ namespace ArcCreate.Gameplay.Data
                 holdHighlightRequestSent = false;
             }
 
-            if (locked || isExpired)
+            if (isExpired)
             {
                 longParticleUntil = int.MinValue;
                 highlight = false;
