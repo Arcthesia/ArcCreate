@@ -38,6 +38,8 @@ namespace ArcCreate.Utility
 
         public TextGenerator TextGenerator => cachedInputTextGenerator;
 
+        public float PixelPerUnit => m_TextComponent.pixelsPerUnit;
+
         private RectTransform Rect
         {
             get
@@ -341,7 +343,7 @@ namespace ArcCreate.Utility
             TextGenerator gen = cachedInputTextGenerator;
             UILineInfo firstLine = gen.lines[0];
             UILineInfo startLine = gen.lines[line];
-            float y = firstLine.topY - startLine.topY - (startLine.leading * line);
+            float y = (firstLine.topY - startLine.topY) / m_TextComponent.pixelsPerUnit;
             float val = y / (contentSize.y - gen.rectExtents.size.y);
             OnScrollVerticalChanged?.Invoke(y);
             verticalScrollbar.SetValueWithoutNotify(val);

@@ -240,7 +240,7 @@ namespace ArcCreate.Compose.Project
         private void DisplayFault(ChartFault fault)
         {
             LineHighlightComponent line = lineHighlightPool.Get();
-            line.SetPosition(inputField.TextGenerator, fault.LineNumber, fault.StartCharPos, fault.Length);
+            line.SetPosition(inputField.TextGenerator, inputField.PixelPerUnit, fault.LineNumber, fault.StartCharPos, fault.Length);
             line.SetContent(fault.Severity, fault.Description);
 
             ScrollHighlightComponent scroll = scrollHighlightPool.Get();
