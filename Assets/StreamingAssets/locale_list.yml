@@ -25,6 +25,9 @@
 - Id: zh-tw
   CodeName: ChineseTraditional
   LocalName: 繁體中文
+- Id: th-th
+  CodeName: Thai
+  LocalName: ไทย
 
 # Add additional entry according to this format
 # - Id: [LCID code. Must match with the YAML file's name]:
