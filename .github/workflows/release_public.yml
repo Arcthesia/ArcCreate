@@ -103,7 +103,7 @@ jobs:
       - name: Set up Fastlane
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7.2
+          ruby-version: 3.2
           bundler-cache: true
 
       - name: Upload to Google Play Internal
