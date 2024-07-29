@@ -57,8 +57,12 @@ jobs:
     name: Build For Android Platform
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-          
+      - uses: jlumbroso/free-disk-space@v1.2.0
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          lfs: true
+
       - name: Decrypt & extract secrets
         run: ./decrypt_secret.sh
         env:
