@@ -51,7 +51,7 @@ jobs:
           targetPlatform: ${{ matrix.targetPlatform }}
           buildName: ArcCreate
           androidKeystoreName: arccreate
-          androidAppBundle: true
+          androidExportType: androidAppBundle
           androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
           androidKeyaliasName: ${{ secrets.ANDROID_KEYALIAS_NAME }}
