@@ -108,7 +108,7 @@ namespace ArcCreate.Compose.Selection
         [RequireGameplayLoaded]
         public void ToggleNoteSelection()
         {
-            if (TryGetNoteUnderCursor(out Note note, SelectionMode.Any))
+            if (TryGetNoteUnderCursorToggle(out Note note))
             {
                 if (selectedNotes.Contains(note))
                 {
@@ -347,7 +347,6 @@ namespace ArcCreate.Compose.Selection
 
             int length = Mathf.Min(hitResults.Length, amount);
             int initialOffset = 0;
-            bool skipOne = false;
 
             if (selectionMode == SelectionMode.Any)
             {
@@ -357,48 +356,20 @@ namespace ArcCreate.Compose.Selection
                     if (SelectedNotes.Contains(hit.Note))
                     {
                         initialOffset = i + 1;
-                        skipOne = true;
                     }
                 }
             }
 
-            int loopNum = skipOne ? length - 1 : length;
-            for (int i = 0; i < loopNum; i++)
+            for (int i = 0; i < length; i++)
             {
                 NoteRaycastHit hit = hitResults[(i + initialOffset) % length];
 
-                if (hit.HitPoint.z >= Gameplay.Values.TrackLengthBackward
-                 || hit.HitPoint.z <= -Gameplay.Values.TrackLengthForward)
+                if (!IsValidHit(hit))
                 {
                     continue;
                 }
 
                 note = hit.Note;
-                if (!note.TimingGroupInstance.GroupProperties.Editable)
-                {
-                    continue;
-                }
-
-                int timing = Services.Gameplay.Audio.ChartTiming;
-
-                if (note is LongNote l)
-                {
-                    if (l.EndTiming < timing)
-                    {
-                        continue;
-                    }
-
-                    float startZ = l.ZPos(l.TimingGroupInstance.GetFloorPosition(timing));
-                    if (hit.HitPoint.z * startZ > 0 && l.Timing < timing)
-                    {
-                        continue;
-                    }
-                }
-                else if (note.Timing < timing)
-                {
-                    continue;
-                }
-
                 switch (selectionMode)
                 {
                     case SelectionMode.Any:
@@ -422,6 +393,95 @@ namespace ArcCreate.Compose.Selection
 
             note = null;
             return false;
+        }
+
+        private bool TryGetNoteUnderCursorToggle(out Note note)
+        {
+            if (EventSystem.current.currentSelectedGameObject != null
+             || (Settings.InputMode.Value != (int)InputMode.Auto
+                && Settings.InputMode.Value != (int)InputMode.AutoController
+                && Settings.InputMode.Value != (int)InputMode.Idle))
+            {
+                note = null;
+                return false;
+            }
+
+            Camera gameplayCamera = Services.Gameplay.Camera.GameplayCamera;
+            Vector2 mousePosition = Input.mousePosition;
+            Ray ray = gameplayCamera.ScreenPointToRay(mousePosition);
+
+            int amount = NoteRaycaster.Raycast(ray, hitResults, 99999);
+            Array.Sort(hitResults, 0, amount, hitComparer);
+
+            int length = Mathf.Min(hitResults.Length, amount);
+
+            // Get first unselected note
+            for (int i = 0; i < length; i++)
+            {
+                NoteRaycastHit hit = hitResults[i];
+                if (SelectedNotes.Contains(hit.Note))
+                {
+                    continue;
+                }
+
+                if (IsValidHit(hit))
+                {
+                    note = hit.Note;
+                    return true;
+                }
+            }
+
+            // If all selected, return the closest
+            for (int i = 0; i < length; i++)
+            {
+                if (!IsValidHit(hitResults[i]))
+                {
+                    continue;
+                }
+
+                note = hitResults[i].Note;
+                return true;
+            }
+
+            note = null;
+            return false;
+        }
+
+        private bool IsValidHit(NoteRaycastHit hit)
+        {
+            if (hit.HitPoint.z >= Gameplay.Values.TrackLengthBackward
+                || hit.HitPoint.z <= -Gameplay.Values.TrackLengthForward)
+            {
+                return false;
+            }
+
+            var note = hit.Note;
+            if (!note.TimingGroupInstance.GroupProperties.Editable)
+            {
+                return false;
+            }
+
+            int timing = Services.Gameplay.Audio.ChartTiming;
+
+            if (note is LongNote l)
+            {
+                if (l.EndTiming < timing)
+                {
+                    return false;
+                }
+
+                float startZ = l.ZPos(l.TimingGroupInstance.GetFloorPosition(timing));
+                if (hit.HitPoint.z * startZ > 0 && l.Timing < timing)
+                {
+                    return false;
+                }
+            }
+            else if (note.Timing < timing)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private void SelectNotesBetweenRange(int from, int to)
