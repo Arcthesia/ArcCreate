@@ -182,10 +182,64 @@ namespace ArcCreate.Compose.Components
 
         private void OnOpenBrowserClick()
         {
-            string path =
-                isSaveFile ?
-                Shell.SaveFileDialog(extensionFilterName, acceptedExtensions, title, PlayerPrefs.GetString(initPathPrefKey, ""), defaultSaveFileName) :
-                Shell.OpenFileDialog(extensionFilterName, acceptedExtensions, title, PlayerPrefs.GetString(initPathPrefKey, ""));
+            if (Settings.UseNativeFileBrowser.Value)
+            {
+                string path =
+                    isSaveFile ?
+                    Shell.SaveFileDialog(extensionFilterName, acceptedExtensions, title, PlayerPrefs.GetString(initPathPrefKey, ""), defaultSaveFileName) :
+                    Shell.OpenFileDialog(extensionFilterName, acceptedExtensions, title, PlayerPrefs.GetString(initPathPrefKey, ""));
+                UseFilePathIfValid(path);
+            }
+            else
+            {
+                if (acceptedExtensions.Length > 0)
+                {
+                    var filter = new SimpleFileBrowser.FileBrowser.Filter(
+                        extensionFilterName,
+                        acceptedExtensions);
+                    SimpleFileBrowser.FileBrowser.SetFilters(false, filter);
+                }
+                else
+                {
+                    SimpleFileBrowser.FileBrowser.SetFilters(true);
+                }
+
+                if (isSaveFile)
+                {
+                    SimpleFileBrowser.FileBrowser.ShowSaveDialog(
+                        onSuccess: (string[] paths) => {
+                            if (paths.Length >= 1)
+                            {
+                                UseFilePathIfValid(Path.GetFileNameWithoutExtension(paths[0]));
+                            }
+                        },
+                        onCancel: () => {},
+                        pickMode: SimpleFileBrowser.FileBrowser.PickMode.Files,
+                        allowMultiSelection: false,
+                        initialPath: PlayerPrefs.GetString(initPathPrefKey, ""),
+                        initialFilename: defaultSaveFileName,
+                        title: title);
+                }
+                else
+                {
+                    SimpleFileBrowser.FileBrowser.ShowLoadDialog(
+                        onSuccess: (string[] paths) => {
+                            if (paths.Length >= 1)
+                            {
+                                UseFilePathIfValid(paths[0]);
+                            }
+                        },
+                        onCancel: () => {},
+                        pickMode: SimpleFileBrowser.FileBrowser.PickMode.Files,
+                        allowMultiSelection: false,
+                        initialPath: PlayerPrefs.GetString(initPathPrefKey, ""),
+                        title: title);
+                }
+            }
+        }
+
+        private void UseFilePathIfValid(string path)
+        {
             if (modifyPref)
             {
                 PlayerPrefs.SetString(initPathPrefKey, Path.GetDirectoryName(path));
@@ -194,6 +248,24 @@ namespace ArcCreate.Compose.Components
             if (string.IsNullOrEmpty(path))
             {
                 return;
+            }
+
+            if (isSaveFile && acceptedExtensions.Length > 0)
+            {
+                bool correctExtension = false;
+                foreach (var extension in acceptedExtensions)
+                {
+                    if (path.EndsWith(extension))
+                    {
+                        correctExtension = true;
+                        break;
+                    }
+                }
+
+                if (!correctExtension)
+                {
+                    path = Path.ChangeExtension(path, acceptedExtensions[0]);
+                }
             }
 
             if (isLocalFileSelector)

@@ -838,6 +838,7 @@ Compose:
         Input:
           Name: Input
           ReloadKeybinds: Reload keybinds
+          UseNativeFileBrowser: Use native file browser
           AllowCreatingNotesBackward: Allow creating notes backward
           BlockCreatingOverlappedNotes: Block creating overlapped notes
           EnableEditingArctapWidth: Allow editing sky note's width

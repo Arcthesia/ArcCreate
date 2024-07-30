@@ -57,6 +57,7 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private GameObject playCountParent;
         [SerializeField] private GameObject autoNotifParent;
         [SerializeField] private float switchSceneAudioFadeDuration = 1;
+        [SerializeField] private float characterImageHeight = 2048;
         private LevelStorage currentLevel;
         private ChartSettings currentChart;
         private CancellationTokenSource cts = new CancellationTokenSource();
@@ -156,6 +157,10 @@ namespace ArcCreate.Selection.Interface
                 var rect = characterImage.GetComponent<RectTransform>();
                 rect.anchoredPosition = new Vector2(character.X, character.Y);
                 rect.localScale = new Vector3(character.Scale, character.Scale, 1);
+                
+                float ratio = (float)t.width / t.height;
+                rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, characterImageHeight);
+                rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, characterImageHeight * ratio);
                 return;
             }
         }

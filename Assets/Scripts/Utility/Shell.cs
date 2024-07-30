@@ -6,32 +6,6 @@ namespace ArcCreate.Utility
 {
     public class Shell
     {
-        public static string OpenFolderDialog(string title = "", string initPath = "")
-        {
-            try
-            {
-                string[] strs = StandaloneFileBrowser.OpenFolderPanel(title, initPath, false);
-                if (strs.Length > 0 && strs[0] != "")
-                {
-                    string str = strs[0];
-                    if (str.StartsWith("file://"))
-                    {
-                        str = UnityWebRequest.UnEscapeURL(str.Replace("file://", ""));
-                    }
-
-                    return str;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
         public static string OpenFileDialog(string filterName, string[] extension, string title = "", string initPath = "")
         {
             ExtensionFilter filter = new ExtensionFilter()

@@ -244,6 +244,7 @@ namespace ArcCreate.Compose.Project
             currentChartPath.text = CurrentChart.ChartPath;
             LoadChart(CurrentChart);
             OnProjectLoad.Invoke(CurrentProject);
+            PlayerPrefs.SetString("LastProjectPath", path);
 
             Debug.Log(
                 I18n.S("Compose.Notify.Project.OpenProject", new Dictionary<string, object>()
@@ -254,19 +255,48 @@ namespace ArcCreate.Compose.Project
 
         private void OnOpenConfirmed()
         {
-            string path = Shell.OpenFileDialog(
-                filterName: "ArcCreate Project",
-                extension: new string[] { Values.ProjectExtensionWithoutDot },
-                title: "Open ArcCreate Project",
-                initPath: PlayerPrefs.GetString("LastProjectPath", ""));
-
-            if (string.IsNullOrEmpty(path))
+            void Open(string path)
             {
-                return;
+                if (string.IsNullOrEmpty(path))
+                {
+                    return;
+                }
+
+                OpenProject(path);
             }
 
-            PlayerPrefs.SetString("LastProjectPath", path);
-            OpenProject(path);
+            string filterName = "ArcCreate Project";
+            string title = "Open ArcCreate Project";
+            string initPath = PlayerPrefs.GetString("LastProjectPath", "");
+            string[] extensions = new string[] { Values.ProjectExtensionWithoutDot };
+            if (Settings.UseNativeFileBrowser.Value)
+            {
+                string path = Shell.OpenFileDialog(
+                    filterName: filterName,
+                    extension: extensions,
+                    title: title,
+                    initPath: initPath);
+                Open(path);
+            }
+            else
+            {
+                var filter = new SimpleFileBrowser.FileBrowser.Filter(
+                    filterName,
+                    extensions);
+                SimpleFileBrowser.FileBrowser.SetFilters(false, extensions);
+                SimpleFileBrowser.FileBrowser.ShowLoadDialog(
+                    onSuccess: (string[] paths) => {
+                        if (paths.Length >= 1)
+                        {
+                            Open(paths[0]);
+                        }
+                    },
+                    onCancel: () => {},
+                    pickMode: SimpleFileBrowser.FileBrowser.PickMode.Files,
+                    allowMultiSelection: false,
+                    initialPath: initPath,
+                    title: title);
+            }
         }
 
         private void OpenProjectFolder()

@@ -70,14 +70,48 @@ namespace ArcCreate.Compose.Rendering
                 .AddTransition(new DecorationTransition(), 1200)
                 .SetWaitDuration(2000);
 
-            string outputPath = Shell.SaveFileDialog(
-                "Video",
-                new string[] { "mp4" },
-                "Render output",
-                Path.GetDirectoryName(Services.Project.CurrentProject.Path),
-                "render");
+            string title = "Render output";
+            string[] exts = new string[] { "mp4" };
+            string defaultName = "render";
+            string initialPath = Path.GetDirectoryName(Services.Project.CurrentProject.Path);
+            string outputPath = null;
+            bool cancelled = false;
 
-            if (string.IsNullOrEmpty(outputPath))
+            if (Settings.UseNativeFileBrowser.Value)
+            {
+                outputPath = Shell.SaveFileDialog(
+                    "Video",
+                    exts,
+                    title,
+                    initialPath,
+                    defaultName);
+            }
+            else
+            {
+                var filter = new SimpleFileBrowser.FileBrowser.Filter("Video", exts);
+                SimpleFileBrowser.FileBrowser.SetFilters(false, filter);
+                SimpleFileBrowser.FileBrowser.ShowSaveDialog(
+                    onSuccess: (string[] paths) => {
+                        if (paths.Length >= 1)
+                        {
+                            outputPath = paths[0];
+                        }
+                    },
+                    onCancel: () => {
+                        cancelled = true;
+                    },
+                    pickMode: SimpleFileBrowser.FileBrowser.PickMode.Files,
+                    allowMultiSelection: false,
+                    initialPath: initialPath,
+                    title: title);
+                
+                while (outputPath == null && !cancelled)
+                {
+                    await UniTask.NextFrame();
+                }
+            }
+
+            if (cancelled || string.IsNullOrEmpty(outputPath))
             {
                 return;
             }

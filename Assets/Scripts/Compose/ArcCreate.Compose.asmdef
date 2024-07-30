@@ -1,5 +1,6 @@
 {
     "name": "ArcCreate.Compose",
+    "rootNamespace": "",
     "references": [
         "GUID:90e3d095a2e0078458a68d742741768c",
         "GUID:bc9459cff53879146aae30bc07a3bf9b",
@@ -16,7 +17,8 @@
         "GUID:4955ea543c7d37317adad658f64728fc",
         "GUID:b3f49edfedc855a48aa1a9e5d3cba438",
         "GUID:2236a98d74e6674839d907b723722dc8",
-        "GUID:47588e3d37f573d458b0eaa6cc8109c2"
+        "GUID:47588e3d37f573d458b0eaa6cc8109c2",
+        "GUID:c685d05731421f64287ad6d13be5af0e"
     ],
     "includePlatforms": [
         "Editor",

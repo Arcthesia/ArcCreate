@@ -51,6 +51,7 @@ namespace ArcCreate.Compose.Components
         [SerializeField] private Button reloadHotkeysButton;
         [SerializeField] private Button openHotkeySettingsButton;
         [SerializeField] private SettingsToggle showHotkeyHintsToggle;
+        [SerializeField] private SettingsToggle useNativeFileBrowserToggle;
         [SerializeField] private SettingsToggle allowCreatingNotesBackwardToggle;
         [SerializeField] private SettingsToggle blockCreatingOverlappedNotesToggle;
         [SerializeField] private SettingsToggle enableEditingArctapWidthToggle;
@@ -116,6 +117,7 @@ namespace ArcCreate.Compose.Components
             inputModeDropdown.Setup(Settings.InputMode, typeof(InputMode), "Compose.UI.Top.Label.InputModeOptions");
             indicatorPositionDropdown.Setup(Settings.FrPmIndicatorPosition, typeof(FrPmPosition), "Gameplay.Selection.Settings.FrPmPosition");
             showHotkeyHintsToggle.Setup(Settings.EnableKeybindHintDisplay);
+            useNativeFileBrowserToggle.Setup(Settings.UseNativeFileBrowser);
             allowCreatingNotesBackwardToggle.Setup(Settings.AllowCreatingNotesBackward);
             enableEditingArctapWidthToggle.Setup(Settings.EnableArctapWidthEditing);
             blockCreatingOverlappedNotesToggle.Setup(Settings.BlockOverlapNoteCreation);
