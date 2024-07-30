@@ -139,7 +139,7 @@ namespace ArcCreate.Gameplay.Audio
 
         public Dictionary<string, AudioClip> SfxAudioClips => Services.Hitsound.SfxAudioClips;
 
-        private int FullOffset => Values.ChartAudioOffset + Settings.GlobalAudioOffset.Value;
+        private int FullOffset => Values.ChartAudioOffset + Mathf.RoundToInt(Settings.GlobalAudioOffset.Value * playbackSpeed);
 
         public void SetAudioTimingSilent(int timing)
         {
@@ -298,6 +298,11 @@ namespace ArcCreate.Gameplay.Audio
 
         public async UniTask PrepareVideoPlayback()
         {
+            if (!videoPlayer.enabled)
+            {
+                return;
+            }
+
             videoPlayer.Prepare();
             await UniTask.WaitUntil(() => videoPlayer.isPrepared);
         }

@@ -73,10 +73,8 @@ Shader "Custom/BlendModes/Exclusion"
 				float4 baseColor = tex2Dproj(_ExclusionGrabTex, i.screen);
 				i.uv.x += _Modify.x;
 				i.uv.x *= _Modify.z;
-				i.uv.x %= 1;
 				i.uv.y += _Modify.y;
 				i.uv.y *= _Modify.w;
-				i.uv.y %= 1;
 				float4 texColor = tex2D(_MainTex, i.uv) * _Color;
 
 				return blendExclusion(baseColor, texColor, texColor.a);

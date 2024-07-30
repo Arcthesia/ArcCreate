@@ -390,7 +390,9 @@ namespace ArcCreate.Gameplay.Scenecontrol
             string material = "default",
             [EmmyChoice("overlay", "notes", "background")]
             string renderLayer = "overlay",
-            XY? pivot = null)
+            XY? pivot = null,
+            [EmmyChoice("repeat", "clamp", "mirror", "mirroronce")]
+            string wrapMode = "repeat")
 #pragma warning restore
         {
             GameObject obj = Instantiate(ImagePrefab, ScreenCanvas.transform);
@@ -404,6 +406,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 {
                     Uri = customFileAccess?.GetFileUri(Path.Combine("Scenecontrol", imgPath)) ?? new Uri(Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath)),
                     Pivot = pivotVec,
+                    WrapMode = GetWrapMode(wrapMode),
                 },
                 cts.Token).ContinueWith(sprite => c.Image.sprite = sprite));
 
@@ -426,7 +429,9 @@ namespace ArcCreate.Gameplay.Scenecontrol
             string material = "default",
             [EmmyChoice("overlay", "notes", "background")]
             string renderLayer = "overlay",
-            XY? pivot = null)
+            XY? pivot = null,
+            [EmmyChoice("repeat", "clamp", "mirror", "mirroronce")]
+            string wrapMode = "repeat")
 #pragma warning restore
         {
             GameObject obj = Instantiate(SpritePrefab, ScreenCanvas.transform);
@@ -440,6 +445,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 {
                     Uri = customFileAccess?.GetFileUri(Path.Combine("Scenecontrol", imgPath)) ?? new Uri(Path.Combine(Services.Scenecontrol.ScenecontrolFolder, imgPath)),
                     Pivot = pivotVec,
+                    WrapMode = GetWrapMode(wrapMode),
                 },
                 cts.Token).ContinueWith(sprite => c.SpriteRenderer.sprite = sprite));
 
@@ -827,6 +833,23 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
+        private TextureWrapMode GetWrapMode(string name)
+        {
+            switch (name)
+            {
+                case "repeat":
+                    return TextureWrapMode.Repeat;
+                case "clamp":
+                    return TextureWrapMode.Clamp;
+                case "mirror":
+                    return TextureWrapMode.Mirror;
+                case "mirroronce":
+                    return TextureWrapMode.MirrorOnce;
+                default:
+                    return TextureWrapMode.Repeat;
+            }
+        }
+
         private async UniTask<Sprite> GetSprite(SpriteDefinition definition, CancellationToken ct)
         {
             if (spriteCache.ContainsKey(definition))
@@ -856,6 +879,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     }
 
                     var t = DownloadHandlerTexture.GetContent(req);
+                    t.wrapMode = definition.WrapMode;
                     Sprite output = Sprite.Create(
                             texture: t,
                             rect: new Rect(0, 0, t.width, t.height),
@@ -916,6 +940,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         {
             public Uri Uri;
             public Vector2 Pivot;
+            public TextureWrapMode WrapMode;
         }
     }
 }

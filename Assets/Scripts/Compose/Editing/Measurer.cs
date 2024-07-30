@@ -34,7 +34,7 @@ namespace ArcCreate.Compose.Editing
         private float currentY;
         private bool actionButtonPressed;
 
-        [EditorAction("Start", true, "e")]
+        [EditorAction("Start", false, "e")]
         [RequireGameplayLoaded]
         [SubAction("CopyTiming", false, "t")]
         [SubAction("CopyPosition", false, "c")]

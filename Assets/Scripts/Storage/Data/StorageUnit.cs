@@ -20,7 +20,7 @@ namespace ArcCreate.Storage.Data
 
         public bool IsDefaultAsset { get; set; }
 
-        public void Delete()
+        public virtual void Delete()
         {
             string dir = GetParentDirectory();
             if (Directory.Exists(dir))
@@ -36,7 +36,7 @@ namespace ArcCreate.Storage.Data
             return Database.Current.GetCollection<T>().FindOne(Query.EQ("Identifier", Identifier));
         }
 
-        public void Insert()
+        public virtual void Insert()
         {
             Database.Current.GetCollection<T>().Insert(this as T);
         }

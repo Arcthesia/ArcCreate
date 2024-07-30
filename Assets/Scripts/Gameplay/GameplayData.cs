@@ -161,6 +161,7 @@ namespace ArcCreate.Gameplay
             }
 
             Texture2D t = new Texture2D(1, 1);
+            t.wrapMode = TextureWrapMode.Clamp;
             t.LoadImage(File.ReadAllBytes(path), true);
             Sprite sprite = Sprite.Create(t, new Rect(0, 0, t.width, t.height), new Vector2(0.5f, 0.5f));
             Background.Value = sprite;
@@ -187,6 +188,7 @@ namespace ArcCreate.Gameplay
             }
 
             Texture2D t = new Texture2D(1, 1);
+            t.wrapMode = TextureWrapMode.Clamp;
             t.LoadImage(File.ReadAllBytes(path), true);
             Sprite sprite = Sprite.Create(t, new Rect(0, 0, t.width, t.height), new Vector2(0.5f, 0.5f));
             Jacket.Value = sprite;

@@ -44,9 +44,11 @@ namespace ArcCreate.Storage
 
         public UltraLiteCollection<PackStorage> PackCollection { get; private set; }
 
+        public UltraLiteCollection<CharacterStorage> CharacterCollection { get; private set; }
+
         public bool IsTransitioning => SceneTransitionManager.Instance != null && SceneTransitionManager.Instance.IsTransitioning;
 
-        public bool IsLoaded => LevelCollection != null && PackCollection != null;
+        public bool IsLoaded => LevelCollection != null && PackCollection != null && CharacterCollection != null;
 
         public LevelStorage GetLevel(string id)
         {
@@ -105,10 +107,22 @@ namespace ArcCreate.Storage
             }
         }
 
+        public CharacterStorage GetCharacter(string id)
+        {
+            CharacterStorage character = CharacterCollection.FindOne(Query.EQ("Identifier", id));
+            if (character == null)
+            {
+                return null;
+            }
+
+            return character;
+        }
+
         public void NotifyStorageChange()
         {
             LevelCollection = Database.Current.GetCollection<LevelStorage>();
             PackCollection = Database.Current.GetCollection<PackStorage>();
+            CharacterCollection = Database.Current.GetCollection<CharacterStorage>();
 
             SelectedPack.SetValueWithoutNotify(GetLastSelectedPack());
             SelectedChart.SetValueWithoutNotify(GetLastSelectedChart(SelectedPack.Value?.Identifier));
@@ -406,6 +420,17 @@ namespace ArcCreate.Storage
             }
 
             return GetPack(id);
+        }
+
+        public CharacterStorage GetSelectedCharacter()
+        {
+            string id = PlayerPrefs.GetString("Selection.LastCharacter", null);
+            if (id == null)
+            {
+                return null;
+            }
+
+            return GetCharacter(id);
         }
 
         private static void DestroyCache<T>(Incompletable<T> obj)

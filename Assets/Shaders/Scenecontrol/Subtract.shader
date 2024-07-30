@@ -68,10 +68,8 @@ Shader "Custom/BlendModes/Subtract"
 				float4 baseColor = tex2Dproj(_SubtractGrabTex, i.screen);
 				i.uv.x += _Modify.x;
 				i.uv.x *= _Modify.z;
-				i.uv.x %= 1;
 				i.uv.y += _Modify.y;
 				i.uv.y *= _Modify.w;
-				i.uv.y %= 1;
 				float4 texColor = tex2D(_MainTex, i.uv) * _Color;
 
 				return blendSubtract(baseColor, texColor, texColor.a);

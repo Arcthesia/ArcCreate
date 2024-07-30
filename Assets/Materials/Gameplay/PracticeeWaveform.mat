@@ -71,8 +71,8 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _RepeatSampleFrom: -88
-    - _RepeatSampleTo: -88
+    - _RepeatSampleFrom: 3422966
+    - _RepeatSampleTo: 3782294
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

@@ -66,6 +66,7 @@ namespace ArcCreate.Selection.Interface
             audioSource.Stop();
             audioPreview.ResumePreview();
             mainButton.onClick.AddListener(StartCalibration);
+            dialogAnimator.Hide();
         }
 
         private async UniTask StartCalibrationTask(CancellationToken ct)

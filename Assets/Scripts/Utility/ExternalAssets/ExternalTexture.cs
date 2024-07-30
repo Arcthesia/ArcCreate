@@ -71,6 +71,7 @@ namespace ArcCreate.Utility.ExternalAssets
                     }
 
                     var t = DownloadHandlerTexture.GetContent(req);
+                    t.wrapMode = original.wrapMode;
                     Cache.Add(path, t);
                     external = t;
                     return;

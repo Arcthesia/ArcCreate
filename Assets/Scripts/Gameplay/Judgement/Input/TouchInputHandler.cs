@@ -63,7 +63,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
                     Vector3 screenPosition = Services.Camera.GameplayCamera.WorldToScreenPoint(worldPosition);
                     Vector3 deltaToNote = screenPosition - input.ScreenPos;
                     float distanceToNote = deltaToNote.sqrMagnitude;
-                    if (LaneCollide(input, screenPosition, req.Lane, judgementSize, judgementSize != Vector2.one || judgementOffset != Vector3.zero)
+                    if (LaneCollide(input, screenPosition, req.Lane, judgementSize, judgementOffset == Vector3.zero)
                     && (timingDifference < minTimingDifference || distanceToNote <= minPositionDifference))
                     {
                         minTimingDifference = timingDifference;
@@ -138,7 +138,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
                     Vector3 worldPosition = new Vector3(ArcFormula.LaneToWorldX(req.Lane), 0, 0) + judgementOffset;
                     Vector3 screenPosition = Services.Camera.GameplayCamera.WorldToScreenPoint(worldPosition);
 
-                    if (LaneCollide(input, screenPosition, req.Lane, judgementSize, judgementSize != Vector2.one || judgementOffset != Vector3.zero))
+                    if (LaneCollide(input, screenPosition, req.Lane, judgementSize, judgementOffset == Vector3.zero))
                     {
                         req.Receiver.ProcessLaneHoldJudgement(currentTiming >= req.ExpireAtTiming, req.IsJudgement, req.Properties);
                         requests.RemoveAt(i);
@@ -353,6 +353,12 @@ namespace ArcCreate.Gameplay.Judgement.Input
 
         private bool ArcTapCollide(TouchInput input, Vector3 screenPosition, Vector3 worldPosition, float width, Vector2 judgementSize)
         {
+            float skyInputY = Services.Judgement.SkyInputY;
+            if (worldPosition.y <= skyInputY)
+            {
+                input.VerticalPos.y = Mathf.Min(input.VerticalPos.y, skyInputY);
+            }
+
             float hitboxX = Values.ArcTapHitboxX + (Values.LaneWidth / 2 * (width - 1));
             float dSx = Mathf.Abs(input.ScreenPos.x - screenPosition.x);
             float dSy = input.ScreenPos.y - screenPosition.y;

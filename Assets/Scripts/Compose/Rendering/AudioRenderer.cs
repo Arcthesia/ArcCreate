@@ -329,7 +329,7 @@ namespace ArcCreate.Compose.Rendering
 
         private string GetPath(string fileName = "")
         {
-            string path = Path.Combine(new DirectoryInfo(Application.dataPath).Parent.FullName, "Rendering", fileName);
+            string path = Path.Combine(Path.GetDirectoryName(Services.Project.CurrentProject.Path), ".rendering", fileName);
             if (!Directory.Exists(Path.GetDirectoryName(path)))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(path));

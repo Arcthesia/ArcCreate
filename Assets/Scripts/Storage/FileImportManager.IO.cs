@@ -300,6 +300,18 @@ namespace ArcCreate.Storage
                                 LevelIdentifiers = packInfo.LevelIdentifiers,
                             };
                             break;
+                        case ImportInformation.CharacterType:
+                            var charInfo = deserializer.Deserialize<CharacterStorage.CharacterImportInformation>(settingsContent);
+                            storage = new CharacterStorage()
+                            {
+                                Name = charInfo.Name,
+                                ImagePath = charInfo.ImagePath,
+                                IconPath = charInfo.IconPath,
+                                X = charInfo.X,
+                                Y = charInfo.Y,
+                                Scale = charInfo.Scale == 0 ? 1 : charInfo.Scale,
+                            };
+                            break;
                     }
 
                     if (!storage.ValidateSelf(out string reason))

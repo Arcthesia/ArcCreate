@@ -40,6 +40,7 @@ namespace ArcCreate.Selection.Interface
 
         private void Awake()
         {
+            scroll.Value = 0;
             options.Setup();
             Pools.New<Cell>("LevelCell", levelCellPrefab, scroll.transform, 5);
             Pools.New<DifficultyCell>("DifficultyCell", difficultyCellPrefab, scroll.transform, 30);
@@ -190,7 +191,7 @@ namespace ArcCreate.Selection.Interface
                 scrollRect.DOAnchorMin(Vector2.zero, rebuildDuration).SetEase(Ease.OutCubic);
             }
 
-            FocusOnLevel(currentLevel);
+            FocusOnLevelImmediate(currentLevel);
         }
 
         private void FocusOnLevel(LevelStorage level)
@@ -220,6 +221,34 @@ namespace ArcCreate.Selection.Interface
             float scrollTo = item.ValueToCenterCell;
             KillTween();
             scrollTween = DOTween.To((float val) => scroll.Value = val, scrollFrom, scrollTo, autoScrollDuration).SetEase(Ease.OutExpo);
+        }
+
+        private void FocusOnLevelImmediate(LevelStorage level)
+        {
+            HierarchyData item = null;
+            if (level == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < scroll.Data.Count; i++)
+            {
+                CellData data = scroll.Data[i];
+                if (data is LevelCellData levelCell && levelCell.LevelStorage.Id == level.Id)
+                {
+                    item = scroll.Hierarchy[i];
+                    break;
+                }
+            }
+
+            if (item == null)
+            {
+                return;
+            }
+
+            float scrollTo = item.ValueToCenterCell;
+            scroll.Value = scrollTo;
+            scroll.Rebuild();
         }
 
         private void SelectRandom()

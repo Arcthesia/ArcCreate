@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
 using ArcCreate.Compose.Navigation;
 using ArcCreate.Compose.Popups;
 using ArcCreate.Compose.Timeline;
@@ -238,7 +237,7 @@ namespace ArcCreate.Compose.Selection
             }
         }
 
-        [EditorAction("RangeSelect", true, "<c-r>")]
+        [EditorAction("RangeSelect", false, "<c-r>")]
         [KeybindHint(Priority = KeybindPriorities.Selection)]
         [RequireGameplayLoaded]
         [SubAction("Confirm", false, "<mouse1>")]

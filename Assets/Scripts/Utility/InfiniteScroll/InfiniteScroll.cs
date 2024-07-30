@@ -243,7 +243,7 @@ namespace ArcCreate.Utility.InfiniteScroll
             return IsVisible(cell.ParentIndex);
         }
 
-        private void Rebuild(bool checkInbetween = false)
+        public void Rebuild(bool checkInbetween = false)
         {
             float minVisiblePositionInRect = IsVertical
                                            ? contentRect.anchoredPosition.y

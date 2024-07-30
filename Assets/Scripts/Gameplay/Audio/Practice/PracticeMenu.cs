@@ -110,7 +110,7 @@ namespace ArcCreate.Gameplay.Audio.Practice
         {
             int timing = Services.Audio.AudioTiming;
             int length = Services.Audio.AudioLength;
-            bool outsideRange = timing < repeatFromTiming - 200 || timing > repeatToTiming;
+            bool outsideRange = timing < repeatFromTiming - 200 * gameplayData.PlaybackSpeed.Value || timing > repeatToTiming;
             bool audioEnd = timing >= length - 100 && repeatToTiming >= length - 100;
             if ((Services.Audio.IsPlaying && outsideRange) || (audioEnd && !gameObject.activeInHierarchy))
             {

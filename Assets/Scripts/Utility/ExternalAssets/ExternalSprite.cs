@@ -74,6 +74,7 @@ namespace ArcCreate.Utility.ExternalAssets
                     }
 
                     var t = DownloadHandlerTexture.GetContent(req);
+                    t.wrapMode = original.texture.wrapMode;
 
                     Sprite sprite;
 

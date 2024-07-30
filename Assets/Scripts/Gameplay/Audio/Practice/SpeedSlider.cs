@@ -13,7 +13,7 @@ namespace ArcCreate.Gameplay.Audio.Practice
         public const float AbsoluteMin = 0.01f;
         public const float Increment = 0.05f;
         public const float IncrementLarge = 0.25f;
-        public const float ClickDuration = 0.1f;
+        public const float ClickDuration = 0.25f;
 
         [SerializeField] private RectTransform fillRect;
         [SerializeField] private Camera gameplayCamera;

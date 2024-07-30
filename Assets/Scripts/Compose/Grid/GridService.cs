@@ -51,7 +51,7 @@ namespace ArcCreate.Compose.Grid
 
         public Vector2 SnapPointToGrid(Vector2 point) => verticalGrid.SnapToVerticalGrid(point);
 
-        [EditorAction("Toggle", true)]
+        [EditorAction("Toggle", false)]
         [RequireGameplayLoaded]
         public void Toggle()
         {

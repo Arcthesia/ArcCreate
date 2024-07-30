@@ -102,10 +102,8 @@ Shader "Sprites/PatternOverlaySC"
 			{
 				uv.x += _Modify.x;
 				uv.x *= _Modify.z;
-				uv.x %= 1;
 				uv.y += _Modify.y;
 				uv.y *= _Modify.w;
-				uv.y %= 1;
 				fixed4 color = tex2D (_MainTex, uv);
 
 #if UNITY_TEXTURE_ALPHASPLIT_ALLOWED

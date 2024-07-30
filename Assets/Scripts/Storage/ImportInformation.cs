@@ -5,6 +5,7 @@ namespace ArcCreate.Storage
         public const string FileName = "index.yml";
         public const string LevelType = "level";
         public const string PackType = "pack";
+        public const string CharacterType = "character";
 
         public string Directory { get; set; }
 

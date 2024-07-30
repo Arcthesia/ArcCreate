@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using ArcCreate.Data;
 using ArcCreate.SceneTransition;
@@ -6,9 +7,11 @@ using ArcCreate.Storage.Data;
 using ArcCreate.Utility.Animation;
 using ArcCreate.Utility.Extension;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Triggers;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 namespace ArcCreate.Selection.Interface
@@ -16,14 +19,13 @@ namespace ArcCreate.Selection.Interface
     public class ResultScreen : SceneRepresentative
     {
         [SerializeField] private StorageData storage;
-        [SerializeField] private Camera resultCamera;
         [SerializeField] private ScriptedAnimator animator;
+        [SerializeField] private Image characterImage;
         [SerializeField] private TMP_Text title;
         [SerializeField] private TMP_Text composer;
         [SerializeField] private Image difficulty;
         [SerializeField] private TMP_Text difficultyText;
         [SerializeField] private GameObject charterFrame;
-        [SerializeField] private RectTransform charterRect;
         [SerializeField] private TMP_Text charterName;
         [SerializeField] private GameObject aliasFrame;
         [SerializeField] private RectTransform aliasRect;
@@ -61,6 +63,12 @@ namespace ArcCreate.Selection.Interface
 
         public void Display(LevelStorage level, ChartSettings chart, PlayResult play, bool isAuto)
         {
+            StartDisplay(level, chart, play, isAuto).Forget();
+        }
+
+        private async UniTask StartDisplay(LevelStorage level, ChartSettings chart, PlayResult play, bool isAuto)
+        {
+            await DisplayCharacter();
             currentLevel = level;
             currentChart = chart;
             title.text = chart.Title;
@@ -105,6 +113,51 @@ namespace ArcCreate.Selection.Interface
 
             audioSource.Play();
             animator.Show();
+        }
+
+        private async UniTask DisplayCharacter()
+        {
+            CharacterStorage character = storage.GetSelectedCharacter();
+            if (character == null || string.IsNullOrEmpty(character.ImagePath))
+            {
+                characterImage.sprite = null;
+                characterImage.gameObject.SetActive(false);
+                return;
+            }
+
+            Option<string> imagePath = character.GetRealPath(character.ImagePath);
+            if (!imagePath.HasValue)
+            {
+                characterImage.sprite = null;
+                characterImage.gameObject.SetActive(false);
+                return;
+            }
+
+            using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(
+                Uri.EscapeUriString("file:///" + imagePath.Value.Replace("\\", "/"))))
+            {
+                await req.SendWebRequest();
+                if (!string.IsNullOrWhiteSpace(req.error))
+                {
+                    characterImage.sprite = null;
+                    characterImage.gameObject.SetActive(false);
+                    return;
+                }
+
+                var t = DownloadHandlerTexture.GetContent(req);
+                t.wrapMode = TextureWrapMode.Clamp ;
+                Sprite sprite = Sprite.Create(
+                    texture: t,
+                    rect: new Rect(0, 0, t.width, t.height),
+                    pivot: new Vector2(0.5f, 0.5f));
+
+                characterImage.sprite = sprite;
+                characterImage.gameObject.SetActive(true);
+                var rect = characterImage.GetComponent<RectTransform>();
+                rect.anchoredPosition = new Vector2(character.X, character.Y);
+                rect.localScale = new Vector3(character.Scale, character.Scale, 1);
+                return;
+            }
         }
 
         public override void PassData(params object[] args)
