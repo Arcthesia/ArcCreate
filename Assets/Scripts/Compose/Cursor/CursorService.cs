@@ -306,7 +306,7 @@ namespace ArcCreate.Compose.Cursor
                     update?.Invoke(result);
                 }
 
-                if (confirm.WasExecuted)
+                if (confirm.WasExecuted && isCursorAboveViewport)
                 {
                     wasSuccessful = resultSet;
                     break;
