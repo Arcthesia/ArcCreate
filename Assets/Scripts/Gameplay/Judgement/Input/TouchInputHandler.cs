@@ -160,7 +160,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
                 for (int i = requests.Count - 1; i >= 0; i--)
                 {
                     ArcJudgementRequest req = requests[i];
-                    if (currentTiming >= req.StartAtTiming
+                    if (currentTiming >= req.Arc.Timing
                      && currentTiming <= req.Arc.EndTiming
                      && req.Arc.Color == color.Color)
                     {
@@ -261,7 +261,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
                     ArcJudgementRequest req = requests[i];
                     ArcColorLogic colorLogic = ArcColorLogic.Get(req.Arc.Color);
 
-                    if (currentTiming < req.StartAtTiming)
+                    if (currentTiming < req.StartAtTiming || currentTiming > req.Arc.EndTiming)
                     {
                         continue;
                     }

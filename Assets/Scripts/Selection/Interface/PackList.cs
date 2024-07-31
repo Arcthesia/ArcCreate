@@ -25,6 +25,8 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private ScriptedAnimator packListAnimator;
         [SerializeField] private ScriptedAnimator levelListAnimator;
         [SerializeField] private ScriptedAnimator hideUIAnimator;
+        [SerializeField] private Transform listButtonsParent;
+        [SerializeField] private Transform packButtonsParent;
         [SerializeField] private CanvasGroup packListCanvasGroup;
         [SerializeField] private Button backToPackListButton;
         [SerializeField] private Button allSongsPack;
@@ -38,6 +40,7 @@ namespace ArcCreate.Selection.Interface
             Services.Select.ClearSelection();
             packListAnimator.Show();
             levelListAnimator.Hide();
+            packButtonsParent.SetAsLastSibling();
             packListCanvasGroup.interactable = true;
             packListCanvasGroup.blocksRaycasts = true;
             lastWasInPackList = true;
@@ -172,6 +175,7 @@ namespace ArcCreate.Selection.Interface
             Services.Select.ClearSelection();
             packListAnimator.Hide();
             levelListAnimator.Show();
+            listButtonsParent.SetAsLastSibling();
             packListCanvasGroup.interactable = false;
             packListCanvasGroup.blocksRaycasts = false;
             lastWasInPackList = false;

@@ -6490,7 +6490,8 @@ MonoBehaviour:
   components:
   - {fileID: 912723903}
   - {fileID: 1203718492}
-  disableGameObject: 0
+  - {fileID: 1203718492}
+  disableGameObject: 1
 --- !u!1 &277860293
 GameObject:
   m_ObjectHideFlags: 0
@@ -18452,6 +18453,8 @@ MonoBehaviour:
   packListAnimator: {fileID: 277033613}
   levelListAnimator: {fileID: 10724661}
   hideUIAnimator: {fileID: 35021833}
+  listButtonsParent: {fileID: 1865666156}
+  packButtonsParent: {fileID: 2087829653}
   packListCanvasGroup: {fileID: 1203718493}
   backToPackListButton: {fileID: 1404543011}
   allSongsPack: {fileID: 1347661603}
@@ -26214,7 +26217,7 @@ PrefabInstance:
     - target: {fileID: 1538273339374402767, guid: e7c86fc9aae35e14ea7cc1d1f80e6d23,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1538273339374402767, guid: e7c86fc9aae35e14ea7cc1d1f80e6d23,
         type: 3}
@@ -33133,7 +33136,7 @@ PrefabInstance:
     - target: {fileID: 1538273339374402767, guid: e7c86fc9aae35e14ea7cc1d1f80e6d23,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1538273339374402767, guid: e7c86fc9aae35e14ea7cc1d1f80e6d23,
         type: 3}
