@@ -486,7 +486,9 @@ namespace ArcCreate.Compose.Selection
 
         private void SelectNotesBetweenRange(int from, int to)
         {
-            SetSelection(GetNotesBetweenRange(from, to));
+            SetSelection(GetNotesBetweenRange(from, to).Where(x =>
+                x.TimingGroupInstance.IsVisible
+                && x.TimingGroupInstance.GroupProperties.Editable));
             rangeSelected = true;
         }
 

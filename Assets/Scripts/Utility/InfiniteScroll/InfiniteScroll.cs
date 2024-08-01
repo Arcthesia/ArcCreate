@@ -88,6 +88,13 @@ namespace ArcCreate.Utility.InfiniteScroll
 
         public void SetData(List<CellData> data)
         {
+            SetDataWithoutRebuild(data);
+            Rebuild();
+            LoadSecondStage(0);
+        }
+
+        public void SetDataWithoutRebuild(List<CellData> data)
+        {
             if (!setup)
             {
                 Awake();
@@ -109,8 +116,6 @@ namespace ArcCreate.Utility.InfiniteScroll
             }
 
             RecalculateCellsState();
-            Rebuild();
-            LoadSecondStage(0);
         }
 
         /// <summary>

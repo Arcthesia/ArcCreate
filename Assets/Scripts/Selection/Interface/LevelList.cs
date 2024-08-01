@@ -4,6 +4,7 @@ using ArcCreate.Data;
 using ArcCreate.Storage;
 using ArcCreate.Storage.Data;
 using ArcCreate.Utility.InfiniteScroll;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -176,12 +177,12 @@ namespace ArcCreate.Selection.Interface
                     storageData.SelectedChart.Value.chart,
                     options.GroupStrategy,
                     options.SortStrategy);
-                scroll.SetData(data);
+                scroll.SetDataWithoutRebuild(data);
             }
             else
             {
                 List<CellData> data = LevelListBuilder.Filter(levels, storageData.SelectedChart.Value.chart, options.SearchQuery);
-                scroll.SetData(data);
+                scroll.SetDataWithoutRebuild(data);
             }
 
             // Only play animation on the second load onward
