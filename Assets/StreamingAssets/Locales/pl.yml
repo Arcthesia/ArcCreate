@@ -802,7 +802,7 @@ Compose:
           Speed: Szybkość
           AspectRatio: Proporcje
           Indicator: Wskaźnik
-          MaxIndicator: Enable max indicator
+          MaxIndicator: Włącz wskaźnik max
           Colorblind: Używaj kolorów arc dla niewidomych
           ScoreDisplay: <size=9>Wyświetlacz wyniku</size>
         Judgement:
