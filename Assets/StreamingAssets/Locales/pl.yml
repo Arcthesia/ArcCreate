@@ -635,7 +635,7 @@ Compose:
           touch: Ekran Dotykowy
           controller: Kontroler
           mouse: Myszka
-          idle: Bezczynność
+          idle: Idle
         FullScreen: Pełny Ekran
         ToggleFullScreenHint: Naciśnij klawisz F11, aby przełączyć pełny ekran.
         Chart: Chart
@@ -651,7 +651,7 @@ Compose:
         Title: Tytuł
         Composer: Kompozytor
         Illustrator: Ilustrator
-        Charter: Charter
+        Charter: Twórca
         Alias: Pseudonim
         BPM: BPM
         BaseBPM: Podstawowe BPM
@@ -665,7 +665,7 @@ Compose:
         DifficultyColor: Kolor Trudności
         Files: Pliki
         Audio: Audio
-        JacketArt: Jacket Art
+        JacketArt: Grafika Okładki
         Background: Tło
         Video: Wideo
         Skin: Skórka
@@ -802,14 +802,14 @@ Compose:
           Speed: Szybkość
           AspectRatio: Proporcje
           Indicator: Wskaźnik
-          MaxIndicator: Enable max indicator
+          MaxIndicator: Włącz wskaźnik max
           Colorblind: Używaj kolorów arc dla niewidomych
           ScoreDisplay: <size=9>Wyświetlacz wyniku</size>
         Judgement:
           Name: Judgement
-          NotUsedInAutoOrIdle: "These options take no effect in auto or idle mode:"
-          EarlyLatePosition: Early/Late position
-          ShowMsDifference: Show ms difference
+          NotUsedInAutoOrIdle: "Te opcje nie mają wpływu w trybie auto lub idle:"
+          EarlyLatePosition: Pozycja Early/Late
+          ShowMsDifference: Pokaż różnicę w ms
           ShowJudgement: "Show judgement:"
           ShowMax: Perfect (Max)
           ShowPerfect: Perfect (Early/Late)
@@ -925,10 +925,10 @@ Remote:
   Description:
     Idle: |-
       Nie podłączono żadnego klienta test play.
-      Rozpocznij transmitowanie w celu wykrycia klientów. Upewnij się, że to urządzenie i urządzenie z włączonym klientem test play znajdują się w tej samej sieci lokalnej i że klient test play znajduje przychodzące transmisje.
+      Rozpocznij transmitowanie w celu wykrycia klientów. Upewnij się, że to urządzenie i urządzenie z włączonym klientem testplay znajdują się w tej samej sieci lokalnej i że klient test play znajduje przychodzące transmisje.
     Broadcasting: |-
       Kod transmitowania: {0}.
-      Wybierz opcję z tym kodem na kliencie test play, aby rozpocząć sesję.
+      Wybierz opcję z tym kodem na kliencie testplay, aby rozpocząć sesję.
     Connected: |-
       Połączono z klientem test play pod adresem: {0}:{1}
   Actions:
@@ -940,13 +940,13 @@ Remote:
     ManualIP: Skonfiguruj połączenie ręcznie
     ReturnToSelect: Wróć do Song Select
   Control:
-    Name: Control
+    Name: Kontroler
     Sync:
       Name: Synchronizuj dane
       AllFiles: <size=10>Wszystkie pliki</size>
       Chart: Chart
       Audio: Audio
-      Jacket: Jacket
+      Jacket: Okładka
       Background: Tło
       Metadata: Metadane
     Settings:
@@ -956,7 +956,7 @@ Remote:
       MusicVolume: Głośność muzyki
       EffectVolume: Głośność SFX
     StartTiming: Play from timing
-    EndTiming: Play to timing      
+    EndTiming: Play to timing
     Loop: Odtwarzanie w pętli
     ShowLog: Pokaż log
     ShowDebug: Pokaż informacje debugowania
@@ -1038,7 +1038,7 @@ Gameplay:
         Charter: Nieznany
       Charter: 'Charter: {0}'
     Sort:
-      addeddate: Added date
+      addeddate: Data dodania
       charter: Charter
       composer: Kompozytor
       difficulty: Poziom
@@ -1053,7 +1053,7 @@ Gameplay:
       grade: Stopień
       rank: Rank
       rating: Rating
-      charter: Charter
+      charter: Twórca
     History:
       Best: Najlepsze
       Recent: Ostatnie
@@ -1072,15 +1072,15 @@ Gameplay:
         Name: Rozgrywka
         Speed: Szybkość
         SpeedDetail: |-
-          Adjust the speed at which notes approach the judgement area.
-        EarlyLatePerfectDisplay: Wyświetlanie perfekcyjnych trafień wcześnie/późno
+          Dostosuj prędkość, z jaką nuty zbliżają się do obszaru judgement.
+        EarlyLatePerfectDisplay: Wyświetlanie perfekcyjnych trafień Early/Late
         EarlyLatePerfectDisplayDetail: |-
-          Zmień opcję wyświetlania trafień perfekcyjnych wcześnie/późno.
+          Zmień opcję wyświetlania trafień perfekcyjnych Early/Late.
         EnablePractice: Włącz tryb treningu
         ShowMsDifference: Wyświetlanie różnice w milisekundach
         ShowMsDifferenceDetail: Wyświetlaj dokładne różnice czasowe w milisekundach zamiast EARLY / LATE.
         HidePause: Ukryj przycisk pauzy
-        PauseMode: Metoda włączenia pauzy
+        PauseMode: Metoda wstrzymywania gry
       Audio:
         Name: Audio
         Offset: Opóźnienie
@@ -1091,49 +1091,49 @@ Gameplay:
         MusicAudio: Głośność muzyki
         MusicAudioDetail: |-
           Zmień głośność muzyki podczas rozgrywki.
-        EffectAudio: Effect volume
+        EffectAudio: Głośność SFX
         EffectAudioDetail: |-
-          Change the volume of hit sounds during gameplay.
+          Zmień głośność dźwięków trafień podczas rozgrywki.
       Visual:
         Name: Grafika
         Colorblind: Tryb dla Niewidomych
         ColorblindDetail: Użyj alternatywnych kolorów arc'ów.
-        FrPmDisplay: FC/AP display
-        FrPmDisplayDetail: Adjust FC/AP indicator position.
-        MaxDisplay: Max indicator display
-        MaxDisplayDetail: Toggle max score indicator display.
-        EarlyLateDisplay: Early/Late display
-        EarlyLateDisplayDetail: Adjust early/late text position.
-        ScoreDisplay: Score display
+        FrPmDisplay: Wyświetlanie FC/AP
+        FrPmDisplayDetail: Dostosuj pozycję wskaźnika FC/AP
+        MaxDisplay: Wyświetlanie wskaźnika Max
+        MaxDisplayDetail: Przełącz wyświetlanie wskaźnika maksymalnego wyniku.
+        EarlyLateDisplay: Wyświetlanie Early/Late
+        EarlyLateDisplayDetail: Dostosuj pozycję tekstu Early/Late.
+        ScoreDisplay: Wyświetlanie wyniku
         LimitFramerate: Ogranicz framerate
         LimitFramerateDetail: Ogranicz framerate do 60 FPS, aby oszczędzać życie baterii. Może to zwiększyć opóźnienia.
         DisableAdvancedGraphics: Wyłącz zaawansowaną grafikę
         DisableAdvancedGraphicsDetails: Wyłącz post processing i tła wideo, co może poprawić wydajność.
       Judgement:
         Name: Judgement
-        ShowMax: Display Perfect (Max) judgement
-        ShowPerfect: Display Perfect (Early / Late) judgement
-        ShowGood: Display Good judgement
-        ShowMiss: Display Miss judgement
+        ShowMax: Wyświetl judgement Perfect (Max)
+        ShowPerfect: Wyświetl judgement Perfect (Early / Late)
+        ShowGood: Wyświetl judgement Good
+        ShowMiss: Wyświetl judgement Miss
       Interface:
-        Name: Interface
-        ForceTheme: Force UI Theme
-        ForceThemeDetail: Set the UI to display a theme regardless of selected chart.
-        SwitchResumeAndRetry: Switch Resume and Retry position
-        SwitchResumeAndRetryDetail: Switch the positions of Resume and Retry buttons within the Pause screen.
-        ShowFPS: Show FPS
-        ShowFPSDetail: Toggle FPS display.
+        Name: Interfejs
+        ForceTheme: Wymuś motyw interfejsu
+        ForceThemeDetail: Ustaw interfejs tak, aby wyświetlał motyw niezależnie od wybranego chartu.
+        SwitchResumeAndRetry: Przełącz pozycję przycisków Wznów i Ponów
+        SwitchResumeAndRetryDetail: Zamień miejscami przyciski Wznów i Ponów na ekranie Pauzy.
+        ShowFPS: Pokaż FPS
+        ShowFPSDetail: Przełącz wyświetlanie FPS.
         ShowDebug: Pokaż informacje debugowania
         ShowDebugDetail: Wyświetlaj informacje debugowania podczas rozgrywki (zaawansowane).
       FrPmPosition:
-        middle: Middle
-        infopanel: Info panel
-        off: Off
+        middle: Na środku
+        infopanel: W panelu info
+        off: Wyłącz
       PauseMode:
-        clickonce: Pojedyncze dotknięcie
-        doubleclick: Dwukrotne dotknięcie
-        hold: Długie naciśnięcie
-        disable: Wyłącz
+        clickonce: Pojedyncze
+        doubleclick: Dwukrotne
+        hold: Przytrzymywanie
+        disable: Wyłączone
       EarlyLateTextPosition:
         middle: Środek
         bottom: Dół
