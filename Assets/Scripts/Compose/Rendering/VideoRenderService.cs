@@ -103,6 +103,7 @@ namespace ArcCreate.Compose.Rendering
                     pickMode: SimpleFileBrowser.FileBrowser.PickMode.Files,
                     allowMultiSelection: false,
                     initialPath: initialPath,
+                    initialFilename: defaultName,
                     title: title);
                 
                 while (outputPath == null && !cancelled)

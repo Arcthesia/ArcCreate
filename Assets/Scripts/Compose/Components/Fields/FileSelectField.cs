@@ -210,7 +210,7 @@ namespace ArcCreate.Compose.Components
                         onSuccess: (string[] paths) => {
                             if (paths.Length >= 1)
                             {
-                                UseFilePathIfValid(Path.GetFileNameWithoutExtension(paths[0]));
+                                UseFilePathIfValid(paths[0]);
                             }
                         },
                         onCancel: () => {},

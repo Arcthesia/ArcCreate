@@ -738,7 +738,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     string[] imgsplit = arg.Split(',');
                     return CreateImage(imgsplit[0], imgsplit[1], imgsplit[2], new XY(float.Parse(imgsplit[3]), float.Parse(imgsplit[4])));
                 case "canvas":
-                    bool worldSpace = def.ToLower() == "true";
+                    bool worldSpace = arg.ToLower() == "true";
                     return CreateCanvas(worldSpace);
                 case "sprite":
                     string[] spriteSplit = arg.Split(',');
