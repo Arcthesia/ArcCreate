@@ -633,9 +633,9 @@ Compose:
         InputMode: การป้อนข้อมูล
         InputModeOptions:
           auto: อัตโนมัติ
-          autocontroller: อัตโนมัติ (เครื่องควบคุม)
+          autocontroller: อัตโนมัติ (จอยเกม)
           touch: จอสัมผัส
-          controller: เครื่องควบคุม
+          controller: จอยเกม
           mouse: เมาส์
           idle: ว่าง
         FullScreen: แสดงเต็มจอ
@@ -651,7 +651,7 @@ Compose:
         Information: ข้อมูล
         Gameplay: การแสดงผลของเกม
         Title: หัวข้อ
-        Composer: ผู้จัดทําเพลงา
+        Composer: ผู้แต่งเพลง
         Illustrator: นักวาดภาพประกอบ
         Charter: ผู้จัดวางโน้ต
         Alias: นามแฝง
@@ -659,7 +659,7 @@ Compose:
         BaseBPM: ฐาน BPM 
         BPMText: ข้อความ BPM 
         SyncBaseBPM: Sync
-        ChartOffset: เวลาความคลาดเคลื่อนของโน้ตเพลง
+        ChartOffset: ค่าคลาดเคลื่อนโน้ต
         TimingPointDensityFactor: Judge Density
         ChartConstant: ความยากของโน้ตเพลง
         SearchTags: แท็คการค้นหา
@@ -694,7 +694,7 @@ Compose:
         Shutter: หน้า Loading
         ShowShutter: เปิดหน้า Loading
         HideShutter: ปิดหน้า Loading
-        PreviewSegment: เวลาที่เล่นในหน้าเลีอกเพลง
+        PreviewSegment: เวลาในหน้าเลีอกเพลง
         CustomChartPath: ทำเอง (ขั้นสูง)
       Options:
         Inherit: ตามฝั่ง
@@ -797,7 +797,7 @@ Compose:
         Gameplay:
           Name: การเล่น
           Speed: ความเร็ว
-          AspectRatio: สัดส่วนการแสดงผล
+          AspectRatio: สัดส่วนแสดงผล
           Indicator: การแสดงผล
           MaxIndicator: แสดงคะแนนเต็ม
           Colorblind: โน้ตลากตาบอดสี แปลี่ยนสีแดงเป็นสีเหลือง
@@ -805,7 +805,7 @@ Compose:
         Judgement:
           Name: ผลการเล่น
           NotUsedInAutoOrIdle: “การตั้งค่านี้ไม่มีผลต่อโหมดอัตโนมัติและโหมดปล่อยเฉย:"
-          EarlyLatePosition: ตำแหน่ง Early/Late (เร็ว/ช้า)
+          EarlyLatePosition: ตำแหน่ง Early/Late
           ShowMsDifference: แสดง ms ที่แตกต่าง
           ShowJudgement: ”แสดงผลการเล่น:"
           ShowMax: Perfect (เต็ม)
