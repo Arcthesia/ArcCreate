@@ -592,6 +592,10 @@ namespace ArcCreate.Compose.Editing
                     {
                         ArcTap arctap = dragArctap[i];
                         arctap.Arc = closestArc;
+                        if (arctap.TimingGroup != closestArc.TimingGroup)
+                        {
+                            arctap.TimingGroup = closestArc.TimingGroup;
+                        }
                     }
                 }
                 else if (mode == PositionArctapMode.Free)
@@ -604,6 +608,10 @@ namespace ArcCreate.Compose.Editing
                     {
                         ArcTap arctap = dragArctap[i];
                         arctap.Arc = freeArc;
+                        if (arctap.TimingGroup != freeArc.TimingGroup)
+                        {
+                            arctap.TimingGroup = freeArc.TimingGroup;
+                        }
                     }
 
                     Services.Gameplay.Chart.UpdateEvents(freeArcEvents);
@@ -619,6 +627,10 @@ namespace ArcCreate.Compose.Editing
                         ArcTap arctap = dragArctap[i];
                         arctap.Arc = freeArc;
                         arctap.Timing = timing;
+                        if (arctap.TimingGroup != freeArc.TimingGroup)
+                        {
+                            arctap.TimingGroup = freeArc.TimingGroup;
+                        }
                     }
 
                     Services.Gameplay.Chart.UpdateEvents(freeArcEvents);
