@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Extension;
 using UnityEngine;
@@ -102,6 +103,36 @@ namespace ArcCreate.Gameplay.GameplayCamera
             foreach (var cam in events)
             {
                 this.events.Remove(cam);
+            }
+
+            RebuildList();
+        }
+
+        public void RemoveTimingGroup(TimingGroup group)
+        {
+            events.RemoveAll(e => e.TimingGroup == group.GroupNumber);
+
+            foreach (var cam in events)
+            {
+                if (cam.TimingGroup > group.GroupNumber)
+                {
+                    cam.TimingGroup -= 1;
+                    cam.ResetTimingGroupChangedFrom();
+                }
+            }
+
+            RebuildList();
+        }
+
+        public void InsertTimingGroup(TimingGroup group)
+        {
+            foreach (var cam in events)
+            {
+                if (cam.TimingGroup >= group.GroupNumber)
+                {
+                    cam.TimingGroup += 1;
+                    cam.ResetTimingGroupChangedFrom();
+                }
             }
 
             RebuildList();

@@ -161,7 +161,7 @@ PlayerSettings:
     Standalone: com.Arcthesia.ArcCreate
   buildNumber:
     Standalone: 0
-    iPhone: 39
+    iPhone: 40
     tvOS: 0
   overrideDefaultApplicationIdentifier: 0
   AndroidBundleVersionCode: 1
@@ -241,7 +241,7 @@ PlayerSettings:
   clonedFromGUID: c0afd0d1d80e3634a9dac47e8a0426ea
   templatePackageId: com.unity.template.3d@4.2.8
   templateDefaultScene: Assets/Scenes/SampleScene.unity
-  useCustomMainManifest: 0
+  useCustomMainManifest: 1
   useCustomLauncherManifest: 0
   useCustomMainGradleTemplate: 0
   useCustomLauncherGradleManifest: 0
@@ -252,7 +252,7 @@ PlayerSettings:
   AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: D:/Games/Arcaea/Unity/arccreate.keystore
+  AndroidKeystoreName: E:/Code/Unity/ArcCreate/arccreate.keystore
   AndroidKeyaliasName: arccreate
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0

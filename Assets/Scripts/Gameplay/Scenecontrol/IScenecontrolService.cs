@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.Data;
 using TMPro;
 
@@ -56,6 +57,10 @@ namespace ArcCreate.Gameplay.Scenecontrol
         /// </summary>
         /// <param name="events">The events collection.</param>
         void Change(IEnumerable<ScenecontrolEvent> events);
+
+        void RemoveTimingGroup(TimingGroup group);
+
+        void InsertTimingGroup(TimingGroup group);
 
         /// <summary>
         /// Clear all events.

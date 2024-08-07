@@ -425,6 +425,8 @@ namespace ArcCreate.Gameplay.Chart
 
         public void RemoveTimingGroup(TimingGroup group)
         {
+            Services.Camera.RemoveTimingGroup(group);
+            Services.Scenecontrol.RemoveTimingGroup(group);
             for (int i = 0; i < timingGroups.Count; i++)
             {
                 if (timingGroups[i] == group)
@@ -443,6 +445,9 @@ namespace ArcCreate.Gameplay.Chart
 
         public void InsertTimingGroup(TimingGroup group)
         {
+            Services.Camera.InsertTimingGroup(group);
+            Services.Scenecontrol.InsertTimingGroup(group);
+
             if (string.IsNullOrEmpty(group.GroupProperties.FileName))
             {
                 group.GroupProperties.FileName = timingGroups[0].GroupProperties.FileName;

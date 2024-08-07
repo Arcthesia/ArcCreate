@@ -424,6 +424,11 @@ namespace ArcCreate.Storage
 
         public CharacterStorage GetSelectedCharacter()
         {
+            if (CharacterCollection.Count() == 1)
+            {
+                return CharacterCollection.FindAll().First();
+            }
+
             string id = PlayerPrefs.GetString("Selection.LastCharacter", null);
             if (id == null)
             {

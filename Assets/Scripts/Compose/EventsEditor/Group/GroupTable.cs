@@ -117,12 +117,18 @@ namespace ArcCreate.Compose.EventsEditor
 
             int index = IndexOf(Selected);
             int num = Selected.GroupNumber;
-            ICommand cmd = new RemoveTimingGroupCommand(I18n.S(
+
+            List<ArcEvent> scCamEvents = new List<ArcEvent>();
+            scCamEvents.AddRange(Services.Gameplay.Chart.GetAll<CameraEvent>().Where(c => c.TimingGroup == num));
+            scCamEvents.AddRange(Services.Gameplay.Chart.GetAll<ScenecontrolEvent>().Where(s => s.TimingGroup == num));
+            ICommand tgCmd = new RemoveTimingGroupCommand("", Selected);
+            ICommand evCmd = new EventCommand("", remove: scCamEvents);
+            ICommand combination = new CombinedCommand(I18n.S(
                 "Compose.Notify.GroupTable.RemoveGroup", new Dictionary<string, object>
                 {
                     { "Number", num },
-                }), Selected);
-            Services.History.AddCommand(cmd);
+                }), tgCmd, evCmd);
+            Services.History.AddCommand(combination);
 
             // Trigger OnEdittingTimingGroup
             Values.EditingTimingGroup.Value = Mathf.Min(Selected.GroupNumber, Services.Gameplay.Chart.TimingGroups.Count - 1);

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.Data;
 using UnityEngine;
 
@@ -66,6 +67,10 @@ namespace ArcCreate.Gameplay.GameplayCamera
         /// </summary>
         /// <param name="events">The events collection.</param>
         void Change(IEnumerable<CameraEvent> events);
+
+        void RemoveTimingGroup(TimingGroup group);
+
+        void InsertTimingGroup(TimingGroup group);
 
         /// <summary>
         /// Clear all events.

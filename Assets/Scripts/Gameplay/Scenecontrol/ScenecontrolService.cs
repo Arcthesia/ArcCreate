@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ArcCreate.ChartFormat;
+using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility.Extension;
 using Cysharp.Threading.Tasks;
@@ -71,6 +72,36 @@ namespace ArcCreate.Gameplay.Scenecontrol
             foreach (var sc in events)
             {
                 this.events.Remove(sc);
+            }
+
+            RebuildList();
+        }
+
+        public void RemoveTimingGroup(TimingGroup group)
+        {
+            events.RemoveAll(e => e.TimingGroup == group.GroupNumber);
+
+            foreach (var sc in events)
+            {
+                if (sc.TimingGroup > group.GroupNumber)
+                {
+                    sc.TimingGroup -= 1;
+                    sc.ResetTimingGroupChangedFrom();
+                }
+            }
+
+            RebuildList();
+        }
+
+        public void InsertTimingGroup(TimingGroup group)
+        {
+            foreach (var sc in events)
+            {
+                if (sc.TimingGroup >= group.GroupNumber)
+                {
+                    sc.TimingGroup += 1;
+                    sc.ResetTimingGroupChangedFrom();
+                }
             }
 
             RebuildList();
