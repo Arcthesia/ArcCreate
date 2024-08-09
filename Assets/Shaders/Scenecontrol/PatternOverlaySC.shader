@@ -30,7 +30,7 @@ Shader "Sprites/PatternOverlaySC"
 		Cull Off
 		Lighting Off
 		ZWrite Off
-		ZTest Always
+		ZTest Off
 		Blend SrcAlpha OneMinusSrcAlpha
 
 		Pass

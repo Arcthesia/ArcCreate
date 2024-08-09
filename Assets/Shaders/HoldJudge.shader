@@ -9,7 +9,7 @@ Shader "Gameplay/HoldJudge"
 	Category
     {
         Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" "PreviewType"="Plane" }
-        Cull Off Lighting Off ZWrite Off
+        Cull Off Lighting Off ZWrite Off ZTest Off
  
         SubShader
         {

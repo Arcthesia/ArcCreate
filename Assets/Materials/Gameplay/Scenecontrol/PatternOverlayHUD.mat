@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PatternOverlayHUD
-  m_Shader: {fileID: 4800000, guid: 5b9aa203ddd5a4046a993a5d04713f3b, type: 3}
+  m_Shader: {fileID: 4800000, guid: f3b508825341ae14eae56bfc3119dac5, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
