@@ -1080,7 +1080,7 @@ Gameplay:
         ShowMsDifference: Wyświetlanie różnice w milisekundach
         ShowMsDifferenceDetail: Wyświetlaj dokładne różnice czasowe w milisekundach zamiast EARLY / LATE.
         HidePause: Ukryj przycisk pauzy
-        PauseMode: Metoda włączenia pauzy
+        PauseMode: Metoda wstrzymywania gry
       Audio:
         Name: Audio
         Offset: Opóźnienie
@@ -1130,10 +1130,10 @@ Gameplay:
         infopanel: W panelu info
         off: Wyłącz
       PauseMode:
-        clickonce: Pojedyncze dotknięcie
-        doubleclick: Dwukrotne dotknięcie
-        hold: Długie naciśnięcie
-        disable: Wyłącz
+        clickonce: Pojedyncze
+        doubleclick: Dwukrotne
+        hold: Przytrzymywanie
+        disable: Wyłączone
       EarlyLateTextPosition:
         middle: Środek
         bottom: Dół
