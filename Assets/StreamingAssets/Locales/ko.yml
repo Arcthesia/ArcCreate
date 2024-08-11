@@ -1,5 +1,5 @@
 Format:
-  # 채보 파일 파싱 중에 나오는 에러 메시지들
+  # 채보 파일 파싱 중에 나오는 오류 메시지들
   Exception:
     File: |-
       채보 파일({File})을 읽는 중 예외가 발생했습니다.
@@ -11,6 +11,13 @@ Format:
     SingleErrorShortFormat: |-
       예외가 발생한 이벤트 타입: {EventType}
       예외 텍스트: {Reason}
+    UnknownException: |-
+      알 수 없는 예외입니다.
+      예외: {Exception}
+      스택 트레이스:
+      {StackTrace}
+    InvalidHeader: |-
+      올바르지 않은 파일 헤더입니다.
     ArcColorNegative: |-
       아크 색의 ID는 음수가 될 수 없습니다.
     AudioOffsetInvalid: |-
@@ -37,20 +44,32 @@ Format:
       ArcTap의 타이밍 위치가 트레이스의 범위에서 벗어났습니다.
     TimingGroupPropertiesInvalid: |-
       타이밍 그룹 정의가 잘못되었습니다.
+    TimingGroupPropertiesInvalid: |-
+      타이밍 그룹 속성 정의가 잘못되었습니다.
+    ReferencedFileError: |-
+      다음 채보 파일을 불러올 수 없습니다:
+      {0}
+    FileDoesNotExist: |-
+      채보 파일이 존재하지 않습니다.
+  Warning:
+    HoldTooShort:
+      홀드 노트의 길이가 17ms보다 짧습니다.
+    TapJudgementOverlap:
+      노트의 판정 인식 범위가 다른 노트와 겹칩니다.
 
 Compose:
-  # 에디터 상에서 나오는 에러 메시지들
+  # 에디터 상에서 나오는 오류 메시지들
   Exception:
     FileDoesNotExist: |-
       {Path}에 파일이 존재하지 않습니다. 파일이 삭제되었을 수 있습니다.
     LoadImage: |-
-      {Path}에 있는 이미지를 로딩하는 중에 에러가 발생했습니다.
-      에러 메시지: {Error}
+      {Path}에 있는 이미지를 불러오는 중 오류가 발생했습니다.
+      오류 메시지: {Error}
     LoadProject: |-
-      {Path}에 있는 프로젝트 파일을 로딩하는 중에 에러가 발생했습니다.
+      {Path}에 있는 프로젝트 파일을 불러오는 중 오류가 발생했습니다.
       권한이 없거나, 프로젝트 파일이 잘못 저장되었을 수 있습니다.
-      프로젝트 파일을 직접 수정하여 다시 시도하거나, 새 프로젝트를 생성해주십시오.
-      에러 메시지: {Error}
+      프로젝트 파일을 직접 수정하여 다시 시도하거나, 새 프로젝트를 생성하십시오.
+      오류 메시지: {Error}
     ChartFileAlreadyExists: |-
       해당 채보 파일은 이미 프로젝트에 추가된 상태입니다.
     InvalidChartFile: |-
@@ -80,11 +99,11 @@ Compose:
       InvalidActionPath: |-
         올바르지 않은 액션 경로: "{0}"에 대응하는 액션이 없습니다.
     Scenecontrol: |-
-      {Type} 타입의 씬 컨트롤 이벤트 실행 중 다음과 같은 오류가 발생했습니다. 
+      {Type} 타입의 장면 제어 이벤트 실행 중 다음 오류가 발생했습니다. 
       오류: {Message}
       {StackTrace}
     LuaScript: |-
-      {Path}에 있는 Lua 스크립트 실행 중 다음과 같은 오류가 발생했습니다.
+      {Path}에 있는 Lua 스크립트 실행 중 다음 오류가 발생했습니다.
       오류: {Message}
       {StackTrace}
     Render:
@@ -93,12 +112,12 @@ Compose:
           FFmpeg 실행 파일을 찾지 못했습니다.
           실행 파일이 정말 {0}에 있는지 확인해주십시오.
         Start: |-
-          {Path}의 FFmpeg 수행 중 다음 에러가 발생했습니다.
-          에러 메시지:{Message}
+          {Path}의 FFmpeg 수행 중 다음 오류가 발생했습니다.
+          오류 메시지:{Message}
           {StackTrace}
         Write: |-
-          FFmpeg 프로세스에 데이터를 쓰는 중 다음 에러가 발생했습니다.
-          에러 미시지: {Message}
+          FFmpeg 프로세스에 데이터를 쓰는 중 다음 오류가 발생했습니다.
+          오류 메시지: {Message}
           {StackTrace}
       Audio:
         IncompatibleSfx: |-
@@ -114,8 +133,8 @@ Compose:
       Space: 카메라 이동 (위)
       Shift: 카메라 이동 (아래)
       IJKL: 카메라 회전 (상하좌우)
-      U: 카메라 굴리기 (왼쪽)
-      O: 카메라 굴리기 (오른쪽)
+      U: 카메라 회전 (반시계 방향)
+      O: 카메라 회전 (시계 방향)
       Esc: 취소
       Enter: 확인
     EmmyLuaGenerated: |-
@@ -126,7 +145,7 @@ Compose:
       NoDragRange: 선택한 노트를 움직일 수 없습니다. 따로따로 시도해보십시오.
     History:
       Execute: |-
-        명령 실행됨 ({Name})
+        명령 실행 ({Name})
       Undo: |-
         명령 취소 ({Name})
       Redo: |-
@@ -138,9 +157,9 @@ Compose:
       AddCamera: 카메라 이벤트 추가
       EditCamera: 카메라 이벤트 편집
       RemoveCamera: 카메라 이벤트 제거
-      AddScenecontrol: 씬 제어 이벤트 추가
-      EditScenecontrol: 씬 제어 이벤트 편집
-      RemoveScenecontrol: 씬 제어 이벤트 제거
+      AddScenecontrol: 장면 제어 이벤트 추가
+      EditScenecontrol: 장면 제어 이벤트 편집
+      RemoveScenecontrol: 장면 제어 이벤트 제거
       EditValue: 노트 속성값 수정
       EditArc: 아크 속성값 수정
       CreateNote:
@@ -164,9 +183,9 @@ Compose:
       NamedCopy: 복사한 노트 {0}개를 클립보드에 "{1}"로써 저장
       NamedCut: 잘라낸 노트 {0}개를 클립보드에 "{1}"로써 저장
     GroupTable:
-      AddGroup: '{Number}번 타이밍 그룹 추가'
-      EditGroup: '{Number}번 타이밍 그룹 편집'
-      RemoveGroup: '{Number}번 타이밍 그룹 제거'
+      AddGroup: {Number}번 타이밍 그룹 추가
+      EditGroup: {Number}번 타이밍 그룹 편집
+      RemoveGroup: {Number}번 타이밍 그룹 제거
     Project:
       NewProject: |-
         새 프로젝트를 생성했습니다.
@@ -177,11 +196,11 @@ Compose:
       SaveProject: |-
         프로젝트를 저장했습니다.
         경로: {Path}
-      OpenChart: '{Path}에 있는 채보 파일을 열었습니다'
-      CreateChart: '{Path}에 채보 파일을 생성했습니다'
-      RemoveChart: '{Path}에 있는 채보 파일을 프로젝트에서 제거했습니다'
+      OpenChart: {Path}에 있는 채보 파일을 열었습니다
+      CreateChart: {Path}에 채보 파일을 생성했습니다
+      RemoveChart: {Path}에 있는 채보 파일을 프로젝트에서 제거했습니다
     Inspector:
-      InvalidParamameter: 유효하지 않은 파라미터
+      InvalidParamameter: 유효하지 않은 속성 값
     Measurer:
       CopyTiming: 커서가 가리키는 시간을 복사했습니다
       CopyPosition: 아크의 위치를 복사했습니다
@@ -204,7 +223,7 @@ Compose:
     RemoveChart:
       Title: 채보 파일 삭제
       Content: |-
-        정말로 프로젝트에서 이 채보를 삭제하시겠습니까?
+        정말로 프로젝트에서 이 채보 파일을 삭제하시겠습니까?
 
         채보 파일은 삭제되지 않아 나중에 다시 프로젝트에 추가할 수 있지만, 채보 파일과 연관된 메타데이터는 프로젝트에서 삭제됩니다.
       Yes: 삭제
@@ -235,7 +254,7 @@ Compose:
         Toggle: 눈금 켜기/끄기
       Display:
         Name: 디스플레이
-        FullScreen: 전체화면 켜기/끄기
+        FullScreen: 전체 화면 켜기/끄기
       Selection:
         Name: 선택
         Clear: 선택 전부 취소
@@ -447,6 +466,7 @@ Compose:
       ImagePrompt: 클릭하여 이미지 선택
     PanelNames:
       Toolbox: 도구
+      RawEditor: 텍스트
       Gameplay: 게임플레이
       Timeline: 타임라인
       Project: 프로젝트
@@ -461,8 +481,8 @@ Compose:
         Open: 열기
         Save: 저장
         InputMode: 입력 모드
-        FullScreen: 전체화면
-        ToggleFullScreenHint: F11 키로 전체화면 모드를 켜거나 끄세요.
+        FullScreen: 전체 화면
+        ToggleFullScreenHint: F11 키로 전체 화면을 켜거나 끄세요.
         Chart: 채보
     # Project panel
     Project:
@@ -509,7 +529,7 @@ Compose:
         Custom: 커스텀
         AddArcColor: 아크 색 추가
         NoProjectLoaded: |-
-          프로젝트가 로드되지 않았습니다.
+          프로젝트를 불러오지 않았습니다.
           프로젝트를 열거나 새 프로젝트를 만드십시오.
         Shutter: 셔터
         ShowShutter: 셔터 보이기
@@ -537,11 +557,12 @@ Compose:
         Present: Present
         Future: Future
         Beyond: Beyond
-    Timeline: # This one isn't used right now, isn't it?
+    Timeline:
       Label:
         Offset: 오프셋
         TimingGroup: 그룹
         Density: 판정 밀도
+        PlaybackSpeed: 속도
     # Events editor panel
     EventsEditor:
       Label:
@@ -552,20 +573,20 @@ Compose:
         DeleteGroup: 그룹 삭제
         AddEvent: 이벤트 추가
         DeleteEvent: 이벤트 삭제
-        AutoReload: 자동 리로드
+        AutoReload: 자동 새로고침
         GenerateEmmyLua: EmmyLua 템플릿 생성
-        Reload: 리로드
+        Reload: 새로고침
         FreeCamera: 자유 카메라
       Mode:
         Timing: 타이밍
         Camera: 카메라
-        Scenecontrol: 씬 제어
+        Scenecontrol: 장면 제어
     # Export panel
     Export:
       Render:
         Name: 비디오 렌더링
         Description: |-
-          채보 영상을 자동 생성합니다.
+          채보 영상을 자동으로 생성합니다.
           FFmpeg가 설치되어 있어야 합니다.
         ConfigureFFmpeg: FFmpeg 실행 파일 경로
         Settings:
@@ -597,7 +618,7 @@ Compose:
         Locale:
           Name: 로컬라이징
           Language: 언어
-          Reload: 언어 리로드
+          Reload: 언어 새로고침
           CheckMissing: 누락된 항목 검사
         Gameplay:
           Name: 게임플레이
@@ -626,7 +647,7 @@ Compose:
           ShowCounter: FPS 보이기
         Input:
           Name: 입력
-          ReloadKeybinds: 키배치 리로드
+          ReloadKeybinds: 키배치 새로고침
         Files:
           Name: 파일
           Backup: 저장 시 백업 생성
@@ -655,7 +676,7 @@ Compose:
       Macros: 매크로
     # Inspector window
     Inspector:
-      Name: 값 조사 도구
+      Name: 속성 검사
       Timing: 타이밍
       StartTiming: 시작
       EndTiming: 끝
@@ -676,38 +697,38 @@ Remote:
     InvalidIP: 올바르지 않은 IP 주소입니다
   State:
     Listening: |-
-      데이터 전파 대기 중...
+      데이터 전송 대기 중...
       <size=20>
-      데스크톱 ArcCreate 클라이언트에서, "Remote" 탭을 열고 "데이터 전파"를 눌러 시작하십시오.</size>
+      데스크톱 ArcCreate 앱에서, "원격 플레이" 탭을 열고 "데이터 전송"을 눌러 시작하십시오.</size>
     ManualIP: |-
-      데스크톱 클라이언트로부터 연결 대기 중...
+      데스크톱 앱으로부터 연결 대기 중...
       <size=20>
-      데스크톱 ArcCreate 클라이언트에서, "Remote" 탭을 열고 IP 주소 "{0}"를 입력하십시오.</size>
+      데스크톱 ArcCreate 앱에서, "원격 플레이" 탭을 열고 IP 주소 "{0}"를 입력하십시오.</size>
     Found: |-
-      다음 디바이스에서 데이터 전파를 감지하였습니다.
-      디바이스를 선택하여 계속하십시오.
+      다음 기기에서 데이터 전송을 감지하였습니다.
+      기기를 선택하여 계속하십시오.
     TargetDisconnected:
-      Compose: 대상이 연결을 종료했습니다. 연결을 종료합니다.
-      Gameplay: 대상이 접속을 해제하였습니다. 새 세션을 시작하시겠습니까?
+      Compose: 대상 기기가 접속을 해제하였습니다. 연결을 종료합니다.
+      Gameplay: 대상 기기가 접속을 해제하였습니다. 새 세션을 시작하시겠습니까?
     Receiving:
       데이터 수신 중 ({0})
   Description:
     Idle: |-
-      테스트 플레이할 대상과 연결되지 않았습니다.
-      데이터 전파를 시작해 플레이 대상을 탐색하십시오. 이 기기와 대상 기기가 같은 로컬 네트워크에 접속해 있고, 대상 기기가 데이터 전파를 기다리도록 설정하십시오.
+      테스트 플레이할 기기와 연결되지 않았습니다.
+      데이터 전송을 시작해 플레이 대상을 탐색하십시오. 이 기기와 대상 기기가 같은 로컬 네트워크에 접속해 있고, 대상 기기가 데이터 전송을 기다리도록 설정하십시오.
     Broadcasting: |-
       데이터 송신 중 ({0})
-      연결된 클라이언트에서 이 값을 선택해 세션을 시작하십시오.
+      연결된 기기에서 이 값을 선택해 세션을 시작하십시오.
     Connected: |-
       연결되었습니다. 연결 주소: "{0}:{1}"
   Actions:
-    Broadcast: 데이터 전파
-    AbortBroadcast: 데이터 전파 멈추기
-    BroadcastAgain: 데이터 전파 재개
+    Broadcast: 데이터 전송
+    AbortBroadcast: 데이터 전송 중지
+    BroadcastAgain: 데이터 전송 재개
     StopSession: 세션 끝내기
     StartNewSession: 새 세션 시작
     ManualIP: 수동 연결
-    ReturnToSelect: 곡 선택 화면으로 가기
+    ReturnToSelect: 악곡 선택 화면으로 돌아가기
   Control:
     Name: 제어
     Sync:
@@ -738,30 +759,39 @@ Remote:
 Gameplay:
   Exception:
     LoadAudio: |-
-      {Path}에 있는 오디오 파일 로딩 중에 에러가 발생했습니다.
+      {Path}에 있는 오디오 파일을 불러오는 중 오류가 발생했습니다.
       {Error}
     Chart: |-
-      {Path}에 있는 채보 파일 로딩 중에 에러가 발생했습니다.
+      {Path}에 있는 채보 파일을 불러오는 중 오류가 발생했습니다.
       {Error}
     Skin: |-
-      {Path}에 있는 이미지 로딩 중에 에러가 발생했습니다.
+      {Path}에 있는 이미지를 불러오는 중 오류가 발생했습니다.
       {Error}
     Scenecontrol: |-
-      {Path}에 있는 SceneControl 파일 로딩 중에 에러가 발생했습니다.
+      {Path}에 있는 장면 제어 JSON 파일을 불러오는 중 오류가 발생했습니다.
       {Error}
     ScenecontrolSprite: |-
-      {Path}에 있는 SceneControl 스프라이트 로딩 중에 에러가 발생했습니다.
+      {Path}에 있는 장면 제어 스프라이트를 불러오는 중 오류가 발생했습니다.
       {Error}
     Load: |-
-      채보를 로딩하는 중에 알 수 없는 에러가 발생했습니다. 
+      채보를 불러오는 중 알 수 없는 오류가 발생했습니다. 
       채보 식별자: {Identifier}, {ChartPath}
-      에러: {Message}
+      오류: {Message}
       스택 트레이스:
       {StackTrace}
   HUD:
     Play: 이어하기
     Retry: 재시작
     Return: 나가기
+    AudioDeviceChange: 음향 기기가 변경되었습니다. 악곡 선택 화면으로 돌아갑니다.
+    Confirm: 확인
+  Practice:
+    PlaybackSpeed: 채보 속도
+    Repeat:
+      On: 반복 켜짐
+      Off: 반복 꺼짐
+      From: 시작점 설정
+      To: 끝점 설정
   Selection:
     SelectStatus:
       Singular: |-
@@ -769,39 +799,65 @@ Gameplay:
       Plural: |-
         애셋 {0}개 선택됨
     DeleteConfirmation: |-
-      해당 애셋을 제거하시겠습니까? 기록은 사라지지 않습니다.
+      해당 애셋을 삭제하시겠습니까?
+      플레이 기록은 사라지지 않습니다.
+    PackDeleteConfirmation: |-
+      다음 악곡 팩을 삭제하려고 합니다.
+      <color=#FFFFFFB4>{0}</color>
+      팩에 포함된 모든 채보도 삭제하거나, 채보는 유지하고 팩만 삭제할 수 있습니다.
     CannotDeleteDefault: |-
       기본 애셋은 삭제할 수 없습니다.
+    EnablePractice: |-
+      다음 플레이 시 연습 모드가 켜집니다.
+    SelectRating: 채보 평가하기
     Action:
+      Copy: 복사
       Delete: 삭제
       Cancel: 취소
+      Keep: 유지
       Done: 완료
     List:
       RemoteTestplay: 원격 테스트 플레이
       Import: 패키지 들여오기
       Community: 커뮤니티
-      AllSongs: 모든 곡
-      OtherDifficulties: 타 난이도
+      AllSongs: 모든 악곡
+      OtherDifficulties: 다른 난이도
     Info:
       Undefined:
-        Title: (이름 없음)
-        Composer: N/A
+        Title: (제목 없음)
+        Composer: (알 수 없음)
         Charter: (알 수 없음)
-      Charter: '채보 아티스트: {0}'
+      Charter: '채보 제작: {0}'
     Sort:
-      addeddate: "추가 순"
-      charter: "채보 제작자 순"
-      composer: "작곡가 순"
-      difficulty: "난이도 순"
-      grade: "달성도 순"
-      playcount: "플레이 횟수 순"
-      score: "점수 순"
-      title: "곡명 순"
+      addeddate: 들여온 날짜
+      charter: 채보 제작자명
+      composer: 작곡가명
+      difficulty: 난이도
+      grade: 달성도
+      playcount: 플레이 횟수
+      rating: 레이팅
+      score: 점수
+      title: 제목
+    SortPack:
+      name: 제목
+      publisher: 배포자
+      addeddate: 들여온 날짜
     Group:
-      none: " - "
-      difficulty: "난이도끼리 묶음"
-      grade: "달성도 단위 묶음"
-      charter: "채보 제작자별로 묶음"
+      none: 없음
+      difficulty: 난이도
+      grade: 달성도
+      charter: 채보 제작자
+    History:
+      Best: 점수 순
+      Recent: 날짜 순
+    Modifiers:
+      GameMode:
+        Name: 게임 모드
+        Auto: 자동 플레이
+        Practice: 연습
+      Modifier:
+        Name: 채보 옵션
+        Mirror: 채보 반전
     Settings:
       Name: 설정
       Language: 언어
@@ -812,51 +868,92 @@ Gameplay:
           노트가 다가오는 속도를 조절합니다.
         EarlyLatePerfectDisplay: 세부 판정 표시
         EarlyLatePerfectDisplayDetail: |-
-          Early/Late Perfect 판정의 표시 여부를 설정합니다.
+          Early/Late Perfect 판정을 표시합니다.
+        EnablePractice: 연습 모드 켜기
+        ShowMsDifference: ±ms 표시
+        ShowMsDifferenceDetail: EARLY/LATE 대신 ±ms 값을 표시합니다.
+        HidePause: 일시 정지 버튼 숨기기
+        PauseMode: 악곡 일시 정지 방법
       Audio:
         Name: 오디오
         Offset: 오프셋
         OffsetDetail: |-
-          악곡과 노트 간의 타이밍을 조절합니다.
+          노트와 악곡간의 타이밍을 조절합니다.
           LATE가 많으면 값을 더 크게, EARLY가 많으면 값을 더 작게 설정하면 됩니다.
-        Calibrate: 오프셋 설정
-        MusicAudio: 악곡 볼륨
+        Calibrate:
+          Button: 설정
+          Title: 오프셋 설정
+          SubTitle: 박자에 맞춰 탭하여 오프셋을 설정하세요.
+        MusicAudio: 악곡 음량
         MusicAudioDetail: |-
           게임 중 들리는 악곡의 음량을 조절합니다.
-        EffectAudio: 효과음 볼륨
+        EffectAudio: 타격음 음량
         EffectAudioDetail: |-
-          게임 중 들리는 타격음의 음량을 조절합니다.
+          게임 중 들리는 노트 타격음의 음량을 조절합니다.
       Visual:
-        Name: 비주얼
+        Name: 그래픽
         Colorblind: 색약 모드
         ColorblindDetail: 아크의 색을 변경합니다.
         FrPmDisplay: FC/AP 표시
-        FrPmDisplayDetail: FC/AP 마크의 표시 위치를 변경합니다.
+        FrPmDisplayDetail: FC/AP 마커의 표시 위치를 변경합니다.
         MaxDisplay: 이론치 표시
-        MaxDisplayDetail: 이론치 마크의 표시 여부를 설정합니다.
+        MaxDisplayDetail: 이론치 마커의 표시 여부를 설정합니다.
         EarlyLateDisplay: Early/Late 표시
         EarlyLateDisplayDetail: Early/Late 판정의 표시 위치를 변경합니다.
-        LimitFramerate: 프레임 제한
-        LimitFramerateDetail: 최대 FPS를 60으로 설정합니다. 전력을 아낄 수 있으나, 레이턴시가 늘어날 수 있습니다.
+        ScoreDisplay: 점수 표시
+        LimitFramerate: FPS 제한
+        LimitFramerateDetail: 전력 사용을 줄이기 위해 최대 FPS를 60으로 설정합니다. 오디오 오프셋이 늘어날 수 있습니다.
+        DisableAdvancedGraphics: 고급 그래픽 비활성화
+        DisableAdvancedGraphicsDetails: 포스트 프로세싱 효과와 배경 영상을 비활성화합니다. 성능이 증가할 수 있습니다.
+      Judgement:
+        Name: 판정 표시
+        ShowMax: Perfect (Max) 판정 표시
+        ShowPerfect: Early/Late Perfect 판정 표시
+        ShowGood: Good 판정 표시
+        ShowMiss: Miss 판정 표시
       Interface:
+        Name: 화면
+        ForceTheme: UI 테마
+        ForceThemeDetail: UI 테마를 설정합니다.
+        SwitchResumeAndRetry: 일시 정지 메뉴 버튼 순서 전환
+        SwitchResumeAndRetryDetail: 일시 정지 메뉴에서 '이어하기'와 '재시작' 버튼의 순서를 바꿉니다.
         ShowFPS: FPS 표시
-        ShowFPSDetail: FPS 표시 여부를 설정합니다.
+        ShowFPSDetail: 현재 FPS를 표시합니다.
         ShowDebug: 디버그 정보 표시
-        ShowDebugDetail: 게임 중 디버그 정보 표시 여부를 설정합니다. (고급 옵션).
+        ShowDebugDetail: 게임 중 디버그 정보를 표시합니다. (고급 옵션)
       FrPmPosition:
         middle: 중간
-        infopanel: 악곡 정보 패널
-        off: 끄기
+        infopanel: 악곡 정보 창
+        off: 비활성화
+      PauseMode:
+        clickonce: 한 번 탭
+        doubleclick: 두 번 탭
+        hold: 누르고 있기
+        disable: 비활성화
       EarlyLateTextPosition:
         middle: 중간
-        bottom: 하단
-        top: 상단
+        bottom: 맨 아래
+        top: 맨 위
+      ScoreDisplay:
+        default: 현재 점수
+        predictive: 예상 점수
+        difference: 이론치 차이
+        decrease: 최대 점수
+      ScoreDisplayDetails:
+        default: 현재 점수를 표시합니다. 노트를 치면 점수가 올라갑니다.
+        predictive: 가장 가까운 달성도 등급까지의 점수 차이를 표시합니다.
+        difference: 이론치와 현재 점수의 차이를 표시합니다.
+        decrease: 현재 달성 가능한 최대 점수를 표시합니다.
+      ForceTheme:
+        default: 악곡 테마
+        light: 라이트
+        dark: 다크
 
 Shutter:
-  Composer: Music
-  Illustrator: Illustration
-  Charter: Note Design
-  Alias: as
+  Composer: 음악
+  Illustrator: 일러스트레이션
+  Charter: 채보 제작
+  Alias: 명의
     
 Storage:
   Confirm: 확인
@@ -877,14 +974,23 @@ Storage:
     Identifier: "식별자: {0}"
     Version: "버전: {0}"
   Loading:
-    Message: '로딩: {0}...'
-    Archive: 아카이브 압축 해제 중...
-    ValidatePackage: 패키지 유효성 검증 중...
-    CheckConflict: 충돌 검사 중...
-    DeleteAsset: 애셋 삭제 중... ({0})
-    StoreAsset: 애셋 저장 중... ({0})
-    Finalizing: 마무리 작업 중...
+    Message: '불러오는 중: {0}'
+    Archive: 아카이브 압축 해제 중
+    ValidatePackage: 패키지 유효성 검증 중
+    CheckConflict: 충돌 검사 중
+    DeleteAsset: 애셋 삭제 중 ({0})
+    StoreAsset: 애셋 저장 중 ({0})
+    Finalizing: 마무리 작업 중
 
 Credits:
   Name: 크레딧
   View: 크레딧 보기
+  Role:
+    LeadProgramming: 리드 프로그래밍
+    Programming: 프로그래밍
+    VisualDesign: 비주얼 디자인
+    SoundDesign: 음향 디자인
+    Localization: 현지화
+    QualityAssurance: 품질 보증
+    Community: 그리고 Arcthesia & ArcCreate 커뮤니티의 모든 분께 감사드립니다!
+    Sponsor: 후원자
