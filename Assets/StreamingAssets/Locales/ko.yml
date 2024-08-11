@@ -12,7 +12,7 @@ Format:
       예외가 발생한 이벤트 타입: {EventType}
       예외 텍스트: {Reason}
     UnknownException: |-
-      처리되지 않은 오류입니다.
+      알 수 없는 예외입니다.
       예외: {Exception}
       스택 트레이스:
       {StackTrace}
@@ -768,10 +768,10 @@ Gameplay:
       {Path}에 있는 이미지를 불러오는 중 오류가 발생했습니다.
       {Error}
     Scenecontrol: |-
-      {Path}에 있는 SceneControl 파일을 불러오는 중 오류가 발생했습니다.
+      {Path}에 있는 장면 제어 JSON 파일을 불러오는 중 오류가 발생했습니다.
       {Error}
     ScenecontrolSprite: |-
-      {Path}에 있는 SceneControl 스프라이트를 불러오는 중 오류가 발생했습니다.
+      {Path}에 있는 장면 제어 스프라이트를 불러오는 중 오류가 발생했습니다.
       {Error}
     Load: |-
       채보를 불러오는 중 알 수 없는 오류가 발생했습니다. 
@@ -783,6 +783,15 @@ Gameplay:
     Play: 이어하기
     Retry: 재시작
     Return: 나가기
+    AudioDeviceChange: 음향 기기가 변경되었습니다. 악곡 선택 화면으로 돌아갑니다.
+    Confirm: 확인
+  Practice:
+    PlaybackSpeed: 채보 속도
+    Repeat:
+      On: 반복 켜짐
+      Off: 반복 꺼짐
+      From: 시작점 설정
+      To: 끝점 설정
   Selection:
     SelectStatus:
       Singular: |-
@@ -790,22 +799,32 @@ Gameplay:
       Plural: |-
         애셋 {0}개 선택됨
     DeleteConfirmation: |-
-      해당 애셋을 제거하시겠습니까? 기록은 사라지지 않습니다.
+      해당 애셋을 삭제하시겠습니까?
+      플레이 기록은 사라지지 않습니다.
+    PackDeleteConfirmation: |-
+      다음 악곡 팩을 삭제하려고 합니다.
+      <color=#FFFFFFB4>{0}</color>
+      팩에 포함된 모든 채보도 삭제하거나, 채보는 유지하고 팩만 삭제할 수 있습니다.
     CannotDeleteDefault: |-
       기본 애셋은 삭제할 수 없습니다.
+    EnablePractice: |-
+      다음 플레이 시 연습 모드가 켜집니다.
+    SelectRating: 채보 평가하기
     Action:
+      Copy: 복사
       Delete: 삭제
       Cancel: 취소
+      Keep: 유지
       Done: 완료
     List:
-      Remote Testplay: 원격 테스트 플레이
+      RemoteTestplay: 원격 테스트 플레이
       Import: 패키지 들여오기
       Community: 커뮤니티
       AllSongs: 모든 악곡
       OtherDifficulties: 다른 난이도
     Info:
       Undefined:
-        Title: (이름 없음)
+        Title: (제목 없음)
         Composer: (알 수 없음)
         Charter: (알 수 없음)
       Charter: '채보 제작: {0}'
@@ -829,15 +848,15 @@ Gameplay:
       grade: 달성도
       charter: 채보 제작자
     History:
-      Best: Best
-      Recent: Recent
+      Best: 점수 순
+      Recent: 날짜 순
     Modifiers:
       GameMode:
-        Name: 게임플레이
-        Auto: 오토플레이
+        Name: 게임 모드
+        Auto: 자동 플레이
         Practice: 연습
       Modifier:
-        Name: 채보
+        Name: 채보 옵션
         Mirror: 채보 반전
     Settings:
       Name: 설정
@@ -932,7 +951,7 @@ Gameplay:
 
 Shutter:
   Composer: 음악
-  Illustrator: 일러스트
+  Illustrator: 일러스트레이션
   Charter: 채보 제작
   Alias: 명의
     
@@ -959,8 +978,8 @@ Storage:
     Archive: 아카이브 압축 해제 중
     ValidatePackage: 패키지 유효성 검증 중
     CheckConflict: 충돌 검사 중
-    DeleteAsset: 애셋 삭제 중: ({0})
-    StoreAsset: 애셋 저장 중: ({0})
+    DeleteAsset: 애셋 삭제 중 ({0})
+    StoreAsset: 애셋 저장 중 ({0})
     Finalizing: 마무리 작업 중
 
 Credits:
