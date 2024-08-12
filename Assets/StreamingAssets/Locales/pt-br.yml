@@ -225,6 +225,8 @@ Compose:
       NotFound: O macro "{macroId}" não existe.
     Mirror:
       CannotMirror: Nenhuma nota pode ser espelhada      
+          Creation:
+      Overlap: "Posição de nota inválida: a posição selecionada se sobrepõe com outra nota."
   # Dialog boxes
   Dialog:
     RemoveGroup:
@@ -836,7 +838,9 @@ Compose:
         Input:
           Name: Entrada
           ReloadKeybinds: Recarregar vinculações de teclas
+          UseNativeFileBrowser: Usar o explorador de arquivos nativo
           AllowCreatingNotesBackward: Permitir criar notas para trás
+          BlockCreatingOverlappedNotes: Bloquear criar notas sobrepostas
           EnableEditingArctapWidth: Permitir editar a largura da sky nota
           ShowKeybindHint: Exibir dicas de vinculações de teclas
         Files:
@@ -904,13 +908,13 @@ Remote:
     InvalidIP: Endereço IP inválido
   State:
     Listening: |-
-      Escutando para transmissão...
+      Escutando pela transmissão...
       <size=20>
-      No seu cliente ArcCreate de área de trabalho, abra a guia "Remoto" e pressione "Iniciar transmissão" para começar.</size>
+      No seu cliente ArcCreate de computador, abra a guia "Remoto" e pressione "Iniciar transmissão" para começar.</size>
     ManualIP: |-
-      Esperando pela conexão do cliente de área de trabalho.
+      Esperando pela conexão do cliente de computador.
       <size=20>
-      No seu cliente ArcCreate de área de trabalho, abra a guia "Remoto" e insira o endereço IP: {0}.</size>
+      No seu cliente ArcCreate de computador, abra a guia "Remoto" e insira o endereço IP: {0}.</size>
     Found: |-
       Transmissão recebida do(s) seguinte(s) dispositivo(s).
       Selecione um dispositivo para continuar.
@@ -935,7 +939,7 @@ Remote:
     StopSession: Parar sessão
     StartNewSession: Começar nova sessão
     ManualIP: Configurar conexão manualmente
-    ReturnToSelect: Retonar á Seleção de Música
+    ReturnToSelect: Retonar à Seleção de Música
   Control:
     Name: Controle
     Sync:
@@ -986,10 +990,10 @@ Gameplay:
       Caminho para rastrear:
       {StackTrace}
   HUD:
-    Play: Continuar
+    Play: Retomar
     Retry: Reiniciar
-    Return: Sair
-    AudioDeviceChange: Dectectado uma mudança no dispositivo de áudio. ArcCreate irá forçadamente voltar ao menu de Seleção.
+    Return: Retornar
+    AudioDeviceChange: Detectado uma mudança no dispositivo de áudio. ArcCreate irá forçadamente voltar ao menu de Seleção.
     Confirm: Confirmar
   Practice:
     PlaybackSpeed: Velocidade
@@ -1005,7 +1009,7 @@ Gameplay:
       Plural: |-
         {0} recursos selecionados
     DeleteConfirmation: |-
-      Tem certeza que quer deletar os assets a seguir?
+      Tem certeza que quer deletar os recursos a seguir?
       Sua pontuação não será deletada.
     PackDeleteConfirmation: |-
       Você está deletando o pack:
@@ -1015,13 +1019,13 @@ Gameplay:
       Recursos padrão não podem ser deletados.
     EnablePractice: |-
       Modo prática habilitado para a próxima partida.
-    SelectRating: Selecionar velocidade
+    SelectRating: Selecione uma nota
     Action:
       Copy: Copiar
-      Delete: Deletar
+      Delete: Apagar
       Cancel: Cancelar
       Keep: Manter
-      Done: Feito
+      Done: Pronto
     List:
       RemoteTestplay: Teste de Jogo Remoto
       Import: Importar pacote
@@ -1044,6 +1048,10 @@ Gameplay:
       rating: Classificação
       score: Pontuação
       title: Título
+    SortPack:
+      name: Nome
+      publisher: Criador
+      addeddate: Data adicionada
     Group:
       none: Nenhum
       difficulty: Dificuldade
@@ -1057,16 +1065,16 @@ Gameplay:
     Modifiers:
       GameMode:
         Name: Modo de jogo
-        Auto: Autoplay
-        Practice: Prática
+        Auto: Automático
+        Practice: Praticar
       Modifier:
         Name: Modificadores
-        Mirror: Espelhado
+        Mirror: Espelhar
     Settings:
       Name: Configurações
       Language: Idioma
       Gameplay:
-        Name: Gameplay
+        Name: Jogabilidade
         Speed: Velocidade
         SpeedDetail: |-
           Ajusta a velocidade das quais as notas se aproximam da área de julgamento.
@@ -1084,7 +1092,10 @@ Gameplay:
         OffsetDetail: |-
           Ajusta a sincronia da música.
           Aumente se você está pegando LATE, ou diminua se você está pegando EARLY.
-        Calibrate: Calibrar
+        Calibrate:
+          Button: Calibrar
+          Title: Calibrar atraso
+          SubTitle: Ajuste o atraso da música tocando no ritmo da batida
         MusicAudio: Volume da Música
         MusicAudioDetail: |-
           Muda o volume da música durante a partida.
@@ -1103,20 +1114,20 @@ Gameplay:
         EarlyLateDisplayDetail: Ajusta a posição do texto early/late.
         ScoreDisplay: Exibição da pontuação
         LimitFramerate: Limitar taxa de quadros
-        LimitFramerateDetail: Limita a taxa de quadros da tela para 60 FPS para preservar a vida útil da bateria. Pode aumentar a latência.
+        LimitFramerateDetail: Limita o FPS da tela para 60 a fim de preservar a vida útil da bateria. Pode aumentar a latência.
         DisableAdvancedGraphics: Desabilitar gráficos avançados
-        DisableAdvancedGraphicsDetails: Desabilita pós-processamento and vídeos de fundo, o que pode impulsionar o desempenho.
+        DisableAdvancedGraphicsDetails: Desabilita pós-processamento e vídeos de fundo, o que pode impulsionar o desempenho.
       Judgement:
         Name: Julgamento
-        ShowMax: Exibir julgamento Perfeito (Máx.)
-        ShowPerfect: Exibir julgamento Perfeito (Early / Late)
-        ShowGood: Exibir julgamento Bom
-        ShowMiss: Exibir julgamento Erro
+        ShowMax: Exibir o julgamento de Perfect (Máx.)
+        ShowPerfect: Exibir o julgamento de Perfect (Early / Late)
+        ShowGood: Exibir o julgamento de Good
+        ShowMiss: Exibir o julgamento de Miss
       Interface:
         Name: Interface
         ForceTheme: Forçar Tema da UI
         ForceThemeDetail: Definir para a UI exibir um tema indepentemente da chart selecionada.
-        SwitchResumeAndRetry: Mudar a posição dos botões Continuar e Reiniciar
+        SwitchResumeAndRetry: <size=10>Mudar a posição dos botões Continuar e Reiniciar</size>
         SwitchResumeAndRetryDetail: Muda as posições dos botões Continuar e Reiniciar na tela de Pause.
         ShowFPS: Exibir FPS
         ShowFPSDetail: Habilita a exibição do FPS.
@@ -1130,19 +1141,19 @@ Gameplay:
         clickonce: Toque único
         doubleclick: Toque duplo
         hold: Toque longo
-        disable: Desabilitar
+        disable: Desabilitado
       EarlyLateTextPosition:
-        middle: Meio
-        bottom: Abaixo
-        top: Acima
+        middle: No meio
+        bottom: Embaixo
+        top: Encima
       ScoreDisplay:
         default: Padrão
         predictive: Preditivo
         difference: Diferença
-        decrease: Diminuir
+        decrease: Diminutivo
       ScoreDisplayDetails:
         default: A exibição de pontuação padrão. A pontuação aumenta ao acertar notas.
-        predictive: A pontuação exibe a distância para o limite de Nota mais próximo Grade
+        predictive: A pontuação exibe a distância para o limite de Nota mais próximo.
         difference: A pontuação exibe a diferença para a pontuação teoricamente perfeita.
         decrease: A pontuação inicia no valor máximo e diminui ao errar notas.
       ForceTheme:
@@ -1181,7 +1192,7 @@ Storage:
     CheckConflict: Verificando por conflito
     DeleteAsset: Deletando recurso {0}
     StoreAsset: Guardando recurso {0}
-    Finalizing: Finaliazndo
+    Finalizing: Finalizando
   
 Credits:
   Name: Créditos
