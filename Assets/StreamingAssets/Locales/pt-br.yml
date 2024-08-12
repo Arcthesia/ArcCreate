@@ -1141,7 +1141,7 @@ Gameplay:
         clickonce: Toque único
         doubleclick: Toque duplo
         hold: Toque longo
-        disable: Desabilita
+        disable: Desabilitado
       EarlyLateTextPosition:
         middle: No meio
         bottom: Embaixo
