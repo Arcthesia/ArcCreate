@@ -1153,7 +1153,7 @@ Gameplay:
         decrease: Diminutivo
       ScoreDisplayDetails:
         default: A exibição de pontuação padrão. A pontuação aumenta ao acertar notas.
-        predictive: A pontuação exibe a distância para o limite de Nota mais próximo Grade
+        predictive: A pontuação exibe a distância para o limite de Nota mais próximo.
         difference: A pontuação exibe a diferença para a pontuação teoricamente perfeita.
         decrease: A pontuação inicia no valor máximo e diminui ao errar notas.
       ForceTheme:
