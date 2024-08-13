@@ -990,7 +990,7 @@ Gameplay:
       Caminho para rastrear:
       {StackTrace}
   HUD:
-    Play: Continuar
+    Play: Retomar
     Retry: Reiniciar
     Return: Retornar
     AudioDeviceChange: Detectado uma mudança no dispositivo de áudio. ArcCreate irá forçadamente voltar ao menu de Seleção.
@@ -1050,7 +1050,7 @@ Gameplay:
       title: Título
     SortPack:
       name: Nome
-      publisher: Publicador
+      publisher: Criador
       addeddate: Data adicionada
     Group:
       none: Nenhum
@@ -1066,10 +1066,10 @@ Gameplay:
       GameMode:
         Name: Modo de jogo
         Auto: Automático
-        Practice: Prática
+        Practice: Praticar
       Modifier:
         Name: Modificadores
-        Mirror: Espelhado
+        Mirror: Espelhar
     Settings:
       Name: Configurações
       Language: Idioma
