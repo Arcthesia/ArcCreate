@@ -56,8 +56,6 @@ namespace Tests.Unit
         public void KeyChannel_Extrapolate()
         {
             KeyChannel channel = new KeyChannel()
-                .SetIntroExtrapolation(true)
-                .SetOuttroExtrapolation(true)
                 .AddKey(0, 0)
                 .AddKey(1, 1);
 

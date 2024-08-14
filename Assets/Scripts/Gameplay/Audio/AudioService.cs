@@ -104,7 +104,7 @@ namespace ArcCreate.Gameplay.Audio
                 }
                 else if (videoPlayer.enabled)
                 {
-                    videoPlayer.time = Mathf.Clamp(value / 1000f, 0, (float)videoPlayer.length);
+                    videoPlayer.time = Mathf.Clamp((value - GlobalOffset) / 1000f, 0, (float)videoPlayer.length);
                     videoPlayer.Play();
                     videoPlayer.Pause();
                 }
@@ -140,6 +140,8 @@ namespace ArcCreate.Gameplay.Audio
         public Dictionary<string, AudioClip> SfxAudioClips => Services.Hitsound.SfxAudioClips;
 
         private int FullOffset => Values.ChartAudioOffset + Mathf.RoundToInt(Settings.GlobalAudioOffset.Value * playbackSpeed);
+
+        private int GlobalOffset => Mathf.RoundToInt(Settings.GlobalAudioOffset.Value * playbackSpeed);
 
         public void SetAudioTimingSilent(int timing)
         {
@@ -310,6 +312,11 @@ namespace ArcCreate.Gameplay.Audio
         private void Play(int timing = 0, int delay = 0, bool resetJudge = true)
         {
             delay = Mathf.Max(delay, 0);
+            if (videoPlayer.enabled)
+            {
+                delay = Mathf.Max(delay, 500);
+            }
+            
             if (timing >= AudioLength - 1)
             {
                 timing = 0;
@@ -349,7 +356,7 @@ namespace ArcCreate.Gameplay.Audio
 
             if (videoPlayer.enabled)
             {
-                StartDelayedVideoPlayback(timing, delay).Forget();
+                StartDelayedVideoPlayback(timing - GlobalOffset, delay).Forget();
             }
 
             SetEnableAutorotation(false);
@@ -358,11 +365,17 @@ namespace ArcCreate.Gameplay.Audio
 
         private async UniTask StartDelayedVideoPlayback(int timing, int delay)
         {
-            DateTime startTime = DateTime.Now;
+            videoPlayer.Pause();
+            if (timing < 0)
+            {
+                delay += -timing;
+                timing = 0;
+            }
+
+            videoPlayer.time = Mathf.Clamp(timing / 1000f, 0, (float)videoPlayer.length);
             videoPlayer.Prepare();
-            await UniTask.WhenAll(UniTask.Delay(delay), UniTask.WaitUntil(() => videoPlayer.isPrepared));
+            await UniTask.Delay(delay);
             videoPlayer.Play();
-            videoPlayer.time = Mathf.Clamp(((timing - delay) / 1000f) + (DateTime.Now - startTime).Seconds, 0, (float)videoPlayer.length);
         }
         
         private void Awake()

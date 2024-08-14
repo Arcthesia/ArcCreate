@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using ArcCreate.Utility.Extension;
 using EmmySharp;
 using MoonSharp.Interpreter;
 
@@ -20,10 +19,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
             keySearch = new CachedBinarySearch<Key, int>(new List<Key>(), k => k.Timing, this);
             keys = keySearch.List;
         }
-
-        public bool IntroExtrapolation { get; set; } = false;
-
-        public bool OuttroExtrapolation { get; set; } = false;
 
         public int KeyCount => keys.Count;
 
@@ -57,20 +52,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
             return this;
         }
 
-        [EmmyDoc("Sets whether or not to extrapolate value for timing values before the first key")]
-        public KeyChannel SetIntroExtrapolation(bool extrapolation)
-        {
-            IntroExtrapolation = extrapolation;
-            return this;
-        }
-
-        [EmmyDoc("Sets whether or not to extrapolate value for timing values after the last key")]
-        public KeyChannel SetOuttroExtrapolation(bool extrapolation)
-        {
-            OuttroExtrapolation = extrapolation;
-            return this;
-        }
-
         public override float ValueAt(int timing)
         {
             if (keys.Count == 0)
@@ -86,28 +67,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
             // Extrapolate
             if (timing <= keys[0].Timing)
             {
-                if (IntroExtrapolation)
-                {
-                    float extrapolatedP = (float)(timing - keys[0].Timing) / (keys[1].Timing - keys[0].Timing);
-                    return keys[0].Easing(keys[0].Value, keys[1].Value, extrapolatedP);
-                }
-                else
-                {
-                    return keys[0].Value;
-                }
+                return keys[0].Value;
             }
 
             if (timing >= keys[keys.Count - 1].Timing)
             {
-                if (OuttroExtrapolation)
-                {
-                    float extrapolatedP = (float)(timing - keys[keys.Count - 2].Timing) / (keys[keys.Count - 1].Timing - keys[keys.Count - 2].Timing);
-                    return keys[keys.Count - 2].Easing(keys[keys.Count - 2].Value, keys[keys.Count - 1].Value, extrapolatedP);
-                }
-                else
-                {
-                    return keys[keys.Count - 1].Value;
-                }
+                return keys[keys.Count - 1].Value;
             }
 
             int index = keySearch.Search(timing);

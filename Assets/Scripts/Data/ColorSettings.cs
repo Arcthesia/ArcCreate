@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace ArcCreate.Data
@@ -11,5 +12,16 @@ namespace ArcCreate.Data
         public List<string> Arc { get; set; } = new List<string>();
 
         public List<string> ArcLow { get; set; } = new List<string>();
+
+        public ColorSettings Clone()
+        {
+            return new ColorSettings
+            {
+                Trace = Trace,
+                Shadow = Shadow,
+                Arc = new List<string>(Arc),
+                ArcLow = new List<string>(ArcLow),
+            };
+        }
     }
 }

@@ -73,6 +73,11 @@ namespace ArcCreate.Compose.Project
                 {
                     if (ev is RawHold h)
                     {
+                        if (rawTimingGroups[h.TimingGroup].NoInput)
+                        {
+                            continue;
+                        }
+
                         if (h.EndTiming - h.Timing <= 1000 / 60f && !rawTimingGroups[ev.TimingGroup].NoInput)
                         {
                             faultQueue.Enqueue(new ChartFault

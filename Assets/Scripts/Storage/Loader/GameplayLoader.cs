@@ -8,7 +8,6 @@ using ArcCreate.Storage.Data;
 using ArcCreate.Utility.Extension;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace ArcCreate.Storage
 {
@@ -86,11 +85,6 @@ namespace ArcCreate.Storage
 
         private void LoadMetadata(LevelStorage level, ChartSettings chart)
         {
-            gameplayData.BaseBpm.Value = chart.BaseBpm;
-            gameplayData.Title.Value = chart.Title;
-            gameplayData.Composer.Value = chart.Composer;
-            gameplayData.DifficultyName.Value = chart.Difficulty;
-
             gameplayControl.Skin.AlignmentSkin = chart.Skin?.Side ?? string.Empty;
             gameplayControl.Skin.AccentSkin = chart.Skin?.Accent ?? string.Empty;
             gameplayControl.Skin.NoteSkin = chart.Skin?.Note ?? string.Empty;

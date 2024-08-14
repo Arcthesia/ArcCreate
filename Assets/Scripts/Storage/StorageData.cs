@@ -307,6 +307,14 @@ namespace ArcCreate.Storage
             SceneTransitionManager.Instance.SetTransition(sequence);
             IGameplayControl gameplay = null;
             OnSwitchToGameplayScene?.Invoke();
+
+            // Set the values first to avoid some scencontrol object only reading these values
+            // once on awake.
+            // Hacky but I'm too tired.
+            gameplayData.BaseBpm.Value = chart.BaseBpm;
+            gameplayData.Title.Value = chart.Title;
+            gameplayData.Composer.Value = chart.Composer;
+            gameplayData.DifficultyName.Value = chart.Difficulty;
             SceneTransitionManager.Instance.SwitchScene(
                 SceneNames.GameplayScene,
                 async (rep) =>
