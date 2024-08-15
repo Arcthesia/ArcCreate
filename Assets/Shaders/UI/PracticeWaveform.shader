@@ -19,6 +19,8 @@ Shader "Gameplay/Waveform"
 		Blend SrcAlpha OneMinusSrcAlpha
 		ZWrite Off
 		Cull Off
+		Lighting Off
+		ZTest Always
 
 		Pass
 		{
