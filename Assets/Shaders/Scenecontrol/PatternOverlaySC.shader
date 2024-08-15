@@ -127,14 +127,6 @@ Shader "Sprites/PatternOverlaySC"
 
                 color = lerp(color, shifted, pattern);
 
-                #ifdef UNITY_UI_CLIP_RECT
-                color.a *= UnityGet2DClipping(IN.worldPosition.xy, _ClipRect);
-                #endif
-
-                #ifdef UNITY_UI_ALPHACLIP
-                clip (color.a - 0.001);
-                #endif
-
                 return color;
 			}
 		ENDCG
