@@ -163,7 +163,7 @@ PlayerSettings:
     iPhone: com.Arcthesia.ArcCreate
   buildNumber:
     Standalone: 0
-    iPhone: 43
+    iPhone: 45
     tvOS: 0
   overrideDefaultApplicationIdentifier: 0
   AndroidBundleVersionCode: 1
