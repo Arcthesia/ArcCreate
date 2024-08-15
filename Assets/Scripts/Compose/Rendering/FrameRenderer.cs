@@ -115,6 +115,7 @@ namespace ArcCreate.Compose.Rendering
                 Services.Grid.IsGridEnabled = false;
                 Services.Cursor.EnableLaneCursor = false;
                 await Services.Gameplay.Audio.PrepareVideoPlayback();
+                await UniTask.Delay(500);
 
                 bool shouldUpdateTiming = false;
                 float unityStartTime = Time.time;

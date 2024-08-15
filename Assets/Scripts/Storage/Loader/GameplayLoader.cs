@@ -85,6 +85,7 @@ namespace ArcCreate.Storage
 
         private void LoadMetadata(LevelStorage level, ChartSettings chart)
         {
+            gameplayData.BaseBpm.Value = chart.BaseBpm;
             gameplayControl.Skin.AlignmentSkin = chart.Skin?.Side ?? string.Empty;
             gameplayControl.Skin.AccentSkin = chart.Skin?.Accent ?? string.Empty;
             gameplayControl.Skin.NoteSkin = chart.Skin?.Note ?? string.Empty;

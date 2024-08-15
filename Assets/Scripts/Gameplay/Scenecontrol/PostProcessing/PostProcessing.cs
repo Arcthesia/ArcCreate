@@ -150,8 +150,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
         [MoonSharpHidden]
         public void DisablePostProcess()
         {
-            layer.enabled = false || Settings.DisableAdvancedGraphics.Value;
-            volume.enabled = false || Settings.DisableAdvancedGraphics.Value;
+            layer.enabled = false;
+            volume.enabled = false;
         }
 
         private void Awake()

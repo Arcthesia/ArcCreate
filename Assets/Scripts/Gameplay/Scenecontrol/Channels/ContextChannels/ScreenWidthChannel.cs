@@ -18,7 +18,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public override float ValueAt(int timing)
         {
-            return Screen.width;
+            return Services.Camera.GameplayCamera.pixelWidth;
         }
 
         protected override IEnumerable<ValueChannel> GetChildrenChannels()
