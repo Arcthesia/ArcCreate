@@ -236,6 +236,8 @@ Compose:
       NotFound: 外置工具 "{macroId}" 不存在
     Mirror:
       CannotMirror: 没有物件可以被镜像
+    Creation:
+      Overlap: "无效的物件坐标：所选的位置坐标与另一个物件重叠"
   # 对话框
   Dialog:
     RemoveGroup:
@@ -848,6 +850,7 @@ Compose:
         Input:
           Name: 输入设置
           ReloadKeybinds: 重新加载键位绑定
+          UseNativeFileBrowser: 使用系统文件管理器浏览
           AllowCreatingNotesBackward: 允许反向创建物件
           BlockCreatingOverlappedNotes: 阻止创建重叠的物件
           EnableEditingArctapWidth: 允许编辑Sky note的宽度
@@ -1058,6 +1061,10 @@ Gameplay:
       rating: 打分
       score: 分数
       title: 标题
+    SortPack:
+      name: 名称
+      publisher: 发布者
+      addeddate: 添加时间
     Group:
       none: 无
       difficulty: 等级
@@ -1098,7 +1105,10 @@ Gameplay:
         OffsetDetail: |-
           调整音乐的同步性
           如果EARLY过多请点击减少（-），如果LATE过多请点击增加（+）
-        Calibrate: 校准
+        Calibrate:
+          Button: 校准
+          Title: 校准偏移率
+          SubTitle: 随着节奏点击按钮，调整偏移率
         MusicAudio: 音乐音量
         MusicAudioDetail: |-
           调节游玩过程中的音乐音量
