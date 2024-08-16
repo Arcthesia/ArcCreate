@@ -14,7 +14,7 @@ Now either create a new file named `(your language code).yml`, or open the file 
 
 If the file already exists, then someone else has already started working on the translation, and you can contribute by editing this further. Open the file, then click on the edit button (with a pencil as the icon) on the top right. You're now ready to start making changes.
 
-> Note: For every new build, missing entries in all locale files are filled in with the default english text from [en-us.yml](/Assets/StreamingAssets/Locales/). Feel free to update the translation by filling these in whenever a new build is released.
+> Note: In game, missing entries in all locale files fallbacks to the default english text from [en-us.yml](/Assets/StreamingAssets/Locales/). Feel free to update the translation by filling these in whenever a new build is released.
 
 #### Creating a new translation
 
@@ -37,6 +37,8 @@ Where:
 After creating the file and modifying the locale list, you're now ready to start translating.
 
 #### Submitting changes
+
+NOTE: Please properly test your translation patches before submitting.
 
 After you're done with the translation, your next step is to submit your changes. Press the `Propose changes` or `Propose new file` button at the bottom. Press `Create pull request` twice, and you have successfully submitted your changes. All that's left is to wait until they're approved and merged into the repository.
 

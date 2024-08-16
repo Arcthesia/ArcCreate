@@ -225,7 +225,7 @@ Compose:
       NotFound: O macro "{macroId}" não existe.
     Mirror:
       CannotMirror: Nenhuma nota pode ser espelhada      
-          Creation:
+    Creation:
       Overlap: "Posição de nota inválida: a posição selecionada se sobrepõe com outra nota."
   # Dialog boxes
   Dialog:

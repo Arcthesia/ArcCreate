@@ -43,8 +43,6 @@ Format:
     ArcTapOutOfRange: |-
       ArcTap의 타이밍 위치가 트레이스의 범위에서 벗어났습니다.
     TimingGroupPropertiesInvalid: |-
-      타이밍 그룹 정의가 잘못되었습니다.
-    TimingGroupPropertiesInvalid: |-
       타이밍 그룹 속성 정의가 잘못되었습니다.
     ReferencedFileError: |-
       다음 채보 파일을 불러올 수 없습니다:
@@ -183,9 +181,9 @@ Compose:
       NamedCopy: 복사한 노트 {0}개를 클립보드에 "{1}"로써 저장
       NamedCut: 잘라낸 노트 {0}개를 클립보드에 "{1}"로써 저장
     GroupTable:
-      AddGroup: {Number}번 타이밍 그룹 추가
-      EditGroup: {Number}번 타이밍 그룹 편집
-      RemoveGroup: {Number}번 타이밍 그룹 제거
+      AddGroup: "{Number}번 타이밍 그룹 추가"
+      EditGroup: "{Number}번 타이밍 그룹 편집"
+      RemoveGroup: "{Number}번 타이밍 그룹 제거"
     Project:
       NewProject: |-
         새 프로젝트를 생성했습니다.
@@ -196,9 +194,9 @@ Compose:
       SaveProject: |-
         프로젝트를 저장했습니다.
         경로: {Path}
-      OpenChart: {Path}에 있는 채보 파일을 열었습니다
-      CreateChart: {Path}에 채보 파일을 생성했습니다
-      RemoveChart: {Path}에 있는 채보 파일을 프로젝트에서 제거했습니다
+      OpenChart: "{Path}에 있는 채보 파일을 열었습니다"
+      CreateChart: "{Path}에 채보 파일을 생성했습니다"
+      RemoveChart: "{Path}에 있는 채보 파일을 프로젝트에서 제거했습니다"
     Inspector:
       InvalidParamameter: 유효하지 않은 속성 값
     Measurer:
