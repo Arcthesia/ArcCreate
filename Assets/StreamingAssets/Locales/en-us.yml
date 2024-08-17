@@ -1039,7 +1039,7 @@ Gameplay:
         Charter: Unknown
       Charter: 'Charter: {0}'
     Sort:
-      addeddate: Added date
+      addeddate: Import date
       charter: Charter
       composer: Composer
       difficulty: Difficulty
@@ -1051,7 +1051,7 @@ Gameplay:
     SortPack:
       name: Name
       publisher: Publisher
-      addeddate: Added date
+      addeddate: Import date
     Group:
       none: None
       difficulty: Difficulty
