@@ -939,8 +939,8 @@ Gameplay:
     Repeat:
       On: 반복 켜짐
       Off: 반복 꺼짐
-      From: 시작 위치 설정
-      To: 끝 위치 설정
+      From: 시작점 설정
+      To: 끝점 설정
   Selection:
     SelectStatus:
       Singular: |-
