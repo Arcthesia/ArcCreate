@@ -645,7 +645,7 @@ Compose:
         NewChart: New Chart
         NewProject: New Project
         ProjectFile: Project File
-        ChartFile: Chart file
+        ChartFile: Chart File
         Information: Information
         Gameplay: Gameplay
         Title: Title
@@ -925,11 +925,11 @@ Remote:
       Receiving data ({0})
   Description:
     Idle: |-
-      No test play client has been connected.
+      No testplay client has been connected.
       Start broadcasting to discover clients. Make sure this device and test play client's device are on the same local network, and that the test play client is listening for incoming broadcast.
     Broadcasting: |-
       Broadcasting code: {0}.
-      Select the option with this code on the test play client to start the session.
+      Select the option with this code on the testplay client to start the session.
     Connected: |-
       Connected to test play client at: {0}:{1}
   Actions:
@@ -993,7 +993,7 @@ Gameplay:
     Play: Resume
     Retry: Retry
     Return: Quit
-    AudioDeviceChange: Detected a change in audio device. ArcCreate will forcibly return to Select menu.
+    AudioDeviceChange: Detected a change in audio device. ArcCreate will forcibly return to Song Select.
     Confirm: Confirm
   Practice:
     PlaybackSpeed: Speed
@@ -1077,7 +1077,7 @@ Gameplay:
         Name: Gameplay
         Speed: Speed
         SpeedDetail: |-
-          Adjust the speed at which notes approach the judgement area.
+          Adjust the speed at which notes approach the judgement line.
         EarlyLatePerfectDisplay: Early/Late perfect display
         EarlyLatePerfectDisplayDetail: |-
           Change whether or not to display early/late perfect judgements.
