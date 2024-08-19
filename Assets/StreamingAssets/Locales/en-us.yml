@@ -106,7 +106,7 @@ Compose:
       Error occured while executing scenecontrol event of type {Type}: {Message}
       {StackTrace}
     LuaScript: |-
-      Error occured while executing lua script {Path}: {Message}
+      Error occured while executing Lua script {Path}: {Message}
       {StackTrace}
     Render:
       FFmpeg:
@@ -433,7 +433,7 @@ Compose:
     DefaultScript: |-
       -- THIS IS A LUA SCRIPT. See full documentation at: https://github.com/Arcthesia/ArcCreate/wiki/Grid-settings
       -- CONFIGURATION
-      -- Choose one of the following template: 4k, 6k, oob4k, oob6k
+      -- Choose one of the following templates: 4k, 6k, oob4k, oob6k
       local useTemplate = "4k"
       local spacing = {
           x = 0.125,
@@ -688,7 +688,7 @@ Compose:
           No project loaded.
           Create or open a new project
         RawEditorFileTooLarge: |-
-          Text editor is disabled for files larger than 1000kb
+          Text editor is disabled for files larger than 1000KB
         Shutter: Transition
         ShowShutter: Show Transition
         HideShutter: Hide Transition
@@ -926,12 +926,12 @@ Remote:
   Description:
     Idle: |-
       No testplay client has been connected.
-      Start broadcasting to discover clients. Make sure this device and test play client's device are on the same local network, and that the test play client is listening for incoming broadcast.
+      Start broadcasting to discover clients. Make sure this device and the testplay client's device are on the same local network, and that the testplay client is listening for incoming broadcast.
     Broadcasting: |-
       Broadcasting code: {0}.
       Select the option with this code on the testplay client to start the session.
     Connected: |-
-      Connected to test play client at: {0}:{1}
+      Connected to testplay client at: {0}:{1}
   Actions:
     Broadcast: Start broadcasting
     AbortBroadcast: Stop broadcast
