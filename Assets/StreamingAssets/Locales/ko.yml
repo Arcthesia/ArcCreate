@@ -41,7 +41,7 @@ Format:
     DurationZero: |-
       이 이벤트는 0을 지속 시간으로 가질 수 없습니다.
     ArcTapOutOfRange: |-
-      ArcTap의 타이밍 위치가 트레이스의 범위에서 벗어났습니다.
+      스카이 노트의 타이밍이 트레이스의 범위에서 벗어났습니다.
     TimingGroupPropertiesInvalid: |-
       타이밍 그룹 속성 정의가 잘못되었습니다.
     ReferencedFileError: |-
@@ -81,7 +81,7 @@ Compose:
     InvalidBaseBPM: |-
       적절하지 않은 기본 BPM 값({0})입니다.
     CreateSkyNoteNoValidArc: |-
-      스카이 노트는 트레이스 노트 상에만 배치할 수 있습니다.
+      스카이 노트는 트레이스 상에만 배치할 수 있습니다.
     Navigation:
       ParseKeybind: |-
         키배치 파싱 도중에 다음과 같은 예외가 발생했습니다.
@@ -165,7 +165,7 @@ Compose:
         Hold: 홀드 노트 추가
         Arc: 아크 노트 추가
         ArcTap: 스카이 노트 추가
-        Trace: 트레이스 노트 추가
+        Trace: 트레이스 추가
       DeleteNotes: 노트 삭제
       Cut: 노트 잘라내기
       Paste: 노트 붙여넣기
@@ -178,8 +178,8 @@ Compose:
     Clipboard:
       Copy: 노트 {0}개 복사
       Cut: 노트 {0}개 잘라내기
-      NamedCopy: 복사한 노트 {0}개를 클립보드에 "{1}"로써 저장
-      NamedCut: 잘라낸 노트 {0}개를 클립보드에 "{1}"로써 저장
+      NamedCopy: 복사한 노트 {0}개를 "{1}" 클립보드에 저장
+      NamedCut: 잘라낸 노트 {0}개를 "{1}" 클립보드에 저장
     GroupTable:
       AddGroup: "{Number}번 타이밍 그룹 추가"
       EditGroup: "{Number}번 타이밍 그룹 편집"
@@ -615,7 +615,7 @@ Compose:
         BPM: BPM
         BaseBPM: 기본 BPM
         BPMText: 표기 BPM
-        SyncBaseBPM: 싱크
+        SyncBaseBPM: 동기화
         ChartOffset: 채보 오프셋
         TimingPointDensityFactor: 판정 밀도
         ChartConstant: 세부 상수
@@ -836,10 +836,11 @@ Compose:
       Arc: 아크
       Trace: 트레이스
       Actions:
-        SelectArc: 부모 트레이스 노트 선택
+        SelectArc: 부모 트레이스 선택
         SelectArctap: 스카이 노트 선택
     Startup:
       Version: "버전 {0}"
+      Recent: 최근 항목
 
 Remote:
   Exception:
@@ -854,7 +855,7 @@ Remote:
       <size=20>
       데스크톱 ArcCreate 앱에서, "원격 플레이" 탭을 열고 IP 주소 "{0}"를 입력하십시오.</size>
     Found: |-
-      다음 기기에서 데이터 전송을 감지하였습니다.
+      다음 기기에서의 데이터 전송을 감지하였습니다.
       기기를 선택하여 계속하십시오.
     TargetDisconnected:
       Compose: 대상 기기가 접속을 해제하였습니다. 연결을 종료합니다.
@@ -953,7 +954,7 @@ Gameplay:
     PackDeleteConfirmation: |-
       다음 악곡 팩을 삭제하려고 합니다.
       <color=#FFFFFFB4>{0}</color>
-      팩에 포함된 모든 채보도 삭제하거나, 채보는 유지하고 팩만 삭제할 수 있습니다.
+      팩에 포함된 모든 채보도 같이 삭제하거나, 채보는 유지하고 팩만 삭제할 수 있습니다.
     CannotDeleteDefault: |-
       기본 애셋은 삭제할 수 없습니다.
     EnablePractice: |-
@@ -1137,7 +1138,7 @@ Credits:
   Role:
     LeadProgramming: 리드 프로그래밍
     Programming: 프로그래밍
-    VisualDesign: 비주얼 디자인
+    VisualDesign: 시각 디자인
     SoundDesign: 음향 디자인
     Localization: 현지화
     QualityAssurance: 품질 보증
