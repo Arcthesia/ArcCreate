@@ -926,7 +926,7 @@ Remote:
   Description:
     Idle: |-
       No testplay client has been connected.
-      Start broadcasting to discover clients. Make sure this device and testplay client's device are on the same local network, and that the testplay client is listening for incoming broadcast.
+      Start broadcasting to discover clients. Make sure this device and the testplay client's device are on the same local network, and that the testplay client is listening for incoming broadcast.
     Broadcasting: |-
       Broadcasting code: {0}.
       Select the option with this code on the testplay client to start the session.
@@ -993,7 +993,7 @@ Gameplay:
     Play: Resume
     Retry: Retry
     Return: Quit
-    AudioDeviceChange: Detected a change in audio device. ArcCreate will forcibly return to Select menu.
+    AudioDeviceChange: Detected a change in audio device. ArcCreate will forcibly return to Song Select.
     Confirm: Confirm
   Practice:
     PlaybackSpeed: Speed
@@ -1039,7 +1039,7 @@ Gameplay:
         Charter: Unknown
       Charter: 'Charter: {0}'
     Sort:
-      addeddate: Added date
+      addeddate: Import date
       charter: Charter
       composer: Composer
       difficulty: Difficulty
@@ -1051,7 +1051,7 @@ Gameplay:
     SortPack:
       name: Name
       publisher: Publisher
-      addeddate: Added date
+      addeddate: Import date
     Group:
       none: None
       difficulty: Difficulty
@@ -1077,7 +1077,7 @@ Gameplay:
         Name: Gameplay
         Speed: Speed
         SpeedDetail: |-
-          Adjust the speed at which notes approach the judgement area.
+          Adjust the speed at which notes approach the judgement line.
         EarlyLatePerfectDisplay: Early/Late perfect display
         EarlyLatePerfectDisplayDetail: |-
           Change whether or not to display early/late perfect judgements.
