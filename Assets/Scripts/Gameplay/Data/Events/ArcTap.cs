@@ -163,6 +163,7 @@ namespace ArcCreate.Gameplay.Data
                     X = WorldX,
                     Y = WorldY,
                     Width = Width,
+                    IsBlocker = false,
                     Receiver = this,
                     Properties = props,
                 });

@@ -9,9 +9,10 @@ namespace ArcCreate.Gameplay.Data
     /// <summary>
     /// Partial class for judgement.
     /// </summary>
-    public partial class Arc : LongNote, ILongNote, IArcJudgementReceiver
+    public partial class Arc : LongNote, ILongNote, IArcJudgementReceiver, IArcTapJudgementReceiver
     {
         private int numJudgementRequestsSent = 0;
+        private bool sentTapBlockingJudgement = false;
         private bool highlightRequestSent = false;
         private bool spawnedParticleThisFrame = false;
 
@@ -24,6 +25,7 @@ namespace ArcCreate.Gameplay.Data
             highlightRequestSent = false;
             arcGroupAlpha = 1;
             hasBeenHitOnce = hasBeenHitOnce && timing >= Timing && timing <= EndTiming;
+            sentTapBlockingJudgement = timing >= Timing;
             for (int i = 0; i < segments.Count; i++)
             {
                 ArcSegmentData segment = segments[i];
@@ -81,6 +83,12 @@ namespace ArcCreate.Gameplay.Data
                 highlightRequestSent = true;
             }
 
+            if (!IsTrace && currentTiming >= Timing - Values.MissJudgeWindow && !sentTapBlockingJudgement)
+            {
+                RequestTapBlockingJudgement(groupProperties);
+                sentTapBlockingJudgement = true;
+            }
+
             spawnedParticleThisFrame = false;
         }
 
@@ -132,6 +140,10 @@ namespace ArcCreate.Gameplay.Data
             }
         }
 
+        public void ProcessArcTapJudgement(int offset, GroupProperties properties)
+        {
+        }
+
         private void RequestJudgement(GroupProperties props)
         {
             for (int t = numJudgementRequestsSent; t < TotalCombo; t++)
@@ -150,6 +162,21 @@ namespace ArcCreate.Gameplay.Data
             }
 
             numJudgementRequestsSent = TotalCombo;
+        }
+
+        private void RequestTapBlockingJudgement(GroupProperties props)
+        {
+            Services.Judgement.Request(new ArcTapJudgementRequest()
+            {
+                ExpireAtTiming = Timing,
+                AutoAtTiming = Timing,
+                IsBlocker = true,
+                Width = 1,
+                X = WorldXAt(0),
+                Y = WorldYAt(0),
+                Receiver = this,
+                Properties = props,
+            });
         }
 
         private void RequestHighlight(int timing, GroupProperties props)

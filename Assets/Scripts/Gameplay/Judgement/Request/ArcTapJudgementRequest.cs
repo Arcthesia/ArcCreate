@@ -9,6 +9,7 @@ namespace ArcCreate.Gameplay.Judgement
         public float X;
         public float Y;
         public float Width;
+        public bool IsBlocker;
         public IArcTapJudgementReceiver Receiver;
         public GroupProperties Properties;
     }
