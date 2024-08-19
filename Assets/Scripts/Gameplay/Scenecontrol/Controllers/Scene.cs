@@ -410,7 +410,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 },
                 cts.Token).ContinueWith(sprite => c.Image.sprite = sprite));
 
-            c.SerializedType = $"image.{imgPath},{material},{renderLayer},{pivotVec.x},{pivotVec.y}";
+            c.SerializedType = $"image.{imgPath},{material},{renderLayer},{pivotVec.x},{pivotVec.y},{wrapMode}";
             c.Start();
             Services.Scenecontrol.AddReferencedController(c);
             return c;
@@ -449,7 +449,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 },
                 cts.Token).ContinueWith(sprite => c.SpriteRenderer.sprite = sprite));
 
-            c.SerializedType = $"sprite.{imgPath},{material},{renderLayer},{pivotVec.x},{pivotVec.y}";
+            c.SerializedType = $"sprite.{imgPath},{material},{renderLayer},{pivotVec.x},{pivotVec.y},{wrapMode}";
             c.Start();
             Services.Scenecontrol.AddReferencedController(c);
             return c;
@@ -736,13 +736,15 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     return track.ExtraR;
                 case "image":
                     string[] imgsplit = arg.Split(',');
-                    return CreateImage(imgsplit[0], imgsplit[1], imgsplit[2], new XY(float.Parse(imgsplit[3]), float.Parse(imgsplit[4])));
+                    string imgWrapMode = imgsplit.Length <= 5 ? "repeat" : imgsplit[5];
+                    return CreateImage(imgsplit[0], imgsplit[1], imgsplit[2], new XY(float.Parse(imgsplit[3]), float.Parse(imgsplit[4])), imgWrapMode);
                 case "canvas":
                     bool worldSpace = arg.ToLower() == "true";
                     return CreateCanvas(worldSpace);
                 case "sprite":
                     string[] spriteSplit = arg.Split(',');
-                    return CreateSprite(spriteSplit[0], spriteSplit[1], spriteSplit[2], new XY(float.Parse(spriteSplit[3]), float.Parse(spriteSplit[4])));
+                    string sprWrapMode = spriteSplit.Length <= 5 ? "repeat" : spriteSplit[5];
+                    return CreateSprite(spriteSplit[0], spriteSplit[1], spriteSplit[2], new XY(float.Parse(spriteSplit[3]), float.Parse(spriteSplit[4])), sprWrapMode);
                 case "text":
                     string[] textSplit = arg.Split(',');
                     return CreateText(
