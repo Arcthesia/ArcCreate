@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Utility;
@@ -83,6 +82,11 @@ namespace ArcCreate.Gameplay.Judgement.Input
                 {
                     ArcTapJudgementRequest req = arcTapRequests[i];
                     int timingDifference = req.AutoAtTiming - currentTiming;
+                    if (timingDifference > minTimingDifference)
+                    {
+                        continue;
+                    }
+
                     Vector2 judgementSize = req.Properties.CurrentJudgementSize;
                     Vector3 judgementOffset = req.Properties.CurrentJudgementOffset;
                     Vector3 worldPosition = new Vector3(req.X, req.Y, 0) + judgementOffset;
@@ -90,33 +94,14 @@ namespace ArcCreate.Gameplay.Judgement.Input
                     Vector3 deltaToNote = screenPosition - input.ScreenPos;
                     float distanceToNote = deltaToNote.sqrMagnitude;
 
-                    if (ArcTapCollide(input, screenPosition, worldPosition, req.Width, judgementSize))
+                    if (ArcTapCollide(input, screenPosition, worldPosition, req.Width, judgementSize)
+                    && (timingDifference < minTimingDifference || distanceToNote <= minPositionDifference))
                     {
-                        if (timingDifference < minTimingDifference || distanceToNote <= minPositionDifference)
-                        {
-                            if (req.IsBlocker &&
-                                (minTimingDifference - timingDifference <= Values.MaxJudgeWindow
-                             || currentTiming >= req.AutoAtTiming))
-                            {
-                                continue;
-                            }
-
-                            minTimingDifference = timingDifference;
-                            minPositionDifference = distanceToNote;
-                            applicableArcTapRequestExists = true;
-                            applicableArcTapRequest = req;
-                            applicableArcTapRequestIndex = i;
-                        }
-                        else if (timingDifference <= minTimingDifference + Values.MaxJudgeWindow
-                        && applicableArcTapRequestExists && applicableArcTapRequest.IsBlocker
-                        && !req.IsBlocker)
-                        {
-                            minTimingDifference = timingDifference;
-                            minPositionDifference = distanceToNote;
-                            applicableArcTapRequestExists = true;
-                            applicableArcTapRequest = req;
-                            applicableArcTapRequestIndex = i;
-                        }
+                        minTimingDifference = timingDifference;
+                        minPositionDifference = distanceToNote;
+                        applicableArcTapRequestExists = true;
+                        applicableArcTapRequest = req;
+                        applicableArcTapRequestIndex = i;
                     }
                 }
 
