@@ -1077,7 +1077,7 @@ Gameplay:
         Name: Gameplay
         Speed: Speed
         SpeedDetail: |-
-          Adjust the speed at which notes approach the judgement line.
+          Adjust the speed at which notes approach the judgement area.
         EarlyLatePerfectDisplay: Early/Late perfect display
         EarlyLatePerfectDisplayDetail: |-
           Change whether or not to display early/late perfect judgements.
