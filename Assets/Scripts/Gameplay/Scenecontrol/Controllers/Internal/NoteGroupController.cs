@@ -371,7 +371,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             transform.localPosition = translation;
             transform.localRotation = rotation;
             transform.localScale = scale;
-            TimingGroup.GroupProperties.GroupMatrix = Matrix4x4.TRS(translation, rotation, scale);
+            TimingGroup.GroupProperties.GroupMatrix = transform.localToWorldMatrix;
         }
 
         protected override void SetActive(bool active)
