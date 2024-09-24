@@ -71,6 +71,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 Value = value,
                 Duration = duration ?? ValueChannel.ConstantOneChannel,
                 Easing = Easing.FromString(easing),
+                EasingString = easing,
             };
 
             return this;
