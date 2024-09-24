@@ -374,10 +374,11 @@ namespace ArcCreate.Gameplay.Skin
 
         public void SetVideoBackground(string path, bool isUri)
         {
-            videoBackground.enabled = !string.IsNullOrEmpty(path);
-            videoBackgroundRenderer.enabled = !string.IsNullOrEmpty(path) && !Settings.DisableAdvancedGraphics.Value;
+            bool enabled = !string.IsNullOrEmpty(path) && !Settings.DisableAdvancedGraphics.Value;
+            videoBackground.enabled = enabled;
+            videoBackgroundRenderer.enabled = enabled;
 
-            if (!string.IsNullOrEmpty(path))
+            if (enabled)
             {
                 path = isUri ? Uri.EscapeUriString(path.Replace("\\", "/")) : path.Replace("\\", "/");
                 videoBackground.url = isUri ? path : "file://" + path;
