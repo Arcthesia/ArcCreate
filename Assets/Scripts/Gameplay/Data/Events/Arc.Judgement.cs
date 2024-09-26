@@ -59,12 +59,12 @@ namespace ArcCreate.Gameplay.Data
             if (count <= whatTheFuckDoesThisMean)
             {
                 TotalCombo = 1;
-                FirstJudgeTime = Timing + (duration / 2);
+                FirstJudgeTime = Timing;
             }
             else
             {
                 TotalCombo = count - whatTheFuckDoesThisMean;
-                FirstJudgeTime = Timing + (whatTheFuckDoesThisMean * TimeIncrement);
+                FirstJudgeTime = Timing;
             }
         }
 
