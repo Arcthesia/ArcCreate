@@ -42,6 +42,7 @@ namespace ArcCreate.Compose.Editing
 
             if (!Services.Cursor.IsHittingLane
              || selectionChanged
+             || !Services.Cursor.IsCursorAboveViewport
              || (Values.CreateNoteMode.Value != CreateNoteMode.ArcTap && selectionSize != 0))
             {
                 return;
