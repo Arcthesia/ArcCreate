@@ -172,7 +172,6 @@ namespace ArcCreate.Gameplay.Particle
             }
 
             Vector2 screenPos = ConvertToScreen(worldPosition);
-            screenPos.y += Values.TextParticleYOffset;
             Particle ps = textParticlePool.Get();
             ps.transform.localPosition = screenPos;
             ps.Stop();
