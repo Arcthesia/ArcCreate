@@ -58,7 +58,7 @@ jobs:
           androidKeyaliasPass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
           androidTargetSdkVersion: AndroidApiLevel34
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: build-${{ matrix.targetPlatform }}
           path: build/${{ matrix.targetPlatform }}
@@ -92,7 +92,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Download Android Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: build-Android
           path: build/Android
@@ -120,7 +120,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Download iOS Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: build-iOS
           path: build/iOS
