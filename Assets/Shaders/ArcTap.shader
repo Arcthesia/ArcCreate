@@ -11,8 +11,8 @@
 		Tags { "Queue" = "Transparent"  "RenderType"="Transparent" "CanUseSpriteAtlas"="true"  }
 		Cull Back
 		Blend SrcAlpha OneMinusSrcAlpha
-		ZWrite Off
-		ZTest Always
+		ZWrite On
+		ZTest Less
 
 		Pass
 		{
