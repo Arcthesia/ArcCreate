@@ -123,7 +123,7 @@ namespace ArcCreate.Gameplay.Data
                         return;
                     }
 
-                    Vector3 arctapPos = new Vector3(arctap.WorldX, arctap.WorldY, 0);
+                    Vector3 arctapPos = new Vector3(arctap.WorldX, arctap.WorldY-0.2f, 0);
                     Vector3 direction = arctapPos - basePos;
 
                     Matrix4x4 lineMatrix = matrix * Matrix4x4.TRS(
