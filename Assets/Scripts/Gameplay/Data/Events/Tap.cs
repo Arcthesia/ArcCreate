@@ -108,7 +108,7 @@ namespace ArcCreate.Gameplay.Data
 
             float alpha = ArcFormula.CalculateFadeOutAlpha(z);
             Color color = groupProperties.Color;
-            Color connectionColor = connectionLineColor;
+            Color connectionColor = color * connectionLineColor;
             color.a *= alpha;
             connectionColor.a *= alpha;
 
