@@ -59,12 +59,12 @@ namespace ArcCreate.Gameplay.Data
             if (count <= whatTheFuckDoesThisMean)
             {
                 TotalCombo = 1;
-                FirstJudgeTime = Timing;
+                FirstJudgeTime = Timing + (duration / 2);
             }
             else
             {
                 TotalCombo = count - whatTheFuckDoesThisMean;
-                FirstJudgeTime = Timing;
+                FirstJudgeTime = Timing + (whatTheFuckDoesThisMean * TimeIncrement);
             }
         }
 
@@ -136,11 +136,12 @@ namespace ArcCreate.Gameplay.Data
         {
             for (int t = numJudgementRequestsSent; t < TotalCombo; t++)
             {
-                int timing = (int)System.Math.Round(FirstJudgeTime + (t * TimeIncrement));
+                int timing = (int)System.Math.Round(Timing + (t * TimeIncrement));
+                int lateTiming = (int)System.Math.Round(FirstJudgeTime + (t * TimeIncrement));
                 Services.Judgement.Request(new ArcJudgementRequest()
                 {
                     StartAtTiming = timing - Values.GoodJudgeWindow,
-                    ExpireAtTiming = timing + Values.HoldMissLateJudgeWindow,
+                    ExpireAtTiming = lateTiming + Values.HoldMissLateJudgeWindow,
                     AutoAtTiming = timing,
                     Arc = this,
                     IsJudgement = true,
