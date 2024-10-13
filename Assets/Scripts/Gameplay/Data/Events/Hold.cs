@@ -150,7 +150,11 @@ namespace ArcCreate.Gameplay.Data
             float clipZ = z;
             if ((!locked || groupProperties.NoInput) && !groupProperties.NoClip)
             {
-                clipZ = 0;
+                if (Timing <= currentTiming)
+                {
+                    clipZ = 0;
+                }
+
                 if ((currentFloorPosition - FloorPosition) / (EndFloorPosition - FloorPosition) > 1.0)
                 {
                     return;
