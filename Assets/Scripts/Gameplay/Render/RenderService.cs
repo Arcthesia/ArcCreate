@@ -371,12 +371,14 @@ namespace ArcCreate.Gameplay.Render
             {
                 pair.Value.Dispose();
             }
+            holdDrawers.Clear(); 
 
             connectionLineDrawer.Dispose();
             foreach (var pair in tapDrawers)
             {
                 pair.Value.Dispose();
             }
+            tapDrawers.Clear(); 
 
             traceShadowDrawer.Dispose();
             arcShadowDrawer.Dispose();
@@ -390,6 +392,7 @@ namespace ArcCreate.Gameplay.Render
             {
                 pair.Value.Dispose();
             }
+            arcCapDrawers.Clear(); 
 
             arcSegmentDrawer.Dispose();
 
@@ -397,11 +400,13 @@ namespace ArcCreate.Gameplay.Render
             {
                 pair.Value.Dispose();
             }
+            arctapDrawers.Clear(); 
 
             foreach (var pair in arctapSfxDrawers)
             {
                 pair.Value.Dispose();
             }
+            arctapSfxDrawers.Clear(); 
 
             arcHeadDrawer.Dispose();
         }
