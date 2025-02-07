@@ -337,7 +337,7 @@ Compose:
         FullScreen: Przełącz pełny ekran
       Selection:
         Name: Wybór
-        Clear: Clear selection
+        Clear: Wyczyść wybór
         Single: Wybierz nutę
         Add: Drag select
         Remove: Drag deselect
@@ -618,7 +618,7 @@ Compose:
       Gameplay: Rozgrywka
       Timeline: Oś czasu
       Project: Projekt
-      Events: Wydarzenia
+      Events: <size=11>Wydarzenia</size>
       Remote: Pilot
       Export: Eksport
       Settings: Ustawienia
@@ -651,14 +651,14 @@ Compose:
         Title: Tytuł
         Composer: Kompozytor
         Illustrator: Ilustrator
-        Charter: Twórca
+        Charter: Charter
         Alias: Pseudonim
         BPM: BPM
         BaseBPM: Podstawowe BPM
         BPMText: Tekst BPM
-        SyncBaseBPM: Synchronizacja podstawowego BPM
+        SyncBaseBPM: <size=6>Synchronizacja podstawowego BPM</size>
         ChartOffset: Offset chartu 
-        TimingPointDensityFactor: Gęstość judgement
+        TimingPointDensityFactor: <size=10>Gęstość judgement</size>
         ChartConstant: Constant Chartu
         SearchTags: <size=10>Tagi Wyszukiwania</size>
         DifficultyName: Nazwa Trudności
@@ -734,12 +734,12 @@ Compose:
       Actions:
         AddGroup: Dodaj grupę
         DeleteGroup: Usuń grupę
-        AddEvent: Dodaj wydarzenie
-        DeleteEvent: Usuń wydarzenie
+        AddEvent: <size=7>Dodaj wydarzenie</size>
+        DeleteEvent: <size=7>Usuń wydarzenie</size>
         AutoReload: Odśwież automatycznie
-        GenerateEmmyLua: Wygeneruj EmmyLua
+        GenerateEmmyLua: <size=11>Wygeneruj EmmyLua</size>
         Reload: Odśwież
-        FreeCamera: Swobodna kamera
+        FreeCamera: <size=7>Swobodna kamera</size>
       Mode:
         Timing: Timing
         Camera: Kamera
@@ -757,7 +757,7 @@ Compose:
           Reset: Reset
           FourK: 4K
           FullHD: Full HD
-          Compact: Kompaktowy
+          Compact: <size=11>Kompaktowy</size>
         Settings:
           Name: Ustawienia
           From: Od
@@ -795,7 +795,7 @@ Compose:
         Locale:
           Name: Regionalne
           Language: Język
-          Reload: Przeładuj ustawienia regionalne
+          Reload: <size=11>Przeładuj ustawienia regionalne</size>
           CheckMissing: Sprawdź brakujące wpisy
         Gameplay:
           Name: Rozgrywka
@@ -810,7 +810,7 @@ Compose:
           NotUsedInAutoOrIdle: "Te opcje nie mają wpływu w trybie auto lub idle:"
           EarlyLatePosition: Pozycja Early/Late
           ShowMsDifference: Pokaż różnicę w ms
-          ShowJudgement: "Show judgement:"
+          ShowJudgement: "Pokaż judgement:"
           ShowMax: Perfect (Max)
           ShowPerfect: Perfect (Early/Late)
           ShowGood: Good
@@ -818,7 +818,7 @@ Compose:
         Grid:
           Name: Siatka
           Slot: Slot
-          UseDefault: Użyj ustawień domyślnych
+          UseDefault: <size=9>Użyj ustawień domyślnych</size>
           FromLane: Z linii
           ToLane: Do linii
           ScaleGrid: Skaluj z wejściem sky
@@ -828,7 +828,7 @@ Compose:
           Name: Audio
           Music: Muzyka
           Effect: SFX
-          GlobalOffset: <size=8>Globalne opóźnienie</size>
+          GlobalOffset: <size=9>Globalny offset</size>
           SyncToDSPTime: Synchronizuj z synchronizacją DSP
         Display:
           Name: Obraz
@@ -838,6 +838,7 @@ Compose:
         Input:
           Name: Input
           ReloadKeybinds: Przeładuj skróty klawiszowe
+          UseNativeFileBrowser: Użyj systemowej przeglądarki plików
           AllowCreatingNotesBackward: Zezwalaj na tworzenie nut wstecz
           BlockCreatingOverlappedNotes: Blokuj tworzenie nut wstecz
           EnableEditingArctapWidth: Zezwalaj na edycję szerokości nuty sky
@@ -856,7 +857,7 @@ Compose:
         TrackScrolling:
           Name: Przewijanie toru
           Threshold: Próg
-          MaxMovement: Maksymalny ruch
+          MaxMovement: <size=10>Maksymalny ruch</size>
     # Toolbox panel
     Toolbox:
       Pallete:
@@ -882,7 +883,7 @@ Compose:
     Inspector:
       Name: Inspektor
       Timing: Timing
-      StartTiming: Początek
+      StartTiming: <size=10>Początek</size>
       EndTiming: Koniec
       Lane: Pas
       StartPos: Od
@@ -1047,13 +1048,17 @@ Gameplay:
       rating: Ocena
       score: Wynik
       title: Tytuł
+    SortPack:
+      name: Nazwa
+      publisher: Wydawca
+      addeddate: Data dodania
     Group:
       none: Brak
       difficulty: Poziom
       grade: Stopień
       rank: Rank
       rating: Ocena
-      charter: Twórca
+      charter: Charter
     History:
       Best: Najlepsze
       Recent: Ostatnie
@@ -1087,7 +1092,10 @@ Gameplay:
         OffsetDetail: |-
           Dostosuj synchronizację muzyki.
           Zwiększ, jeśli dostajesz LATE, lub zmniejsz, jeśli dostajesz EARLY.
-        Calibrate: Kalibruj
+        Calibrate:
+          Button: Kalibruj
+          Title: Skalibruj offset
+          SubTitle: Dostosuj offset, stukając zgodnie z rytmem
         MusicAudio: Głośność muzyki
         MusicAudioDetail: |-
           Zmień głośność muzyki podczas rozgrywki.
@@ -1156,7 +1164,7 @@ Gameplay:
 Shutter:
   Composer: Muzyka
   Illustrator: Ilustracja
-  Charter: Twórca
+  Charter: Charter
   Alias: jako
     
 Storage:
