@@ -1,112 +1,112 @@
 Parsing:
   # Exception messages for parsing strings
   Exception:
-    CharacterNotFound: Could not find character "{0}".
-    InvalidConversionToInt: Could not convert "{0}" to integer.
-    InvalidConversionToBool: Could not convert "{0}" to boolean.
-    InvalidConversionToFloat: Could not convert "{0}" to float.
+    CharacterNotFound: Nie znaleziono znaku "{0}".
+    InvalidConversionToInt: Nie można przekonwertować "{0}" na liczbę całkowitą.
+    InvalidConversionToBool: Nie można przekonwertować "{0}" na wartość logiczną.
+    InvalidConversionToFloat: Nie można przekonwertować "{0}" na wartość zmiennoprzecinkową.
 
 Format:
   # Exception messages while parsing chart files
   Exception:
     File: |-
-      An exception occured while reading the chart file {File}:
+      Wystąpił błąd podczas odczytu pliku chartu {File}:
       {Error}
     SingleErrorFormat: |-
-      At: line {LineNumber}
-      While parsing event of type: {EventType}
-      With the following: "{Content}".
+      W: wierszu {LineNumber}
+      Podczas parsowania wydarzenia typu: {EventType}
+      Z: "{Content}".
       {Reason}
     SingleErrorShortFormat: |-
-      While parsing event of type: {EventType}
+      Podczas parsowania wydarzenia typu: {EventType}
       {Reason}
     UnknownException: |-
-      Unknown exception.
-      Exception: {Exception}
+      Nieznany błąd.
+      Błąd: {Exception}
       Stack trace:
       {StackTrace}
     InvalidHeader: |-
-      Invalid header line.
+      Nieprawidłowy wiersz nagłówka.
     ArcColorNegative: |-
-      ID koloru arc'a nie może być ujemne.
+      ID koloru Arca nie może być ujemny.
     AudioOffsetInvalid: |-
-      Invalid audio offset definition.
+      Nieprawidłowa definicja offsetu dźwięku.
     TimingPointDensityFactorInvalid: |-
-      Invalid timing point density factor definition.
+      Nieprawidłowa definicja współczynnika gęstości punktów timingu.
     BaseTimingInvalid: |-
-      Invalid base timing definition. Ensure your chart file starts with a timing event at 0ms.
+      Nieprawidłowa definicja podstawowego timingu. Upewnij się, że plik chartu zaczyna się od wydarzenia timingu w 0 ms.
     IncludeReferencedMultipleTimes: |-
-      A chart file was already included but is being referenced again.
+      Plik chartu został już dołączony, ale jest ponownie przywoływany.
     IncludeAReferencedFragment: |-
-      A chart file was already referenced as a fragment but is being included again.
+      Plik chartu był już przywoływany jako fragment, ale jest dołączany ponownie.
     TimingGroupPairInvalid: |-
-      Invalid timing group symbol pairing. Make sure to enclose timing group definitions properly with "};".
+      Nieprawidłowe łączenie symboli grup timingów. Upewnij się, że definicje grup timingów są prawidłowo dołączone za pomocą "};".
     DivisorNegative: |-
-      Divisor property of timing event can not be negative.
+      Właściwość dzielnika wydarzenia timingu nie może być ujemna.
     DurationNegative: |-
-      Duration of this event type can not be negative.
+      Czas trwania tego typu wydarzenia nie może być ujemny.
     DurationZero: |-
-      Duration of this event type can not be zero.
+      Czas trwania tego typu wydarzenia nie może być równy zero.
     ArcTapOutOfRange: |-
-      ArcTap is outside the timing range of its parent Arc.
+      ArcTap znajduje się poza zakresem timingu swojego nadrzędnego arca.
     TimingGroupPropertiesInvalid: |-
-      Invalid timing group properties definition.
+      Nieprawidłowa definicja właściwości grupy timingów.
     ReferencedFileError: |-
-      Can not load the referenced chart file:
+      Nie można załadować przywołanego pliku chartu:
       {0}
     FileDoesNotExist: |-
-      Chart file does not exist.
+      Plik chartu nie istnieje.
   Warning:
     HoldTooShort:
-      Hold note's duration is shorter than 17ms.
+      Czas trwania holda jest krótszy niż 17 ms.
     TapJudgementOverlap:
-      Tap judgement overlaps with other notes.
+      Judgement tap pokrywa się z innymi nutami.
 
 Compose:
   # Exception messages within the editor
   Exception:
     FileDoesNotExist: |-
-      Trying to read file located at {Path} but it does not exist. The file might have been deleted.
+      Próbowano odczytać plik znajdujący się pod {Path}, ale nie istnieje. Plik mógł zostać usunięty.
     LoadImage: |-
-      An error occured while trying to load the image located at {Path}.
+      Wystąpił błąd podczas próby załadowania obrazu znajdującego się pod {Path}.
       {Error}
     LoadProject: |-
-      An error occured while trying to load the project file located at {Path}.
-      The file could have been saved incorrectly.
-      You can try modifying it manually, or you can delete the file and create a new project.
+      Wystąpił błąd podczas próby ładowania pliku projektu znajdującego się pod {Path}.
+      Plik mógł zostać zapisany nieprawidłowo.
+      Możesz spróbować zmodyfikować go ręcznie lub usunąć plik i utworzyć nowy projekt.
       {Error}
     ChartFileAlreadyExists: |-
-      Chart is already included in the project
+      Chart jest już zawarty w projekcie
     InvalidChartFile: |-
-      The provided chart file name is invalid
+      Podana nazwa pliku chartu jest nieprawidłowa
     NoChartIncluded: |-
-      Invalid project file: No chart is included within this project.
+      Nieprawidłowy plik projektu: Ten projekt nie zawiera chartów.
     InvalidGroupProperties: |-
-      Invalid timing group properties. {Message}
+      Nieprawidłowe właściwości grupy timingów. {Message}
     InstructionLimit: |-
-      Lua script execution has been aborted: The instruction count limit of {0} was reached.
+      Wykonywanie skryptu Lua zostało przerwane: Osiągnięto limit liczby instrukcji {0}.
     InvalidBaseBPM: |-
-      Invalid base bpm value: {0}
+      Nieprawidłowa wartość podstawowego BPM: {0}
     CreateSkyNoteNoValidArc: |-
-      Can not create sky note here. Sky notes must be placed on traces.
+      Nie można tutaj utworzyć nutę sky. Nuty sky muszą być umieszczone na trace-ach.
     Navigation:
       ParseKeybind: |-
-        An exception occured while parsing the keybind: "{0}".
+        Wystąpił błąd podczas analizowania skrótu klawiszowego: "{0}".
       ParseWhitespace: |-
-        Invalid keybind: a keystroke can not be a whitespace.
+        Nieprawidłowy skrót klawiszowy: klawisz nie może być pustym znakiem.
       InvalidKeystroke: |-
-        Invalid keystroke: The keystroke "{0}" does not follow the correct format.
+        Nieprawidłowy skrót klawiszowy: The keystroke "{0}" does not follow the correct format.
       InvalidKey: |-
-        Invalid key: The string "{0}" does not match any key.
+        Nieprawidłowy klawisz: Ciąg znaków "{0}" nie pasuje do żadnego klawisza.
       InvalidModifier: |-
-        Invalid modifier: The string "{0}" does not match any modifier key.
+        Nieprawidłowy modyfikator: Ciąg znaków "{0}" nie pasuje do żadnego klawisza modyfikującego.
       InvalidActionPath: |-
-        Invalid action path: The string "{0}" does not match any action.
+        Nieprawidłowa ścieżka akcji: ciąg "{0}" nie pasuje do żadnej akcji.
     Scenecontrol: |-
-      Error occured while executing scenecontrol event of type {Type}: {Message}
+      Wystąpił błąd podczas wykonywania wydarzenia scenecontrol typu {Type}: {Message}
       {StackTrace}
     LuaScript: |-
-      Error occured while executing lua script {Path}: {Message}
+      Wystąpił błąd podczas wykonywania skryptu lua {Path}: {Message}
       {StackTrace}
     Render:
       FFmpeg:
@@ -121,8 +121,8 @@ Compose:
           {StackTrace}
       Audio:
         IncompatibleSfx: |-
-          The audio clip {Sfx} is incompatible for rendering.
-          Expected channel count of {ExpectedChannels} and frequency of {ExpectedFrequency}, but the clip's channel count is {Channels} and its frequency is {Frequency}.
+          Klip audio {Sfx} jest niekompatybilny z renderowaniem.
+          Oczekiwana liczba kanałów {ExpectedChannels} i częstotliwość {ExpectedFrequency}, ale liczba kanałów klipu wynosi {Channels}, a jego częstotliwość {Frequency}.
           
   # Notification messages
   Notify:
@@ -139,14 +139,14 @@ Compose:
       Enter: Potwierdź
     EmmyLuaGenerated:
       Scenecontrol: |-
-        Szablon EmmyLua dla scenecontrol wygenerowany w folderze bieżącego projektu
+        Szablon EmmyLua dla scenecontrol został wygenerowany w folderze bieżącego projektu
         Użyj VsCode z rozszerzeniem tangzx.emmylua, aby uzyskać autouzupełnianie
       Macros: |-
         Szablon EmmyLua dla makr został wygenerowany w folderze macros
         Użyj VsCode z rozszerzeniem tangzx.emmylua, aby uzyskać autouzupełnianie
     Actions:
-      CannotMirror: Can not mirror any of the selected notes.
-      NoDragRange: Can not drag selected notes timing. Try dragging the notes separately.
+      CannotMirror: Nie można przerzucić żadnej z wybranych nut.
+      NoDragRange: Nie można przeciągnąć wybranych nut zgodnie z timingiem. Spróbuj przeciągnąć nuty osobno.
     History:
       Execute: |-
         Wykonano polecenie: {Name}
@@ -155,41 +155,41 @@ Compose:
       Redo: |-
         Wykonano ponownie polecenie: {Name}
       # {Name} above will be replaced with these entries
-      AddTiming: Add timing event
-      EditTiming: Edit timing event
-      RemoveTiming: Remove timing event
-      AddCamera: Add camera event
-      EditCamera: Edit camera event
-      RemoveCamera: Remove camera event
-      AddScenecontrol: Add scenecontrol event
-      EditScenecontrol: Edit scenecontrol event
-      RemoveScenecontrol: Remove scenecontrol event
-      EditValue: Edit selected note's value
-      EditArc: Edit arc's values
+      AddTiming: Dodaj wydarzenie timingu
+      EditTiming: Edytuj wydarzenie timingu
+      RemoveTiming: Usuń wydarzenie timingu
+      AddCamera: Dodaj wydarzenie kamery
+      EditCamera: Edytuj wydarzenie kamery
+      RemoveCamera: Usuń wydarzenie kamery
+      AddScenecontrol: Dodaj wydarzenie scenecontrol
+      EditScenecontrol: Edytuj wydarzenie scenecontrol
+      RemoveScenecontrol: Usuń wydarzenie scenecontrol
+      EditValue: Edytuj wartość wybranej nuty
+      EditArc: Edytuj wartości arca
       CreateNote:
-        Tap: Stwórz nutę tap
-        Hold: Stwórz nutę hold
-        Arc: Stwórz nutę arc
-        ArcTap: Stwórz nutę sky
-        Trace: Stwórz nutę trace
+        Tap: Dodaj Tap
+        Hold: Dodaj Hold
+        Arc: Dodaj Arc
+        ArcTap: Dodaj ArcTap
+        Trace: Dodaj Trace
       DeleteNotes: Usuń nuty
       Cut: Wytnij nuty
       Paste: Wklej nuty 
       Mirror:
-        Vertical: Obróć pionowo nuty
-        Horizontal: Obróć poziomo nuty
+        Vertical: Przerzuć w pionie nuty
+        Horizontal: Przerzuć w poziomie nuty
       Drag:
-        Timing: Drag notes timing
-        Position: Drag notes position
+        Timing: Przeciągnij timing nut
+        Position: Przeciągnij pozycję nut
     Clipboard:
-      Copy: Copied {0} notes
-      Cut: Cut {0} notes
+      Copy: Skopiowano {0} nut
+      Cut: Wycięto {0} nut
       NamedCopy: Skopiowano {0} nut do nazwanej schowka "{1}"
       NamedCut: Wycięto {0} nut do nazwanej schowka "{1}"
     GroupTable:
-      AddGroup: Added timing group {Number}
-      EditGroup: Edited timing group {Number}
-      RemoveGroup: Removed timing group {Number}
+      AddGroup: Dodano grupę timingów {Number}
+      EditGroup: Zedytowano grupę timingów {Number}
+      RemoveGroup: Usunięto grupę timingów {Number}
     Project:
       NewProject: |-
         Utworzono nowy projekt
@@ -206,10 +206,10 @@ Compose:
     Inspector:
       InvalidParamameter: Nieprawidłowy parametr
     Measurer:
-      CopyTiming: Copied cursor timing
-      CopyPosition: Copied arc's position
-      CopyX: Copied arc's x coordinate
-      CopyY: Copied arc's y coordinate
+      CopyTiming: Skopiowano timing kursora
+      CopyPosition: Skopiowana pozycję arca
+      CopyX: Skopiowano współrzędną x arca
+      CopyY: Skopiowano współrzędną y arca
     Export:
       Render:
         Cancelled: Render został anulowany
@@ -224,15 +224,15 @@ Compose:
         Lane: Wybierz pas
       NotFound: Makro "{0}" nie istnieje.
     Mirror:
-      CannotMirror: No notes can be mirrored
+      CannotMirror: Nuty nie mogą być przerzucone
     Creation:
-      Overlap: "Invalid note position: the selected position overlaps with another note."
+      Overlap: "Nieprawidłowa pozycja nuty: wybrana pozycja nakłada się na inną nutę."
   # Dialog boxes
   Dialog:
     RemoveGroup:
-      Title: Usuń grupę timing'u
+      Title: Usuń grupę timingu
       Content: |-
-        Czy na pewno chcesz usunąć tę grupę timing'u i całą jej zawartość? (nie możesz tego cofnąć)
+        Czy na pewno chcesz usunąć tę grupę timingu i całą jej zawartość? (nie można tego cofnąć)
       Yes: Usuń
       No: Anuluj
     RemoveChart:
@@ -262,8 +262,8 @@ Compose:
     Macros:
       Title: Makra
     GroupPicker:
-      SelectEditingGroup: "Change current group to:"
-      AssignNotesToGroup: "Assign selected notes to:"
+      SelectEditingGroup: "Zmień aktualną grupę na:"
+      AssignNotesToGroup: "Przypisz wybrane nuty do:"
     CameraViews:
       Default: Widok domyślny
       Stationary: Widok statyczny
@@ -284,21 +284,21 @@ Compose:
       Camera:
         Name: Kamera
         FreeCamera:
-          Name: Start free camera
-          Confirm: Confirm
-          Cancel: Cancel
-          Faster: Move faster
-          Slower: Move slower
-          MoveForward: Foward
-          MoveLeft: Left
-          MoveRight: Right
-          MoveBackward: Back
-          MoveUp: Up
-          MoveDown: Down
-          LookUp: Look up
-          LookDown: Look down
-          LookLeft: Look left
-          LookRight: Look right
+          Name: Uruchom swobodną kamerę
+          Confirm: Potwierdź
+          Cancel: Anuluj
+          Faster: Poruszaj się szybciej
+          Slower: Poruszaj się wolniej
+          MoveForward: Do przodu
+          MoveLeft: Na lewo
+          MoveRight: Na prawo
+          MoveBackward: Do tyłu
+          MoveUp: Do góry
+          MoveDown: Na dół
+          LookUp: Spójrz w górę
+          LookDown: Spójrz w dół
+          LookLeft: Spójrz w lewo
+          LookRight: Spójrz w prawo
           RollLeft: Roll left
           RollRight: Roll right
       Grid:
@@ -316,8 +316,8 @@ Compose:
           Slot8: Slot 8
           Slot9: Slot 9
           Slot0: Slot 0
-        IncreaseDensity: Increase density
-        DecreaseDensity: Decrease density
+        IncreaseDensity: Zwiększ gęstość
+        DecreaseDensity: Zmniejsz gęstość
       Macro:
         Name: Makro
         SelectEvents:
@@ -347,12 +347,12 @@ Compose:
           Confirm: Potwierdź
           Cancel: Anuluj
       Measure:
-        Name: Mierzenie
+        Name: Miarka
         Start:
           Name: Otwórz miarkę
           Confirm: Potwierdź
           Cancel: Anuluj
-          CopyTiming: Copy timing
+          CopyTiming: Skopiuj timing
           CopyPosition: Skopiuj pozycję
           CopyX: Skopiuj współrzędną x
           CopyY: Skopiuj współrzędną y
@@ -369,15 +369,15 @@ Compose:
           Name: Paste
           Confirm: Potwierdź wklejanie
           Cancel: Anuluj wklejanie
-          Mirror: Mirror
+          Mirror: Przerzuć
         Clear: Wyczyść schowek
       NoteCreation:
-        Name: Note creation
+        Name: Tworzenie nut
         Start:
           Name: Dodaj nutę
           Confirm: Potwierdź
           Cancel: Anuluj
-          ToggleFreeSky: Switch to free sky note
+          ToggleFreeSky: Przejdź na wolną nutę sky
       NotePallete:
         Name: Paleta nut
         Arc: 
@@ -393,40 +393,40 @@ Compose:
         Sky: Sky
         Tap: Tap
         Hold: Hold
-        Idle: Bezczynność
+        Idle: Idle
       Delete:
         Name: Usuń
         Execute: Usuń
       Mirror:
-        Name: Mirror
-        Horizontal: Mirror horizontally
-        HorizontalNoColorSwitch: Mirror horizontally (ignore color)
-        Vertical: Mirror vertically
+        Name: Przerzucanie
+        Horizontal: Przerzuć w poziomie
+        HorizontalNoColorSwitch: Przerzuć w poziomie (ignoruj kolor)
+        Vertical: Przerzuć w pionie
       Dragging:
-        Name: Dragging
+        Name: Przeciąganie
         Timing:
-          Name: Drag timing
-          Confirm: Confirm
-          Cancel: Cancel
-          CycleSkyNoteMode: Cycle sky note mode
+          Name: Przeciągnij timing
+          Confirm: Potwierdź
+          Cancel: Anuluj
+          CycleSkyNoteMode: Przełącz tryb nut sky
         Position:
-          Name: Drag position
-          Confirm: Confirm
-          Cancel: Cancel
-          CycleSkyNoteMode: Cycle sky note mode
+          Name: Przeciągnij pozycję
+          Confirm: Potwierdź
+          Cancel: Anuluj
+          CycleSkyNoteMode: Przełącz tryb nut sky
       Render:
         Name: Renderowanie
         Start:
           Cancel: Anuluj renderowanie
       Playback:
-        Name: Timeline
-        TogglePlay: Play/Pause
+        Name: Oś czasu
+        TogglePlay: Odtwórz/Pauza
         PlayReturn:
-          Name: Play
-          Return: Pause and return
-          Pause: Pause
-        IncreaseSpeed: Speed up
-        DecreaseSpeed: Slow down
+          Name: Odtwórz
+          Return: Pauza i wróć
+          Pause: Pauza
+        IncreaseSpeed: Przyspiesz
+        DecreaseSpeed: Zwolnij
 
   Grid:
     # Please modify the comment lines only (lines beginning with '--')
@@ -628,7 +628,7 @@ Compose:
         New: Nowy
         Open: Otwórz
         Save: Zapisz
-        InputMode: Tryb Wejścia
+        InputMode: Wejście
         InputModeOptions:
           auto: Auto
           autocontroller: Auto (Kontroler)
@@ -656,16 +656,16 @@ Compose:
         BPM: BPM
         BaseBPM: Podstawowe BPM
         BPMText: Tekst BPM
-        SyncBaseBPM: Synchronizacja
-        ChartOffset: Opóźnienie chartu 
-        TimingPointDensityFactor: Judge Density
+        SyncBaseBPM: Synchronizacja podstawowego BPM
+        ChartOffset: Offset chartu 
+        TimingPointDensityFactor: Gęstość judgement
         ChartConstant: Constant Chartu
         SearchTags: <size=10>Tagi Wyszukiwania</size>
         DifficultyName: Nazwa Trudności
         DifficultyColor: Kolor Trudności
         Files: Pliki
         Audio: Audio
-        JacketArt: Grafika Okładki
+        JacketArt: Okładka
         Background: Tło
         Video: Wideo
         Skin: Skórka
@@ -674,11 +674,11 @@ Compose:
         Particle: Efekt
         Accent: Akcent
         Track: Tor
-        SingleLine: Linia Pojedyncza
+        SingleLine: Pojedyncza linia
         Colors: Kolory
-        TraceBody: Trace Body
+        TraceBody: Ciało trace'ów
         Shadow: Cień
-        ArcColors: Kolor arc'ów
+        ArcColors: Kolor arców
         Blue: Niebieski
         Red: Czerwony
         Green: Zielony
@@ -721,7 +721,7 @@ Compose:
       Label:
         Offset: Opóźnienie
         TimingGroup: Grupa
-        Density: Density
+        Density: Gęstość
         PlaybackSpeed: Szybkość
       Timestamp:
         Name: Timestamp
@@ -757,7 +757,7 @@ Compose:
           Reset: Reset
           FourK: 4K
           FullHD: Full HD
-          Compact: Compact
+          Compact: Kompaktowy
         Settings:
           Name: Ustawienia
           From: Od
@@ -793,7 +793,7 @@ Compose:
     Settings:
       Label:
         Locale:
-          Name: Ustawienia Regionalne
+          Name: Regionalne
           Language: Język
           Reload: Przeładuj ustawienia regionalne
           CheckMissing: Sprawdź brakujące wpisy
@@ -818,18 +818,18 @@ Compose:
         Grid:
           Name: Siatka
           Slot: Slot
-          UseDefault: Use default
-          FromLane: From lane
-          ToLane: To lane
-          ScaleGrid: Scale with sky input
-          Gridline: Define gridlines
-          Script: Lua script
+          UseDefault: Użyj ustawień domyślnych
+          FromLane: Z linii
+          ToLane: Do linii
+          ScaleGrid: Skaluj z wejściem sky
+          Gridline: Zdefiniuj linie siatki
+          Script: Skrypt Lua
         AudioVolume:
           Name: Audio
           Music: Muzyka
           Effect: SFX
           GlobalOffset: <size=8>Globalne opóźnienie</size>
-          SyncToDSPTime: Sync to DSP timing
+          SyncToDSPTime: Synchronizuj z synchronizacją DSP
         Display:
           Name: Obraz
           Vsync: Vsync
@@ -837,11 +837,11 @@ Compose:
           ShowCounter: Wyświetl framerate
         Input:
           Name: Input
-          ReloadKeybinds: Reload keybinds
-          AllowCreatingNotesBackward: Allow creating notes backward
-          BlockCreatingOverlappedNotes: Block creating overlapped notes
-          EnableEditingArctapWidth: Allow editing sky note's width
-          ShowKeybindHint: Show keybind hints
+          ReloadKeybinds: Przeładuj skróty klawiszowe
+          AllowCreatingNotesBackward: Zezwalaj na tworzenie nut wstecz
+          BlockCreatingOverlappedNotes: Blokuj tworzenie nut wstecz
+          EnableEditingArctapWidth: Zezwalaj na edycję szerokości nuty sky
+          ShowKeybindHint: Pokaż podpowiedzi skrótów klawiszowych
         Files:
           Name: Pliki
           Backup: Utwórz kopię zapasową podczas zapisywania
@@ -849,14 +849,14 @@ Compose:
           Autosave: Włącz autosave
           AutosaveInterval:  Interwał autosave'u (sekundy)
         ScrollSensitivity:
-          Name: Scroll sensitivity
-          Vertical: Vertical
-          Horizontal: Horizontal
-          Timeline: Timeline
+          Name: Czułość przewijania
+          Vertical: Pionowa
+          Horizontal: Poziomo
+          Timeline: Oś czasu
         TrackScrolling:
-          Name: Track scrolling
-          Threshold: Threshold
-          MaxMovement: Max movement
+          Name: Przewijanie toru
+          Threshold: Próg
+          MaxMovement: Maksymalny ruch
     # Toolbox panel
     Toolbox:
       Pallete:
@@ -867,40 +867,40 @@ Compose:
         Hold: Hold
         Arctap: Sky
         Idle: Idle
-        Easing: Easing
+        Easing: Łagodzenie
       Settings:
-        ShowGrid: Show grid
-        HideGrid: Hide grid
-        Measure: Measure
-        RangeSelect: Range select
+        ShowGrid: Pokaż siatkę
+        HideGrid: Ukryj siatkę
+        Measure: Miarka
+        RangeSelect: Wybór zakresu
       Macros:
         Name: Makra
-        GenerateEmmy: Generate EmmyLua
-        Reload: Reload macro scripts
-        OpenExplorer: Open macros folder
+        GenerateEmmy: Generuj EmmyLua
+        Reload: Przeładuj skrypty makro
+        OpenExplorer: Otwórz folder makr
     # Inspector window
     Inspector:
-      Name: Inspector
+      Name: Inspektor
       Timing: Timing
-      StartTiming: Start
-      EndTiming: End
-      Lane: Lane
-      StartPos: From
-      EndPos: To
+      StartTiming: Początek
+      EndTiming: Koniec
+      Lane: Pas
+      StartPos: Od
+      EndPos: Do
       Sfx: Sfx
-      Width: Width
-      Group: Group
-      Mixed: Mixed
+      Width: Szerokość
+      Group: Grupa
+      Mixed: Mieszane
       Arc: Arc
       Trace: Trace
       Actions:
-        SelectArc: Select parent arc
-        SelectArctap: Select sky notes
+        SelectArc: Wybierz arc nadrzędny
+        SelectArctap: Wybierz nuty sky
     Startup:
       Discord: Serwer Discord
       Kofi: Wesprzyj nas na Ko-fi
       Version: "Wersja: {0}"
-      Recent: Ostatnio otworzone
+      Recent: Ostatnie projekty
 
 Remote:
   Exception:
@@ -924,8 +924,8 @@ Remote:
       Odbieranie danych ({0})
   Description:
     Idle: |-
-      Nie podłączono żadnego klienta test play.
-      Rozpocznij transmitowanie w celu wykrycia klientów. Upewnij się, że to urządzenie i urządzenie z włączonym klientem testplay znajdują się w tej samej sieci lokalnej i że klient test play znajduje przychodzące transmisje.
+      Nie podłączono żadnego klienta testplay.
+      Rozpocznij transmitowanie w celu wykrycia klientów. Upewnij się, że to urządzenie i urządzenie z włączonym klientem testplay znajdują się w tej samej sieci lokalnej i że klient testplay znajduje przychodzące transmisje.
     Broadcasting: |-
       Kod transmitowania: {0}.
       Wybierz opcję z tym kodem na kliencie testplay, aby rozpocząć sesję.
@@ -955,8 +955,8 @@ Remote:
       Speed: Szybkość urządzenia
       MusicVolume: Głośność muzyki
       EffectVolume: Głośność SFX
-    StartTiming: Play from timing
-    EndTiming: Play to timing
+    StartTiming: Odtwórz z timingu
+    EndTiming: Odtwórz do timingu
     Loop: Odtwarzanie w pętli
     ShowLog: Pokaż log
     ShowDebug: Pokaż informacje debugowania
@@ -1018,7 +1018,7 @@ Gameplay:
       Nie można usunąć domyślnych rzeczy.
     EnablePractice: |-
       Tryb treningowy włączony dla następnej gry.
-    SelectRating: Wybierz ocenę
+    SelectRating: Oceń
     Action:
       Copy: Kopiuj
       Delete: Usuń
@@ -1044,7 +1044,7 @@ Gameplay:
       difficulty: Poziom
       grade: Stopień
       playcount: Liczba zagrań
-      rating: Rating
+      rating: Ocena
       score: Wynik
       title: Tytuł
     Group:
@@ -1052,7 +1052,7 @@ Gameplay:
       difficulty: Poziom
       grade: Stopień
       rank: Rank
-      rating: Rating
+      rating: Ocena
       charter: Twórca
     History:
       Best: Najlepsze
@@ -1097,7 +1097,7 @@ Gameplay:
       Visual:
         Name: Grafika
         Colorblind: Tryb dla Niewidomych
-        ColorblindDetail: Użyj alternatywnych kolorów arc'ów.
+        ColorblindDetail: Użyj alternatywnych kolorów arców.
         FrPmDisplay: Wyświetlanie FC/AP
         FrPmDisplayDetail: Dostosuj pozycję wskaźnika FC/AP
         MaxDisplay: Wyświetlanie wskaźnika Max
@@ -1196,5 +1196,5 @@ Credits:
     SoundDesign: Dzwięk
     Localization: Tłumaczenie
     QualityAssurance: Kontrola Jakości
-    Community: i wszyscy w społeczności Arcthesia & ArcCreate!
+    Community: i wszyscy w społeczności Arcthesia i ArcCreate!
     Sponsor: Specjalne podziękowania dla naszych Wspierających
