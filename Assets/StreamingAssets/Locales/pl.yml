@@ -1136,7 +1136,7 @@ Gameplay:
       FrPmPosition:
         middle: Na środku
         infopanel: W panelu info
-        off: Wyłącz
+        off: Wyłączony
       PauseMode:
         clickonce: Pojedyncze
         doubleclick: Dwukrotne
