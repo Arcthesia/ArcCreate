@@ -28,9 +28,9 @@ Format:
     InvalidHeader: |-
       Nieprawidłowy wiersz nagłówka.
     ArcColorNegative: |-
-      ID koloru Arca nie może być ujemny.
+      ID koloru arca nie może być ujemny.
     AudioOffsetInvalid: |-
-      Nieprawidłowa definicja offsetu dźwięku.
+      Nieprawidłowa definicja opóźnienia dźwięku.
     TimingPointDensityFactorInvalid: |-
       Nieprawidłowa definicja współczynnika gęstości punktów timingu.
     BaseTimingInvalid: |-
@@ -88,7 +88,7 @@ Compose:
     InvalidBaseBPM: |-
       Nieprawidłowa wartość podstawowego BPM: {0}
     CreateSkyNoteNoValidArc: |-
-      Nie można tutaj utworzyć nutę sky. Nuty sky muszą być umieszczone na trace-ach.
+      Nie można tutaj utworzyć nutę sky. Nuty sky muszą być umieszczone na traceach.
     Navigation:
       ParseKeybind: |-
         Wystąpił błąd podczas analizowania skrótu klawiszowego: "{0}".
@@ -106,7 +106,7 @@ Compose:
       Wystąpił błąd podczas wykonywania wydarzenia scenecontrol typu {Type}: {Message}
       {StackTrace}
     LuaScript: |-
-      Wystąpił błąd podczas wykonywania skryptu lua {Path}: {Message}
+      Wystąpił błąd podczas wykonywania skryptu Lua {Path}: {Message}
       {StackTrace}
     Render:
       FFmpeg:
@@ -619,7 +619,7 @@ Compose:
       Timeline: Oś czasu
       Project: Projekt
       Events: <size=11>Wydarzenia</size>
-      Remote: Pilot
+      Remote: Testplay
       Export: Eksport
       Settings: Ustawienia
     # Top bar of the UI
@@ -657,7 +657,7 @@ Compose:
         BaseBPM: Podstawowe BPM
         BPMText: Tekst BPM
         SyncBaseBPM: <size=6>Synchronizacja podstawowego BPM</size>
-        ChartOffset: Offset chartu 
+        ChartOffset: <size=11>Opóźnienie chartu</size> 
         TimingPointDensityFactor: <size=10>Gęstość judgement</size>
         ChartConstant: Constant Chartu
         SearchTags: <size=10>Tagi Wyszukiwania</size>
@@ -674,9 +674,9 @@ Compose:
         Particle: Efekt
         Accent: Akcent
         Track: Tor
-        SingleLine: Pojedyncza linia
+        SingleLine: Linia
         Colors: Kolory
-        TraceBody: Ciało trace'ów
+        TraceBody: Ciało traceów
         Shadow: Cień
         ArcColors: Kolor arców
         Blue: Niebieski
@@ -795,7 +795,7 @@ Compose:
         Locale:
           Name: Regionalne
           Language: Język
-          Reload: <size=11>Przeładuj ustawienia regionalne</size>
+          Reload: Przeładuj języki
           CheckMissing: Sprawdź brakujące wpisy
         Gameplay:
           Name: Rozgrywka
@@ -804,7 +804,7 @@ Compose:
           Indicator: Wskaźnik
           MaxIndicator: Włącz wskaźnik max
           Colorblind: Używaj kolorów arc dla niewidomych
-          ScoreDisplay: <size=9>Wyświetlacz wyniku</size>
+          ScoreDisplay: <size=8>Wyświetlacz wyniku</size>
         Judgement:
           Name: Judgement
           NotUsedInAutoOrIdle: "Te opcje nie mają wpływu w trybie auto lub idle:"
@@ -821,15 +821,15 @@ Compose:
           UseDefault: <size=9>Użyj ustawień domyślnych</size>
           FromLane: Z linii
           ToLane: Do linii
-          ScaleGrid: Skaluj z wejściem sky
+          ScaleGrid: Skaluj z sky input
           Gridline: Zdefiniuj linie siatki
           Script: Skrypt Lua
         AudioVolume:
           Name: Audio
           Music: Muzyka
           Effect: SFX
-          GlobalOffset: <size=9>Globalny offset</size>
-          SyncToDSPTime: Synchronizuj z synchronizacją DSP
+          GlobalOffset: <size=8>Globalne opóźnienie</size>
+          SyncToDSPTime: Synchronizuj z DSP
         Display:
           Name: Obraz
           Vsync: Vsync
@@ -845,14 +845,14 @@ Compose:
           ShowKeybindHint: Pokaż podpowiedzi skrótów klawiszowych
         Files:
           Name: Pliki
-          Backup: Utwórz kopię zapasową podczas zapisywania
+          Backup: <size=11>Utwórz kopię zapasową podczas zapisywania</size>
           BackupCount: Liczba kopii zapasowych
           Autosave: Włącz autosave
           AutosaveInterval:  Interwał autosave'u (sekundy)
         ScrollSensitivity:
           Name: Czułość przewijania
           Vertical: Pionowa
-          Horizontal: Poziomo
+          Horizontal: Pozioma
           Timeline: Oś czasu
         TrackScrolling:
           Name: Przewijanie toru
@@ -910,36 +910,36 @@ Remote:
     Listening: |-
       Szukanie transmisji...
       <size=20>
-      W kliencie PC ArcCreate otwórz zakładkę "Pilot" i naciśnij "Zacznij transmitowanie", aby rozpocząć.</size>
+      W edytorze ArcCreate otwórz zakładkę "Testplay" i naciśnij "Zacznij transmitowanie", aby rozpocząć.</size>
     ManualIP: |-
-      Oczekiwanie na połączenie od klienta PC.
+      Oczekiwanie na połączenie od komputera.
       <size=20>
-      W kliencie PC ArcCreate otwórz zakładkę "Pilot" i wprowadź adres IP: {0}.</size>
+      W edytorze ArcCreate otwórz zakładkę "Testplay" i wprowadź adres IP: {0}.</size>
     Found: |-
       Transmisja znaleziona z następujących urządzeń.
       Wybierz urządzenie, aby kontynuować.
     TargetDisconnected:
-      Compose: Klient PC rozłączony. Zatrzymanie połączenia.
-      Gameplay: Klient PC rozłączony. Czy chcesz rozpocząć nową sesję?
+      Compose: Edytor rozłączony. Zatrzymanie połączenia.
+      Gameplay: Edytor rozłączony. Czy chcesz rozpocząć nową sesję?
     Receiving:
       Odbieranie danych ({0})
   Description:
     Idle: |-
-      Nie podłączono żadnego klienta testplay.
-      Rozpocznij transmitowanie w celu wykrycia klientów. Upewnij się, że to urządzenie i urządzenie z włączonym klientem testplay znajdują się w tej samej sieci lokalnej i że klient testplay znajduje przychodzące transmisje.
+      Nie podłączono żadnego urządzenia mobilnego.
+      Rozpocznij transmitowanie w celu wykrycia urządzeń. Upewnij się, że to urządzenie i urządzenie z włączonym klientem testplay znajdują się w tej samej sieci i że klient testplay znajduje przychodzące transmisje.
     Broadcasting: |-
       Kod transmitowania: {0}.
-      Wybierz opcję z tym kodem na kliencie testplay, aby rozpocząć sesję.
+      Wybierz opcję z tym kodem na urządzeniu mobilnym, aby rozpocząć sesję.
     Connected: |-
-      Połączono z klientem test play pod adresem: {0}:{1}
+      Połączono z urządzeniem pod adresem: {0}:{1}
   Actions:
     Broadcast: Zacznij transmitowanie
     AbortBroadcast: <size=8>Zatrzymaj transmitowanie</size>
     BroadcastAgain: <size=9>Transmituj ponownie</size>
     StopSession: Zatrzymaj sesję
     StartNewSession: Zacznij nową sesję
-    ManualIP: Skonfiguruj połączenie ręcznie
-    ReturnToSelect: Wróć do Song Select
+    ManualIP: Ręcznie skonfiguruj połączenie
+    ReturnToSelect: Wróć do menu
   Control:
     Name: Kontroler
     Sync:
@@ -952,8 +952,8 @@ Remote:
       Metadata: Metadane
     Settings:
       Name: Ustawienia
-      Offset: Opóźnienie urządzenia
-      Speed: Szybkość urządzenia
+      Offset: Opóźnienie na urządzeniu
+      Speed: Szybkość nut na urządzeniu
       MusicVolume: Głośność muzyki
       EffectVolume: Głośność SFX
     StartTiming: Odtwórz z timingu
@@ -961,7 +961,7 @@ Remote:
     Loop: Odtwarzanie w pętli
     ShowLog: Pokaż log
     ShowDebug: Pokaż informacje debugowania
-    ManualIP: Wprowadź adres IP ręcznie
+    ManualIP: Wprowadź ręcznie IP
   Window:
     Name: Pilot
     SyncChart: <size=8>Synchronizuj chart</size>
@@ -979,10 +979,10 @@ Gameplay:
       Wystąpił błąd podczas próby wczytania obrazu znajdującego się w {Path}.
       {Error}
     Scenecontrol: |-
-      Wystąpił błąd podczas próby wczytania pliku JSON scenecontrol'u znajdującego się w {Path}.
+      Wystąpił błąd podczas próby wczytania pliku JSON scenecontrolu znajdującego się w {Path}.
       {Error}
     ScenecontrolSprite: |-
-      Wystąpił błąd podczas próby wczytania sprite'a scenecontrol'u znajdującego się w {Path}.
+      Wystąpił błąd podczas próby wczytania sprite'a scenecontrolu znajdującego się w {Path}.
       {Error}
     Load: |-
       Wystąpił nieznany błąd podczas próby wczytania chartu {Identifier}, znajdującego się w {ChartPath}.
@@ -993,13 +993,13 @@ Gameplay:
     Play: Wznów
     Retry: Ponów
     Return: Wyjdź
-    AudioDeviceChange: Wykryto zmianę w urządzeniu audio. ArcCreate wymusi powrót do menu Select.
+    AudioDeviceChange: Wykryto zmianę w urządzeniu audio. ArcCreate wymusi powrót do menu.
     Confirm: Potwierdź
   Practice:
     PlaybackSpeed: Szybkość
     Repeat:
-      On: Powtarzanie włączone
-      Off: Powtarzanie wyłączone
+      On: Pętla włączona
+      Off: Pętla wyłączona
       From: Ustaw punkt startowy
       To: Ustaw punkt końcowy
   Selection:
@@ -1019,7 +1019,7 @@ Gameplay:
       Nie można usunąć domyślnych rzeczy.
     EnablePractice: |-
       Tryb treningowy włączony dla następnej gry.
-    SelectRating: Oceń
+    SelectRating: Wybierz ocenę
     Action:
       Copy: Kopiuj
       Delete: Usuń
@@ -1027,7 +1027,7 @@ Gameplay:
       Keep: Zachowaj
       Done: Gotowe
     List:
-      RemoteTestplay: Pilot Testplay
+      RemoteTestplay: Testplay
       Import: Importuj pakiet
       Community: Społeczność
       AllSongs: Wszystkie piosenki
@@ -1075,7 +1075,7 @@ Gameplay:
       Language: Język
       Gameplay:
         Name: Rozgrywka
-        Speed: Szybkość
+        Speed: Szybkość nut
         SpeedDetail: |-
           Dostosuj prędkość, z jaką nuty zbliżają się do obszaru judgement.
         EarlyLatePerfectDisplay: Wyświetlanie perfekcyjnych trafień Early/Late
@@ -1094,8 +1094,8 @@ Gameplay:
           Zwiększ, jeśli dostajesz LATE, lub zmniejsz, jeśli dostajesz EARLY.
         Calibrate:
           Button: Kalibruj
-          Title: Skalibruj offset
-          SubTitle: Dostosuj offset, stukając zgodnie z rytmem
+          Title: Skalibruj opóźnienie
+          SubTitle: Ustaw opóźnienie, stukając zgodnie z rytmem
         MusicAudio: Głośność muzyki
         MusicAudioDetail: |-
           Zmień głośność muzyki podczas rozgrywki.
@@ -1170,28 +1170,28 @@ Shutter:
 Storage:
   Confirm: Potwierdź
   ImportErrors: |-
-    Następujące rzeczy nie mogły zostać zaimportowane:
+    Następujące pliki nie mogły zostać zaimportowane:
   ImportSummary: |-
-    Pomyślnie zaimportowano następujące rzeczy:
+    Pomyślnie zaimportowano następujące pliki:
   NoAssetImported: |-
-    Nie zaimportowano żadnych rzeczy
+    Nie zaimportowano żadnych plików
   ImportConflict:
     Message: |-
-      Próbujesz zaimportować starszą wersję rzeczy.
+      Próbujesz zaimportować starszą wersję pliku.
       Którą wersję chcesz zachować?
     ReplaceAsset:
-      Zastąp importowaną rzeczą
+      Zastąp importowanym plikiem
     KeepOriginal:
-      Zachowaj originalną rzecz
+      Zachowaj originalny plik
     Identifier: "Identyfikator: {0}"
     Version: "Wersja: {0}"
   Loading:
     Message: 'Ładowanie: {0}...'
     Archive: Rozpakowywanie archiwum
-    ValidatePackage: Walidacja pakietu
+    ValidatePackage: Weryfikacja pakietu
     CheckConflict: Sprawdzanie konfliktów
-    DeleteAsset: Usuwanie rzeczy {0}
-    StoreAsset: Przechowywanie rzeczy {0}
+    DeleteAsset: Usuwanie {0}
+    StoreAsset: Przechowywanie {0}
     Finalizing: Finalizowanie
   
 Credits:
