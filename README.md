@@ -1,6 +1,6 @@
 # ArcCreatePL: Polskie tłumaczenie edytora i odtwarzacza ArcCreate.
 Polskie tłumaczenie w oryginalnej wersji ArcCreate (też stworzona przeze mnie) już istnieje, ale tamta wersja jest.... zła. Ta wersja jest lepsza.
-## Ogólne zmiany z poprzedniej wersji tłumaczenia:
+## Ogólne zmiany w porównaniu z poprzednią wersją tłumaczenia:
 - Dodano więcej tłumaczeń
 - Poprawiono większość tłumaczeń
 - Zmieniono rozmiary czcionek niektórych tłumaczeń (w tym tłumaczenia odtwarzacza)
