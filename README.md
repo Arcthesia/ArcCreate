@@ -1,33 +1,12 @@
-# Bardzo ważne, proszę przeczytać. | Important, please read.
-PL:
-Prace nad ArcCreate są obecnie wstrzymane do czasu znalezienia nowego programisty, który zajmie się projektem. **Oznacza to, że obecne polskie tłumaczenie (które również zostało wykonane przeze mnie) w repozytorium Arcthesia (które można znaleźć [tutaj](https://github.com/Arcthesia/ArcCreate)) jest obecnie starszą, niedokończoną wersją, która jest *bardzo, BARDZO źle przetłumaczona*.**
-
-Nie wiem jak budować aplikacje w Unity, więc będziesz musiał sam dodać polskie tłumaczenie do aktualnego oficjalnego wydania ArcCreate. Oto jak to zrobić dla edytora:
-1. Pobierz [najnowsze wydanie tłumaczenia](https://github.com/unauthparadox/ArcCreate/releases)
-2. Pobierz [najnowszą oficjalną wersję edytora ArcCreate (czyli wersja dla Windows, macOS lub Linux)](https://github.com/Arcthesia/ArcCreate/releases) i wyodrębnij ją.
-3. W wyodrębnionym folderze przejdź do `ArcCreate_Data/StreamingAssets/Locales`.
-4. Wklej plik pl.yml pobrany z tego repozytorium do folderu `Locales` w ArcCreate.
-5. Otwórz ArcCreate i zmień język na polski.
-6. Uruchom ponownie ArcCreate.
-7. Gotowe.
-
-Nie można użyć tej metody do korzystania z nowszej wersji tłumaczenia odtwarzacza. Będziesz musiał zbudować aplikację za pomocą UnityEditor. Część tekstu w ustawieniach odtwarzacza nakłada się na siebie ze względu na rozmiar czcionki.
-
----
-
-EN:
-ArcCreate development is currently stopped until a new developer is found to maintain the project. **This means that the current Polish translation (which was also done by me) in Arcthesia's parent repository (which you can find [here](https://github.com/Arcthesia/ArcCreate)) is currently an older, unfinished version, which is *very, VERY bad*.**
-
-I don't know how to build applications in Unity, so you'll need to add the Polish translation to the current official ArcCreate release yourself. Here's how you can do it in the editor:
-1. Download the [latest release of the translation](https://github.com/unauthparadox/ArcCreate/releases)
-2. Download [the latest official ArcCreate release (this means versions for Windows, macOS or Linux)](https://github.com/Arcthesia/ArcCreate/releases) and extract it.
-3. In the extracted folder, go to `ArcCreate_Data/StreamingAssets/Locales`.
-4. Paste the pl.yml file you've downloaded from this repository to the `Locales` folder in ArcCreate.
-5. Open ArcCreate and change your language to Polish.
-6. Restart ArcCreate.
-7. Done.
-
-You can't use this method to use a newer version of the player translation, you'll need to build the app using Unity. Please note that some of the text in the settings overlap due to font size issues.
+# ArcCreatePL: Polskie tłumaczenie edytora i odtwarzacza ArcCreate.
+Polskie tłumaczenie w oryginalnej wersji ArcCreate (też stworzona przeze mnie) już istnieje, ale tamta wersja jest.... zła. Ta wersja jest lepsza.
+## Ogólne zmiany z poprzedniej wersji tłumaczenia:
+- Dodano więcej tłumaczeń
+- Poprawiono większość tłumaczeń
+- Zmieniono rozmiary czcionek niektórych tłumaczeń (w tym tłumaczenia odtwarzacza)
+  
+Edytor (i osobny plik pl.yml dla tych, którzy już mają edytora) jest dostępny do pobrania w sekcji [Releases](https://github.com/unauthparadox/ArcCreatePL/releases) repozytorium.
+Odtwarzacz nie jest jeszcze dostępny, ponieważ mam problemy z budowaniem aplikacji na Androida i iOS. Jeśli NAPRAWDĘ chcesz mieć lepsze polskie tłumaczenie odtwarzacza i chcesz je mieć TERAZ, zbuduj sam odtwarzacz przy użyciu tego repozytorium i [Unity 2021.3.37f1](https://unity.com/releases/editor/archive).
 
 ## Poniżej znajduje się oryginalna zawartość README z repozytorium Arcthesia. | The following is the original contents of the README from the Arcthesia repository.
 
