@@ -6,7 +6,7 @@ Polskie tłumaczenie w oryginalnej wersji ArcCreate (też stworzona przeze mnie)
 - Zmieniono rozmiary czcionek niektórych tłumaczeń (w tym tłumaczenia odtwarzacza)
   
 Edytor (i osobny plik pl.yml dla tych, którzy już mają edytora) jest dostępny do pobrania w sekcji [Releases](https://github.com/unauthparadox/ArcCreatePL/releases) repozytorium.
-Odtwarzacz nie jest jeszcze dostępny, ponieważ mam problemy z budowaniem aplikacji na Androida i iOS. Jeśli NAPRAWDĘ chcesz mieć lepsze polskie tłumaczenie odtwarzacza i chcesz je mieć TERAZ, zbuduj sam odtwarzacz przy użyciu tego repozytorium i [Unity 2021.3.37f1](https://unity.com/releases/editor/archive).
+Odtwarzacz nie jest jeszcze dostępny, ponieważ mam problemy z budowaniem aplikacji na Androida i iOS (kocham unity :D). Jeśli NAPRAWDĘ chcesz mieć lepsze polskie tłumaczenie odtwarzacza i chcesz je mieć TERAZ, zbuduj sam odtwarzacz przy użyciu tego repozytorium i [Unity 2021.3.37f1](https://unity.com/releases/editor/archive).
 
 ## Poniżej znajduje się oryginalna zawartość README z repozytorium Arcthesia. | The following is the original contents of the README from the Arcthesia repository.
 
