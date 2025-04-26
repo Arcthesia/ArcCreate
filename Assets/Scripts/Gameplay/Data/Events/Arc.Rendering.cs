@@ -254,7 +254,7 @@ namespace ArcCreate.Gameplay.Data
                 }
                 else
                 {
-                    Services.Render.DrawArcHead(Color, highlight, matrix, color, IsSelected, redArcValue, basePos.y);
+                    Services.Render.DrawArcHead(Color, highlight, matrix, color, IsSelected, redArcValue, segments[0].EndPosition.y);
                 }
             }
 
