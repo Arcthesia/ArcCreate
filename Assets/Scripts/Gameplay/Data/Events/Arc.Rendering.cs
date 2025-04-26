@@ -139,6 +139,9 @@ namespace ArcCreate.Gameplay.Data
             Vector3 scl = groupProperties.ScaleIndividual;
             Matrix4x4 matrix = groupProperties.GroupMatrix * Matrix4x4.TRS(pos, rot, scl);
 
+            float currentX = 0;
+            float currentY = 0;
+
             float alpha = 1;
             float redArcValue = Services.Skin.GetRedArcValue(Color);
             if (!IsTrace)
@@ -268,7 +271,7 @@ namespace ArcCreate.Gameplay.Data
                 Services.Particle.PlayArcParticle(
                     Color,
                     firstArcOfBranch ?? this,
-                    new Vector3(WorldXAt(currentTiming), WorldYAt(currentTiming), 0) + groupProperties.CurrentJudgementOffset);
+                    WorldSegmentedPosAt(currentTiming) + groupProperties.CurrentJudgementOffset);
             }
         }
 
@@ -358,6 +361,37 @@ namespace ArcCreate.Gameplay.Data
             }
 
             return WorldXAt(timing);
+        }
+
+        public Vector3 WorldSegmentedPosAt(int timing)
+        {
+            for (int i = 0; i < segments.Count; i++)
+            {
+                var seg = segments[i];
+                if (seg.Timing <= timing && timing <= seg.EndTiming)
+                {
+                    var xStart = ArcFormula.ArcXToWorld(XStart);
+                    var yStart = ArcFormula.ArcYToWorld(YStart);
+                    var xSegStart = seg.StartPosition.x;
+                    var ySegStart = seg.StartPosition.y;
+                    if (seg.Timing == seg.EndTiming)
+                    {
+                        var sx = xSegStart + xStart;
+                        var sy = ySegStart + yStart;
+                        return new Vector3(sx, sy);
+                    }
+
+                    Vector3 dv = (seg.EndPosition - seg.StartPosition);
+                    float dx = dv.x;
+                    float dy = dv.y;
+                    float dt = (float)(timing - seg.Timing) / (seg.EndTiming - seg.Timing);
+                    var x = xSegStart + (dt * dx) + xStart;
+                    var y = ySegStart + (dt * dy) + yStart;
+                    return new Vector3(x, y);
+                }
+            }
+
+            return new Vector3(WorldXAt(timing), WorldYAt(timing));
         }
 
         private void RebuildSegments()
