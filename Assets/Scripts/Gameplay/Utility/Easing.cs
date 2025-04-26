@@ -4,7 +4,7 @@ using EmmySharp;
 using MoonSharp.Interpreter;
 using UnityEngine;
 
-namespace ArcCreate.Gameplay.Scenecontrol
+namespace ArcCreate.Utility
 {
     [MoonSharpUserData]
     [EmmySingleton]
