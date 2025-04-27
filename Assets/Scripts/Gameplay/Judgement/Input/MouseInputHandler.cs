@@ -21,7 +21,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
             else if (UnityEngine.Input.GetMouseButton(0))
             {
                 input = new TouchInput(0, mousePosition, false, TouchPhase.Moved, GetCameraRay(mousePosition));
-                Services.InputFeedback.LaneFeedback(input.Lane);
+                Services.InputFeedback.LaneFeedback(Mathf.RoundToInt(input.Lane));
                 Services.InputFeedback.FloatlineFeedback(input.VerticalPos.y);
             }
             else

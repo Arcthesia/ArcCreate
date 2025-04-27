@@ -109,12 +109,21 @@ namespace ArcCreate.ChartFormat
 
                 case RawEventType.Tap:
                     RawTap tap = affEvent as RawTap;
-                    stream.WriteLine($"{indent}({tap.Timing},{tap.Lane});");
+                    if (HasDecimal(tap.Lane))
+                    {
+                        stream.WriteLine($"{indent}({tap.Timing},{tap.Lane:f2});");
+                    }
+                    stream.WriteLine($"{indent}({tap.Timing},{tap.Lane:N0});");
                     break;
 
                 case RawEventType.Hold:
                     RawHold hold = affEvent as RawHold;
-                    stream.WriteLine($"{indent}hold({hold.Timing},{hold.EndTiming},{hold.Lane});");
+                    if (HasDecimal(hold.Lane))
+                    {
+                        stream.WriteLine($"{indent}hold({hold.Timing},{hold.EndTiming},{hold.Lane:f2});");
+                        break;
+                    }
+                    stream.WriteLine($"{indent}hold({hold.Timing},{hold.EndTiming},{hold.Lane:N0});");
                     break;
 
                 case RawEventType.Arc:
@@ -212,6 +221,11 @@ namespace ArcCreate.ChartFormat
         {
             stream.WriteLine("};");
             stream.Flush();
+        }
+
+        private bool HasDecimal(float value, float epsilon = 0.001f)
+        {
+            return Mathf.Abs(value%1) > epsilon;
         }
     }
 }

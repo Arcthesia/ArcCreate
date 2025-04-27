@@ -14,7 +14,7 @@ namespace ArcCreate.Gameplay.Data
 
         public HashSet<ArcTap> ConnectedArcTaps { get; } = new HashSet<ArcTap>();
 
-        public int Lane { get; set; }
+        public float Lane { get; set; }
 
         public override ArcEvent Clone()
         {
@@ -146,7 +146,7 @@ namespace ArcCreate.Gameplay.Data
 
             if (!result.IsMiss())
             {
-                Services.InputFeedback.LaneFeedback(Lane);
+                Services.InputFeedback.LaneFeedback(Mathf.RoundToInt(Lane));
                 Services.Hitsound.PlayTapHitsound(Timing);
             }
         }

@@ -31,6 +31,11 @@ namespace ArcCreate.Gameplay
             return (-Values.LaneWidth * lane) + (Values.LaneWidth * 2.5f);
         }
 
+        public static float LaneToWorldX(float lane)
+        {
+            return (-Values.LaneWidth * lane) + (Values.LaneWidth * 2.5f);
+        }
+
         public static float LaneToArcX(int lane)
         {
             return (0.5f * lane) - 0.75f;

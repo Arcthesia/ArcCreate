@@ -54,7 +54,7 @@ namespace ArcCreate.ChartFormat
             StringParser s = new StringParser(line);
             s.Skip(1);
             if (!s.ReadInt(",").TryUnwrap(out TextSpan<int> tick, out ParsingError e)
-             || !s.ReadInt(")").TryUnwrap(out TextSpan<int> lane, out e))
+             || !s.ReadFloat(")").TryUnwrap(out TextSpan<float> lane, out e))
             {
                 return ChartError.Parsing(line, lineNumber, RawEventType.Tap, e);
             }

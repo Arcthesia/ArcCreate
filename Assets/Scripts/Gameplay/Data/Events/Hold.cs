@@ -18,7 +18,7 @@ namespace ArcCreate.Gameplay.Data
         private bool spawnedParticleThisFrame = false;
         private Texture texture;
 
-        public int Lane { get; set; }
+        public float Lane { get; set; }
 
         public bool IsLocked => locked;
 
@@ -232,7 +232,7 @@ namespace ArcCreate.Gameplay.Data
 
             longParticleUntil = currentTiming + Values.HoldParticlePersistDuration;
             highlight = true;
-            Services.InputFeedback.LaneFeedback(Lane);
+            Services.InputFeedback.LaneFeedback(Mathf.RoundToInt(Lane));
             Services.Particle.PlayHoldParticle(this, new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0) + props.CurrentJudgementOffset);
             Services.Hitsound.PlayTapHitsound(Timing);
 
@@ -319,7 +319,7 @@ namespace ArcCreate.Gameplay.Data
             numHoldJudgementRequestsSent = TotalCombo;
         }
 
-        private void RequestHoldHighlight(int timing, GroupProperties props)
+        protected void RequestHoldHighlight(int timing, GroupProperties props)
         {
             Services.Judgement.Request(new LaneHoldJudgementRequest()
             {

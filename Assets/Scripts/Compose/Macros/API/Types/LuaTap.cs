@@ -9,7 +9,8 @@ namespace ArcCreate.Compose.Macros
     [EmmyGroup("Macros")]
     public class LuaTap : LuaChartEvent
     {
-        public int Lane { get; set; } = 1;
+        public float Lane { get; set; } = 1;
+        public bool IsDecimal { get; set; }
 
         public override LuaChartEvent Copy()
         {
@@ -18,6 +19,7 @@ namespace ArcCreate.Compose.Macros
                 Timing = Timing,
                 Lane = Lane,
                 TimingGroup = TimingGroup,
+                IsDecimal = IsDecimal
             };
         }
 

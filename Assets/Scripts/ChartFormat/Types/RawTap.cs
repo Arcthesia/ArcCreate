@@ -2,6 +2,6 @@ namespace ArcCreate.ChartFormat
 {
     public class RawTap : RawEvent
     {
-        public int Lane { get; set; }
+        public float Lane { get; set; }
     }
 }

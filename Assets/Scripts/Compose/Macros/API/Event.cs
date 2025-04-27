@@ -76,7 +76,7 @@ namespace ArcCreate.Compose.Macros
         }
 
         [EmmyDoc("Create a tap event data.")]
-        public static LuaTap Tap(int timing, int lane, int timingGroup = 0)
+        public static LuaTap Tap(int timing, float lane, int timingGroup = 0)
         {
             if (timingGroup >= Services.Gameplay.Chart.TimingGroups.Count || timingGroup < 0)
             {
@@ -92,7 +92,7 @@ namespace ArcCreate.Compose.Macros
         }
 
         [EmmyDoc("Create a hold event data.")]
-        public static LuaHold Hold(int timing, int endTiming, int lane, int timingGroup = 0)
+        public static LuaHold Hold(int timing, int endTiming, float lane, int timingGroup = 0)
         {
             if (timingGroup >= Services.Gameplay.Chart.TimingGroups.Count || timingGroup < 0)
             {
@@ -109,17 +109,18 @@ namespace ArcCreate.Compose.Macros
         }
 
         [EmmyDoc("Create an arctap event data.")]
-        public static LuaArcTap ArcTap(int timing, LuaArc arc)
+        public static LuaArcTap ArcTap(int timing, float width, LuaArc arc)
         {
             return new LuaArcTap
             {
                 Timing = timing,
                 Arc = arc,
+                Width = width,
             };
         }
 
         [EmmyDoc("Create an arctap event data.")]
-        public static LuaArcTap Arctap(int timing, LuaArc arc) => ArcTap(timing, arc);
+        public static LuaArcTap Arctap(int timing, float width, LuaArc arc) => ArcTap(timing, width, arc);
 
         [EmmyDoc("Create a timing event data.")]
         public static LuaTiming Timing(int timing, float bpm, float divisor, int timingGroup = 0)
@@ -508,7 +509,7 @@ namespace ArcCreate.Compose.Macros
                         LuaArcTap at;
                         if (arcs.Keys.Contains(n.Arc))
                         {
-                            at = ArcTap(n.Timing, arcs[n.Arc]);
+                            at = ArcTap(n.Timing, n.Width, arcs[n.Arc]);
                         }
                         else
                         {
@@ -525,7 +526,7 @@ namespace ArcCreate.Compose.Macros
                                 n.Arc.TimingGroup,
                                 n.Arc.Sfx);
                             arcs.Add(n.Arc, a);
-                            at = ArcTap(n.Timing, a);
+                            at = ArcTap(n.Timing, n.Width, a);
                         }
 
                         at.SetInstance(n);
