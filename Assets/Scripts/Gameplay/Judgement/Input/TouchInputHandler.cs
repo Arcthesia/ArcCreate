@@ -378,7 +378,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
         private bool LaneCollide(TouchInput input, Vector3 screenPosition, float lane, Vector2 judgementSize, bool useLane)
         {
             float dLx = Mathf.Abs(input.Lane - lane);
-            bool worldCollide = dLx <= 0.5f && useLane;
+            bool worldCollide = dLx <= 0.5f * judgementSize.x && useLane;
             bool screenCollide = Mathf.Abs(input.ScreenPos.x - screenPosition.x) <= (Values.LaneScreenHitboxHorizontal * judgementSize.x)
                               && Mathf.Abs(input.ScreenPos.y - screenPosition.y) <= (Values.LaneScreenHitboxVertical * judgementSize.y);
             return worldCollide || screenCollide;
