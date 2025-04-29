@@ -112,6 +112,7 @@ namespace ArcCreate.ChartFormat
                     if (HasDecimal(tap.Lane))
                     {
                         stream.WriteLine($"{indent}({tap.Timing},{tap.Lane:f2});");
+                        break;
                     }
                     stream.WriteLine($"{indent}({tap.Timing},{tap.Lane:N0});");
                     break;

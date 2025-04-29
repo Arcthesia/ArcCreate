@@ -63,7 +63,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
                     Vector3 screenPosition = Services.Camera.GameplayCamera.WorldToScreenPoint(worldPosition);
                     Vector3 deltaToNote = screenPosition - input.ScreenPos;
                     float distanceToNote = deltaToNote.sqrMagnitude;
-                    if (LaneCollide(input, screenPosition, worldPosition, judgementSize, judgementOffset == Vector3.zero)
+                    if (LaneCollide(input, screenPosition, worldPosition, req.Lane, judgementSize, judgementOffset == Vector3.zero)
                     && (timingDifference < minTimingDifference || distanceToNote <= minPositionDifference))
                     {
                         minTimingDifference = timingDifference;
@@ -138,7 +138,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
                     Vector3 worldPosition = new Vector3(ArcFormula.LaneToWorldX(req.Lane), 0, 0) + judgementOffset;
                     Vector3 screenPosition = Services.Camera.GameplayCamera.WorldToScreenPoint(worldPosition);
 
-                    if (LaneCollide(input, screenPosition, worldPosition, judgementSize, judgementOffset == Vector3.zero))
+                    if (LaneCollide(input, screenPosition, worldPosition, req.Lane, judgementSize, judgementOffset == Vector3.zero))
                     {
                         req.Receiver.ProcessLaneHoldJudgement(currentTiming >= req.ExpireAtTiming, req.IsJudgement, req.Properties);
                         requests.RemoveAt(i);
@@ -374,10 +374,10 @@ namespace ArcCreate.Gameplay.Judgement.Input
             return worldCollide || screenCollide;
         }
 
-        private bool LaneCollide(TouchInput input, Vector3 screenPosition, Vector3 worldPosition, Vector2 judgementSize, bool useLane)
+        private bool LaneCollide(TouchInput input, Vector3 screenPosition, Vector3 worldPosition, float lane, Vector2 judgementSize, bool useLane)
         {
-            float dWx = Mathf.Abs(input.VerticalPos.x - worldPosition.x);
-            bool worldCollide = dWx <= Values.LaneWidth * judgementSize.x;
+            float dLx = Mathf.Abs(input.Lane - lane);
+            bool worldCollide = dLx <= 0.5f;
             bool screenCollide = Mathf.Abs(input.ScreenPos.x - screenPosition.x) <= (Values.LaneScreenHitboxHorizontal * judgementSize.x)
                               && Mathf.Abs(input.ScreenPos.y - screenPosition.y) <= (Values.LaneScreenHitboxVertical * judgementSize.y);
             return worldCollide || screenCollide;
