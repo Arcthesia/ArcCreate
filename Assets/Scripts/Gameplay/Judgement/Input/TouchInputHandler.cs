@@ -58,12 +58,12 @@ namespace ArcCreate.Gameplay.Judgement.Input
 
                     Vector2 judgementSize = req.Properties.CurrentJudgementSize;
                     Vector3 judgementOffset = req.Properties.CurrentJudgementOffset;
-
+                    bool useLane = judgementOffset.y == 0;
                     Vector3 worldPosition = new Vector3(ArcFormula.LaneToWorldX(req.Lane), 0, 0) + judgementOffset;
                     Vector3 screenPosition = Services.Camera.GameplayCamera.WorldToScreenPoint(worldPosition);
                     Vector3 deltaToNote = screenPosition - input.ScreenPos;
                     float distanceToNote = deltaToNote.sqrMagnitude;
-                    if (LaneCollide(input, screenPosition, worldPosition, req.Lane, judgementSize, judgementOffset == Vector3.zero)
+                    if (LaneCollide(input, screenPosition, req.Lane, judgementSize, useLane)
                     && (timingDifference < minTimingDifference || distanceToNote <= minPositionDifference))
                     {
                         minTimingDifference = timingDifference;
@@ -135,10 +135,11 @@ namespace ArcCreate.Gameplay.Judgement.Input
 
                     Vector2 judgementSize = req.Properties.CurrentJudgementSize;
                     Vector3 judgementOffset = req.Properties.CurrentJudgementOffset;
+                    bool useLane = judgementOffset.y == 0;
                     Vector3 worldPosition = new Vector3(ArcFormula.LaneToWorldX(req.Lane), 0, 0) + judgementOffset;
                     Vector3 screenPosition = Services.Camera.GameplayCamera.WorldToScreenPoint(worldPosition);
 
-                    if (LaneCollide(input, screenPosition, worldPosition, req.Lane, judgementSize, judgementOffset == Vector3.zero))
+                    if (LaneCollide(input, screenPosition, req.Lane, judgementSize, useLane))
                     {
                         req.Receiver.ProcessLaneHoldJudgement(currentTiming >= req.ExpireAtTiming, req.IsJudgement, req.Properties);
                         requests.RemoveAt(i);
@@ -374,10 +375,10 @@ namespace ArcCreate.Gameplay.Judgement.Input
             return worldCollide || screenCollide;
         }
 
-        private bool LaneCollide(TouchInput input, Vector3 screenPosition, Vector3 worldPosition, float lane, Vector2 judgementSize, bool useLane)
+        private bool LaneCollide(TouchInput input, Vector3 screenPosition, float lane, Vector2 judgementSize, bool useLane)
         {
             float dLx = Mathf.Abs(input.Lane - lane);
-            bool worldCollide = dLx <= 0.5f;
+            bool worldCollide = dLx <= 0.5f && useLane;
             bool screenCollide = Mathf.Abs(input.ScreenPos.x - screenPosition.x) <= (Values.LaneScreenHitboxHorizontal * judgementSize.x)
                               && Mathf.Abs(input.ScreenPos.y - screenPosition.y) <= (Values.LaneScreenHitboxVertical * judgementSize.y);
             return worldCollide || screenCollide;
