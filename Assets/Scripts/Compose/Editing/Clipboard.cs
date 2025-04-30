@@ -270,12 +270,14 @@ namespace ArcCreate.Compose.Editing
         private HashSet<Note> MakeClipboard(HashSet<Note> notes)
         {
             HashSet<Note> clipboard = new HashSet<Note>();
+            HashSet<ArcTap> copiedArcTaps = new HashSet<ArcTap>();
             foreach (var note in notes)
             {
                 if (note is ArcTap arcTap)
                 {
                     if (!notes.Contains(arcTap.Arc))
                     {
+                        copiedArcTaps.Add(arcTap);
                         clipboard.Add(arcTap.Clone() as Note);
                     }
                 }
@@ -285,6 +287,7 @@ namespace ArcCreate.Compose.Editing
                     var arctaps = Services.Gameplay.Chart.GetAll<ArcTap>().Where(at => at.Arc == arc);
                     foreach (var arctap in arctaps)
                     {
+                        if(copiedArcTaps.Contains(arctap)) continue;
                         ArcTap cloneArctap = arctap.Clone() as ArcTap;
                         cloneArctap.Arc = clone;
                         clipboard.Add(cloneArctap);
