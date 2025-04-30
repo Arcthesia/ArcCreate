@@ -52,5 +52,7 @@ namespace EmmySharp
 
         public static string EmmyAlias(this ICustomAttributeProvider p)
             => p.GetAttrOr<EmmyAliasAttribute>()?.Alias;
+        public static string EmmyDeprecated(this ICustomAttributeProvider p)
+            => p.GetAttrOr<EmmyDeprecatedAttribute>()?.DeprecationNotice;
     }
 }
