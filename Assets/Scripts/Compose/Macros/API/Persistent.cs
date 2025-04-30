@@ -100,7 +100,7 @@ namespace ArcCreate.Compose.Macros
             }
             catch (Exception e)
             {
-                throw new ScriptRuntimeException(e.Message, e);
+                throw new ScriptRuntimeException(e.ToString());
             }
         }
 
