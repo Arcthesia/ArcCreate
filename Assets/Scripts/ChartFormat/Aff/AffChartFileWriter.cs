@@ -111,7 +111,7 @@ namespace ArcCreate.ChartFormat
                     RawTap tap = affEvent as RawTap;
                     if (HasDecimal(tap.Lane))
                     {
-                        stream.WriteLine($"{indent}({tap.Timing},{tap.Lane:f2});");
+                        stream.WriteLine($"{indent}({tap.Timing},{tap.Lane:f3});");
                         break;
                     }
                     stream.WriteLine($"{indent}({tap.Timing},{tap.Lane:N0});");
@@ -121,7 +121,7 @@ namespace ArcCreate.ChartFormat
                     RawHold hold = affEvent as RawHold;
                     if (HasDecimal(hold.Lane))
                     {
-                        stream.WriteLine($"{indent}hold({hold.Timing},{hold.EndTiming},{hold.Lane:f2});");
+                        stream.WriteLine($"{indent}hold({hold.Timing},{hold.EndTiming},{hold.Lane:f3});");
                         break;
                     }
                     stream.WriteLine($"{indent}hold({hold.Timing},{hold.EndTiming},{hold.Lane:N0});");
