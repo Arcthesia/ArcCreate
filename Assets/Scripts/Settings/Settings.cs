@@ -83,6 +83,7 @@ namespace ArcCreate
 
         public static readonly BoolSetting EnableKeybindHintDisplay = new BoolSetting("Editor.Navigation.KeybindHint", true);
         public static readonly BoolSetting EnableArctapWidthEditing = new BoolSetting("Editor.Secret.ArctapWidth", false);
+        public static readonly BoolSetting SnapFloorNoteWithGrid = new BoolSetting("Editor.Secret.SnapFloorNoteWithGrid", false);
 
         [RuntimeInitializeOnLoadMethod]
         public static void OnInitialize()

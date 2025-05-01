@@ -57,11 +57,26 @@ namespace ArcCreate.Compose.Editing
                 case CreateNoteMode.Idle:
                     break;
                 case CreateNoteMode.Tap:
-                    CreateTap();
+                    if (Settings.SnapFloorNoteWithGrid.Value)
+                    {
+                        toggleFreeSky.ForceDisabled = true;
+                        await CreateDecimalTap(confirm, cancel);
+                    }
+                    else
+                    {
+                        CreateTap();
+                    }
                     break;
                 case CreateNoteMode.Hold:
                     toggleFreeSky.ForceDisabled = true;
-                    await CreateHold(confirm, cancel);
+                    if (Settings.SnapFloorNoteWithGrid.Value)
+                    {
+                        await CreateDecimalHold(confirm, cancel);
+                    }
+                    else
+                    {
+                        await CreateHold(confirm, cancel);
+                    }
                     break;
                 case CreateNoteMode.Arc:
                     toggleFreeSky.ForceDisabled = true;
@@ -130,6 +145,121 @@ namespace ArcCreate.Compose.Editing
             using (new NoteModifyTarget(new List<Note> { hold }))
             {
                 previewHold.gameObject.SetActive(false);
+                var (success, timing2) = await Services.Cursor.RequestTimingSelection(
+                    confirm,
+                    cancel,
+                    update: t =>
+                    {
+                        hold.Timing = Mathf.Min(timing1, t);
+                        hold.EndTiming = Mathf.Max(timing1, t);
+                        Services.Gameplay.Chart.UpdateEvents(events);
+                    },
+                    constraint: t => t != timing1 && (AllowCreatingNoteBackwards || t > timing1));
+                previewHold.gameObject.SetActive(false);
+                Services.Cursor.EnableLaneCursor = true;
+
+                if (success)
+                {
+                    hold.Timing = Mathf.Min(timing1, timing2);
+                    hold.EndTiming = Mathf.Max(timing1, timing2);
+                    Services.History.AddCommandWithoutExecuting(command);
+                }
+                else
+                {
+                    command.Undo();
+                }
+            }
+        }
+
+        private async UniTask CreateDecimalTap(SubAction confirm, SubAction cancel)
+        {
+            int timing = Services.Cursor.CursorTiming;
+            Tap tap = new Tap()
+            {
+                Timing = timing,
+                Lane = Gameplay.Values.InvalidLane,
+                TimingGroup = Values.EditingTimingGroup.Value,
+            };
+
+            IEnumerable<ArcEvent> events = new ArcEvent[] { tap };
+            var command = new EventCommand(
+                I18n.S("Compose.Notify.History.CreateNote.Tap"),
+                add: events);
+            command.Execute();
+
+            using (new NoteModifyTarget(new List<Note> { tap }))
+            {
+                previewTap.gameObject.SetActive(false);
+                var (posSuccess, pos) = await Services.Cursor.RequestVerticalSelection(
+                    confirm,
+                    cancel,
+                    showGridAtTiming: timing,
+                    update: p =>
+                    {
+                        tap.Lane = ArcFormula.ArcXToLane(p.x);
+                        Services.Gameplay.Chart.UpdateEvents(events);
+                    });
+
+                if (!posSuccess)
+                {
+                    command.Undo();
+                }
+                else
+                {
+                    tap.Lane = ArcFormula.ArcXToLane(pos.x);
+                    Services.History.AddCommandWithoutExecuting(command);
+                }
+
+            }
+        }
+
+        private async UniTask CreateDecimalHold(SubAction confirm, SubAction cancel)
+        {
+            int timing1 = Services.Cursor.CursorTiming;
+            int lane = Services.Cursor.CursorLane;
+            if (Settings.BlockOverlapNoteCreation.Value
+             && HasOverlap(timing1, lane))
+            {
+                Services.Popups.Notify(Popups.Severity.Warning, I18n.S("Compose.Notify.Creation.Overlap"));
+                return;
+            }
+
+            Hold hold = new Hold()
+            {
+                Timing = timing1,
+                EndTiming = timing1 + 1,
+                Lane = Gameplay.Values.InvalidLane,
+                TimingGroup = Values.EditingTimingGroup.Value,
+            };
+
+            IEnumerable<ArcEvent> events = new ArcEvent[] { hold };
+            var command = new EventCommand(
+                I18n.S("Compose.Notify.History.CreateNote.Hold"),
+                add: events);
+            command.Execute();
+
+            using (new NoteModifyTarget(new List<Note> { hold }))
+            {
+                previewHold.gameObject.SetActive(false);
+                var (posSuccess, pos) = await Services.Cursor.RequestVerticalSelection(
+                    confirm,
+                    cancel,
+                    showGridAtTiming: timing1,
+                    update: p =>
+                    {
+                        hold.Lane = ArcFormula.ArcXToLane(p.x);
+                        Services.Gameplay.Chart.UpdateEvents(events);
+                    });
+                if (posSuccess)
+                {
+                    hold.Lane = ArcFormula.ArcXToLane(pos.x);
+                }
+                else
+                {
+                    
+                    command.Undo();
+                    return;
+                }
                 var (success, timing2) = await Services.Cursor.RequestTimingSelection(
                     confirm,
                     cancel,

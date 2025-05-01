@@ -46,9 +46,9 @@ namespace ArcCreate.Gameplay
             return z >= -Values.TrackLengthForward && z <= Values.TrackLengthBackward;
         }
 
-        public static int ArcXToLane(float x)
+        public static float ArcXToLane(float x)
         {
-            return Mathf.RoundToInt((x + 0.75f) / 0.5f);
+            return (x + 0.75f) / 0.5f;
         }
 
         public static int WorldXToLane(float x)

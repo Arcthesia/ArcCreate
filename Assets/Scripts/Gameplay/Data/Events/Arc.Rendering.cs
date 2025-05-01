@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
 using ArcCreate.Gameplay.Render;
 using ArcCreate.Gameplay.Utility;
+using Gameplay.Utility;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
@@ -138,9 +139,6 @@ namespace ArcCreate.Gameplay.Data
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
             Matrix4x4 matrix = groupProperties.GroupMatrix * Matrix4x4.TRS(pos, rot, scl);
-
-            float currentX = 0;
-            float currentY = 0;
 
             float alpha = 1;
             float redArcValue = Services.Skin.GetRedArcValue(Color);
