@@ -108,17 +108,17 @@ namespace ArcCreate.Compose.Selection
 
             if (includeTap && includeHold)
             {
-                laneField.text = ExtractCommonProperty<Tap, int>(n => n.Lane, out int tapLane)
-                              && ExtractCommonProperty<Hold, int>(n => n.Lane, out int holdLane)
+                laneField.text = ExtractCommonProperty<Tap, float>(n => n.Lane, out float tapLane)
+                              && ExtractCommonProperty<Hold, float>(n => n.Lane, out float holdLane)
                               && tapLane == holdLane ? tapLane.ToString() : Mixed;
             }
             else if (includeTap)
             {
-                laneField.text = ExtractCommonProperty<Tap, int>(n => n.Lane, out int tapLane) ? tapLane.ToString() : Mixed;
+                laneField.text = ExtractCommonProperty<Tap, float>(n => n.Lane, out float tapLane) ? tapLane.ToString() : Mixed;
             }
             else
             {
-                laneField.text = ExtractCommonProperty<Hold, int>(n => n.Lane, out int holdLane) ? holdLane.ToString() : Mixed;
+                laneField.text = ExtractCommonProperty<Hold, float>(n => n.Lane, out float holdLane) ? holdLane.ToString() : Mixed;
             }
 
             startXField.text = ExtractCommonProperty<Arc, float>(n => n.XStart, out float startX) ? startX.ToString() : Mixed;
@@ -311,11 +311,11 @@ namespace ArcCreate.Compose.Selection
                 {
                     if (ev is Tap t)
                     {
-                        t.Lane = (int)lane;
+                        t.Lane = (float)lane;
                     }
                     else if (ev is Hold h)
                     {
-                        h.Lane = (int)lane;
+                        h.Lane = (float)lane;
                     }
                 },
                 preselect: ev => ev is Tap || ev is Hold);
