@@ -182,32 +182,25 @@ namespace ArcCreate.Compose.Editing
             };
 
             IEnumerable<ArcEvent> events = new ArcEvent[] { tap };
-            var command = new EventCommand(
-                I18n.S("Compose.Notify.History.CreateNote.Tap"),
-                add: events);
-            command.Execute();
 
             using (new NoteModifyTarget(new List<Note> { tap }))
             {
-                previewTap.gameObject.SetActive(false);
                 var (posSuccess, pos) = await Services.Cursor.RequestVerticalSelection(
                     confirm,
                     cancel,
                     showGridAtTiming: timing,
                     update: p =>
                     {
-                        tap.Lane = ArcFormula.ArcXToLane(p.x);
-                        Services.Gameplay.Chart.UpdateEvents(events);
+                        previewTap.transform.localPosition = new Vector3(ArcFormula.ArcXToWorld(p.x), 0, 0);
                     });
-
-                if (!posSuccess)
-                {
-                    command.Undo();
-                }
-                else
+                previewTap.gameObject.SetActive(false);
+                if (posSuccess)
                 {
                     tap.Lane = ArcFormula.ArcXToLane(pos.x);
-                    Services.History.AddCommandWithoutExecuting(command);
+                    var command = new EventCommand(
+                        I18n.S("Compose.Notify.History.CreateNote.Tap"),
+                        add: events);
+                    Services.History.AddCommand(command);
                 }
 
             }
@@ -217,6 +210,8 @@ namespace ArcCreate.Compose.Editing
         {
             int timing1 = Services.Cursor.CursorTiming;
             int lane = Services.Cursor.CursorLane;
+            Vector3 cursorPosition = Services.Cursor.CursorWorldPosition;
+            float z = cursorPosition.z;
             if (Settings.BlockOverlapNoteCreation.Value
              && HasOverlap(timing1, lane))
             {
@@ -233,31 +228,25 @@ namespace ArcCreate.Compose.Editing
             };
 
             IEnumerable<ArcEvent> events = new ArcEvent[] { hold };
+
             var command = new EventCommand(
                 I18n.S("Compose.Notify.History.CreateNote.Hold"),
                 add: events);
-            command.Execute();
 
             using (new NoteModifyTarget(new List<Note> { hold }))
             {
-                previewHold.gameObject.SetActive(false);
                 var (posSuccess, pos) = await Services.Cursor.RequestVerticalSelection(
                     confirm,
                     cancel,
-                    showGridAtTiming: timing1,
-                    update: p =>
-                    {
-                        hold.Lane = ArcFormula.ArcXToLane(p.x);
-                        Services.Gameplay.Chart.UpdateEvents(events);
-                    });
+                    showGridAtTiming: timing1);
+                previewHold.gameObject.SetActive(false);
                 if (posSuccess)
                 {
                     hold.Lane = ArcFormula.ArcXToLane(pos.x);
+                    command.Execute();
                 }
                 else
                 {
-                    
-                    command.Undo();
                     return;
                 }
                 var (success, timing2) = await Services.Cursor.RequestTimingSelection(
@@ -270,7 +259,6 @@ namespace ArcCreate.Compose.Editing
                         Services.Gameplay.Chart.UpdateEvents(events);
                     },
                     constraint: t => t != timing1 && (AllowCreatingNoteBackwards || t > timing1));
-                previewHold.gameObject.SetActive(false);
                 Services.Cursor.EnableLaneCursor = true;
 
                 if (success)
@@ -278,10 +266,6 @@ namespace ArcCreate.Compose.Editing
                     hold.Timing = Mathf.Min(timing1, timing2);
                     hold.EndTiming = Mathf.Max(timing1, timing2);
                     Services.History.AddCommandWithoutExecuting(command);
-                }
-                else
-                {
-                    command.Undo();
                 }
             }
         }
@@ -780,9 +764,11 @@ namespace ArcCreate.Compose.Editing
             int tg = Values.EditingTimingGroup.Value;
             Vector3 cursorPosition = Services.Cursor.CursorWorldPosition;
             float z = cursorPosition.z;
+            bool decimalEditing = Settings.SnapFloorNoteWithGrid.Value;
 
             GroupProperties groupProperties = Services.Gameplay.Chart.GetTimingGroup(tg).GroupProperties;
             Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(ArcFormula.LaneToWorldX(cursorLane), 0, 0);
+            Vector3 decPos = (groupProperties.FallDirection * z) + new Vector3(cursorPosition.x, 0, 0);
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
 
@@ -790,13 +776,13 @@ namespace ArcCreate.Compose.Editing
             {
                 case CreateNoteMode.Tap:
                     scl.y = ArcFormula.CalculateTapSizeScalar(z) * scl.y;
-                    previewTap.localPosition = pos;
+                    previewTap.localPosition = decimalEditing ? decPos : pos;
                     previewTap.localRotation = rot;
                     previewTap.localScale = scl;
                     break;
                 case CreateNoteMode.Hold:
                     scl.z *= 10;
-                    previewHold.localPosition = pos;
+                    previewHold.localPosition = decimalEditing ? decPos : pos;
                     previewHold.localRotation = rot;
                     previewHold.localScale = scl;
                     break;
