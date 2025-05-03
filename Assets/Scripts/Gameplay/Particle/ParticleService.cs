@@ -53,8 +53,10 @@ namespace ArcCreate.Gameplay.Particle
         private ExternalTexture arcParticleTexture;
         private ExternalTexture holdParticleTexture;
 
-        private ParticlePool<Particle> tapParticlePool;
-        private ParticlePool<Particle> textParticlePool;
+        private Particle tapParticle;
+        private Particle perfectTextParticle;
+        private Particle goodTextParticle;
+        private Particle missTextParticle;
         private Pool<Particle> arcParticlePool;
         private Pool<Particle> holdParticlePool;
         private float lastEarlyLateRealTime = float.MinValue;
@@ -138,12 +140,8 @@ namespace ArcCreate.Gameplay.Particle
             {
                 return;
             }
-
-            Vector2 screenPos = ConvertToScreen(worldPosition);
-            Particle ps = tapParticlePool.Get();
-            ps.transform.localPosition = screenPos;
-            ps.Stop();
-            ps.Play();
+            
+            tapParticle.Emit(ConvertToScreenWorld(worldPosition));
         }
 
         public void PlayTextParticle(Vector3 worldPosition, JudgementResult result, Option<int> offset)
@@ -158,25 +156,21 @@ namespace ArcCreate.Gameplay.Particle
                 return;
             }
 
+            Particle target;
             if (result.IsPerfect())
             {
-                mat = PerfectMaterial;
+                target = perfectTextParticle;
             }
             else if (result.IsGood())
             {
-                mat = GoodMaterial;
+                target = goodTextParticle;
             }
             else
             {
-                mat = MissMaterial;
+                target = missTextParticle;
             }
-
-            Vector2 screenPos = ConvertToScreen(worldPosition);
-            Particle ps = textParticlePool.Get();
-            ps.transform.localPosition = screenPos;
-            ps.Stop();
-            ps.ApplyMaterial(mat);
-            ps.Play();
+            
+            target.Emit(ConvertToScreenWorld(worldPosition));
 
             if (result.IsEarly() && (result.IsGood() || Settings.ShowEarlyLatePerfect.Value))
             {
@@ -277,13 +271,7 @@ namespace ArcCreate.Gameplay.Particle
 
         public void SetTapParticleSkin(Texture particleTexture)
         {
-            tapParticlePrefab.GetComponent<ParticleSystemRenderer>().material.mainTexture = particleTexture;
-            Pools.Destroy<Particle>(Values.TapParticlePoolName);
-            tapParticlePool.Destroy();
-            tapParticlePool = new ParticlePool<Particle>(
-                tapParticlePrefab,
-                tapParticleParent,
-                tapParticlePoolCount);
+            tapParticle.GetComponent<ParticleSystemRenderer>().material.mainTexture = particleTexture;
         }
 
         public void SetHoldParticleSkin(Color colorMin, Color colorMax, Gradient fromGradient, Gradient toGradient, Color colorGrid)
@@ -308,22 +296,24 @@ namespace ArcCreate.Gameplay.Particle
 
         private void Awake()
         {
-            tapParticlePrefab = Instantiate(tapParticlePrefab, transform);
-            arcNoteParticlePrefab = Instantiate(arcNoteParticlePrefab, transform);
-            holdNoteParticlePrefab = Instantiate(holdNoteParticlePrefab, transform);
+            var tap = Instantiate(tapParticlePrefab, gameplayCamera.transform);
+            tapParticle = tap.GetComponent<Particle>();
+            
             PerfectMaterial = Instantiate(perfectMaterial);
             GoodMaterial = Instantiate(goodMaterial);
             MissMaterial = Instantiate(missMaterial);
-
-            tapParticlePool = new ParticlePool<Particle>(
-                tapParticlePrefab,
-                tapParticleParent,
-                tapParticlePoolCount);
-
-            textParticlePool = new ParticlePool<Particle>(
-                textParticlePrefab,
-                textParticleParent,
-                textParticlePoolCount);
+            var perfectText = Instantiate(textParticlePrefab, gameplayCamera.transform);
+            perfectTextParticle = perfectText.GetComponent<Particle>();
+            perfectTextParticle.ApplyMaterial(perfectMaterial);
+            var goodText = Instantiate(textParticlePrefab, gameplayCamera.transform);
+            goodTextParticle = goodText.GetComponent<Particle>();
+            goodTextParticle.ApplyMaterial(goodMaterial);
+            var missText = Instantiate(textParticlePrefab, gameplayCamera.transform);
+            missTextParticle = missText.GetComponent<Particle>();
+            missTextParticle.ApplyMaterial(missMaterial);
+            
+            arcNoteParticlePrefab = Instantiate(arcNoteParticlePrefab, transform);
+            holdNoteParticlePrefab = Instantiate(holdNoteParticlePrefab, transform);
 
             arcParticlePool = Pools.New<Particle>(
                 Values.ArcParticlePoolName,
@@ -395,8 +385,6 @@ namespace ArcCreate.Gameplay.Particle
 
         private void OnDestroy()
         {
-            tapParticlePool.Destroy();
-            textParticlePool.Destroy();
             Pools.Destroy<Particle>(Values.ArcParticlePoolName);
 
             perfectMaterialTexture.Unload();
@@ -415,6 +403,14 @@ namespace ArcCreate.Gameplay.Particle
         {
             Vector2 viewport = gameplayCamera.WorldToViewportPoint(world);
             return new Vector2(viewport.x * screenParticlesRect.rect.width, viewport.y * screenParticlesRect.rect.height);
+        }
+
+        private Vector3 ConvertToScreenWorld(Vector3 world)
+        {
+            Vector3 screenPos = gameplayCamera.WorldToViewportPoint(world);
+            screenPos.z = 100; // original canvas distance
+            Vector3 worldPos = gameplayCamera.ViewportToWorldPoint(screenPos);
+            return worldPos;
         }
 
         private void SetOffsetNumber(char[] charArray, int value, out int length)

@@ -22,6 +22,16 @@ namespace ArcCreate.Gameplay.Particle
             }
         }
 
+        public void Emit(Vector3 position)
+        {
+            ParticleSystem.EmitParams emitParams = new ()
+            {
+                position = ps.transform.InverseTransformPoint(position),
+                applyShapeToPosition = true,
+            };
+            ps.Emit(emitParams, 1);
+        }
+
         public void Stop()
         {
             ps.Stop();
