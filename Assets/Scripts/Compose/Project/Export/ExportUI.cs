@@ -3,6 +3,7 @@ using System.IO;
 using ArcCreate.Data;
 using ArcCreate.Utility;
 using ArcCreate.Utility.Parser;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +21,7 @@ namespace ArcCreate.Compose.Project
 
         private void Awake()
         {
-            confirmButton.onClick.AddListener(StartExport);
+            confirmButton.onClick.AddListener(OnStartExport);
             publisherField.onValueChanged.AddListener(OnInfoChange);
             packageNameField.onValueChanged.AddListener(OnInfoChange);
             Services.Project.OnProjectLoad += OnProjectChange;
@@ -28,7 +29,7 @@ namespace ArcCreate.Compose.Project
 
         private void OnDestroy()
         {
-            confirmButton.onClick.RemoveListener(StartExport);
+            confirmButton.onClick.RemoveListener(OnStartExport);
             publisherField.onValueChanged.RemoveListener(OnInfoChange);
             packageNameField.onValueChanged.RemoveListener(OnInfoChange);
             Services.Project.OnProjectLoad -= OnProjectChange;
@@ -79,7 +80,12 @@ namespace ArcCreate.Compose.Project
             identifierPreview.text = I18n.S("Compose.UI.Export.Package.Identifier", $"{publisherField.text}.{packageNameField.text}");
         }
 
-        private void StartExport()
+        private void OnStartExport()
+        {
+            StartExport().Forget();
+        }
+
+        private async UniTask StartExport()
         {
             string publisher = publisherField.text;
             string package = packageNameField.text;
@@ -95,14 +101,43 @@ namespace ArcCreate.Compose.Project
             requiredIndicator.SetActive(false);
 
             ProjectSettings proj = Services.Project.CurrentProject;
-            string outputPath = Shell.SaveFileDialog(
-                "ArcCreate package",
-                new string[] { "arcpkg" },
-                "Export package",
-                Path.GetDirectoryName(proj.Path),
-                $"{publisher}.{package}");
+            string outputPath = null;
+            var cancelled = false;
+            if (Settings.UseNativeFileBrowser.Value)
+            {
+                outputPath = Shell.SaveFileDialog(
+                    "ArcCreate package",
+                    new string[] { "arcpkg" },
+                    "Export package",
+                    Path.GetDirectoryName(proj.Path),
+                    $"{publisher}.{package}");
+            }
+            else
+            {
+                var filter = new SimpleFileBrowser.FileBrowser.Filter("ArcCreate package", new [] { "arcpkg" });
+                SimpleFileBrowser.FileBrowser.SetFilters(false, filter);
+                SimpleFileBrowser.FileBrowser.ShowSaveDialog(
+                    onSuccess: (string[] paths) => {
+                        if (paths.Length >= 1)
+                        {
+                            outputPath = paths[0];
+                        }
+                    },
+                    onCancel: () => {
+                        cancelled = true;
+                    },
+                    pickMode: SimpleFileBrowser.FileBrowser.PickMode.Files,
+                    allowMultiSelection: false,
+                    initialPath: Path.GetDirectoryName(proj.Path),
+                    initialFilename: $"{publisher}.{package}.arcpkg",
+                    title: "Export package");
+                while (outputPath == null && !cancelled)
+                {
+                    await UniTask.NextFrame();
+                }
+            }
 
-            if (string.IsNullOrWhiteSpace(outputPath))
+            if (string.IsNullOrWhiteSpace(outputPath) || cancelled)
             {
                 return;
             }
