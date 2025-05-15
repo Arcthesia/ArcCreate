@@ -104,6 +104,11 @@ namespace ArcCreate.Compose.Macros
             }
         }
 
+        [EmmyDeprecated("Persistence data no longer saves to json")]
+        public void Save()
+        {
+        }
+
         [MoonSharpHidden]
         public void Dispose()
         {
