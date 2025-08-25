@@ -6,7 +6,7 @@ namespace ArcCreate.Gameplay.Data
 
         public override ArcEvent Clone()
         {
-            return new IncludeEvent()
+            return new FragmentEvent()
             {
                 Timing = Timing,
                 TimingGroup = TimingGroup,
