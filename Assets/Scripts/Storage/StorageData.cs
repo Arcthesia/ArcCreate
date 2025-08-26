@@ -59,6 +59,23 @@ namespace ArcCreate.Storage
         {
             return LevelCollection.FindAll();
         }
+        public IEnumerable<LevelStorage> GetBasePackLevels()
+        {
+            var allPacks = GetAllPacks().ToList();
+
+            var packedLevelIdentifiers = new HashSet<string>();
+            foreach (var pack in allPacks)
+                if (pack.LevelIdentifiers != null)
+                    foreach (var levelId in pack.LevelIdentifiers)
+                        packedLevelIdentifiers.Add(levelId);
+
+            var allLevels = GetAllLevels().ToList();
+
+            var basePackLevels = allLevels.Where(level =>
+                level != null && !packedLevelIdentifiers.Contains(level.Identifier));
+
+            return basePackLevels;
+        }
 
         public void ClearLevels()
         {

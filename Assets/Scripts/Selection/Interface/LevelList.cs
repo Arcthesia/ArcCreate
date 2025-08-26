@@ -95,6 +95,8 @@ namespace ArcCreate.Selection.Interface
         private void OnSelectedPack(PackStorage pack)
         {
             lastWasInLevelList = true;
+
+            //All Songs
             if (pack == null)
             {
                 var (level, chart) = storageData.GetLastSelectedChart(null);
@@ -105,6 +107,39 @@ namespace ArcCreate.Selection.Interface
                 }
 
                 RebuildList();
+                currentPack = pack;
+                return;
+            }
+
+            // Base Pack
+            if (pack.Identifier == "base")
+            {
+                // Get all levels in the Base pack
+                var baseLevels = storageData.GetBasePackLevels()?.ToList() ?? new List<LevelStorage>();
+
+                // Check if the current level is in the Base pack
+                bool found = currentLevel != null && baseLevels.Any(l => l.Id == currentLevel.Id);
+
+                if (!found || currentLevel == null)
+                {
+                    // Switch to the first level in the Base pack
+                    if (baseLevels.Count > 0)
+                    {
+                        var firstLevel = baseLevels[0];
+                        var firstChart = firstLevel.Settings?.Charts?.FirstOrDefault();
+
+                        if (firstChart != null)
+                        {
+                            currentLevel = firstLevel;
+                            storageData.SelectedChart.Value = (firstLevel, firstChart);
+                        }
+                    }
+                }
+                else
+                {
+                    RebuildList();
+                }
+
                 currentPack = pack;
                 return;
             }
@@ -152,18 +187,34 @@ namespace ArcCreate.Selection.Interface
 
         private void RebuildList()
         {
-            if (!lastWasInLevelList)
-            {
-                return;
-            }
+            List<LevelStorage> levels = null;
+            if (!lastWasInLevelList) return;
 
-            int prevCount = scroll.Data.Count;
+            var prevCount = scroll.Data.Count;
+
             if (storageData.SelectedPack.Value != null)
             {
-                storageData.FetchLevelsForPack(storageData.SelectedPack.Value);
+                if (storageData.SelectedPack.Value.Identifier != "base")
+                {
+                    // Normal Pack
+                    storageData.FetchLevelsForPack(storageData.SelectedPack.Value);
+                    levels = storageData.SelectedPack.Value.Levels?.ToList();
+                }
+                else
+                {
+                    // Base Pack
+                    levels = storageData.GetBasePackLevels().ToList();
+                }
+            }
+            else
+            {
+                // All Songs
+                levels = storageData.GetAllLevels()?.ToList();
             }
 
-            List<LevelStorage> levels = (storageData.SelectedPack.Value?.Levels ?? storageData.GetAllLevels())?.ToList();
+
+            levels = levels ?? new List<LevelStorage>();
+            Debug.Log(levels?.Count);
             if (levels?.Count == 0)
             {
                 packList.BackToPackList();
@@ -172,7 +223,7 @@ namespace ArcCreate.Selection.Interface
 
             if (string.IsNullOrWhiteSpace(options.SearchQuery))
             {
-                List<CellData> data = LevelListBuilder.Build(
+                var data = LevelListBuilder.Build(
                     levels,
                     storageData.SelectedChart.Value.chart,
                     options.GroupStrategy,
@@ -181,7 +232,7 @@ namespace ArcCreate.Selection.Interface
             }
             else
             {
-                List<CellData> data = LevelListBuilder.Filter(levels, storageData.SelectedChart.Value.chart, options.SearchQuery);
+                var data = LevelListBuilder.Filter(levels, storageData.SelectedChart.Value.chart, options.SearchQuery);
                 scroll.SetDataWithoutRebuild(data);
             }
 

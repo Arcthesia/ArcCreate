@@ -20,6 +20,8 @@ namespace ArcCreate.Storage.Data
 
         public bool IsDefaultAsset { get; set; }
 
+        public bool IsBasePack { get; set; }=false;
+
         public virtual void Delete()
         {
             string dir = GetParentDirectory();
