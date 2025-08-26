@@ -235,7 +235,7 @@ namespace ArcCreate.Gameplay.Data
                 }
                 else
                 {
-                    var _p = Math.Clamp01((-endZPos-(Timing==EndTiming? 90:95))/-10f);
+                    var _p = Mathf.Clamp01((-endZPos-(Timing==EndTiming? 90:95))/-10f);
                     var opacity = Mathf.Clamp(_p * 150 + 75, 75, 255);
                     Services.Render.DrawArcSegment(Color, highlight, matrix * bodyMatrix, color, IsSelected, redArcValue, basePos.y + segment.EndPosition.y, depth,opacity);
                     if (!groupProperties.NoShadow)
