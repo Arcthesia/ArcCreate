@@ -115,7 +115,7 @@ namespace ArcCreate.Selection.Interface
             if (pack.Identifier == "base")
             {
                 // Get all levels in the Base pack
-                var baseLevels = storageData.GetBasePackLevels()?.ToList() ?? new List<LevelStorage>();
+                var baseLevels = storageData.GetSinglePackLevels()?.ToList() ?? new List<LevelStorage>();
 
                 // Check if the current level is in the Base pack
                 bool found = currentLevel != null && baseLevels.Any(l => l.Id == currentLevel.Id);
@@ -203,7 +203,7 @@ namespace ArcCreate.Selection.Interface
                 else
                 {
                     // Base Pack
-                    levels = storageData.GetBasePackLevels().ToList();
+                    levels = storageData.GetSinglePackLevels().ToList();
                 }
             }
             else
