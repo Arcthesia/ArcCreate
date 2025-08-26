@@ -109,7 +109,7 @@ namespace ArcCreate.Compose.Macros
         }
 
         [EmmyDoc("Create an arctap event data.")]
-        public static LuaArcTap ArcTap(int timing, float width, LuaArc arc)
+        public static LuaArcTap ArcTap(int timing, LuaArc arc, float width)
         {
             return new LuaArcTap
             {
@@ -120,7 +120,7 @@ namespace ArcCreate.Compose.Macros
         }
 
         [EmmyDoc("Create an arctap event data.")]
-        public static LuaArcTap Arctap(int timing, float width, LuaArc arc) => ArcTap(timing, width, arc);
+        public static LuaArcTap Arctap(int timing, LuaArc arc, float width) => ArcTap(timing, arc, width);
 
         [EmmyDoc("Create a timing event data.")]
         public static LuaTiming Timing(int timing, float bpm, float divisor, int timingGroup = 0)
@@ -509,7 +509,7 @@ namespace ArcCreate.Compose.Macros
                         LuaArcTap at;
                         if (arcs.Keys.Contains(n.Arc))
                         {
-                            at = ArcTap(n.Timing, n.Width, arcs[n.Arc]);
+                            at = ArcTap(n.Timing, arcs[n.Arc], n.Width);
                         }
                         else
                         {
@@ -526,7 +526,7 @@ namespace ArcCreate.Compose.Macros
                                 n.Arc.TimingGroup,
                                 n.Arc.Sfx);
                             arcs.Add(n.Arc, a);
-                            at = ArcTap(n.Timing, n.Width, a);
+                            at = ArcTap(n.Timing, a, n.Width);
                         }
 
                         at.SetInstance(n);

@@ -28,6 +28,7 @@ namespace ArcCreate.Gameplay.Particle
 
         [Header("Other particles")]
         [SerializeField] private GameObject tapParticlePrefab;
+        [SerializeField] private GameObject tapSfxParticlePrefab;
         [SerializeField] private GameObject arcNoteParticlePrefab;
         [SerializeField] private GameObject holdNoteParticlePrefab;
 
@@ -54,6 +55,7 @@ namespace ArcCreate.Gameplay.Particle
         private ExternalTexture holdParticleTexture;
 
         private Particle tapParticle;
+        private Particle tapSfxParticle;
         private Particle perfectTextParticle;
         private Particle goodTextParticle;
         private Particle missTextParticle;
@@ -134,14 +136,21 @@ namespace ArcCreate.Gameplay.Particle
             }
         }
 
-        public void PlayTapParticle(Vector3 worldPosition, JudgementResult result)
+        public void PlayTapParticle(Vector3 worldPosition, JudgementResult result, bool isSFX)
         {
             if (result.IsMiss())
             {
                 return;
             }
-            
-            tapParticle.Emit(ConvertToScreenWorld(worldPosition));
+
+            if (isSFX)
+            {
+                tapSfxParticle.Emit(ConvertToScreenWorld(worldPosition));
+            }
+            else
+            {
+                tapParticle.Emit(ConvertToScreenWorld(worldPosition));
+            }
         }
 
         public void PlayTextParticle(Vector3 worldPosition, JudgementResult result, Option<int> offset)
@@ -274,6 +283,11 @@ namespace ArcCreate.Gameplay.Particle
             tapParticle.GetComponent<ParticleSystemRenderer>().material.mainTexture = particleTexture;
         }
 
+        public void SetTapSfxParticleSkin(Texture particleTexture)
+        {
+            tapSfxParticle.GetComponent<ParticleSystemRenderer>().material.mainTexture = particleTexture;
+        }
+
         public void SetHoldParticleSkin(Color colorMin, Color colorMax, Gradient fromGradient, Gradient toGradient, Color colorGrid)
         {
             ParticleSystem pts = holdNoteParticlePrefab.GetComponent<ParticleSystem>();
@@ -298,6 +312,8 @@ namespace ArcCreate.Gameplay.Particle
         {
             var tap = Instantiate(tapParticlePrefab, gameplayCamera.transform);
             tapParticle = tap.GetComponent<Particle>();
+            var tapSfx = Instantiate(tapSfxParticlePrefab, gameplayCamera.transform);
+            tapSfxParticle = tapSfx.GetComponent<Particle>();
             
             PerfectMaterial = Instantiate(perfectMaterial);
             GoodMaterial = Instantiate(goodMaterial);

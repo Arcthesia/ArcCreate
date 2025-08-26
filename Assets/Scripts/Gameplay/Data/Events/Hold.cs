@@ -289,7 +289,7 @@ namespace ArcCreate.Gameplay.Data
         {
             Services.Judgement.Request(new LaneTapJudgementRequest()
             {
-                ExpireAtTiming = EndTiming + Values.GoodJudgeWindow,
+                ExpireAtTiming = EndTiming,
                 AutoAtTiming = Timing,
                 Lane = Lane,
                 Receiver = this,
@@ -301,13 +301,12 @@ namespace ArcCreate.Gameplay.Data
         {
             for (int t = numHoldJudgementRequestsSent; t < TotalCombo; t++)
             {
-                int timing = (int)System.Math.Round(Timing + (t * TimeIncrement));
-                int lateTiming = (int)System.Math.Round(FirstJudgeTime + (t * TimeIncrement));
+                int timing = (int)System.Math.Round(FirstJudgeTime + (t * TimeIncrement));
 
                 Services.Judgement.Request(new LaneHoldJudgementRequest()
                 {
                     StartAtTiming = timing,
-                    ExpireAtTiming = lateTiming + Values.HoldMissLateJudgeWindow,
+                    ExpireAtTiming = timing + (int)(4*TimeIncrement),
                     AutoAtTiming = timing,
                     Lane = Lane,
                     IsJudgement = true,

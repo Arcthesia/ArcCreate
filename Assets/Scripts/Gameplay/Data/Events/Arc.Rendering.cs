@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
-using ArcCreate.Gameplay.Render;
 using ArcCreate.Gameplay.Utility;
-using Gameplay.Utility;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
@@ -46,6 +44,21 @@ namespace ArcCreate.Gameplay.Data
         public Arc NextArc { get; set; }
 
         public Arc PreviousArc { get; set; }
+
+        public IEnumerable<ArcTap> ArcTaps
+        {
+            get
+            {
+                var arcTaps = Services.Chart.GetAll<ArcTap>();
+                foreach (var at in arcTaps)
+                {
+                    if (at.Arc == this)
+                    {
+                        yield return at;
+                    }
+                }
+            }
+        }
 
         public float SegmentLength
             => ArcFormula.CalculateArcSegmentLength(EndTiming - Timing, TimingGroupInstance.GroupProperties.ArcResolution);
@@ -93,6 +106,10 @@ namespace ArcCreate.Gameplay.Data
             IsTrace = n.IsTrace;
             TimingGroup = n.TimingGroup;
             Sfx = n.Sfx;
+            foreach (var at in ArcTaps)
+            {
+                at.TimingGroup = n.TimingGroup;
+            }
         }
 
         public override int ComboAt(int timing)
@@ -400,13 +417,20 @@ namespace ArcCreate.Gameplay.Data
                 double lastEndFloorPosition = TimingGroupInstance.GetFloorPosition(Timing);
                 Vector2 basePosition = new Vector2(ArcFormula.ArcXToWorld(XStart), ArcFormula.ArcYToWorld(YStart));
                 Vector2 lastPosition = basePosition;
+                int finalTiming = EndTiming;
+                Vector2 finalPosition = new Vector2(ArcFormula.ArcXToWorld(XEnd), ArcFormula.ArcYToWorld(YEnd));
+                if (NextArc != null)
+                {
+                    finalTiming = NextArc.Timing;
+                    finalPosition = new Vector2(ArcFormula.ArcXToWorld(NextArc.XStart), ArcFormula.ArcYToWorld(NextArc.YStart));
+                }
 
                 int i = 0;
                 while (true)
                 {
                     int timing = lastEndTiming;
                     int endTiming = timing + Mathf.RoundToInt(SegmentLength);
-                    int cappedEndTiming = Mathf.Min(endTiming, EndTiming);
+                    int cappedEndTiming = Mathf.Min(endTiming, finalTiming);
 
                     ArcSegmentData segment = i < segments.Count ? segments[i] : default;
                     if (i >= segments.Count)
@@ -421,8 +445,8 @@ namespace ArcCreate.Gameplay.Data
 
                     lastEndFloorPosition = TimingGroupInstance.GetFloorPosition(cappedEndTiming);
                     segment.EndFloorPosition = lastEndFloorPosition;
-                    lastPosition = cappedEndTiming == EndTiming ?
-                        new Vector2(ArcFormula.ArcXToWorld(XEnd), ArcFormula.ArcYToWorld(YEnd)) :
+                    lastPosition = cappedEndTiming == finalTiming ?
+                        finalPosition :
                         new Vector2(WorldXAt(cappedEndTiming), WorldYAt(cappedEndTiming));
                     segment.EndPosition = lastPosition - basePosition;
                     segment.From = 0;
@@ -432,7 +456,7 @@ namespace ArcCreate.Gameplay.Data
                     i += 1;
 
                     lastEndTiming = endTiming;
-                    if (endTiming >= EndTiming)
+                    if (endTiming >= finalTiming)
                     {
                         break;
                     }

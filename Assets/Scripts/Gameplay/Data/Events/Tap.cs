@@ -139,7 +139,7 @@ namespace ArcCreate.Gameplay.Data
         {
             Vector3 judgeOffset = props.CurrentJudgementOffset;
             JudgementResult result = props.MapJudgementResult(offset.CalculateJudgeResult());
-            Services.Particle.PlayTapParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0) + judgeOffset, result);
+            Services.Particle.PlayTapParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0) + judgeOffset, result, false);
             Services.Particle.PlayTextParticle(new Vector3(ArcFormula.LaneToWorldX(Lane), 0) + judgeOffset, result, offset);
             Services.Score.ProcessJudgement(result, offset);
             isHit = true;
