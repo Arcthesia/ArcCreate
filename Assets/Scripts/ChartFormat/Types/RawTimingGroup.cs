@@ -34,6 +34,8 @@ namespace ArcCreate.ChartFormat
 
         public float ArcResolution { get; set; } = 1;
 
+        public float DropRate { get; set; } = 0;
+
         public float AngleX { get; set; } = 0;
 
         public float AngleY { get; set; } = 0;
@@ -117,6 +119,10 @@ namespace ArcCreate.ChartFormat
                             valid = Evaluator.TryFloat(value, out val);
                             val = UnityEngine.Mathf.Clamp(val, 0.1f, 10);
                             tg.ArcResolution = valid ? val : 1;
+                            break;
+                        case "droprate":
+                            valid = Evaluator.TryFloat(value, out val);
+                            tg.DropRate = valid ? val : 0;
                             break;
                         case "max":
                             AddRemapRules(tg, value, JudgementMap.Max);
@@ -385,6 +391,11 @@ namespace ArcCreate.ChartFormat
             if (ArcResolution != 1)
             {
                 opts.Add($"arcresolution={ArcResolution:f1}");
+            }
+
+            if (DropRate > 0)
+            {
+                opts.Add($"droprate={DropRate:f1}");
             }
 
             if (JudgementOffsetX != 0)

@@ -42,7 +42,7 @@ namespace ArcCreate.Gameplay.Chart
         {
             if (instance != null)
             {
-                float z = ArcFormula.FloorPositionToZ(FloorPosition - floorPosition);
+                float z = ArcFormula.FloorPositionToZ(FloorPosition - floorPosition, 0);
                 instance.transform.localPosition = new Vector3(0, 0, z);
                 instance.transform.localScale = new Vector3(
                     instance.transform.localScale.x,

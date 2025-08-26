@@ -203,7 +203,7 @@ namespace ArcCreate.Gameplay.Utility
 
             float baseX = ArcFormula.ArcXToWorld(arc.XStart);
             float baseY = ArcFormula.ArcYToWorld(arc.YStart);
-            float baseZ = ArcFormula.FloorPositionToZ(arc.FloorPosition);
+            float baseZ = ArcFormula.FloorPositionToZ(arc.FloorPosition, arc.TimingGroup);
 
             // help
             if (arc.IsFirstArcOfGroup)
@@ -234,7 +234,7 @@ namespace ArcCreate.Gameplay.Utility
                     timing = Mathf.Min(timing, arc.EndTiming);
                     float x = timing == arc.EndTiming ? ArcFormula.ArcXToWorld(arc.XEnd) : arc.WorldXAt(timing);
                     float y = timing == arc.EndTiming ? ArcFormula.ArcYToWorld(arc.YEnd) : arc.WorldYAt(timing);
-                    float z = ArcFormula.FloorPositionToZ(tg.GetFloorPosition(timing));
+                    float z = ArcFormula.FloorPositionToZ(tg.GetFloorPosition(timing), arc.TimingGroup);
 
                     float dx = x - baseX;
                     float dy = y - baseY;
@@ -278,7 +278,7 @@ namespace ArcCreate.Gameplay.Utility
                     timing = Mathf.Min(timing, arc.EndTiming);
                     float x = timing == arc.EndTiming ? ArcFormula.ArcXToWorld(arc.XEnd) : arc.WorldXAt(timing);
                     float y = timing == arc.EndTiming ? ArcFormula.ArcYToWorld(arc.YEnd) : arc.WorldYAt(timing);
-                    float z = ArcFormula.FloorPositionToZ(tg.GetFloorPosition(timing));
+                    float z = ArcFormula.FloorPositionToZ(tg.GetFloorPosition(timing), arc.TimingGroup);
 
                     float dx = x - baseX;
                     float dy = y - baseY;

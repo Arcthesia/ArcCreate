@@ -9,6 +9,8 @@ namespace ArcCreate.Gameplay.Data
 
         public int EndTiming;
 
+        public int TimingGroup;
+
         public Vector3 StartPosition;
 
         public Vector3 EndPosition;
@@ -20,15 +22,15 @@ namespace ArcCreate.Gameplay.Data
         public float From;
 
         public float CalculateZPos(double currentFloorPosition)
-            => ArcFormula.FloorPositionToZ(FloorPosition - currentFloorPosition);
+            => ArcFormula.FloorPositionToZ(FloorPosition - currentFloorPosition, TimingGroup);
 
         public float CalculateEndZPos(double currentFloorPosition)
-            => ArcFormula.FloorPositionToZ(EndFloorPosition - currentFloorPosition);
+            => ArcFormula.FloorPositionToZ(EndFloorPosition - currentFloorPosition, TimingGroup);
 
         public (Matrix4x4 body, Matrix4x4 shadow, Vector4 cornerOffset) GetMatrices(double floorPosition, Vector3 fallDirection, float baseZ, float baseY)
         {
-            float startZ = ArcFormula.FloorPositionToZ(FloorPosition - floorPosition);
-            float endZ = ArcFormula.FloorPositionToZ(EndFloorPosition - floorPosition);
+            float startZ = ArcFormula.FloorPositionToZ(FloorPosition - floorPosition, TimingGroup);
+            float endZ = ArcFormula.FloorPositionToZ(EndFloorPosition - floorPosition, TimingGroup);
             Vector3 startPos = StartPosition + ((startZ - baseZ) * fallDirection);
             Vector3 endPos = EndPosition + ((endZ - baseZ) * fallDirection);
             startPos = ((endPos - startPos) * From) + startPos;
@@ -57,7 +59,7 @@ namespace ArcCreate.Gameplay.Data
                 return (Matrix4x4.zero, Matrix4x4.zero, Vector4.zero);
             }
 
-            float startZ = ArcFormula.FloorPositionToZ(FloorPosition - floorPosition);
+            float startZ = ArcFormula.FloorPositionToZ(FloorPosition - floorPosition, TimingGroup);
             Vector3 startPos = StartPosition + ((startZ - baseZ) * fallDirection);
             Vector3 endPos = EndPosition + ((startZ - baseZ) * fallDirection);
             Vector3 dir = endPos - startPos;
@@ -73,12 +75,12 @@ namespace ArcCreate.Gameplay.Data
             if (next != null && next.TryGetFirstSegement(out ArcSegmentData nextFirstSeg)
              && nextFirstSeg.EndTiming > nextFirstSeg.Timing)
             {
-                float dz = Mathf.Abs(ArcFormula.FloorPositionToZ(nextFirstSeg.EndFloorPosition - nextFirstSeg.FloorPosition));
+                float dz = Mathf.Abs(ArcFormula.FloorPositionToZ(nextFirstSeg.EndFloorPosition - nextFirstSeg.FloorPosition, TimingGroup));
                 float dx = Mathf.Abs(nextFirstSeg.StartPosition.x - nextFirstSeg.EndPosition.x);
                 zLength = Mathf.Sqrt(4 * offset * offset * dz * dz / ((dz * dz) + (dx * dx)));
             }
 
-            double fpOffset = ArcFormula.ZToFloorPosition(zLength);
+            double fpOffset = ArcFormula.ZToFloorPosition(zLength, group.GroupProperties);
 
             // Arc might go backward or forward in time, need to check both direction.
             int slamForwardTiming = group.GetTimingFromFloorPosition(FloorPosition + fpOffset);

@@ -22,7 +22,7 @@ namespace ArcCreate.Gameplay.Data
         }
 
         public float ZPos(double floorPosition)
-            => ArcFormula.FloorPositionToZ(FloorPosition - floorPosition);
+            => ArcFormula.FloorPositionToZ(FloorPosition - floorPosition, TimingGroup);
 
         public abstract void GenerateColliderTriangles(int timing, List<Vector3> vertices, List<int> triangles);
     }

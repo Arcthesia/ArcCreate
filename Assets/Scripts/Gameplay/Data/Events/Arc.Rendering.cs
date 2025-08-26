@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
 using ArcCreate.Gameplay.Render;
 using ArcCreate.Gameplay.Utility;
-using Gameplay.Utility;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
@@ -416,6 +415,7 @@ namespace ArcCreate.Gameplay.Data
 
                     segment.Timing = timing;
                     segment.EndTiming = cappedEndTiming;
+                    segment.TimingGroup = TimingGroup;
                     segment.FloorPosition = lastEndFloorPosition;
                     segment.StartPosition = lastPosition - basePosition;
 

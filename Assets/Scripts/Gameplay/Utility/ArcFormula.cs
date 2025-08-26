@@ -56,15 +56,21 @@ namespace ArcCreate.Gameplay
             return Mathf.RoundToInt((x - (Values.LaneWidth * 2.5f)) / -Values.LaneWidth);
         }
 
-        public static double ZToFloorPosition(float z)
-        {
-            return (double)(z / Settings.DropRate.Value * Values.BaseBpm * -1000);
-        }
+        public static double ZToFloorPosition(float z, int timingGroup) =>
+            ZToFloorPosition(z, Services.Chart.GetTimingGroup(timingGroup).GroupProperties);
 
-        public static float FloorPositionToZ(double fp)
-        {
-            return (float)(fp / Values.BaseBpm * Settings.DropRate.Value / -1000);
-        }
+        public static double ZToFloorPosition(float z, GroupProperties groupProperties) => ZToFloorPosition(z,
+            groupProperties.DropRate > 0 ? groupProperties.DropRate : Settings.DropRate.Value);
+
+        public static double ZToFloorPosition(float z, float dropRate) => (double)(z / dropRate * Values.BaseBpm * -1000);
+
+        public static float FloorPositionToZ(double fp, int timingGroup) =>
+            FloorPositionToZ(fp, Services.Chart.GetTimingGroup(timingGroup).GroupProperties);
+
+        public static float FloorPositionToZ(double fp, GroupProperties groupProperties) => FloorPositionToZ(fp,
+            groupProperties.DropRate > 0 ? groupProperties.DropRate : Settings.DropRate.Value);
+
+        public static float FloorPositionToZ(double fp, float dropRate) => (float)(fp / Values.BaseBpm * dropRate / -1000);
 
         public static float S(float start, float end, float t)
         {

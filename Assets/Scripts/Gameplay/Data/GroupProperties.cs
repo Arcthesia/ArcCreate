@@ -34,6 +34,7 @@ namespace ArcCreate.Gameplay.Data
             JudgementSizeX = raw.JudgementSizeX;
             JudgementSizeY = raw.JudgementSizeY;
             ArcResolution = raw.ArcResolution;
+            DropRate = raw.DropRate;
             Editable = raw.Editable;
             Autoplay = raw.Autoplay;
             foreach (var pair in raw.JudgementMaps)
@@ -91,6 +92,8 @@ namespace ArcCreate.Gameplay.Data
         public float JudgementOffsetZ { get; set; } = 0;
 
         public float ArcResolution { get; set; } = 1;
+
+        public float DropRate { get; set; } = 0;
 
         public float SCAngleX { get; set; } = 0;
 
@@ -157,6 +160,7 @@ namespace ArcCreate.Gameplay.Data
                 JudgementSizeX = JudgementSizeX,
                 JudgementSizeY = JudgementSizeY,
                 ArcResolution = ArcResolution,
+                DropRate = DropRate,
                 Autoplay = Autoplay,
                 IgnoreMirror = IgnoreMirror,
             };

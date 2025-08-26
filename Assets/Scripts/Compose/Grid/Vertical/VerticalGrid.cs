@@ -155,8 +155,8 @@ namespace ArcCreate.Compose.Grid
             if (scaleGridToSkyInput)
             {
                 ValueChannel skyInputY = Services.Gameplay.Scenecontrol.Scene.GetSkyInputYChannel();
-                int timing = Services.Gameplay.Chart.GetTimingGroup(Values.EditingTimingGroup.Value)
-                    .GetTimingFromZPosition(verticalPanel.transform.localPosition.z);
+                var tg = Services.Gameplay.Chart.GetTimingGroup(Values.EditingTimingGroup.Value);
+                int timing = tg.GetTimingFromZPosition(verticalPanel.transform.localPosition.z);
                 verticalScale = skyInputY.ValueAt(timing) / Gameplay.Values.ArcY1;
                 verticalPanel.transform.localScale = new Vector3(1, verticalScale, 0.001f);
             }

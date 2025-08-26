@@ -211,7 +211,7 @@ namespace ArcCreate.Compose.Cursor
             int timing = tg.GetTimingFromZPosition(hit.z);
             selectingTiming = Services.Grid.SnapTimingToGridIfGridIsEnabled(timing);
             double fp = tg.GetFloorPositionFromCurrent(selectingTiming);
-            float z = Gameplay.ArcFormula.FloorPositionToZ(fp);
+            float z = Gameplay.ArcFormula.FloorPositionToZ(fp, tg.GroupProperties);
 
             cursorLaneTiming.DrawLine(
                 from: new Vector3(Values.LaneFromX, 0, z),
@@ -276,7 +276,7 @@ namespace ArcCreate.Compose.Cursor
         {
             var tg = Services.Gameplay.Chart.GetTimingGroup(Values.EditingTimingGroup.Value);
             double fp = tg.GetFloorPositionFromCurrent(showVerticalAtTiming);
-            float z = Gameplay.ArcFormula.FloorPositionToZ(fp);
+            float z = Gameplay.ArcFormula.FloorPositionToZ(fp, tg.GroupProperties);
 
             Vector3 pos = verticalPlane.localPosition;
             pos.z = z;

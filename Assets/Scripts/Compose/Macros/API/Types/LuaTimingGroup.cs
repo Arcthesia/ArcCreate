@@ -48,6 +48,8 @@ namespace ArcCreate.Compose.Macros
 
         public float ArcResolution { get; set; }
 
+        public float DropRate { get; set; }
+
         public float AngleX { get; set; }
 
         public float AngleY { get; set; }
