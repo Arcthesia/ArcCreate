@@ -785,6 +785,7 @@ Compose:
           Export a .arcpkg package file to share to other players.
         Publisher: Publisher
         Package: Package
+        SaveTo: Save to
         Version: Version
         BlankField: Please enter both publisher and package name information
         Identifier: "Your package identifier is: {0}"
@@ -843,6 +844,7 @@ Compose:
           BlockCreatingOverlappedNotes: Block creating overlapped notes
           EnableEditingArctapWidth: Allow editing sky note's width
           ShowKeybindHint: Show keybind hints
+          SnapFloorNoteWithGrid: Snap floor note with grid
         Files:
           Name: Files
           Backup: Create backup on save

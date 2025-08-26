@@ -4,14 +4,14 @@ namespace ArcCreate.Utility
 {
     public static class WaveformGenerator
     {
-        private const int AverageSampleCount = 32;
 
         /// <summary>
         /// Encode the audio clip's waveform into a texture which should be displayed with the Waveform shader.
         /// </summary>
         /// <param name="clip">The audio clip to encode.</param>
+        /// <param name="averageSampleCount">Number of samples to pack into one sample</param>
         /// <returns>The encoded texture.</returns>
-        public static Texture2D EncodeTexture(AudioClip clip)
+        public static Texture2D EncodeTexture(AudioClip clip, int averageSampleCount = 32)
         {
             int sampleCount = clip.samples * clip.channels;
             int maxSize = 16384;
@@ -21,7 +21,7 @@ namespace ArcCreate.Utility
             int height = 0;
             while (maxSize > 1024)
             {
-                int samplePixelCount = Mathf.CeilToInt(sampleCount / AverageSampleCount / 4f);
+                int samplePixelCount = Mathf.CeilToInt(sampleCount / averageSampleCount / 4f);
                 width = Mathf.Min(samplePixelCount, maxSize);
                 height = (samplePixelCount + width - 1) / width;
 
@@ -59,37 +59,37 @@ namespace ArcCreate.Utility
             {
                 for (int x = 0; x < width; x++)
                 {
-                    float s1 = 0;
-                    for (int i = sample; i < sample + AverageSampleCount; i++)
+                    float s1 = -1;
+                    for (int i = sample; i < sample + averageSampleCount; i++)
                     {
                         s1 = Mathf.Max(s1, i < samples.Length ? samples[i] : 0);
                     }
 
-                    sample += AverageSampleCount;
+                    sample += averageSampleCount;
 
-                    float s2 = 0;
-                    for (int i = sample; i < sample + AverageSampleCount; i++)
+                    float s2 = -1;
+                    for (int i = sample; i < sample + averageSampleCount; i++)
                     {
                         s2 = Mathf.Max(s2, i < samples.Length ? samples[i] : 0);
                     }
 
-                    sample += AverageSampleCount;
+                    sample += averageSampleCount;
 
-                    float s3 = 0;
-                    for (int i = sample; i < sample + AverageSampleCount; i++)
+                    float s3 = -1;
+                    for (int i = sample; i < sample + averageSampleCount; i++)
                     {
                         s3 = Mathf.Max(s3, i < samples.Length ? samples[i] : 0);
                     }
 
-                    sample += AverageSampleCount;
+                    sample += averageSampleCount;
 
-                    float s4 = 0;
-                    for (int i = sample; i < sample + AverageSampleCount; i++)
+                    float s4 = -1;
+                    for (int i = sample; i < sample + averageSampleCount; i++)
                     {
                         s4 = Mathf.Max(s4, i < samples.Length ? samples[i] : 0);
                     }
 
-                    sample += AverageSampleCount;
+                    sample += averageSampleCount;
 
                     s1 = (s1 + 1) * 0.5f;
                     s2 = (s2 + 1) * 0.5f;
