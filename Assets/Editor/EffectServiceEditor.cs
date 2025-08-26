@@ -41,7 +41,11 @@ namespace ArcCreate.EditorScripts
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Play tap effect"))
             {
-                effect.PlayTapParticle(new Vector3(x, y), result);
+                effect.PlayTapParticle(new Vector3(x, y), result, false);
+            }
+            if (GUILayout.Button("Play tap sfx effect"))
+            {
+                effect.PlayTapParticle(new Vector3(x, y), result, true);
             }
 
             if (GUILayout.Button("Play text effect"))

@@ -125,6 +125,8 @@ namespace ArcCreate.Gameplay.Skin
                 particleOpt = particleOpt != null ? particleOpt : currentAlignment.DefaultParticleOption;
 
                 Services.Particle.SetTapParticleSkin(particleOpt.ParticleSkin.Value);
+                Services.Particle.SetTapSfxParticleSkin(particleOpt.SfxParticleSkin.Value);
+                
                 Services.Particle.SetHoldParticleSkin(
                     particleOpt.HoldEffectColorMin,
                     particleOpt.HoldEffectColorMax,
