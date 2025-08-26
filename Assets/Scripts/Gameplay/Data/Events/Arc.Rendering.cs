@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
 using ArcCreate.Gameplay.Render;
 using ArcCreate.Gameplay.Utility;
-using Gameplay.Utility;
+//using Gameplay.Utility;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Data
@@ -13,6 +13,8 @@ namespace ArcCreate.Gameplay.Data
     public partial class Arc : LongNote, ILongNote, IArcJudgementReceiver
     {
         private static bool isControllerMode = false;
+        
+        public static readonly Color OverrrideArcColor = new Color32(0xE6, 0x32, 0x32, 255);
 
         private bool highlight = false;
         private bool hasBeenHitOnce = false;
