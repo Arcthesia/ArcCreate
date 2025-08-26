@@ -15,9 +15,9 @@ namespace ArcCreate.Gameplay.Render
 
         void DrawArcCap(Texture texture, Matrix4x4 matrix, Color color, bool isController);
 
-        void DrawArcHead(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y);
+        void DrawArcHead(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y,float opacity=255f);
 
-        void DrawArcSegment(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y, float depth);
+        void DrawArcSegment(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y, float depth,float opacity=255f);
 
         void DrawArcShadow(Matrix4x4 matrix, Color color, Vector4 cornerOffset);
 

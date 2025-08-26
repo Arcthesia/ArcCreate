@@ -99,11 +99,13 @@ namespace ArcCreate.Gameplay.Render
             connectionLineDrawer.RegisterInstance(matrix, color);
         }
 
-        public void DrawArcSegment(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y, float depth)
+        public void DrawArcSegment(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y, float depth,float opacity=255f)
         {
             (Color high, Color low) = Services.Skin.GetArcColor(colorId);
             color *= Color.Lerp(Color.Lerp(low, high, (y - 1) / 4.5f), Color.red, redValue);
+
             Vector4 properties = new Vector4(selected ? 1 : 0, highlight ? 1 : 0, 0, 0);
+            color.a *= opacity / 255f;
             queuedArcDrawCalls.Add(new ArcDrawCall
             {
                 Matrix = matrix,
@@ -134,11 +136,12 @@ namespace ArcCreate.Gameplay.Render
             traceShadowDrawer.RegisterInstance(matrix, color);
         }
 
-        public void DrawArcHead(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y)
+        public void DrawArcHead(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y, float opacity = 255f)
         {
             (Color high, Color low) = Services.Skin.GetArcColor(colorId);
             color *= Color.Lerp(Color.Lerp(low, high, (y - 1) / 4.5f), Color.red, redValue);
             Vector4 properties = new Vector4(selected ? 1 : 0, highlight ? 1 : 0, 0, 0);
+            color.a *= opacity / 255f;
             arcHeadDrawer.RegisterInstance(matrix, color, properties);
         }
 
