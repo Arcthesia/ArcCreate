@@ -151,6 +151,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
             {
                 cam.FieldOfView = cam2.FieldOfView;
                 cam.TiltFactor = cam2.TiltFactor;
+                cam.Near = cam2.Near;
+                cam.Far = cam2.Far;
                 cam.EnableCameraModule = cam2.EnableCameraModule;
             }
 
@@ -305,6 +307,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
                 fov = cam.FieldOfView.ValueAt(timing);
                 tilt = cam.TiltFactor.ValueAt(timing);
+                far= cam.Far.ValueAt(timing);
+                near= cam.Near.ValueAt(timing);
 
                 cam.UpdateCamera(fov, tilt);
             }
@@ -442,6 +446,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 cam.UpdateCamera(cam.DefaultFieldOfView, 1);
                 cam.FieldOfView = new ConstantChannel(cam.DefaultFieldOfView);
                 cam.TiltFactor = new ConstantChannel(1);
+                cam.Far=new ConstantChannel(10000f);
+                cam.Near=new ConstantChannel(0.01f);
                 cam.EnableCameraModule = false;
             }
 
@@ -557,6 +563,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 result.Add(cam.EnableCameraModule);
                 result.Add(serialization.AddUnitAndGetId(cam.FieldOfView));
                 result.Add(serialization.AddUnitAndGetId(cam.TiltFactor));
+                result.Add(serialization.AddUnitAndGetId(cam.Near));
+                result.Add(serialization.AddUnitAndGetId(cam.Far));
             }
 
             if (this is IRectController rect)
@@ -683,6 +691,8 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 bool enable = (bool)properties[offset++];
                 cam.FieldOfView = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
                 cam.TiltFactor = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                cam.Near = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                cam.Far = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
                 cam.EnableCameraModule = enable;
             }
 
