@@ -221,7 +221,6 @@ namespace ArcCreate.Compose.EventsEditor
             AddType(new GroupAlphaType());
             AddType(new EnwidenLanesType());
             AddType(new EnwidenCameraType());
-            AddType(new CamClipPlaneType());
         }
 
         private void AddType(IBuiltInScenecontrolType type)

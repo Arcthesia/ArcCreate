@@ -19,28 +19,6 @@ namespace ArcCreate.Gameplay.Scenecontrol
         private ValueChannel scaleX;
         private ValueChannel scaleY;
         private ValueChannel scaleZ;
-        private ValueChannel near = 0.01f;
-        private ValueChannel far = 10000f;
-
-        public ValueChannel Near
-        {
-            get => near;
-            set
-            {
-                near = value;
-                EnableCameraModule = true;
-            }
-        }
-
-        public ValueChannel Far
-        {
-            get => far;
-            set
-            {
-                far = value;
-                EnableCameraModule = true;
-            }
-        }
 
         [EmmyDoc("Channel for the camera's field of view. Value of this channel is added to the camera's internal field of view value (Default is 0)")]
         public ValueChannel FieldOfView
