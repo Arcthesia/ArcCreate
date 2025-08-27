@@ -140,7 +140,9 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         ValueChannel ScaleIndividualZ { get; set; }
 
-        void UpdateNoteGroup(Quaternion rotation, Vector3 scale, Vector2 angle, Vector2 judgesize, Vector3 judgeoffset);
+        ValueChannel DropRate { get; set; }
+
+        void UpdateNoteGroup(Quaternion rotation, Vector3 scale, Vector2 angle, Vector2 judgesize, Vector3 judgeoffset, float dropRate);
     }
 
     public interface ICameraController : IController

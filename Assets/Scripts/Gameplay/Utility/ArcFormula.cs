@@ -59,8 +59,8 @@ namespace ArcCreate.Gameplay
         public static double ZToFloorPosition(float z, int timingGroup) =>
             ZToFloorPosition(z, Services.Chart.GetTimingGroup(timingGroup).GroupProperties);
 
-        public static double ZToFloorPosition(float z, GroupProperties groupProperties) => ZToFloorPosition(z,
-            groupProperties.DropRate > 0 ? groupProperties.DropRate : Settings.DropRate.Value);
+        public static double ZToFloorPosition(float z, GroupProperties groupProperties) =>
+            ZToFloorPosition(z, groupProperties.DropRate > 0 ? groupProperties.DropRate : Settings.DropRate.Value);
 
         public static double ZToFloorPosition(float z, float dropRate) => (double)(z / dropRate * Values.BaseBpm * -1000);
 

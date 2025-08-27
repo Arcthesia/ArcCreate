@@ -139,6 +139,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 tg.ScaleIndividualX = tg2.ScaleIndividualX;
                 tg.ScaleIndividualY = tg2.ScaleIndividualY;
                 tg.ScaleIndividualZ = tg2.ScaleIndividualZ;
+                tg.DropRate = tg2.DropRate;
                 tg.JudgeOffsetX = tg2.JudgeOffsetX;
                 tg.JudgeOffsetY = tg2.JudgeOffsetY;
                 tg.JudgeOffsetZ = tg2.JudgeOffsetZ;
@@ -277,6 +278,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 Vector2 angle = Vector2.zero;
                 Vector2 judgesize = Vector2.one;
                 Vector3 judgeoffset = Vector3.zero;
+                float dropRate = tg.DropRate.ValueAt(timing);
 
                 rotation.x = tg.RotationIndividualX.ValueAt(timing);
                 rotation.y = tg.RotationIndividualY.ValueAt(timing);
@@ -289,13 +291,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 angle.x = tg.AngleX.ValueAt(timing);
                 angle.y = tg.AngleY.ValueAt(timing);
 
+                dropRate = dropRate > 0 ? dropRate : Settings.DropRate.Value;
+
                 judgesize.x = tg.JudgeSizeX.ValueAt(timing);
                 judgesize.y = tg.JudgeSizeY.ValueAt(timing);
                 judgeoffset.x = tg.JudgeOffsetX.ValueAt(timing);
                 judgeoffset.y = tg.JudgeOffsetY.ValueAt(timing);
                 judgeoffset.z = tg.JudgeOffsetZ.ValueAt(timing);
 
-                tg.UpdateNoteGroup(Quaternion.Euler(rotation), scale, angle, judgesize, judgeoffset);
+
+                tg.UpdateNoteGroup(Quaternion.Euler(rotation), scale, angle, judgesize, judgeoffset, dropRate);
             }
 
             if (this is ICameraController cam && cam.EnableCameraModule)
@@ -420,7 +425,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
             if (this is INoteGroupController tg)
             {
-                tg.UpdateNoteGroup(Quaternion.identity, Vector3.one, Vector2.zero, Vector2.one, Vector3.zero);
+                tg.UpdateNoteGroup(Quaternion.identity, Vector3.one, Vector2.zero, Vector2.one, Vector3.zero, 0);
                 tg.AngleX = new ConstantChannel(0);
                 tg.AngleY = new ConstantChannel(0);
                 tg.RotationIndividualX = new ConstantChannel(0);
@@ -429,6 +434,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 tg.ScaleIndividualX = new ConstantChannel(1);
                 tg.ScaleIndividualY = new ConstantChannel(1);
                 tg.ScaleIndividualZ = new ConstantChannel(1);
+                tg.DropRate = new ConstantChannel(0);
                 tg.JudgeSizeX = new ConstantChannel(1);
                 tg.JudgeSizeY = new ConstantChannel(1);
                 tg.JudgeOffsetX = new ConstantChannel(0);
@@ -550,6 +556,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
                 result.Add(serialization.AddUnitAndGetId(tg.JudgeOffsetX));
                 result.Add(serialization.AddUnitAndGetId(tg.JudgeOffsetY));
                 result.Add(serialization.AddUnitAndGetId(tg.JudgeOffsetZ));
+                result.Add(serialization.AddUnitAndGetId(tg.DropRate));
             }
 
             if (this is ICameraController cam)
@@ -674,6 +681,12 @@ namespace ArcCreate.Gameplay.Scenecontrol
                     tg.JudgeOffsetY = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
                     tg.JudgeOffsetZ = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
                 }
+
+                if (features.HasFlag(EnabledFeatures.DropRateManipulation))
+                {
+                    tg.DropRate = deserialization.GetUnitFromId<ValueChannel>(properties[offset++]);
+                }
+
 
                 tg.EnableNoteGroupModule = enable;
             }

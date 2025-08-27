@@ -11,11 +11,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
 
         public DropRateChannel()
         {
-        }
-
-        public DropRateChannel(int tg)
-        {
-            group = Services.Chart.GetTimingGroup(tg);
+            group = Services.Chart.GetTimingGroup(0);
         }
 
         public override void DeserializeProperties(List<object> properties, ScenecontrolDeserialization deserialization)

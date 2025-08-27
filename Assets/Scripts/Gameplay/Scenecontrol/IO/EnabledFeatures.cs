@@ -7,6 +7,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
     {
         None = 0,
         JudgeManipulation = 1,
-        All = None | JudgeManipulation,
+        DropRateManipulation = 2,
+        All = None | JudgeManipulation | DropRateManipulation,
     }
 }
