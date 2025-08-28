@@ -60,10 +60,8 @@ Format:
     FileDoesNotExist: |-
       譜面檔案不存在
   Warning:
-    HoldTooShort:
-      長按音符長度小於17毫秒
-    TapJudgementOverlap:
-      單擊音符和其他音符重疊
+    HoldTooShort: 長按音符長度小於17毫秒
+    TapJudgementOverlap: 單擊音符和其他音符重疊
 
 Compose:
   # 編輯器中的報錯
@@ -145,11 +143,11 @@ Compose:
       Enter: 確認
     EmmyLuaGenerated:
       Scenecontrol: |-
-       在專案資料夾，用以設定 Scenecontrol 的 EmmyLua 腳本範本。
-       使用VSCode並安裝"tangzx.emmylua"的擴充套件以得到自動完成的功能。
+        在專案資料夾，用以設定 Scenecontrol 的 EmmyLua 腳本範本。
+        使用VSCode並安裝"tangzx.emmylua"的擴充套件以得到自動完成的功能。
       Macros: |-
-       在專案資料夾，用以設定巨集的 EmmyLua 腳本範本。
-       使用VSCode並安裝"tangzx.emmylua"的擴充套件以得到自動完成的功能。
+        在專案資料夾，用以設定巨集的 EmmyLua 腳本範本。
+        使用VSCode並安裝"tangzx.emmylua"的擴充套件以得到自動完成的功能。
     Actions:
       CannotMirror: 無法鏡像所選的音符。
       NoDragRange: 無法拖曳所選音符的時間，請嘗試個別拖曳音符。
@@ -291,8 +289,8 @@ Compose:
           Name: 移動相機
           Confirm: 確定
           Cancel: 取消
-          Faster: 移速增添
-          Slower: 移速降低
+          Faster: 增加移速
+          Slower: 降低移速
           MoveForward: 向前移動
           MoveLeft: 向左移動
           MoveRight: 向右移動
@@ -434,9 +432,9 @@ Compose:
   Grid:
     # 翻譯時煩請只編輯註釋行（開頭為“--”的行）
     DefaultScript: |-
-      -- THIS IS A LUA SCRIPT. See full documentation at: https://github.com/Arcthesia/ArcCreate/wiki/Grid-settings
-      -- CONFIGURATION
-      -- Choose one of the following template: 4k, 6k, oob4k, oob6k
+      -- 以下為LUA腳本. 詳見文檔: https://github.com/Arcthesia/ArcCreate/wiki/Grid-settings
+      -- 設定
+      -- 選擇以下格線模板: 4k, 6k, oob4k, oob6k
       local useTemplate = "4k"
       local spacing = {
           x = 0.125,
@@ -633,12 +631,12 @@ Compose:
         Save: 儲存
         InputMode: 輸入模式
         InputModeOptions:
-          auto: Auto
-          autocontroller: Auto (Controller)
-          touch: Touch
-          controller: Controller
-          mouse: Mouse
-          idle: Idle
+          auto: 自動
+          autocontroller: 自動 (搖桿)
+          touch: 觸控
+          controller: 搖桿
+          mouse: 滑鼠
+          idle: 無
         FullScreen: 全螢幕
         ToggleFullScreenHint: 按F11以切換全螢幕模式
         Chart: 譜面
@@ -754,6 +752,12 @@ Compose:
           錄製並匯出譜面影片檔案，
           需要安裝FFmpeg。
         ConfigureFFmpeg: 設定FFmpeg執行檔的路徑
+        Presets:
+          Name: 預設值
+          Reset: 重設
+          FourK: 4K
+          FullHD: 全高畫質
+          Compact: 精簡
         Settings:
           Name: 設定
           From: 開始
@@ -836,7 +840,9 @@ Compose:
         Input:
           Name: 輸入設定
           ReloadKeybinds: 重新載入快捷鍵
+          UseNativeFileBrowser: 使用系統檔案瀏覽
           AllowCreatingNotesBackward: 允許反向創建音符
+          BlockCreatingOverlappedNotes: 禁止創建重疊音符
           EnableEditingArctapWidth: 允許編輯天鍵的寬度
           ShowKeybindHint: 顯示快捷鍵提示
         Files:
@@ -987,7 +993,7 @@ Gameplay:
       堆疊追蹤 (Stack Trace):
       {StackTrace}
   HUD:
-    Play: 遊玩
+    Play: 返回
     Retry: 重試
     Return: 退出
     AudioDeviceChange: 偵測到音訊設備更動，ArcCreate將強制返回選單
@@ -1045,6 +1051,10 @@ Gameplay:
       rating: 評分
       score: 分數
       title: 曲名
+    SortPack:
+      name: 曲包排序
+      publisher: 發布人
+      addeddate: 新增日期
     Group:
       none: 無
       difficulty: 難度
@@ -1085,10 +1095,13 @@ Gameplay:
         OffsetDetail: |-
           調整音樂的偏移是否與遊玩時同步。
           如果LATE過多增加數值，如果EARLY過多則減少數值。
-        Calibrate: 譜面校正
+        Calibrate:
+          Button: 校正
+          Title: 校正偏移
+          SubTitle: 在樂曲第三拍時輕觸以校正偏移
         MusicAudio: 音樂音量
         MusicAudioDetail: |-
-          調整游戲内音樂音量大小。
+          調整游戲內音樂音量大小。
         EffectAudio: 打擊音效音量
         EffectAudioDetail: |-
           調整遊戲內打擊音效的音量。
@@ -1122,7 +1135,7 @@ Gameplay:
         ShowFPS: 顯示幀率
         ShowFPSDetail: 調整幀率顯示。
         ShowDebug: 顯示除錯訊息
-        ShowDebugDetail: 在游戲内顯示除錯訊息 (進階)。
+        ShowDebugDetail: 在游戲內顯示除錯訊息 (進階)。
       FrPmPosition:
         middle: 中間
         infopanel: 訊息欄
@@ -1137,24 +1150,24 @@ Gameplay:
         bottom: 底部
         top: 頂端
       ScoreDisplay:
-        default: Default
-        predictive: Predictive
-        difference: Difference
-        decrease: Decrease
+        default: 預設
+        predictive: 評級
+        difference: 差值
+        decrease: 倒扣
       ScoreDisplayDetails:
         default: 默認顯示模式。擊中音符時分數增加
         predictive: 當前分數將顯示為與距離最近評級分數之差
         difference: 當前分數將顯示為與離理論值的分數之差
         decrease: 當前分數將顯示為與從理論值開始減少分數
       ForceTheme:
-        default: Default
-        light: Light
-        dark: Dark
+        default: 預設
+        light: 光側
+        dark: 對立側
 
 Shutter:
-  Composer: 曲師
-  Illustrator: 繪師
-  Charter: 譜面設計
+  Composer: 歌曲
+  Illustrator: 插畫
+  Charter: 音符設計
   Alias: as
 
 Storage:
@@ -1169,10 +1182,8 @@ Storage:
     Message: |-
       您正在嘗試匯入舊版本的譜面資料，
       請問您想要保留哪個版本?
-    ReplaceAsset:
-      以匯入譜面資料取代
-    KeepOriginal:
-      保留原本的譜面資料
+    ReplaceAsset: 以匯入譜面資料取代
+    KeepOriginal: 保留原本的譜面資料
     Identifier: "辨識碼: {0}"
     Version: "版本: {0}"
   Loading:
@@ -1187,6 +1198,15 @@ Storage:
 Credits:
   Name: 致謝名單
   View: 查看致謝名單
-
+  Role:
+    LeadProgramming: 主程式設計
+    Programming: 程式設計
+    VisualDesign: 視覺設計
+    SoundDesign: 音效設計
+    Localization: 在地化
+    QualityAssurance: 遊戲測試
+    Community: 以及Arcthesia 和 ArcCreate 社群的所有成員!
+    Sponsor: 感謝我們的贊助者
 # First Edited by sylvex - 2023/4/25
 # Second edit by ZeErQi27, recharge-sp - 2024/4/11
+# Third Edited by sylvex - 2025/8/29
