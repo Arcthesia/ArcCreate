@@ -4,10 +4,6 @@
 
 Fast and powerful .aff editor made with Unity.
 
-### Support us:
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Q5Q1JE1B1)
-
 ### Join our discord server:
 
 [![Join the Discord](https://discord.com/api/guilds/1083452023250354206/widget.png?style=banner4)](https://discord.com/invite/t27ptGsrGH)
