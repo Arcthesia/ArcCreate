@@ -30,7 +30,7 @@ namespace ArcCreate.Gameplay
         public const int HoldFlashCycle = 4;
         public const int ArcFlashCycle = 5;
         public const float MaxHoldAlpha = 0.8627451f;
-        public const float MaxArcAlpha = 0.8823592f;
+        public const float MaxArcAlpha = 1f;
         public const float FlashArcAlphaScalar = 0.85f;
         public const float FlashHoldAlphaScalar = 0.85f;
         public const float MissedArcAlphaScalar = 0.75f;

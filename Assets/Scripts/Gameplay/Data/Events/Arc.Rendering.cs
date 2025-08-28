@@ -11,6 +11,8 @@ namespace ArcCreate.Gameplay.Data
     public partial class Arc : LongNote, ILongNote, IArcJudgementReceiver
     {
         private static bool isControllerMode = false;
+        
+        public static readonly Color OverrrideArcColor = new Color32(0xE6, 0x32, 0x32, 255);
 
         private bool highlight = false;
         private bool hasBeenHitOnce = false;
@@ -250,7 +252,9 @@ namespace ArcCreate.Gameplay.Data
                 }
                 else
                 {
-                    Services.Render.DrawArcSegment(Color, highlight, matrix * bodyMatrix, color, IsSelected, redArcValue, basePos.y + segment.EndPosition.y, depth);
+                    var _p = Mathf.Clamp01((-endZPos-(Timing==EndTiming? 90:95))/-10f);
+                    var opacity = Mathf.Clamp(_p * 150 + 75, 75, 255);
+                    Services.Render.DrawArcSegment(Color, highlight, matrix * bodyMatrix, color, IsSelected, redArcValue, basePos.y + segment.EndPosition.y, depth,opacity);
                     if (!groupProperties.NoShadow)
                     {
                         Services.Render.DrawArcShadow(matrix * shadowMatrix, color, cornerOffset);
@@ -272,7 +276,10 @@ namespace ArcCreate.Gameplay.Data
                 }
                 else
                 {
-                    Services.Render.DrawArcHead(Color, highlight, matrix, color, IsSelected, redArcValue, basePos.y + segments[0].EndPosition.y);
+                    float p = Mathf.Clamp01((-z - (Timing == EndTiming ? 90 : 95)) / -10f);
+                    float opacity = Mathf.Clamp(p * 150 + 75, 75, 255);
+                    Services.Render.DrawArcHead(Color, highlight, matrix, color, IsSelected, redArcValue,
+                        basePos.y + segments[0].EndPosition.y, opacity);
                 }
             }
 

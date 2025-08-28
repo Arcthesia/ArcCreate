@@ -30,6 +30,7 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private CanvasGroup packListCanvasGroup;
         [SerializeField] private Button backToPackListButton;
         [SerializeField] private Button allSongsPack;
+        [SerializeField] private Button basePack;
         [SerializeField] private Button remotePack;
         [SerializeField] private Button loadChartsPack;
         private Pool<Cell> packCellPool;
@@ -55,6 +56,7 @@ namespace ArcCreate.Selection.Interface
             storageData.SelectedPack.OnValueChange += OnSelectedPack;
             backToPackListButton.onClick.AddListener(BackToPackList);
             allSongsPack.onClick.AddListener(SelectAllSongsPack);
+            basePack.onClick.AddListener(SelectAllSongsPack);
             remotePack.onClick.AddListener(SwitchToRemoteScene);
             loadChartsPack.onClick.AddListener(OpenChartPicker);
             storageData.OnSwitchToGameplaySceneException += OnGameplayException;
@@ -99,6 +101,7 @@ namespace ArcCreate.Selection.Interface
             storageData.SelectedPack.OnValueChange -= OnSelectedPack;
             backToPackListButton.onClick.RemoveListener(BackToPackList);
             allSongsPack.onClick.RemoveListener(SelectAllSongsPack);
+            basePack.onClick.RemoveListener(SelectAllSongsPack);
             remotePack.onClick.RemoveListener(SwitchToRemoteScene);
             loadChartsPack.onClick.RemoveListener(OpenChartPicker);
             storageData.OnSwitchToGameplaySceneException -= OnGameplayException;
@@ -109,6 +112,20 @@ namespace ArcCreate.Selection.Interface
         private void SelectAllSongsPack()
         {
             storageData.SelectedPack.Value = null;
+        }
+        private void SelectBasePack()
+        {
+            
+            var basePack = new PackStorage
+            {
+                Identifier = "base",
+                PackName = "Base",
+                IsBasePack = true,
+                Levels = storageData.GetBasePackLevels().ToList(), // 确保 Levels 不为 null
+                LevelIdentifiers = storageData.GetBasePackLevels().Select(l => l.Identifier).ToList()
+            };
+
+            storageData.SelectedPack.Value = basePack;
         }
 
         private void OnGameplayException(Exception e)
