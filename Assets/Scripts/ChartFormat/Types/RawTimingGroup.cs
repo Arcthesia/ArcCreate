@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ArcCreate.Utility.Parser;
+using UnityEngine;
 
 namespace ArcCreate.ChartFormat
 {
@@ -7,46 +8,45 @@ namespace ArcCreate.ChartFormat
     {
         // Might be problematic when multiple chart formats is introduced, as this class only serialize / deserialize to aff.
         // Don't wnat to think about it now though.
-        public string Name { get; set; } = null;
+        public string Name { get; set; }
 
-        public bool NoInput { get; set; } = false;
+        public bool NoInput { get; set; }
 
-        public bool NoClip { get; set; } = false;
+        public bool NoClip { get; set; }
 
-        public bool NoHeightIndicator { get; set; } = false;
+        public bool NoHeightIndicator { get; set; }
 
-        public bool NoShadow { get; set; } = false;
+        public bool NoShadow { get; set; }
 
-        public bool NoHead { get; set; } = false;
+        public bool NoHead { get; set; }
 
-        public bool NoArcCap { get; set; } = false;
+        public bool NoArcCap { get; set; }
 
-        public bool NoConnection { get; set; } = false;
+        public bool NoConnection { get; set; }
 
-        public bool FadingHolds { get; set; } = false;
+        public bool FadingHolds { get; set; }
 
-        public bool IgnoreMirror { get; set; } = false;
+        public bool IgnoreMirror { get; set; }
 
-        public bool Autoplay { get; set; } = false;
+        public bool Autoplay { get; set; }
 
-        public Dictionary<JudgementMap, JudgementMap> JudgementMaps { get; set; }
-            = new Dictionary<JudgementMap, JudgementMap>();
+        public Dictionary<JudgementMap, JudgementMap> JudgementMaps { get; set; } = new();
 
         public float ArcResolution { get; set; } = 1;
 
-        public float AngleX { get; set; } = 0;
+        public float AngleX { get; set; }
 
-        public float AngleY { get; set; } = 0;
+        public float AngleY { get; set; }
 
         public float JudgementSizeX { get; set; } = 1;
 
         public float JudgementSizeY { get; set; } = 1;
 
-        public float JudgementOffsetX { get; set; } = 0;
+        public float JudgementOffsetX { get; set; }
 
-        public float JudgementOffsetY { get; set; } = 0;
+        public float JudgementOffsetY { get; set; }
 
-        public float JudgementOffsetZ { get; set; } = 0;
+        public float JudgementOffsetZ { get; set; }
 
         public SideOverride Side { get; set; } = SideOverride.None;
 
@@ -57,26 +57,81 @@ namespace ArcCreate.ChartFormat
         public static Result<RawTimingGroup, ChartError> Parse(string def, int lineNumber = 0)
         {
             var tg = new RawTimingGroup();
-            if (def == "")
-            {
-                return tg;
-            }
+            if (def == "") return tg;
 
             def += ",";
-            StringParser parser = new StringParser(def);
+            var parser = new StringParser(def);
             while (!parser.HasEnded)
             {
-                if (!parser.ReadString(",").TryUnwrap(out TextSpan<string> optRaw, out ParsingError e))
-                {
+                bool angleACE = true;
+                var angleV = 1f;
+                var angleAmount = 0;
+                if (!parser.ReadString(",").TryUnwrap(out var optRaw, out var e))
                     return ChartError.Parsing(def, lineNumber, RawEventType.TimingGroup, e);
+
+                var opt = optRaw.Value.Trim();
+                if (opt.Contains("_") || !opt.Contains("="))//Official AFF format support
+                {
+                    angleACE = false;
+                    if (opt.Contains("anglex"))
+                    {
+                        angleAmount += 1;
+                        angleV = 10f;
+                        opt = opt.Replace("anglex", "anglex=");
+                    }
+
+                    if (opt.Contains("angley"))
+                    {
+                        angleAmount += 1;
+                        angleV = 10f;
+                        opt = opt.Replace("angley", "angley=");
+                    }
+
+                    opt = opt.Replace("_", ",");
                 }
 
-                string opt = optRaw.Value.Trim();
-                if (opt.Contains("="))
+                if (angleAmount == 2)
                 {
-                    string[] tokens = opt.Split('=');
-                    string type = tokens[0];
-                    string value = tokens[1];
+                    var _tokens = opt.Split(',');
+                    var angle1 = _tokens[0].Split('=');
+                    var angle2 = _tokens[1].Split('=');
+                    var _type1 = angle1[0];
+                    var _value1 = angle1[1];
+                    var _type2 = angle2[0];
+                    var _value2 = angle2[1];
+
+                    bool _valid;
+                    float _val;
+                    switch (_type1.ToLower())
+                    {
+                        case "anglex":
+                            _valid = Evaluator.TryFloat(_value1, out _val);
+                            tg.AngleX = (_valid ? _val : 0) / angleV;
+                            break;
+                        case "angley":
+                            _valid = Evaluator.TryFloat(_value1, out _val);
+                            tg.AngleY = (_valid ? _val : 0) / (angleACE ?angleV:-angleV);
+                            break;
+                    }
+
+                    switch (_type2.ToLower())
+                    {
+                        case "anglex":
+                            _valid = Evaluator.TryFloat(_value2, out _val);
+                            tg.AngleX = (_valid ? _val : 0) / angleV;
+                            break;
+                        case "angley":
+                            _valid = Evaluator.TryFloat(_value2, out _val);
+                            tg.AngleY = (_valid ? _val : 0) / (angleACE ?angleV:-angleV);
+                            break;
+                    }
+                }
+
+                if (opt.Contains("=") && angleAmount < 2)
+                {
+                    var tokens = opt.Split('=');
+                    var type = tokens[0];
+                    var value = tokens[1];
 
                     bool valid;
                     float val;
@@ -87,11 +142,11 @@ namespace ArcCreate.ChartFormat
                             break;
                         case "anglex":
                             valid = Evaluator.TryFloat(value, out val);
-                            tg.AngleX = valid ? val : 0;
+                            tg.AngleX = (valid ? val : 0) / angleV;
                             break;
                         case "angley":
                             valid = Evaluator.TryFloat(value, out val);
-                            tg.AngleY = valid ? val : 0;
+                            tg.AngleY = (valid ? val : 0) / (angleACE ?angleV:-angleV);
                             break;
                         case "judgesizex":
                             valid = Evaluator.TryFloat(value, out val);
@@ -115,7 +170,7 @@ namespace ArcCreate.ChartFormat
                             break;
                         case "arcresolution":
                             valid = Evaluator.TryFloat(value, out val);
-                            val = UnityEngine.Mathf.Clamp(val, 0.1f, 10);
+                            val = Mathf.Clamp(val, 0.1f, 10);
                             tg.ArcResolution = valid ? val : 1;
                             break;
                         case "max":
@@ -199,13 +254,15 @@ namespace ArcCreate.ChartFormat
                             tg.Autoplay = true;
                             break;
                         default:
-                            return ChartError.Property(
-                                def,
-                                lineNumber,
-                                RawEventType.TimingGroup,
-                                optRaw.StartPos,
-                                optRaw.Length,
-                                ChartError.Kind.TimingGroupPropertiesInvalid);
+                            if (angleAmount != 2)
+                                return ChartError.Property(
+                                    def,
+                                    lineNumber,
+                                    RawEventType.TimingGroup,
+                                    optRaw.StartPos,
+                                    optRaw.Length,
+                                    ChartError.Kind.TimingGroupPropertiesInvalid);
+                            break;
                     }
                 }
             }
@@ -229,193 +286,136 @@ namespace ArcCreate.ChartFormat
         {
             switch (mapTo)
             {
-                case "max": result = JudgementMap.Max; return true;
-                case "perfectearly": result = JudgementMap.PerfectEarly; return true;
-                case "goodearly": result = JudgementMap.GoodEarly; return true;
-                case "missearly": result = JudgementMap.MissEarly; return true;
-                case "perfectlate": result = JudgementMap.PerfectLate; return true;
-                case "goodlate": result = JudgementMap.GoodLate; return true;
-                case "misslate": result = JudgementMap.MissLate; return true;
-                case "perfect": result = JudgementMap.PerfectMapped; return true;
-                case "good": result = JudgementMap.GoodMapped; return true;
-                case "miss": result = JudgementMap.MissMapped; return true;
-                default: result = default; return false;
+                case "max":
+                    result = JudgementMap.Max;
+                    return true;
+                case "perfectearly":
+                    result = JudgementMap.PerfectEarly;
+                    return true;
+                case "goodearly":
+                    result = JudgementMap.GoodEarly;
+                    return true;
+                case "missearly":
+                    result = JudgementMap.MissEarly;
+                    return true;
+                case "perfectlate":
+                    result = JudgementMap.PerfectLate;
+                    return true;
+                case "goodlate":
+                    result = JudgementMap.GoodLate;
+                    return true;
+                case "misslate":
+                    result = JudgementMap.MissLate;
+                    return true;
+                case "perfect":
+                    result = JudgementMap.PerfectMapped;
+                    return true;
+                case "good":
+                    result = JudgementMap.GoodMapped;
+                    return true;
+                case "miss":
+                    result = JudgementMap.MissMapped;
+                    return true;
+                default:
+                    result = default;
+                    return false;
             }
         }
 
         private static void AddRemapRules(RawTimingGroup tg, string value, params JudgementMap[] fromJudgements)
         {
-            string mapTo = value.Trim('"').ToLower();
-            if (TryGetJudgement(mapTo, out JudgementMap res))
-            {
+            var mapTo = value.Trim('"').ToLower();
+            if (TryGetJudgement(mapTo, out var res))
                 foreach (var j in fromJudgements)
-                {
                     tg.JudgementMaps.Add(j, res);
-                }
-            }
         }
 
         private List<string> GetPropertyStrings(bool withName)
         {
-            List<string> opts = new List<string>();
-            if (withName && !string.IsNullOrEmpty(Name))
-            {
-                opts.Add($"name=\"{Name}\"");
-            }
+            var opts = new List<string>();
+            if (withName && !string.IsNullOrEmpty(Name)) opts.Add($"name=\"{Name}\"");
 
-            if (NoInput)
-            {
-                opts.Add("noinput");
-            }
+            if (NoInput) opts.Add("noinput");
 
-            if (NoClip)
-            {
-                opts.Add("noclip");
-            }
+            if (NoClip) opts.Add("noclip");
 
-            if (NoHeightIndicator)
-            {
-                opts.Add("noheightindicator");
-            }
+            if (NoHeightIndicator) opts.Add("noheightindicator");
 
-            if (NoHead)
-            {
-                opts.Add("nohead");
-            }
+            if (NoHead) opts.Add("nohead");
 
-            if (NoShadow)
-            {
-                opts.Add("noshadow");
-            }
+            if (NoShadow) opts.Add("noshadow");
 
-            if (NoArcCap)
-            {
-                opts.Add("noarccap");
-            }
+            if (NoArcCap) opts.Add("noarccap");
 
-            if (FadingHolds)
-            {
-                opts.Add("fadingholds");
-            }
+            if (FadingHolds) opts.Add("fadingholds");
 
-            if (IgnoreMirror)
-            {
-                opts.Add("ignoremirror");
-            }
+            if (IgnoreMirror) opts.Add("ignoremirror");
 
-            if (Autoplay)
-            {
-                opts.Add("autoplay");
-            }
+            if (Autoplay) opts.Add("autoplay");
 
-            if (NoConnection)
-            {
-                opts.Add("noconnection");
-            }
+            if (NoConnection) opts.Add("noconnection");
 
-            if (JudgementMaps.TryGetValue(JudgementMap.Max, out JudgementMap maxTo))
-            {
-                opts.Add($"max={GetStringFrom(maxTo)}");
-            }
+            if (JudgementMaps.TryGetValue(JudgementMap.Max, out var maxTo)) opts.Add($"max={GetStringFrom(maxTo)}");
 
-            if (JudgementMaps.TryGetValue(JudgementMap.PerfectEarly, out JudgementMap pearlyTo)
-            && JudgementMaps.TryGetValue(JudgementMap.PerfectLate, out JudgementMap plateTo)
-            && pearlyTo == plateTo)
+            if (JudgementMaps.TryGetValue(JudgementMap.PerfectEarly, out var pearlyTo)
+                && JudgementMaps.TryGetValue(JudgementMap.PerfectLate, out var plateTo)
+                && pearlyTo == plateTo)
             {
                 opts.Add($"perfect={GetStringFrom(pearlyTo)}");
             }
             else
             {
-                if (JudgementMaps.TryGetValue(JudgementMap.PerfectEarly, out JudgementMap pe))
-                {
+                if (JudgementMaps.TryGetValue(JudgementMap.PerfectEarly, out var pe))
                     opts.Add($"perfectearly={GetStringFrom(pe)}");
-                }
-                if (JudgementMaps.TryGetValue(JudgementMap.PerfectLate, out JudgementMap pl))
-                {
+                if (JudgementMaps.TryGetValue(JudgementMap.PerfectLate, out var pl))
                     opts.Add($"perfectlate={GetStringFrom(pl)}");
-                }
             }
 
-            if (JudgementMaps.TryGetValue(JudgementMap.GoodEarly, out JudgementMap gearlyTo)
-            && JudgementMaps.TryGetValue(JudgementMap.GoodLate, out JudgementMap glateTo)
-            && gearlyTo == glateTo)
+            if (JudgementMaps.TryGetValue(JudgementMap.GoodEarly, out var gearlyTo)
+                && JudgementMaps.TryGetValue(JudgementMap.GoodLate, out var glateTo)
+                && gearlyTo == glateTo)
             {
                 opts.Add($"good={GetStringFrom(gearlyTo)}");
             }
             else
             {
-                if (JudgementMaps.TryGetValue(JudgementMap.GoodEarly, out JudgementMap ge))
-                {
+                if (JudgementMaps.TryGetValue(JudgementMap.GoodEarly, out var ge))
                     opts.Add($"goodearly={GetStringFrom(ge)}");
-                }
-                if (JudgementMaps.TryGetValue(JudgementMap.GoodLate, out JudgementMap gl))
-                {
+                if (JudgementMaps.TryGetValue(JudgementMap.GoodLate, out var gl))
                     opts.Add($"goodlate={GetStringFrom(gl)}");
-                }
             }
 
-            if (JudgementMaps.TryGetValue(JudgementMap.MissEarly, out JudgementMap mearlyTo)
-            && JudgementMaps.TryGetValue(JudgementMap.MissLate, out JudgementMap mlateTo)
-            && mearlyTo == mlateTo)
+            if (JudgementMaps.TryGetValue(JudgementMap.MissEarly, out var mearlyTo)
+                && JudgementMaps.TryGetValue(JudgementMap.MissLate, out var mlateTo)
+                && mearlyTo == mlateTo)
             {
                 opts.Add($"miss={GetStringFrom(mearlyTo)}");
             }
             else
             {
-                if (JudgementMaps.TryGetValue(JudgementMap.MissEarly, out JudgementMap me))
-                {
+                if (JudgementMaps.TryGetValue(JudgementMap.MissEarly, out var me))
                     opts.Add($"missearly={GetStringFrom(me)}");
-                }
-                if (JudgementMaps.TryGetValue(JudgementMap.MissLate, out JudgementMap ml))
-                {
+                if (JudgementMaps.TryGetValue(JudgementMap.MissLate, out var ml))
                     opts.Add($"misslate={GetStringFrom(ml)}");
-                }
             }
 
-            if (AngleX != 0)
-            {
-                opts.Add($"anglex={AngleX:f2}");
-            }
+            if (AngleX != 0) opts.Add($"anglex={AngleX:f2}");
 
-            if (AngleY != 0)
-            {
-                opts.Add($"angley={AngleY:f2}");
-            }
+            if (AngleY != 0) opts.Add($"angley={AngleY:f2}");
 
-            if (ArcResolution != 1)
-            {
-                opts.Add($"arcresolution={ArcResolution:f1}");
-            }
+            if (ArcResolution != 1) opts.Add($"arcresolution={ArcResolution:f1}");
 
-            if (JudgementOffsetX != 0)
-            {
-                opts.Add($"judgeoffsetx={JudgementOffsetX:f1}");
-            }
+            if (JudgementOffsetX != 0) opts.Add($"judgeoffsetx={JudgementOffsetX:f1}");
 
-            if (JudgementOffsetY != 0)
-            {
-                opts.Add($"judgeoffsety={JudgementOffsetY:f1}");
-            }
+            if (JudgementOffsetY != 0) opts.Add($"judgeoffsety={JudgementOffsetY:f1}");
 
-            if (JudgementOffsetZ != 0)
-            {
-                opts.Add($"judgeoffsetz={JudgementOffsetZ:f1}");
-            }
+            if (JudgementOffsetZ != 0) opts.Add($"judgeoffsetz={JudgementOffsetZ:f1}");
 
-            if (JudgementSizeX != 1)
-            {
-                opts.Add($"judgesizex={JudgementSizeX:f1}");
-            }
+            if (JudgementSizeX != 1) opts.Add($"judgesizex={JudgementSizeX:f1}");
 
-            if (JudgementSizeY != 1)
-            {
-                opts.Add($"judgesizey={JudgementSizeY:f1}");
-            }
+            if (JudgementSizeY != 1) opts.Add($"judgesizey={JudgementSizeY:f1}");
 
-            if (Side != SideOverride.None)
-            {
-                opts.Add(Side == SideOverride.Light ? "light" : "conflict");
-            }
+            if (Side != SideOverride.None) opts.Add(Side == SideOverride.Light ? "light" : "conflict");
 
             return opts;
         }

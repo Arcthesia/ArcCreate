@@ -22,6 +22,12 @@ namespace ArcCreate.ChartFormat
 
         public string Sfx { get; set; }
 
+        public bool Designant { get; set; }
+
+        public bool DesignantScore { get; set; }
+
+        public float Smoothness { get; set; }
+
         public List<RawArcTap> ArcTaps { get; set; }
     }
 }
