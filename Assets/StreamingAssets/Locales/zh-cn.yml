@@ -1,138 +1,128 @@
-### 翻译注意事项：
-# 1. 音符名称保持原文并尽量首字母大写，无论是否在句首：Tap、Hold、Arc、Sky note、Trace
-# 2. Timing同样不翻译，位于句首时大写，的timing可以翻译为“时间”一词，请自行判断位于句中时小写Timing group翻译为时间组有些位置
-# 3. 为保持与英文原文行数一致，部分段落会添加#为占位
-#
-######
 Parsing:
   # 解析字符串的异常信息
   Exception:
-    CharacterNotFound: 找不到字符"{0}"
-    InvalidConversionToInt: 无法将"{0}"转换为整数
-    InvalidConversionToBool: 无法将"{0}"转换为布尔值
-    InvalidConversionToFloat: 无法将"{0}"转换为浮点数
+    CharacterNotFound: 找不到字符 "{0}"
+    InvalidConversionToInt: 无法将 "{0}" 转换为整数
+    InvalidConversionToBool: 无法将 "{0}" 转换为布尔值
+    InvalidConversionToFloat: 无法将 "{0}" 转换为浮点数
 
 Format:
   # 解析谱面文件时发生的错误
   Exception:
     File: |-
-      读取谱面文件{File}时发生错误
+      读取谱面文件 {File} 时发生异常：
       {Error}
     SingleErrorFormat: |-
-      错误位于第{LineNumber}行的{EventType}事件
-      语句内容: "{Content}".
+      位置：第 {LineNumber} 行
+      解析事件类型时: {EventType}
+      语句为: "{Content}".
       {Reason}
     SingleErrorShortFormat: |-
-      {EventType}事件
-      错误原因：
+      解析事件类型时：{EventType}
       {Reason}
     UnknownException: |-
-      未知错误
+      发生未知错误
       异常: {Exception}
       堆栈跟踪：
       {StackTrace}
     InvalidHeader: |-
-      无效的文件头
+      无效的表头行
     ArcColorNegative: |-
-      Arc的颜色ID不能为负数
+      Arc 颜色 ID 不能为负数
     AudioOffsetInvalid: |-
       无效的音频偏移
     TimingPointDensityFactorInvalid: |-
-      无效的判定点密度
+      无效的判定点密度定义
     BaseTimingInvalid: |-
-      无效的基准timing，请确认您的谱面0ms处存在一条timing语句
+      无效的基准timing定义，请确认您的谱面文件是否有起始于0ms的timing事件。
     IncludeReferencedMultipleTimes: |-
-      工程已经引用了一个谱面文件，但是又重复引用了这个谱面
+      该谱面文件已被完整包含，无法再次引用。
     IncludeAReferencedFragment: |-
-      工程已经引用了一个谱面文件的一部分，但是又重复引用了这个谱面
+      该谱面文件已被作为片段引用，无法再次进行完整包含。
     TimingGroupPairInvalid: |-
-      时间组符号配对错误。请注意在编辑时间组时用大括号括起来并在结尾加分号“};”
+      时间组符号配对错误。请注意在编辑时间组时用大括号括起来并在结尾加分号“};”。
     DivisorNegative: |-
-      Timing事件的节拍分割参数不能为负数
-    # 原文为“divisor property”，我翻译为“节拍分割参数”，指的是timing语句的第三个参数（四分音符每小节）
+      Timing 事件的节拍分割参数不能为负数。
     DurationNegative: |-
-      该类事件的持续时间不能为负数
+      该类事件的持续时间不能为负数。
     DurationZero: |-
-      该类事件的持续时间不能为零
+      该类事件的持续时间不能为零。
     ArcTapOutOfRange: |-
-      Sky note的时间超出其所在Arc的时间范围
+      ArcTap 的时间超出其父 Arc 的时间范围。
     TimingGroupPropertiesInvalid: |-
-      无效的时间组属性
+      无效的时间组属性定义。
     ReferencedFileError: |-
       无法加载引用的谱面文件:
       {0}
     FileDoesNotExist: |-
-      谱面文件不存在
+      谱面文件不存在。
   Warning:
     HoldTooShort:
-      Hold的持续时间过短，小于17ms
+      Hold 音符的持续时间短于 17ms。
     TapJudgementOverlap:
-      Tap判定和其他物件发生重叠
+      Tap 音符的判定与其他音符重叠。
 
 Compose:
   # 编辑器中的报错
   Exception:
     FileDoesNotExist: |-
-      尝试读取位于路径 {Path} 的文件，但是该文件不存在，可能被删除了
+      尝试读取位于 {Path} 的文件，但该文件不存在。文件可能已被删除。
     LoadImage: |-
-      尝试读取位于路径 {Path} 的图片文件时发生错误
+      尝试加载位于 {Path} 的图片文件时发生错误。
       {Error}
     LoadProject: |-
-      尝试读取位于路径 {Path} 的工程文件时发生错误
-      工程文件之前可能没有被正常保存
-      您可以试着手动修复工程文件，也可以删掉原有的文件并创建一个新的工程文件
+      尝试加载位于 {Path} 的工程文件时发生错误。
+      该文件可能未正确保存。
+      您可以尝试手动修改它，也可以删掉原有的文件并创建一个新的工程文件。
       {Error}
     ChartFileAlreadyExists: |-
-      谱面在工程中已被引用
+      谱面在工程中已被引用。
     InvalidChartFile: |-
-      输入了无效的谱面文件名
+      输入了无效的谱面文件名。
     NoChartIncluded: |-
-      无效的工程文件：工程中不包含谱面
+      无效的工程文件：此工程内没有任何谱面。
     InvalidGroupProperties: |-
       无效的时间组属性 {Message}
     InstructionLimit: |-
-      Lua脚本执行中止：到达指令数量上限{0}
+      Lua 脚本执行中止：到达指令数量上限 {0}
     InvalidBaseBPM: |-
-      无效的基准BPM数值：{0}
+      无效的基准 BPM 值: {0}
     CreateSkyNoteNoValidArc: |-
-      不能在这里放置Sky note。Sky note必须放在Trace上
+      无法在此处创建天键，天键必须放在黑线上。
     Navigation:
       ParseKeybind: |-
-        解析键位绑定时出现了一个错误："{0}"
+        解析键位绑定时发生异常："{0}".
       ParseWhitespace: |-
         无效的键位绑定：键位设置不能为空
       InvalidKeystroke: |-
-        无效的键位设置：键位"{0}"的格式错误
+        无效的键位设置：键位 "{0}" 不符合正确的格式。
       InvalidKey: |-
-        无效的键位：键位"{0}"并不匹配任何按键
+        无效的键位：字符串 "{0}" 不匹配任何按键。
       InvalidModifier: |-
-        无效的键位指示符：字符串"{0}"并不匹配任何键位指示符
-      # 原文：“modifier key”，指的是在keybind编辑中用字母代替某些特别的键位
-      # 例如c代表ctrl，s代表shift，然后在尖括号中使用，例如<c-s-esc>就是ctrl+shift+esc
-      # 详见github wiki的keybind页面
+        无效的键位指示符：字符串 "{0}" 并不匹配任何键位指示符。
       InvalidActionPath: |-
-        无效的动作路径：字符串"{0}"并不匹配任何动作
+        无效的操作路径：字符串 "{0}" 并不匹配任何操作。
     Scenecontrol: |-
-      执行{Type}类型SceneControl事件时发生错误：{Message}
+      执行 {Type} 类型 SceneControl 事件时发生错误:{Message}
       {StackTrace}
     LuaScript: |-
-      执行{Path}路径下的Lua脚本时发生错误：{Message}
+      执行 {Path} 路径下的 Lua 脚本时发生错误:{Message}
       {StackTrace}
     Render:
       FFmpeg:
         NotFound: |-
-          找不到任何FFmpeg可执行文件
-          请确认配置的路径 {0} 是正确路径
+          找不到任何 FFmpeg 可执行文件。
+          请确认配置的路径 {0} 是否正确。
         Start: |-
-          启动位于 {Path} 路径的FFmpeg时发生错误：{Message}
+          启动位于 {Path} 路径的 FFmpeg 时发生错误: {Message}
           {StackTrace}
         Write: |-
-          写入FFmpeg进程时发生错误：{Message}
+          写入 FFmpeg 进程时发生错误:{Message}
           {StackTrace}
       Audio:
         IncompatibleSfx: |-
-          音效片段{Sfx}不兼容渲染
-          渲染音频声道数量为 {ExpectedChannels} ，渲染音频采样率为 {ExpectedFrequency}，而音频片段的声道数量为{Channels}，采样率为{Frequency}
+          音效片段 {Sfx} 不兼容渲染
+          渲染音频声道数量为 {ExpectedChannels} ，渲染音频采样率为 {ExpectedFrequency}，而音频片段的声道数量为{Channels}，采样率为{Frequency}.
           
  # 通知消息
   Notify:
@@ -155,17 +145,16 @@ Compose:
        在当前文件夹下生成了用于外置文件的EmmyLua模板
        请使用安装了"tangzx.emmylua"插件的VS Code进行自动填充
     Actions:
-      CannotMirror: 无法镜像选中的物件
-      NoDragRange: 无法拖动选中物件的timing。请尝试分别拖动物件
+      CannotMirror: 无法镜像选中的物件。
+      NoDragRange: 无法拖动选中物件的timing。请尝试分别拖动物件。
     History:
       Execute: |-
-        已执行的命令：{Name}
+        已执行命令: {Name}
       Undo: |-
-        撤销命令：{Name}
+        撤销命令: {Name}
       Redo: |-
-        重做命令：{Name}
-      #上方的{Name}占位符会用以下项代替
-      #部分英文需要在两旁添加空格
+        重做命令: {Name}
+      #上方的{Name}占位符会用以下项代替 | 部分英文需要在两旁添加空格
       AddTiming: 添加 timing 事件
       EditTiming: 编辑 timing 事件
       RemoveTiming: 移除 timing 事件
@@ -193,10 +182,10 @@ Compose:
         Timing: 拖动物件timing
         Position: 拖动物件位置
     Clipboard:
-      Copy: 复制了{0}个物件
-      Cut: 剪切了{0}个物件
-      NamedCopy: 复制了{0}个物件到命名为"{1}"剪贴板
-      NamedCut: 剪切了{0}个物件到命名为"{1}"剪贴板
+      Copy: 复制了 {0} 个物件
+      Cut: 剪切了 {0} 个物件
+      NamedCopy: 复制了 {0} 个物件到命名为 "{1}" 剪贴板
+      NamedCut: 剪切了 {0} 个物件到命名为 "{1}" 剪贴板
     GroupTable:
       AddGroup: 添加了时间组 {Number}
       EditGroup: 编辑了时间组 {Number}
@@ -218,22 +207,22 @@ Compose:
       InvalidParamameter: 无效参数
     Measurer:
       CopyTiming: 已复制当前timing
-      CopyPosition: 已复制Arc位置
-      CopyX: 已复制Arc的x坐标
-      CopyY: 已复制Arc的y坐标
+      CopyPosition: 已复制 Arc 位置
+      CopyX: 已复制 Arc 的 X 坐标
+      CopyY: 已复制 Arc 的 Y 坐标
     Export:
       Render:
         Cancelled: 取消渲染
         Complete: 渲染完成
       Package:
-        Complete: 将包导出到了{0}
+        Complete: 将包导出到了 {0}
     Macros:
       Cancelled: 撤销外置工具
       Select:
         Timing: 选择timing
         Position: 选择位置
         Lane: 选择轨道
-      NotFound: 外置工具 "{macroId}" 不存在
+      NotFound: 外置工具 "{0}" 不存在.
     Mirror:
       CannotMirror: 没有物件可以被镜像
     Creation:
@@ -316,17 +305,17 @@ Compose:
         Name: 网格
         Toggle: 切换网格
         ToggleSlot:
-          Name: 网格切换栏
-          Slot1: 栏位1
-          Slot2: 栏位2
-          Slot3: 栏位3
-          Slot4: 栏位4
-          Slot5: 栏位5
+          Name: 网格切换
+          Slot1: 预设1
+          Slot2: 预设2
+          Slot3: 预设3
+          Slot4: 预设4
+          Slot5: 预设5
           Slot6: 栏位6
-          Slot7: 栏位7
-          Slot8: 栏位8
-          Slot9: 栏位9
-          Slot0: 栏位0
+          Slot7: 预设7
+          Slot8: 预设8
+          Slot9: 预设9
+          Slot0: 预设0
         IncreaseDensity: 增加节拍细分密度
         DecreaseDensity: 降低节拍细分密度
       Macro:
@@ -365,8 +354,8 @@ Compose:
           Cancel: 取消
           CopyTiming: 复制测量时间
           CopyPosition: 复制测量位置
-          CopyX: 复制x坐标
-          CopyY: 复制y坐标
+          CopyX: 复制 X 坐标
+          CopyY: 复制 Y 坐标
       Clipboard:
         Name: 剪贴板
         Copy: 复制
@@ -390,7 +379,7 @@ Compose:
           Cancel: 取消
           ToggleFreeSky: 切换至Single Arc Tap
       NotePallete:
-        Name: Note颜色选取
+        Name: Arc 颜色选择
         Arc: 
           Name: 音弧
           Blue: 蓝（0）
@@ -404,7 +393,7 @@ Compose:
         Sky: 天键
         Tap: 地键
         Hold: 长条
-        Idle: 不创建
+        Idle: （无）
       Delete:
         Name: 删除
         Execute: 删除物件
@@ -420,7 +409,6 @@ Compose:
           Confirm: 确认
           Cancel: 
           CycleSkyNoteMode: 切换天键的放置模式
-        
         Position:
           Name: 拖拽坐标
           Confirm: 确认
@@ -619,10 +607,10 @@ Compose:
       NotRequired: （选填）
       Extension: 文件扩展名
     Placeholder:
-      Text: 空……
-      File: 没有选择文件……
-      Image: 没有选择图片……
-      Property: 没有属性……
+      Text: 空...
+      File: 没有选择文件...
+      Image: 没有选择图片...
+      Property: 没有属性...
       ImagePrompt: 点击选择图片
     PanelNames:
       Toolbox: 工具箱
@@ -664,7 +652,7 @@ Compose:
         Composer: 曲师
         Illustrator: 插画作者
         Charter: 谱师
-        Alias: 谱师假名（马甲）
+        Alias: 名义
         BPM: BPM
         BaseBPM: 基准BPM
         BPMText: BPM文本
@@ -751,7 +739,7 @@ Compose:
         AutoReload: 自动重新加载
         GenerateEmmyLua: 生成 EmmyLua
         Reload: 重新加载
-        FreeCamera: 自由camera
+        FreeCamera: 移动相机
       Mode:
         Timing: Timing
         Camera: Camera
@@ -777,7 +765,7 @@ Compose:
           CRF:
             Name: CRF
             Lossless: "{0} (无损质量)"
-            VeryLow: "{0} (接近无损质量)"
+            VeryLow: "{0} (近无损质量)"
             Low: "{0} (高质量)"
             Medium: "{0} (中等质量)"
             Default: "{0} (默认质量)"
@@ -797,6 +785,7 @@ Compose:
           导出一个可分享给其他玩家的 .arcpkg 谱面包
         Publisher: 发布者
         Package: 谱面包
+        SaveTo: 保存到
         Version: 版本
         BlankField: 请输入发布者和谱面包名信息
         Identifier: "您的谱面包标识符是：{0}"
@@ -829,7 +818,7 @@ Compose:
           ShowMiss: Miss
         Grid:
           Name: 网格设置
-          Slot: 栏位
+          Slot: 预设
           UseDefault: 使用默认设置
           FromLane: 起始轨道
           ToLane: 结束轨道
@@ -853,8 +842,9 @@ Compose:
           UseNativeFileBrowser: 使用系统文件管理器浏览
           AllowCreatingNotesBackward: 允许反向创建物件
           BlockCreatingOverlappedNotes: 阻止创建重叠的物件
-          EnableEditingArctapWidth: 允许编辑Sky note的宽度
+          EnableEditingArctapWidth: 允许编辑天键的宽度
           ShowKeybindHint: 显示键位绑定提示
+          SnapFloorNoteWithGrid: 将 Tap 音符与网格对齐
         Files:
           Name: 文件设置
           Backup: 保存时创建备份
@@ -887,7 +877,6 @@ Compose:
         Measure: 测量
         RangeSelect: 段落选中
       Macros:
-    # 应该翻译为宏，但是外置工具更顺口
         Name: 外置工具
         GenerateEmmy: 生成EmmyLua
         Reload: 重新加载外置工具脚本
@@ -921,30 +910,30 @@ Remote:
     InvalidIP: 无效的IP地址
   State:
     Listening: |-
-      正在监听广播……
+      正在监听广播...
       <size=20>
-      在您的桌面ArcCreate客户端上打开“远程连接”标签页并点击“开始广播”开始游玩</size>
+      在您的桌面 ArcCreate 客户端上打开“远程连接”标签页并点击“开始广播”开始游玩</size>
     ManualIP: |-
       等待桌面客户端连接
       <size=20>
-      在您的桌面ArcCreate客户端上打开“远程连接”标签页并输入IP地址：{0}。</size>
+      在您的桌面 ArcCreate 客户端上打开“远程连接”标签页并输入IP地址: {0}。</size>
     Found: |-
-      从以下设备接收到广播
-      选择一个设备以继续
+      从以下设备接收到广播。
+      选择一个设备以继续。
     TargetDisconnected:
-      Compose: 目标客户端断开连接，连接中止
+      Compose: 目标客户端断开连接，连接中止。
       Gameplay: 目标客户端断开连接，您想要创建一个新会话吗？
     Receiving:
-      接收数据（{0}）
+      接收数据 ({0})
   Description:
     Idle: |-
-      没有连接测试游玩设备
-      开始广播来寻找设备。请确认这台设备和测试游玩的设备在同一个本地网络中，并且测试游玩的设备正在监听广播
+      没有连接测试游玩设备。
+      开始广播来寻找设备。请确认这台设备和测试游玩的设备在同一个本地网络中，并且测试游玩的设备正在监听广播。
     Broadcasting: |-
-      广播码：{0}
-      在测试游玩设备上选择选项并输入广播码来开始游玩
+      广播码: {0}
+      在测试游玩设备上选择选项并输入广播码来开始游玩。
     Connected: |-
-      连接到了测试游玩设备：{0}:{1}
+      连接到了测试游玩设备： {0}:{1}
   Actions:
     Broadcast: 开始广播
     AbortBroadcast: 停止广播
@@ -983,30 +972,30 @@ Remote:
 Gameplay:
   Exception:
     LoadAudio: |-
-      尝试加载位于路径 {Path} 的音频文件时发生错误
+      尝试加载位于路径 {Path} 的音频文件时发生错误。
       {Error}
     Chart: |-
-      尝试加载位于路径 {Path} 的谱面时发生错误
+      尝试加载位于路径 {Path} 的谱面时发生错误。
       {Error}
     Skin: |-
-      尝试加载位于路径 {Path} 的图片时发生错误
+      尝试加载位于路径 {Path} 的图片时发生错误。
       {Error}
     Scenecontrol: |-
-      尝试加载位于路径 {Path} 的SceneControl json时发生错误
+      尝试加载位于路径 {Path} 的SceneControl json时发生错误。
       {Error}
     ScenecontrolSprite: |-
-      尝试加载位于路径 {Path} 的SceneControl精灵图时发生错误
+      尝试加载位于路径 {Path} 的SceneControl精灵图时发生错误。
       {Error}
     Load: |-
       尝试加载 {ChartPath} 路径下的谱面 {Identifier} 时发生未知错误
-      错误信息：{Message}
-      堆栈追踪：
+      错误信息: {Message}
+      堆栈追踪: 
       {StackTrace}
   HUD:
     Play: 返回
     Retry: 重试
     Return: 退出
-    AudioDeviceChange: 检测到音频设备发生变化，ArcCreate将强制返回选择菜单
+    AudioDeviceChange: 检测到音频设备发生变化，ArcCreate将强制返回选择菜单。
     Confirm: 确认
   Practice:
     PlaybackSpeed: 播放速度
@@ -1018,20 +1007,20 @@ Gameplay:
   Selection:
     SelectStatus:
       Singular: |-
-        选择了{0}个资源
+        选择了 {0} 个资源
       Plural: |-
-        选择了{0}个资源
+        选择了 {0} 个资源
     DeleteConfirmation: |-
       您确定要删除以下资源吗？
-      这不会删除您的分数
+      这不会删除您的分数。
     PackDeleteConfirmation: |-
-      您正在删除谱面包：
+      您正在删除曲包：
       <color=#FFFFFFB4>{0}</color>
-      您是否也想要删除掉属于这个谱面包的所有谱面，或者是保留谱面只删除这个谱面包？
+      您是否也想要删除掉属于这个曲包的所有谱面，或者是保留谱面只删除这个曲包？
     CannotDeleteDefault: |-
-      无法删除默认资源
+      无法删除默认资源。
     EnablePractice: |-
-      下一次游玩时启用练习模式
+      下一次游玩时启用练习模式。
     SelectRating: 为这张谱面打分
     Action:
       Copy: 复制
@@ -1050,7 +1039,7 @@ Gameplay:
         Title: 未命名
         Composer: N/A
         Charter: 未知
-      Charter: '谱师：{0}'
+      Charter: '谱师: {0}'
     Sort:
       addeddate: 添加时间
       charter: 谱师
@@ -1187,19 +1176,19 @@ Storage:
   ImportSummary: |-
     成功导入以下资源：
   NoAssetImported: |-
-    没有导入资源
+    没有导入资源。
   ImportConflict:
     Message: |-
-      您正在尝试导入一个资源的较早版本
+      您正在尝试导入一个资源的较早版本。
       您想保留哪个版本？
     ReplaceAsset:
       用导入的资源替换
     KeepOriginal:
       保留原有资源
-    Identifier: "标识符：{0}"
+    Identifier: "标识符: {0}"
     Version: "版本：{0}"
   Loading:
-    Message: '正在加载：{0}……'
+    Message: '正在加载：{0}...'
     Archive: 正在解包
     ValidatePackage: 正在验证包
     CheckConflict: 正在检查冲突
@@ -1219,3 +1208,4 @@ Credits:
     QualityAssurance: 测试人员
     Community: 以及 Arcthesia 和 ArcCreate 社区的所有成员！
     Sponsor: 特别感谢我们的赞助者！
+    
