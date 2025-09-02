@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using ArcCreate.Gameplay.Audio;
 using ArcCreate.Gameplay.Judgement;
 using ArcCreate.Gameplay.Utility;
 using UnityEngine;
@@ -113,7 +114,8 @@ namespace ArcCreate.Gameplay.Data
                 SetGroupHighlight(true, currentTiming + Values.HoldParticlePersistDuration);
                 if (!hasBeenHitOnce)
                 {
-                    Services.Hitsound.PlayArcHitsound(Timing);
+                    // Services.Hitsound.PlayArcHitsound(Timing);
+                    BassHandle.PlayArc();
                 }
 
                 hasBeenHitOnce = true;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ArcCreate.Gameplay.Audio;
 using ArcCreate.Gameplay.Judgement;
 using ArcCreate.Utility;
 using ArcCreate.Utility.Extension;
@@ -234,7 +235,8 @@ namespace ArcCreate.Gameplay.Data
             highlight = true;
             Services.InputFeedback.LaneFeedback(Mathf.RoundToInt(Lane));
             Services.Particle.PlayHoldParticle(this, new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0) + props.CurrentJudgementOffset);
-            Services.Hitsound.PlayTapHitsound(Timing);
+            // Services.Hitsound.PlayTapHitsound(Timing);
+            BassHandle.PlayTap();
 
             // Extend the note back
             if (currentTiming < Timing)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using ArcCreate.Data;
 using ArcCreate.Gameplay;
+using ArcCreate.Gameplay.Audio;
 using ArcCreate.SceneTransition;
 using ArcCreate.Storage.Data;
 using ArcCreate.Utility.Extension;
@@ -268,6 +269,8 @@ namespace ArcCreate.Storage
 
         public void SwitchToPlayScene((LevelStorage level, ChartSettings chart) selection)
         {
+            _ = BassAudio.Instance;
+            BassHandle.LoadStream().Forget();
             if (SceneTransitionManager.Instance.IsTransitioning)
             {
                 return;

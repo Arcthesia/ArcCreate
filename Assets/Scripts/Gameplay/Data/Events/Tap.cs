@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ArcCreate.Gameplay.Audio;
 using ArcCreate.Gameplay.Judgement;
 using ArcCreate.Utility.Extension;
 using UnityEngine;
@@ -147,7 +148,8 @@ namespace ArcCreate.Gameplay.Data
             if (!result.IsMiss())
             {
                 Services.InputFeedback.LaneFeedback(Mathf.RoundToInt(Lane));
-                Services.Hitsound.PlayTapHitsound(Timing);
+                // Services.Hitsound.PlayTapHitsound(Timing);
+                BassHandle.PlayTap();
             }
         }
 
