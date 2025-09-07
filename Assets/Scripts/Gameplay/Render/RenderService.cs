@@ -398,6 +398,7 @@ namespace ArcCreate.Gameplay.Render
 
         public static Color GetColorByHeight(int id, float height)
         {
+            _height = Mathf.Clamp(height, 0f, 1145f);
             return LerpArcColor(low, high, height, true);
         }
 
