@@ -567,6 +567,28 @@ namespace ArcCreate.Gameplay.Data
                 }
             }
 
+            // fadeout arccap if end of arc chain on non 0ms arcs
+            bool isArcCapFadeoutWindow = currentTiming > EndTiming && currentTiming < EndTiming + Values.ArcCapFadeOutTime;
+            if (NextArc == null && Timing + 1 < EndTiming && isArcCapFadeoutWindow)
+            {
+                if (!isControllerMode)
+                {
+                    float distance = Mathf.Clamp(1 - ((currentTiming - EndTiming) / Values.ArcCapFadeOutTime), 0, 1);
+
+                    Vector3 startPos = new Vector3(WorldXAt(Timing), WorldYAt(Timing));
+                    Vector3 endPos = new Vector3(WorldXAt(EndTiming), WorldYAt(EndTiming));
+                    Vector3 capPos = endPos - startPos - (fallDirection * z); // helép what am i doing
+                    Vector3 scale = new Vector3(ArcCapSize, ArcCapSize, 1);
+                    Vector4 color = new Color(1, 1, 1, distance * (IsTrace ? Values.TraceCapAlpha : Values.ArcCapAlpha));
+
+                    return (true, Matrix4x4.TRS(capPos, Quaternion.identity, scale), color);
+                }
+                else
+                {
+                    return (false, default, default);
+                }
+            }
+
             return (false, default, default);
         }
 

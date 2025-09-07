@@ -6,11 +6,11 @@ namespace ArcCreate.Gameplay.Particle
     public class Particle : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer sprite;
-
         private ParticleSystem ps;
         private ParticleSystemRenderer render;
         private Transform cachedTransform;
-
+        
+        public ParticleSystem ParticleSystem => ps;
         public Transform Transform => cachedTransform;
 
         public void Play()

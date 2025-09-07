@@ -78,6 +78,8 @@ namespace ArcCreate.Gameplay.Particle
         private Material GoodMaterial { get; set; }
 
         private Material MissMaterial { get; set; }
+        private ParticleSystem.ColorOverLifetimeModule arcNoteParticlePrefabColorOverLifetime;
+        private ParticleSystem.MinMaxGradient arcNoteParticleFadeoutColor;
 
         public void UpdateParticles()
         {
@@ -102,7 +104,22 @@ namespace ArcCreate.Gameplay.Particle
             {
                 LongNote reference = pair.Key;
                 ParticleSchedule schedule = pair.Value;
-                if (currentRealTime >= schedule.ExpireAt)
+                ParticleSystem ps = schedule.Particle.ParticleSystem;
+
+                if (!schedule.IsExpired && currentRealTime >= schedule.ExpireAt)
+                {
+                    ps.Stop();
+                    ps.Clear();
+                    ps.Emit(ps.main.maxParticles);
+
+                    var colorModule = ps.colorOverLifetime;
+                    colorModule.enabled = true;
+                    colorModule.color = arcNoteParticleFadeoutColor;
+
+                    schedule.IsExpired = true;
+                }
+
+                if (schedule.IsExpired && !ps.IsAlive())
                 {
                     schedule.Particle.Stop();
                     arcParticlePool.Return(schedule.Particle);
@@ -121,7 +138,16 @@ namespace ArcCreate.Gameplay.Particle
             {
                 LongNote reference = pair.Key;
                 ParticleSchedule schedule = pair.Value;
-                if (currentRealTime >= schedule.ExpireAt)
+                ParticleSystem ps = schedule.Particle.ParticleSystem;
+
+                if (!schedule.IsExpired && currentRealTime >= schedule.ExpireAt)
+                {
+                    ps.Stop();
+
+                    schedule.IsExpired = true;
+                }
+
+                if (schedule.IsExpired && !ps.IsAlive())
                 {
                     schedule.Particle.Stop();
                     holdParticlePool.Return(schedule.Particle);
@@ -226,21 +252,17 @@ namespace ArcCreate.Gameplay.Particle
 
                 playingHoldParticles.Add(
                     reference,
-                    new ParticleSchedule()
-                    {
-                        ExpireAt = currentRealTime + longParticlePersistDuration,
-                        Particle = ps,
-                    });
+                    new ParticleSchedule(ps, currentRealTime + longParticlePersistDuration)
+                );
             }
             else
             {
                 ParticleSchedule ps = playingHoldParticles[reference];
+
                 ps.Particle.transform.localPosition = screenPos;
-                playingHoldParticles[reference] = new ParticleSchedule()
-                {
-                    ExpireAt = currentRealTime + longParticlePersistDuration,
-                    Particle = ps.Particle,
-                };
+                ps.Particle.Play();
+
+                playingHoldParticles[reference] = new ParticleSchedule(ps.Particle, currentRealTime + longParticlePersistDuration);
             }
         }
 
@@ -253,28 +275,33 @@ namespace ArcCreate.Gameplay.Particle
             if (!playingArcParticles.ContainsKey(reference))
             {
                 Particle ps = arcParticlePool.Get();
+                ParticleSystem psys = ps.ParticleSystem;
+
+                var colorModule = psys.colorOverLifetime;
+                colorModule.color = arcNoteParticlePrefabColorOverLifetime.color;
+
                 ps.ApplyColor(color1, color2);
                 ps.transform.localPosition = screenPos;
                 ps.Play();
 
                 playingArcParticles.Add(
                     reference,
-                    new ParticleSchedule()
-                    {
-                        ExpireAt = currentRealTime + longParticlePersistDuration,
-                        Particle = ps,
-                    });
+                    new ParticleSchedule(ps, currentRealTime + longParticlePersistDuration)
+                );
             }
             else
             {
                 ParticleSchedule ps = playingArcParticles[reference];
+                ParticleSystem psys = ps.Particle.ParticleSystem;
+
+                var colorModule = psys.colorOverLifetime;
+                colorModule.color = arcNoteParticlePrefabColorOverLifetime.color;
+
                 ps.Particle.ApplyColor(color1, color2);
                 ps.Particle.transform.localPosition = screenPos;
-                playingArcParticles[reference] = new ParticleSchedule()
-                {
-                    ExpireAt = currentRealTime + longParticlePersistDuration,
-                    Particle = ps.Particle,
-                };
+                ps.Particle.Play();
+
+                playingArcParticles[reference] = new ParticleSchedule(ps.Particle, currentRealTime + longParticlePersistDuration);
             }
         }
 
@@ -331,6 +358,10 @@ namespace ArcCreate.Gameplay.Particle
             arcNoteParticlePrefab = Instantiate(arcNoteParticlePrefab, transform);
             holdNoteParticlePrefab = Instantiate(holdNoteParticlePrefab, transform);
 
+            var psys = arcNoteParticlePrefab.GetComponent<ParticleSystem>();
+            arcNoteParticlePrefabColorOverLifetime = psys.colorOverLifetime;
+            arcNoteParticleFadeoutColor = psys.customData.GetColor(ParticleSystemCustomData.Custom1);
+            
             arcParticlePool = Pools.New<Particle>(
                 Values.ArcParticlePoolName,
                 arcNoteParticlePrefab,

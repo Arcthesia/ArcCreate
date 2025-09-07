@@ -1,8 +1,15 @@
 namespace ArcCreate.Gameplay.Particle
 {
-    public struct ParticleSchedule
+    public class ParticleSchedule
     {
-        public Particle Particle;
-        public float ExpireAt;
+        public readonly Particle Particle;
+        public readonly float ExpireAt;
+        public bool IsExpired = false;
+
+        public ParticleSchedule(Particle _particle, float _expireAt)
+        {
+            Particle = _particle;
+            ExpireAt = _expireAt;
+        }
     }
 }
