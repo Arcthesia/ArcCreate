@@ -47,6 +47,7 @@ namespace ArcCreate.Gameplay
         public const float ArcSegmentLength = 1000f / 14f;
         public const float ArcCapSize = 0.35f;
         public const float ArcCapSizeAdditionMax = 0.5f;
+        public const float ArcCapFadeOutTime = 130;
         public const float TraceCapSize = 0.21f;
         public const float ArcCapAlpha = 1f;
         public const float TraceCapAlpha = 0.5f;
