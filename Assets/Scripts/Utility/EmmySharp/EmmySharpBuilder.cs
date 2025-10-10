@@ -168,8 +168,20 @@ namespace EmmySharp
 
             var parameters = method.GetParameters();
 
+            string deprecationNotice = method.EmmyDeprecated();
+            if (method.EmmyDeprecated()!=null)
+            {
+                builder.Append($"---@deprecated {deprecationNotice}");
+                builder.AppendLine();
+            }
             foreach (var p in parameters)
             {
+                // MoonSharp automatically injects context when there's Script in the parameter, ignore it.
+                // https://www.moonsharp.org/callback.html#returning-a-table (see: There are two things to notice...)
+                if (p.ParameterType == typeof(Script))
+                {
+                    continue;
+                }
                 builder.Append($"---@param {p.Name} ");
                 AppendTypeName(p.ParameterType, p.EmmyChoice());
                 builder.AppendLine();
@@ -204,6 +216,10 @@ namespace EmmySharp
             for (var i = 0; i < parameters.Length; i++)
             {
                 var p = parameters[i];
+                if (p.ParameterType == typeof(Script))
+                {
+                    continue;
+                }
                 string paramName = RenameAvoidKeyword(p.Name);
 
                 builder.Append(paramName);

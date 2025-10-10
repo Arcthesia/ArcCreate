@@ -4,13 +4,11 @@
 
 Fast and powerful .aff editor made with Unity.
 
-### Support us:
+### Development discord server:
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Q5Q1JE1B1)
+This server is strictly for ArcCreate development purposes, you will be screened before joining.  
+[Permanent invite link](https://discord.gg/3MAyPwPma5)
 
-### Join our discord server:
-
-[![Join the Discord](https://discord.com/api/guilds/1083452023250354206/widget.png?style=banner4)](https://discord.com/invite/t27ptGsrGH)
 
 # Getting started
 

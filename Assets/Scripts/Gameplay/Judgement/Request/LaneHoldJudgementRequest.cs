@@ -7,7 +7,7 @@ namespace ArcCreate.Gameplay.Judgement
         public int StartAtTiming;
         public int ExpireAtTiming;
         public int AutoAtTiming;
-        public int Lane;
+        public float Lane;
         public bool IsJudgement;
         public Hold Receiver;
         public GroupProperties Properties;

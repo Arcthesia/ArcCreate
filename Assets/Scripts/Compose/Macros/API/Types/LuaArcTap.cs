@@ -10,6 +10,7 @@ namespace ArcCreate.Compose.Macros
     public class LuaArcTap : LuaChartEvent
     {
         public LuaArc Arc { get; set; }
+        public float Width { get; set; } = 1.0f;
 
         public int TraceTimingGroup => Arc.TimingGroup;
 
@@ -19,6 +20,7 @@ namespace ArcCreate.Compose.Macros
             {
                 Timing = Timing,
                 Arc = Arc,
+                Width = Width,
             };
         }
 
@@ -31,6 +33,7 @@ namespace ArcCreate.Compose.Macros
                 Timing = Mathf.RoundToInt(Timing),
                 Arc = a,
                 TimingGroup = TimingGroup,
+                Width = Width,
             };
 
             return arctap;

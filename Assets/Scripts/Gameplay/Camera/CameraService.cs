@@ -84,6 +84,7 @@ namespace ArcCreate.Gameplay.GameplayCamera
 
         public void Clear()
         {
+            isReset = true;
             events.Clear();
         }
 
@@ -104,7 +105,7 @@ namespace ArcCreate.Gameplay.GameplayCamera
             {
                 this.events.Remove(cam);
             }
-
+            isReset = true;
             RebuildList();
         }
 

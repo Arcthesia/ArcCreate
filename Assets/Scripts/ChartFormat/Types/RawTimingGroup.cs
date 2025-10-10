@@ -115,7 +115,7 @@ namespace ArcCreate.ChartFormat
                             break;
                         case "arcresolution":
                             valid = Evaluator.TryFloat(value, out val);
-                            val = UnityEngine.Mathf.Clamp(val, 0, 10);
+                            val = UnityEngine.Mathf.Clamp(val, 0.1f, 10);
                             tg.ArcResolution = valid ? val : 1;
                             break;
                         case "max":

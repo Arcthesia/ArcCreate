@@ -74,10 +74,10 @@
 				float from = UNITY_ACCESS_INSTANCED_PROP(Props, _Properties).y;
 				float highlight = UNITY_ACCESS_INSTANCED_PROP(Props, _Properties).z;
 			    if(i.uv.y < from || i.worldpos.z > 50 || i.worldpos.z < -100) return 0;
-				i.uv.y = (i.uv.y - 1) * 1 / (1 - from) + 1;
+				// i.uv.y = (i.uv.y - 1) * 1 / (1 - from) + 1;
 				i.uv.x = (i.uv.x + highlight) / 2;
 
-				half4 c = half4(tex2D(_MainTex,i.uv).rgb, 1); 
+				half4 c = half4(tex2D(_MainTex,i.uv).rgba); 
 
 				if(UNITY_ACCESS_INSTANCED_PROP(Props, _Properties).x >= 0.5) 
 				{

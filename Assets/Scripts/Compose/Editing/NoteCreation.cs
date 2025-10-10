@@ -57,11 +57,26 @@ namespace ArcCreate.Compose.Editing
                 case CreateNoteMode.Idle:
                     break;
                 case CreateNoteMode.Tap:
-                    CreateTap();
+                    if (Settings.SnapFloorNoteWithGrid.Value)
+                    {
+                        toggleFreeSky.ForceDisabled = true;
+                        await CreateDecimalTap(confirm, cancel);
+                    }
+                    else
+                    {
+                        CreateTap();
+                    }
                     break;
                 case CreateNoteMode.Hold:
                     toggleFreeSky.ForceDisabled = true;
-                    await CreateHold(confirm, cancel);
+                    if (Settings.SnapFloorNoteWithGrid.Value)
+                    {
+                        await CreateDecimalHold(confirm, cancel);
+                    }
+                    else
+                    {
+                        await CreateHold(confirm, cancel);
+                    }
                     break;
                 case CreateNoteMode.Arc:
                     toggleFreeSky.ForceDisabled = true;
@@ -152,6 +167,105 @@ namespace ArcCreate.Compose.Editing
                 else
                 {
                     command.Undo();
+                }
+            }
+        }
+
+        private async UniTask CreateDecimalTap(SubAction confirm, SubAction cancel)
+        {
+            int timing = Services.Cursor.CursorTiming;
+            Tap tap = new Tap()
+            {
+                Timing = timing,
+                Lane = Gameplay.Values.InvalidLane,
+                TimingGroup = Values.EditingTimingGroup.Value,
+            };
+
+            IEnumerable<ArcEvent> events = new ArcEvent[] { tap };
+
+            using (new NoteModifyTarget(new List<Note> { tap }))
+            {
+                var (posSuccess, pos) = await Services.Cursor.RequestVerticalSelection(
+                    confirm,
+                    cancel,
+                    showGridAtTiming: timing,
+                    update: p =>
+                    {
+                        previewTap.transform.localPosition = new Vector3(ArcFormula.ArcXToWorld(p.x), 0, 0);
+                    });
+                previewTap.gameObject.SetActive(false);
+                if (posSuccess)
+                {
+                    tap.Lane = ArcFormula.ArcXToLane(pos.x);
+                    var command = new EventCommand(
+                        I18n.S("Compose.Notify.History.CreateNote.Tap"),
+                        add: events);
+                    Services.History.AddCommand(command);
+                }
+
+            }
+        }
+
+        private async UniTask CreateDecimalHold(SubAction confirm, SubAction cancel)
+        {
+            int timing1 = Services.Cursor.CursorTiming;
+            int lane = Services.Cursor.CursorLane;
+            Vector3 cursorPosition = Services.Cursor.CursorWorldPosition;
+            float z = cursorPosition.z;
+            if (Settings.BlockOverlapNoteCreation.Value
+             && HasOverlap(timing1, lane))
+            {
+                Services.Popups.Notify(Popups.Severity.Warning, I18n.S("Compose.Notify.Creation.Overlap"));
+                return;
+            }
+
+            Hold hold = new Hold()
+            {
+                Timing = timing1,
+                EndTiming = timing1 + 1,
+                Lane = Gameplay.Values.InvalidLane,
+                TimingGroup = Values.EditingTimingGroup.Value,
+            };
+
+            IEnumerable<ArcEvent> events = new ArcEvent[] { hold };
+
+            var command = new EventCommand(
+                I18n.S("Compose.Notify.History.CreateNote.Hold"),
+                add: events);
+
+            using (new NoteModifyTarget(new List<Note> { hold }))
+            {
+                var (posSuccess, pos) = await Services.Cursor.RequestVerticalSelection(
+                    confirm,
+                    cancel,
+                    showGridAtTiming: timing1);
+                previewHold.gameObject.SetActive(false);
+                if (posSuccess)
+                {
+                    hold.Lane = ArcFormula.ArcXToLane(pos.x);
+                    command.Execute();
+                }
+                else
+                {
+                    return;
+                }
+                var (success, timing2) = await Services.Cursor.RequestTimingSelection(
+                    confirm,
+                    cancel,
+                    update: t =>
+                    {
+                        hold.Timing = Mathf.Min(timing1, t);
+                        hold.EndTiming = Mathf.Max(timing1, t);
+                        Services.Gameplay.Chart.UpdateEvents(events);
+                    },
+                    constraint: t => t != timing1 && (AllowCreatingNoteBackwards || t > timing1));
+                Services.Cursor.EnableLaneCursor = true;
+
+                if (success)
+                {
+                    hold.Timing = Mathf.Min(timing1, timing2);
+                    hold.EndTiming = Mathf.Max(timing1, timing2);
+                    Services.History.AddCommandWithoutExecuting(command);
                 }
             }
         }
@@ -650,9 +764,11 @@ namespace ArcCreate.Compose.Editing
             int tg = Values.EditingTimingGroup.Value;
             Vector3 cursorPosition = Services.Cursor.CursorWorldPosition;
             float z = cursorPosition.z;
+            bool decimalEditing = Settings.SnapFloorNoteWithGrid.Value;
 
             GroupProperties groupProperties = Services.Gameplay.Chart.GetTimingGroup(tg).GroupProperties;
             Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(ArcFormula.LaneToWorldX(cursorLane), 0, 0);
+            Vector3 decPos = (groupProperties.FallDirection * z) + new Vector3(cursorPosition.x, 0, 0);
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
 
@@ -660,13 +776,13 @@ namespace ArcCreate.Compose.Editing
             {
                 case CreateNoteMode.Tap:
                     scl.y = ArcFormula.CalculateTapSizeScalar(z) * scl.y;
-                    previewTap.localPosition = pos;
+                    previewTap.localPosition = decimalEditing ? decPos : pos;
                     previewTap.localRotation = rot;
                     previewTap.localScale = scl;
                     break;
                 case CreateNoteMode.Hold:
                     scl.z *= 10;
-                    previewHold.localPosition = pos;
+                    previewHold.localPosition = decimalEditing ? decPos : pos;
                     previewHold.localRotation = rot;
                     previewHold.localScale = scl;
                     break;

@@ -4,6 +4,6 @@ namespace ArcCreate.ChartFormat
     {
         public int EndTiming { get; set; }
 
-        public int Lane { get; set; }
+        public float Lane { get; set; }
     }
 }

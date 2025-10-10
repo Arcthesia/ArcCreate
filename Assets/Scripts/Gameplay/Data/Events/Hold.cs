@@ -18,7 +18,7 @@ namespace ArcCreate.Gameplay.Data
         private bool spawnedParticleThisFrame = false;
         private Texture texture;
 
-        public int Lane { get; set; }
+        public float Lane { get; set; }
 
         public bool IsLocked => locked;
 
@@ -72,12 +72,12 @@ namespace ArcCreate.Gameplay.Data
             if (count <= 1)
             {
                 TotalCombo = 1;
-                FirstJudgeTime = Timing;
+                FirstJudgeTime = Timing + (duration / 2);
             }
             else
             {
                 TotalCombo = count - 1;
-                FirstJudgeTime = Timing;
+                FirstJudgeTime = Timing + TimeIncrement;
             }
         }
 
@@ -147,13 +147,28 @@ namespace ArcCreate.Gameplay.Data
             }
 
             float z = ZPos(currentFloorPosition);
+            float clipZ = z;
+            if ((!locked || groupProperties.NoInput) && !groupProperties.NoClip)
+            {
+                if (Timing <= currentTiming)
+                {
+                    clipZ = 0;
+                }
+
+                if ((currentFloorPosition - FloorPosition) / (EndFloorPosition - FloorPosition) > 1.0)
+                {
+                    return;
+                }
+            }
+
             float endZ = EndZPos(currentFloorPosition);
-            Vector3 pos = (groupProperties.FallDirection * z) + new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
+
+            Vector3 pos = (groupProperties.FallDirection * clipZ) + new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0);
             Quaternion rot = groupProperties.RotationIndividual;
             Vector3 scl = groupProperties.ScaleIndividual;
             Matrix4x4 matrix = groupProperties.GroupMatrix
                              * Matrix4x4.TRS(pos, rot, scl)
-                             * MatrixUtility.Shear(groupProperties.FallDirection * (z - endZ));
+                             * MatrixUtility.Shear(groupProperties.FallDirection * (clipZ - endZ));
 
             float alpha = 1;
             if (highlight)
@@ -185,13 +200,7 @@ namespace ArcCreate.Gameplay.Data
             Color color = groupProperties.Color;
             color.a *= alpha;
 
-            float from = 0;
-            if ((!locked || groupProperties.NoInput) && !groupProperties.NoClip)
-            {
-                from = (float)((currentFloorPosition - FloorPosition) / (EndFloorPosition - FloorPosition));
-            }
-
-            Services.Render.DrawHold(texture, matrix, color, IsSelected, from, highlight);
+            Services.Render.DrawHold(texture, matrix, color, IsSelected, 0, highlight);
 
             if (currentTiming <= longParticleUntil && currentTiming <= EndTiming)
             {
@@ -213,7 +222,7 @@ namespace ArcCreate.Gameplay.Data
         public void ProcessLaneTapJudgement(int offset, GroupProperties props)
         {
             int currentTiming = Services.Audio.ChartTiming;
-            if (currentTiming >= EndTiming + Values.GoodJudgeWindow)
+            if (currentTiming > EndTiming)
             {
                 return;
             }
@@ -223,7 +232,7 @@ namespace ArcCreate.Gameplay.Data
 
             longParticleUntil = currentTiming + Values.HoldParticlePersistDuration;
             highlight = true;
-            Services.InputFeedback.LaneFeedback(Lane);
+            Services.InputFeedback.LaneFeedback(Mathf.RoundToInt(Lane));
             Services.Particle.PlayHoldParticle(this, new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0) + props.CurrentJudgementOffset);
             Services.Hitsound.PlayTapHitsound(Timing);
 
@@ -280,7 +289,7 @@ namespace ArcCreate.Gameplay.Data
         {
             Services.Judgement.Request(new LaneTapJudgementRequest()
             {
-                ExpireAtTiming = EndTiming + Values.GoodJudgeWindow,
+                ExpireAtTiming = EndTiming,
                 AutoAtTiming = Timing,
                 Lane = Lane,
                 Receiver = this,
@@ -296,8 +305,8 @@ namespace ArcCreate.Gameplay.Data
 
                 Services.Judgement.Request(new LaneHoldJudgementRequest()
                 {
-                    StartAtTiming = timing - Values.GoodJudgeWindow,
-                    ExpireAtTiming = timing + Values.HoldMissLateJudgeWindow,
+                    StartAtTiming = timing,
+                    ExpireAtTiming = timing + (int)(4*TimeIncrement),
                     AutoAtTiming = timing,
                     Lane = Lane,
                     IsJudgement = true,
@@ -309,7 +318,7 @@ namespace ArcCreate.Gameplay.Data
             numHoldJudgementRequestsSent = TotalCombo;
         }
 
-        private void RequestHoldHighlight(int timing, GroupProperties props)
+        protected void RequestHoldHighlight(int timing, GroupProperties props)
         {
             Services.Judgement.Request(new LaneHoldJudgementRequest()
             {
