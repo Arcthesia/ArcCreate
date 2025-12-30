@@ -70,7 +70,9 @@ namespace ArcCreate.Gameplay.Data
 
         public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)
         {
-            if (!IsTrace && currentTiming >= Timing && Timing < EndTiming)
+            if (!IsTrace && currentTiming >= Timing && Timing < EndTiming
+                && !groupProperties.NoInput // no judgement for noinput arcs
+               )
             {
                 RequestJudgement(groupProperties);
             }
@@ -86,6 +88,8 @@ namespace ArcCreate.Gameplay.Data
 
         public void ProcessArcJudgement(bool isExpired, bool isJudgement, GroupProperties props)
         {
+            if (props.NoInput) return; // noinput notes don't respond to any input
+            
             int currentTiming = Services.Audio.ChartTiming;
             highlightRequestSent = false;
             float x = WorldXAt(currentTiming);
@@ -137,11 +141,11 @@ namespace ArcCreate.Gameplay.Data
             for (int t = numJudgementRequestsSent; t < TotalCombo; t++)
             {
                 int timing = (int)System.Math.Round(Timing + (t * TimeIncrement));
-                int lateTiming = (int)System.Math.Round(FirstJudgeTime + (t * TimeIncrement));
+                int lateTiming = (int)System.Math.Round(FirstJudgeTime + ((t+4) * TimeIncrement));
                 Services.Judgement.Request(new ArcJudgementRequest()
                 {
                     StartAtTiming = timing - Values.GoodJudgeWindow,
-                    ExpireAtTiming = lateTiming + Values.HoldMissLateJudgeWindow,
+                    ExpireAtTiming = lateTiming,
                     AutoAtTiming = timing,
                     Arc = this,
                     IsJudgement = true,

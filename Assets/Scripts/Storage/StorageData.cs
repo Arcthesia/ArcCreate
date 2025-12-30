@@ -55,6 +55,16 @@ namespace ArcCreate.Storage
             return LevelCollection.FindOne(Query.EQ("Identifier", id));
         }
 
+        public IEnumerable<LevelStorage> GetLevels(List<string> ids)
+        {
+            if (ids == null || ids.Count < 1)
+            {
+                return Enumerable.Empty<LevelStorage>();
+            }
+
+            return LevelCollection.Find(Query.In("Identifier", ids.Select(BsonValue.FromObject)));
+        }
+
         public IEnumerable<LevelStorage> GetAllLevels()
         {
             return LevelCollection.FindAll();
@@ -97,14 +107,8 @@ namespace ArcCreate.Storage
         {
             pack.Levels = new List<LevelStorage>();
 
-            foreach (var lvid in pack.LevelIdentifiers)
-            {
-                LevelStorage lv = GetLevel(lvid);
-                if (lv != null)
-                {
-                    pack.Levels.Add(lv);
-                }
-            }
+            var levels = GetLevels(pack.LevelIdentifiers).ToList();
+            pack.Levels.AddRange(levels.Where(levelStorage => levelStorage != null));
         }
 
         public CharacterStorage GetCharacter(string id)

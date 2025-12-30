@@ -32,7 +32,12 @@ namespace ArcCreate.Compose.Macros
             this.macroCellSize = macroCellSize;
         }
 
-        public string MacroDefFolder => new DirectoryInfo(Application.dataPath).Parent.FullName + "/Macros";
+        public string MacroDefFolder =>
+#if UNITY_STANDALONE_WIN
+            new DirectoryInfo(Application.dataPath).Parent.FullName + "/Macros";
+#else
+            new DirectoryInfo(Application.persistentDataPath).FullName + "/Macros";
+#endif
 
         public string PreBundledMacroDefFolder =>
             new DirectoryInfo(Application.streamingAssetsPath) + "/Macros";
@@ -294,7 +299,7 @@ namespace ArcCreate.Compose.Macros
 
         internal void SavePersistent()
         {
-            persistent.Save();
+            persistent.Dispose();
         }
     }
 }

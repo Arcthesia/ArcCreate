@@ -19,7 +19,8 @@ namespace ArcCreate.Gameplay.Particle
         /// </summary>
         /// <param name="worldPosition">The world-space coordinate.</param>
         /// <param name="result">Judgement to play.</param>
-        void PlayTapParticle(Vector3 worldPosition, JudgementResult result);
+        /// <param name="isSFX">is SFX</param>
+        void PlayTapParticle(Vector3 worldPosition, JudgementResult result, bool isSFX);
 
         /// <summary>
         /// Play a text (e.g "Perfect") particle. The coordinate will be translated to screen-space coordinate.
@@ -50,6 +51,12 @@ namespace ArcCreate.Gameplay.Particle
         /// </summary>
         /// <param name="particleTexture">The tap texture.</param>
         void SetTapParticleSkin(Texture particleTexture);
+
+        /// <summary>
+        /// Change SFX tap particle skin.
+        /// </summary>
+        /// <param name="particleTexture">The tap texture.</param>
+        void SetTapSfxParticleSkin(Texture sfxParticleTexture);
 
         /// <summary>
         /// Change hold and arc note's particle skin.

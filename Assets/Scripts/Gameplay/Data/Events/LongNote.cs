@@ -42,6 +42,6 @@ namespace ArcCreate.Gameplay.Data
         }
 
         public float EndZPos(double floorPosition)
-            => ArcFormula.FloorPositionToZ(EndFloorPosition - floorPosition);
+            => ArcFormula.FloorPositionToZ(EndFloorPosition - floorPosition, TimingGroup);
     }
 }

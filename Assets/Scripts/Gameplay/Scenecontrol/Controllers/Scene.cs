@@ -360,6 +360,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
 
             spriteCache.Clear();
+
+            foreach (var pair in noteGroups)
+            {
+                if (pair.Value != null)
+                {
+                    // clear previous dropRate prop
+                    pair.Value.UpdateDropRate(0);
+                }
+            }
+
             noteGroups.Clear();
         }
 

@@ -5,7 +5,7 @@ namespace ArcCreate.Gameplay.Judgement.Input
     public struct TouchInput
     {
         public int Id;
-        public int Lane;
+        public float Lane;
         public Vector3 ScreenPos;
         public Vector3 VerticalPos;
         public bool IsTap;

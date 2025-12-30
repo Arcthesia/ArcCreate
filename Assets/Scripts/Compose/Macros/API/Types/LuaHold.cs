@@ -9,7 +9,7 @@ namespace ArcCreate.Compose.Macros
     [EmmyGroup("Macros")]
     public class LuaHold : LuaChartEvent
     {
-        public int Lane { get; set; } = 1;
+        public float Lane { get; set; } = 1;
 
         public float EndTiming { get; set; } = 1000;
 

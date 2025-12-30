@@ -31,6 +31,11 @@ namespace ArcCreate.Gameplay
             return (-Values.LaneWidth * lane) + (Values.LaneWidth * 2.5f);
         }
 
+        public static float LaneToWorldX(float lane)
+        {
+            return (-Values.LaneWidth * lane) + (Values.LaneWidth * 2.5f);
+        }
+
         public static float LaneToArcX(int lane)
         {
             return (0.5f * lane) - 0.75f;
@@ -41,9 +46,9 @@ namespace ArcCreate.Gameplay
             return z >= -Values.TrackLengthForward && z <= Values.TrackLengthBackward;
         }
 
-        public static int ArcXToLane(float x)
+        public static float ArcXToLane(float x)
         {
-            return Mathf.RoundToInt((x + 0.75f) / 0.5f);
+            return (x + 0.75f) / 0.5f;
         }
 
         public static int WorldXToLane(float x)
@@ -51,15 +56,21 @@ namespace ArcCreate.Gameplay
             return Mathf.RoundToInt((x - (Values.LaneWidth * 2.5f)) / -Values.LaneWidth);
         }
 
-        public static double ZToFloorPosition(float z)
-        {
-            return (double)(z / Settings.DropRate.Value * Values.BaseBpm * -1000);
-        }
+        public static double ZToFloorPosition(float z, int timingGroup) =>
+            ZToFloorPosition(z, Services.Chart.GetTimingGroup(timingGroup).GroupProperties);
 
-        public static float FloorPositionToZ(double fp)
-        {
-            return (float)(fp / Values.BaseBpm * Settings.DropRate.Value / -1000);
-        }
+        public static double ZToFloorPosition(float z, GroupProperties groupProperties) =>
+            ZToFloorPosition(z, groupProperties.DropRate > 0 ? groupProperties.DropRate : Settings.DropRate.Value);
+
+        public static double ZToFloorPosition(float z, float dropRate) => (double)(z / dropRate * Values.BaseBpm * -1000);
+
+        public static float FloorPositionToZ(double fp, int timingGroup) =>
+            FloorPositionToZ(fp, Services.Chart.GetTimingGroup(timingGroup).GroupProperties);
+
+        public static float FloorPositionToZ(double fp, GroupProperties groupProperties) => FloorPositionToZ(fp,
+            groupProperties.DropRate > 0 ? groupProperties.DropRate : Settings.DropRate.Value);
+
+        public static float FloorPositionToZ(double fp, float dropRate) => (float)(fp / Values.BaseBpm * dropRate / -1000);
 
         public static float S(float start, float end, float t)
         {

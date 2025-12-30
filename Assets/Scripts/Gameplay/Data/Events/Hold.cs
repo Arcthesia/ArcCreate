@@ -18,7 +18,7 @@ namespace ArcCreate.Gameplay.Data
         private bool spawnedParticleThisFrame = false;
         private Texture texture;
 
-        public int Lane { get; set; }
+        public float Lane { get; set; }
 
         public bool IsLocked => locked;
 
@@ -119,6 +119,8 @@ namespace ArcCreate.Gameplay.Data
 
         public void UpdateJudgement(int currentTiming, GroupProperties groupProperties)
         {
+            if (groupProperties.NoInput) return; // no judgement nor highlight should be performed for noinput notes
+
             if (currentTiming >= Timing - Values.MissJudgeWindow && locked && !tapJudgementRequestSent)
             {
                 RequestTapJudgement(groupProperties);
@@ -222,7 +224,7 @@ namespace ArcCreate.Gameplay.Data
         public void ProcessLaneTapJudgement(int offset, GroupProperties props)
         {
             int currentTiming = Services.Audio.ChartTiming;
-            if (currentTiming >= EndTiming + Values.GoodJudgeWindow)
+            if (currentTiming > EndTiming)
             {
                 return;
             }
@@ -232,7 +234,7 @@ namespace ArcCreate.Gameplay.Data
 
             longParticleUntil = currentTiming + Values.HoldParticlePersistDuration;
             highlight = true;
-            Services.InputFeedback.LaneFeedback(Lane);
+            Services.InputFeedback.LaneFeedback(Mathf.RoundToInt(Lane));
             Services.Particle.PlayHoldParticle(this, new Vector3(ArcFormula.LaneToWorldX(Lane), 0, 0) + props.CurrentJudgementOffset);
             Services.Hitsound.PlayTapHitsound(Timing);
 
@@ -245,6 +247,8 @@ namespace ArcCreate.Gameplay.Data
 
         public void ProcessLaneHoldJudgement(bool isExpired, bool isJudgement, GroupProperties props)
         {
+            if (props.NoInput) return; // noinput notes don't respond to any input
+            
             int currentTiming = Services.Audio.ChartTiming;
             if (!isJudgement)
             {
@@ -289,7 +293,7 @@ namespace ArcCreate.Gameplay.Data
         {
             Services.Judgement.Request(new LaneTapJudgementRequest()
             {
-                ExpireAtTiming = EndTiming + Values.GoodJudgeWindow,
+                ExpireAtTiming = EndTiming,
                 AutoAtTiming = Timing,
                 Lane = Lane,
                 Receiver = this,
@@ -301,13 +305,12 @@ namespace ArcCreate.Gameplay.Data
         {
             for (int t = numHoldJudgementRequestsSent; t < TotalCombo; t++)
             {
-                int timing = (int)System.Math.Round(Timing + (t * TimeIncrement));
-                int lateTiming = (int)System.Math.Round(FirstJudgeTime + (t * TimeIncrement));
+                int timing = (int)System.Math.Round(FirstJudgeTime + (t * TimeIncrement));
 
                 Services.Judgement.Request(new LaneHoldJudgementRequest()
                 {
                     StartAtTiming = timing,
-                    ExpireAtTiming = lateTiming + Values.HoldMissLateJudgeWindow,
+                    ExpireAtTiming = timing + (int)(4*TimeIncrement),
                     AutoAtTiming = timing,
                     Lane = Lane,
                     IsJudgement = true,
@@ -319,7 +322,7 @@ namespace ArcCreate.Gameplay.Data
             numHoldJudgementRequestsSent = TotalCombo;
         }
 
-        private void RequestHoldHighlight(int timing, GroupProperties props)
+        protected void RequestHoldHighlight(int timing, GroupProperties props)
         {
             Services.Judgement.Request(new LaneHoldJudgementRequest()
             {

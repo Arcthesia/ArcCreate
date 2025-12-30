@@ -176,6 +176,10 @@ namespace ArcCreate.Selection.Interface
 
         public override void OnUnloadScene()
         {
+            // Destroy Sprite on Scene unload to prevent a memory leak.
+            Destroy(characterImage.sprite.texture);
+            Destroy(characterImage.sprite);
+            
             returnButton.onClick.RemoveListener(ReturnToPreviousScene);
             retryButton.onClick.RemoveListener(RetryChart);
             cts.Cancel();

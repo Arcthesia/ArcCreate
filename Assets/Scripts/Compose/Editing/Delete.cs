@@ -34,8 +34,17 @@ namespace ArcCreate.Compose.Editing
                 {
                     var arctaps = Services.Gameplay.Chart.GetAll<ArcTap>()
                         .Where(at => at.Arc == arctap.Arc);
-                    list.Add(arctap.Arc);
-                    list.AddRange(arctaps);
+                    if (arctaps.Count() > 1)
+                    {
+                        // Don't delete every arctap and trace first
+                        list.AddRange(arctaps);
+                        list.RemoveAt(list.Count - 1);
+                    }
+                    else
+                    {
+                        list.Add(arctap.Arc);
+                        list.AddRange(arctaps);
+                    }
                 }
             }
 

@@ -51,7 +51,7 @@ namespace ArcCreate.Gameplay.Chart
         /// <returns>The timing value corresponding to the value.</returns>
         public int GetTimingFromZPosition(float z)
         {
-            double fp = ArcFormula.ZToFloorPosition(z);
+            double fp = ArcFormula.ZToFloorPosition(z, GroupProperties);
             double currentFp = GetFloorPosition(Services.Audio.ChartTiming);
             return GetTimingFromFloorPosition(fp + currentFp);
         }

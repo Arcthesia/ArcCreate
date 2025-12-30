@@ -55,6 +55,7 @@ namespace ArcCreate.Compose.Components
         [SerializeField] private SettingsToggle allowCreatingNotesBackwardToggle;
         [SerializeField] private SettingsToggle blockCreatingOverlappedNotesToggle;
         [SerializeField] private SettingsToggle enableEditingArctapWidthToggle;
+        [SerializeField] private SettingsToggle snapFloorNoteWithGrid;
         [SerializeField] private SettingsInputFieldFloat scrollVerticalField;
         [SerializeField] private SettingsInputFieldFloat scrollHorizontalField;
         [SerializeField] private SettingsInputFieldFloat scrollTimelineField;
@@ -120,6 +121,7 @@ namespace ArcCreate.Compose.Components
             useNativeFileBrowserToggle.Setup(Settings.UseNativeFileBrowser);
             allowCreatingNotesBackwardToggle.Setup(Settings.AllowCreatingNotesBackward);
             enableEditingArctapWidthToggle.Setup(Settings.EnableArctapWidthEditing);
+            snapFloorNoteWithGrid.Setup(Settings.SnapFloorNoteWithGrid);
             blockCreatingOverlappedNotesToggle.Setup(Settings.BlockOverlapNoteCreation);
             colorblindModeToggle.Setup(Settings.EnableColorblind);
             scoreDisplayDropdown.Setup(Settings.ScoreDisplayMode, typeof(ScoreDisplayMode), "Gameplay.Selection.Settings.ScoreDisplay");

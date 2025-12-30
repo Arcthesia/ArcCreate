@@ -51,8 +51,8 @@ namespace ArcCreate.Gameplay.Chart
                 return;
             }
 
-            double fpDistForward = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLengthForward));
-            double fpDistBackward = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLengthBackward));
+            double fpDistForward = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLengthForward, groupProperties));
+            double fpDistBackward = System.Math.Abs(ArcFormula.ZToFloorPosition(Values.TrackLengthBackward, groupProperties));
             double renderFrom =
                 (groupProperties.NoInput && !groupProperties.NoClip) ?
                 floorPosition :

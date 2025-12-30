@@ -30,8 +30,8 @@ namespace ArcCreate.Gameplay.Hitsound
             }
 
             initialized = true;
-            arcSource = NativeAudio.GetNativeSource(0);
             tapSource = NativeAudio.GetNativeSource(1);
+            arcSource = NativeAudio.GetNativeSource(0);
         }
 
         public void Dispose()
@@ -56,14 +56,14 @@ namespace ArcCreate.Gameplay.Hitsound
 
         public void PlayArc()
         {
-            tapSource.Play(tapClip);
-            tapSource.SetVolume(volume);
+            arcSource.Play(arcClip);
+            arcSource.SetVolume(volume);
         }
 
         public void PlayTap()
         {
-            arcSource.Play(arcClip);
-            arcSource.SetVolume(volume);
+            tapSource.Play(tapClip);
+            tapSource.SetVolume(volume);
         }
     }
 }

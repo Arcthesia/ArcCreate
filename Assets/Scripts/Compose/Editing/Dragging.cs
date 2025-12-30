@@ -408,13 +408,27 @@ namespace ArcCreate.Compose.Editing
 
             if (dragTap.Count > 0)
             {
-                await DragLanes(dragTap, confirm, cancel);
+                if (Settings.SnapFloorNoteWithGrid.Value)
+                {
+                    await DragFloatLanes(closestTiming, dragTap, confirm, cancel);
+                }
+                else
+                {
+                    await DragLanes(dragTap, confirm, cancel);
+                }
                 return;
             }
 
             if (dragHold.Count > 0)
             {
-                await DragLanes(dragHold, confirm, cancel);
+                if (Settings.SnapFloorNoteWithGrid.Value)
+                {
+                    await DragFloatLanes(closestTiming, dragHold, confirm, cancel);
+                }
+                else
+                {
+                    await DragLanes(dragHold, confirm, cancel);
+                }
                 return;
             }
 
@@ -508,6 +522,52 @@ namespace ArcCreate.Compose.Editing
                         else if (note is Hold h)
                         {
                             h.Lane = lane;
+                        }
+                    }
+
+                    command.Execute();
+                });
+
+            if (!success)
+            {
+                command.Undo();
+            }
+            else
+            {
+                Services.History.AddCommand(command);
+            }
+        }
+
+        private async UniTask DragFloatLanes(int timing, List<Note> dragNotes, SubAction confirm, SubAction cancel)
+        {
+            List<(ArcEvent instance, ArcEvent newValue)> events = new List<(ArcEvent, ArcEvent)>();
+            for (int i = 0; i < dragNotes.Count; i++)
+            {
+                Note tap = dragNotes[i];
+                Note clone = tap.Clone() as Note;
+                events.Add((tap, clone));
+                dragNotes[i] = clone;
+            }
+
+            var command = new EventCommand(
+                name: I18n.S("Compose.Notify.History.Drag.Position"),
+                update: events);
+
+            var (success, position) = await Services.Cursor.RequestVerticalSelection(
+                confirm,
+                cancel,
+                showGridAtTiming: timing,
+                update: position =>
+                {
+                    foreach (var note in dragNotes)
+                    {
+                        if (note is Tap t)
+                        {
+                            t.Lane = ArcFormula.ArcXToLane(position.x);
+                        }
+                        else if (note is Hold h)
+                        {
+                            h.Lane = ArcFormula.ArcXToLane(position.x);
                         }
                     }
 

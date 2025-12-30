@@ -38,6 +38,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
         private ValueChannel scaleIndividualX;
         private ValueChannel scaleIndividualY;
         private ValueChannel scaleIndividualZ;
+        private ValueChannel dropRate;
 
         [MoonSharpHidden] public TimingGroup TimingGroup { get; set; }
 
@@ -261,6 +262,16 @@ namespace ArcCreate.Gameplay.Scenecontrol
             }
         }
 
+        public ValueChannel DropRate
+        {
+            get => dropRate;
+            set
+            {
+                dropRate = value;
+                EnableNoteGroupModule = true;
+            }
+        }
+
         public ValueChannel ColorR
         {
             get => colorR;
@@ -352,7 +363,9 @@ namespace ArcCreate.Gameplay.Scenecontrol
         }
 
         [MoonSharpHidden]
-        public void UpdateNoteGroup(Quaternion rotation, Vector3 scale, Vector2 angle, Vector2 judgesize, Vector3 judgeoffset)
+        public void UpdateNoteGroup(Quaternion rotation, Vector3 scale, Vector2 angle, Vector2 judgesize, Vector3 judgeoffset,
+            float dropRate
+        )
         {
             TimingGroup.GroupProperties.SCAngleX = angle.x;
             TimingGroup.GroupProperties.SCAngleY = angle.y;
@@ -363,6 +376,13 @@ namespace ArcCreate.Gameplay.Scenecontrol
             TimingGroup.GroupProperties.SCJudgementOffsetZ = judgeoffset.z;
             TimingGroup.GroupProperties.RotationIndividual = rotation;
             TimingGroup.GroupProperties.ScaleIndividual = scale;
+            UpdateDropRate(dropRate);
+        }
+
+        [MoonSharpHidden]
+        public void UpdateDropRate(float dropRate)
+        {
+            TimingGroup.GroupProperties.DropRate = dropRate;
         }
 
         [MoonSharpHidden]

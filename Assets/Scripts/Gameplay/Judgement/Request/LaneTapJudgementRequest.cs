@@ -6,7 +6,7 @@ namespace ArcCreate.Gameplay.Judgement
     {
         public int ExpireAtTiming;
         public int AutoAtTiming;
-        public int Lane;
+        public float Lane;
         public ILaneTapJudgementReceiver Receiver;
         public GroupProperties Properties;
     }

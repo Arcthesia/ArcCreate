@@ -12,7 +12,11 @@ namespace ArcCreate.Compose.Macros
     [EmmyGroup("Macros")]
     public class MacroContext
     {
-        public static float DropRate => Settings.DropRate.Value;
+        public static float DropRate(int timingGroup = 0)
+        {
+            var tgDropRate = Services.Gameplay.Chart.GetTimingGroup(timingGroup).GroupProperties.DropRate;
+            return tgDropRate > 0 ? tgDropRate : Settings.DropRate.Value;
+        }
 
         public static float Offset => Gameplay.Values.ChartAudioOffset;
 

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
-using ArcCreate.Gameplay.Render;
 using ArcCreate.Gameplay.Utility;
 using UnityEngine;
 
@@ -45,6 +44,21 @@ namespace ArcCreate.Gameplay.Data
         public Arc NextArc { get; set; }
 
         public Arc PreviousArc { get; set; }
+
+        public IEnumerable<ArcTap> ArcTaps
+        {
+            get
+            {
+                var arcTaps = Services.Chart.GetAll<ArcTap>();
+                foreach (var at in arcTaps)
+                {
+                    if (at.Arc == this)
+                    {
+                        yield return at;
+                    }
+                }
+            }
+        }
 
         public float SegmentLength
             => ArcFormula.CalculateArcSegmentLength(EndTiming - Timing, TimingGroupInstance.GroupProperties.ArcResolution);
@@ -92,6 +106,10 @@ namespace ArcCreate.Gameplay.Data
             IsTrace = n.IsTrace;
             TimingGroup = n.TimingGroup;
             Sfx = n.Sfx;
+            foreach (var at in ArcTaps)
+            {
+                at.TimingGroup = n.TimingGroup;
+            }
         }
 
         public override int ComboAt(int timing)
@@ -254,7 +272,7 @@ namespace ArcCreate.Gameplay.Data
                 }
                 else
                 {
-                    Services.Render.DrawArcHead(Color, highlight, matrix, color, IsSelected, redArcValue, basePos.y);
+                    Services.Render.DrawArcHead(Color, highlight, matrix, color, IsSelected, redArcValue, basePos.y + segments[0].EndPosition.y);
                 }
             }
 
@@ -268,7 +286,7 @@ namespace ArcCreate.Gameplay.Data
                 Services.Particle.PlayArcParticle(
                     Color,
                     firstArcOfBranch ?? this,
-                    new Vector3(WorldXAt(currentTiming), WorldYAt(currentTiming), 0) + groupProperties.CurrentJudgementOffset);
+                    WorldSegmentedPosAt(currentTiming) + groupProperties.CurrentJudgementOffset);
             }
         }
 
@@ -360,6 +378,37 @@ namespace ArcCreate.Gameplay.Data
             return WorldXAt(timing);
         }
 
+        public Vector3 WorldSegmentedPosAt(int timing)
+        {
+            for (int i = 0; i < segments.Count; i++)
+            {
+                var seg = segments[i];
+                if (seg.Timing <= timing && timing <= seg.EndTiming)
+                {
+                    var xStart = ArcFormula.ArcXToWorld(XStart);
+                    var yStart = ArcFormula.ArcYToWorld(YStart);
+                    var xSegStart = seg.StartPosition.x;
+                    var ySegStart = seg.StartPosition.y;
+                    if (seg.Timing == seg.EndTiming)
+                    {
+                        var sx = xSegStart + xStart;
+                        var sy = ySegStart + yStart;
+                        return new Vector3(sx, sy);
+                    }
+
+                    Vector3 dv = (seg.EndPosition - seg.StartPosition);
+                    float dx = dv.x;
+                    float dy = dv.y;
+                    float dt = (float)(timing - seg.Timing) / (seg.EndTiming - seg.Timing);
+                    var x = xSegStart + (dt * dx) + xStart;
+                    var y = ySegStart + (dt * dy) + yStart;
+                    return new Vector3(x, y);
+                }
+            }
+
+            return new Vector3(WorldXAt(timing), WorldYAt(timing));
+        }
+
         private void RebuildSegments()
         {
             if (Values.EnableArcRebuildSegment || segments.Count == 0)
@@ -368,13 +417,20 @@ namespace ArcCreate.Gameplay.Data
                 double lastEndFloorPosition = TimingGroupInstance.GetFloorPosition(Timing);
                 Vector2 basePosition = new Vector2(ArcFormula.ArcXToWorld(XStart), ArcFormula.ArcYToWorld(YStart));
                 Vector2 lastPosition = basePosition;
+                int finalTiming = EndTiming;
+                Vector2 finalPosition = new Vector2(ArcFormula.ArcXToWorld(XEnd), ArcFormula.ArcYToWorld(YEnd));
+                if (NextArc != null)
+                {
+                    finalTiming = NextArc.Timing;
+                    finalPosition = new Vector2(ArcFormula.ArcXToWorld(NextArc.XStart), ArcFormula.ArcYToWorld(NextArc.YStart));
+                }
 
                 int i = 0;
                 while (true)
                 {
                     int timing = lastEndTiming;
                     int endTiming = timing + Mathf.RoundToInt(SegmentLength);
-                    int cappedEndTiming = Mathf.Min(endTiming, EndTiming);
+                    int cappedEndTiming = Mathf.Min(endTiming, finalTiming);
 
                     ArcSegmentData segment = i < segments.Count ? segments[i] : default;
                     if (i >= segments.Count)
@@ -384,13 +440,14 @@ namespace ArcCreate.Gameplay.Data
 
                     segment.Timing = timing;
                     segment.EndTiming = cappedEndTiming;
+                    segment.TimingGroup = TimingGroup;
                     segment.FloorPosition = lastEndFloorPosition;
                     segment.StartPosition = lastPosition - basePosition;
 
                     lastEndFloorPosition = TimingGroupInstance.GetFloorPosition(cappedEndTiming);
                     segment.EndFloorPosition = lastEndFloorPosition;
-                    lastPosition = cappedEndTiming == EndTiming ?
-                        new Vector2(ArcFormula.ArcXToWorld(XEnd), ArcFormula.ArcYToWorld(YEnd)) :
+                    lastPosition = cappedEndTiming == finalTiming ?
+                        finalPosition :
                         new Vector2(WorldXAt(cappedEndTiming), WorldYAt(cappedEndTiming));
                     segment.EndPosition = lastPosition - basePosition;
                     segment.From = 0;
@@ -400,7 +457,7 @@ namespace ArcCreate.Gameplay.Data
                     i += 1;
 
                     lastEndTiming = endTiming;
-                    if (endTiming >= EndTiming)
+                    if (endTiming >= finalTiming)
                     {
                         break;
                     }

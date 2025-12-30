@@ -142,7 +142,7 @@ namespace ArcCreate.Gameplay.Data
         {
             JudgementResult result = props.MapJudgementResult(offset.CalculateJudgeResult());
             Vector3 judgeOffset = props.CurrentJudgementOffset;
-            Services.Particle.PlayTapParticle(new Vector3(WorldX, WorldY) + judgeOffset, result);
+            Services.Particle.PlayTapParticle(new Vector3(WorldX, WorldY) + judgeOffset, result, Sfx != "none" && Sfx != "");
             Services.Particle.PlayTextParticle(new Vector3(WorldX, WorldY) + judgeOffset, result, offset);
             Services.Score.ProcessJudgement(result, offset);
             isHit = true;

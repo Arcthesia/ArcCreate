@@ -51,9 +51,18 @@ Shader "Compose/Waveform"
             
             float SampleAt(float x)
             {
-				// LITERAL DARK MAGIC
-				// https://github.com/keijiro/WavTexture/blob/master/Assets/WavTexture/Shader/Common.cginc
-				float pos = x / 32 / 4;
+				/* works by storing samples as RGBA image
+				 * consider a signed 8-bit sample is in its -127~128 range
+				 * it's converted to 0~255 then 0.0f~1.0f into the RGBA image
+				 * R = sample[0]
+				 * G = sample[1]
+				 * B = sample[2]
+				 * A = sample[3]
+				 * parameter x is divided by 4 and its sample size
+				 * the fraction part now indexes the sample on the RGBA channel 
+				*/
+				const int AverageSampleCount = 32;
+				float pos = (x-(x%AverageSampleCount)) / AverageSampleCount / 4;
 				float xy = floor(pos) * _MainTex_TexelSize.x;
 				float xcoord = frac(xy);
 				float ycoord = floor(xy) * _MainTex_TexelSize.y;
@@ -67,28 +76,29 @@ Shader "Compose/Waveform"
 
 				return val * 2 - 1;
             }
-			
 			float4 frag (v2f i) : SV_Target
 			{ 
-				float yFromCenter = abs(i.uv.y - 0.5f) * 2;
+				float yFromCenter = abs(i.uv.y - 0.5f)*2;
 
 				float uvx = i.uv.x;
 				float dx = ddx(uvx);
 
+				const float SAMPLING_RANGE =  6;
 				// If it works it's not stupid
 				float s = 0;
-
-				[unroll(6)]
-				for (int i = 0; i < 6; i++)
+				int totalSamples = _ToSample - _FromSample;
+				[unroll(SAMPLING_RANGE)]
+				for (int j = 0; j < SAMPLING_RANGE; j++)
 				{
-					float smpl = _FromSample + (uvx + dx * i / 6) * (_ToSample - _FromSample);
-					s += SampleAt(smpl);
+					float smpl = _FromSample + (uvx + dx * j / SAMPLING_RANGE) * (_ToSample - _FromSample);
+					smpl = smpl - (smpl%(SAMPLING_RANGE));
+						s += abs(SampleAt(smpl));
 				}
-
-				s /= 6;
-
-                bool hit = yFromCenter >= s;
-				return hit ? _Color : _Background;
+				s/=SAMPLING_RANGE;
+				float pos = i.uv.y;
+				
+				float edge = abs(i.uv.y - 0.5f)/s;
+				return lerp(_Color, _Background, clamp(0, 1, pow(edge*2, 4)));
 			}
 			ENDCG
 		}
