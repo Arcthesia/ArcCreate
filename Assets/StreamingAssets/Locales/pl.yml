@@ -750,7 +750,7 @@ Compose:
         Name: Renderuj wideo
         Description: |-
           Automatycznie eksportuj wideo chart view.
-          Wymaga zainstalowania FFmpeg.
+          Wymagane jest zainstalowanie programu FFmpeg.
         ConfigureFFmpeg: Skonfiguruj ścieżkę pliku executable FFmpeg
         Presets:
           Name: Presety
@@ -764,8 +764,8 @@ Compose:
           To: Do
           CRF:
             Name: CRF
-            Lossless: "{0} (Jakość Lossless)"
-            VeryLow: "{0} (Jakość prawie Lossless)"
+            Lossless: "{0} (Lossless)"
+            VeryLow: "{0} (Prawie Lossless)"
             Low: "{0} (Wysoka jakość)"
             Medium: "{0} (Średnia jakość)"
             Default: "{0} (Domyślna jakość)"
@@ -1206,3 +1206,4 @@ Credits:
     QualityAssurance: Kontrola Jakości
     Community: i wszyscy w społeczności Arcthesia i ArcCreate!
     Sponsor: Specjalne podziękowania dla naszych Wspierających
+
