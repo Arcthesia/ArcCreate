@@ -1,5 +1,6 @@
 using System.Threading;
 using ArcCreate.Data;
+using ArcCreate.Gameplay.Audio;
 using ArcCreate.Storage;
 using ArcCreate.Storage.Data;
 using Cysharp.Threading.Tasks;
@@ -33,58 +34,61 @@ namespace ArcCreate.Selection.Interface
             PlayPreviewAudio(level, chart, cts.Token).Forget();
         }
 
-        public async UniTask PlayPreviewAudio(LevelStorage level, ChartSettings chart, CancellationToken ct)
+        private async UniTask PlayPreviewAudio(LevelStorage level, ChartSettings chart, CancellationToken ct)
         {
-            audioSource.Stop();
-            AudioClip clip = await storage.GetAudioClipStreaming(level, chart.AudioPath);
-            if (ct.IsCancellationRequested)
-            {
-                return;
-            }
-
-            audioSource.clip = clip;
-
-            float start = Mathf.Clamp(chart.PreviewStart / 1000f, 0, clip.length - minPreviewLength);
-            start = Mathf.Max(start, 0);
-
-            float end = Mathf.Clamp(chart.PreviewEnd / 1000f, start + minPreviewLength, clip.length);
-            end = Mathf.Min(end, Mathf.Max(clip.length, minPreviewLength));
-
-            float fadeDuration = Mathf.Min(audioFadeDuration, (end - start) / 2);
-            if (fadeDuration < 0)
-            {
-                return;
-            }
-
-            while (true)
-            {
-                audioSource.volume = 0;
-                audioSource.time = start;
-                audioSource.Play();
-                audioSource.DOFade(1, fadeDuration);
-
-                while (audioSource.time < end - fadeDuration)
-                {
-                    await UniTask.NextFrame();
-                    if (ct.IsCancellationRequested)
-                    {
-                        return;
-                    }
-                }
-
-                audioSource.DOFade(0, fadeDuration);
-
-                while (audioSource.time < end)
-                {
-                    await UniTask.NextFrame();
-                    if (ct.IsCancellationRequested)
-                    {
-                        return;
-                    }
-                }
-
-                audioSource.Stop();
-            }
+            _ = BassAudio.Instance;
+            var audioBytes = await storage.GetAudioBytesAsync(level, chart.AudioPath);
+            BassHandle.PlayAudioPreview(audioBytes).Forget();
+            // audioSource.Stop();
+            // AudioClip clip = await storage.GetAudioClipStreaming(level, chart.AudioPath);
+            // if (ct.IsCancellationRequested)
+            // {
+            //     return;
+            // }
+            //
+            // audioSource.clip = clip;
+            //
+            // float start = Mathf.Clamp(chart.PreviewStart / 1000f, 0, clip.length - minPreviewLength);
+            // start = Mathf.Max(start, 0);
+            //
+            // float end = Mathf.Clamp(chart.PreviewEnd / 1000f, start + minPreviewLength, clip.length);
+            // end = Mathf.Min(end, Mathf.Max(clip.length, minPreviewLength));
+            //
+            // float fadeDuration = Mathf.Min(audioFadeDuration, (end - start) / 2);
+            // if (fadeDuration < 0)
+            // {
+            //     return;
+            // }
+            //
+            // while (true)
+            // {
+            //     audioSource.volume = 0;
+            //     audioSource.time = start;
+            //     audioSource.Play();
+            //     audioSource.DOFade(1, fadeDuration);
+            //
+            //     while (audioSource.time < end - fadeDuration)
+            //     {
+            //         await UniTask.NextFrame();
+            //         if (ct.IsCancellationRequested)
+            //         {
+            //             return;
+            //         }
+            //     }
+            //
+            //     audioSource.DOFade(0, fadeDuration);
+            //
+            //     while (audioSource.time < end)
+            //     {
+            //         await UniTask.NextFrame();
+            //         if (ct.IsCancellationRequested)
+            //         {
+            //             return;
+            //         }
+            //     }
+            //
+            //     audioSource.Stop();
+            // }
         }
 
         private void Awake()

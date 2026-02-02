@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using ManagedBass;
+using UnityEditor;
 
 namespace ArcCreate.Gameplay.Audio
 {
@@ -26,10 +27,12 @@ namespace ArcCreate.Gameplay.Audio
             {
                 initialized = true;
                 Debug.Log("BASS_INIT");
+                Debug.Log("BASS初始化成功！" + Bass.LastError);
             }
             else
             {
                 Debug.LogError(Bass.LastError);
+                initialized = true;
             }
         }
         
@@ -40,10 +43,11 @@ namespace ArcCreate.Gameplay.Audio
         
         public void Dispose()
         {
-            if (!initialized) return;
+            //if (!initialized) return;
             BassHandle.FreeStream();
             Bass.Free();
             initialized = false;
+            Debug.Log("BASS_FINISH");
         }
     }
 }

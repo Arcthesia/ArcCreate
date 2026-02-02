@@ -10,6 +10,14 @@ namespace ArcCreate.Gameplay.Audio
     {
         private static BassStream _tapHitSound;
         private static BassStream _arcHitSound;
+        public static BassStream AudioPreview;
+
+        public static async UniTask PlayAudioPreview(byte[] audioBytes)
+        {
+            AudioPreview?.Dispose();
+            AudioPreview = new BassStream(audioBytes);
+            AudioPreview.Play();
+        }
 
         public static async UniTask LoadStream()
         {
@@ -28,7 +36,7 @@ namespace ArcCreate.Gameplay.Audio
             await request.SendWebRequest().ToUniTask();
             return request.downloadHandler.data;
         }
-        
+
 
         public static void PlayTap()
         {
@@ -42,8 +50,9 @@ namespace ArcCreate.Gameplay.Audio
 
         public static void FreeStream()
         {
-            _tapHitSound.Dispose();
-            _arcHitSound.Dispose();
+            _tapHitSound?.Dispose();
+            _arcHitSound?.Dispose();
+            AudioPreview?.Dispose();
         }
     }
 }
