@@ -125,7 +125,7 @@ namespace ArcCreate.Gameplay.Data
             Color color = groupProperties.Color;
             color.a *= alpha;
 
-            Services.Render.DrawArcTap(isSfx, texture, matrix, color, IsSelected);
+            Services.Render.DrawArcTap(isSfx, texture, matrix, color, IsSelected, z);
             if (!groupProperties.NoShadow)
             {
                 Matrix4x4 shadowMatrix = matrix * Matrix4x4.Translate(new Vector3(0, -pos.y, 0));
