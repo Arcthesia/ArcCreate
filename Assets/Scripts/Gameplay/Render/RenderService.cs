@@ -99,7 +99,17 @@ namespace ArcCreate.Gameplay.Render
             connectionLineDrawer.RegisterInstance(matrix, color);
         }
 
-        public void DrawArcSegment(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y, float depth)
+        public void DrawArcSegment(int colorId,
+            bool highlight,
+            Matrix4x4 matrix,
+            Color color,
+            bool selected,
+            float redValue,
+            float y,
+            float depth,
+            Vector2 arcStartPos,
+            Vector2 arcEndPos,
+            Vector2Int timingStartEnd)
         {
             (Color high, Color low) = Services.Skin.GetArcColor(colorId);
             color *= Color.Lerp(Color.Lerp(low, high, (y - 1) / 4.5f), Color.red, redValue);
@@ -109,7 +119,11 @@ namespace ArcCreate.Gameplay.Render
                 Matrix = matrix,
                 Color = color,
                 Properties = properties,
+                ColorId = colorId,
                 Depth = depth,
+                ArcStartPos = arcStartPos,
+                ArcEndPos = arcEndPos,
+                TimingStartEnd = timingStartEnd,
             });
         }
 

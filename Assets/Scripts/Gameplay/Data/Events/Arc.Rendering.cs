@@ -250,7 +250,20 @@ namespace ArcCreate.Gameplay.Data
                 }
                 else
                 {
-                    Services.Render.DrawArcSegment(Color, highlight, matrix * bodyMatrix, color, IsSelected, redArcValue, basePos.y + segment.EndPosition.y, depth);
+                    Services.Render.DrawArcSegment(Color,
+                        highlight,
+                        matrix * bodyMatrix,
+                        color,
+                        IsSelected,
+                        redArcValue,
+                        basePos.y + segment.EndPosition.y,
+                        depth,
+                        new Vector2(XStart,
+                            YStart),
+                        new Vector2(XEnd,
+                            YEnd),
+                        new Vector2Int(Timing,
+                            EndTiming));
                     if (!groupProperties.NoShadow)
                     {
                         Services.Render.DrawArcShadow(matrix * shadowMatrix, color, cornerOffset);

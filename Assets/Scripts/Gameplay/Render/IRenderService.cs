@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ArcCreate.Gameplay.Render
@@ -17,7 +16,17 @@ namespace ArcCreate.Gameplay.Render
 
         void DrawArcHead(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y);
 
-        void DrawArcSegment(int colorId, bool highlight, Matrix4x4 matrix, Color color, bool selected, float redValue, float y, float depth);
+        void DrawArcSegment(int colorId,
+            bool highlight,
+            Matrix4x4 matrix,
+            Color color,
+            bool selected,
+            float redValue,
+            float y,
+            float depth,
+            Vector2 arcStartPos,
+            Vector2 arcEndPos,
+            Vector2Int timingStartEnd);
 
         void DrawArcShadow(Matrix4x4 matrix, Color color, Vector4 cornerOffset);
 
