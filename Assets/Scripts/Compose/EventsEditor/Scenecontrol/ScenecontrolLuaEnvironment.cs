@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using ArcCreate.Compose.Navigation;
+using ArcCreate.Compose.Popups;
 using ArcCreate.Gameplay.Data;
 using ArcCreate.Gameplay.Scenecontrol;
 using ArcCreate.Utility.Lua;
+using Cysharp.Threading.Tasks;
 using MoonSharp.Interpreter;
 using UnityEngine;
 
@@ -75,12 +77,11 @@ namespace ArcCreate.Compose.EventsEditor
             });
         }
 
-        public void Rebuild()
+        public void Rebuild(bool isDebug = false)
         {
             Services.Gameplay.Scenecontrol.ScenecontrolFolder = Values.ScenecontrolFolder;
             Clean();
-            RunScript();
-            ExecuteEvents();
+            RunScript(isDebug).ContinueWith(ExecuteEvents).Forget();
         }
 
         public void GenerateEmmyLua()
@@ -166,31 +167,96 @@ namespace ArcCreate.Compose.EventsEditor
             Debug.LogError(e);
         }
 
-        private void RunScript()
+        private async UniTask RunScript(bool isDebug = false)
         {
-            Script script = new Script();
             string folderPath = Values.ScenecontrolFolder;
 
             UserData.RegisterAssembly();
             AddBuiltInTypes();
 
+            const string initFileName = "init.lua";
+
             string currentChartName = Services.Project.CurrentChart.ChartPath;
-            string initPath = Path.Combine(folderPath, "init.lua");
-            string perChartPath = Path.Combine(folderPath, Path.GetFileNameWithoutExtension(currentChartName) + ".lua");
+            string perChartFileName = Path.GetFileNameWithoutExtension(currentChartName) + ".lua";
+
+            string initPath = Path.Combine(folderPath, initFileName);
+            string perChartPath = Path.Combine(folderPath, perChartFileName);
             string lastPath = initPath;
 
             try
             {
+                var debugServer = isDebug ? Services.ScenecontrolDebug.InitDebugServer() : null;
+
+                Script initScript = null;
+                Script perChartScript = null;
+
                 if (File.Exists(initPath))
                 {
                     lastPath = initPath;
-                    LuaRunner.RunScript(File.ReadAllText(initPath), this, new ScriptLoader(folderPath));
+                    initScript = LuaRunner.RunScript(await File.ReadAllTextAsync(initPath),
+                        this,
+                        new ScriptLoader(folderPath),
+                        initFileName,
+                        folderPath,
+                        debugServer);
                 }
 
                 if (File.Exists(perChartPath))
                 {
                     lastPath = perChartPath;
-                    LuaRunner.RunScript(File.ReadAllText(perChartPath), this, new ScriptLoader(folderPath));
+                    perChartScript = LuaRunner.RunScript(await File.ReadAllTextAsync(perChartPath),
+                        this,
+                        new ScriptLoader(folderPath),
+                        perChartFileName,
+                        folderPath,
+                        debugServer);
+                }
+
+                if (isDebug && debugServer != null)
+                {
+                    Debug.Log("Waiting for VsCode debugger to attach");
+                    bool isAttached = await Services.ScenecontrolDebug.AwaitDebuggerAttach();
+                    if (!isAttached)
+                    {
+                        Debug.LogWarning("VsCode debugger timeout, continue to run the script");
+                    }
+                    else
+                    {
+                        Debug.Log("VsCode debugger attached");
+
+                        // update the canvas before hitting breakpoint
+                        Canvas.ForceUpdateCanvases();
+                        await UniTask.Delay(500); // a window for changes to take place
+
+                        const string debugEntrypoint = "DEBUG_ENTRYPOINT";
+
+                        if (initScript != null)
+                        {
+                            if (initScript.Globals[debugEntrypoint] != null)
+                            {
+                                initScript.Call(initScript.Globals[debugEntrypoint]);
+                            }
+                            else
+                            {
+                                Debug.Log($"Unable to find debug entrypoint for '{initFileName}'");
+                            }
+                        }
+
+                        if (perChartScript != null)
+                        {
+                            if (perChartScript.Globals[debugEntrypoint] != null)
+                            {
+                                perChartScript.Call(perChartScript.Globals[debugEntrypoint]);
+                            }
+                            else
+                            {
+                                Debug.Log($"Unable to find debug entrypoint for '{perChartFileName}'");
+                            }
+                        }
+                    }
+
+                    Services.ScenecontrolDebug.CleanDebugServer();
+                    Debug.Log("VsCode debugger detached");
                 }
             }
             catch (Exception e)
@@ -212,6 +278,7 @@ namespace ArcCreate.Compose.EventsEditor
             scenecontrolTypes.Clear();
             scTable.ClearTypes();
             Services.Gameplay.Scenecontrol.Clean();
+            Services.ScenecontrolDebug.CleanDebugServer();
         }
 
         private void AddBuiltInTypes()

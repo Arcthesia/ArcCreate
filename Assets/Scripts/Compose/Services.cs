@@ -1,4 +1,5 @@
 using ArcCreate.Compose.Cursor;
+using ArcCreate.Compose.EventsEditor;
 using ArcCreate.Compose.Grid;
 using ArcCreate.Compose.History;
 using ArcCreate.Compose.Macros;
@@ -8,6 +9,7 @@ using ArcCreate.Compose.Project;
 using ArcCreate.Compose.Selection;
 using ArcCreate.Compose.Timeline;
 using ArcCreate.Gameplay;
+using ArcCreate.Utility.Lua;
 using UnityEngine;
 
 namespace ArcCreate.Compose
@@ -23,6 +25,7 @@ namespace ArcCreate.Compose
         [SerializeField] private GridService grid;
         [SerializeField] private SelectionService selection;
         [SerializeField] private MacroService macros;
+        [SerializeField] private ScenecontrolDebugService scDbg;
 
         public static IProjectService Project { get; private set; }
 
@@ -31,6 +34,8 @@ namespace ArcCreate.Compose
         public static ITimelineService Timeline { get; private set; }
 
         public static IGameplayControl Gameplay { get; set; }
+        
+        public static IScriptDebugSetup ScenecontrolDebug { get; set; }
 
         public static IHistoryService History { get; set; }
 
@@ -55,6 +60,7 @@ namespace ArcCreate.Compose
             Grid = grid;
             Selection = selection;
             Macros = macros;
+            ScenecontrolDebug = scDbg;
         }
     }
 }

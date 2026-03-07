@@ -63,7 +63,6 @@ namespace ArcCreate.Compose.Macros
 
             try
             {
-                Script script = new Script();
                 UserData.RegisterAssembly();
                 if (includePreBundledPath)
                 {

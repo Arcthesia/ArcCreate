@@ -1,8 +1,9 @@
-using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using ArcCreate.Compose.Components;
 using ArcCreate.Compose.History;
+using ArcCreate.Compose.Popups;
 using ArcCreate.Compose.Timeline;
 using ArcCreate.Gameplay;
 using ArcCreate.Gameplay.Data;
@@ -18,11 +19,13 @@ namespace ArcCreate.Compose.EventsEditor
         [SerializeField] private TMP_Dropdown typenameDropdown;
         [SerializeField] private Toggle autoRebuild;
         [SerializeField] private Button rebuildButton;
+        [SerializeField] private Button rebuildDebugButton;
         [SerializeField] private ParametersRow parametersRow;
         [SerializeField] private Scrollbar horizontalScrollbar;
         [SerializeField] private Button addButton;
         [SerializeField] private Button removeButton;
         [SerializeField] private Button generateEmmyButton;
+        [SerializeField] private Button generateMoonSharpButton;
         [SerializeField] private Marker marker;
         [SerializeField] private int maxNumVisibleFields = 4;
         private ScenecontrolLuaEnvironment luaEnvironment;
@@ -172,11 +175,13 @@ namespace ArcCreate.Compose.EventsEditor
             autoRebuild.isOn = Settings.ScenecontrolAutoRebuild.Value;
             autoRebuild.onValueChanged.AddListener(OnAutoRebuildToggle);
             rebuildButton.onClick.AddListener(RebuildLua);
+            rebuildDebugButton.onClick.AddListener(RebuildLuaDebug);
             addButton.onClick.AddListener(OnAddButton);
             removeButton.onClick.AddListener(OnRemoveButton);
             typenameDropdown.onValueChanged.AddListener(OnTypenameChange);
             horizontalScrollbar.onValueChanged.AddListener(OnHorizontalScroll);
             generateEmmyButton.onClick.AddListener(GenerateEmmy);
+            generateMoonSharpButton.onClick.AddListener(GenerateMoonSharp);
             Values.EditingTimingGroup.OnValueChange += OnEdittingTimingGroup;
         }
 
@@ -187,12 +192,19 @@ namespace ArcCreate.Compose.EventsEditor
             gameplayData.OnChartFileLoad -= OnChart;
             autoRebuild.onValueChanged.RemoveListener(OnAutoRebuildToggle);
             rebuildButton.onClick.RemoveListener(RebuildLua);
+            rebuildDebugButton.onClick.RemoveListener(RebuildLuaDebug);
             addButton.onClick.RemoveListener(OnAddButton);
             removeButton.onClick.RemoveListener(OnRemoveButton);
             typenameDropdown.onValueChanged.RemoveListener(OnTypenameChange);
             horizontalScrollbar.onValueChanged.RemoveListener(OnHorizontalScroll);
             generateEmmyButton.onClick.AddListener(GenerateEmmy);
+            generateMoonSharpButton.onClick.RemoveListener(GenerateMoonSharp);
             Values.EditingTimingGroup.OnValueChange -= OnEdittingTimingGroup;
+        }
+
+        private void RebuildLuaDebug()
+        {
+            luaEnvironment.Rebuild(true);
         }
 
         private void RebuildLua()
@@ -323,7 +335,14 @@ namespace ArcCreate.Compose.EventsEditor
         private void GenerateEmmy()
         {
             luaEnvironment.GenerateEmmyLua();
-            Services.Popups.Notify(Popups.Severity.Info, I18n.S("Compose.Notify.EmmyLuaGenerated.Scenecontrol"));
+            Services.Popups.Notify(Severity.Info, I18n.S("Compose.Notify.EmmyLuaGenerated.Scenecontrol"));
+        }
+
+        private void GenerateMoonSharp()
+        {
+            Services.ScenecontrolDebug.GenerateVsCodeLaunchSettings(
+                Path.GetDirectoryName(Services.Project.CurrentProject.Path));
+            Services.Popups.Notify(Severity.Info, I18n.S("Compose.Notify.MoonSharpGenerated"));
         }
     }
 }

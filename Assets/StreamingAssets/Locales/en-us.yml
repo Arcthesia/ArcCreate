@@ -123,7 +123,7 @@ Compose:
         IncompatibleSfx: |-
           The audio clip {Sfx} is incompatible for rendering.
           Expected channel count of {ExpectedChannels} and frequency of {ExpectedFrequency}, but the clip's channel count is {Channels} and its frequency is {Frequency}.
-          
+  
   # Notification messages
   Notify:
     FreeCameraEditHelp: |-
@@ -144,6 +144,9 @@ Compose:
       Macros: |-
         EmmyLua template for macros generated at macros folder
         Use VsCode with the extension tangzx.emmylua to get autocompletion
+    MoonSharpGenerated: |-
+      VsCode launch settings for debugging scenecontrol generated at the current project's folder
+      Use VsCode with the extension xanathar.moonsharp-debug to get step-run debugger
     Actions:
       CannotMirror: Can not mirror any of the selected notes.
       NoDragRange: Can not drag selected notes timing. Try dragging the notes separately.
@@ -380,12 +383,12 @@ Compose:
           ToggleFreeSky: Switch to free sky note
       NotePallete:
         Name: Note palette
-        Arc: 
+        Arc:
           Name: Arc
           Blue: Blue arc
           Red: Red arc
           Green: Green arc
-        ArcAlt: 
+        ArcAlt:
           Name: Arc (alt)
           Blue: Blue arc
           Red: Red arc
@@ -738,7 +741,9 @@ Compose:
         DeleteEvent: Delete event
         AutoReload: Reload automatically
         GenerateEmmyLua: Generate EmmyLua
+        GenerateDebug: Generate MoonSharp
         Reload: Reload
+        ReloadDebug: Debug
         FreeCamera: Free camera
       Mode:
         Timing: Timing
@@ -959,7 +964,7 @@ Remote:
       MusicVolume: Music volume
       EffectVolume: Effect volume
     StartTiming: Play from timing
-    EndTiming: Play to timing      
+    EndTiming: Play to timing
     Loop: Loop playback
     ShowLog: Show log
     ShowDebug: Show debug information
@@ -1003,7 +1008,7 @@ Gameplay:
       On: Repeat On
       Off: Repeat Off
       From: Set starting point
-      To: Set ending point 
+      To: Set ending point
   Selection:
     SelectStatus:
       Singular: |-
@@ -1168,7 +1173,7 @@ Shutter:
   Illustrator: Illustration
   Charter: Note Design
   Alias: as
-    
+
 Storage:
   Confirm: Confirm
   ImportErrors: |-
@@ -1195,7 +1200,7 @@ Storage:
     DeleteAsset: Deleting asset {0}
     StoreAsset: Storing asset {0}
     Finalizing: Finalizing
-  
+
 Credits:
   Name: Credits
   View: See Credits

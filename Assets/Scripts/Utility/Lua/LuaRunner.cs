@@ -1,7 +1,10 @@
 using System;
+using System.IO;
 using EmmySharp;
+using JetBrains.Annotations;
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Loaders;
+using MoonSharp.VsCodeDebugger;
 using UnityEngine;
 
 namespace ArcCreate.Utility.Lua
@@ -14,9 +17,18 @@ namespace ArcCreate.Utility.Lua
         /// Runs a string of lua script.
         /// </summary>
         /// <param name="script">The script to run.</param>
-        /// <param name="setup">The object to setup the script, for binding methods.</param>
+        /// <param name="setup">The object to set up the script, for binding methods.</param>
         /// <param name="scriptLoader">The script loader instance for loading script from file system.</param>
-        public static void RunScript(string script, IScriptSetup setup, FileSystemScriptLoader scriptLoader = null)
+        /// <param name="scriptFileName">The filename of the script to be run.</param>
+        /// <param name="scriptBasePath">The dir path to the script.</param>
+        /// <param name="debugServer">MoonSharp debugger instance, leave it null to disable</param>
+        public static Script RunScript(
+            string script,
+            IScriptSetup setup,
+            FileSystemScriptLoader scriptLoader = null,
+            [CanBeNull] string scriptFileName = null,
+            [CanBeNull] string scriptBasePath = null,
+            [CanBeNull] MoonSharpVsCodeDebugServer debugServer = null)
         {
             Script scriptObject = new Script();
             Script.GlobalOptions.RethrowExceptionNested = true;
@@ -35,7 +47,16 @@ namespace ArcCreate.Utility.Lua
 
             RegisterCommon(scriptObject);
             setup.SetupScript(scriptObject);
-            scriptObject.DoString(script);
+
+            if (debugServer != null && scriptFileName != null && scriptBasePath != null)
+            {
+                debugServer.AttachToScript(scriptObject, scriptFileName,
+                    s => Path.Combine(scriptBasePath, s.Name.Replace('/', Path.DirectorySeparatorChar)));
+            }
+
+            scriptObject.DoString(script, null, scriptFileName);
+
+            return scriptObject;
         }
 
         public static void RegisterCommon(Script scriptObject)
@@ -47,6 +68,8 @@ namespace ArcCreate.Utility.Lua
             scriptObject.Globals["Convert"] = new Convert();
 
             scriptObject.Globals["log"] = (Action<object>)Log;
+            scriptObject.Options.DebugPrint = Log; // re-direct lua `print` function
+            
             scriptObject.Globals["toNumber"] = (Func<DynValue, double>)ToNumber;
             scriptObject.Globals["toBool"] = (Func<DynValue, bool>)ToBool;
         }

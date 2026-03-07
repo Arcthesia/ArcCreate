@@ -16,6 +16,7 @@
     "precompiledReferences": [
         "Jace.dll",
         "MoonSharp.Interpreter.dll",
+        "MoonSharp.VsCodeDebugger.dll",
         "DOTween.dll"
     ],
     "autoReferenced": true,
