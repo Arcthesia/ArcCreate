@@ -140,11 +140,11 @@ namespace ArcCreate.Compose.Macros
             };
         }
 
-        [EmmyDoc("Set the properties of this group using aff timing group property syntax.")]
+        [EmmyDoc("Set the properties of this group using acf timing group property syntax.")]
         public void SetProperties(string props)
         {
-            RawTimingGroup prop = RawTimingGroup.Parse(props).UnwrapOrElse(e => throw new System.Exception(e.Message));
-            SetProperties(props);
+            RawTimingGroup prop = RawTimingGroup.ParseProperties(ArcCreateChartReader.Instance, props);
+            SetProperties(prop);
         }
 
         [MoonSharpHidden]

@@ -20,12 +20,18 @@ namespace ArcCreate.Compose.Components
         /// </summary>
         public event Action<Color> OnValueChange;
 
+        /// <summary>
+        /// Event invoked after closing the color palette
+        /// </summary>
+        public event Action<Color> OnEndValueChange;
+        
         public Color Value => currentColor;
 
         public void OnPointerDown(PointerEventData eventData)
         {
             ColorPickerWindow window = Services.Popups.OpenColorPicker(eventData.position, currentColor);
             window.OnColorChanged = SetValue;
+            window.OnWindowClosed = () => OnEndValueChange?.Invoke(currentColor);
         }
 
         /// <summary>

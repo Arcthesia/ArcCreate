@@ -16,7 +16,7 @@ namespace ArcCreate.Gameplay.Data
 
         public override ArcEvent Clone()
         {
-            return new CameraEvent()
+            return new CameraEvent
             {
                 Timing = Timing,
                 Duration = Duration,

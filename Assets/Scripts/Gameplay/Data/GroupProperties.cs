@@ -95,6 +95,8 @@ namespace ArcCreate.Gameplay.Data
 
         public float DropRate { get; set; } = 0;
 
+        public float SCDropRate { get; set; } = 0;
+        
         public float SCAngleX { get; set; } = 0;
 
         public float SCAngleY { get; set; } = 0;
@@ -153,7 +155,6 @@ namespace ArcCreate.Gameplay.Data
                 NoArcCap = NoArcCap,
                 NoConnection = NoConnection,
                 DropRate = DropRate,
-                DropRateSerialized = 0,
                 AngleX = AngleX,
                 AngleY = AngleY,
                 JudgementOffsetX = JudgementOffsetX,

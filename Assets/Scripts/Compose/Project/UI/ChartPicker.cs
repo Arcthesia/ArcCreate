@@ -14,6 +14,8 @@ namespace ArcCreate.Compose.Project
         [SerializeField] private Button togglePickerButton;
         [SerializeField] private Button newChartButton;
         [SerializeField] private NewChartDialog newChartDialog;
+        [SerializeField] private Button importChartButton;
+        [SerializeField] private ImportChartDialog importChartDialog;
         private readonly List<ChartPickerRow> chartPickerRows = new List<ChartPickerRow>();
 
         public void SetOptions(List<ChartSettings> charts, ChartSettings currentChart)
@@ -39,12 +41,14 @@ namespace ArcCreate.Compose.Project
         {
             togglePickerButton.onClick.AddListener(TogglePicker);
             newChartButton.onClick.AddListener(OpenNewChartDialog);
+            importChartButton.onClick.AddListener(ImportNewChartDialog);
         }
 
         private void OnDestroy()
         {
             togglePickerButton.onClick.RemoveListener(TogglePicker);
             newChartButton.onClick.RemoveListener(OpenNewChartDialog);
+            importChartButton.onClick.RemoveListener(ImportNewChartDialog);
         }
 
         private void TogglePicker()
@@ -55,6 +59,11 @@ namespace ArcCreate.Compose.Project
         private void OpenNewChartDialog()
         {
             newChartDialog.Open();
+        }
+
+        private void ImportNewChartDialog()
+        {
+            importChartDialog.Open();
         }
     }
 }

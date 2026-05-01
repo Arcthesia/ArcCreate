@@ -59,16 +59,28 @@ namespace ArcCreate.Gameplay
         public static double ZToFloorPosition(float z, int timingGroup) =>
             ZToFloorPosition(z, Services.Chart.GetTimingGroup(timingGroup).GroupProperties);
 
-        public static double ZToFloorPosition(float z, GroupProperties groupProperties) =>
-            ZToFloorPosition(z, groupProperties.DropRate != 0 ? groupProperties.DropRate : Settings.DropRate.Value);
+        public static double ZToFloorPosition(float z, GroupProperties groupProperties)
+        {
+            var realDropRate = groupProperties.DropRate + groupProperties.SCDropRate;
+            
+            return ZToFloorPosition(z, !Mathf.Approximately(realDropRate, 0)
+                ? realDropRate 
+                : Settings.DropRate.Value);
+        }
 
         public static double ZToFloorPosition(float z, float dropRate) => (double)(z / dropRate * Values.BaseBpm * -1000);
 
         public static float FloorPositionToZ(double fp, int timingGroup) =>
             FloorPositionToZ(fp, Services.Chart.GetTimingGroup(timingGroup).GroupProperties);
 
-        public static float FloorPositionToZ(double fp, GroupProperties groupProperties) => FloorPositionToZ(fp,
-            groupProperties.DropRate != 0 ? groupProperties.DropRate : Settings.DropRate.Value);
+        public static float FloorPositionToZ(double fp, GroupProperties groupProperties)
+        {
+            var realDropRate = groupProperties.DropRate + groupProperties.SCDropRate;
+            
+            return FloorPositionToZ(fp, !Mathf.Approximately(realDropRate, 0) 
+                ? realDropRate 
+                : Settings.DropRate.Value);
+        }
 
         public static float FloorPositionToZ(double fp, float dropRate) => (float)(fp / Values.BaseBpm * dropRate / -1000);
 

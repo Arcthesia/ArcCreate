@@ -34,6 +34,7 @@ namespace ArcCreate.Compose.Popups
         private RectTransform rect;
 
         public Action<Color> OnColorChanged { get; set; }
+        public Action OnWindowClosed { get; set; }
 
         public Color Color
         {
@@ -262,6 +263,7 @@ namespace ArcCreate.Compose.Popups
         {
             window.SetActive(false);
             closeButton.gameObject.SetActive(false);
+            OnWindowClosed?.Invoke();
         }
     }
 }

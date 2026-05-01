@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using ArcCreate.ChartFormat;
+using ArcCreate.ChartFormat.Grammar;
 using ArcCreate.Compose.Navigation;
 using ArcCreate.Compose.Popups;
 using ArcCreate.Data;
@@ -9,6 +11,7 @@ using ArcCreate.Gameplay;
 using ArcCreate.Utility;
 using ArcCreate.Utility.Extension;
 using TMPro;
+using UnityEditor.AssetImporters;
 using UnityEngine;
 using UnityEngine.UI;
 using YamlDotNet.Serialization;
@@ -63,10 +66,11 @@ namespace ArcCreate.Compose.Project
             {
                 if (!File.Exists(info.AudioPath.OriginalPath))
                 {
-                    throw new ComposeException(I18n.S("Compose.Exception.FileDoesNotExist", new Dictionary<string, object>
-                    {
-                        { "Path", info.AudioPath.OriginalPath },
-                    }));
+                    throw new ComposeException(I18n.S("Compose.Exception.FileDoesNotExist",
+                        new Dictionary<string, object>
+                        {
+                            { "Path", info.AudioPath.OriginalPath },
+                        }));
                 }
 
                 info.AudioPath.RenameUntilNoOverwrite();
@@ -76,10 +80,11 @@ namespace ArcCreate.Compose.Project
             {
                 if (!File.Exists(info.AudioPath.FullPath))
                 {
-                    throw new ComposeException(I18n.S("Compose.Exception.FileDoesNotExist", new Dictionary<string, object>
-                    {
-                        { "Path", info.AudioPath.FullPath },
-                    }));
+                    throw new ComposeException(I18n.S("Compose.Exception.FileDoesNotExist",
+                        new Dictionary<string, object>
+                        {
+                            { "Path", info.AudioPath.FullPath },
+                        }));
                 }
             }
 
@@ -143,6 +148,31 @@ namespace ArcCreate.Compose.Project
                 {
                     { "Path", chartFilePath },
                 }));
+        }
+
+        public void ImportNewChart(string chartFilePath, string externalChartPath)
+        {
+            ChartSettings newChart = CurrentChart.Clone();
+            newChart.ChartPath = chartFilePath;
+            AutofillChart(newChart);
+
+            if (ConvertChartAndLoad(newChart, externalChartPath))
+            {
+                CurrentProject.Charts.Add(newChart);
+                CurrentProject.Charts.Sort((a, b) => a.ChartPath.CompareTo(b.ChartPath));
+
+                CurrentChart = newChart;
+                CurrentProject.LastOpenedChartPath = newChart.ChartPath;
+
+                chartPicker.SetOptions(CurrentProject.Charts, CurrentChart);
+                currentChartPath.text = CurrentChart.ChartPath;
+                
+                Debug.Log(
+                    I18n.S("Compose.Notify.Project.CreateChart", new Dictionary<string, object>()
+                    {
+                        { "Path", chartFilePath },
+                    }));
+            }
         }
 
         public void OpenChart(ChartSettings chart)
@@ -285,13 +315,14 @@ namespace ArcCreate.Compose.Project
                     extensions);
                 SimpleFileBrowser.FileBrowser.SetFilters(false, extensions);
                 SimpleFileBrowser.FileBrowser.ShowLoadDialog(
-                    onSuccess: (string[] paths) => {
+                    onSuccess: (string[] paths) =>
+                    {
                         if (paths.Length >= 1)
                         {
                             Open(paths[0]);
                         }
                     },
-                    onCancel: () => {},
+                    onCancel: () => { },
                     pickMode: SimpleFileBrowser.FileBrowser.PickMode.Files,
                     allowMultiSelection: false,
                     initialPath: initPath,
@@ -438,16 +469,16 @@ namespace ArcCreate.Compose.Project
                         new List<(RawTimingGroup, IEnumerable<RawEvent>)>()
                         {
                             (new RawTimingGroup(), new List<RawEvent>()
+                            {
+                                new RawTiming()
                                 {
-                                    new RawTiming()
-                                    {
-                                        Type = RawEventType.Timing,
-                                        Timing = 0,
-                                        TimingGroup = 0,
-                                        Bpm = chart.BaseBpm,
-                                        Divisor = 4,
-                                    },
-                                }),
+                                    Type = RawEventType.Timing,
+                                    Timing = 0,
+                                    TimingGroup = 0,
+                                    Bpm = chart.BaseBpm,
+                                    Divisor = 4,
+                                },
+                            }),
                         });
                 }
             }
@@ -496,9 +527,85 @@ namespace ArcCreate.Compose.Project
             }
         }
 
+        private bool ConvertChartAndLoad(ChartSettings chart, string externalChartPath)
+        {
+            string dir = Path.GetDirectoryName(CurrentProject.Path);
+            string path = Path.Combine(dir, chart.ChartPath);
+
+            if (!Directory.Exists(Path.GetDirectoryName(path)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+            }
+
+            try
+            {
+                var reader = ChartReaderFactory.GetReader(new PhysicalFileAccess(), externalChartPath);
+                var parseResult = reader.Parse();
+
+                if (parseResult.IsError)
+                {
+                    Services.Popups.CreateTextDialog(
+                        title: I18n.S("Compose.Dialog.LoadChartError.Title"),
+                        content: I18n.S("Compose.Dialog.LoadChartError.Content", new Dictionary<string, object>
+                        {
+                            { "ChartPath", path },
+                            { "TabName", I18n.S("Compose.UI.PanelNames.RawEditor") },
+                            { "Content", parseResult.Error.Message },
+                        }),
+                        new ButtonSetting
+                        {
+                            Text = I18n.S("Compose.Dialog.LoadChartError.Confirm"),
+                            Callback = null,
+                            ButtonColor = ButtonColor.Highlight,
+                        });
+
+                    return false;
+                }
+
+                var groups = reader.Events
+                    .GroupBy(x => x.TimingGroup)
+                    .Select(tg => (reader.TimingGroups[tg.Key], tg))
+                    .Select(dummy => ((RawTimingGroup, IEnumerable<RawEvent>))dummy)
+                    .ToList();
+
+                var writer = ChartFileWriterFactory.GetWriterFromFilename(path);
+                using (FileStream fileStream = File.OpenWrite(path))
+                {
+                    writer.Write(
+                        new StreamWriter(fileStream),
+                        reader.AudioOffset,
+                        reader.TimingPointDensity,
+                        groups);
+                }
+            }
+            catch (Exception e) when (e is AntlrParseException or ChartReaderException)
+            {
+                Services.Popups.CreateTextDialog(
+                    title: I18n.S("Compose.Dialog.LoadChartError.Title"),
+                    content: I18n.S("Compose.Dialog.LoadChartError.Content", new Dictionary<string, object>
+                    {
+                        { "ChartPath", externalChartPath },
+                        { "TabName", I18n.S("Compose.UI.PanelNames.RawEditor") },
+                        { "Content", e.Message },
+                    }),
+                    new ButtonSetting
+                    {
+                        Text = I18n.S("Compose.Dialog.LoadChartError.Confirm"),
+                        Callback = null,
+                        ButtonColor = ButtonColor.Highlight,
+                    });
+                return false;
+            }
+
+            LoadChart(chart);
+
+            return true;
+        }
+
         private void SerializeChart(ProjectSettings projectSettings)
         {
-            string dir = Path.Combine(Path.GetDirectoryName(projectSettings.Path), Path.GetDirectoryName(CurrentChart.ChartPath));
+            string dir = Path.Combine(Path.GetDirectoryName(projectSettings.Path),
+                Path.GetDirectoryName(CurrentChart.ChartPath));
             var chartData = new RawEventsBuilder().GetEvents();
             new ChartSerializer(new PhysicalFileAccess(), dir).Write(
                 gameplayData.AudioOffset.Value,
@@ -516,7 +623,8 @@ namespace ArcCreate.Compose.Project
             string scJson = Services.Gameplay.Scenecontrol.Export();
             if (!string.IsNullOrEmpty(scJson) && scJson != "[]")
             {
-                string scPath = Path.Combine(dir, Path.GetFileNameWithoutExtension(CurrentChart.ChartPath) + ".sc.json");
+                string scPath = Path.Combine(dir,
+                    Path.GetFileNameWithoutExtension(CurrentChart.ChartPath) + ".sc.json");
                 File.WriteAllText(scPath, scJson);
             }
         }

@@ -374,6 +374,8 @@ namespace ArcCreate.Gameplay.Skin
             return (arcLowDesaturatedColors[i], arcLowColors[i]);
         }
 
+        public Material GetTraceMaterial() => traceMaterial;
+
         public void SetVideoBackground(string path, bool isUri)
         {
             bool enabled = !string.IsNullOrEmpty(path) && !Settings.DisableAdvancedGraphics.Value;

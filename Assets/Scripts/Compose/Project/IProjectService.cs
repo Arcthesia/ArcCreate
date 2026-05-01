@@ -46,6 +46,13 @@ namespace ArcCreate.Compose.Project
         void CreateNewChart(string name);
 
         /// <summary>
+        /// Import an existing chart, convert to ArcCreate format and add it to the current project.
+        /// </summary>
+        /// <param name="name">The name of the chart file.</param>
+        /// <param name="externalChartPath">The path of the chart file to be imported.</param>
+        void ImportNewChart(string name, string externalChartPath);
+
+        /// <summary>
         /// Load a chart and invoke <see cref="OnChartLoad"/>.
         /// </summary>
         /// <param name="chart">The chart to load.</param>

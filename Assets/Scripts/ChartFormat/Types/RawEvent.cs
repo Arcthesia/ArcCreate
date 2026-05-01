@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace ArcCreate.ChartFormat
 {
     public class RawEvent
@@ -13,5 +15,7 @@ namespace ArcCreate.ChartFormat
         public int CharacterStart { get; set; } = 0;
 
         public int Length { get; set; } = -1;
+        
+        protected Dictionary<string, string> Properties { get; } = new();
     }
 }

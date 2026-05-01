@@ -7,6 +7,7 @@ using ArcCreate.Compose.Navigation;
 using ArcCreate.Gameplay;
 using ArcCreate.Gameplay.Chart;
 using ArcCreate.Gameplay.Data;
+using ArcCreate.Utility.Extension;
 using ArcCreate.Utility.Parser;
 using NSubstitute;
 using TMPro;
@@ -27,6 +28,8 @@ namespace ArcCreate.Compose.Selection
         [SerializeField] private GameObject laneFields;
         [SerializeField] private GameObject positionFields;
         [SerializeField] private GameObject arcSettingsFields;
+        [SerializeField] private GameObject arcPropertiesFields;
+        
         [SerializeField] private TMP_InputField timingField;
         [SerializeField] private TMP_InputField startTimingField;
         [SerializeField] private TMP_InputField endTimingField;
@@ -38,6 +41,8 @@ namespace ArcCreate.Compose.Selection
         [SerializeField] private ArcTypeSelector arcTypeField;
         [SerializeField] private ArcColorSelector arcColorField;
         [SerializeField] private Button arcOrTraceButton;
+        [SerializeField] private TMP_InputField arcResolutionField;
+        [SerializeField] private ColorInputField traceColorField;
         [SerializeField] private TMP_InputField sfxField;
         [SerializeField] private TMP_InputField widthField;
         [SerializeField] private TimingGroupField groupField;
@@ -95,6 +100,7 @@ namespace ArcCreate.Compose.Selection
             laneFields.SetActive((includeTap || includeHold) && !includeArclike && !includeArctap);
             positionFields.SetActive(showArcSettings);
             arcSettingsFields.SetActive(showArcSettings);
+            arcPropertiesFields.SetActive(showArcSettings);
             widthField.gameObject.SetActive(showArctapWidth);
             sfxField.gameObject.SetActive(showArcSettings);
             groupField.gameObject.SetActive(selected.Any(n => !(n is ArcTap)));
@@ -127,6 +133,8 @@ namespace ArcCreate.Compose.Selection
             endYField.text = ExtractCommonProperty<Arc, float>(n => n.YEnd, out float endY) ? endY.ToString() : Mixed;
             arcTypeField.SetValueWithoutNotify(ExtractCommonProperty<Arc, int>(n => (int)n.LineType, out int lineTypeNum) ? (ArcLineType)lineTypeNum : ArcLineType.Unknown);
             arcColorField.SetValueWithoutNotify(ExtractCommonProperty<Arc, int>(n => n.Color, out int color) ? color : int.MinValue);
+            arcResolutionField.text = ExtractCommonProperty<Arc, float>(n => n.ArcResolution, out float arcResolution) ? arcResolution.ToString() : Mixed;
+            traceColorField.SetValueWithoutNotify(ExtractCommonProperty<Arc, int>(n => n.TraceColor.HasValue ? n.TraceColor.Value.ToArgbInt() : Color.clear.ToArgbInt(), out int traceColor) ? traceColor.ToArgbColor() : Color.clear);
             sfxField.text = ExtractCommonProperty<Arc, string>(n => n.Sfx, out string sfx) ? sfx : Mixed;
             widthField.text = ExtractCommonProperty<ArcTap, float>(n => n.Width, out float arctapWidth) ? arctapWidth.ToString() : Mixed;
 
@@ -207,6 +215,8 @@ namespace ArcCreate.Compose.Selection
             arcTypeField.OnTypeChanged += OnArcTypeField;
             arcColorField.OnColorChanged += OnArcColorField;
             arcOrTraceButton.onClick.AddListener(OnArcOrTraceButton);
+            arcResolutionField.onEndEdit.AddListener(OnArcResolution);
+            traceColorField.OnEndValueChange += OnTraceColor;
             sfxField.onEndEdit.AddListener(OnSfxField);
             widthField.onEndEdit.AddListener(OnWidthField);
             groupField.OnValueChanged += OnGroupField;
@@ -228,6 +238,8 @@ namespace ArcCreate.Compose.Selection
             arcTypeField.OnTypeChanged -= OnArcTypeField;
             arcColorField.OnColorChanged -= OnArcColorField;
             arcOrTraceButton.onClick.RemoveListener(OnArcOrTraceButton);
+            arcResolutionField.onEndEdit.RemoveListener(OnArcResolution);
+            traceColorField.OnEndValueChange -= OnTraceColor;
             sfxField.onEndEdit.RemoveListener(OnSfxField);
             widthField.onEndEdit.RemoveListener(OnWidthField);
             groupField.OnValueChanged -= OnGroupField;
@@ -457,6 +469,30 @@ namespace ArcCreate.Compose.Selection
                 a => a.IsTrace = !a.IsTrace);
         }
 
+        private void OnArcResolution(string value)
+        {
+            if (value == Mixed)
+            {
+                return;
+            }
+
+            if (Evaluator.TryFloat(value, out float v))
+            {
+                ModifyNotes<Arc>(
+                    a => !Mathf.Approximately(a.ArcResolution, v),
+                    a => a.ArcResolution = v);
+            }
+        }
+
+        private void OnTraceColor(Color value)
+        {
+            ModifyNotes<Arc>(
+                _ => true,
+                a => a.TraceColor = value == Color.clear
+                    ? Option<Color>.None()
+                    : value);
+        }
+        
         private void OnSfxField(string value)
         {
             if (value == Mixed)

@@ -1,14 +1,17 @@
 {
     "name": "ArcCreate.ChartFormat",
+    "rootNamespace": "",
     "references": [
-        "Schwarzer.I18n",
-        "ArcCreate.Utility"
+        "GUID:01ac7ee8347a8dc4ab295317e5a85380"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
-    "precompiledReferences": [],
+    "precompiledReferences": [
+        "Antlr4.Runtime.Standard.dll",
+        "Jace.dll"
+    ],
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],

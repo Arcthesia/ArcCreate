@@ -180,6 +180,8 @@ namespace ArcCreate.Gameplay.Judgement
 
         private void Awake()
         {
+            gameObject.SetActive(false);
+            
             lineTex = new Texture2D(1, 1);
         }
 

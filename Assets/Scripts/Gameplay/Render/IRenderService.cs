@@ -21,7 +21,7 @@ namespace ArcCreate.Gameplay.Render
 
         void DrawArcShadow(Matrix4x4 matrix, Color color, Vector4 cornerOffset);
 
-        void DrawArcTap(bool sfx, Texture texture, Matrix4x4 matrix, Color color, bool selected);
+        void DrawArcTap(bool sfx, Texture texture, Matrix4x4 matrix, Color color, bool selected, bool overrideMaterialColor = false);
 
         void DrawArcTapShadow(Matrix4x4 matrix, Color color);
 
@@ -33,9 +33,9 @@ namespace ArcCreate.Gameplay.Render
 
         void DrawTap(Texture texture, Matrix4x4 matrix, Color color, bool selected);
 
-        void DrawTraceHead(Matrix4x4 matrix, Color color, bool selected);
+        void DrawTraceHead(Matrix4x4 matrix, Color color, bool selected, bool overrideMaterialColor = false);
 
-        void DrawTraceSegment(Matrix4x4 matrix, Color color, bool selected, float depth);
+        void DrawTraceSegment(Matrix4x4 matrix, Color color, bool selected, float depth, bool overrideMaterialColor = false);
 
         void DrawTraceShadow(Matrix4x4 matrix, Color color);
 

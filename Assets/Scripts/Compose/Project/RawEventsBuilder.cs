@@ -115,6 +115,8 @@ namespace ArcCreate.Compose.Project
                                     YStart = arc.YStart,
                                     Sfx = arc.Sfx,
                                     ArcTaps = ats.ToList(),
+                                    ArcResolution = arc.ArcResolution,
+                                    TraceColor = arc.TraceColor.HasValue ? arc.TraceColor.Value : null,
                                 };
                             case CameraEvent cam:
                                 return new RawCamera

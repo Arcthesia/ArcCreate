@@ -17,10 +17,10 @@ namespace ArcCreate.ChartFormat
             string extension = Path.GetExtension(file);
             switch (extension)
             {
-                case "aff":
-                    return new AffChartFileWriter();
+                // case ".aff":
+                //     return new ArcCreateChartFileWriter();
                 default:
-                    return new AffChartFileWriter();
+                    return new ArcCreateChartFileWriter();
             }
         }
     }

@@ -1,13 +1,14 @@
 {
     "name": "Tests",
+    "rootNamespace": "",
     "references": [
-        "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner",
-        "ArcCreate.ChartFormat",
-        "ArcCreate.Gameplay",
-        "ArcCreate.Utility",
-        "UniTask",
-        "ArcCreate.Remote.Common"
+        "GUID:27619889b8ba8c24980f49ee34dbb44a",
+        "GUID:0acc523941302664db1f4e527237feb3",
+        "GUID:bc9459cff53879146aae30bc07a3bf9b",
+        "GUID:90e3d095a2e0078458a68d742741768c",
+        "GUID:01ac7ee8347a8dc4ab295317e5a85380",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:0dd229e6bf7e239b59d8bf0a85760fc6"
     ],
     "includePlatforms": [
         "Editor"
@@ -18,8 +19,8 @@
     "precompiledReferences": [
         "nunit.framework.dll",
         "NSubstitute.dll",
-        "System.Threading.Tasks.Extensions.dll",
-        "Castle.Core.dll"
+        "Castle.Core.dll",
+        "Antlr4.Runtime.Standard.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [

@@ -369,7 +369,7 @@ namespace ArcCreate.Gameplay.Scenecontrol
             Vector2 angle,
             Vector2 judgesize,
             Vector3 judgeoffset,
-            float dropRate
+            float dropRateValue
         )
         {
             TimingGroup.GroupProperties.SCAngleX = angle.x;
@@ -381,14 +381,9 @@ namespace ArcCreate.Gameplay.Scenecontrol
             TimingGroup.GroupProperties.SCJudgementOffsetZ = judgeoffset.z;
             TimingGroup.GroupProperties.RotationIndividual = rotation;
             TimingGroup.GroupProperties.ScaleIndividual = scale;
-            UpdateDropRate(dropRate);
+            TimingGroup.GroupProperties.SCDropRate = dropRateValue;
         }
 
-        [MoonSharpHidden]
-        public void UpdateDropRate(float dropRate)
-        {
-            TimingGroup.GroupProperties.DropRate = dropRate;
-        }
 
         [MoonSharpHidden]
         public void UpdatePosition(Vector3 translation, Quaternion rotation, Vector3 scale)

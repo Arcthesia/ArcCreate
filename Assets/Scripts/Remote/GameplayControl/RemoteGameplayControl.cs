@@ -189,7 +189,7 @@ namespace ArcCreate.Remote.Gameplay
                 }
 
                 string chartData = req.downloadHandler.text;
-                var reader = new AffChartReader(new VirtualFileAccess(chartData), string.Empty, string.Empty, string.Empty);
+                var reader = new ArcCreateChartReader(new VirtualFileAccess(chartData), string.Empty, string.Empty, string.Empty);
                 reader.Parse();
                 gameplayData.LoadChart(reader, GetURIString("sfx/"));
             }

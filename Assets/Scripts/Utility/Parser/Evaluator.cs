@@ -1,6 +1,8 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Jace;
+using Jace.Execution;
 
 namespace ArcCreate.Utility.Parser
 {
@@ -9,14 +11,15 @@ namespace ArcCreate.Utility.Parser
     /// </summary>
     public class Evaluator
     {
-        private static readonly CalculationEngine Engine =
-            new CalculationEngine(System.Globalization.CultureInfo.CurrentCulture, Jace.Execution.ExecutionMode.Interpreted);
+        private static readonly CalculationEngine Engine = new(CultureInfo.CurrentCulture, ExecutionMode.Interpreted);
 
-        public static bool TryCalculate(string str, IDictionary<string, double> variables, out float value)
+        public static bool TryCalculate(string str, IDictionary<string, double> variables, out float value,
+            CalculationEngine engine = null)
         {
+            engine ??= Engine!;
             try
             {
-                value = (float)Engine.Calculate(str, variables);
+                value = (float)engine.Calculate(str, variables);
                 return true;
             }
             catch
@@ -26,16 +29,18 @@ namespace ArcCreate.Utility.Parser
             }
         }
 
-        public static float Calculate(string str, IDictionary<string, double> variables)
+        public static float Calculate(string str, IDictionary<string, double> variables,
+            CalculationEngine engine = null)
         {
-            return (float)Engine.Calculate(str, variables);
+            engine ??= Engine!;
+            return (float)engine.Calculate(str, variables);
         }
 
-        public static bool TryDouble(string str, out double value)
+        public static bool TryDouble(string str, out double value, CalculationEngine engine = null)
         {
             try
             {
-                value = Double(str);
+                value = Double(str, engine);
                 return true;
             }
             catch
@@ -44,11 +49,11 @@ namespace ArcCreate.Utility.Parser
             }
         }
 
-        public static bool TryFloat(string str, out float value)
+        public static bool TryFloat(string str, out float value, CalculationEngine engine = null)
         {
             try
             {
-                value = Float(str);
+                value = Float(str, engine);
                 return true;
             }
             catch
@@ -57,11 +62,11 @@ namespace ArcCreate.Utility.Parser
             }
         }
 
-        public static bool TryInt(string str, out int value)
+        public static bool TryInt(string str, out int value, CalculationEngine engine = null)
         {
             try
             {
-                value = Int(str);
+                value = Int(str, engine);
                 return true;
             }
             catch
@@ -70,19 +75,22 @@ namespace ArcCreate.Utility.Parser
             }
         }
 
-        private static float Float(string str)
+        private static float Float(string str, CalculationEngine engine = null)
         {
-            return (float)Engine.Calculate(str);
+            engine ??= Engine!;
+            return (float)engine.Calculate(str);
         }
 
-        private static double Double(string str)
+        private static double Double(string str, CalculationEngine engine = null)
         {
-            return Engine.Calculate(str);
+            engine ??= Engine!;
+            return engine.Calculate(str);
         }
 
-        private static int Int(string str)
+        private static int Int(string str, CalculationEngine engine = null)
         {
-            return (int)System.Math.Round(Engine.Calculate(str));
+            engine ??= Engine!;
+            return (int)Math.Round(engine.Calculate(str));
         }
     }
 }

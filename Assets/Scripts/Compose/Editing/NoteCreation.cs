@@ -286,7 +286,7 @@ namespace ArcCreate.Compose.Editing
 
             IEnumerable<ArcEvent> events = new ArcEvent[] { arc };
             var command = new EventCommand(
-                I18n.S("Compose.Notify.History.CreateNote.Hold"),
+                I18n.S("Compose.Notify.History.CreateNote.Arc"),
                 add: events);
             command.Execute();
 

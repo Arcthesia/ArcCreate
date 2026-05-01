@@ -12,8 +12,10 @@ namespace ArcCreate.ChartFormat
         Unknown,
         SceneControl,
         TimingGroup,
-        TimingGroupEnd,
         Include,
         Fragment,
+        
+        AntlrValue,
+        AntlrExpr
     }
 }

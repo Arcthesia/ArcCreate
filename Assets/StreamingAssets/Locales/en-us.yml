@@ -5,6 +5,7 @@ Parsing:
     InvalidConversionToInt: Could not convert "{0}" to integer.
     InvalidConversionToBool: Could not convert "{0}" to boolean.
     InvalidConversionToFloat: Could not convert "{0}" to float.
+    Antlr: Could not parse "{0}".
 
 Format:
   # Exception messages while parsing chart files
@@ -56,6 +57,8 @@ Format:
       {0}
     FileDoesNotExist: |-
       Chart file does not exist.
+    Parsing: |-
+      Antlr failed to parse this chart.
   Warning:
     HoldTooShort:
       Hold note's duration is shorter than 17ms.
@@ -643,6 +646,7 @@ Compose:
     Project:
       Label:
         NewChart: New Chart
+        ImportChart: Import Chart
         NewProject: New Project
         ProjectFile: Project File
         ChartFile: Chart file
@@ -890,6 +894,8 @@ Compose:
       Lane: Lane
       StartPos: From
       EndPos: To
+      ArcResolution: <size=10>Reso-<br>lution
+      TraceColor: <size=10>Trace<br>Color
       Sfx: Sfx
       Width: Width
       Group: Group

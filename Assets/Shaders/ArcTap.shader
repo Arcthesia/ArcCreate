@@ -4,6 +4,7 @@
 	{
 		_MainTex ("Texture", 2D) = "white" {}
 		_Color ("Color", Color) = (1, 1, 1, 1)
+		_ArcTapColor ("ArcTap Color", Color) = (1, 1, 1, 1)
 		_Properties ("Properties", Vector) = (0, 0, 0, 0)
 	}
 	SubShader
@@ -44,6 +45,7 @@
             UNITY_INSTANCING_BUFFER_END(Props)
 
 			sampler2D _MainTex;
+			half4 _ArcTapColor;
             float4 _MainTex_ST;
 
 			half4 Selected(half4 c)
@@ -73,7 +75,7 @@
 				{
 					c = Selected(c);
 				}
-				return c * UNITY_ACCESS_INSTANCED_PROP(Props, _Color);
+				return c * _ArcTapColor * UNITY_ACCESS_INSTANCED_PROP(Props, _Color);
 			}
 			ENDCG
 		}

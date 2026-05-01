@@ -6,6 +6,7 @@ namespace ArcCreate.Gameplay.Render
     {
         public Matrix4x4 Matrix;
         public Vector4 Color;
+        public bool OverrideMaterialColor;
         public Vector4 Properties;
         public float Depth;
     }

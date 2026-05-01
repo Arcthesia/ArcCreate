@@ -1,0 +1,322 @@
+using System.Linq;
+using ArcCreate.ChartFormat;
+using ArcCreate.ChartFormat.Grammar;
+using NSubstitute;
+using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.TestTools.Utils;
+using static Tests.Unit.ChartFormatTestUtils;
+
+namespace Tests.Unit
+{
+    public class ArcCreateChartFormatTest
+    {
+        private ArcCreateChartReader reader;
+
+        [OneTimeSetUp]
+        public void SetUpFixture()
+        {
+            reader = new ArcCreateChartReader(Substitute.For<IFileAccessWrapper>(), "", "2.acf", "2.acf");
+        }
+
+        [TestCase(0, 100, 4)]
+        [TestCase(1000, 100, 4)]
+        [TestCase(0, 999999, 2)]
+        [TestCase(0, -1, 3)]
+        public void ParseTiming(int timing, int bpm, int divisor)
+        {
+            var evt = ParseEvents($"timing({timing},{bpm},{divisor});")[0];
+
+            RawTiming e = reader.ParseTiming(evt, 0);
+            Assert.That(e.Timing, Is.EqualTo(timing));
+            Assert.That(e.Bpm, Is.EqualTo(bpm));
+            Assert.That(e.Divisor, Is.EqualTo(divisor));
+        }
+
+        [TestCase(0, 100, -1)]
+        public void ParseTimingFail_DivisorNegative(int timing, int bpm, int divisor)
+        {
+            var evt = ParseEvents($"timing({timing},{bpm},{divisor});")[0];
+
+            AssertChartReaderError(() => reader.ParseTiming(evt, 0), ChartError.Kind.DivisorNegative);
+        }
+
+        [TestCase(0, 0)]
+        [TestCase(0, 1)]
+        [TestCase(1000, 4)]
+        public void ParseTap(int timing, int lane)
+        {
+            var evt = ParseEvents($"({timing},{lane});")[0];
+
+            RawTap e = reader.ParseTap(evt, 0);
+            Assert.That(e.Timing, Is.EqualTo(timing));
+            Assert.That(e.Lane, Is.EqualTo(lane));
+        }
+
+        [TestCase(0, 1000, 1)]
+        [TestCase(0, 1000, 0)]
+        public void ParseHold(int timing, int endTiming, int lane)
+        {
+            var evt = ParseEvents($"hold({timing},{endTiming},{lane});")[0];
+
+            RawHold e = reader.ParseHold(evt, 0);
+            Assert.That(e.Timing, Is.EqualTo(timing));
+            Assert.That(e.EndTiming, Is.EqualTo(endTiming));
+            Assert.That(e.Lane, Is.EqualTo(lane));
+        }
+
+        [TestCase(0, 0, 4)]
+        public void ParseHoldFail_DurationZero(int timing, int endTiming, int lane)
+        {
+            var evt = ParseEvents($"hold({timing},{endTiming},{lane});")[0];
+
+            AssertChartReaderError(() => reader.ParseHold(evt, 0), ChartError.Kind.DurationZero);
+        }
+
+        [TestCase(1000, 0, 4)]
+        public void ParseHoldFail_DurationNegative(int timing, int endTiming, int lane)
+        {
+            var evt = ParseEvents($"hold({timing},{endTiming},{lane});")[0];
+
+            AssertChartReaderError(() => reader.ParseHold(evt, 0), ChartError.Kind.DurationNegative);
+        }
+
+        [TestCase(0, 1000, 0, 0, 1, 1, "b", 0, true, "sfx.wav")]
+        [TestCase(0, 1000, 0, 0, 1, 1, "b", 0, true, "sfx_wav")]
+        [TestCase(0, 1000, 0, 0, 1, 1, "b", 0, true, "none")]
+        [TestCase(1000, 1000, 0, 0, 1, 1, "b", 0, true, "none")]
+        [TestCase(1000, 1000, 0, 0, 1, 1, "b", 1, true, "none")]
+        public void ParseArc(int timing, int endTiming, float xS, float xE, float yS, float yE, string type, int color,
+            bool isTrace, string sfx)
+        {
+            var evt = ParseEvents(
+                    $"arc({timing},{endTiming},{xS},{xE},{type},{yS},{yE},{color},{sfx},{(isTrace ? "true" : "false")});")
+                [0];
+
+            RawArc e = reader.ParseArc(evt, 0);
+
+            Assert.That(e.Timing, Is.EqualTo(timing));
+            Assert.That(e.EndTiming, Is.EqualTo(endTiming));
+            Assert.That(e.XStart, Is.EqualTo(xS));
+            Assert.That(e.XEnd, Is.EqualTo(xE));
+            Assert.That(e.YStart, Is.EqualTo(yS));
+            Assert.That(e.YEnd, Is.EqualTo(yE));
+            Assert.That(e.LineType, Is.EqualTo(type));
+            Assert.That(e.Color, Is.EqualTo(color));
+            Assert.That(e.IsTrace, Is.EqualTo(isTrace));
+            Assert.That(e.Sfx, Is.EqualTo(sfx));
+        }
+
+        [Test]
+        public void ParseArcTraceColor()
+        {
+            var evt = ParseEvents(
+                "arc(78000,82800,0.50,0.50,s,0.00,0.00,0,none,true)[arctap(82200)]< tracecolor: #F02961 >;")[0];
+            
+            var e = reader.ParseArc(evt, 0);
+            
+            Assert.True(e.TraceColor.HasValue);
+            Assert.True(ColorEqualityComparer.Instance.Equals(e.TraceColor.Value, new Color32(240, 41, 97, 255)));
+        }
+
+        [TestCase("arc(0,1,0,0,b,1,1,0,true,none,2);")]
+        [TestCase("arc(0,1,0,0,b,1,1,0,true,none)< resolution: 2 >;")]
+        public void ParseArcResolution(string raw)
+        {
+            var evt = ParseEvents(raw)[0];
+
+            RawArc e = reader.ParseArc(evt, 0);
+
+            Assert.That(e.ArcResolution, Is.EqualTo(2));
+        }
+
+        [TestCase(1000, 0, 0, 0, 1, 1, "b", 0, true, "none")]
+        public void ParseArcFail_DurationNegative(int timing, int endTiming, float xS, float xE, float yS, float yE,
+            string type, int color, bool isTrace, string sfx)
+        {
+            var evt = ParseEvents(
+                    $"arc({timing},{endTiming},{xS},{xE},{type},{yS},{yE},{color},{sfx},{(isTrace ? "true" : "false")});")
+                [0];
+
+            Assert.Throws<ChartReaderException>(() => reader.ParseArc(evt, 0));
+        }
+
+        [TestCase(0, 1000, new[] { 0 })]
+        [TestCase(0, 1000, new[] { 1000 })]
+        [TestCase(0, 1000, new[] { 500 })]
+        [TestCase(0, 1000, new[] { 0, 500, 1000 })]
+        public void ParseArcTap(int start, int end, int[] timings)
+        {
+            string arcTapString = string.Join(",", timings.Select(x => $"arctap({x})"));
+            var evt = ParseEvents($"arc({start},{end},0,0,b,0,0,0,none,true)[{arcTapString}];")[0];
+
+            RawArc e = reader.ParseArc(evt, 0);
+
+            Assert.That(e.ArcTaps, Has.Count.EqualTo(timings.Length));
+            for (int i = 0; i < timings.Length; i++)
+            {
+                Assert.That(e.ArcTaps[i].Timing, Is.EqualTo(timings[i]));
+            }
+        }
+
+        [TestCase(0, 1000, new[] { -1 })]
+        [TestCase(0, 1000, new[] { 1001 })]
+        public void ParseArcTapFail_OutOfRange(int start, int end, int[] timings)
+        {
+            string arcTapString = string.Join(",", timings.Select(x => $"arctap({x})"));
+            var evt = ParseEvents($"arc({start},{end},0,0,b,0,0,0,none,true)[{arcTapString}];")[0];
+
+            AssertChartReaderError(() => reader.ParseArc(evt, 0), ChartError.Kind.ArcTapOutOfRange);
+        }
+
+        [TestCase(0, 0, 0, 0, 0, 0, 0, "l", 1)]
+        [TestCase(1000, 0, 0, 0, 0, 0, 0, "l", 1)]
+        [TestCase(0, 1000, 1000, 1000, 0, 0, 0, "l", 1)]
+        [TestCase(0, 1000, 1000, 1000, 90, 90, 90, "l", 1)]
+        [TestCase(0, 1000, 1000, 1000, 90, 90, 90, "l", 0)]
+        public void ParseCamera(int start, float x, float y, float z, float rx, float ry, float rz, string type,
+            int duration)
+        {
+            var evt = ParseEvents($"camera({start},{x},{y},{z},{rx},{ry},{rz},{type},{duration});")[0];
+
+            RawCamera e = reader.ParseCamera(evt, 0);
+
+            Assert.That(e.Timing, Is.EqualTo(start));
+            Assert.That(e.Move.x, Is.EqualTo(x));
+            Assert.That(e.Move.y, Is.EqualTo(y));
+            Assert.That(e.Move.z, Is.EqualTo(z));
+            Assert.That(e.Rotate.x, Is.EqualTo(rx));
+            Assert.That(e.Rotate.y, Is.EqualTo(ry));
+            Assert.That(e.Rotate.z, Is.EqualTo(rz));
+            Assert.That(e.CameraType, Is.EqualTo(type));
+            Assert.That(e.Duration, Is.EqualTo(duration));
+        }
+
+        [TestCase(0, 0, 0, 0, 0, 0, 0, "l", -1)]
+        public void ParseCameraFail_DurationNegative(int start, float x, float y, float z, float rx, float ry, float rz,
+            string type, int duration)
+        {
+            var evt = ParseEvents($"camera({start},{x},{y},{z},{rx},{ry},{rz},{type},{duration});")[0];
+
+            AssertChartReaderError(() => reader.ParseCamera(evt, 0), ChartError.Kind.DurationNegative);
+        }
+
+        [TestCase(new object[] { 0, 100 })]
+        [TestCase(new object[] { "s" })]
+        [TestCase(new object[] { 0, "s" })]
+        [TestCase(new object[] { 0, "s, d" })]
+        public void ParseSceneControl(object[] args)
+        {
+            string argString = string.Join(",", args.Select(o => o is string ? $"\"{o}\"" : o.ToString()));
+            var evt = ParseEvents($"scenecontrol(0,test,{argString});")[0];
+
+            RawSceneControl e = reader.ParseSceneControl(evt, 0);
+
+            Assert.That(e.Timing, Is.EqualTo(0));
+            Assert.That(e.SceneControlTypeName, Is.EqualTo("test"));
+            Assert.That(e.Arguments.Count, Is.EqualTo(args.Length));
+            for (int i = 0; i < args.Length; i++)
+            {
+                Assert.That(args[i], Is.EqualTo(e.Arguments[i]));
+            }
+        }
+
+        [TestCase]
+        public void ParseSceneControlNoArgs()
+        {
+            var evt = ParseEvents($"scenecontrol(0,test);")[0];
+
+            RawSceneControl e = reader.ParseSceneControl(evt, 0);
+
+            Assert.That(e.Timing, Is.EqualTo(0));
+            Assert.That(e.SceneControlTypeName, Is.EqualTo("test"));
+            Assert.That(e.Arguments.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void ParseTimingGroupNoProperty()
+        {
+            var evt = ParseEvents("timinggroup(){};")[0];
+
+            var (e, events) = reader.ParseTimingGroup(evt, 0);
+
+            Assert.That(e.NoInput, Is.False);
+            Assert.That(e.NoClip, Is.False);
+            Assert.That(e.AngleX, Is.Zero);
+            Assert.That(e.AngleY, Is.Zero);
+            Assert.That(e.Side, Is.EqualTo(SideOverride.None));
+        }
+
+        [Test]
+        public void ParseTimingGroupOneProperty()
+        {
+            var evt = ParseEvents("timinggroup(noinput){};")[0];
+
+            var (e, events) = reader.ParseTimingGroup(evt, 0);
+
+            Assert.That(e.NoInput, Is.True);
+        }
+
+        [Test]
+        public void ParseTimingGroupNumericProperty()
+        {
+            var evt = ParseEvents("timinggroup(angleX=30){};")[0];
+
+            var (e, events) = reader.ParseTimingGroup(evt, 0);
+
+            Assert.That(e.AngleX, Is.EqualTo(30));
+        }
+
+        [Test]
+        public void ParseTimingGroupMultipleProperty()
+        {
+            var evt = ParseEvents("timinggroup(angleY=30,noclip){};")[0];
+
+            var (e, events) = reader.ParseTimingGroup(evt, 0);
+
+            Assert.That(e.NoClip, Is.True);
+            Assert.That(e.AngleY, Is.EqualTo(30));
+        }
+
+        [Test]
+        public void ParseTimingGroupNameProperty()
+        {
+            var evt = ParseEvents("timinggroup(name=\"gimmick\",angleY=30,noclip){};")[0];
+
+            var (e, events) = reader.ParseTimingGroup(evt, 0);
+
+            Assert.That(e.NoClip, Is.True);
+            Assert.That(e.Name, Is.EqualTo("gimmick"));
+            Assert.That(e.AngleY, Is.EqualTo(30));
+        }
+
+        [TestCase("test.aff")]
+        [TestCase("with space.aff")] // this will work now
+        [TestCase("\"with space.aff\"")] // better to use quoted instead
+        [TestCase("'with space.aff'")] // single quotes works as well
+        [TestCase("dir/file.aff")]
+        public void ParseInclude(string path)
+        {
+            var evt = ParseEvents($"include({path});")[0];
+
+            var e = reader.ParseInclude(evt);
+
+            Assert.That(e.File, Is.EqualTo(UniversalChartVisitor.TrimQuotes(path)));
+        }
+
+        [TestCase("test.aff")]
+        [TestCase("with space.aff")] // this will work now
+        [TestCase("\"with space.aff\"")] // better to use quoted instead
+        [TestCase("'with space.aff'")] // single quotes works as well
+        [TestCase("dir/file.aff")]
+        public void ParseFragment(string path)
+        {
+            var evt = ParseEvents($"fragment(1000, {path});")[0];
+
+            RawFragment frag = reader.ParseFragment(evt);
+
+            Assert.That(frag.Timing, Is.EqualTo(1000));
+            Assert.That(frag.File, Is.EqualTo(UniversalChartVisitor.TrimQuotes(path)));
+        }
+    }
+}

@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Globalization;
+using ArcCreate.Utility.Parser;
+using UnityEngine;
 
 namespace ArcCreate.ChartFormat
 {
@@ -23,5 +26,13 @@ namespace ArcCreate.ChartFormat
         public string Sfx { get; set; }
 
         public List<RawArcTap> ArcTaps { get; set; }
+
+        #region Property
+
+        public float ArcResolution { get; set; } = 1;
+
+        public Color? TraceColor { get; set; } = null;
+
+        #endregion
     }
 }

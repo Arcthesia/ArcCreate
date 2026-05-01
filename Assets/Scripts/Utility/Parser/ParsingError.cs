@@ -16,6 +16,7 @@ namespace ArcCreate.Utility.Parser
             InvalidConversionToInt,
             InvalidConversionToBool,
             InvalidConversionToFloat,
+            Antlr
         }
 
         public string Cause { get; private set; }

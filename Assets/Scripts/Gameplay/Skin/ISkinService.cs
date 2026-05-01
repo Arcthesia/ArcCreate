@@ -39,6 +39,8 @@ namespace ArcCreate.Gameplay.Skin
 
         (Color color1, Color color2) GetArcParticleColor(int colorId);
 
+        Material GetTraceMaterial();
+        
         void SetVideoBackground(string path, bool isUri);
     }
 }

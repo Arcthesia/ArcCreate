@@ -220,11 +220,11 @@ namespace ArcCreate.Compose.Macros
             };
         }
 
-        [EmmyDoc("Create a timing group object. Properties are defined with a string whose format is the same as .aff chart format."
+        [EmmyDoc("Create a timing group object. Properties are defined with a string whose format is the same as .acf chart format."
                + "You must use LuaTimingGroup.save() in order to add this timing group to the chart.")]
         public static LuaTimingGroup CreateTimingGroup(string properties = "")
         {
-            RawTimingGroup prop = RawTimingGroup.Parse(properties).UnwrapOrElse(e => throw new Exception(e.Message));
+            RawTimingGroup prop = RawTimingGroup.ParseProperties(ArcCreateChartReader.Instance, properties);
             prop.File = Services.Gameplay.Chart.GetTimingGroup(0).GroupProperties.FileName;
             return new LuaTimingGroup(prop);
         }
