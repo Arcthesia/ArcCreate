@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ArcCreate.Gameplay.Judgement;
 using ArcCreate.Gameplay.Utility;
@@ -608,20 +609,23 @@ namespace ArcCreate.Gameplay.Data
             }
             
             bool isValidLength = EndTiming - Timing > 1;
-            if (IsLastArcOfGroup && isValidLength && !isControllerMode)
+            if (currentTiming >= EndTiming)
             {
-                float distance = Mathf.Abs(EndZPos(currentFloorPosition));
-                float approach = Mathf.Clamp(1 - (distance * Values.ArcCapFadeoutFactor / Values.TrackLengthBackward), 0, 1);
-                float size = IsTrace ? Values.TraceCapSize : Values.ArcCapSize;
-                
-                Vector3 arcStartPos = new Vector3(WorldXAt(Timing), WorldYAt(Timing), 0);
-                Vector3 arcEndPos = new Vector3(WorldXAt(EndTiming), WorldYAt(EndTiming), 0);
+                if (IsLastArcOfGroup && isValidLength && !isControllerMode)
+                {
+                    float approach = Mathf.Clamp(1 - ((currentTiming - EndTiming) / (float)Values.ArcCapFadeoutDuration), 0, 1);
+                    //Debug.Log(string.Format("{0}: {1}, (currently at {2})", EndTiming, approach, currentTiming));
+                    float size = IsTrace ? Values.TraceCapSize : Values.ArcCapSize;
+                    
+                    Vector3 arcStartPos = new Vector3(WorldXAt(Timing), WorldYAt(Timing), 0);
+                    Vector3 arcEndPos = new Vector3(WorldXAt(EndTiming), WorldYAt(EndTiming), 0);
 
-                Vector3 capPos = (arcEndPos - arcStartPos) - (fallDirection * z);
-                Vector3 scale = new Vector3(size, size, 1);
-                Vector4 color = new Color(1, 1, 1, approach * (IsTrace ? Values.TraceCapAlpha : Values.ArcCapAlpha));
+                    Vector3 capPos = (arcEndPos - arcStartPos) - (fallDirection * z);
+                    Vector3 scale = new Vector3(size, size, 1);
+                    Vector4 color = new Color(1, 1, 1, approach * (IsTrace ? Values.TraceCapAlpha : Values.ArcCapAlpha));
 
-                return (true, Matrix4x4.TRS(capPos, Quaternion.identity, scale), color);
+                    return (true, Matrix4x4.TRS(capPos, Quaternion.identity, scale), color);
+                }
             }
 
             return (false, default, default);

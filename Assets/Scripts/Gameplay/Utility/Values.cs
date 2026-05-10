@@ -50,7 +50,7 @@ namespace ArcCreate.Gameplay
         public const float ArcCapSizeAdditionMax = 0.5f;
         public const float TraceCapSize = 0.21f;
         public const float ArcCapAlpha = 1f;
-        public const float ArcCapFadeoutFactor = 2.5f;
+        public const int ArcCapFadeoutDuration = 120;
         public const float TraceCapAlpha = 0.5f;
         public const float TraceAlpha = 0.4779405f;
         public const int HoldHighlightPersistDuration = 50;
