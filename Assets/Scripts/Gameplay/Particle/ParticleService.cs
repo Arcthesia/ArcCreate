@@ -406,6 +406,24 @@ namespace ArcCreate.Gameplay.Particle
             classicArcNoteParticlePrefab = Instantiate(classicArcNoteParticlePrefab, transform);
             holdNoteParticlePrefab = Instantiate(holdNoteParticlePrefab, transform);
 
+            perfectMaterialTexture = new ExternalTexture(PerfectMaterial.mainTexture, "Particles");
+            goodMaterialTexture = new ExternalTexture(GoodMaterial.mainTexture, "Particles");
+            missMaterialTexture = new ExternalTexture(MissMaterial.mainTexture, "Particles");
+
+            var particlePrefabRenderer = arcNoteParticlePrefab.GetComponent<ParticleSystemRenderer>();
+            arcParticleTexture = new ExternalTexture(particlePrefabRenderer.material.mainTexture, "Particles");
+
+            particlePrefabRenderer = holdNoteParticlePrefab.GetComponent<ParticleSystemRenderer>();
+            holdParticleTexture = new ExternalTexture(particlePrefabRenderer.material.mainTexture, "Particles");
+
+            Settings.LateEarlyTextPosition.OnValueChanged.AddListener(OnLateEarlyPositionSettings);
+            OnLateEarlyPositionSettings(Settings.LateEarlyTextPosition.Value);
+
+            LoadExternalParticleSkin().Forget();
+            
+            // Ensure we create the particle pools after setting the custom arc and hold
+            // particle textures. Otherwise, they will not use the custom textures
+            // (cuz this instanciates the game objects on New).
             arcParticlePool = Pools.New<Particle>(
                 Values.ArcParticlePoolName,
                 arcNoteParticlePrefab,
@@ -423,21 +441,6 @@ namespace ArcCreate.Gameplay.Particle
                 holdNoteParticlePrefab,
                 longNoteParticleParent,
                 holdParticlePoolCount);
-
-            perfectMaterialTexture = new ExternalTexture(PerfectMaterial.mainTexture, "Particles");
-            goodMaterialTexture = new ExternalTexture(GoodMaterial.mainTexture, "Particles");
-            missMaterialTexture = new ExternalTexture(MissMaterial.mainTexture, "Particles");
-
-            var particlePrefabRenderer = arcNoteParticlePrefab.GetComponent<ParticleSystemRenderer>();
-            arcParticleTexture = new ExternalTexture(particlePrefabRenderer.material.mainTexture, "Particles");
-
-            particlePrefabRenderer = holdNoteParticlePrefab.GetComponent<ParticleSystemRenderer>();
-            holdParticleTexture = new ExternalTexture(particlePrefabRenderer.material.mainTexture, "Particles");
-
-            Settings.LateEarlyTextPosition.OnValueChanged.AddListener(OnLateEarlyPositionSettings);
-            OnLateEarlyPositionSettings(Settings.LateEarlyTextPosition.Value);
-
-            LoadExternalParticleSkin().Forget();
         }
 
         private void OnLateEarlyPositionSettings(int val)
