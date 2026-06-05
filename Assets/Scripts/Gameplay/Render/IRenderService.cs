@@ -21,7 +21,7 @@ namespace ArcCreate.Gameplay.Render
 
         void DrawArcShadow(Matrix4x4 matrix, Color color, Vector4 cornerOffset);
 
-        void DrawArcTap(bool sfx, Texture texture, Matrix4x4 matrix, Color color, bool selected);
+        void DrawArcTap(bool sfx, Texture texture, Matrix4x4 matrix, Color color, bool selected, float depth);
 
         void DrawArcTapShadow(Matrix4x4 matrix, Color color);
 

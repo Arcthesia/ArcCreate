@@ -50,8 +50,9 @@ namespace ArcCreate.Gameplay.Render
         private InstancedRendererPool heightIndicatorDrawer;
 
         // Arctap
+        private readonly List<ArcTapDrawCall> queuedArcTapDrawCalls = new List<ArcTapDrawCall>();
+        private readonly IComparer<ArcTapDrawCall> arcTapDrawCallComparer = new ArcTapDrawCallComparer();
         private readonly Dictionary<Texture, InstancedRendererPool> arctapDrawers = new Dictionary<Texture, InstancedRendererPool>();
-        private readonly Dictionary<Texture, InstancedRendererPool> arctapSfxDrawers = new Dictionary<Texture, InstancedRendererPool>();
         private InstancedRendererPool arctapShadowDrawer;
 
         public bool IsLoaded { get; private set; }
@@ -168,21 +169,17 @@ namespace ArcCreate.Gameplay.Render
             heightIndicatorDrawer.RegisterInstance(matrix, color);
         }
 
-        public void DrawArcTap(bool sfx, Texture texture, Matrix4x4 matrix, Color color, bool selected)
+        public void DrawArcTap(bool sfx, Texture texture, Matrix4x4 matrix, Color color, bool selected, float depth)
         {
-            var drawer = sfx ? arctapSfxDrawers : arctapDrawers;
-            if (!drawer.ContainsKey(texture))
+            queuedArcTapDrawCalls.Add(new ArcTapDrawCall
             {
-                Material newArctap = Instantiate(baseArctapMaterial);
-                newArctap.mainTexture = texture;
-                generatedMaterials.Add(newArctap);
-                drawer.Add(texture, new InstancedRendererPool(
-                    newArctap,
-                    sfx ? arctapSfxMesh : arctapMesh,
-                    true));
-            }
-
-            drawer[texture].RegisterInstance(matrix, color, new Vector4(selected ? 1 : 0, 0, 0, 0));
+                IsSfx = sfx,
+                Texture = texture,
+                Matrix = matrix,
+                Color = color,
+                Properties = new Vector4(selected ? 1 : 0, 0, 0, 0),
+                Depth = depth
+            });
         }
 
         public void DrawArcTapShadow(Matrix4x4 matrix, Color color)
@@ -244,16 +241,30 @@ namespace ArcCreate.Gameplay.Render
             arcSegmentDrawer.Draw(notesCamera, layer);
             queuedArcDrawCalls.Clear();
 
-            foreach (var pair in arctapDrawers)
-            {
-                pair.Value.Draw(notesCamera, layer);
-            }
+            #region ArcTap
 
-            foreach (var pair in arctapSfxDrawers)
+            queuedArcTapDrawCalls.Sort(arcTapDrawCallComparer);
+            foreach (var call in queuedArcTapDrawCalls)
             {
-                pair.Value.Draw(notesCamera, layer);
+                if (!arctapDrawers.ContainsKey(call.Texture))
+                {
+                    Material newArctap = Instantiate(baseArctapMaterial);
+                    newArctap.mainTexture = call.Texture;
+                    generatedMaterials.Add(newArctap);
+                    arctapDrawers.Add(call.Texture, new InstancedRendererPool(
+                        newArctap,
+                        call.IsSfx ? arctapSfxMesh : arctapMesh,
+                        true));
+                }
+                
+                arctapDrawers[call.Texture].RegisterInstance(call.Matrix, call.Color, call.Properties);
+                arctapDrawers[call.Texture].Draw(notesCamera, layer);
             }
+            
+            queuedArcTapDrawCalls.Clear();
 
+            #endregion
+            
             arcHeadDrawer.Draw(notesCamera, layer);
         }
 
@@ -394,11 +405,6 @@ namespace ArcCreate.Gameplay.Render
             arcSegmentDrawer.Dispose();
 
             foreach (var pair in arctapDrawers)
-            {
-                pair.Value.Dispose();
-            }
-
-            foreach (var pair in arctapSfxDrawers)
             {
                 pair.Value.Dispose();
             }
