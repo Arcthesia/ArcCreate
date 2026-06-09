@@ -58,7 +58,7 @@ namespace ArcCreate.Gameplay.Hitsound
         /// <returns>Unitask instance.</returns>
         UniTask LoadCustomSfxs(string parentFolder, IFileAccessWrapper fileAccess);
 
-        void UpdateHitsoundHistory(int currentTiming);
+        void UpdateHitsounds(int currentTiming);
 
         void ResetHitsoundHistory();
     }

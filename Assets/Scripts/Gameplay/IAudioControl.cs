@@ -7,6 +7,10 @@ namespace ArcCreate.Gameplay
 {
     public interface IAudioControl
     {
+        int FullOffset { get; }
+        
+        int GlobalOffset { get; }
+        
         /// <summary>
         /// Gets or sets the audio's actual timing.
         /// Setting this value will cause score to reset to 0.

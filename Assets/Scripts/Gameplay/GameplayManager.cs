@@ -149,7 +149,7 @@ namespace ArcCreate.Gameplay
             Services.Camera.UpdateCamera(currentTiming);
             Services.Chart.UpdateChartRender(currentTiming);
             Services.Score.UpdateDisplay();
-            Services.Hitsound.UpdateHitsoundHistory(currentTiming);
+            Services.Hitsound.UpdateHitsounds(currentTiming);
             Services.Render.UpdateRenderers();
 
             gameplayData.NotifyUpdate(currentTiming);
