@@ -139,9 +139,9 @@ namespace ArcCreate.Gameplay.Audio
 
         public Dictionary<string, AudioClip> SfxAudioClips => Services.Hitsound.SfxAudioClips;
 
-        private int FullOffset => Values.ChartAudioOffset + Mathf.RoundToInt(Settings.GlobalAudioOffset.Value * playbackSpeed);
+        public int FullOffset => Values.ChartAudioOffset + Mathf.RoundToInt(Settings.GlobalAudioOffset.Value * playbackSpeed);
 
-        private int GlobalOffset => Mathf.RoundToInt(Settings.GlobalAudioOffset.Value * playbackSpeed);
+        public int GlobalOffset => Mathf.RoundToInt(Settings.GlobalAudioOffset.Value * playbackSpeed);
 
         public void SetAudioTimingSilent(int timing)
         {

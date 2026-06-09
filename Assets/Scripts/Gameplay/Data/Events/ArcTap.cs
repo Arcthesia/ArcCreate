@@ -11,7 +11,6 @@ namespace ArcCreate.Gameplay.Data
         private bool judgementRequestSent = false;
         private bool isHit = false;
         private bool isSfx;
-        private bool sfxPlayed = false;
         private Texture texture;
 
         public HashSet<Tap> ConnectedTaps { get; } = new HashSet<Tap>();
@@ -25,6 +24,7 @@ namespace ArcCreate.Gameplay.Data
         public float WorldY => Arc.WorldYAt(Timing);
 
         public string Sfx => Arc.Sfx;
+        public bool SfxPlayed { get; private set; } = false;
 
         public override ArcEvent Clone()
         {
@@ -49,7 +49,7 @@ namespace ArcCreate.Gameplay.Data
         {
             judgementRequestSent = timing > Timing;
             isHit = timing > Timing;
-            sfxPlayed = timing > Timing;
+            SfxPlayed = timing > Timing - Services.Audio.FullOffset;
         }
 
         public void Rebuild()
@@ -94,12 +94,12 @@ namespace ArcCreate.Gameplay.Data
                 RequestJudgement(groupProperties);
                 judgementRequestSent = true;
             }
-
-            if (currentTiming >= Timing && !sfxPlayed)
-            {
-                Services.Hitsound.PlayArcTapHitsound(Timing, Sfx, isFromJudgement: false);
-                sfxPlayed = true;
-            }
+        }
+        
+        public void PlayMutedSfx()
+        {
+            Services.Hitsound.PlayArcTapHitsound(Timing, Sfx, isFromJudgement: false);
+            SfxPlayed = true;
         }
 
         public void UpdateRender(int currentTiming, double currentFloorPosition, GroupProperties groupProperties)

@@ -22,6 +22,7 @@ namespace ArcCreate.Gameplay.Hitsound
         private IHitsoundPlayer hitsoundPlayer;
 
         private readonly Dictionary<string, AudioClip> sfxClips = new Dictionary<string, AudioClip>();
+        private readonly Dictionary<string, List<ArcTap>> sfxTimings = new Dictionary<string, List<ArcTap>>();
         private readonly UnorderedList<int> playedTapHitsoundTimings = new UnorderedList<int>(30);
         private readonly UnorderedList<int> playedArcHitsoundTimings = new UnorderedList<int>(30);
 
@@ -88,6 +89,7 @@ namespace ArcCreate.Gameplay.Hitsound
             }
 
             sfxClips.Clear();
+            sfxTimings.Clear();
 
             List<UniTask> loadTasks = new List<UniTask>();
             HashSet<string> sfxs = new HashSet<string>();
@@ -97,7 +99,16 @@ namespace ArcCreate.Gameplay.Hitsound
             {
                 if (!string.IsNullOrEmpty(at.Sfx) && at.Sfx != "none")
                 {
-                    sfxs.Add(at.Sfx);
+                    string sfx = at.Sfx;
+                    sfxs.Add(sfx);
+                    if (sfxTimings.ContainsKey(sfx))
+                    {
+                        sfxTimings[sfx].Add(at);
+                    }
+                    else
+                    {
+                        sfxTimings.Add(sfx, new List<ArcTap>() { at });
+                    }
                 }
             }
 
@@ -125,7 +136,35 @@ namespace ArcCreate.Gameplay.Hitsound
             IsLoaded = true;
         }
 
-        public void UpdateHitsoundHistory(int currentTiming)
+        public void UpdateHitsounds(int currentTiming)
+        {
+            PlayMutedSfx(currentTiming);
+            UpdateHitsoundHistory(currentTiming);
+        }
+
+        private void PlayMutedSfx(int currentTiming)
+        {
+            if (IsMuted)
+            {
+                foreach (string sfx in sfxTimings.Keys)
+                {
+                    int noteIndex = 0;
+                    while (noteIndex < sfxTimings[sfx].Count)
+                    {
+                        ArcTap at = sfxTimings[sfx][noteIndex];
+                        
+                        int timing = at.Timing - Services.Audio.FullOffset;
+                        if (!at.SfxPlayed && currentTiming >= timing)
+                        {
+                            at.PlayMutedSfx();
+                        }
+                        noteIndex++;
+                    }
+                }
+            }
+        }
+
+        private void UpdateHitsoundHistory(int currentTiming)
         {
             PurgeOldSoundPlayedTimings(currentTiming, playedArcHitsoundTimings, Values.HoldMissLateJudgeWindow);
             PurgeOldSoundPlayedTimings(currentTiming, playedTapHitsoundTimings, Values.HoldMissLateJudgeWindow);
