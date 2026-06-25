@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using System.Threading;
+using System.Collections;
 using ArcCreate.Data;
 using ArcCreate.SceneTransition;
 using ArcCreate.Storage;
@@ -51,6 +53,7 @@ namespace ArcCreate.Selection.Interface
         [SerializeField] private ClearResultDisplay clearResultDisplay;
         [SerializeField] private Button returnButton;
         [SerializeField] private Button retryButton;
+        [SerializeField] private Button shareButton;
         [SerializeField] private StringSO transitionPlayCount;
         [SerializeField] private StringSO transitionRetryCount;
         [SerializeField] private AudioSource audioSource;
@@ -182,6 +185,7 @@ namespace ArcCreate.Selection.Interface
             
             returnButton.onClick.RemoveListener(ReturnToPreviousScene);
             retryButton.onClick.RemoveListener(RetryChart);
+            shareButton.onClick.RemoveListener(ShareResult);
             cts.Cancel();
             cts.Dispose();
             cts = new CancellationTokenSource();
@@ -191,6 +195,7 @@ namespace ArcCreate.Selection.Interface
         {
             returnButton.onClick.AddListener(ReturnToPreviousScene);
             retryButton.onClick.AddListener(RetryChart);
+            shareButton.onClick.AddListener(ShareResult);
             animator.HideImmediate();
         }
 
@@ -216,6 +221,21 @@ namespace ArcCreate.Selection.Interface
                 animator.Hide();
                 storage.SwitchToPlayScene((currentLevel, currentChart));
             }
+        }
+
+        private void ShareResult()
+        { 
+            Texture2D ss = ScreenCapture.CaptureScreenshotAsTexture();
+
+            string filePath = Path.Combine( Application.temporaryCachePath, "result.jpg" );
+            File.WriteAllBytes( filePath, ss.EncodeToJPG( 100 ) );
+
+            Destroy( ss );
+
+            new NativeShare().AddFile( filePath )
+                .SetText( "#arccreate" )
+                .SetCallback( ( result, shareTarget ) => Debug.Log( "Share result: " + result + ", selected app: " + shareTarget ) )
+                .Share();
         }
     }
 }
