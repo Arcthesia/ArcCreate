@@ -85,3 +85,6 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# An eternal shame
+**/.DS_Store
+

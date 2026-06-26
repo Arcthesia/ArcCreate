@@ -10,6 +10,7 @@
     "com.unity.textmeshpro": "3.0.9",
     "com.unity.toolchain.linux-x86_64": "2.0.4",
     "com.unity.ugui": "1.0.0",
+    "com.yasirkula.nativeshare": "https://github.com/yasirkula/UnityNativeShare.git",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
