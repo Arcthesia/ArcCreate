@@ -1,5 +1,6 @@
 {
     "name": "ArcCreate.Selection",
+    "rootNamespace": "",
     "references": [
         "GUID:01ac7ee8347a8dc4ab295317e5a85380",
         "GUID:e057305c1554d8e5a97137707ec8777e",
@@ -13,7 +14,8 @@
         "GUID:4955ea543c7d37317adad658f64728fc",
         "GUID:2236a98d74e6674839d907b723722dc8",
         "GUID:250e096504da3aa4f851a4df12262950",
-        "GUID:487fec7a34e3d5e99b05a90f30225ba2"
+        "GUID:487fec7a34e3d5e99b05a90f30225ba2",
+        "GUID:2ace7ebb826df10459d12b4f3c4a9407"
     ],
     "includePlatforms": [],
     "excludePlatforms": [

@@ -107,6 +107,13 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "com.yasirkula.nativeshare": {
+      "version": "https://github.com/yasirkula/UnityNativeShare.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "5f3680e2938f59c87b3d01f052980381f62ed9d4"
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,
