@@ -297,7 +297,7 @@ namespace ArcCreate.Gameplay.Data
             if (TotalCombo == 1 && numHoldJudgementRequestsSent == 0)
             {
                 // special handling for hold with just 1 combo
-                int timing = Timing + (Timing - EndTiming) / 2;
+                int timing = Timing + ((EndTiming - Timing) / 2);
                 Services.Judgement.Request(new LaneHoldJudgementRequest()
                 {
                     StartAtTiming = (int)(Timing - TimeIncrement),
