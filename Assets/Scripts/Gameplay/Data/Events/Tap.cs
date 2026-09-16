@@ -114,11 +114,11 @@ namespace ArcCreate.Gameplay.Data
 
             Services.Render.DrawTap(texture, matrix, color, IsSelected);
 
-            if (!groupProperties.NoConnection)
+            if (!groupProperties.NoConnection && !groupProperties.NoInput)
             {
                 foreach (var arctap in ConnectedArcTaps)
                 {
-                    if (arctap.TimingGroupInstance.GroupProperties.NoConnection)
+                    if (arctap.TimingGroupInstance.GroupProperties.NoConnection || arctap.TimingGroupInstance.GroupProperties.NoInput)
                     {
                         return;
                     }
